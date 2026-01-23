@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
@@ -650,7 +650,7 @@ describe('PostsPage Component', () => {
       // Open modal
       const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
       await act(async () => {
-        fireEvent.click(pinnedPostButton);
+        await userEvent.click(pinnedPostButton);
       });
 
       await waitFor(() => {
@@ -660,7 +660,7 @@ describe('PostsPage Component', () => {
       // Close modal
       const closeButton = screen.getByTestId('close-post-view-button');
       await act(async () => {
-        fireEvent.click(closeButton);
+        await userEvent.click(closeButton);
       });
 
       await waitFor(() => {
@@ -701,13 +701,13 @@ describe('PostsPage Component', () => {
         // Open modal
         const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
         await act(async () => {
-          fireEvent.click(pinnedPostButton);
+          await userEvent.click(pinnedPostButton);
         });
 
         // Close the modal
         const closeButton = screen.getByTestId('close-post-view-button');
         await act(async () => {
-          fireEvent.click(closeButton);
+          await userEvent.click(closeButton);
         });
 
         // Verify URL was updated with remaining query parameters
@@ -761,13 +761,13 @@ describe('PostsPage Component', () => {
         // Open modal
         const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
         await act(async () => {
-          fireEvent.click(pinnedPostButton);
+          await userEvent.click(pinnedPostButton);
         });
 
         // Close the modal
         const closeButton = screen.getByTestId('close-post-view-button');
         await act(async () => {
-          fireEvent.click(closeButton);
+          await userEvent.click(closeButton);
         });
 
         // Verify URL was updated without query parameters (empty query string)
@@ -798,7 +798,8 @@ describe('PostsPage Component', () => {
 
       // Enter search term
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'test' } });
+        await userEvent.clear(searchInput);
+        await userEvent.type(searchInput, 'test');
       });
 
       // Wait for filtering to activate
@@ -812,7 +813,7 @@ describe('PostsPage Component', () => {
 
       // Clear search term
       await act(async () => {
-        fireEvent.change(searchInput, { target: { value: '' } });
+        await userEvent.clear(searchInput);
       });
 
       await waitFor(
@@ -850,7 +851,8 @@ describe('PostsPage Component', () => {
 
     const searchInput = screen.getByTestId('searchByName');
     await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'test search' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'test search');
     });
 
     // Should show error toast for GraphQL error
@@ -923,7 +925,7 @@ describe('Sorting Functionality', () => {
 
     const sortSelect = screen.getByTestId('sortpost-toggle-select');
     await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'latest' } });
+      await userEvent.selectOptions(sortSelect, 'latest');
     });
 
     // Should handle empty posts gracefully and not crash
@@ -942,7 +944,7 @@ describe('Sorting Functionality', () => {
 
     const sortSelect = screen.getByTestId('sortpost-toggle-select');
     await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'oldest' } });
+      await userEvent.selectOptions(sortSelect, 'oldest');
     });
 
     await waitFor(() => {
@@ -966,12 +968,12 @@ describe('Sorting Functionality', () => {
 
     // Sort by latest first
     await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'latest' } });
+      await userEvent.selectOptions(sortSelect, 'latest');
     });
 
     // Reset to None
     await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'None' } });
+      await userEvent.selectOptions(sortSelect, 'None');
     });
 
     await waitFor(() => {
@@ -1002,7 +1004,7 @@ describe('Create Post Modal', () => {
     // Open modal
     const createButton = screen.getByTestId('createPostModalBtn');
     await act(async () => {
-      fireEvent.click(createButton);
+      await userEvent.click(createButton);
     });
 
     await waitFor(() => {
@@ -1012,7 +1014,7 @@ describe('Create Post Modal', () => {
     // Close modal
     const closeButton = screen.getByTestId('close-create-modal');
     await act(async () => {
-      fireEvent.click(closeButton);
+      await userEvent.click(closeButton);
     });
 
     expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
@@ -1052,7 +1054,8 @@ describe('Infinite Scroll', () => {
 
     // Enter search term to activate filtering
     await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'test' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'test');
     });
 
     await waitFor(() => {
@@ -1062,7 +1065,7 @@ describe('Infinite Scroll', () => {
 
     // Clear search to return to paginated view
     await act(async () => {
-      fireEvent.change(searchInput, { target: { value: '' } });
+      await userEvent.clear(searchInput);
     });
 
     await waitFor(() => {
@@ -1213,7 +1216,7 @@ describe('Edge Cases', () => {
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
     await act(async () => {
-      fireEvent.click(loadMoreButton);
+      await userEvent.click(loadMoreButton);
     });
 
     // Should not crash and maintain current state
@@ -1250,7 +1253,7 @@ describe('Edge Cases', () => {
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
     await act(async () => {
-      fireEvent.click(loadMoreButton);
+      await userEvent.click(loadMoreButton);
     });
 
     await waitFor(() => {
@@ -1402,7 +1405,7 @@ describe('HandleSorting Edge Case', () => {
     let infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
 
-    fireEvent.change(sortSelect, { target: { value: 'None' } });
+    await userEvent.selectOptions(sortSelect, 'None');
 
     await waitFor(() => {
       expect(sortSelect).toHaveValue('None');
@@ -1505,7 +1508,7 @@ describe('FetchMore Success Coverage', () => {
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
     await act(async () => {
-      fireEvent.click(loadMoreButton);
+      await userEvent.click(loadMoreButton);
     });
 
     // Wait for the new post to be loaded and verify pageInfo is handled

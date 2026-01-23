@@ -4,7 +4,6 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -635,10 +634,8 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Search the Pledges list by Users', async () => {
     renderFundCampaignPledge(link1);
     const searchPledger = await screen.findByTestId('searchPledger');
-    fireEvent.change(searchPledger, {
-      target: { value: 'John' },
-    });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.type(searchPledger, 'John');
+    await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1015,11 +1012,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('amount_ASC'));
+    await userEvent.click(screen.getByTestId('amount_ASC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1041,11 +1038,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('amount_DESC'));
+    await userEvent.click(screen.getByTestId('amount_DESC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1067,11 +1064,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('endDate_DESC'));
+    await userEvent.click(screen.getByTestId('endDate_DESC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1095,11 +1092,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('endDate_ASC'));
+    await userEvent.click(screen.getByTestId('endDate_ASC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1149,7 +1146,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Directly test the sorting by manipulating the state
     const filterButton = screen.getByTestId('filter');
-    fireEvent.click(filterButton);
+    await userEvent.click(filterButton);
 
     // The default case should maintain the original order
     await waitFor(() => {
@@ -1179,11 +1176,11 @@ describe('Testing Campaign Pledge Screen', () => {
     ];
 
     for (const option of sortOptions) {
-      fireEvent.click(screen.getByTestId('filter'));
+      await userEvent.click(screen.getByTestId('filter'));
       await waitFor(() => {
         expect(screen.getByTestId(option)).toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId(option));
+      await userEvent.click(screen.getByTestId(option));
 
       await waitFor(() => {
         const amountCells = screen.getAllByTestId('amountCell');

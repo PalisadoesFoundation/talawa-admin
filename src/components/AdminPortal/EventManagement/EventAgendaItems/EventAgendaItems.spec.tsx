@@ -364,30 +364,25 @@ describe('Testing Agenda Items Components', () => {
           mocks: mocks ?? createDefaultMocks(),
         };
 
+    const routes = (
+      <Routes>
+        <Route
+          path="/admin/event/:orgId/:eventId"
+          element={<EventAgendaItems eventId={eventId} />}
+        />
+      </Routes>
+    );
+
     const content = (
       <MockedProvider {...providerProps}>
         <Provider store={store}>
           <MemoryRouter initialEntries={[`/admin/event/${orgId}/${eventId}`]}>
             {withLocalization ? (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <I18nextProvider i18n={i18n}>
-                  <Routes>
-                    <Route
-                      path="/admin/event/:orgId/:eventId"
-                      element={<EventAgendaItems eventId={eventId} />}
-                    />
-                  </Routes>
-                </I18nextProvider>
+                <I18nextProvider i18n={i18n}>{routes}</I18nextProvider>
               </LocalizationProvider>
             ) : (
-              <I18nextProvider i18n={i18n}>
-                <Routes>
-                  <Route
-                    path="/admin/event/:orgId/:eventId"
-                    element={<EventAgendaItems eventId={eventId} />}
-                  />
-                </Routes>
-              </I18nextProvider>
+              <I18nextProvider i18n={i18n}>{routes}</I18nextProvider>
             )}
           </MemoryRouter>
         </Provider>
