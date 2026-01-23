@@ -30,30 +30,28 @@
  * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery } from '@apollo/client';
+import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
+
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import styles from './PledgeModal.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
-  Autocomplete,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
 import { BaseModal } from 'shared-components/BaseModal';
+import {
+  FormFieldGroup,
+  FormTextField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
+import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
+import styles from './PledgeModal.module.css';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -65,6 +63,18 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+
+export const areOptionsEqual = (
+  option: InterfaceUserInfoPG,
+  value: InterfaceUserInfoPG,
+): boolean => option.id === value.id;
+
+export const getMemberLabel = (member: InterfaceUserInfoPG): string => {
+  if (member.firstName || member.lastName) {
+    return `${member.firstName || ''} ${member.lastName || ''}`.trim();
+  }
+  return member.name || '';
+};
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
@@ -84,6 +94,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
+
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
@@ -110,34 +121,22 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     }
   }, [memberData]);
 
-  const { pledgeUsers, pledgeAmount } = formState;
-
   const isAmountValid = formState.pledgeAmount > 0;
 
   // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
-      const variables: {
-        id?: string;
-        amount?: number;
-      } = {
-        id: pledge?.id,
-      };
-
-      if (pledgeAmount !== pledge?.amount) {
-        variables.amount = pledgeAmount;
-      }
       try {
         const variables = {
           id: pledge?.id ?? '',
           ...(pledge &&
-            pledgeAmount !== pledge.amount && { amount: pledgeAmount }),
+            formState.pledgeAmount !== pledge.amount && {
+              amount: formState.pledgeAmount,
+            }),
         };
 
-        await updatePledge({
-          variables,
-        });
+        await updatePledge({ variables });
         NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
@@ -156,6 +155,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         if (!formState.pledgeUsers[0]?.id) {
           throw new Error('Failed to create pledge');
         }
+
         await createPledge({
           variables: {
             campaignId,
@@ -176,18 +176,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         NotificationToast.error((error as Error).message);
       }
     },
-    [formState, campaignId],
+    [formState, campaignId, createPledge, refetchPledge, hide, t],
   );
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setFormState({
-        ...formState,
-        pledgeAmount: Math.max(0, value),
-      });
-    }
-  };
 
   const modalTitle = mode === 'create' ? t('createPledge') : t('editPledge');
 
@@ -197,7 +187,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       onHide={hide}
       show={isOpen}
       dataTestId="pledge-modal"
-      showCloseButton={false} // Custom close button used to preserve existing test ID
+      showCloseButton={false}
       headerContent={
         <div className="d-flex align-items-center justify-content-between w-100">
           <h5 data-testid="createPledgeTitle" className="mb-0">
@@ -214,24 +204,28 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         </div>
       }
     >
-      <Form
+      <form
         data-testid="pledgeForm"
-        onSubmitCapture={
-          mode === 'edit' ? updatePledgeHandler : createPledgeHandler
-        }
+        onSubmit={mode === 'edit' ? updatePledgeHandler : createPledgeHandler}
         className="p-3"
       >
         {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <Autocomplete
             className={`${styles.noOutlinePledge} w-100`}
             data-testid="pledgerSelect"
             options={pledgers}
-            value={pledgeUsers[0] || null}
+            value={formState.pledgeUsers[0] || null}
             filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              `${member.name || ''}`
-            }
+            clearOnEscape
+            disableClearable={false}
+            componentsProps={{
+              clearIndicator: {
+                'aria-label': 'Clear',
+              },
+            }}
+            isOptionEqualToValue={areOptionsEqual}
+            getOptionLabel={getMemberLabel}
             onChange={(_, newPledger): void => {
               setFormState({
                 ...formState,
@@ -241,31 +235,30 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               });
             }}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('pledgers')}
-                inputProps={{
-                  ...params.inputProps,
-                  'aria-label': t('pledgers'),
-                }}
-              />
+              <FormFieldGroup name="pledgers" label={t('pledgers')}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    aria-label={t('pledgers')}
+                    data-testid="pledgerInput"
+                  />
+                </div>
+              </FormFieldGroup>
             )}
           />
-        </Form.Group>
-        <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+        </div>
+
+        <div className="d-flex gap-3 mx-auto mb-3">
           {/* Dropdown to select the currency in which amount is to be pledged */}
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              {t('currency')}
-            </InputLabel>
+          <div className="flex-grow-1" style={{ minWidth: '150px' }}>
+            <InputLabel>{t('currency')}</InputLabel>
             <Select
-              value={formState.pledgeCurrency || ''}
+              value={formState.pledgeCurrency}
               label={t('currency')}
-              inputProps={{
-                'aria-label': t('currency'),
-              }}
+              inputProps={{ 'aria-label': t('currency') }}
               disabled
-              className="MuiSelect-disabled"
+              fullWidth
             >
               {currencyOptions.map((currency) => (
                 <MenuItem key={currency.label} value={currency.value}>
@@ -273,27 +266,33 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
+          </div>
+
           {/* Input field to enter amount to be pledged */}
-          <FormControl fullWidth>
-            <TextField
+          <div className="flex-grow-1">
+            <FormTextField
+              name="amount"
               label={t('amount')}
-              variant="outlined"
               type="number"
-              inputProps={{
-                min: 1,
-                'aria-label': t('amount'),
+              value={formState.pledgeAmount.toString()}
+              onChange={(value) => {
+                const numValue = parseInt(value, 10);
+                if (!isNaN(numValue)) {
+                  setFormState({
+                    ...formState,
+                    pledgeAmount: Math.max(0, numValue),
+                  });
+                }
               }}
-              error={formState.pledgeAmount < 1}
-              helperText={
+              error={
                 formState.pledgeAmount < 1 ? t('amountMustBeAtLeastOne') : ''
               }
-              className={styles.noOutlinePledge}
-              value={formState.pledgeAmount}
-              onChange={handleAmountChange}
+              touched={true}
+              data-testid="pledgeAmount"
             />
-          </FormControl>
-        </Form.Group>
+          </div>
+        </div>
+
         {/* Button to submit the pledge form */}
         <Button
           type="submit"
@@ -303,8 +302,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         >
           {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
+
 export default PledgeModal;

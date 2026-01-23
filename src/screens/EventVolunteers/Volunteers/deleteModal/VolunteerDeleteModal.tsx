@@ -22,7 +22,7 @@
  * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
  * - Displays success or error messages using `NotificationToast`.
  */
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import styles from './VolunteerDeleteModal.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -114,27 +114,31 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
 
       {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
       {volunteer.isTemplate && !volunteer.isInstanceException && (
-        <Form.Group className="mb-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
-          <Form.Check
-            type="radio"
-            label={t('entireSeries')}
-            name="applyTo"
-            id="deleteApplyToSeries"
-            data-testid="deleteApplyToSeries"
-            checked={applyTo === 'series'}
-            onChange={() => setApplyTo('series')}
-          />
-          <Form.Check
-            type="radio"
-            label={t('thisEventOnly')}
-            name="applyTo"
-            id="deleteApplyToInstance"
-            data-testid="deleteApplyToInstance"
-            checked={applyTo === 'instance'}
-            onChange={() => setApplyTo('instance')}
-          />
-        </Form.Group>
+        <div className="mb-3">
+          <label>{t('applyTo')}</label>
+          <div>
+            <input
+              type="radio"
+              name="applyTo"
+              id="deleteApplyToSeries"
+              data-testid="deleteApplyToSeries"
+              checked={applyTo === 'series'}
+              onChange={() => setApplyTo('series')}
+            />
+            <label htmlFor="deleteApplyToSeries">{t('entireSeries')}</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              name="applyTo"
+              id="deleteApplyToInstance"
+              data-testid="deleteApplyToInstance"
+              checked={applyTo === 'instance'}
+              onChange={() => setApplyTo('instance')}
+            />
+            <label htmlFor="deleteApplyToInstance">{t('thisEventOnly')}</label>
+          </div>
+        </div>
       )}
     </BaseModal>
   );

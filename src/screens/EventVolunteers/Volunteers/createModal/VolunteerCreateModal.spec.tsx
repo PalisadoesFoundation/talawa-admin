@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -14,7 +17,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -162,6 +164,29 @@ describe('Testing VolunteerCreateModal', () => {
     expect(await screen.findByText('Jane Smith')).toBeInTheDocument();
     // Input value remains the same; isOptionEqualToValue is used internally for filtering
     expect(memberInputField).toHaveValue('John Doe');
+  });
+
+  it('should clear userId when member selection is cleared', async () => {
+    renderCreateModal(link1, itemProps[0]);
+
+    // Select a member first
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const memberInputField = within(membersSelect).getByRole('combobox');
+    fireEvent.mouseDown(memberInputField);
+    const memberOption = await screen.findByText('John Doe');
+    fireEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(memberInputField).toHaveValue('John Doe');
+    });
+
+    // Clear the selection by clearing input and pressing Escape
+    await userEvent.clear(memberInputField);
+    fireEvent.keyDown(memberInputField, { key: 'Escape' });
+
+    await waitFor(() => {
+      expect(memberInputField).toHaveValue('');
+    });
   });
 
   describe('Recurring Events', () => {

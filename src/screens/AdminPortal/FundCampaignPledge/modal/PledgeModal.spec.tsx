@@ -27,7 +27,8 @@ dayjs.extend(utc);
 
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfacePledgeModal } from './PledgeModal';
-import PledgeModal from './PledgeModal';
+import PledgeModal, { areOptionsEqual, getMemberLabel } from './PledgeModal';
+import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import { vi } from 'vitest';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
@@ -591,14 +592,49 @@ describe('PledgeModal', () => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
-    const clearButton = screen.getByLabelText('Clear');
-
+    // Focus the input and use Escape key to clear (clearOnEscape is enabled)
     await act(async () => {
-      fireEvent.click(clearButton);
+      fireEvent.focus(pledgerInput);
+      fireEvent.keyDown(pledgerInput, { key: 'Escape' });
     });
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('');
     });
+  });
+});
+
+describe('PledgeModal helper functions (coverage)', () => {
+  it('areOptionsEqual returns true when ids match', () => {
+    const a = { id: '1' } as InterfaceUserInfoPG;
+    const b = { id: '1' } as InterfaceUserInfoPG;
+    expect(areOptionsEqual(a, b)).toBe(true);
+  });
+
+  it('areOptionsEqual returns false when ids differ', () => {
+    const a = { id: '1' } as InterfaceUserInfoPG;
+    const b = { id: '2' } as InterfaceUserInfoPG;
+    expect(areOptionsEqual(a, b)).toBe(false);
+  });
+
+  it('getMemberLabel uses firstName and lastName when present', () => {
+    const member = {
+      id: '1',
+      firstName: 'John',
+      lastName: 'Doe',
+    } as InterfaceUserInfoPG;
+
+    expect(getMemberLabel(member)).toBe('John Doe');
+  });
+
+  it('getMemberLabel falls back to name when first and last name are missing', () => {
+    const member = {
+      id: '1',
+      firstName: '',
+      lastName: '',
+      name: 'Fallback Name',
+    } as InterfaceUserInfoPG;
+
+    expect(getMemberLabel(member)).toBe('Fallback Name');
   });
 });

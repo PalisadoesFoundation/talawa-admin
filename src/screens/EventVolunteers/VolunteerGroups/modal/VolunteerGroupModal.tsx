@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,
@@ -11,7 +11,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
+import { Autocomplete } from '@mui/material';
+import {
+  FormTextField,
+  FormFieldGroup,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -34,6 +38,20 @@ export interface InterfaceVolunteerGroupModal {
   baseEvent?: { id: string } | null;
   recurringEventInstanceId?: string;
 }
+
+/**
+ * Compares two user options by their IDs.
+ */
+export const areOptionsEqual = (
+  option: InterfaceUserInfoPG,
+  value: InterfaceUserInfoPG,
+): boolean => option.id === value.id;
+
+/**
+ * Gets the display name for a member.
+ */
+export const getMemberName = (member: InterfaceUserInfoPG): string =>
+  member.name;
 
 /**
  * A modal dialog for creating or editing a volunteer group.
@@ -194,66 +212,64 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </p>
       }
     >
-      <Form
+      <form
         onSubmit={mode === 'edit' ? updateGroupHandler : createGroupHandler}
         className="p-3"
       >
         {/* Radio buttons for recurring events - only show in create mode */}
         {isRecurring && mode === 'create' ? (
-          <Form.Group className="mb-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
-              type="radio"
-              label={t('entireSeries')}
-              name="applyTo"
-              id="applyToSeries"
-              checked={applyTo === 'series'}
-              onChange={() => setApplyTo('series')}
-            />
-            <Form.Check
-              type="radio"
-              label={t('thisEventOnly')}
-              name="applyTo"
-              id="applyToInstance"
-              checked={applyTo === 'instance'}
-              onChange={() => setApplyTo('instance')}
-            />
-          </Form.Group>
+          <div className="mb-3">
+            <label>{t('applyTo')}</label>
+            <div>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <label htmlFor="applyToSeries">{t('entireSeries')}</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+              <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
+            </div>
+          </div>
         ) : null}
 
         {/* Input field to enter the group name */}
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              required
-              label={tCommon('name')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={name}
-              onChange={(e) =>
-                setFormState({ ...formState, name: e.target.value })
-              }
-            />
-          </FormControl>
-        </Form.Group>
+        <div className="mb-3">
+          <FormTextField
+            name="name"
+            label={tCommon('name')}
+            value={name}
+            onChange={(value) => setFormState({ ...formState, name: value })}
+            required
+            data-testid="groupName"
+          />
+        </div>
         {/* Input field to enter the group description */}
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              multiline
-              rows={3}
-              label={tCommon('description')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </FormControl>
-        </Form.Group>
+        <div className="mb-3">
+          <FormTextField
+            name="description"
+            label={tCommon('description')}
+            value={description ?? ''}
+            onChange={(value) =>
+              setFormState({ ...formState, description: value })
+            }
+            as="textarea"
+            rows={3}
+            data-testid="groupDescription"
+          />
+        </div>
         {/* A dropdown to select leader for volunteer group */}
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <Autocomplete
             className={`${styles.noOutline} w-100`}
             limitTags={2}
@@ -261,11 +277,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             options={members}
             value={leader}
             disabled={mode === 'edit'}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={areOptionsEqual}
             filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              member.name
-            }
+            getOptionLabel={getMemberName}
             onChange={(_, newLeader): void => {
               if (newLeader) {
                 setFormState({
@@ -284,13 +298,21 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               }
             }}
             renderInput={(params) => (
-              <TextField {...params} label={`${t('leader')} *`} />
+              <FormFieldGroup name="leader" label={`${t('leader')} *`}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    data-testid="leaderInput"
+                  />
+                </div>
+              </FormFieldGroup>
             )}
           />
-        </Form.Group>
+        </div>
 
         {/* A Multi-select dropdown to select more than one volunteer */}
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <Autocomplete
             multiple
             className={`${styles.noOutline} w-100`}
@@ -298,11 +320,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             data-testid="volunteerSelect"
             options={members}
             value={volunteerUsers}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            isOptionEqualToValue={areOptionsEqual}
             filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              member.name
-            }
+            getOptionLabel={getMemberName}
             disabled={mode === 'edit'}
             onChange={(_, newUsers): void => {
               setFormState({
@@ -311,39 +331,46 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               });
             }}
             renderInput={(params) => (
-              <TextField {...params} label={`${t('volunteers')} *`} />
+              <FormFieldGroup name="volunteers" label={`${t('volunteers')} *`}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    data-testid="volunteersInput"
+                  />
+                </div>
+              </FormFieldGroup>
             )}
           />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              label={t('volunteersRequired')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={volunteersRequired ?? ''}
-              onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
-                  setFormState({
-                    ...formState,
-                    volunteersRequired: parseInt(e.target.value),
-                  });
-                } else if (e.target.value === '') {
-                  setFormState({
-                    ...formState,
-                    volunteersRequired: null,
-                  });
-                }
-              }}
-            />
-          </FormControl>
-        </Form.Group>
+        </div>
+        <div className="mb-3">
+          <FormTextField
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+            type="number"
+            value={volunteersRequired?.toString() ?? ''}
+            onChange={(value) => {
+              if (value && parseInt(value) > 0) {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: parseInt(value),
+                });
+              } else {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: null,
+                });
+              }
+            }}
+            data-testid="volunteersRequired"
+          />
+        </div>
 
         {/* Button to submit the volunteer group form */}
         <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
           {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

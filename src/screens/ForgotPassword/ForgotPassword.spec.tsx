@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
 import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
@@ -198,7 +197,7 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(toastMocks.success).toHaveBeenCalled();
     });
   });
 
@@ -246,7 +245,13 @@ describe('Testing Forgot Password screen', () => {
     );
     setItem('otpToken', 'lorem ipsum');
     await userEvent.click(screen.getByText('Change Password'));
-    await wait();
+
+    await waitFor(() => {
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        translations.passwordChanges,
+        expect.any(Object),
+      );
+    });
   });
 
   it('Testing forgot password functionality, if the otp got deleted from the local storage', async () => {
@@ -368,7 +373,7 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(toastMocks.warning).toHaveBeenCalledWith(
         translations.emailNotRegistered,
         expect.any(Object),
       );
@@ -398,7 +403,7 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         translations.errorSendingMail,
         expect.any(Object),
       );
@@ -429,7 +434,7 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
         expect.any(Object),
       );

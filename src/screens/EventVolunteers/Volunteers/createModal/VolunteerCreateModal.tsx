@@ -25,15 +25,16 @@
  * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ADD_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
@@ -129,36 +130,40 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       show={isOpen}
       headerContent={<p className={styles.titlemodal}>{t('addVolunteer')}</p>}
     >
-      <Form
+      <form
         data-testid="volunteerForm"
-        onSubmitCapture={addVolunteerHandler}
+        onSubmit={addVolunteerHandler}
         className="p-3"
       >
         {/* Radio buttons for recurring events */}
         {isRecurring ? (
-          <Form.Group className="mb-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
-              type="radio"
-              label={t('entireSeries')}
-              name="applyTo"
-              id="applyToSeries"
-              checked={applyTo === 'series'}
-              onChange={() => setApplyTo('series')}
-            />
-            <Form.Check
-              type="radio"
-              label={t('thisEventOnly')}
-              name="applyTo"
-              id="applyToInstance"
-              checked={applyTo === 'instance'}
-              onChange={() => setApplyTo('instance')}
-            />
-          </Form.Group>
+          <div className="mb-3">
+            <label>{t('applyTo')}</label>
+            <div>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <label htmlFor="applyToSeries">{t('entireSeries')}</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+              <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
+            </div>
+          </div>
         ) : null}
 
         {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <Autocomplete
             className={`${styles.noOutline} w-100`}
             limitTags={2}
@@ -171,16 +176,24 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               setUserId(newVolunteer?.id ?? '');
             }}
             renderInput={(params) => (
-              <TextField {...params} label={tCommon('members')} />
+              <FormFieldGroup name="members" label={tCommon('members')}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    data-testid="membersInput"
+                  />
+                </div>
+              </FormFieldGroup>
             )}
           />
-        </Form.Group>
+        </div>
 
         {/* Button to submit the volunteer form */}
         <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
           {t('addVolunteer')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

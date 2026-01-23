@@ -37,9 +37,10 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -229,42 +230,41 @@ const CommunityProfile = (): JSX.Element => {
         </div>
         <Card.Body>
           <div className="mb-3">{t('communityProfileInfo')}</div>
-          <Form onSubmit={handleOnSubmit}>
-            <Form.Group>
-              <Form.Label className={styles.formLabel}>
-                {t('communityName')}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                id="communityName"
-                name="name"
-                value={profileVariable.name}
-                onChange={handleOnChange}
-                className={`mb-3 ${styles.inputField}`}
-                placeholder={t('communityName')}
-                autoComplete="off"
-                required
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label className={styles.formLabel}>
-                {t('wesiteLink')}
-              </Form.Label>
-              <Form.Control
-                type="url"
-                id="websiteURL"
-                name="websiteURL"
-                value={profileVariable.websiteURL}
-                onChange={handleOnChange}
-                className={`mb-3 ${styles.inputField}`}
-                placeholder={t('wesiteLink')}
-                autoComplete="off"
-                required
-              />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label className={styles.formLabel}>{t('logo')}</Form.Label>
-              <Form.Control
+          <form onSubmit={handleOnSubmit}>
+            <FormTextField
+              id="communityName"
+              name="name"
+              label={t('communityName')}
+              value={profileVariable.name}
+              onChange={(value: string) =>
+                setProfileVariable({ ...profileVariable, name: value })
+              }
+              placeholder={t('communityName')}
+              autoComplete="off"
+              required
+              className={`mb-3 ${styles.inputField}`}
+              labelClassName={styles.formLabel}
+            />
+            <FormTextField
+              id="websiteURL"
+              name="websiteURL"
+              type="url"
+              label={t('wesiteLink')}
+              value={profileVariable.websiteURL}
+              onChange={(value: string) =>
+                setProfileVariable({ ...profileVariable, websiteURL: value })
+              }
+              placeholder={t('wesiteLink')}
+              autoComplete="off"
+              required
+              className={`mb-3 ${styles.inputField}`}
+              labelClassName={styles.formLabel}
+            />
+            <div className="mb-3">
+              <label htmlFor="logo" className={styles.formLabel}>
+                {t('logo')}
+              </label>
+              <input
                 accept="image/*"
                 multiple={false}
                 type="file"
@@ -286,24 +286,22 @@ const CommunityProfile = (): JSX.Element => {
                     logo: base64file ?? '',
                   });
                 }}
-                className={`mb-3 ${styles.inputField}`}
+                className={`form-control mb-0 ${styles.inputField}`}
                 autoComplete="off"
                 required
               />
-            </Form.Group>
-            <Form.Group>
-              <Form.Label className={styles.formLabel}>
-                {t('social')}
-              </Form.Label>
+            </div>
+            <div className="mb-3">
+              <label className={styles.formLabel}>{t('social')}</label>
               {/* Social media inputs */}
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="facebook"
                   name="facebookURL"
                   data-testid="facebook"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.facebookURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -312,12 +310,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="instagram"
                   name="instagramURL"
                   data-testid="instagram"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.instagramURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -326,12 +324,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={XLogo} alt={`X ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="X"
                   name="xURL"
                   data-testid="X"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.xURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -340,12 +338,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="linkedIn"
                   name="linkedInURL"
                   data-testid="linkedIn"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.linkedInURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -354,12 +352,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={GithubLogo} alt={`Github ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="github"
                   name="githubURL"
                   data-testid="github"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.githubURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -368,12 +366,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="youtube"
                   name="youtubeURL"
                   data-testid="youtube"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.youtubeURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -382,12 +380,12 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="reddit"
                   name="redditURL"
                   data-testid="reddit"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.redditURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
@@ -396,19 +394,19 @@ const CommunityProfile = (): JSX.Element => {
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
-                <Form.Control
+                <input
                   type="url"
                   id="slack"
                   name="slackURL"
                   data-testid="slack"
-                  className={`mb-0 mt-0 ${styles.inputField}`}
+                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.slackURL}
                   onChange={handleOnChange}
                   placeholder={t('url')}
                   autoComplete="off"
                 />
               </div>
-            </Form.Group>
+            </div>
             <div
               className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >
@@ -429,7 +427,7 @@ const CommunityProfile = (): JSX.Element => {
                 {tCommon('saveChanges')}
               </Button>
             </div>
-          </Form>
+          </form>
         </Card.Body>
       </Card>
 
