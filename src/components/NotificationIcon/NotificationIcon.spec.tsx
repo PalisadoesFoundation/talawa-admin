@@ -97,7 +97,7 @@ describe('NotificationIcon Component', () => {
 
   it('should render loading state', async () => {
     render(
-      <MockedProvider mocks={mocks([], false, 500)}>
+      <MockedProvider mocks={mocks([], false, 50)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
