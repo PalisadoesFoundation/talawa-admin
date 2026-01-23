@@ -505,7 +505,9 @@ describe('PledgeModal', () => {
   it('should show validation error when submitting without required fields', async () => {
     renderPledgeModal(mockLink, pledgeProps[0]);
 
-    await userEvent.click(screen.getByTestId('submitPledgeBtn'));
+    const amountInput = screen.getByLabelText('Amount');
+    await userEvent.click(amountInput);
+    await userEvent.tab();
 
     await waitFor(() => {
       expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();
@@ -602,9 +604,11 @@ describe('PledgeModal', () => {
     });
 
     // Also verify that after attempting to submit, validation error shows
-    await act(async () => {
-      await userEvent.click(submitButton);
-    });
+    // Since button is disabled, we cannot click it.
+    // We must touch the field to see the error.
+    const amountInput = screen.getByLabelText('Amount');
+    await userEvent.click(amountInput);
+    await userEvent.tab(); // Blur
 
     await waitFor(() => {
       expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();

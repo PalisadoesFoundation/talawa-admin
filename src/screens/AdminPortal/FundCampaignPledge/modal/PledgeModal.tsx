@@ -127,7 +127,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   const isAmountValid = formState.pledgeAmount > 0;
 
-  const showAmountError = amountTouched || formState.pledgeAmount < 1;
+  const showAmountError = amountTouched && !isAmountValid;
 
   // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
