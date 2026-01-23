@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import React from 'react';
+import dayjs from 'dayjs';
 import {
   renderHeader,
   renderCellValue,
@@ -108,21 +109,21 @@ describe('DataTable utils', () => {
     });
 
     it('returns JSON string for Date objects', () => {
-      const date = new Date('2024-01-01T00:00:00.000Z');
+      const date = dayjs().subtract(30, 'days').toDate();
       const result = renderCellValue(date);
       expect(result).toBe(JSON.stringify(date));
     });
   });
 
   describe('getCellValue', () => {
-    interface TestRow {
+    interface ITestRow {
       id: number;
       name: string;
       email: string;
       nested?: { value: string };
     }
 
-    const testRow: TestRow = {
+    const testRow: ITestRow = {
       id: 1,
       name: 'John Doe',
       email: 'john@example.com',
@@ -130,17 +131,17 @@ describe('DataTable utils', () => {
     };
 
     it('returns value using property accessor (key)', () => {
-      const result = getCellValue<TestRow, string>(testRow, 'name');
+      const result = getCellValue<ITestRow, string>(testRow, 'name');
       expect(result).toBe('John Doe');
     });
 
     it('returns number using property accessor', () => {
-      const result = getCellValue<TestRow, number>(testRow, 'id');
+      const result = getCellValue<ITestRow, number>(testRow, 'id');
       expect(result).toBe(1);
     });
 
     it('returns nested object using property accessor', () => {
-      const result = getCellValue<TestRow, { value: string } | undefined>(
+      const result = getCellValue<ITestRow, { value: string } | undefined>(
         testRow,
         'nested',
       );
@@ -148,30 +149,30 @@ describe('DataTable utils', () => {
     });
 
     it('returns value using function accessor', () => {
-      const accessor = (row: TestRow): string => row.name.toUpperCase();
-      const result = getCellValue<TestRow, string>(testRow, accessor);
+      const accessor = (row: ITestRow): string => row.name.toUpperCase();
+      const result = getCellValue<ITestRow, string>(testRow, accessor);
       expect(result).toBe('JOHN DOE');
     });
 
     it('returns computed value using function accessor', () => {
-      const accessor = (row: TestRow): string => `${row.name} <${row.email}>`;
-      const result = getCellValue<TestRow, string>(testRow, accessor);
+      const accessor = (row: ITestRow): string => `${row.name} <${row.email}>`;
+      const result = getCellValue<ITestRow, string>(testRow, accessor);
       expect(result).toBe('John Doe <john@example.com>');
     });
 
     it('returns nested value using function accessor', () => {
-      const accessor = (row: TestRow): string => row.nested?.value ?? '';
-      const result = getCellValue<TestRow, string>(testRow, accessor);
+      const accessor = (row: ITestRow): string => row.nested?.value ?? '';
+      const result = getCellValue<ITestRow, string>(testRow, accessor);
       expect(result).toBe('nested value');
     });
 
     it('handles undefined property values with property accessor', () => {
-      const rowWithoutNested: TestRow = {
+      const rowWithoutNested: ITestRow = {
         id: 2,
         name: 'Jane',
         email: 'jane@example.com',
       };
-      const result = getCellValue<TestRow, { value: string } | undefined>(
+      const result = getCellValue<ITestRow, { value: string } | undefined>(
         rowWithoutNested,
         'nested',
       );
@@ -191,9 +192,9 @@ describe('DataTable utils', () => {
     });
 
     it('returns ISO string for valid Date', () => {
-      const date = new Date('2024-06-15T10:30:00.000Z');
+      const date = dayjs().subtract(15, 'days').toDate();
       const result = toSearchableString(date);
-      expect(result).toBe('2024-06-15T10:30:00.000Z');
+      expect(result).toBe(date.toISOString());
     });
 
     it('returns empty string for invalid Date', () => {
