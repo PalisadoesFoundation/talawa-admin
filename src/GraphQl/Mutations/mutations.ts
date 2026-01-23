@@ -125,7 +125,6 @@ export const UPDATE_USER_MUTATION = gql`
     }
   }
 `;
-
 // to update the password of user
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`
