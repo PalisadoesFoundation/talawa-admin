@@ -5,12 +5,15 @@
  * `@param` props - Component props from InterfaceDeleteVolunteerGroupModal
  * `@returns` JSX.Element
  */
-import { Button, Form } from 'react-bootstrap';
 import styles from './VolunteerGroupDeleteModal.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import Button from 'shared-components/Button';
+import FormCheck from 'react-bootstrap/FormCheck';
+import FormGroup from 'react-bootstrap/FormGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
@@ -90,9 +93,9 @@ const VolunteerGroupDeleteModal: React.FC<
 
       {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
       {group?.isTemplate && !group?.isInstanceException && (
-        <Form.Group className="mb-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
-          <Form.Check
+        <FormGroup className="mb-3">
+          <FormLabel>{t('applyTo')}</FormLabel>
+          <FormCheck
             type="radio"
             label={t('entireSeries')}
             name="applyTo"
@@ -101,7 +104,7 @@ const VolunteerGroupDeleteModal: React.FC<
             checked={applyTo === 'series'}
             onChange={() => setApplyTo('series')}
           />
-          <Form.Check
+          <FormCheck
             type="radio"
             label={t('thisEventOnly')}
             name="applyTo"
@@ -110,7 +113,7 @@ const VolunteerGroupDeleteModal: React.FC<
             checked={applyTo === 'instance'}
             onChange={() => setApplyTo('instance')}
           />
-        </Form.Group>
+        </FormGroup>
       )}
     </BaseModal>
   );

@@ -54,7 +54,7 @@ export const FormFieldGroup: React.FC<
         }`}
       >
         {label}
-        {required && <span aria-label={tCommon('required')}>*</span>}
+        {required && <span aria-label={tCommon('required')}> *</span>}
       </Form.Label>
 
       {children}
