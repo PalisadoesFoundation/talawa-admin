@@ -41,7 +41,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
+import styles from './UpdateSession.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import Button from 'shared-components/Button/Button';

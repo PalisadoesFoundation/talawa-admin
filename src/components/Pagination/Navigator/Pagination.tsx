@@ -34,6 +34,8 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
+import styles from './Pagination.module.css';
+
 interface InterfaceTablePaginationActionsProps {
   count: number;
   page: number;
@@ -99,7 +101,7 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box className={styles.container}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
