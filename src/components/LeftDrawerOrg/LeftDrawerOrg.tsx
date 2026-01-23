@@ -111,7 +111,7 @@ const LeftDrawerOrg = ({
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(
     () => (
-      <div className={styles.optionList} data-cy="leftDrawerOptionList">
+      <>
         {targets.map(({ name, url }, index) =>
           url ? (
             <SidebarNavItem
@@ -148,7 +148,7 @@ const LeftDrawerOrg = ({
           onItemClick={handleLinkClick}
           useSimpleButton={true}
         />
-      </div>
+      </>
     ),
     [
       targets,
