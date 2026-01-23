@@ -613,7 +613,10 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "search": "搜索",
+    "Events": "活动",
+    "Workshops": "研讨会",
+    "selectMonth": "选择月份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
