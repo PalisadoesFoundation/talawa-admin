@@ -34,7 +34,7 @@ Whether to center the modal vertically on the page
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L96)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L97)
 
 Content to render inside the modal body
 
@@ -58,7 +58,7 @@ Additional CSS class name for the modal
 
 > `optional` **customFooter**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L127)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L128)
 
 Custom footer content to replace the default action buttons
 When provided, primaryText, secondaryText, and onPrimary are ignored
@@ -98,7 +98,7 @@ When provided, shows an Alert component with the error
 
 > `optional` **hideSecondary**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L121)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L122)
 
 Whether to hide the secondary (cancel) button
 
@@ -142,7 +142,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > `optional` **onPrimary**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L102)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L103)
 
 Callback function for the primary action button
 If not provided, the primary button will not be rendered
@@ -171,7 +171,7 @@ Controls whether the modal is visible (defaults to false)
 
 > `optional` **primaryDisabled**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L115)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L116)
 
 Whether to disable the primary button
 Automatically disabled when loading is true
@@ -196,7 +196,7 @@ Text for the primary action button
 
 > `optional` **primaryVariant**: `"primary"` \| `"success"` \| `"danger"`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L108)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L109)
 
 Variant style for the primary button
 
@@ -220,7 +220,7 @@ Text for the secondary action button
 
 > `optional` **showFooter**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L133)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L134)
 
 Whether to show the modal footer at all
 

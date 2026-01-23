@@ -46,7 +46,7 @@ import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
-import Avatar from 'shared-components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -81,10 +81,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const { t: tErrors } = useTranslation('errors');
 
   const { orgId } = useParams();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -146,6 +142,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     () => debounce((value: string) => setSearchTerm(value), 300),
     [],
   );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (eventData && eventData.event) {
@@ -209,6 +212,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     eventActionItemsRefetch();
   }, [eventId, eventActionItemsRefetch]);
 
+  // Early return if orgId is not available - must be after all hooks
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   if (eventInfoLoading) {
     return (
       <LoadingState isLoading={eventInfoLoading} variant="spinner">
@@ -246,14 +254,17 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         let avatarKey = 'no-assignment';
         let isAssigned = false;
         let isGroup = false;
+        let avatarUrl: string | null = null;
 
         if (volunteer?.user) {
           displayName = volunteer.user.name || t('unknownVolunteer');
           avatarKey = volunteer.id;
+          avatarUrl = volunteer.user.avatarURL || null;
           isAssigned = true;
         } else if (volunteerGroup) {
           displayName = volunteerGroup.name;
           avatarKey = volunteerGroup.id;
+          avatarUrl = volunteerGroup.leader?.avatarURL || null;
           isAssigned = true;
           isGroup = true;
         }
@@ -263,8 +274,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             className={`d-flex fw-bold align-items-center ms-2 ${styles.assigneeCellContainer}`}
             data-testid="assigneeName"
           >
-            <div className={styles.TableImage}>
-              <Avatar key={avatarKey} name={displayName} alt={displayName} />
+            <div className={styles.tableImageWrapper}>
+              <ProfileAvatarDisplay
+                key={avatarKey}
+                fallbackName={displayName}
+                imageUrl={avatarUrl}
+                size="small"
+              />
             </div>
             <span className={!isAssigned ? 'text-muted' : ''}>
               {displayName}

@@ -555,7 +555,6 @@
     "inviteOnly": "Sur invitation uniquement",
     "registerable": "Est enregistrable",
     "searchMemberName": "Rechercher le nom du membre",
-    "isRegistrable": "Est enregistrable",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -1935,6 +1934,7 @@
     "checkInStatus": "Statut d'Enregistrement"
   },
   "eventRegistrantsModal": {
+    "title": "Inscrits à l'Événement",
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
@@ -1944,11 +1944,7 @@
     "selectUserFirst": "Veuillez d'abord choisir un utilisateur à ajouter !",
     "unknownUser": "Utilisateur inconnu",
     "inviteByEmailButton": "Inviter par email",
-    "addRegistrantButton": "Ajouter un inscrit",
     "noRegistrationsFound": "Aucune inscription trouvée.",
-    "addOnspotRegistrationLink": "Ajouter une inscription sur place",
-    "addRegistrantLabel": "Ajouter un inscrit",
-    "addRegistrantPlaceholder": "Entrez le nom complet ou l'email de l'utilisateur",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",
@@ -1966,7 +1962,12 @@
       "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
       "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
       "invitesSentSuccessfully": "Invitations envoyées avec succès"
-    }
+    },
+    "addRegistrant": "Ajouter un Inscrit",
+    "addOnspotRegistration": "Ajouter une Inscription sur Place",
+    "registrantLabel": "Ajouter un Inscrit",
+    "registrantPlaceholder": "Choisissez l'utilisateur que vous souhaitez ajouter",
+    "chooseUser": "Veuillez d'abord choisir un utilisateur à ajouter!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Format d'email invalide",

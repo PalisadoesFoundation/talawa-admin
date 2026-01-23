@@ -37,6 +37,19 @@ vi.mock('react-router', async () => {
   };
 });
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => {
+  const mockProfileAvatar = ({
+    fallbackName,
+    dataTestId,
+  }: {
+    fallbackName: string;
+    dataTestId?: string;
+  }): JSX.Element => (
+    <div data-testid={dataTestId || 'avatar'}>{fallbackName}</div>
+  );
+  return { ProfileAvatarDisplay: mockProfileAvatar };
+});
+
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
 const link3 = new StaticMockLink(MOCKS_EMPTY);
@@ -304,7 +317,7 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
-  it('renders avatar image when user has avatarURL (img-url)', async () => {
+  it('renders ProfileAvatarDisplay for volunteers', async () => {
     renderVolunteers(link1);
 
     await waitFor(() => {
@@ -322,10 +335,9 @@ describe('Testing Volunteers Screen', () => {
     });
 
     await waitFor(() => {
-      // Find the volunteer that has an avatarURL (Bruce Graza)
-      const img = screen.queryByTestId('volunteer_image');
-      expect(img).toBeInTheDocument();
-      expect(img).toHaveAttribute('src', 'img-url');
+      // All volunteers should render ProfileAvatarDisplay with volunteer_avatar_* testId
+      const avatars = screen.queryAllByTestId(/^volunteer_avatar_/);
+      expect(avatars.length).toBeGreaterThan(0);
     });
   });
 
@@ -592,7 +604,7 @@ describe('Testing Volunteers Screen', () => {
     });
   });
 
-  it('should render Avatar component when volunteer has no avatarURL', async () => {
+  it('should render ProfileAvatarDisplay component for all volunteers', async () => {
     renderVolunteers(link1);
 
     // Wait for volunteers to load and DataGrid to render
@@ -609,14 +621,10 @@ describe('Testing Volunteers Screen', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
     });
 
-    // Now check for avatar components
-    // volunteer1 (Teresa Bradley) in mocks has avatarURL: null, should render Avatar component
-    const avatars = screen.queryAllByTestId('volunteer_avatar');
-    // volunteer2 (Bruce Graza) in mocks has avatarURL: 'img-url', should render img element
-    const images = screen.queryAllByTestId('volunteer_image');
-
-    // At least one of each should be present
-    expect(avatars.length + images.length).toBeGreaterThan(0);
+    // Now check for avatar components - all volunteers use ProfileAvatarDisplay
+    const avatars = screen.queryAllByTestId(/^volunteer_avatar_/);
+    // All volunteers should have avatars rendered via ProfileAvatarDisplay
+    expect(avatars.length).toBeGreaterThan(0);
   });
 
   it('should render volunteer modals conditionally when volunteer state is set', async () => {
@@ -669,10 +677,10 @@ describe('Testing Volunteers Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    // Verify initial state shows multiple volunteers
+    // Verify initial state shows multiple volunteers (use getAllByText since name appears in avatar and text)
     await waitFor(() => {
-      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
-      expect(screen.getByText('Bruce Graza')).toBeInTheDocument();
+      expect(screen.getAllByText('Teresa Bradley').length).toBeGreaterThan(0);
+      expect(screen.getAllByText('Bruce Graza').length).toBeGreaterThan(0);
     });
 
     // Find the search input
@@ -692,7 +700,7 @@ describe('Testing Volunteers Screen', () => {
     // After debounced search with 'Teresa', only Teresa Bradley should appear
     await waitFor(
       () => {
-        expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+        expect(screen.getAllByText('Teresa Bradley').length).toBeGreaterThan(0);
         // Bruce Graza should no longer be visible after filtering by 'Teresa'
         expect(screen.queryByText('Bruce Graza')).not.toBeInTheDocument();
       },

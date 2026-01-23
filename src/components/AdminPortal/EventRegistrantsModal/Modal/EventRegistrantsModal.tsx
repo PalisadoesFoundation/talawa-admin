@@ -17,7 +17,7 @@
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
  * - Displays a loading spinner while data is being fetched.
- * - Integrates with `NotificationToast` for user notifications..
+ * - Integrates with `NotificationToast` for user notifications.
  * - Supports translations using `react-i18next`.
  *
  * @example
@@ -56,6 +56,7 @@ import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type ModalPropType = {
   show: boolean;
@@ -106,10 +107,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning(t('selectUserFirst'));
+      NotificationToast.warning(t('chooseUser') as string);
       return;
     }
-    NotificationToast.warning(t('addingAttendee'));
+    NotificationToast.warning(t('addingAttendee') as string);
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -156,9 +157,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         <BaseModal
           show={show}
           onHide={handleClose}
-          title={t('eventRegistrantsTitle')}
+          title={t('title')}
           headerClassName={styles.modalHeader}
-          dataTestId="invite-modal"
+          dataTestId="event-registrants-modal"
           showCloseButton
           footer={
             <div>
@@ -175,7 +176,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 data-testid="add-registrant-btn"
                 onClick={addRegistrant}
               >
-                {t('addRegistrantButton')}
+                {t('addRegistrant')}
               </Button>
             </div>
           }
@@ -196,20 +197,34 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                   }}
                   onMouseDown={(e) => e.preventDefault()}
                 >
-                  {t('addOnspotRegistrationLink')}
+                  {t('addOnspotRegistration')}
                 </button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
             getOptionLabel={(member: InterfaceUser): string =>
-              member.name || t('unknownUser')
+              member.name || tCommon('unknownUser')
             }
+            renderOption={(props, member: InterfaceUser): React.ReactNode => (
+              <li {...props} key={member.id}>
+                <div className="d-flex align-items-center">
+                  <div className="me-2">
+                    <ProfileAvatarDisplay
+                      fallbackName={member.name || tCommon('unknownUser')}
+                      imageUrl={member.avatarURL}
+                      size="small"
+                    />
+                  </div>
+                  <span>{member.name || tCommon('unknownUser')}</span>
+                </div>
+              </li>
+            )}
             renderInput={(params): React.ReactNode => (
               <TextField
                 {...params}
                 data-testid="autocomplete"
-                label={t('addRegistrantLabel') as string}
-                placeholder={t('addRegistrantPlaceholder') as string}
+                label={t('registrantLabel')}
+                placeholder={t('registrantPlaceholder')}
               />
             )}
           />

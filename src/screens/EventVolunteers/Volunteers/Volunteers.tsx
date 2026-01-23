@@ -50,7 +50,11 @@ import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
-import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
+import {
+  Circle,
+  VolunteerActivism,
+  WarningAmberRounded,
+} from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -59,9 +63,9 @@ import type {
   GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
-import Avatar from 'shared-components/Avatar/Avatar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import styles from './Volunteers.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
@@ -255,25 +259,14 @@ function Volunteers(): JSX.Element {
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="volunteerName"
           >
-            {avatarURL ? (
-              <img
-                src={avatarURL}
-                alt={tCommon('volunteer')}
-                data-testid="volunteer_image"
-                className={styles.tableImages}
+            <div className={styles.tableImageWrapper}>
+              <ProfileAvatarDisplay
+                fallbackName={name}
+                imageUrl={avatarURL}
+                size="small"
+                dataTestId={'volunteer_avatar_' + id}
               />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={id + '1'}
-                  dataTestId="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.tableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
-            )}
+            </div>
             {name}
           </div>
         );
@@ -289,15 +282,17 @@ function Volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const status = params.row.volunteerStatus;
-        const statusVariant =
-          status === 'accepted'
-            ? 'accepted'
-            : status === 'rejected'
-              ? 'rejected'
-              : 'pending';
-
-        return <StatusBadge variant={statusVariant} dataTestId="statusChip" />;
+        const status = params.row.volunteerStatus as
+          | 'accepted'
+          | 'rejected'
+          | 'pending';
+        return (
+          <StatusBadge
+            variant={status || 'pending'}
+            icon={<Circle className={styles.chipIcon} />}
+            dataTestId="statusChip"
+          />
+        );
       },
     },
     {

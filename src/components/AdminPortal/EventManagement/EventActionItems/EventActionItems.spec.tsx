@@ -64,11 +64,25 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   },
 }));
 
-vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="avatar">{name}</div>
-  ),
-}));
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => {
+  const mockProfileAvatar = ({
+    fallbackName,
+    dataTestId,
+    imageUrl,
+  }: {
+    fallbackName: string;
+    dataTestId?: string;
+    imageUrl?: string | null;
+  }): JSX.Element => (
+    <div
+      data-testid={dataTestId || 'avatar'}
+      data-image-url={imageUrl ?? 'none'}
+    >
+      {fallbackName}
+    </div>
+  );
+  return { ProfileAvatarDisplay: mockProfileAvatar };
+});
 
 vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
@@ -381,8 +395,6 @@ const renderEventActionItems = (
 describe('EventActionItems', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-  beforeEach(() => {
     vi.clearAllMocks();
   });
 
@@ -1357,7 +1369,7 @@ describe('EventActionItems', () => {
                     id: 'groupId1',
                     name: 'Volunteer Group A',
                     description: 'Test group',
-                    leaderUser: {
+                    leader: {
                       id: 'leaderId1',
                       name: 'Group Leader',
                       avatarURL: '',
@@ -1408,7 +1420,7 @@ describe('EventActionItems', () => {
                     id: 'groupId1',
                     name: 'Test Group',
                     description: 'Test',
-                    leaderUser: {
+                    leader: {
                       id: 'leaderId',
                       name: 'Leader',
                       avatarURL: '',
@@ -1522,6 +1534,161 @@ describe('EventActionItems', () => {
       // Verify component renders and eventually loads data
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('ProfileAvatarDisplay imageUrl Prop', () => {
+    it('should pass volunteer.user.avatarURL to ProfileAvatarDisplay', async () => {
+      const avatarUrl = 'https://example.com/volunteer-avatar.png';
+      const mockDataWithVolunteerAvatar = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'volunteerAvatarItem',
+                  volunteer: {
+                    id: 'volunteerId1',
+                    hasAccepted: true,
+                    isPublic: true,
+                    hoursVolunteered: 5,
+                    user: {
+                      id: 'userId1',
+                      name: 'John Doe',
+                      avatarURL: avatarUrl,
+                    },
+                  },
+                  volunteerGroup: null,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithVolunteerAvatar },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        const avatarElement = screen.getByTestId('avatar');
+        expect(avatarElement).toHaveAttribute('data-image-url', avatarUrl);
+        expect(avatarElement).toHaveTextContent('John Doe');
+      });
+    });
+
+    it('should pass volunteerGroup.leaderUser.avatarURL when volunteer is null', async () => {
+      const leaderAvatarUrl = 'https://example.com/leader-avatar.png';
+      const mockDataWithGroupLeaderAvatar = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'groupLeaderAvatarItem',
+                  volunteerId: null,
+                  volunteer: null,
+                  volunteerGroupId: 'groupId1',
+                  volunteerGroup: {
+                    id: 'groupId1',
+                    name: 'Test Group',
+                    description: 'A test volunteer group',
+                    leader: {
+                      id: 'leaderId1',
+                      name: 'Leader User',
+                      avatarURL: leaderAvatarUrl,
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithGroupLeaderAvatar },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        const avatarElement = screen.getByTestId('avatar');
+        expect(avatarElement).toHaveAttribute(
+          'data-image-url',
+          leaderAvatarUrl,
+        );
+        expect(avatarElement).toHaveTextContent('Test Group');
+      });
+    });
+
+    it('should pass "none" to ProfileAvatarDisplay when no avatarURL exists', async () => {
+      const mockDataNoAvatar = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'noAvatarItem',
+                  volunteer: {
+                    id: 'volunteerId1',
+                    hasAccepted: true,
+                    isPublic: true,
+                    hoursVolunteered: 5,
+                    user: {
+                      id: 'userId1',
+                      name: 'User No Avatar',
+                      avatarURL: null,
+                    },
+                  },
+                  volunteerGroup: null,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataNoAvatar },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        const avatarElement = screen.getByTestId('avatar');
+        expect(avatarElement).toHaveAttribute('data-image-url', 'none');
+        expect(avatarElement).toHaveTextContent('User No Avatar');
       });
     });
   });

@@ -1918,6 +1918,7 @@
     "checkInStatus": "Estado de Registro"
   },
   "eventRegistrantsModal": {
+    "title": "Registrantes del Evento",
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
     "eventRegistrantsTitle": "Registrantes del evento",
@@ -1927,11 +1928,7 @@
     "selectUserFirst": "¡Por favor, elija un usuario para agregar primero!",
     "unknownUser": "Usuario desconocido",
     "inviteByEmailButton": "Invitar por correo electrónico",
-    "addRegistrantButton": "Agregar registrado",
     "noRegistrationsFound": "No se encontraron registros",
-    "addOnspotRegistrationLink": "Agregar enlace de registro en el lugar",
-    "addRegistrantLabel": "Agregar registrado",
-    "addRegistrantPlaceholder": "Ingrese el correo electrónico del registrado",
     "inviteByEmail": {
       "addRecipient": "Agregar destinatario",
       "email": "Correo electrónico",
@@ -1949,7 +1946,12 @@
       "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
       "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
       "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
-    }
+    },
+    "addRegistrant": "Agregar Registrante",
+    "addOnspotRegistration": "Agregar Registro en el Lugar",
+    "registrantLabel": "Agregar un Registrante",
+    "registrantPlaceholder": "Elija el usuario que desea agregar",
+    "chooseUser": "¡Por favor, elija un usuario para agregar primero!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Formato de correo electrónico no válido",

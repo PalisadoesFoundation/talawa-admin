@@ -1935,6 +1935,7 @@
     "checkInStatus": "चेक इन स्थिति"
   },
   "eventRegistrantsModal": {
+    "title": "कार्यक्रम पंजीकृत",
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",
@@ -1944,11 +1945,7 @@
     "selectUserFirst": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
     "unknownUser": "अज्ञात उपयोगकर्ता",
     "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
-    "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
-    "addOnspotRegistrationLink": "ऑन-स्पॉट पंजीकरण जोड़ें लिंक",
-    "addRegistrantLabel": "पंजीकृत व्यक्ति जोड़ें",
-    "addRegistrantPlaceholder": "पंजीकृत व्यक्ति का नाम या ईमेल दर्ज करें",
     "inviteByEmail": {
       "addRecipient": "प्राप्तकर्ता जोड़ें",
       "email": "ईमेल",
@@ -1966,7 +1963,12 @@
       "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
       "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
       "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
-    }
+    },
+    "addRegistrant": "पंजीकृत जोड़ें",
+    "addOnspotRegistration": "ऑनस्पॉट पंजीकरण जोड़ें",
+    "registrantLabel": "एक पंजीकृत जोड़ें",
+    "registrantPlaceholder": "वह उपयोगकर्ता चुनें जिसे आप जोड़ना चाहते हैं",
+    "chooseUser": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
