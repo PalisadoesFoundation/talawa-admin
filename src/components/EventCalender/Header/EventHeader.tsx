@@ -5,23 +5,17 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param props - The props for the EventHeader component.
  * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
  * @param handleChangeView - Callback function to handle changes in the calendar view type.
  * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns - The rendered EventHeader component.
+ * @returns The rendered EventHeader component.
  *
  * @remarks
- * - This component uses `SearchBar` for searching events by name.
- * - It includes two `SortingButton` components for selecting the calendar view type and event type.
- * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
- *
- * - `react-bootstrap` for the `Button` component.
- * - `@mui/icons-material` for the `AddIcon`.
- * - `react-i18next` for translations.
- * - Custom styles from `style/app-fixed.module.css`.
- * - Shared Components: `SortingButton` and `SearchBar`.
+ * - Uses `SearchBar` for searching events by name.
+ * - Uses `SortingButton` for selecting calendar view type and event type.
+ * - Uses `AddIcon` from MUI for the create event button.
+ * - Styles from `EventHeader.module.css`.
  *
  * @example
  * ```tsx
