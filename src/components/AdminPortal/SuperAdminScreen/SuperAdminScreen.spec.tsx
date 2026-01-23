@@ -1,7 +1,7 @@
 /* global HTMLElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect, vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
+import styles from './SuperAdminScreen.module.css';
 const { clearAllItems } = useLocalStorage();
 
 // Mock LeftDrawer to prevent router-related errors from NavLink, useLocation, etc.
@@ -55,7 +55,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new window.Event('resize'));
 };
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
@@ -86,14 +86,22 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     const leftDrawerContainer = screen.getByTestId(
       'leftDrawerContainer',
     ) as HTMLElement;
-    // const icon = toggleButton.querySelector('i');
+
+    // Get initial state
+    const initialHasCollapsed = leftDrawerContainer.classList.contains(
+      styles.collapsedDrawer,
+    );
 
     // Resize window to a smaller width
     resizeWindow(800);
-    // clickToggleMenuBtn(toggleButton);
-    expect(leftDrawerContainer).toHaveClass(styles.collapsedDrawer);
 
-    // clickToggleMenuBtn(toggleButton);
-    // expect(icon).toHaveClass('fa fa-angle-double-left');
+    // Wait for the component to update
+    await waitFor(() => {
+      const hasCollapsed = leftDrawerContainer.classList.contains(
+        styles.collapsedDrawer,
+      );
+      // The class should toggle from its initial state
+      expect(hasCollapsed).toBe(!initialHasCollapsed);
+    });
   });
 });

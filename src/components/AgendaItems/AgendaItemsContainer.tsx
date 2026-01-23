@@ -33,7 +33,7 @@ import type { FormEvent, JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
