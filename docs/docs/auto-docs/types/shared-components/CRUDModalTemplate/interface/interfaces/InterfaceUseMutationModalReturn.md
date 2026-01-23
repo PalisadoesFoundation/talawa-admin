@@ -28,7 +28,7 @@ Return type for useMutationModal hook
 
 > **clearError**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L348)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L349)
 
 Clears the error state
 
@@ -60,7 +60,7 @@ Closes the modal
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L346)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L347)
 
 Error from the last mutation attempt
 
@@ -70,7 +70,7 @@ Error from the last mutation attempt
 
 > **execute**: (`data?`) => `Promise`\<`TResult`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L344)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L345)
 
 Executes the mutation with current form data
 
