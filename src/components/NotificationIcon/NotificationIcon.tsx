@@ -73,37 +73,41 @@ const NotificationIcon = () => {
       <Dropdown.Menu className={styles.glassMenu}>
         {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
         {error && <Dropdown.Item>{t('errorFetching')}</Dropdown.Item>}
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
-            <Dropdown.Item
-              key={notification.id}
-              className={`${styles.notificationItem} ${
-                notification.navigation ? styles.clickable : ''
-              }`}
-              onClick={() => {
-                if (notification.navigation) {
-                  navigate(notification.navigation);
-                  return;
-                }
-                const path = location.pathname || '';
-                const isUserPortal =
-                  path.startsWith('/user/') || path.startsWith('/user');
-                navigate(isUserPortal ? '/user/notification' : '/notification');
-              }}
-            >
-              {!notification.isRead && (
-                <span className={styles.notificationDot} title={t('unread')} />
-              )}
-              <span className={styles.notificationText}>
-                {notification.body.length > 48
-                  ? notification.body.slice(0, 48) + '...'
-                  : notification.body}
-              </span>
-            </Dropdown.Item>
-          ))
-        ) : (
-          <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
-        )}
+        {!loading &&
+          !error &&
+          (notifications.length > 0 ? (
+            notifications.map((notification) => (
+              <Dropdown.Item
+                className={`${styles.notificationItem} ${styles.clickable}`}
+                onClick={() => {
+                  if (notification.navigation) {
+                    navigate(notification.navigation);
+                    return;
+                  }
+                  const path = location.pathname || '';
+                  const isUserPortal =
+                    path.startsWith('/user/') || path.startsWith('/user');
+                  navigate(
+                    isUserPortal ? '/user/notification' : '/notification',
+                  );
+                }}
+              >
+                {!notification.isRead && (
+                  <span
+                    className={styles.notificationDot}
+                    title={t('unread')}
+                  />
+                )}
+                <span className={styles.notificationText}>
+                  {notification.body.length > 48
+                    ? notification.body.slice(0, 48) + '...'
+                    : notification.body}
+                </span>
+              </Dropdown.Item>
+            ))
+          ) : (
+            <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
+          ))}
         <Dropdown.Divider />
         <Dropdown.Item
           onClick={() => {

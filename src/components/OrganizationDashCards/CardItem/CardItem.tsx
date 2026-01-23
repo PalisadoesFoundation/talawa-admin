@@ -81,7 +81,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 data-testid="display-img"
                 avatarStyle={styles.cardItemImage}
                 name={`${title}`}
-                alt=""
+                alt={t('avatar', { title })}
               />
             ) : (
               <img
