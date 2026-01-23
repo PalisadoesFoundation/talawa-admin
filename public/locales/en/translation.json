@@ -2291,10 +2291,17 @@
     "view": "View",
     "changeLanguage": "Change Language",
     "userNotFoundError": "User not found",
+    "selectAllOnPage": "Select all rows on this page",
+    "actions": "Actions",
+    "bulkActions": "Bulk actions",
+    "selected": "selected",
+    "clear": "Clear",
+    "clearSelection": "Clear selection",
+    "loading": "Loading...",
+    "selectRow": "Select row {{rowKey}}",
     "yes": "Yes",
     "no": "No",
-    "cancel": "Cancel",
-    "loading": "Loading"
+    "cancel": "Cancel"
   },
   "donation": {
     "amount_label": "Amount",
