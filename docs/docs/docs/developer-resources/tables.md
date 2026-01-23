@@ -684,11 +684,11 @@ Enable selection, add row actions, and bulk actions for selected rows.
 
 ```tsx
 import type {
-  RowAction,
-  BulkAction,
-} from 'src/shared-components/DataTable/types';
+  IRowAction,
+  IBulkAction,
+} from 'src/types/shared-components/DataTable/interface';
 
-const rowActions: RowAction<User>[] = [
+const rowActions: IRowAction<User>[] = [
   { id: 'open', label: 'Open', onClick: (u) => console.log('open', u.id) },
   {
     id: 'disable',
@@ -698,7 +698,7 @@ const rowActions: RowAction<User>[] = [
   },
 ];
 
-const bulkActions: BulkAction<User>[] = [
+const bulkActions: IBulkAction<User>[] = [
   {
     id: 'export',
     label: 'Export CSV',

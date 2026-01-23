@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { PaginationControls } from './Pagination';
 
 describe('PaginationControls', () => {
@@ -98,7 +99,8 @@ describe('PaginationControls', () => {
   });
 
   describe('Page Navigation', () => {
-    it('calls onPageChange with correct page when next button is clicked', () => {
+    it('calls onPageChange with correct page when next button is clicked', async () => {
+      const user = userEvent.setup();
       const onPageChange = vi.fn();
       render(
         <PaginationControls
@@ -108,11 +110,12 @@ describe('PaginationControls', () => {
         />,
       );
 
-      fireEvent.click(screen.getByLabelText('paginationNextLabel'));
+      await user.click(screen.getByLabelText('paginationNextLabel'));
       expect(onPageChange).toHaveBeenCalledWith(3);
     });
 
-    it('calls onPageChange with correct page when previous button is clicked', () => {
+    it('calls onPageChange with correct page when previous button is clicked', async () => {
+      const user = userEvent.setup();
       const onPageChange = vi.fn();
       render(
         <PaginationControls
@@ -122,7 +125,7 @@ describe('PaginationControls', () => {
         />,
       );
 
-      fireEvent.click(screen.getByLabelText('paginationPrevLabel'));
+      await user.click(screen.getByLabelText('paginationPrevLabel'));
       expect(onPageChange).toHaveBeenCalledWith(1);
     });
 

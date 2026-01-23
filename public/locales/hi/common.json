@@ -293,5 +293,10 @@
   "userNotFound": "उपयोगकर्ता नहीं मिला",
   "avatarProcessingError": "अवतार प्रोसेसिंग में त्रुटि, कृपया अपनी छवि जांचें।",
   "viewEventStatistics": "इवेंट सांख्यिकी देखें",
-  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें"
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
+  "selectAllOnPage": "इस पृष्ठ पर सभी पंक्तियों का चयन करें",
+  "selectRow": "पंक्ति {{rowKey}} का चयन करें",
+  "bulkActions": "सामूहिक क्रियाएं",
+  "selected": "चयनित",
+  "clearSelection": "चयन साफ़ करें"
 }
