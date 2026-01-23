@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -106,7 +106,7 @@ const mockNotificationToast = vi.hoisted(() => ({
   dismiss: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 
@@ -365,10 +365,10 @@ describe('Testing Agenda Items components', () => {
       translations.enterDescription,
     );
 
-    fireEvent.change(title, { target: { value: '' } });
+    await userEvent.clear(title);
     await userEvent.type(title, formData.title);
 
-    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.clear(description);
     await userEvent.type(description, formData.description);
 
     await waitFor(() => {
@@ -407,10 +407,8 @@ describe('Testing Agenda Items components', () => {
 
     const titleInput = screen.getByLabelText(translations.title);
     const descriptionInput = screen.getByLabelText(translations.description);
-    fireEvent.change(titleInput, { target: { value: '' } });
-    fireEvent.change(descriptionInput, {
-      target: { value: '' },
-    });
+    await userEvent.clear(titleInput);
+    await userEvent.clear(descriptionInput);
     await userEvent.type(titleInput, formData.title);
     await userEvent.type(descriptionInput, formData.description);
 
