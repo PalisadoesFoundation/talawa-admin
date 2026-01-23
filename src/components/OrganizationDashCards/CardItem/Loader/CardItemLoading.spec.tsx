@@ -34,4 +34,9 @@ describe('Test the CardItemLoading component', () => {
     const title = cardItemLoading.querySelector(`.${styles.title}`);
     expect(title).toBeInTheDocument();
   });
+
+  test('Should render the translated loading placeholder text', () => {
+    render(<CardItemLoading />);
+    expect(screen.getByText('cardItem.loadingPlaceholder')).toBeInTheDocument();
+  });
 });
