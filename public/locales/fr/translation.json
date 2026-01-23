@@ -89,7 +89,7 @@
     "emailResent": "Verification email has been resent successfully.",
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification",
-    "resendFailed": "Failed to resend verification email. Please try again.",
+    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
     "showPassword": "Afficher le mot de passe",
     "hidePassword": "Masquer le mot de passe"
   },

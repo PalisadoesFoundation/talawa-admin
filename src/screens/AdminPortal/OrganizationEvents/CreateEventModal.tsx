@@ -128,13 +128,17 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     }
   };
 
+  const handleCreateModalSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <CreateModal
         open={isOpen}
         title={t('eventDetails')}
         onClose={handleClose}
-        onSubmit={() => {}}
+        onSubmit={handleCreateModalSubmit}
         loading={createLoading}
       >
         <EventForm
