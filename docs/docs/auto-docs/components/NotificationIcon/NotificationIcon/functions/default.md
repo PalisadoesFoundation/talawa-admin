@@ -10,13 +10,14 @@ Defined in: [src/components/NotificationIcon/NotificationIcon.tsx:29](https://gi
 
 NotificationIcon component.
 
-`@remarks`
-A small, friendly notification bell used in the app header. It shows the
-unread count and a compact dropdown of the most recent notifications so
-users can quickly preview or navigate to them.
-
-`@returns` JSX.Element
-
 ## Returns
 
 `Element`
+
+JSX.Element's
+
+## Remarks
+
+A small, friendly notification bell used in the app header. It shows the
+unread count and a compact dropdown of the most recent notifications so
+users can quickly preview or navigate to them.
