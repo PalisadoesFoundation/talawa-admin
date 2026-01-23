@@ -23,6 +23,7 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { urlToFile } from 'utils/urlToFile';
+import { PREFIX, clearAllItems, getItem, setItem } from 'utils/useLocalstorage';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -158,21 +159,6 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   );
 };
 
-// Mock localStorage for user profile tests
-const mockLocalStorage = {
-  getItem: (key: string) => {
-    if (key === 'id') return '456';
-    if (key === 'sidebar') return 'false';
-    return null;
-  },
-  setItem: vi.fn(),
-};
-
-Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage,
-  writable: true,
-});
-
 const renderUserProfileScreen = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -197,6 +183,10 @@ describe('MemberDetail', () => {
     vi.spyOn(NotificationToast, 'error');
     vi.spyOn(NotificationToast, 'info');
     vi.spyOn(NotificationToast, 'warning');
+    clearAllItems(PREFIX);
+    setItem(PREFIX, 'id', '456');
+    setItem(PREFIX, 'userId', '456');
+    setItem(PREFIX, 'sidebar', false);
   });
 
   afterEach(() => {
@@ -733,18 +723,9 @@ describe('MemberDetail', () => {
 
   describe('Data Update and Processing Tests', () => {
     test('handles user profile localStorage updates on successful save', async () => {
-      const mockSetItem = vi.fn();
-      Object.defineProperty(window, 'localStorage', {
-        value: {
-          getItem: (key: string) => {
-            if (key === 'id') return '456';
-            if (key === 'sidebar') return 'false';
-            return null;
-          },
-          setItem: mockSetItem,
-        },
-        writable: true,
-      });
+      setItem(PREFIX, 'id', '456');
+      setItem(PREFIX, 'userId', '456');
+      setItem(PREFIX, 'sidebar', false);
 
       renderUserProfileScreen(link5); // Use UPDATE_MOCK which has successful response
       await wait();
@@ -755,10 +736,7 @@ describe('MemberDetail', () => {
       const saveButton = screen.getByTestId('saveChangesBtn');
       fireEvent.click(saveButton);
       await waitFor(() => {
-        expect(mockSetItem).toHaveBeenCalledWith(
-          'Talawa-admin_name',
-          '"Updated User Name"',
-        );
+        expect(getItem<string>(PREFIX, 'name')).toBe('Updated User Name');
       });
     });
   });

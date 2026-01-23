@@ -160,7 +160,7 @@ describe('EventDashboardScreen Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
 
   it('renders and toggles drawer states correctly', async () => {
