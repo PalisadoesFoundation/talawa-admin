@@ -80,6 +80,25 @@ describe('ESLint Search Input Restrictions', () => {
       expect(searchError).toBeDefined();
     });
 
+    it('should error on input with "Query" in placeholder', async () => {
+      const code = `
+        import React from 'react';
+        
+        function TestComponent() {
+          return <input placeholder="Query items" />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const searchError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('search-related placeholder'),
+      );
+
+      expect(searchError).toBeDefined();
+    });
+
     it('should error on input with search-related name attribute', async () => {
       const code = `
         import React from 'react';
