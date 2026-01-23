@@ -36,7 +36,7 @@ import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 
 // Define the type for an event edge

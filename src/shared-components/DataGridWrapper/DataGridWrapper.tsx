@@ -16,7 +16,7 @@ import styles from './DataGridWrapper.module.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchFilterBar from '../SearchFilterBar/SearchFilterBar';
 
-import SortingButton from '../../subComponents/SortingButton';
+import SortingButton from '../SortingButton/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataGridLoadingOverlay } from './DataGridLoadingOverlay';
 import { DataGridErrorOverlay } from './DataGridErrorOverlay';

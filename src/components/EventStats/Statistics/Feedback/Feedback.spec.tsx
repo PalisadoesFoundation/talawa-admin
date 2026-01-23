@@ -1,9 +1,9 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 import { render, waitFor } from '@testing-library/react';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, expect, it, vi } from 'vitest';
@@ -60,7 +60,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...nonEmptyProps} />
           </I18nextProvider>
         </Provider>
@@ -87,7 +87,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...emptyProps} />
           </I18nextProvider>
         </Provider>
@@ -110,7 +110,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...diverseRatingsProps} />
           </I18nextProvider>
         </Provider>
@@ -144,7 +144,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...diverseRatingsProps} />
           </I18nextProvider>
         </Provider>
@@ -170,5 +170,36 @@ describe('Testing Feedback Statistics Card', () => {
     const rating5Data = chartData.find((d) => d.id === 5);
     expect(rating5Data).toBeDefined();
     expect(rating5Data?.value).toBe(1);
+  });
+
+  it('should fallback to transparent colors if getComputedStyle throws an error', async () => {
+    // Save original function
+    const originalGetComputedStyle = window.getComputedStyle;
+
+    // Mock to throw error - this hits the catch block in getCSSVariable
+    window.getComputedStyle = vi.fn().mockImplementation(() => {
+      throw new Error('Access denied or unavailable');
+    });
+
+    try {
+      const { getByText } = render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <NotificationToastContainer />
+              <FeedbackStats {...nonEmptyProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>,
+      );
+
+      // Component should handle the error gracefully and still render
+      await waitFor(() =>
+        expect(getByText('Feedback Analysis')).toBeInTheDocument(),
+      );
+    } finally {
+      // Always restore the original function
+      window.getComputedStyle = originalGetComputedStyle;
+    }
   });
 });

@@ -1,0 +1,53 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.iconOrgActionItemCategories {
+  transform: scale(1.5);
+  color: var(--iconOrgActionItemCategories-color);
+  margin-bottom: 1rem;
+}
+
+.tableHeader {
+  background-color: red;
+}
+
+.editButton {
+  background-color: var(--editButton-bg);
+  color: var(--editButton-font);
+  border-color: var(--editButton-border);
+  --bs-btn-active-bg: var(--editButton-bg-active);
+  --bs-btn-active-border-color: var(--editButton-border-active);
+}
+
+.btnsContainerOrgActionItemCategories {
+  display: flex;
+  margin: 0.5rem 0 1.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: 120px;
+  overflow-y: auto;
+}
