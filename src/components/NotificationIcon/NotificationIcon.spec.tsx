@@ -46,29 +46,29 @@ const mocks = (
   error = false,
   delay = 0,
 ) => [
-  {
-    request: {
-      query: GET_USER_NOTIFICATIONS,
-      variables: {
-        userId: 'user-1',
-        input: {
-          first: 5,
-          skip: 0,
+    {
+      request: {
+        query: GET_USER_NOTIFICATIONS,
+        variables: {
+          userId: 'user-1',
+          input: {
+            first: 5,
+            skip: 0,
+          },
         },
       },
-    },
-    result: error
-      ? { errors: [new Error('An error occurred')] }
-      : {
+      result: error
+        ? { errors: [new Error('An error occurred')] }
+        : {
           data: {
             user: {
               notifications: notifications,
             },
           },
         },
-    delay,
-  },
-];
+      delay,
+    },
+  ];
 
 const generateNotifications = (
   count: number,
@@ -97,7 +97,7 @@ describe('NotificationIcon Component', () => {
 
   it('should render loading state', async () => {
     render(
-      <MockedProvider mocks={mocks([], false, 50)}>
+      <MockedProvider mocks={mocks([], false, 300)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
