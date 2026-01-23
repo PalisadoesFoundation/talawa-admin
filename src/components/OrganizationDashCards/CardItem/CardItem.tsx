@@ -19,26 +19,16 @@
  * @remarks
  * - The component uses `dayjs` for date formatting.
  * - Icons for location and date are imported as React components.
- * - Styling is applied using CSS modules from `app-fixed.module.css`.
+ * - Styling is applied using CSS modules from `CardItem.module.css`.
  */
 import React, { useState, useEffect } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItem.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
-
-export interface InterfaceCardItem {
-  type: 'Event' | 'Post' | 'MembershipRequest';
-  title: string;
-  time?: string;
-  startdate?: string;
-  enddate?: string;
-  creator?: { id: string | number; name: string };
-  location?: string;
-  image?: string;
-}
+import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, enddate, time, location, image } =

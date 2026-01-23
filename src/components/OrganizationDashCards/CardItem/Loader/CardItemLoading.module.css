@@ -7,11 +7,23 @@
 }
 
 .themeOverlay {
-  composes: themeOverlay from 'style/app-fixed.module.css';
+  background: var(--cardItem-iconWrapper-bg);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0.12;
+  border-radius: 50%;
 }
 
 .title {
-  composes: title from 'style/app-fixed.module.css';
+  font-size: 1rem;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 3px;
 }
 
 .titlePlaceholder {

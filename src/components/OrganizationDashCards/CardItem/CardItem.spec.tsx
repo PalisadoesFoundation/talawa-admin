@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import CardItem from './CardItem';
-import type { InterfaceCardItem } from './CardItem';
+import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -18,7 +18,7 @@ vi.mock('assets/svgs/cardItemDate.svg?react', () => ({
 
 describe('CardItem Component', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('renders Event type card with all properties', () => {
     const props: InterfaceCardItem = {
