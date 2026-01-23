@@ -9,6 +9,8 @@ export interface InterfaceFormFieldGroupProps {
   error?: string;
   touched?: boolean;
   'data-testid'?: string;
+  inline?: boolean;
+  hideLabel?: boolean;
 }
 
 export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
