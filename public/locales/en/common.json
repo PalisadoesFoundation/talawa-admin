@@ -248,6 +248,7 @@
   "pageNumber": "Page {{page}}",
   "loadMoreItems": "Load more items",
   "loadMore": "Load More",
+  "loadOlderMessages": "Load older messages",
   "retry": "Retry",
   "publicEvent": "Public (Community Visible)",
   "publicEventDescription": "Visible to everyone in the community",
@@ -290,5 +291,10 @@
   "copyToClipboardError": "Error copying link to clipboard",
   "share": "Share",
   "viewEventStatistics": "View Event Statistics",
-  "checkInRegistrantsAriaLabel": "Check in registrants"
+  "checkInRegistrantsAriaLabel": "Check in registrants",
+  "selectAllOnPage": "Select all rows on this page",
+  "selectRow": "Select row {{rowKey}}",
+  "bulkActions": "Bulk actions",
+  "selected": "selected",
+  "clearSelection": "Clear selection"
 }

@@ -1,0 +1,7 @@
+.messageAttachment {
+  height: var(--space-13);
+  width: var(--space-13);
+  border-radius: var(--space-4);
+  object-fit: cover;
+  margin: var(--space-4) var(--space-0) var(--space-4) var(--space-4);
+}

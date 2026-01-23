@@ -1,0 +1,136 @@
+/* SidebarOrgSection.module.css */
+
+/* Extracted from .leftDrawer .organizationContainer button and .profileContainer */
+.profileContainer {
+  position: relative;
+  margin: 0.7rem 0;
+  padding: 2.5rem 0.1rem;
+  border-radius: 16px;
+  background-color: var(--LeftDrawer-org-profileContainer-bg) !important;
+  padding-right: 10px;
+  padding-left: 10px;
+
+  border: none;
+  width: 100%;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  outline: none;
+  cursor: pointer;
+}
+
+.profileContainer:focus {
+  outline: none;
+}
+
+.profileContainer:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.imageContainer {
+  width: 68px;
+  margin-right: 8px;
+  margin-bottom: 1px;
+  /* adjusted from 10px to align better? app-fixed had 10px */
+}
+
+.imageContainer img {
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+}
+
+.ProfileRightContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  flex: 1;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+}
+
+.primaryText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+  color: var(--bs-emphasis-color, var(--primaryText-color));
+}
+
+.secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--leftDrawer-secondaryText-color);
+  display: block;
+  text-transform: capitalize;
+}
+
+.ArrowIcon {
+  margin-right: 5px;
+}
+
+.avatarContainer {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+}
+
+.bgDanger {
+  background-color: var(--bs-danger) !important;
+}
+
+/* Responsive styles from app-fixed.module.css */
+@media (max-height: 900px) {
+  .profileContainer {
+    margin: 0.6rem 0;
+    padding: 2.2rem 0.1rem;
+  }
+
+  .primaryText {
+    font-size: 1rem;
+  }
+
+  .secondaryText {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-height: 650px) {
+  .profileContainer {
+    margin: 0.2rem 0;
+    padding: 1.6rem 0rem;
+  }
+
+  .primaryText {
+    font-size: 0.8rem;
+  }
+
+  .secondaryText {
+    font-size: 0.6rem;
+  }
+
+  .imageContainer {
+    width: 40px;
+    margin-left: 5px;
+    margin-right: 10px;
+  }
+
+  .imageContainer img {
+    width: 40px;
+    height: 100%;
+  }
+}

@@ -243,6 +243,7 @@
   "tags": "टैग",
   "loadMoreItems": "और चीज़ें लोड करें",
   "loadMore": "और लोड करें",
+  "loadOlderMessages": "पुराने संदेश लोड करें",
   "retry": "पुनः प्रयास करें",
   "publicEvent": "सार्वजनिक (समुदाय के लिए दृश्य)",
   "publicEventDescription": "समुदाय में सभी के लिए दृश्य",
@@ -290,5 +291,10 @@
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
   "share": "शेयर करें",
   "viewEventStatistics": "इवेंट सांख्यिकी देखें",
-  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें"
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
+  "selectAllOnPage": "इस पृष्ठ पर सभी पंक्तियों का चयन करें",
+  "selectRow": "पंक्ति {{rowKey}} का चयन करें",
+  "bulkActions": "सामूहिक क्रियाएं",
+  "selected": "चयनित",
+  "clearSelection": "चयन साफ़ करें"
 }

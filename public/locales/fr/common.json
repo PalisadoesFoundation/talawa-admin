@@ -247,6 +247,7 @@
   "pageNumber": "Page {{page}}",
   "loadMoreItems": "Charger plus d'éléments",
   "loadMore": "Charger Plus",
+  "loadOlderMessages": "Charger les messages plus anciens",
   "retry": "Réessayer",
   "publicEvent": "Public (Visible par la communauté)",
   "publicEventDescription": "Visible par tous les membres de la communauté",
@@ -290,5 +291,10 @@
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
   "share": "Partager",
   "viewEventStatistics": "Voir les statistiques de l'événement",
-  "checkInRegistrantsAriaLabel": "Enregistrer les participants"
+  "checkInRegistrantsAriaLabel": "Enregistrer les participants",
+  "selectAllOnPage": "Sélectionner toutes les lignes de cette page",
+  "selectRow": "Sélectionner la ligne {{rowKey}}",
+  "bulkActions": "Actions en masse",
+  "selected": "sélectionnés",
+  "clearSelection": "Effacer la sélection"
 }

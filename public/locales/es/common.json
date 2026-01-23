@@ -246,6 +246,7 @@
   "tags": "Etiquetas",
   "loadMoreItems": "Cargar más elementos",
   "loadMore": "Cargar Más",
+  "loadOlderMessages": "Cargar mensajes más antiguos",
   "retry": "Reintentar",
   "publicEvent": "Público (Visible para la comunidad)",
   "publicEventDescription": "Visible para todos en la comunidad",
@@ -290,5 +291,10 @@
   "copyToClipboardError": "Error al copiar el enlace al portapapeles",
   "share": "Compartir",
   "viewEventStatistics": "Ver Estadísticas del Evento",
-  "checkInRegistrantsAriaLabel": "Registrar asistentes"
+  "checkInRegistrantsAriaLabel": "Registrar asistentes",
+  "selectAllOnPage": "Seleccionar todas las filas en esta página",
+  "selectRow": "Seleccionar fila {{rowKey}}",
+  "bulkActions": "Acciones masivas",
+  "selected": "seleccionados",
+  "clearSelection": "Limpiar selección"
 }

@@ -31,7 +31,7 @@
  * ```
  *
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   PieChart,
   pieArcClasses,
@@ -40,19 +40,40 @@ import {
 import Card from 'react-bootstrap/Card';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
+import { useTranslation } from 'react-i18next';
+import './Feedback.module.css';
 
 export const FeedbackStats = ({
   data,
 }: InterfaceStatsModal): React.JSX.Element => {
-  // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
-  const ratingColors = [
-    '#57bb8a', // Green
-    '#94bd77',
-    '#d4c86a',
-    '#e9b861',
-    '#e79a69',
-    '#dd776e', // Red
-  ];
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventStats.feedback',
+  });
+
+  // Get colors from CSS custom properties only
+  const ratingColors = useMemo(() => {
+    const getCSSVariable = (varName: string): string => {
+      // Safely get CSS variable, fallback to 'transparent' if not available
+      try {
+        return (
+          getComputedStyle(document.documentElement)
+            .getPropertyValue(varName)
+            .trim() || 'transparent'
+        );
+      } catch {
+        // SSR or other edge cases
+        return 'transparent';
+      }
+    };
+    return [
+      getCSSVariable('--rating-color-5'), // Green
+      getCSSVariable('--rating-color-4'),
+      getCSSVariable('--rating-color-3'),
+      getCSSVariable('--rating-color-2'),
+      getCSSVariable('--rating-color-1'),
+      getCSSVariable('--rating-color-0'), // Red
+    ];
+  }, []);
 
   // Count the number of feedbacks for each rating
   const count: Record<number, number> = {};
@@ -79,12 +100,9 @@ export const FeedbackStats = ({
       <Card>
         <Card.Body>
           <Card.Title>
-            <h3>Feedback Analysis</h3>
+            <h3>{t('title')}</h3>
           </Card.Title>
-          <h5>
-            {data.event.feedback.length} people have filled feedback for this
-            event.
-          </h5>
+          <h5>{t('filledByCount', { count: data.event.feedback.length })}</h5>
           {data.event.feedback.length ? (
             <PieChart
               colors={ratingColors}
@@ -117,7 +135,7 @@ export const FeedbackStats = ({
               height={380}
             />
           ) : (
-            <>Please ask attendees to submit feedback for insights!</>
+            <>{t('emptyState')}</>
           )}
         </Card.Body>
       </Card>
