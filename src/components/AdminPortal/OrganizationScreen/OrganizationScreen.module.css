@@ -6,7 +6,7 @@
 }
 
 .expand {
-  padding-left: 4rem;
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.5rem);
   animation: moveLeft 0.5s ease-in-out;
 }
 

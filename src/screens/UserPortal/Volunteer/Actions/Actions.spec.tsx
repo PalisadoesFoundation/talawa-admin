@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -100,8 +100,10 @@ describe('Actions Screen', () => {
     });
   });
 
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     localStorageMock.clear();
+    user = userEvent.setup();
     setItem('userId', 'userId');
     setItem('volunteerId', 'volunteerId1');
   });
@@ -234,9 +236,9 @@ describe('Actions Screen', () => {
       expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
-    fireEvent.click(screen.getByTestId('sort'));
+    await user.click(screen.getByTestId('sort'));
     const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
-    fireEvent.click(dueDateAscOption);
+    await user.click(dueDateAscOption);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('assigneeName')[0]).toBeInTheDocument();
@@ -250,9 +252,9 @@ describe('Actions Screen', () => {
       expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
-    fireEvent.click(screen.getByTestId('sort'));
+    await user.click(screen.getByTestId('sort'));
     const dueDateDescOption = await screen.findByTestId('dueDate_DESC');
-    fireEvent.click(dueDateDescOption);
+    await user.click(dueDateDescOption);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('assigneeName')[0]).toBeInTheDocument();
@@ -263,7 +265,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const input = await screen.findByTestId('searchByInput');
-    await userEvent.type(input, 'Teresa');
+    await user.type(input, 'Teresa');
     await debounceWait();
 
     await waitFor(() => {
@@ -277,7 +279,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const input = await screen.findByTestId('searchByInput');
-    await userEvent.type(input, 'Group');
+    await user.type(input, 'Group');
     await debounceWait();
 
     await waitFor(() => {
@@ -294,13 +296,13 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category search
-    fireEvent.click(screen.getByTestId('searchBy'));
+    await user.click(screen.getByTestId('searchBy'));
     const categoryOption = await screen.findByTestId('category');
-    fireEvent.click(categoryOption);
+    await user.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
-    await userEvent.clear(input);
-    await userEvent.type(input, 'Category');
+    await user.clear(input);
+    await user.type(input, 'Category');
     await debounceWait();
 
     await waitFor(() => {
@@ -317,19 +319,18 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category
-    fireEvent.click(screen.getByTestId('searchBy'));
+    await user.click(screen.getByTestId('searchBy'));
     const categoryOption = await screen.findByTestId('category');
-    fireEvent.click(categoryOption);
+    await user.click(categoryOption);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     // Switch back to assignee
-    fireEvent.click(screen.getByTestId('searchBy'));
+    await user.click(screen.getByTestId('searchBy'));
     const assigneeOption = await screen.findByTestId('assignee');
-    fireEvent.click(assigneeOption);
-
+    await user.click(assigneeOption);
     await waitFor(() => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
@@ -339,7 +340,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const input = await screen.findByTestId('searchByInput');
-    await userEvent.type(input, 'Teresa');
+    await user.type(input, 'Teresa');
     await debounceWait();
 
     await waitFor(() => {
@@ -357,10 +358,10 @@ describe('Actions Screen', () => {
     });
 
     const input = screen.getByTestId('searchByInput') as HTMLInputElement;
-    await userEvent.type(input, 'test');
+    await user.type(input, 'test');
     await debounceWait();
 
-    await userEvent.clear(input);
+    await user.clear(input);
     await debounceWait();
 
     await waitFor(() => {
@@ -419,11 +420,11 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const btn = await screen.findAllByTestId('viewItemBtn');
-    await userEvent.click(btn[0]);
+    await user.click(btn[0]);
 
     expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
 
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
 
     await waitFor(() => {
       expect(screen.queryByText(t.actionItemDetails)).not.toBeInTheDocument();
@@ -436,15 +437,15 @@ describe('Actions Screen', () => {
     const btns = await screen.findAllByTestId('viewItemBtn');
 
     // Open first item
-    await userEvent.click(btns[0]);
+    await user.click(btns[0]);
     expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
 
     // Open second item if exists
     if (btns.length > 1) {
-      await userEvent.click(btns[1]);
+      await user.click(btns[1]);
       expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
-      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+      await user.click(await screen.findByTestId('modalCloseBtn'));
     }
   });
 
@@ -452,11 +453,11 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const checkbox = await screen.findAllByTestId('statusCheckbox');
-    await userEvent.click(checkbox[0]);
+    await user.click(checkbox[0]);
 
     expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
 
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
 
     await waitFor(() => {
       expect(screen.queryByText(t.actionItemStatus)).not.toBeInTheDocument();
@@ -472,9 +473,9 @@ describe('Actions Screen', () => {
     );
 
     if (completedCheckbox) {
-      await userEvent.click(completedCheckbox);
+      await user.click(completedCheckbox);
       expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
-      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+      await user.click(await screen.findByTestId('modalCloseBtn'));
     }
   });
 
@@ -487,9 +488,9 @@ describe('Actions Screen', () => {
     );
 
     if (pendingCheckbox) {
-      await userEvent.click(pendingCheckbox);
+      await user.click(pendingCheckbox);
       expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
-      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+      await user.click(await screen.findByTestId('modalCloseBtn'));
     }
   });
 
@@ -498,19 +499,19 @@ describe('Actions Screen', () => {
 
     // Open view modal
     const viewBtn = await screen.findAllByTestId('viewItemBtn');
-    await userEvent.click(viewBtn[0]);
+    await user.click(viewBtn[0]);
     expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
 
     // Close view modal
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
 
     // Open status modal
     const checkbox = await screen.findAllByTestId('statusCheckbox');
-    await userEvent.click(checkbox[0]);
+    await user.click(checkbox[0]);
     expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
 
     // Close status modal
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('renders assignee with volunteer user', async () => {
@@ -552,7 +553,7 @@ describe('Actions Screen', () => {
     });
 
     const input = screen.getByTestId('searchByInput');
-    await userEvent.type(input, 'NonexistentSearchTerm12345');
+    await user.type(input, 'NonexistentSearchTerm12345');
     await debounceWait();
 
     await waitFor(() => {
@@ -570,13 +571,13 @@ describe('Actions Screen', () => {
     });
 
     // Set sort order
-    fireEvent.click(screen.getByTestId('sort'));
+    await user.click(screen.getByTestId('sort'));
     const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
-    fireEvent.click(dueDateAscOption);
+    await user.click(dueDateAscOption);
 
     // Then search
     const input = screen.getByTestId('searchByInput');
-    await userEvent.type(input, 'Teresa');
+    await user.type(input, 'Teresa');
     await debounceWait();
 
     await waitFor(() => {
@@ -613,13 +614,13 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category search
-    fireEvent.click(screen.getByTestId('searchBy'));
+    await user.click(screen.getByTestId('searchBy'));
     const categoryOption = await screen.findByTestId('category');
-    fireEvent.click(categoryOption);
+    await user.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
-    await userEvent.clear(input);
-    await userEvent.type(input, 'category');
+    await user.clear(input);
+    await user.type(input, 'category');
     await debounceWait();
 
     await waitFor(() => {
@@ -631,7 +632,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     const input = await screen.findByTestId('searchByInput');
-    await userEvent.type(input, 'teresa');
+    await user.type(input, 'teresa');
     await debounceWait();
 
     await waitFor(() => {

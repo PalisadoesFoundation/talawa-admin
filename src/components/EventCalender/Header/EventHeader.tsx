@@ -5,23 +5,23 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
+ * @param props - The props for the EventHeader component.
  * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
  * @param handleChangeView - Callback function to handle changes in the calendar view type.
  * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns The rendered EventHeader component.
+ * @returns - The rendered EventHeader component.
  *
  * @remarks
  * - This component uses `SearchBar` for searching events by name.
  * - It includes two `SortingButton` components for selecting the calendar view type and event type.
  * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
  *
- * @remarks
- * - Uses the shared Button component for actions.
- * - Depends on `@mui/icons-material` for the `AddIcon`.
- * - Relies on `react-i18next` for translations.
- * - Styled with `./EventHeader.module.css`.
- * - Composes `SortingButton` and `SearchBar`.
+ * - `react-bootstrap` for the `Button` component.
+ * - `@mui/icons-material` for the `AddIcon`.
+ * - `react-i18next` for translations.
+ * - Custom styles from `style/app-fixed.module.css`.
+ * - Shared Components: `SortingButton` and `SearchBar`.
  *
  * @example
  * ```tsx
@@ -34,13 +34,13 @@
  */
 
 import React from 'react';
+import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './EventHeader.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import Button from 'shared-components/Button';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
 function EventHeader({

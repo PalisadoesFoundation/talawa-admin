@@ -1,27 +1,21 @@
 .calendarEventHeader {
   width: 100%;
-  border-radius: var(--radius-xl);
-  padding: var(--space-3);
+  border-radius: 10px;
+  padding: 5px;
 }
 
 .calendar__header {
   display: flex;
   align-items: stretch;
   justify-content: flex-start;
-  gap: var(--space-4);
+  gap: 0.75rem;
   flex-wrap: wrap;
-  margin-right: var(--space-0);
-}
-
-@media (max-width: 768px) {
-  .calendar__header {
-    flex-wrap: wrap;
-  }
+  margin-right: 0;
 }
 
 .calendar__search {
-  flex: 1 1 var(--space-22);
-  min-width: var(--space-19);
+  flex: 1 1 360px;
+  min-width: 260px;
   max-width: 100%;
 }
 
@@ -30,62 +24,18 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  gap: var(--space-6);
+  gap: 12px;
   width: auto;
   flex-shrink: 0;
-  height: var(--space-10);
-  margin: var(--space-0);
-}
-
-@media (max-width: 768px) {
-  .btnsBlock {
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: var(--space-5);
-  }
-}
-
-.btnsBlock > * {
-  margin: var(--space-0);
-  height: 100%;
-  display: flex;
-  align-items: center;
-  min-height: auto;
+  height: 48px;
+  margin: 0;
 }
 
 .dropdown {
-  background-color: var(--color-white);
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
-}
-
-.dropdown:is(
-  :hover,
-  :focus,
-  :active,
-  :focus-visible,
-  .show,
-  :disabled,
-  :checked
-) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-xs) 0 rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
-}
-
-.dropdown:is(:focus, :focus-visible) {
-  outline: var(--border-2) solid var(--color-blue-200);
-  border: var(--border-1) solid var(--color-gray-700);
-}
-
-.addButtonIcon {
-  font-size: var(--font-size-2xl);
-  margin-bottom: var(--space-1);
-  margin-right: var(--space-1);
 }
