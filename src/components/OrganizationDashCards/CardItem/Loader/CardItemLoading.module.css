@@ -1,0 +1,20 @@
+.cardItem {
+  composes: cardItem from 'style/app-fixed.module.css';
+}
+
+.iconWrapper {
+  composes: iconWrapper from 'style/app-fixed.module.css';
+}
+
+.themeOverlay {
+  composes: themeOverlay from 'style/app-fixed.module.css';
+}
+
+.title {
+  composes: title from 'style/app-fixed.module.css';
+}
+
+.titlePlaceholder {
+  --card-item-loading-height: 1.5rem;
+  height: var(--card-item-loading-height);
+}

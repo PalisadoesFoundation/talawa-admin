@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import CardItem from './CardItem';
 import type { InterfaceCardItem } from './CardItem';
 import dayjs from 'dayjs';
@@ -98,7 +98,7 @@ describe('CardItem Component', () => {
 
     // Simulate image load error
     act(() => {
-      fireEvent.error(img);
+      img.dispatchEvent(new Event('error'));
     });
 
     // After error, the default image should be displayed
@@ -139,7 +139,7 @@ describe('CardItem Component', () => {
 
     // Simulate image load error
     act(() => {
-      fireEvent.error(img);
+      img.dispatchEvent(new Event('error'));
     });
 
     // After error, the Avatar should be displayed (has empty alt text)

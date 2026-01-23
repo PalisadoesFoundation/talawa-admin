@@ -3,9 +3,7 @@
  * for a card item. This component is used to indicate that the
  * content of a card item is being loaded.
  *
- * @component
- * @returns {JSX.Element} A JSX element representing the loading state
- * of a card item.
+ * @returns A JSX element representing the loading state of a card item.
  *
  * @remarks
  * - The component uses CSS classes from `app-fixed.module.css` to
@@ -32,7 +30,7 @@
  * experience for users.
  */
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItemLoading.module.css';
 
 const CardItemLoading = (): JSX.Element => {
   return (
@@ -45,8 +43,7 @@ const CardItemLoading = (): JSX.Element => {
           <div className={styles.themeOverlay} />
         </div>
         <span
-          className={`${styles.title} shimmer rounded`}
-          style={{ height: '1.5rem' }}
+          className={`${styles.title} shimmer rounded ${styles.titlePlaceholder}`}
         >
           &nbsp;
         </span>
