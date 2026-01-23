@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,

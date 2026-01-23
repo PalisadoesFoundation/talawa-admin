@@ -549,7 +549,6 @@
     "recurringEvent": "Événement récurrent",
     "recurring": "Récurrent",
     "isPublic": "est public",
-    "isRegistrable": "Est enregistrable",
     "visibility": "Visibilité",
     "public": "Public",
     "organizationMembers": "Membres de l'organisation",
@@ -2345,11 +2344,20 @@
     "noEventsAttended": "Aucun événement assisté"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Score Moyen des Avis",
+      "rated": "Noté {{score}} / 5"
+    },
     "title": "Statistiques de l'événement",
     "reviews": {
       "title": "Avis",
       "emptyState": "En attente que les gens parlent de l'événement...",
       "filledByCount": "Rempli par {{count}} personnes."
+    },
+    "feedback": {
+      "title": "Analyse des commentaires",
+      "emptyState": "Veuillez demander aux participants de soumettre leurs commentaires pour obtenir des informations !",
+      "filledByCount": "{{count}} personnes ont rempli des commentaires pour cet événement."
     }
   },
   "verifyEmail": {

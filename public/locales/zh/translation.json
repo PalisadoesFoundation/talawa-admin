@@ -2344,11 +2344,20 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "平均评论分数",
+      "rated": "评分 {{score}} / 5"
+    },
     "title": "活動統計",
     "reviews": {
       "title": "評論",
       "emptyState": "等待人們談論活動...",
       "filledByCount": "已由 {{count}} 人填寫。"
+    },
+    "feedback": {
+      "title": "反饋分析",
+      "emptyState": "請要求與會者提交反饋以獲取見解！",
+      "filledByCount": "{{count}} 人已為此活動填寫反饋。"
     }
   },
   "verifyEmail": {
