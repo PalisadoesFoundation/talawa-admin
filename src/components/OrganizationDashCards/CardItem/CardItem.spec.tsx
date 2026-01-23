@@ -4,8 +4,10 @@ import CardItem from './CardItem';
 
 vi.mock('react-i18next', () => ({
   useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
-    t: (key: string) =>
-      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+    t: (key: string, tOptions?: { title?: string }) =>
+      options?.keyPrefix
+        ? `${options.keyPrefix}.${key}${tOptions?.title ? ` ${tOptions.title}` : ''}`
+        : key,
     i18n: {
       changeLanguage: () => Promise.resolve(),
     },
@@ -104,7 +106,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('cardItem.avatar');
+    const img = screen.getByAltText(/^cardItem\.avatar/);
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'invalid-image-url.jpg');
 
@@ -114,7 +116,7 @@ describe('CardItem Component', () => {
     });
 
     // After error, the default image should be displayed
-    const defaultImg = screen.getByAltText('Post with Image Error');
+    const defaultImg = screen.getByAltText(/^cardItem\.avatar/);
     expect(defaultImg).toBeInTheDocument();
     expect(defaultImg.getAttribute('src')).toContain('defaultImg.png');
   });
@@ -129,7 +131,7 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     // Avatar component is rendered inside an imageContainer
-    const avatarContainer = screen.getByAltText('cardItem.avatar');
+    const avatarContainer = screen.getByAltText(/^cardItem\.avatar/);
     expect(avatarContainer).toBeInTheDocument();
     expect(avatarContainer).toHaveAttribute(
       'src',
@@ -146,7 +148,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('cardItem.avatar');
+    const img = screen.getByAltText(/^cardItem\.avatar/);
     expect(img).toBeInTheDocument();
 
     // Simulate image load error
@@ -155,7 +157,7 @@ describe('CardItem Component', () => {
     });
 
     // After error, the Avatar should be displayed (has empty alt text)
-    const avatar = screen.getByAltText('cardItem.avatar');
+    const avatar = screen.getByAltText(/^cardItem\.avatar/);
     expect(avatar).toBeInTheDocument();
     expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
   });
@@ -169,7 +171,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('cardItem.avatar');
+    const img = screen.getByAltText(/^cardItem\.avatar/);
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/image.jpg');
   });
@@ -201,7 +203,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('cardItem.avatar');
+    const img = screen.getByAltText(/^cardItem\.avatar/);
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/member.jpg');
   });
@@ -214,7 +216,7 @@ describe('CardItem Component', () => {
 
     const { rerender } = render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('cardItem.avatar');
+    const img = screen.getByAltText(/^cardItem\.avatar/);
 
     // Simulate error on first image
     act(() => {
@@ -222,12 +224,14 @@ describe('CardItem Component', () => {
     });
 
     // Verify fallback is shown
-    expect(screen.getByAltText('Post with Changing Image')).toBeInTheDocument();
+    expect(
+      screen.getByAltText('cardItem.avatar Post with Changing Image'),
+    ).toBeInTheDocument();
 
     // Change image prop - should reset imgOk and try new image
     rerender(<CardItem {...props} image="second-image.jpg" />);
 
-    const newImg = screen.getByAltText('cardItem.avatar');
+    const newImg = screen.getByAltText(/^cardItem\.avatar/);
     expect(newImg).toHaveAttribute('src', 'second-image.jpg');
   });
 
