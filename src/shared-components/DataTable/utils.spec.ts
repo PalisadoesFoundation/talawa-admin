@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import React from 'react';
 import dayjs from 'dayjs';
 import {
@@ -7,6 +7,10 @@ import {
   getCellValue,
   toSearchableString,
 } from './utils';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('DataTable utils', () => {
   describe('renderHeader', () => {
