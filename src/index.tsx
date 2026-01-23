@@ -19,6 +19,7 @@ import './style/tokens/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
+import 'react-toastify/dist/ReactToastify.css'; // React Toastify Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
