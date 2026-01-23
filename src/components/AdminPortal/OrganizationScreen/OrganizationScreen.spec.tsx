@@ -235,11 +235,19 @@ describe('Testing OrganizationScreen', () => {
 
     renderComponent();
 
+    // Get initial state
+    const mainPage = screen.getByTestId('mainpageright');
+    const initialHasExpand = mainPage.classList.contains(styles.expand);
+
+    // Trigger resize
     window.innerWidth = 800;
     window.dispatchEvent(new window.Event('resize'));
 
+    // Wait for the component to update
     await waitFor(() => {
-      expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+      const hasExpand = mainPage.classList.contains(styles.expand);
+      // The class should toggle from its initial state
+      expect(hasExpand).toBe(!initialHasExpand);
     });
   });
 

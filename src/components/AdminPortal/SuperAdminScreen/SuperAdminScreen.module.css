@@ -24,8 +24,12 @@
 
 .collapsedDrawer {
   composes: collapsedDrawer from '../../../style/app-fixed.module.css';
+  width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
 }
 
 .expandedDrawer {
   composes: expandedDrawer from '../../../style/app-fixed.module.css';
+  width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
 }
