@@ -2427,5 +2427,31 @@
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
     "goToLogin": "Go to Login"
+  },
+  "plugins": {
+    "loading": "प्लगइन लोड हो रहा है...",
+    "component": "कम्पोनेंट",
+    "plugin": "प्लगइन",
+    "errors": {
+      "missingPluginId": {
+        "title": "प्लगइन आईडी गायब है",
+        "description": "इस रूट में मान्य प्लगइन आईडी नहीं है"
+      },
+      "notRegistered": {
+        "title": "प्लगइन पंजीकृत नहीं है",
+        "description": "कृपया इस प्लगइन को रजिस्ट्री में जोड़ें"
+      },
+      "noComponents": {
+        "title": "कोई घटक नहीं मिला"
+      },
+      "componentNotFound": {
+        "title": "घटक नहीं मिला",
+        "availableComponents": "उपलब्ध घटक: {{components}}"
+      },
+      "pluginError": {
+        "title": "प्लगइन त्रुटि",
+        "failedToLoad": "घटक लोड करने में विफल"
+      }
+    }
   }
 }

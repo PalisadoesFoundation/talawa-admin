@@ -6,6 +6,7 @@
  */
 
 import React, { Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { IRouteExtension } from '../types';
 import { getPluginComponents, isPluginRegistered } from '../registry';
 
@@ -19,8 +20,11 @@ interface IPluginRouteRendererProps {
  */
 const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
   route,
-  fallback = <div>Loading plugin...</div>,
+  fallback,
 }) => {
+  const { t } = useTranslation();
+  const loadingFallback = fallback || <div>{t('plugins.loading')}</div>;
+
   // Check if pluginId is provided
   if (!route.pluginId) {
     console.error(`Plugin ID is missing from route`);
@@ -36,13 +40,13 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
         }}
       >
         <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-          Plugin ID Missing
+          {t('plugins.errors.missingPluginId.title')}
         </h3>
         <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-          Component: <strong>{route.component}</strong>
+          {t('plugins.component')}: <strong>{route.component}</strong>
         </p>
         <p style={{ color: '#6c757d', fontSize: '14px' }}>
-          This route does not have a valid plugin ID
+          {t('plugins.errors.missingPluginId.description')}
         </p>
       </div>
     );
@@ -63,13 +67,13 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
         }}
       >
         <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-          Plugin Not Registered
+          {t('plugins.errors.notRegistered.title')}
         </h3>
         <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-          Plugin: <strong>{route.pluginId}</strong>
+          {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
         <p style={{ color: '#6c757d', fontSize: '14px' }}>
-          Please add this plugin to the plugin registry in{' '}
+          {t('plugins.errors.notRegistered.description')}{' '}
           <code>src/plugin/registry.ts</code>
         </p>
       </div>
@@ -93,10 +97,10 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
         }}
       >
         <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-          No Components Found
+          {t('plugins.errors.noComponents.title')}
         </h3>
         <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-          Plugin: <strong>{route.pluginId}</strong>
+          {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
       </div>
     );
@@ -121,23 +125,25 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
         }}
       >
         <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-          Component Not Found
+          {t('plugins.errors.componentNotFound.title')}
         </h3>
         <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-          Component: <strong>{route.component}</strong>
+          {t('plugins.component')}: <strong>{route.component}</strong>
         </p>
         <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-          Plugin: <strong>{route.pluginId}</strong>
+          {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
         <p style={{ color: '#6c757d', fontSize: '14px' }}>
-          Available components: {Object.keys(pluginComponents).join(', ')}
+          {t('plugins.errors.componentNotFound.availableComponents', {
+            components: Object.keys(pluginComponents).join(', '),
+          })}
         </p>
       </div>
     );
   }
 
   return (
-    <Suspense fallback={fallback}>
+    <Suspense fallback={loadingFallback}>
       <PluginComponent />
     </Suspense>
   );

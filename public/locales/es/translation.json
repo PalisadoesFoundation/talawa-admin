@@ -2427,5 +2427,31 @@
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
     "goToLogin": "Go to Login"
+  },
+  "plugins": {
+    "loading": "Cargando complemento...",
+    "component": "Componente",
+    "plugin": "Complemento",
+    "errors": {
+      "missingPluginId": {
+        "title": "Falta ID del complemento",
+        "description": "Esta ruta no tiene un ID de complemento válido"
+      },
+      "notRegistered": {
+        "title": "Complemento no registrado",
+        "description": "Por favor añada este complemento al registro en"
+      },
+      "noComponents": {
+        "title": "No se encontraron componentes"
+      },
+      "componentNotFound": {
+        "title": "Componente no encontrado",
+        "availableComponents": "Componentes disponibles: {{components}}"
+      },
+      "pluginError": {
+        "title": "Error del complemento",
+        "failedToLoad": "Error al cargar el componente"
+      }
+    }
   }
 }

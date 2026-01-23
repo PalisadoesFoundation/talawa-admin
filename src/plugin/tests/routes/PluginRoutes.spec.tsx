@@ -5,6 +5,13 @@ import type { ComponentType, ReactNode } from 'react';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 const lazyImportFunctions: Array<() => Promise<unknown>> = [];
 
 function createStubComponent(testId: string, label: string) {
@@ -414,7 +421,9 @@ describe('PluginRoutes', () => {
 
         const ErrorComponent = result.default;
         const { getByText } = render(<ErrorComponent />);
-        expect(getByText('Plugin Error')).toBeInTheDocument();
+        expect(
+          getByText('plugins.errors.pluginError.title'),
+        ).toBeInTheDocument();
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           "Failed to load plugin component 'ErrorComponent' from 'error-plugin':",
           expect.any(Error),
@@ -443,7 +452,7 @@ describe('PluginRoutes', () => {
       const pluginDetail = getByText((content, node) => {
         return node?.textContent?.trim().startsWith('Plugin:') ?? false;
       });
-      expect(pluginDetail).toHaveTextContent('Plugin:');
+      expect(pluginDetail).toHaveTextContent('plugins.plugin');
     });
   });
 
@@ -514,7 +523,7 @@ describe('PluginRoutes', () => {
       );
 
       // Should show loading state
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
   });
 

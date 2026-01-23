@@ -7,6 +7,7 @@
 
 import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { usePluginRoutes } from '../hooks';
 import type { IRouteExtension } from '../types';
 
@@ -22,10 +23,12 @@ interface IPluginRoutesProps {
 const PluginRoutes: React.FC<IPluginRoutesProps> = ({
   userPermissions = [],
   isAdmin = false,
-  fallback = <div>Loading plugin...</div>,
+  fallback,
 }) => {
+  const { t } = useTranslation();
   const routes = usePluginRoutes(userPermissions, isAdmin);
   const safeRoutes = Array.isArray(routes) ? routes : [];
+  const loadingFallback = fallback || <div>{t('plugins.loading')}</div>;
 
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
@@ -60,13 +63,14 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
                 }}
               >
                 <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-                  Plugin Error
+                  {t('plugins.errors.pluginError.title')}
                 </h3>
                 <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Failed to load component: <strong>{route.component}</strong>
+                  {t('plugins.errors.pluginError.failedToLoad')}:{' '}
+                  <strong>{route.component}</strong>
                 </p>
                 <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Plugin: <strong>{route.pluginId}</strong>
+                  {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
                 </p>
                 <p style={{ color: '#6c757d', fontSize: '14px' }}>
                   {error.message}
@@ -82,7 +86,7 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
         key={`${route.pluginId}-${route.path}`}
         path={route.path}
         element={
-          <Suspense fallback={fallback}>
+          <Suspense fallback={loadingFallback}>
             <PluginComponent />
           </Suspense>
         }

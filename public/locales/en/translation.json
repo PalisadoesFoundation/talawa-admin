@@ -2430,5 +2430,31 @@
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
     "goToLogin": "Go to Login"
+  },
+  "plugins": {
+    "loading": "Loading plugin...",
+    "component": "Component",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "Plugin ID Missing",
+        "description": "This route does not have a valid plugin ID"
+      },
+      "notRegistered": {
+        "title": "Plugin Not Registered",
+        "description": "Please add this plugin to the plugin registry in"
+      },
+      "noComponents": {
+        "title": "No Components Found"
+      },
+      "componentNotFound": {
+        "title": "Component Not Found",
+        "availableComponents": "Available components: {{components}}"
+      },
+      "pluginError": {
+        "title": "Plugin Error",
+        "failedToLoad": "Failed to load component"
+      }
+    }
   }
 }
