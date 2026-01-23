@@ -108,6 +108,9 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,

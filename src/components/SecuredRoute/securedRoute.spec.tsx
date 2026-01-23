@@ -1,6 +1,5 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
@@ -96,7 +95,6 @@ describe('SecuredRoute', () => {
 
   describe('User Activity Tracking', () => {
     it('should update lastActive on mouse movement', async () => {
-      const user = userEvent.setup();
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
 
@@ -111,7 +109,7 @@ describe('SecuredRoute', () => {
       );
 
       // Simulate mouse movement - this should update the lastActive timestamp
-      await user.pointer({ target: document.body });
+      document.dispatchEvent(new Event('mousemove'));
 
       // We can't directly test the lastActive variable since it's module-scoped,
       // but we can verify the event listener is attached by checking if the event fires
@@ -119,7 +117,6 @@ describe('SecuredRoute', () => {
     });
 
     it('should prevent timeout when user activity occurs within timeout window', async () => {
-      const user = userEvent.setup();
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
       setItem('token', 'test-token');
@@ -138,7 +135,7 @@ describe('SecuredRoute', () => {
       vi.advanceTimersByTime(14 * 60 * 1000);
 
       // Simulate user activity
-      await user.pointer({ target: document.body });
+      document.dispatchEvent(new Event('mousemove'));
 
       // Advance past original timeout point
       vi.advanceTimersByTime(2 * 60 * 1000);
