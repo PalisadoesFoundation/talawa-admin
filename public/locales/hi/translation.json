@@ -2300,7 +2300,8 @@
     "clear": "साफ़ करें",
     "clearSelection": "चयन साफ़ करें",
     "loading": "लोड हो रहा है...",
-    "selectRow": "पंक्ति {{rowKey}} चुनें"
+    "selectRow": "पंक्ति {{rowKey}} चुनें",
+    "cancel": "रद्द करें"
   },
   "donation": {
     "amount_label": "राशि",

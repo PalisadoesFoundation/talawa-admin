@@ -2290,7 +2290,11 @@
     "talawaBranding": "Talawa Branding",
     "view": "View",
     "changeLanguage": "Change Language",
-    "userNotFoundError": "User not found"
+    "userNotFoundError": "User not found",
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "loading": "Loading"
   },
   "donation": {
     "amount_label": "Amount",

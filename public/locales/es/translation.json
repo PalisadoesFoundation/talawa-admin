@@ -2300,7 +2300,8 @@
     "clear": "Limpiar",
     "clearSelection": "Limpiar selección",
     "loading": "Cargando...",
-    "selectRow": "Seleccionar fila {{rowKey}}"
+    "selectRow": "Seleccionar fila {{rowKey}}",
+    "cancel": "Cancelar"
   },
   "donation": {
     "amount_label": "Cantidad",

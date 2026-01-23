@@ -2300,7 +2300,8 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "cancel": "取消"
   },
   "donation": {
     "amount_label": "金额",

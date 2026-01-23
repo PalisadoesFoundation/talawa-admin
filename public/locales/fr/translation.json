@@ -2300,7 +2300,8 @@
     "clear": "Effacer",
     "clearSelection": "Effacer la sélection",
     "loading": "Chargement...",
-    "selectRow": "Sélectionner la ligne {{rowKey}}"
+    "selectRow": "Sélectionner la ligne {{rowKey}}",
+    "cancel": "Annuler"
   },
   "donation": {
     "amount_label": "Montant",

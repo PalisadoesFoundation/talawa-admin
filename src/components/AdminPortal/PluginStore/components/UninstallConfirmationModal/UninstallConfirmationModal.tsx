@@ -89,7 +89,7 @@ const UninstallConfirmationModal: React.FC<
             data-testid="uninstall-cancel-btn"
             className="me-2"
           >
-            {t('cancel')}
+            {t('common.cancel')}
           </Button>
           <Button
             variant="danger"
@@ -97,7 +97,7 @@ const UninstallConfirmationModal: React.FC<
             disabled={isLoading}
             data-testid="uninstall-remove-btn"
           >
-            {isLoading ? t('loading') : t('pluginStore.uninstall')}
+            {isLoading ? t('common.loading') : t('pluginStore.uninstall')}
           </Button>
         </>
       }
