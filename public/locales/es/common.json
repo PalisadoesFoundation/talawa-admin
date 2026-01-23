@@ -292,5 +292,10 @@
   "userNotFound": "Usuario no encontrado",
   "avatarProcessingError": "Error al procesar el avatar, por favor verifique su imagen.",
   "viewEventStatistics": "Ver Estadísticas del Evento",
-  "checkInRegistrantsAriaLabel": "Registrar asistentes"
+  "checkInRegistrantsAriaLabel": "Registrar asistentes",
+  "selectAllOnPage": "Seleccionar todas las filas en esta página",
+  "selectRow": "Seleccionar fila {{id}}",
+  "bulkActions": "Acciones masivas",
+  "selected": "seleccionados",
+  "clearSelection": "Limpiar selección"
 }

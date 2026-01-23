@@ -292,5 +292,10 @@
   "userNotFound": "User not found",
   "avatarProcessingError": "Error processing avatar, please check your image.",
   "viewEventStatistics": "View Event Statistics",
-  "checkInRegistrantsAriaLabel": "Check in registrants"
+  "checkInRegistrantsAriaLabel": "Check in registrants",
+  "selectAllOnPage": "Select all rows on this page",
+  "selectRow": "Select row {{id}}",
+  "bulkActions": "Bulk actions",
+  "selected": "selected",
+  "clearSelection": "Clear selection"
 }
