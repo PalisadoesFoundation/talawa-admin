@@ -1,10 +1,3 @@
-/**
- * NotificationIcon component
- *
- * A small, friendly notification bell used in the app header. It shows the
- * unread count and a compact dropdown of the most recent notifications so
- * users can quickly preview or navigate to them.
- */
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
@@ -23,7 +16,17 @@ interface InterfaceNotification {
   navigation?: string;
 }
 
-const NotificationIcon = () => {
+/**
+ * NotificationIcon component.
+ *
+ * `@remarks`
+ * A small, friendly notification bell used in the app header. It shows the
+ * unread count and a compact dropdown of the most recent notifications so
+ * users can quickly preview or navigate to them.
+ *
+ * `@returns` JSX.Element
+ */
+const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
@@ -55,6 +58,7 @@ const NotificationIcon = () => {
       <Dropdown.Toggle
         variant="white"
         id="dropdown-basic"
+        aria-label={t('openNotificationsMenu')}
         className={styles.iconButton}
       >
         <div className={styles.iconContainer}>

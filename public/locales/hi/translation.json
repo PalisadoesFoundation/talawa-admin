@@ -204,7 +204,8 @@
     "errorFetching": "सूचनाएं प्राप्त करते समय त्रुटि",
     "unread": "अपठित",
     "noNewNotifications": "कोई नई सूचना नहीं",
-    "viewAllNotifications": "सभी सूचनाएं देखें"
+    "viewAllNotifications": "सभी सूचनाएं देखें",
+    "openNotificationsMenu": "सूचना मेनू खोलें"
   },
   "orgList": {
     "title": "तालावा संगठन",

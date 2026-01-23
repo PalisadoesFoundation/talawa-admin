@@ -204,7 +204,8 @@
     "errorFetching": "Erreur lors de la récupération des notifications",
     "unread": "Non lu",
     "noNewNotifications": "Aucune nouvelle notification",
-    "viewAllNotifications": "Voir toutes les notifications"
+    "viewAllNotifications": "Voir toutes les notifications",
+    "openNotificationsMenu": "Ouvrir le menu des notifications"
   },
   "orgList": {
     "title": "Organisations Talawa",

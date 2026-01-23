@@ -204,7 +204,8 @@
     "errorFetching": "获取通知时出错",
     "unread": "未读",
     "noNewNotifications": "没有新通知",
-    "viewAllNotifications": "查看所有通知"
+    "viewAllNotifications": "查看所有通知",
+    "openNotificationsMenu": "打开通知菜单"
   },
   "orgList": {
     "title": "塔拉瓦组织",

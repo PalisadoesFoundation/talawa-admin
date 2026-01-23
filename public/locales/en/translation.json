@@ -204,7 +204,8 @@
     "errorFetching": "Error fetching notifications",
     "unread": "Unread",
     "noNewNotifications": "No new notifications",
-    "viewAllNotifications": "View all notifications"
+    "viewAllNotifications": "View all notifications",
+    "openNotificationsMenu": "Open notifications menu"
   },
   "orgList": {
     "title": "Organizations",
