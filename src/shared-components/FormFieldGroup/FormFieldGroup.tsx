@@ -11,13 +11,42 @@ import type { InterfaceFormFieldGroupProps } from '../../types/FormFieldGroup/in
  */
 export const FormFieldGroup: React.FC<
   InterfaceFormFieldGroupProps & { children: React.ReactNode }
-> = ({ name, label, required, helpText, error, touched, children }) => {
+> = ({
+  name,
+  label,
+  required,
+  helpText,
+  error,
+  touched,
+  children,
+  inline,
+  hideLabel,
+}) => {
   const { t: tCommon } = useTranslation('common');
   const showError = touched && !!error;
 
+  if (inline) {
+    return (
+      <>
+        {label && !hideLabel && (
+          <Form.Label htmlFor={name} className="visually-hidden">
+            {label}
+            {required && <span aria-label={tCommon('required')}>*</span>}
+          </Form.Label>
+        )}
+        {children}
+        {showError && (
+          <Form.Control.Feedback type="invalid" className="d-block">
+            {error}
+          </Form.Control.Feedback>
+        )}
+      </>
+    );
+  }
+
   return (
     <Form.Group controlId={name}>
-      <Form.Label htmlFor={name}>
+      <Form.Label htmlFor={name} className={hideLabel ? 'visually-hidden' : ''}>
         {label}
         {required && <span aria-label={tCommon('required')}>*</span>}
       </Form.Label>
