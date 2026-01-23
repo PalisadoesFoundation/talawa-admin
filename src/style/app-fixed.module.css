@@ -359,7 +359,6 @@
   --cardBody-st-color: #0056b3;
 
   --sidebar-bg: #e8e5e5;
-  --sidebar-bg-user: #f0f7fb;
   --sidebarsticky-border: #e8e5e5;
   --searchtitle-color: #707070;
   --searchtitle-border: #a8c7fa;
@@ -2855,7 +2854,6 @@ form label,
   align-items: center;
   color: grey;
 }
-
 .peopleTabEventHeader:hover {
   color: var(--groupsLabel-color);
 }
@@ -4431,13 +4429,10 @@ form label,
 }
 
 .peopleTabUserTagTableHeader {
-  background-color: #f9fafb;
-  /* bg-gray-50 */
-  border-top-width: 1px;
-  /* border-y */
+  background-color: #f9fafb; /* bg-gray-50 */
+  border-top-width: 1px; /* border-y */
   border-bottom-width: 1px;
-  border-color: #e5e7eb;
-  /* border-gray-200 */
+  border-color: #e5e7eb; /* border-gray-200 */
   border-style: solid;
 }
 
@@ -4500,7 +4495,6 @@ form label,
   align-items: baseline;
   justify-content: space-between;
 }
-
 .peopleTabUserEventDate {
   display: flex;
   align-items: baseline;
@@ -4513,7 +4507,6 @@ form label,
   display: flex;
   flex-direction: column;
 }
-
 .peoplePageUserEventCardBody {
   display: grid;
   gap: 1rem;
@@ -6260,8 +6253,7 @@ form {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 6px;
-  /* space between icon & text */
+  margin-right: 6px; /* space between icon & text */
 }
 
 .dropdownItemButton {
@@ -11014,7 +11006,6 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
-
   .tagActionsDivider {
     border-color: var(--grey-border-box-color);
     border-style: solid;
