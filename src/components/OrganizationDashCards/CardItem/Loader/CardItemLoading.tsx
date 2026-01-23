@@ -41,10 +41,9 @@ const CardItemLoading = (): JSX.Element => {
           <div className={styles.themeOverlay} />
         </div>
         <span
+          aria-hidden="true"
           className={`${styles.title} shimmer rounded ${styles.titlePlaceholder}`}
-        >
-          &nbsp;
-        </span>
+        />
       </div>
     </>
   );

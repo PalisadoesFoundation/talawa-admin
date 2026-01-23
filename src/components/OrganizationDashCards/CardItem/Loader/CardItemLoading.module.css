@@ -28,5 +28,6 @@
 
 .titlePlaceholder {
   --card-item-loading-height: 1.5rem;
+  display: inline-block;
   height: var(--card-item-loading-height);
 }
