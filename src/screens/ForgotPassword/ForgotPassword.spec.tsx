@@ -370,7 +370,6 @@ describe('Testing Forgot Password screen', () => {
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
         translations.emailNotRegistered,
-        expect.any(Object),
       );
     });
   });
@@ -400,7 +399,6 @@ describe('Testing Forgot Password screen', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.errorSendingMail,
-        expect.any(Object),
       );
     });
   });
@@ -431,7 +429,6 @@ describe('Testing Forgot Password screen', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
-        expect.any(Object),
       );
     });
   });
