@@ -219,6 +219,11 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(
+        screen.getByText('notification.viewAllNotifications'),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(
       screen.getByText('notification.viewAllNotifications'),
     );
@@ -308,6 +313,11 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(
+        screen.getByText('notification.viewAllNotifications'),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(
       screen.getByText('notification.viewAllNotifications'),
     );
