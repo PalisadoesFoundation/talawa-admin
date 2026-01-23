@@ -723,10 +723,6 @@ describe('MemberDetail', () => {
 
   describe('Data Update and Processing Tests', () => {
     test('handles user profile localStorage updates on successful save', async () => {
-      setItem(PREFIX, 'id', '456');
-      setItem(PREFIX, 'userId', '456');
-      setItem(PREFIX, 'sidebar', false);
-
       renderUserProfileScreen(link5); // Use UPDATE_MOCK which has successful response
       await wait();
 

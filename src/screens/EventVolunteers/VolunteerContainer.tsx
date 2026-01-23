@@ -54,7 +54,7 @@ function VolunteerContainer(): JSX.Element {
             to:
               dataType === 'individual'
                 ? undefined
-                : `/admin/event/${orgId}/${eventId}`,
+                : `/admin/event/${orgId}/${eventId}/volunteers`,
             isCurrent: dataType === 'individual',
           },
           ...(dataType === 'group'

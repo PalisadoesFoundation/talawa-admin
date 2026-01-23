@@ -329,14 +329,7 @@ describe('Testing Leaderboard Screen', () => {
 
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    userName[0].dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: ' ',
-        code: 'Space',
-        bubbles: true,
-        cancelable: true,
-      }),
-    );
+    await userEvent.type(userName[0], '{space}');
 
     await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();

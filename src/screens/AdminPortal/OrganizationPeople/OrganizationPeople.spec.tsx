@@ -4,8 +4,9 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
-import userEvent from '@testing-library/user-event';
+import userEvent, {
+  PointerEventsCheckLevel,
+} from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
@@ -505,10 +506,10 @@ describe('OrganizationPeople', () => {
 
     // Switch to admin tab
     const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
-    fireEvent.click(adminOption);
+    await userEvent.click(adminOption);
 
     // Wait for admin data to load
     await waitFor(() => {
@@ -516,9 +517,9 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to users tab
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
     const usersOption = screen.getByText(/users/i);
-    fireEvent.click(usersOption);
+    await userEvent.click(usersOption);
 
     // Wait for users data to load
     await waitFor(() => {
@@ -527,9 +528,9 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to users tab
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
     const memberOption = screen.getByText(/members/i);
-    fireEvent.click(memberOption);
+    await userEvent.click(memberOption);
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -644,10 +645,10 @@ describe('OrganizationPeople', () => {
 
     // Switch to admin tab
     const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
-    fireEvent.click(adminOption);
+    await userEvent.click(adminOption);
 
     // Wait for admin data to load
     await waitFor(() => {
@@ -699,10 +700,10 @@ describe('OrganizationPeople', () => {
 
     // Switch to users tab
     const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
 
     const usersOption = screen.getByText(/users/i);
-    fireEvent.click(usersOption);
+    await userEvent.click(usersOption);
 
     // Wait for users data to load
     await waitFor(() => {
@@ -711,6 +712,9 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles pagination correctly for ADMIN no next', async () => {
+    const user = userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
     const initialMemberMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
@@ -778,10 +782,10 @@ describe('OrganizationPeople', () => {
 
     // Switch to admin tab
     const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
-    fireEvent.click(adminOption);
+    await userEvent.click(adminOption);
 
     await waitFor(() => {
       expect(
@@ -791,13 +795,13 @@ describe('OrganizationPeople', () => {
 
     // Navigate to next page
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
+    await user.click(nextPageButton);
 
     // Navigate back to previous page
     const prevPageButton = screen.getByRole('button', {
       name: /previous page/i,
     });
-    fireEvent.click(prevPageButton);
+    await user.click(prevPageButton);
   });
 
   test('handles errors from GraphQL queries', async () => {
@@ -889,10 +893,10 @@ describe('OrganizationPeople', () => {
 
     // Switch to admin tab
     const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);
-    fireEvent.click(adminOption);
+    await userEvent.click(adminOption);
 
     // Wait for error handling
     await waitFor(() => {
@@ -999,7 +1003,7 @@ describe('OrganizationPeople', () => {
 
     // Click on delete button for a member
     const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
-    fireEvent.click(deleteButtons[0]);
+    await userEvent.click(deleteButtons[0]);
 
     // Modal should be open
     await waitFor(() => {
@@ -1008,7 +1012,7 @@ describe('OrganizationPeople', () => {
 
     // Close the modal
     const closeButton = screen.getByTestId('removeMemberBtn');
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
 
     // Modal should be closed
     await waitFor(() => {
@@ -1017,6 +1021,9 @@ describe('OrganizationPeople', () => {
   });
 
   test('prevents navigation when there are no pages available', async () => {
+    const user = userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
     const singlePageMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
@@ -1073,7 +1080,7 @@ describe('OrganizationPeople', () => {
 
     // Try to navigate to next page (should not work)
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
+    await user.click(nextPageButton);
 
     // Should still show the same data
     await waitFor(() => {
@@ -1082,6 +1089,9 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles backward navigation with missing page cursors', async () => {
+    const user = userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
     const initialMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
@@ -1126,13 +1136,13 @@ describe('OrganizationPeople', () => {
     // Manually trigger pagination to page 1 to simulate being on a later page
     // without having proper cursor data stored
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
+    await user.click(nextPageButton);
 
     // Now try to go back - this should trigger the fallback to null
     const prevPageButton = screen.getByRole('button', {
       name: /previous page/i,
     });
-    fireEvent.click(prevPageButton);
+    await user.click(prevPageButton);
   });
 
   test('prevents forward pagination when hasNextPage is false', async () => {
@@ -1257,6 +1267,9 @@ describe('OrganizationPeople', () => {
   });
 
   test('prevents backward navigation attempt when hasPreviousPage is false', async () => {
+    const user = userEvent.setup({
+      pointerEventsCheck: PointerEventsCheckLevel.Never,
+    });
     // This test targets line 353 - the second return statement
     const firstPageMock = createMemberConnectionMock(
       {
@@ -1318,7 +1331,7 @@ describe('OrganizationPeople', () => {
     });
 
     // This click should trigger the line 353 return statement
-    fireEvent.click(prevPageButton);
+    await user.click(prevPageButton);
 
     // Verify we're still showing the same data
     await waitFor(() => {

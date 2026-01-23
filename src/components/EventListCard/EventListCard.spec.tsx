@@ -86,10 +86,6 @@ const renderEventListCard = (
                   element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
-                  path="/admin/event/:orgId/"
-                  element={<EventListCard key={key} {...restProps} />}
-                />
-                <Route
                   path="/admin/event/:orgId/:eventId"
                   element={<div>Event Dashboard (Admin)</div>}
                 />
