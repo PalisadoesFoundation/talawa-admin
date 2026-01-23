@@ -2347,11 +2347,20 @@
     "noEventsAttended": "No events attended"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Average Review Score",
+      "rated": "Rated {{score}} / 5"
+    },
     "title": "Event Statistics",
     "reviews": {
       "title": "Reviews",
       "emptyState": "Waiting for people to talk about the event...",
       "filledByCount": "Filled by {{count}} people."
+    },
+    "feedback": {
+      "title": "Feedback Analysis",
+      "emptyState": "Please ask attendees to submit feedback for insights!",
+      "filledByCount": "{{count}} people have filled feedback for this event."
     }
   },
   "verifyEmail": {

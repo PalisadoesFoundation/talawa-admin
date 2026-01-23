@@ -3,7 +3,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
@@ -33,7 +34,7 @@ vi.mock('style/app-fixed.module.css', () => ({
     profileContainer: 'profileContainer',
     bgDanger: 'bgDanger',
     imageContainer: 'imageContainer',
-    ProfileRightConatiner: 'ProfileRightConatiner',
+    ProfileRightContainer: 'ProfileRightContainer',
     profileText: 'profileText',
     primaryText: 'primaryText',
     secondaryText: 'secondaryText',
@@ -47,6 +48,24 @@ vi.mock('style/app-fixed.module.css', () => ({
     userSidebarOrgFooter: 'userSidebarOrgFooter',
   },
 }));
+
+vi.mock(
+  'shared-components/SidebarOrgSection/SidebarOrgSection.module.css',
+  () => ({
+    default: {
+      organizationContainer: 'organizationContainer',
+      profileContainer: 'profileContainer',
+      bgDanger: 'bgDanger',
+      imageContainer: 'imageContainer',
+      ProfileRightContainer: 'ProfileRightContainer',
+      profileText: 'profileText',
+      primaryText: 'primaryText',
+      secondaryText: 'secondaryText',
+      ArrowIcon: 'ArrowIcon',
+      avatarContainer: 'avatarContainer',
+    },
+  }),
+);
 
 // Type definitions for better type safety
 interface IMockedResponse {
@@ -483,7 +502,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -498,7 +518,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
@@ -513,7 +534,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const membersLink = screen.getByText('Members');
-      fireEvent.click(membersLink);
+      const user = userEvent.setup();
+      await user.click(membersLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -528,7 +550,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const eventsLink = screen.getByText('Events');
-      fireEvent.click(eventsLink);
+      const user = userEvent.setup();
+      await user.click(eventsLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -673,7 +696,7 @@ describe('LeftDrawerOrg', () => {
       expect(screen.getByTestId('plugin-logo')).toBeInTheDocument();
     });
 
-    it('should hide drawer on mobile when plugin link is clicked', () => {
+    it('should hide drawer on mobile when plugin link is clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -693,7 +716,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const pluginButton = screen.getByText('Test Plugin');
-      fireEvent.click(pluginButton);
+      const user = userEvent.setup();
+      await user.click(pluginButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -766,7 +790,7 @@ describe('LeftDrawerOrg', () => {
     expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
   });
 
-  it('should toggle drawer state and update localStorage on click events', () => {
+  it('should toggle drawer state and update localStorage on click events', async () => {
     // Test with initial hideDrawer = false
     const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
 
@@ -774,7 +798,8 @@ describe('LeftDrawerOrg', () => {
     expect(toggleButton).toBeInTheDocument();
 
     // Test onClick functionality - clicking when drawer is visible should hide it
-    fireEvent.click(toggleButton);
+    const user = userEvent.setup();
+    await user.click(toggleButton);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -789,7 +814,7 @@ describe('LeftDrawerOrg', () => {
     const toggleButtonCollapsed = screen.getByTestId('toggleBtn');
 
     // Test onClick when drawer is hidden - clicking should show it
-    fireEvent.click(toggleButtonCollapsed);
+    await user.click(toggleButtonCollapsed);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
@@ -862,7 +887,7 @@ describe('LeftDrawerOrg', () => {
       expect(screen.getByTestId('collapsible-dropdown')).toBeInTheDocument();
     });
 
-    it('should handle window resize during interaction', () => {
+    it('should handle window resize during interaction', async () => {
       renderComponent();
 
       // Start on desktop
@@ -873,7 +898,8 @@ describe('LeftDrawerOrg', () => {
       });
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
 
       // Change to mobile during next interaction
@@ -883,7 +909,7 @@ describe('LeftDrawerOrg', () => {
         value: 800,
       });
 
-      fireEvent.click(dashboardLink);
+      await user.click(dashboardLink);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
   });
