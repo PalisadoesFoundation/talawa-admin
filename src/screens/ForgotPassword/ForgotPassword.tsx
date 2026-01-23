@@ -202,7 +202,9 @@ const ForgotPassword = (): JSX.Element => {
                     <FormTextField
                       name="userOtp"
                       label={t('enterOtp')}
-                      type="number"
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
                       placeholder={t('userOtp')}
                       value={forgotPassFormData.userOtp}
                       onChange={(value) =>
@@ -233,7 +235,7 @@ const ForgotPassword = (): JSX.Element => {
 
                     <FormTextField
                       name="confirmNewPassword"
-                      label={t('cofirmNewPassword')}
+                      label={t('confirmNewPassword')}
                       type="password"
                       placeholder={tCommon('password')}
                       value={forgotPassFormData.confirmNewPassword}

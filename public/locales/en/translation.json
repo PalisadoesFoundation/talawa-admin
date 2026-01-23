@@ -1123,7 +1123,7 @@
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
     "enterNewPassword": "Enter New Password",
-    "cofirmNewPassword": "Confirm New Password",
+    "confirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
     "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",

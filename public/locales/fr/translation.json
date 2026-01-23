@@ -1061,7 +1061,7 @@
     "getOtp": "Obtenir OTP",
     "enterOtp": "Entrez OTP",
     "enterNewPassword": "Entrez un nouveau mot de passe",
-    "cofirmNewPassword": "Confirmer le nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe",
     "changePassword": "Changer le mot de passe",
     "backToLogin": "Retour connexion",
     "userOtp": "par exemple. ",

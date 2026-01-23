@@ -37,7 +37,8 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -292,7 +293,7 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="mb-3">
-              <label className={styles.formLabel}>{t('social')}</label>
+              <h4 className={styles.formLabel}>{t('social')}</h4>
               {/* Social media inputs */}
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />

@@ -197,7 +197,10 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalled();
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        translations.OTPsent,
+        expect.any(Object),
+      );
     });
   });
 

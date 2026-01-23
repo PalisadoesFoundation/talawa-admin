@@ -6,13 +6,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -179,38 +173,41 @@ describe('Testing VolunteerGroupModal', () => {
 
     const nameInput = screen.getByTestId('groupName');
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 1' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 1');
     expect(nameInput).toHaveValue('Group 1');
 
     const descInput = screen.getByTestId('groupDescription');
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc');
     expect(descInput).toHaveValue('desc');
 
     const vrInput = screen.getByTestId('volunteersRequired');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     // Select Leader
     const memberSelect = await screen.findByTestId('leaderSelect');
     expect(memberSelect).toBeInTheDocument();
     const memberInputField = within(memberSelect).getByRole('combobox');
-    fireEvent.mouseDown(memberInputField);
+    await userEvent.click(memberInputField);
 
     const memberOption = await screen.findByText('Harve Lance');
     expect(memberOption).toBeInTheDocument();
-    fireEvent.click(memberOption);
+    await userEvent.click(memberOption);
 
     // Select Volunteers
     const volunteerSelect = await screen.findByTestId('volunteerSelect');
     expect(volunteerSelect).toBeInTheDocument();
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-    fireEvent.mouseDown(volunteerInputField);
+    await userEvent.click(volunteerInputField);
 
     const volunteerOption = await screen.findByText('John Doe');
     expect(volunteerOption).toBeInTheDocument();
-    fireEvent.click(volunteerOption);
+    await userEvent.click(volunteerOption);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
@@ -231,38 +228,41 @@ describe('Testing VolunteerGroupModal', () => {
 
     const nameInput = screen.getByTestId('groupName');
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 1' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 1');
     expect(nameInput).toHaveValue('Group 1');
 
     const descInput = screen.getByTestId('groupDescription');
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc');
     expect(descInput).toHaveValue('desc');
 
     const vrInput = screen.getByTestId('volunteersRequired');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     // Select Leader
     const memberSelect = await screen.findByTestId('leaderSelect');
     expect(memberSelect).toBeInTheDocument();
     const memberInputField = within(memberSelect).getByRole('combobox');
-    fireEvent.mouseDown(memberInputField);
+    await userEvent.click(memberInputField);
 
     const memberOption = await screen.findByText('Harve Lance');
     expect(memberOption).toBeInTheDocument();
-    fireEvent.click(memberOption);
+    await userEvent.click(memberOption);
 
     // Select Volunteers
     const volunteerSelect = await screen.findByTestId('volunteerSelect');
     expect(volunteerSelect).toBeInTheDocument();
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-    fireEvent.mouseDown(volunteerInputField);
+    await userEvent.click(volunteerInputField);
 
     const volunteerOption = await screen.findByText('John Doe');
     expect(volunteerOption).toBeInTheDocument();
-    fireEvent.click(volunteerOption);
+    await userEvent.click(volunteerOption);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
@@ -279,17 +279,20 @@ describe('Testing VolunteerGroupModal', () => {
 
     const nameInput = screen.getByTestId('groupName');
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 2');
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByTestId('groupDescription');
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc new');
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByTestId('volunteersRequired');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
@@ -311,17 +314,20 @@ describe('Testing VolunteerGroupModal', () => {
 
     const nameInput = screen.getByTestId('groupName');
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 2');
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByTestId('groupDescription');
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc new');
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByTestId('volunteersRequired');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
@@ -339,7 +345,8 @@ describe('Testing VolunteerGroupModal', () => {
 
     const vrInput = screen.getByTestId('volunteersRequired');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '-1' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '-1');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
@@ -352,12 +359,14 @@ describe('Testing VolunteerGroupModal', () => {
       expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '0' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '0');
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '19' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '19');
     await waitFor(() => {
       expect(vrInput).toHaveValue(19);
     });
@@ -384,9 +393,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(leaderSelect).toBeInTheDocument();
     const leaderInput = within(leaderSelect).getByRole('combobox');
 
-    fireEvent.mouseDown(leaderInput);
+    await userEvent.click(leaderInput);
     const memberOption = await screen.findByText('Harve Lance');
-    fireEvent.click(memberOption);
+    await userEvent.click(memberOption);
 
     await waitFor(() => {
       expect(leaderInput).toHaveValue('Harve Lance');
@@ -395,7 +404,7 @@ describe('Testing VolunteerGroupModal', () => {
     // Clear the input by focusing, clearing text, and pressing Escape
     // This triggers the Autocomplete's onChange with null
     await userEvent.clear(leaderInput);
-    fireEvent.keyDown(leaderInput, { key: 'Escape' });
+    await userEvent.keyboard('{Escape}');
 
     await waitFor(() => {
       expect(leaderInput).toHaveValue('');
@@ -431,29 +440,30 @@ describe('Testing VolunteerGroupModal', () => {
 
       // Fill form
       const nameInput = screen.getByTestId('groupName');
-      fireEvent.change(nameInput, {
-        target: { value: 'Recurring Group Series' },
-      });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Recurring Group Series');
 
       const descInput = screen.getByTestId('groupDescription');
-      fireEvent.change(descInput, { target: { value: 'desc' } });
+      await userEvent.clear(descInput);
+      await userEvent.type(descInput, 'desc');
 
       const vrInput = screen.getByTestId('volunteersRequired');
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      await userEvent.clear(vrInput);
+      await userEvent.type(vrInput, '10');
 
       // Select Leader
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
-      fireEvent.mouseDown(memberInputField);
+      await userEvent.click(memberInputField);
       const memberOption = await screen.findByText('Harve Lance');
-      fireEvent.click(memberOption);
+      await userEvent.click(memberOption);
 
       // Select Volunteers
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await userEvent.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await userEvent.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('submitBtn');
       await userEvent.click(submitBtn);
@@ -480,29 +490,30 @@ describe('Testing VolunteerGroupModal', () => {
 
       // Fill form
       const nameInput = screen.getByTestId('groupName');
-      fireEvent.change(nameInput, {
-        target: { value: 'Recurring Group Instance' },
-      });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Recurring Group Instance');
 
       const descInput = screen.getByTestId('groupDescription');
-      fireEvent.change(descInput, { target: { value: 'desc' } });
+      await userEvent.clear(descInput);
+      await userEvent.type(descInput, 'desc');
 
       const vrInput = screen.getByTestId('volunteersRequired');
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      await userEvent.clear(vrInput);
+      await userEvent.type(vrInput, '10');
 
       // Select Leader
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
-      fireEvent.mouseDown(memberInputField);
+      await userEvent.click(memberInputField);
       const memberOption = await screen.findByText('Harve Lance');
-      fireEvent.click(memberOption);
+      await userEvent.click(memberOption);
 
       // Select Volunteers
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await userEvent.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await userEvent.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('submitBtn');
       await userEvent.click(submitBtn);
@@ -565,26 +576,29 @@ describe('Testing VolunteerGroupModal', () => {
 
       // Fill minimal form to test the mutation logic
       const nameInput = screen.getByTestId('groupName');
-      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Test Group');
 
       const descInput = screen.getByTestId('groupDescription');
-      fireEvent.change(descInput, { target: { value: 'desc' } });
+      await userEvent.clear(descInput);
+      await userEvent.type(descInput, 'desc');
 
       const vrInput = screen.getByTestId('volunteersRequired');
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      await userEvent.clear(vrInput);
+      await userEvent.type(vrInput, '10');
 
       // Select Leader (required)
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
-      fireEvent.mouseDown(memberInputField);
+      await userEvent.click(memberInputField);
       const memberOption = await screen.findByText('Harve Lance');
-      fireEvent.click(memberOption);
+      await userEvent.click(memberOption);
 
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await userEvent.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await userEvent.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('submitBtn');
       await userEvent.click(submitBtn);
@@ -682,7 +696,8 @@ describe('Testing VolunteerGroupModal', () => {
 
       // Fill some form fields
       const nameInput = screen.getByTestId('groupName');
-      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Test Group');
 
       // Radio button state should be preserved
       expect(instanceRadio).toBeChecked();

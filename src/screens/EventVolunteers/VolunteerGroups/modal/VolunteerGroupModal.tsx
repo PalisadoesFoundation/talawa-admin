@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,
@@ -218,8 +218,8 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       >
         {/* Radio buttons for recurring events - only show in create mode */}
         {isRecurring && mode === 'create' ? (
-          <div className="mb-3">
-            <label>{t('applyTo')}</label>
+          <fieldset className="mb-3">
+            <legend>{t('applyTo')}</legend>
             <div>
               <input
                 type="radio"
@@ -240,7 +240,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               />
               <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
             </div>
-          </div>
+          </fieldset>
         ) : null}
 
         {/* Input field to enter the group name */}

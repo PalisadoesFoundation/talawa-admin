@@ -25,7 +25,7 @@
  * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
@@ -137,8 +137,8 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       >
         {/* Radio buttons for recurring events */}
         {isRecurring ? (
-          <div className="mb-3">
-            <label>{t('applyTo')}</label>
+          <fieldset className="mb-3">
+            <legend>{t('applyTo')}</legend>
             <div>
               <input
                 type="radio"
@@ -159,7 +159,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               />
               <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
             </div>
-          </div>
+          </fieldset>
         ) : null}
 
         {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
@@ -169,6 +169,9 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             limitTags={2}
             data-testid="membersSelect"
             options={members}
+            value={
+              members.find((m: InterfaceUserInfo) => m.id === userId) || null
+            }
             isOptionEqualToValue={(option, value) => option.id === value.id}
             filterSelectedOptions={true}
             getOptionLabel={(member: InterfaceUserInfo): string => member.name}
@@ -177,12 +180,13 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             }}
             renderInput={(params) => (
               <FormFieldGroup name="members" label={tCommon('members')}>
-                <div ref={params.InputProps.ref}>
+                <div ref={params.InputProps.ref} className="d-flex">
                   <input
                     {...params.inputProps}
                     className="form-control"
                     data-testid="membersInput"
                   />
+                  {params.InputProps.endAdornment}
                 </div>
               </FormFieldGroup>
             )}
@@ -190,7 +194,12 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         </div>
 
         {/* Button to submit the volunteer form */}
-        <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
+        <Button
+          type="submit"
+          className={styles.regBtn}
+          data-testid="submitBtn"
+          disabled={!userId}
+        >
           {t('addVolunteer')}
         </Button>
       </form>

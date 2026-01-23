@@ -3,13 +3,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
-  fireEvent,
   render,
   screen,
   waitFor,
   within,
   act,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -254,7 +254,7 @@ describe('PledgeModal', () => {
     const hideMock = vi.fn();
     const props = { ...pledgeProps[0], hide: hideMock };
     renderPledgeModal(link1, props);
-    fireEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
     expect(hideMock).toHaveBeenCalledTimes(1);
   });
 
@@ -286,7 +286,8 @@ describe('PledgeModal', () => {
     expect(amountInput).toHaveAttribute('value', '100');
 
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '200' } });
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '200');
     });
     expect(amountInput).toHaveAttribute('value', '200');
   });
@@ -299,7 +300,8 @@ describe('PledgeModal', () => {
     const amountInput = screen.getByLabelText('Amount');
 
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '-10' } });
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '-10');
     });
 
     await waitFor(() => {
@@ -328,8 +330,9 @@ describe('PledgeModal', () => {
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '100' } });
-      fireEvent.submit(screen.getByTestId('pledgeForm'));
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '100');
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
     });
 
     await waitFor(() => {
@@ -366,20 +369,21 @@ describe('PledgeModal', () => {
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
     await act(async () => {
-      fireEvent.mouseDown(pledgerInput);
+      await userEvent.click(pledgerInput);
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const listbox = screen.getByRole('listbox');
       const option = within(listbox).getByText('John Doe');
-      fireEvent.click(option);
+      await userEvent.click(option);
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    fireEvent.change(amountInput, { target: { value: '100' } });
+    await userEvent.clear(amountInput);
+    await userEvent.type(amountInput, '100');
 
     await act(async () => {
-      fireEvent.click(screen.getByTestId('submitPledgeBtn'));
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
     });
 
     await waitFor(() => {
@@ -402,7 +406,7 @@ describe('PledgeModal', () => {
   it('should show validation error when submitting without required fields', async () => {
     renderPledgeModal(mockLink, pledgeProps[0]);
 
-    fireEvent.click(screen.getByTestId('submitPledgeBtn'));
+    await userEvent.click(screen.getByTestId('submitPledgeBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();
@@ -416,7 +420,7 @@ describe('PledgeModal', () => {
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
     await act(async () => {
-      fireEvent.mouseDown(pledgerInput);
+      await userEvent.click(pledgerInput);
     });
 
     await waitFor(() => {
@@ -426,8 +430,8 @@ describe('PledgeModal', () => {
       expect(option).toBeInTheDocument();
     });
 
-    fireEvent.keyDown(pledgerInput, { key: 'ArrowDown' });
-    fireEvent.keyDown(pledgerInput, { key: 'Enter' });
+    await userEvent.type(pledgerInput, '{arrowdown}');
+    await userEvent.type(pledgerInput, '{enter}');
 
     await waitFor(() => {
       const selectedValue = within(pledgerSelect).getByRole('combobox');
@@ -445,10 +449,11 @@ describe('PledgeModal', () => {
     renderPledgeModal(mockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
-    fireEvent.change(amountInput, { target: { value: '200' } });
+    await userEvent.clear(amountInput);
+    await userEvent.type(amountInput, '200');
 
     await act(async () => {
-      fireEvent.click(screen.getByTestId('submitPledgeBtn'));
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
     });
 
     await waitFor(() => {
@@ -473,7 +478,7 @@ describe('PledgeModal', () => {
     });
 
     await act(async () => {
-      fireEvent.submit(screen.getByTestId('pledgeForm'));
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
     });
 
     await waitFor(() => {
@@ -487,7 +492,8 @@ describe('PledgeModal', () => {
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '-1' } });
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '-1');
     });
 
     await waitFor(() => {
@@ -512,8 +518,9 @@ describe('PledgeModal', () => {
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '200' } });
-      fireEvent.submit(screen.getByTestId('pledgeForm'));
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '200');
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
     });
 
     await waitFor(() => {
@@ -526,7 +533,9 @@ describe('PledgeModal', () => {
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      fireEvent.change(amountInput, { target: { value: '' } });
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, ' '); // Simulating clearing or typing empty space effectively clears value if type is number/text for test purposes or just clear
+      await userEvent.clear(amountInput);
     });
 
     await waitFor(() => {
@@ -579,13 +588,13 @@ describe('PledgeModal', () => {
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
     await act(async () => {
-      fireEvent.mouseDown(pledgerInput);
+      await userEvent.click(pledgerInput);
     });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const listbox = screen.getByRole('listbox');
       const option = within(listbox).getByText('John Doe');
-      fireEvent.click(option);
+      await userEvent.click(option);
     });
 
     await waitFor(() => {
@@ -594,8 +603,8 @@ describe('PledgeModal', () => {
 
     // Focus the input and use Escape key to clear (clearOnEscape is enabled)
     await act(async () => {
-      fireEvent.focus(pledgerInput);
-      fireEvent.keyDown(pledgerInput, { key: 'Escape' });
+      await userEvent.click(pledgerInput);
+      await userEvent.keyboard('{Escape}');
     });
 
     await waitFor(() => {

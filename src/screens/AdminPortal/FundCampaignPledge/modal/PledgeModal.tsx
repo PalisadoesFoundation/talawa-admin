@@ -31,7 +31,7 @@
  */
 import type { ChangeEvent } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
@@ -94,6 +94,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
+  const [amountTouched, setAmountTouched] = useState(false);
 
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
@@ -251,7 +252,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
         <div className="d-flex gap-3 mx-auto mb-3">
           {/* Dropdown to select the currency in which amount is to be pledged */}
-          <div className="flex-grow-1" style={{ minWidth: '150px' }}>
+          <div className={`flex-grow-1 ${styles.currencyContainer}`}>
             <InputLabel>{t('currency')}</InputLabel>
             <Select
               value={formState.pledgeCurrency}
@@ -287,7 +288,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               error={
                 formState.pledgeAmount < 1 ? t('amountMustBeAtLeastOne') : ''
               }
-              touched={true}
+              touched={amountTouched}
+              onBlur={() => setAmountTouched(true)}
               data-testid="pledgeAmount"
             />
           </div>

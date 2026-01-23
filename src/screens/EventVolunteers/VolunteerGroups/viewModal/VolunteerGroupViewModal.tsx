@@ -189,9 +189,9 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
         {/* Table for Associated Volunteers */}
         {volunteers && volunteers.length > 0 && (
           <div>
-            <label className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}>
+            <h5 className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}>
               {t('volunteers')}
-            </label>
+            </h5>
 
             <TableContainer
               component={Paper}

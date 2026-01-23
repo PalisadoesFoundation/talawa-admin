@@ -1078,7 +1078,7 @@
     "getOtp": "获取一次性密码",
     "enterOtp": "输入一次性密码",
     "enterNewPassword": "输入新密码",
-    "cofirmNewPassword": "确认新密码",
+    "confirmNewPassword": "确认新密码",
     "changePassword": "更改密码",
     "backToLogin": "回到登入",
     "userOtp": "例如",

@@ -22,7 +22,7 @@
  * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
  * - Displays success or error messages using `NotificationToast`.
  */
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import styles from './VolunteerDeleteModal.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -114,8 +114,8 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
 
       {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
       {volunteer.isTemplate && !volunteer.isInstanceException && (
-        <div className="mb-3">
-          <label>{t('applyTo')}</label>
+        <fieldset className="mb-3">
+          <legend>{t('applyTo')}</legend>
           <div>
             <input
               type="radio"
@@ -138,7 +138,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
             />
             <label htmlFor="deleteApplyToInstance">{t('thisEventOnly')}</label>
           </div>
-        </div>
+        </fieldset>
       )}
     </BaseModal>
   );

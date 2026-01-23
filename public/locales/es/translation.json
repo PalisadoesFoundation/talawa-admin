@@ -1062,7 +1062,7 @@
     "getOtp": "Obtener OTP",
     "enterOtp": "Ingresar OTP",
     "enterNewPassword": "Ingrese nueva clave",
-    "cofirmNewPassword": "Confirmar nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
     "changePassword": "Cambia la contraseña",
     "backToLogin": "Volver al inicio de sesión",
     "userOtp": "por ejemplo 12345",

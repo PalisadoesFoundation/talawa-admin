@@ -1078,7 +1078,7 @@
     "getOtp": "ओटीपी प्राप्त करें",
     "enterOtp": "ओटीपी दर्ज करें",
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
-    "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
     "backToLogin": "लॉगिन पर वापस जाएं",
     "userOtp": "जैसे ",
