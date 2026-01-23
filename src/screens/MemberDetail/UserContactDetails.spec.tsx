@@ -1313,35 +1313,35 @@ describe('MemberDetail', () => {
       {
         request: {
           query: MOCKS1[0].request.query,
-          variables: { input: { id: '456' } },
+          variables: {
+            input: {
+              id: '456',
+            },
+          },
         },
         result: {
           data: {
             user: {
               id: '456',
               name: 'TestUser',
-              birthDate: null,
-              email: 'test@example.com',
               firstName: 'Test',
               lastName: 'User',
+              email: 'test@example.com',
+              birthDate: null,
               gender: 'MALE',
-              phone: {
-                mobile: '+1234567890',
-                work: '+0987654321',
-                home: '+1111111111',
-              },
-              image: null,
-              address: {
-                line1: '123 Main St',
-                line2: 'Apt 4',
-                city: 'City',
-                state: 'State',
-                countryCode: 'US',
-                postalCode: '12345',
-              },
+              mobilePhoneNumber: '+1234567890',
+              workPhoneNumber: '+0987654321',
+              homePhoneNumber: '+1111111111',
+              addressLine1: '123 Main St',
+              addressLine2: 'Apt 4',
+              city: 'City',
+              state: 'State',
+              countryCode: 'US',
+              postalCode: '12345',
               maritalStatus: 'SINGLE',
               employmentStatus: 'FULL_TIME',
               educationGrade: 'GRADUATE',
+              image: null,
               emailVerified: true,
               description: 'Test description',
               eventsAttended: [],
