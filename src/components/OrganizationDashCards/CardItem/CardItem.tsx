@@ -77,7 +77,7 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
             ) : (
               <img
                 src={DefaultImg}
-                alt={`${title}`}
+                alt={t('avatar', { title })}
                 crossOrigin="anonymous"
                 className={styles.cardItemImage}
                 loading="lazy"

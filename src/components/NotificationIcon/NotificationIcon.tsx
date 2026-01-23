@@ -28,11 +28,6 @@ interface InterfaceNotification {
  */
 const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
-  const getNotificationPath = (): string => {
-    const path = location.pathname || '';
-    const isUserPortal = path === '/user' || path.startsWith('/user/');
-    return isUserPortal ? '/user/notification' : '/notification';
-  };
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
@@ -50,6 +45,12 @@ const NotificationIcon = (): JSX.Element => {
   });
   const navigate = useNavigate();
   const location = useLocation();
+
+  const getNotificationPath = (): string => {
+    const path = location.pathname || '';
+    const isUserPortal = path === '/user' || path.startsWith('/user/');
+    return isUserPortal ? '/user/notification' : '/notification';
+  };
 
   const unreadCount: number = (
     (data?.user?.notifications as InterfaceNotification[]) || []
