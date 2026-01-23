@@ -1,8 +1,22 @@
 import CardItemLoading from './CardItemLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItemLoading.module.css';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
+    t: (key: string) =>
+      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+    i18n: {
+      changeLanguage: () => Promise.resolve(),
+    },
+  }),
+}));
 describe('Test the CardItemLoading component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('Should render the component', () => {
     render(<CardItemLoading />);
     expect(screen.getByTestId('cardItemLoading')).toBeInTheDocument();
@@ -19,5 +33,10 @@ describe('Test the CardItemLoading component', () => {
 
     const title = cardItemLoading.querySelector(`.${styles.title}`);
     expect(title).toBeInTheDocument();
+  });
+
+  test('Should render the translated loading placeholder text', () => {
+    render(<CardItemLoading />);
+    expect(screen.getByText('cardItem.loadingPlaceholder')).toBeInTheDocument();
   });
 });
