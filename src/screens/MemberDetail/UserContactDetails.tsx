@@ -361,6 +361,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   </label>
                   <DynamicDropDown
                     formState={formState}
+                    data-testid="inputEducationGrade"
                     setFormState={setFormState}
                     fieldOptions={educationGradeEnum}
                     fieldName="educationGrade"
@@ -390,6 +391,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   </label>
                   <DynamicDropDown
                     formState={formState}
+                    data-testid="marital-status-btn"
                     setFormState={setFormState}
                     fieldOptions={maritalStatusEnum}
                     fieldName="maritalStatus"
