@@ -74,10 +74,10 @@ import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-export default function groupChatDetails({
+export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
