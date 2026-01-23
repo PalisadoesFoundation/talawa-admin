@@ -11,7 +11,7 @@ vi.mock('react-i18next', () => ({
     },
   }),
 }));
-import type { InterfaceCardItem } from './CardItem';
+import type { InterfaceCardItemProps as InterfaceCardItem } from 'types/components/OrganizationDashCards/CardItem/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -205,4 +205,30 @@ describe('CardItem Component', () => {
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/member.jpg');
   });
+});
+
+it('resets image state when image prop changes', () => {
+  const props: InterfaceCardItem = {
+    type: 'Post',
+    title: 'Post with Changing Image',
+    image: 'first-image.jpg',
+  };
+
+  const { rerender } = render(<CardItem {...props} />);
+
+  const img = screen.getByAltText('cardItem.avatar');
+
+  // Simulate error on first image
+  act(() => {
+    img.dispatchEvent(new Event('error'));
+  });
+
+  // Verify fallback is shown
+  expect(screen.getByAltText('Post with Changing Image')).toBeInTheDocument();
+
+  // Change image prop - should reset imgOk and try new image
+  rerender(<CardItem {...props} image="second-image.jpg" />);
+
+  const newImg = screen.getByAltText('cardItem.avatar');
+  expect(newImg).toHaveAttribute('src', 'second-image.jpg');
 });
