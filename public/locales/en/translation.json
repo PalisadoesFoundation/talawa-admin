@@ -365,7 +365,9 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0"
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Posted on:",
+    "author": "Author:"
   },
   "dashboard": {
     "title": "Dashboard",

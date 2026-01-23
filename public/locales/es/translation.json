@@ -365,7 +365,9 @@
     "avatar": "avatar de {{title}}",
     "eventLocation": "Ubicación del Evento",
     "eventDate": "Fecha del Evento",
-    "loadingPlaceholder": "\u00A0"
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Publicado el:",
+    "author": "Autor:"
   },
   "dashboard": {
     "title": "Panel de",

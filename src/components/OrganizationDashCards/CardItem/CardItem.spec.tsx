@@ -55,7 +55,9 @@ describe('CardItem Component', () => {
     const dateRange = `${startdate} - ${enddate}`;
     expect(screen.getByText(dateRange)).toBeInTheDocument();
 
-    expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
+    expect(
+      screen.getByText('cardItem.author Event Organizer'),
+    ).toBeInTheDocument();
 
     expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
     expect(screen.getAllByTestId('date-icon')).not.toHaveLength(0);
@@ -182,7 +184,7 @@ describe('CardItem Component', () => {
     render(<CardItem {...props} />);
 
     expect(screen.getByText('Post with Time')).toBeInTheDocument();
-    expect(screen.getByText(/Posted on:/)).toBeInTheDocument();
+    expect(screen.getByText(/cardItem.postedOn/)).toBeInTheDocument();
     expect(
       screen.getByText(new RegExp(dayjs.utc().format('MMM D, YYYY')), {
         exact: false,

@@ -7,7 +7,7 @@
  * of a card item.
  *
  * @remarks
- * - The component uses CSS classes from `app-fixed.module.css` to
+ * - The component uses CSS classes from `CardItemLoading.module.css` to
  *   style the loading placeholder.
  * - The `shimmer` and `rounded` classes are applied to create a
  *   visual effect for the loading state.

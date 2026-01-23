@@ -365,7 +365,9 @@
     "avatar": "{{title}} 头像",
     "eventLocation": "活动地点",
     "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0"
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "发布于：",
+    "author": "作者："
   },
   "dashboard": {
     "title": "仪表板",

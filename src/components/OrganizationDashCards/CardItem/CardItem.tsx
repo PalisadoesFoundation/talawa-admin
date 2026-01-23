@@ -107,13 +107,15 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
 
           {type == 'Post' && time && (
             <span className={`${styles.cardItemDate}`}>
-              Posted on:
+              {t('postedOn')}
               {dayjs(time).format('MMM D, YYYY')}
             </span>
           )}
 
           {creator && (
-            <div className={styles.cardItemAuthor}>Author: {creator.name}</div>
+            <div className={styles.cardItemAuthor}>
+              {t('author')} {creator.name}
+            </div>
           )}
 
           <div className={styles.rightCard}>
@@ -132,7 +134,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
               <span className={`${styles.time} fst-normal fw-semibold`}>
                 {type === 'Event' && (
                   <DateIcon
-                    title="Event Date"
+                    title={t('eventDate')}
                     fill="var(--bs-gray-600)"
                     width={20}
                     height={20}

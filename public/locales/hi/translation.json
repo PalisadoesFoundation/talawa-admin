@@ -365,7 +365,9 @@
     "avatar": "{{title}} अवतार",
     "eventLocation": "इवेंट स्थान",
     "eventDate": "इवेंट तिथि",
-    "loadingPlaceholder": "\u00A0"
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "पर पोस्ट किया गया:",
+    "author": "लेखक:"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
