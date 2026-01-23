@@ -176,6 +176,65 @@ const restrictImportsExcept = (allowedIds = []) => ({
   ],
 });
 
+/**
+ * Security-related syntax restrictions that apply everywhere
+ */
+const securityRestrictions = [
+  {
+    selector:
+      "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
+    message:
+      "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
+  },
+  {
+    selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
+    message:
+      'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
+  },
+  {
+    selector:
+      "Property[key.name='variables'] Property[key.name='refreshToken']",
+    message:
+      'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
+  },
+];
+
+/**
+ * Search input restrictions - disabled for search component implementations
+ */
+const searchInputRestrictions = [
+  {
+    selector:
+      "JSXOpeningElement[name.name='input'] > JSXAttribute[name.name='type'] > Literal[value='search']",
+    message:
+      'Direct <input type="search"> is not allowed. Use SearchBar or SearchFilterBar components instead.',
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='input'] > JSXAttribute[name.name='placeholder'] > Literal[value=/[Ss]earch|[Ff]ind|[Qq]uer/]",
+    message:
+      'Input with search-related placeholder detected. Use SearchBar or SearchFilterBar components for search functionality.',
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='input'] > JSXAttribute[name.name='name'] > Literal[value=/[Ss]earch/]",
+    message:
+      'Input with search-related name detected. Use SearchBar or SearchFilterBar components for search functionality.',
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='input'] > JSXAttribute[name.name='id'] > Literal[value=/[Ss]earch/]",
+    message:
+      'Input with search-related id detected. Use SearchBar or SearchFilterBar components for search functionality.',
+  },
+  {
+    selector:
+      "JSXOpeningElement[name.name='input'] > JSXAttribute[name.name='aria-label'] > Literal[value=/[Ss]earch|[Ff]ind/]",
+    message:
+      'Input with search-related aria-label detected. Use SearchBar or SearchFilterBar components for search functionality.',
+  },
+];
+
 export default [
   {
     ignores: [
@@ -307,30 +366,8 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-restricted-syntax': [
         'error',
-        // Prevent insecure token handling in authorization headers
-        // See docs/docs/docs/developer-resources/security.md for details on these rules
-        // Note: No current violations exist. This rule is retained to prevent future regressions.
-        // Prohibited: { authorization: localStorage.getItem('token') }
-        // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
-        {
-          selector:
-            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
-          message:
-            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
-        },
-        // Prevent using deprecated REVOKE_REFRESH_TOKEN mutation
-        {
-          selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
-          message:
-            'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
-        },
-        // Prevent passing refreshToken as a variable to mutations
-        {
-          selector:
-            "Property[key.name='variables'] Property[key.name='refreshToken']",
-          message:
-            'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
-        },
+        ...securityRestrictions,
+        ...searchInputRestrictions,
       ],
       /**
        * Enforce usage of standardized DataGridWrapper component
@@ -503,6 +540,21 @@ export default [
       'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['dicebear-core']),
+  },
+  /**
+   * Exemption: SearchBar, SearchFilterBar, and DataTable components
+   * These components implement search functionality and need to use search inputs directly.
+   * Security restrictions still apply, but search input restrictions are disabled.
+   */
+  {
+    files: [
+      'src/shared-components/SearchBar/**/*.{ts,tsx}',
+      'src/shared-components/SearchFilterBar/**/*.{ts,tsx}',
+      'src/shared-components/DataTable/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-syntax': ['error', ...securityRestrictions],
+    },
   },
   // Cypress-specific configuration
   {
