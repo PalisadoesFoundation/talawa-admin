@@ -4,7 +4,7 @@
 
 # Interface: ISortState
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L483)
+Defined in: [src/types/shared-components/DataTable/interface.ts:509](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L509)
 
 Sorting state
 
@@ -14,7 +14,7 @@ Sorting state
 
 > **columnId**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L484)
+Defined in: [src/types/shared-components/DataTable/interface.ts:510](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L510)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:484](https://git
 
 > **direction**: `"desc"` \| `"asc"`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:485](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L485)
+Defined in: [src/types/shared-components/DataTable/interface.ts:511](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L511)
