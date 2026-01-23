@@ -178,9 +178,10 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
-    await waitFor(async () => {
-      await userEvent.click(screen.getByText(/This is notification 1/));
+    await waitFor(() => {
+      expect(screen.getByText(/This is notification 1/)).toBeInTheDocument();
     });
+    await userEvent.click(screen.getByText(/This is notification 1/));
     expect(mockNavigate).toHaveBeenCalledWith('/notification/1');
   });
 
