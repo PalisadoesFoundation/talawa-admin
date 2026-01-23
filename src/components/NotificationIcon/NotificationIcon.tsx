@@ -78,6 +78,7 @@ const NotificationIcon = () => {
           (notifications.length > 0 ? (
             notifications.map((notification) => (
               <Dropdown.Item
+                key={notification.id}
                 className={`${styles.notificationItem} ${styles.clickable}`}
                 onClick={() => {
                   if (notification.navigation) {

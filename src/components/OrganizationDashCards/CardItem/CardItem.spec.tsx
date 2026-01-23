@@ -127,7 +127,7 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     // Avatar component is rendered inside an imageContainer
-    const avatarContainer = screen.getByAltText('');
+    const avatarContainer = screen.getByAltText('cardItem.avatar');
     expect(avatarContainer).toBeInTheDocument();
     expect(avatarContainer).toHaveAttribute(
       'src',
@@ -153,7 +153,7 @@ describe('CardItem Component', () => {
     });
 
     // After error, the Avatar should be displayed (has empty alt text)
-    const avatar = screen.getByAltText('');
+    const avatar = screen.getByAltText('cardItem.avatar');
     expect(avatar).toBeInTheDocument();
     expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
   });
