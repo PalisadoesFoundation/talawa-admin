@@ -223,16 +223,26 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   }, [someSelectedOnPage]);
 
+  // Refs to debounce development warnings (prevent console spam on re-renders)
+  const hasWarnedRenderRowSelectableRef = React.useRef(false);
+  const hasWarnedRenderRowActionsRef = React.useRef(false);
+
   // Warn in development if renderRow is used with selection/actions
   React.useEffect(() => {
     if (process.env.NODE_ENV !== 'production' && renderRow) {
-      if (selectable) {
+      if (selectable && !hasWarnedRenderRowSelectableRef.current) {
+        hasWarnedRenderRowSelectableRef.current = true;
         console.warn(
           'DataTable: `selectable` is ignored when `renderRow` is provided. ' +
             'Custom row renderers must handle selection UI manually.',
         );
       }
-      if (rowActions && rowActions.length > 0) {
+      if (
+        rowActions &&
+        rowActions.length > 0 &&
+        !hasWarnedRenderRowActionsRef.current
+      ) {
+        hasWarnedRenderRowActionsRef.current = true;
         console.warn(
           'DataTable: `rowActions` is ignored when `renderRow` is provided. ' +
             'Custom row renderers must handle action buttons manually.',
