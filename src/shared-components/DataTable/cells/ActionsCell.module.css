@@ -1,0 +1,12 @@
+/**
+ * ActionsCell styles - re-exports relevant classes from DataTable.module.css
+ * This file exists to satisfy the CSS import naming convention.
+ */
+
+.actionsCellContainer {
+  composes: actionsCellContainer from '../DataTable.module.css';
+}
+
+.actionBtn {
+  composes: actionBtn from '../DataTable.module.css';
+}
