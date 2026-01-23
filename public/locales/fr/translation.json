@@ -2290,7 +2290,15 @@
     "talawaBranding": "Image de marque Talawa",
     "view": "Voir",
     "changeLanguage": "Changer de langue",
-    "userNotFoundError": "Utilisateur introuvable"
+    "userNotFoundError": "Utilisateur introuvable",
+    "selectAllOnPage": "Sélectionner toutes les lignes de cette page",
+    "actions": "Actions",
+    "bulkActions": "Actions groupées",
+    "selected": "sélectionné(s)",
+    "clear": "Effacer",
+    "clearSelection": "Effacer la sélection",
+    "loading": "Chargement...",
+    "selectRow": "Sélectionner la ligne {{rowKey}}"
   },
   "donation": {
     "amount_label": "Montant",
