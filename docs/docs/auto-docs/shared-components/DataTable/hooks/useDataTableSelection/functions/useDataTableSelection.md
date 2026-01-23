@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useDataTableSelection**\<`T`\>(`options`): `object`
 
-Defined in: [src/shared-components/DataTable/hooks/useDataTableSelection.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableSelection.ts#L17)
+Defined in: [src/shared-components/DataTable/hooks/useDataTableSelection.ts:17](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/DataTable/hooks/useDataTableSelection.ts#L17)
 
 Hook to manage DataTable selection and bulk action logic.
 Supports controlled and uncontrolled modes for row selection.

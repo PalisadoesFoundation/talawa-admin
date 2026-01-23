@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L6)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L6)
 
 User information interface for UserTableRow component
 
@@ -14,7 +14,7 @@ User information interface for UserTableRow component
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L10)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:10](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L10)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:10](https://github.
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L11)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:11](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L11)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:11](https://github.
 
 > `optional` **emailAddress**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L9)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:9](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L9)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:9](https://github.c
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L7)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L7)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:7](https://github.c
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L8)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:8](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/UserTableRow/interface.ts#L8)

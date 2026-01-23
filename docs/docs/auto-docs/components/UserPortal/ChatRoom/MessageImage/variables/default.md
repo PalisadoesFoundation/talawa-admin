@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `MemoExoticComponent`\<(`__namedParameters`) => `Element`\>
 
-Defined in: [src/components/UserPortal/ChatRoom/MessageImage.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/MessageImage.tsx#L38)
+Defined in: [src/components/UserPortal/ChatRoom/MessageImage.tsx:38](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/UserPortal/ChatRoom/MessageImage.tsx#L38)

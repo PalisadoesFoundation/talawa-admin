@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **InterfacePreviewEventModalProps** = [`IPreviewEventModalProps`](../interfaces/IPreviewEventModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L297)
+Defined in: [src/types/Event/interface.ts:297](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L297)

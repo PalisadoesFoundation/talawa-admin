@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DataGridWrapper**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L71)
+Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:71](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L71)
 
 A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
 

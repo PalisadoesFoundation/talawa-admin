@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IViewModalProps
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L37)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:37](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L37)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **hide**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L39)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:39](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L39)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **isOpen**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L38)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:38](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L38)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemVie
 
 > **item**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L40)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:40](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L40)

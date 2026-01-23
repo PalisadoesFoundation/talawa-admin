@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ViewModal**: `React.FC`\<[`InterfaceViewModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L57)
+Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:57](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L57)
 
 ViewModal Component
 

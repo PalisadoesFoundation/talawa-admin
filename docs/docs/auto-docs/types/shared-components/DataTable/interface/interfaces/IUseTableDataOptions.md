@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IUseTableDataOptions\<TNode, TRow, TData\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L145)
+Defined in: [src/types/shared-components/DataTable/interface.ts:145](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L145)
 
 Options for the useTableData hook
 
@@ -34,7 +34,7 @@ The complete query result data type
 
 > `optional` **deps**: `DependencyList`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L286)
+Defined in: [src/types/shared-components/DataTable/interface.ts:286](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L286)
 
 React dependency array for memoization. Passed to useMemo() in useTableData.
 Only include values that should trigger path re-evaluation.
@@ -50,7 +50,7 @@ Use this for additional dependencies like query variables or state.
 
 > **path**: `DataPath`\<`TNode`, `TData`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L220)
+Defined in: [src/types/shared-components/DataTable/interface.ts:220](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L220)
 
 Path to the GraphQL connection within the query result.
 
@@ -130,7 +130,7 @@ The path (whether string[] or function) must resolve to a GraphQL connection typ
 
 > `optional` **transformNode**: (`node`) => `TRow`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L276)
+Defined in: [src/types/shared-components/DataTable/interface.ts:276](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L276)
 
 Optional transformation function to convert GraphQL nodes to display rows.
 

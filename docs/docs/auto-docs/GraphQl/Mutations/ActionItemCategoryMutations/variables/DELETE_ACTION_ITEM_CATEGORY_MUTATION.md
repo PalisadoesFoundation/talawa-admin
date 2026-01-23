@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_ACTION\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L65)
+Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:65](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L65)
 
 GraphQL mutation to delete an action item category.
 Updated to match new backend schema using input object

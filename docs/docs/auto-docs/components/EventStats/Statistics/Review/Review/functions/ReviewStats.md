@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ReviewStats**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/Review/Review.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Review/Review.tsx#L44)
+Defined in: [src/components/EventStats/Statistics/Review/Review.tsx:44](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/EventStats/Statistics/Review/Review.tsx#L44)
 
 ## Parameters
 

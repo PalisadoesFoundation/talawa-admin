@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AdvertisementsConnection** = `object`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L40)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Advertisement/type.ts#L40)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/
 
 > `optional` **edges**: [`AdvertisementEdge`](AdvertisementEdge.md)[]
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L41)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Advertisement/type.ts#L41)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/
 
 > `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L42)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Advertisement/type.ts#L42)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/
 
 > `optional` **totalCount**: `number`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L43)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:43](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Advertisement/type.ts#L43)

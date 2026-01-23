@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceProfileAvatarDisplayProps
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L16)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:16](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L16)
 
 Props for the ProfileAvatarDisplay component.
 
@@ -14,7 +14,7 @@ Props for the ProfileAvatarDisplay component.
 
 > `optional` **border**: `boolean`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L21)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:21](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L21)
 
 Optional flag to add a border around the avatar.
 
@@ -24,7 +24,7 @@ Optional flag to add a border around the avatar.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L22)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:22](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L22)
 
 Optional additional CSS class names.
 
@@ -34,7 +34,7 @@ Optional additional CSS class names.
 
 > `optional` **crossOrigin**: `"anonymous"` \| `"use-credentials"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L31)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L31)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](h
 
 > `optional` **customSize**: `number`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L20)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:20](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L20)
 
 Optional custom size in pixels (used when size='custom').
 
@@ -52,7 +52,7 @@ Optional custom size in pixels (used when size='custom').
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L25)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:25](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L25)
 
 Optional test ID for testing purposes.
 
@@ -62,7 +62,7 @@ Optional test ID for testing purposes.
 
 > `optional` **decoding**: `"sync"` \| `"async"` \| `"auto"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L32)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:32](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L32)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:32](h
 
 > `optional` **enableEnlarge**: `boolean`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L29)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:29](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L29)
 
 If true, clicking the avatar opens an enlarged modal view
 
@@ -80,7 +80,7 @@ If true, clicking the avatar opens an enlarged modal view
 
 > **fallbackName**: `string`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L24)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:24](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L24)
 
 Required name used for fallback avatar generation.
 
@@ -90,7 +90,7 @@ Required name used for fallback avatar generation.
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L17)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:17](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L17)
 
 Optional URL of the avatar image to display.
 
@@ -100,7 +100,7 @@ Optional URL of the avatar image to display.
 
 > `optional` **loading**: `"eager"` \| `"lazy"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L33)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L33)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](h
 
 > `optional` **objectFit**: `"fill"` \| `"cover"` \| `"contain"` \| `"none"` \| `"scale-down"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L26)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L26)
 
 Optional CSS object-fit value for the image.
 
@@ -118,7 +118,7 @@ Optional CSS object-fit value for the image.
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L27)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:27](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L27)
 
 #### Returns
 
@@ -130,7 +130,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:27](h
 
 > `optional` **onError**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L34)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:34](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L34)
 
 #### Returns
 
@@ -142,7 +142,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:34](h
 
 > `optional` **onLoad**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L35)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:35](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L35)
 
 #### Returns
 
@@ -154,7 +154,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:35](h
 
 > `optional` **shape**: `"circle"` \| `"square"` \| `"rounded"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L19)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:19](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L19)
 
 Optional shape: 'circle', 'square', or 'rounded'.
 
@@ -164,7 +164,7 @@ Optional shape: 'circle', 'square', or 'rounded'.
 
 > `optional` **size**: `"small"` \| `"custom"` \| `"medium"` \| `"large"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L18)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:18](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L18)
 
 Optional size preset: 'small', 'medium', 'large', or 'custom'.
 
@@ -174,6 +174,6 @@ Optional size preset: 'small', 'medium', 'large', or 'custom'.
 
 > `optional` **style**: `CSSProperties`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L23)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:23](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L23)
 
 Optional inline React CSS properties.

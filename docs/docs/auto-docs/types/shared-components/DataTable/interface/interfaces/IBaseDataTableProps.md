@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IBaseDataTableProps\<T, TValue\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L333)
+Defined in: [src/types/shared-components/DataTable/interface.ts:333](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L333)
 
 Props for a generic DataTable component
 
@@ -24,7 +24,7 @@ Props for a generic DataTable component
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L357)
+Defined in: [src/types/shared-components/DataTable/interface.ts:357](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L357)
 
 Optional accessible label for the table, used for both the visually hidden table caption and as aria-label on the table element.
 This improves accessibility for screen readers and navigation.
@@ -35,7 +35,7 @@ This improves accessibility for screen readers and navigation.
 
 > `optional` **bulkActions**: readonly [`IBulkAction`](IBulkAction.md)\<`T`\>[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:409](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L409)
+Defined in: [src/types/shared-components/DataTable/interface.ts:409](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L409)
 
 Bulk actions shown in a toolbar when rows are selected.
 
@@ -45,7 +45,7 @@ Bulk actions shown in a toolbar when rows are selected.
 
 > `optional` **columnFilters**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L378)
+Defined in: [src/types/shared-components/DataTable/interface.ts:378](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L378)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:378](https://git
 
 > **columns**: [`IColumnDef`](IColumnDef.md)\<`T`, `TValue`\>[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L335)
+Defined in: [src/types/shared-components/DataTable/interface.ts:335](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L335)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:335](https://git
 
 > **data**: `T`[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L334)
+Defined in: [src/types/shared-components/DataTable/interface.ts:334](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L334)
 
 ***
 
@@ -69,7 +69,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:334](https://git
 
 > `optional` **emptyMessage**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L350)
+Defined in: [src/types/shared-components/DataTable/interface.ts:350](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L350)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:350](https://git
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L351)
+Defined in: [src/types/shared-components/DataTable/interface.ts:351](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L351)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:351](https://git
 
 > `optional` **globalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L371)
+Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L371)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://git
 
 > `optional` **initialGlobalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L375)
+Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L375)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://git
 
 > `optional` **initialSelectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L401)
+Defined in: [src/types/shared-components/DataTable/interface.ts:401](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L401)
 
 Initial selected keys for uncontrolled selection.
 
@@ -111,7 +111,7 @@ Initial selected keys for uncontrolled selection.
 
 > `optional` **loading**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L336)
+Defined in: [src/types/shared-components/DataTable/interface.ts:336](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L336)
 
 ***
 
@@ -119,7 +119,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:336](https://git
 
 > `optional` **loadingOverlay**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:364](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L364)
+Defined in: [src/types/shared-components/DataTable/interface.ts:364](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L364)
 
 When true and data is already present, show a translucent overlay on top of the table
 while a refetch is in flight. This avoids content jump during refresh.
@@ -130,7 +130,7 @@ while a refetch is in flight. This avoids content jump during refresh.
 
 > `optional` **onColumnFiltersChange**: (`filters`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L379)
+Defined in: [src/types/shared-components/DataTable/interface.ts:379](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L379)
 
 #### Parameters
 
@@ -148,7 +148,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:379](https://git
 
 > `optional` **onGlobalSearchChange**: (`q`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L372)
+Defined in: [src/types/shared-components/DataTable/interface.ts:372](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L372)
 
 #### Parameters
 
@@ -166,7 +166,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:372](https://git
 
 > `optional` **onSelectionChange**: (`next`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L397)
+Defined in: [src/types/shared-components/DataTable/interface.ts:397](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L397)
 
 Callback when selection changes. Required for controlled selection.
 
@@ -186,7 +186,7 @@ Callback when selection changes. Required for controlled selection.
 
 > `optional` **renderError**: (`error`) => `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L352)
+Defined in: [src/types/shared-components/DataTable/interface.ts:352](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L352)
 
 #### Parameters
 
@@ -204,7 +204,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:352](https://git
 
 > `optional` **renderRow**: (`row`, `index`) => `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L349)
+Defined in: [src/types/shared-components/DataTable/interface.ts:349](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L349)
 
 Optional custom row renderer. When provided, rows are rendered using this function.
 
@@ -228,7 +228,7 @@ Optional custom row renderer. When provided, rows are rendered using this functi
 
 > `optional` **rowActions**: readonly [`IRowAction`](IRowAction.md)\<`T`\>[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L405)
+Defined in: [src/types/shared-components/DataTable/interface.ts:405](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L405)
 
 Per-row action buttons rendered in an actions column.
 
@@ -238,7 +238,7 @@ Per-row action buttons rendered in an actions column.
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => `string` \| `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L341)
+Defined in: [src/types/shared-components/DataTable/interface.ts:341](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L341)
 
 rowKey: A property name (keyof T) or a function to uniquely identify each row.
 If a property name is provided, its value will be coerced to string or number.
@@ -249,7 +249,7 @@ If a property name is provided, its value will be coerced to string or number.
 
 > `optional` **searchPlaceholder**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L368)
+Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L368)
 
 ***
 
@@ -257,7 +257,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://git
 
 > `optional` **selectable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L389)
+Defined in: [src/types/shared-components/DataTable/interface.ts:389](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L389)
 
 When true, render a checkbox column for row selection.
 
@@ -267,7 +267,7 @@ When true, render a checkbox column for row selection.
 
 > `optional` **selectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:393](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L393)
+Defined in: [src/types/shared-components/DataTable/interface.ts:393](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L393)
 
 Controlled selection state. When provided with onSelectionChange, selection is controlled.
 
@@ -277,7 +277,7 @@ Controlled selection state. When provided with onSelectionChange, selection is c
 
 > `optional` **serverFilter**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L383)
+Defined in: [src/types/shared-components/DataTable/interface.ts:383](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L383)
 
 ***
 
@@ -285,7 +285,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:383](https://git
 
 > `optional` **serverSearch**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L382)
+Defined in: [src/types/shared-components/DataTable/interface.ts:382](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L382)
 
 ***
 
@@ -293,7 +293,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:382](https://git
 
 > `optional` **showSearch**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L367)
+Defined in: [src/types/shared-components/DataTable/interface.ts:367](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L367)
 
 ***
 
@@ -301,7 +301,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:367](https://git
 
 > `optional` **skeletonRows**: `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L359)
+Defined in: [src/types/shared-components/DataTable/interface.ts:359](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L359)
 
 Number of skeleton rows to show when loading (default: 5)
 
@@ -311,6 +311,6 @@ Number of skeleton rows to show when loading (default: 5)
 
 > `optional` **tableClassName**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L345)
+Defined in: [src/types/shared-components/DataTable/interface.ts:345](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/DataTable/interface.ts#L345)
 
 Optional className applied to the underlying table element.

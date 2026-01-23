@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfacePageHeaderProps
 
-Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L4)
+Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L4)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/PalisadoesFo
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L21)
+Defined in: [src/types/PeopleTab/interface.ts:21](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L21)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:21](https://github.com/PalisadoesF
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L6)
+Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L6)
 
 #### buttonTestId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFo
 
 > `optional` **showEventTypeFilter**: `boolean`
 
-Defined in: [src/types/PeopleTab/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L20)
+Defined in: [src/types/PeopleTab/interface.ts:20](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L20)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/PeopleTab/interface.ts:20](https://github.com/PalisadoesF
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/PeopleTab/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L12)
+Defined in: [src/types/PeopleTab/interface.ts:12](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L12)
 
 #### icon?
 
@@ -104,4 +104,4 @@ Defined in: [src/types/PeopleTab/interface.ts:12](https://github.com/PalisadoesF
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L5)
+Defined in: [src/types/PeopleTab/interface.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/PeopleTab/interface.ts#L5)

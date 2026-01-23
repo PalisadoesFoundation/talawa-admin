@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceDropdown()
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L10)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/test-utils/mocks/react-bootstrap/types.ts#L10)
 
 ## Extends
 
@@ -12,7 +12,7 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.co
 
 > **InterfaceDropdown**(`props`): `ReactNode` \| `Promise`\<`ReactNode`\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L10)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/test-utils/mocks/react-bootstrap/types.ts#L10)
 
 ## Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.co
 
 > **Item**: `FC`\<[`BtnProps`](../type-aliases/BtnProps.md)\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L13)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:13](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/test-utils/mocks/react-bootstrap/types.ts#L13)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:13](https://github.co
 
 > **Menu**: `FC`\<[`DivProps`](../type-aliases/DivProps.md)\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L12)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:12](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/test-utils/mocks/react-bootstrap/types.ts#L12)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:12](https://github.co
 
 > **Toggle**: `FC`\<[`BtnProps`](../type-aliases/BtnProps.md)\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L11)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:11](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/test-utils/mocks/react-bootstrap/types.ts#L11)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: IQueryVariable
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L20)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:20](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L20)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:20](h
 
 > `optional` **after**: `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L23)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:23](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L23)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:23](h
 
 > `optional` **before**: `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L25)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:25](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:25](h
 
 > `optional` **first**: `number`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L22)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:22](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L22)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:22](h
 
 > `optional` **last**: `number`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L24)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:24](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L24)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:24](h
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L21)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:21](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L21)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:21](h
 
 > `optional` **where**: `object`
 
-Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L26)
+Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:26](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L26)
 
 #### role
 

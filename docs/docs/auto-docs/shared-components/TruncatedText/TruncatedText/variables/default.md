@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceTruncatedTextProps`](../../../../types/shared-components/TruncatedText/interface/interfaces/InterfaceTruncatedTextProps.md)\>
 
-Defined in: [src/shared-components/TruncatedText/TruncatedText.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/TruncatedText/TruncatedText.tsx#L25)
+Defined in: [src/shared-components/TruncatedText/TruncatedText.tsx:25](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/TruncatedText/TruncatedText.tsx#L25)

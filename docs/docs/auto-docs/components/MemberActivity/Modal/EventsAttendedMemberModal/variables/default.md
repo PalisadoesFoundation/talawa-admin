@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceEventsAttendedMemberModalProps`](../../../../../types/Event/interface/type-aliases/InterfaceEventsAttendedMemberModalProps.md)\>
 
-Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L35)
+Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:35](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L35)
 
 EventsAttendedMemberModal component displays a paginated list of events attended by a member.
 

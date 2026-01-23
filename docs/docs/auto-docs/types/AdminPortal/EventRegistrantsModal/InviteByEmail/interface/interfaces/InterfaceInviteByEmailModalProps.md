@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: InterfaceInviteByEmailModalProps
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L4)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:4](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L4)
 
 Props for InviteByEmailModal component.
 
@@ -14,7 +14,7 @@ Props for InviteByEmailModal component.
 
 > **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L7)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 > **handleClose**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L6)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L6)
 
 #### Returns
 
@@ -34,7 +34,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L8)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:8](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L8)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 > `optional` **onInvitesSent**: () => `void`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L9)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:9](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L9)
 
 #### Returns
 
@@ -54,4 +54,4 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 > **show**: `boolean`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L5)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L5)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePostViewModalProps
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L11)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:11](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PostViewModal/interface.ts#L11)
 
 Props for PostViewModal component.
 
@@ -30,7 +30,7 @@ Function to refresh post data after mutations.
 
 > **onHide**: () => `void`
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L13)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PostViewModal/interface.ts#L13)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://
 
 > **post**: [`InterfacePost`](../../../../Post/interface/interfaces/InterfacePost.md)
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L14)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:14](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PostViewModal/interface.ts#L14)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:14](https://
 
 > **refetch**: () => `Promise`\<`unknown`\>
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L15)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:15](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PostViewModal/interface.ts#L15)
 
 #### Returns
 
@@ -62,4 +62,4 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:15](https://
 
 > **show**: `boolean`
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L12)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:12](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PostViewModal/interface.ts#L12)

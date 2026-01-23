@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IItemDeleteModalProps
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L42)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:42](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L42)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > **actionItem**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L45)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:45](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L45)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L46)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:46](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L46)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L47)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:47](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L47)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > **hide**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L44)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:44](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L44)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > **isOpen**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L43)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:43](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L43)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemD
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L48)
+Defined in: [src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:48](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L48)

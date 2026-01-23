@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTagMembersData
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L10)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:10](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Tag/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:10](https://github.com/Palis
 
 > **edges**: `object`[]
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L11)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:11](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Tag/interface.ts#L11)
 
 #### node
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:11](https://github.com/Palis
 
 > **pageInfo**: `object`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L18)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:18](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Tag/interface.ts#L18)
 
 #### endCursor
 
@@ -60,4 +60,4 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:18](https://github.com/Palis
 
 > **totalCount**: `number`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L24)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:24](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/Tag/interface.ts#L24)

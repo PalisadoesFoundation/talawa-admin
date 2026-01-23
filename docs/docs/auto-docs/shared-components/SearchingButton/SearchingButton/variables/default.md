@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceSearchingButtonProps`](../../../../types/shared-components/SearchingButton/interface/interfaces/InterfaceSearchingButtonProps.md)\>
 
-Defined in: [src/shared-components/SearchingButton/SearchingButton.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SearchingButton/SearchingButton.tsx#L15)
+Defined in: [src/shared-components/SearchingButton/SearchingButton.tsx:15](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/SearchingButton/SearchingButton.tsx#L15)
 
 SearchingButton component that only displays a text.
 

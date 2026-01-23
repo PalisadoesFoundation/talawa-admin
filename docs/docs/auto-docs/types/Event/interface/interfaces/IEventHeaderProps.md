@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IEventHeaderProps
 
-Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L122)
+Defined in: [src/types/Event/interface.ts:122](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L122)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:122](https://github.com/PalisadoesFoun
 
 > **handleChangeView**: (`item`) => `void`
 
-Defined in: [src/types/Event/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L124)
+Defined in: [src/types/Event/interface.ts:124](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L124)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:124](https://github.com/PalisadoesFoun
 
 > **showInviteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L125)
+Defined in: [src/types/Event/interface.ts:125](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L125)
 
 #### Returns
 
@@ -42,4 +42,4 @@ Defined in: [src/types/Event/interface.ts:125](https://github.com/PalisadoesFoun
 
 > **viewType**: [`ViewType`](../../../../screens/AdminPortal/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L123)
+Defined in: [src/types/Event/interface.ts:123](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L123)

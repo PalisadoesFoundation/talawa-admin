@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceCustomRecurrenceModalProps`](../../../../types/Recurrence/interface/interfaces/InterfaceCustomRecurrenceModalProps.md)\>
 
-Defined in: [src/shared-components/Recurrence/CustomRecurrenceModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Recurrence/CustomRecurrenceModal.tsx#L33)
+Defined in: [src/shared-components/Recurrence/CustomRecurrenceModal.tsx:33](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/Recurrence/CustomRecurrenceModal.tsx#L33)
 
 CustomRecurrenceModal Component
 

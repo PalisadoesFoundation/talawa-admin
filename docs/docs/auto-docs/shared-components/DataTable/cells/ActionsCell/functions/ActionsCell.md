@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ActionsCell**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/cells/ActionsCell.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/cells/ActionsCell.tsx#L12)
+Defined in: [src/shared-components/DataTable/cells/ActionsCell.tsx:12](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/DataTable/cells/ActionsCell.tsx#L12)
 
 ActionsCell renders a row of action buttons for a single table row.
 

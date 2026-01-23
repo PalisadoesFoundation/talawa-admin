@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTableCheckIn
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L30)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:30](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L30)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:30](https://github
 
 > **checkInTime**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L34)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:34](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L34)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:34](https://github
 
 > **checkOutTime**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L35)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:35](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L35)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:35](https://github
 
 > **eventId**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L38)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:38](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L38)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:38](https://github
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L31)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:31](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L31)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:31](https://github
 
 > **isCheckedIn**: `boolean`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L36)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:36](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L36)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:36](https://github
 
 > **isCheckedOut**: `boolean`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L37)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:37](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L37)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:37](https://github
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L39)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:39](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L39)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:39](https://github
 
 > **name**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L32)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:32](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L32)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:32](https://github
 
 > **userId**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L33)
+Defined in: [src/types/shared-components/CheckIn/interface.ts:33](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/CheckIn/interface.ts#L33)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getCellValue**\<`T`, `TValue`\>(`row`, `accessor`): `TValue`
 
-Defined in: [src/shared-components/DataTable/utils.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L41)
+Defined in: [src/shared-components/DataTable/utils.ts:41](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/DataTable/utils.ts#L41)
 
 Helper to get raw cell value from a row using the accessor.
 

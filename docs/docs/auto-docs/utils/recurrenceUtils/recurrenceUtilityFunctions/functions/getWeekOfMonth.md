@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getWeekOfMonth**(`date`): `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L324)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:324](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L324)
 
 Calculates which week of the month a given date falls in
 

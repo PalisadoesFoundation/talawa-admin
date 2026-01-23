@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceSearchFilterBarProps`](../../../../types/shared-components/SearchFilterBar/interface/type-aliases/InterfaceSearchFilterBarProps.md)\>
 
-Defined in: [src/shared-components/SearchFilterBar/SearchFilterBar.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SearchFilterBar/SearchFilterBar.tsx#L20)
+Defined in: [src/shared-components/SearchFilterBar/SearchFilterBar.tsx:20](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/SearchFilterBar/SearchFilterBar.tsx#L20)
 
 SearchFilterBar component provides a unified search and filter interface.
 Supports search functionality with optional sorting and filtering dropdowns.

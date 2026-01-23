@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **adjustColumnsForCompactMode**(`columns`, `compactMode`): [`ReportingTableColumn`](../../../../types/ReportingTable/interface/type-aliases/ReportingTableColumn.md)[]
 
-Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L20)
+Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:20](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ReportingTable/ReportingTable.tsx#L20)
 
 Adjusts column widths for compact display mode.
 In compact mode:

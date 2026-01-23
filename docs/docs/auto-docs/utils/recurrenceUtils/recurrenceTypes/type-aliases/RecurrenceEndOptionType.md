@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **RecurrenceEndOptionType** = `"never"` \| `"on"` \| `"after"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L46)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:46](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/utils/recurrenceUtils/recurrenceTypes.ts#L46)

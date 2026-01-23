@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IEventEdge
 
-Defined in: [src/types/Event/interface.ts:215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L215)
+Defined in: [src/types/Event/interface.ts:215](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L215)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:215](https://github.com/PalisadoesFoun
 
 > **cursor**: `string`
 
-Defined in: [src/types/Event/interface.ts:257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L257)
+Defined in: [src/types/Event/interface.ts:257](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L257)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:257](https://github.com/PalisadoesFoun
 
 > **node**: `object`
 
-Defined in: [src/types/Event/interface.ts:216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L216)
+Defined in: [src/types/Event/interface.ts:216](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Event/interface.ts#L216)
 
 #### allDay
 

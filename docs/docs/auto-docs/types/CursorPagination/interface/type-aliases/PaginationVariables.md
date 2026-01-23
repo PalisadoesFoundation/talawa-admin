@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PaginationVariables**\<`T`\> = `T` & `object`
 
-Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L7)
+Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/CursorPagination/interface.ts#L7)
 
 Helper type to combine pagination variables with custom query variables
 

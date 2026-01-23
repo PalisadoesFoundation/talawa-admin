@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **endsAfter**: [`after`](../../recurrenceTypes/enumerations/RecurrenceEndOption.md#after) = `RecurrenceEndOption.after`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:39](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/utils/recurrenceUtils/recurrenceConstants.ts#L39)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DefaultConnectionPageInfo** = `object`
 
-Defined in: [src/types/AdminPortal/pagination.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/pagination.ts#L1)
+Defined in: [src/types/AdminPortal/pagination.ts:1](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/pagination.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/pagination.ts:1](https://github.com/Palisadoe
 
 > `optional` **endCursor**: `string`
 
-Defined in: [src/types/AdminPortal/pagination.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/pagination.ts#L5)
+Defined in: [src/types/AdminPortal/pagination.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/pagination.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/pagination.ts:5](https://github.com/Palisadoe
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/AdminPortal/pagination.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/pagination.ts#L2)
+Defined in: [src/types/AdminPortal/pagination.ts:2](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/pagination.ts#L2)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/pagination.ts:2](https://github.com/Palisadoe
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/AdminPortal/pagination.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/pagination.ts#L3)
+Defined in: [src/types/AdminPortal/pagination.ts:3](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/pagination.ts#L3)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/AdminPortal/pagination.ts:3](https://github.com/Palisadoe
 
 > `optional` **startCursor**: `string`
 
-Defined in: [src/types/AdminPortal/pagination.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/pagination.ts#L4)
+Defined in: [src/types/AdminPortal/pagination.ts:4](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/pagination.ts#L4)

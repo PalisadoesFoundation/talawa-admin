@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **EMPTY\_EVENT\_CHECKINS\_MOCK**: `MockedResponse`
 
-Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts#L69)
+Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts:69](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts#L69)

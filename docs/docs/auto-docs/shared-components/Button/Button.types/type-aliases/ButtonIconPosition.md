@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,6 +6,6 @@
 
 > **ButtonIconPosition** = `"start"` \| `"end"`
 
-Defined in: [src/shared-components/Button/Button.types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L13)
+Defined in: [src/shared-components/Button/Button.types.ts:13](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/Button/Button.types.ts#L13)
 
 Position of an optional icon relative to the label.

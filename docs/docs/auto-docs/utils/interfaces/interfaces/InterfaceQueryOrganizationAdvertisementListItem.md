@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfaceQueryOrganizationAdvertisementListItem
 
-Defined in: [src/utils/interfaces.ts:1179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1179)
+Defined in: [src/utils/interfaces.ts:1179](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/utils/interfaces.ts#L1179)
 
 Defines the structure for an organization advertisement list item returned from a query.
 
@@ -14,7 +14,7 @@ Defines the structure for an organization advertisement list item returned from 
 
 > **advertisements**: `object`
 
-Defined in: [src/utils/interfaces.ts:1180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1180)
+Defined in: [src/utils/interfaces.ts:1180](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/utils/interfaces.ts#L1180)
 
 #### edges
 

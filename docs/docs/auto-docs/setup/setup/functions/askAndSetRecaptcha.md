@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askAndSetRecaptcha**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L56)
+Defined in: [src/setup/setup.ts:56](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/setup/setup.ts#L56)
 
 Prompts user to configure reCAPTCHA settings and updates the .env file.
 

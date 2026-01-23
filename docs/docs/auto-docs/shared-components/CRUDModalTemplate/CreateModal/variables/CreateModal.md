@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **CreateModal**: `React.FC`\<[`InterfaceCreateModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceCreateModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/CreateModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/CreateModal.tsx#L44)
+Defined in: [src/shared-components/CRUDModalTemplate/CreateModal.tsx:44](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/CRUDModalTemplate/CreateModal.tsx#L44)
 
 CreateModal Component
 

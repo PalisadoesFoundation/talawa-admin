@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PromiseFunction**\<`T`\> = () => `Promise`\<`T`\>
 
-Defined in: [src/types/shared-components/NotificationToast/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L59)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:59](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/NotificationToast/interface.ts#L59)
 
 Promisified function type.
 

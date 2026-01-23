@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IFileMetadataInput
 
-Defined in: [src/types/Post/type.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L178)
+Defined in: [src/types/Post/type.ts:178](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L178)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/type.ts:178](https://github.com/PalisadoesFoundation
 
 > **fileHash**: `string`
 
-Defined in: [src/types/Post/type.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L179)
+Defined in: [src/types/Post/type.ts:179](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L179)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/type.ts:179](https://github.com/PalisadoesFoundation
 
 > **mimetype**: `string`
 
-Defined in: [src/types/Post/type.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L180)
+Defined in: [src/types/Post/type.ts:180](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L180)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/type.ts:180](https://github.com/PalisadoesFoundation
 
 > **name**: `string`
 
-Defined in: [src/types/Post/type.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L181)
+Defined in: [src/types/Post/type.ts:181](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L181)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/type.ts:181](https://github.com/PalisadoesFoundation
 
 > **objectName**: `string`
 
-Defined in: [src/types/Post/type.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L182)
+Defined in: [src/types/Post/type.ts:182](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L182)

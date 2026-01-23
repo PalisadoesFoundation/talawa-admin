@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **formatRecurrenceForPayload**(`recurrenceRule`, `startDate`): `Omit`\<[`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md), `"endDate"`\> & `object`
 
-Defined in: [src/shared-components/EventForm/EventForm.tsx:563](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/EventForm.tsx#L563)
+Defined in: [src/shared-components/EventForm/EventForm.tsx:563](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/EventForm/EventForm.tsx#L563)
 
 Formats a recurrence rule for API submission.
 

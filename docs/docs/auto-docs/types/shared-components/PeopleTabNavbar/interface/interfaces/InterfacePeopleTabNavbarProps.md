@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePeopleTabNavbarProps
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L6)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L6)
 
 Props for PeopleTabNavbar component.
 
@@ -14,7 +14,7 @@ Props for PeopleTabNavbar component.
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L23)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:23](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L23)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:23](https:
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L8)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:8](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L8)
 
 #### buttonTestId?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:8](https:/
 
 > `optional` **showEventTypeFilter**: `boolean`
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L22)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:22](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L22)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:22](https:
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L14)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:14](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L14)
 
 #### icon?
 
@@ -106,4 +106,4 @@ Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:14](https:
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PeopleTabNavbar/interface.ts#L7)
+Defined in: [src/types/shared-components/PeopleTabNavbar/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/PeopleTabNavbar/interface.ts#L7)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceRecurrenceDropdownProps
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L6)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L6)
 
 Props for the RecurrenceDropdown component.
 
@@ -14,7 +14,7 @@ Props for the RecurrenceDropdown component.
 
 > **currentLabel**: `string`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L8)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L9)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L9)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](http
 
 > **onSelect**: (`option`) => `void`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L11)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L11)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](htt
 
 > **onToggle**: (`isOpen`) => `void`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L10)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L10)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](htt
 
 > **recurrenceOptions**: [`InterfaceRecurrenceOption`](../../../../../shared-components/EventForm/utils/recurrenceOptions/interfaces/InterfaceRecurrenceOption.md)[]
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](http
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L12)
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:12](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/RecurrenceDropdown/interface.ts#L12)
 
 #### Parameters
 

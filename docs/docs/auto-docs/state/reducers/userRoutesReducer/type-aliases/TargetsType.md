@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **TargetsType** = `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L3)
+Defined in: [src/state/reducers/userRoutesReducer.ts:3](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/state/reducers/userRoutesReducer.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:3](https://github.com/Palis
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L4)
+Defined in: [src/state/reducers/userRoutesReducer.ts:4](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/state/reducers/userRoutesReducer.ts#L4)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:4](https://github.com/Palis
 
 > `optional` **subTargets**: [`SubTargetType`](SubTargetType.md)[]
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L6)
+Defined in: [src/state/reducers/userRoutesReducer.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/state/reducers/userRoutesReducer.ts#L6)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:6](https://github.com/Palis
 
 > `optional` **url**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L5)
+Defined in: [src/state/reducers/userRoutesReducer.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/state/reducers/userRoutesReducer.ts#L5)

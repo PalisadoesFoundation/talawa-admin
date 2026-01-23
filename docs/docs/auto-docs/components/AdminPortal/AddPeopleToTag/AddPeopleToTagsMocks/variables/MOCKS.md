@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after?`: `undefined`; `first`: `number`; `id`: `string`; `tagId?`: `undefined`; `userIds?`: `undefined`; `where`: \{ `firstName`: \{ `starts_with`: `string`; \}; `lastName`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `addPeopleToUserTag?`: `undefined`; `getUsersToAssignTo`: \{ `name`: `string`; `usersToAssignTo`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; `totalCount`: `number`; \}; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `string`; `first`: `number`; `id`: `string`; `tagId?`: `undefined`; `userIds?`: `undefined`; `where`: \{ `firstName`: \{ `starts_with`: `string`; \}; `lastName`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `addPeopleToUserTag?`: `undefined`; `getUsersToAssignTo`: \{ `name`: `string`; `usersToAssignTo`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; `totalCount`: `number`; \}; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after?`: `undefined`; `first?`: `undefined`; `id?`: `undefined`; `tagId`: `string`; `userIds`: `string`[]; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `addPeopleToUserTag`: \{ `_id`: `string`; \}; `getUsersToAssignTo?`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L5)
+Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L5)

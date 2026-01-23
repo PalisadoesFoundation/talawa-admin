@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[] = `MOCK_RESPONSES.UNDEFINED_USER_TAGS`
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L315)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L315)
 
 ## Type Declaration
 

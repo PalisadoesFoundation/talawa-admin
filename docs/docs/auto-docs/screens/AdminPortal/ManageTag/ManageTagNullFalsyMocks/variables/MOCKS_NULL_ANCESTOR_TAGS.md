@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_NULL\_ANCESTOR\_TAGS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts#L106)
+Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts:106](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts#L106)
 
 ## Type Declaration
 

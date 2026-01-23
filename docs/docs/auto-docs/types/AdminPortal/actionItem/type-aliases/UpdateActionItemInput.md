@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UpdateActionItemInput** = `object`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L39)
+Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/Palisado
 
 > `optional` **assigneeId**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L40)
+Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L40)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/Palisado
 
 > `optional` **completionDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L41)
+Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L41)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/Palisado
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L42)
+Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L42)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/Palisado
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L43)
+Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L43)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/Palisado
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L44)
+Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L44)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/Palisado
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L45)
+Defined in: [src/types/AdminPortal/actionItem.ts:45](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/actionItem.ts#L45)

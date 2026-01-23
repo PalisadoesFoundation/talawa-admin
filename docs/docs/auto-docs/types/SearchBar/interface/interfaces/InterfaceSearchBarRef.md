@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceSearchBarRef
 
-Defined in: [src/types/SearchBar/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L21)
+Defined in: [src/types/SearchBar/interface.ts:21](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/SearchBar/interface.ts#L21)
 
 Methods exposed by the SearchBar ref.
 
@@ -14,7 +14,7 @@ Methods exposed by the SearchBar ref.
 
 > **blur**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L25)
+Defined in: [src/types/SearchBar/interface.ts:25](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/SearchBar/interface.ts#L25)
 
 Programmatically blur the search input
 
@@ -28,7 +28,7 @@ Programmatically blur the search input
 
 > **clear**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L27)
+Defined in: [src/types/SearchBar/interface.ts:27](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/SearchBar/interface.ts#L27)
 
 Clear the search input value and trigger onChange
 
@@ -42,7 +42,7 @@ Clear the search input value and trigger onChange
 
 > **focus**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L23)
+Defined in: [src/types/SearchBar/interface.ts:23](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/SearchBar/interface.ts#L23)
 
 Programmatically focus the search input
 

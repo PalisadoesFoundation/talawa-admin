@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UNLIKE\_COMMENT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CommentMutations.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L54)
+Defined in: [src/GraphQl/Mutations/CommentMutations.ts:54](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/GraphQl/Mutations/CommentMutations.ts#L54)
 
 GraphQL mutation to unlike a comment.
 

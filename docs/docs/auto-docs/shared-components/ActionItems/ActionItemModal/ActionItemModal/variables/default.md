@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `FC`\<[`IItemModalProps`](../../../../../types/shared-components/ActionItems/interface/interfaces/IItemModalProps.md)\>
 
-Defined in: [src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx#L94)
+Defined in: [src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx:94](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx#L94)
 
 Modal component for creating and editing action items.
 

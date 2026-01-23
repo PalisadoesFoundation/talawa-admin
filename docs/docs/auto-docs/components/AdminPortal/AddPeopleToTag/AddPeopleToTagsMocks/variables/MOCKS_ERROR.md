@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR**: `object`[]
 
-Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L277)
+Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:277](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L277)
 
 ## Type Declaration
 

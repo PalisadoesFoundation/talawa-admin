@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceFormData
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L13)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:13](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L13)
 
 Defines the structure for form data.
 
@@ -14,7 +14,7 @@ Defines the structure for form data.
 
 > **email**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L16)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:16](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L16)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:16](https:
 
 > **firstName**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L14)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:14](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:14](https:
 
 > **gender**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L18)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:18](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L18)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:18](https:
 
 > **lastName**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L15)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:15](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L15)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:15](https:
 
 > **phoneNo**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L17)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts:17](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/AdminPortal/EventRegistrantsModal/AddOnSpot.ts#L17)

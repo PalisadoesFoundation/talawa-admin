@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **NotificationToastContainer**(`props`): `ReactElement`
 
-Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L148)
+Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:148](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/NotificationToast/NotificationToast.tsx#L148)
 
 NotificationToastContainer
 

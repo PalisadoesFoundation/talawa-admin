@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceRecurringEventVolunteerModalProps`](../../../../../../types/UserPortal/RecurringEventVolunteerModal/interface/interfaces/InterfaceRecurringEventVolunteerModalProps.md)\>
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx#L27)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx:27](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx#L27)
 
 RecurringEventVolunteerModal component
 

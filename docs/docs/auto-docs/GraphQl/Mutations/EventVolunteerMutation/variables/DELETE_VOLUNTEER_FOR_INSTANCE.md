@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_VOLUNTEER\_FOR\_INSTANCE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L117)
+Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:117](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/GraphQl/Mutations/EventVolunteerMutation.ts#L117)
 
 GraphQL mutation to delete a volunteer from a specific recurring event instance.
 

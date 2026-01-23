@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **pastEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L126)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:126](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L126)
 
 ## Type Declaration
 

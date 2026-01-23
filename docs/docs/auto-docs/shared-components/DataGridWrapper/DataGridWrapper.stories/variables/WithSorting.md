@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **WithSorting**: `Story`
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.stories.tsx:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.stories.tsx#L178)
+Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.stories.tsx:178](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/shared-components/DataGridWrapper/DataGridWrapper.stories.tsx#L178)
 
 DataGridWrapper with sorting dropdown.
 Pre-configured sorting options for common use cases.

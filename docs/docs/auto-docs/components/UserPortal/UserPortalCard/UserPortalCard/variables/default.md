@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceUserPortalCardProps`](../../../../../types/UserPortal/UserPortalCard/interface/interfaces/InterfaceUserPortalCardProps.md)\>
 
-Defined in: [src/components/UserPortal/UserPortalCard/UserPortalCard.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx#L32)
+Defined in: [src/components/UserPortal/UserPortalCard/UserPortalCard.tsx:32](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/components/UserPortal/UserPortalCard/UserPortalCard.tsx#L32)
 
 UserPortalCard
 

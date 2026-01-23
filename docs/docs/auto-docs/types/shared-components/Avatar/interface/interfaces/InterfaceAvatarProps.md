@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceAvatarProps
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L1)
+Defined in: [src/types/shared-components/Avatar/interface.ts:1](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:1](https://github.c
 
 > `optional` **alt**: `string`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L3)
+Defined in: [src/types/shared-components/Avatar/interface.ts:3](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L3)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:3](https://github.c
 
 > `optional` **avatarStyle**: `string`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L6)
+Defined in: [src/types/shared-components/Avatar/interface.ts:6](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L6)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:6](https://github.c
 
 > `optional` **containerStyle**: `string`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L5)
+Defined in: [src/types/shared-components/Avatar/interface.ts:5](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L5)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:5](https://github.c
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L7)
+Defined in: [src/types/shared-components/Avatar/interface.ts:7](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L7)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:7](https://github.c
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L2)
+Defined in: [src/types/shared-components/Avatar/interface.ts:2](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L2)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:2](https://github.c
 
 > `optional` **radius**: `number`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L8)
+Defined in: [src/types/shared-components/Avatar/interface.ts:8](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L8)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:8](https://github.c
 
 > `optional` **size**: `number`
 
-Defined in: [src/types/shared-components/Avatar/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L4)
+Defined in: [src/types/shared-components/Avatar/interface.ts:4](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/shared-components/Avatar/interface.ts#L4)

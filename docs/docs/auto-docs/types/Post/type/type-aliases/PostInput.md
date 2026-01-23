@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PostInput** = `object`
 
-Defined in: [src/types/Post/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L22)
+Defined in: [src/types/Post/type.ts:22](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L22)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:22](https://github.com/PalisadoesFoundation/
 
 > `optional` **\_id**: `string`
 
-Defined in: [src/types/Post/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L23)
+Defined in: [src/types/Post/type.ts:23](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L23)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:23](https://github.com/PalisadoesFoundation/
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L24)
+Defined in: [src/types/Post/type.ts:24](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L24)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:24](https://github.com/PalisadoesFoundation/
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Post/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L25)
+Defined in: [src/types/Post/type.ts:25](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L25)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/type.ts:25](https://github.com/PalisadoesFoundation/
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L26)
+Defined in: [src/types/Post/type.ts:26](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L26)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Post/type.ts:26](https://github.com/PalisadoesFoundation/
 
 > **text**: `string`
 
-Defined in: [src/types/Post/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L27)
+Defined in: [src/types/Post/type.ts:27](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L27)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/type.ts:27](https://github.com/PalisadoesFoundation/
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/Post/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L28)
+Defined in: [src/types/Post/type.ts:28](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L28)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/Post/type.ts:28](https://github.com/PalisadoesFoundation/
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L29)
+Defined in: [src/types/Post/type.ts:29](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/Post/type.ts#L29)

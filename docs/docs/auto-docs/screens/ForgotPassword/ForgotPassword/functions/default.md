@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ForgotPassword/ForgotPassword.tsx#L64)
+Defined in: [src/screens/ForgotPassword/ForgotPassword.tsx:64](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/ForgotPassword/ForgotPassword.tsx#L64)
 
 ## Returns
 

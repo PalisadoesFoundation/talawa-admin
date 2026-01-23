@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceCampaignModal`](../../types/interfaces/InterfaceCampaignModal.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L44)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:44](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L44)
 
 Modal component for creating or editing a Fund Campaign.
 

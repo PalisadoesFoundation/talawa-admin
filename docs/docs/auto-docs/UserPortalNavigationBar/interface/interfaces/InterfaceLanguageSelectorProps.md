@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfaceLanguageSelectorProps
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L181)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:181](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L181)
 
 Props interface for LanguageSelector subcomponent
 
@@ -19,7 +19,7 @@ to switch between available interface languages (en, fr, hi, es, zh).
 
 > `optional` **currentLanguageCode**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L186)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:186](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L186)
 
 Currently active language code
 
@@ -29,7 +29,7 @@ Currently active language code
 
 > `optional` **dropDirection**: `"start"` \| `"end"` \| `"up"` \| `"down"`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L184)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L184)
 
 Direction for dropdown menu
 
@@ -39,7 +39,7 @@ Direction for dropdown menu
 
 > **handleLanguageChange**: (`languageCode`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L185)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:185](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L185)
 
 Handler called when language is selected
 
@@ -59,7 +59,7 @@ Handler called when language is selected
 
 > `optional` **showLanguageSelector**: `boolean`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L182)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L182)
 
 Whether to display the language selector
 
@@ -69,6 +69,6 @@ Whether to display the language selector
 
 > `optional` **testIdPrefix**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L183)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:183](https://github.com/VanshikaSabharwal/talawa-admin/blob/b013ea08c548e04dfa8e27b7d9e9418af9419ded/src/types/UserPortalNavigationBar/interface.ts#L183)
 
 Prefix for test IDs
