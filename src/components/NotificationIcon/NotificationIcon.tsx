@@ -24,10 +24,15 @@ interface InterfaceNotification {
  * unread count and a compact dropdown of the most recent notifications so
  * users can quickly preview or navigate to them.
  *
- * @returns JSX.Element's
+ * @returns JSX.Element
  */
 const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
+  const getNotificationPath = (): string => {
+    const path = location.pathname || '';
+    const isUserPortal = path === '/user' || path.startsWith('/user/');
+    return isUserPortal ? '/user/notification' : '/notification';
+  };
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
@@ -91,7 +96,7 @@ const NotificationIcon = (): JSX.Element => {
                   }
                   const path = location.pathname || '';
                   const isUserPortal =
-                    path.startsWith('/user/') || path.startsWith('/user');
+                    path === '/user' || path.startsWith('/user/');
                   navigate(
                     isUserPortal ? '/user/notification' : '/notification',
                   );
@@ -114,14 +119,7 @@ const NotificationIcon = (): JSX.Element => {
             <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
           ))}
         <Dropdown.Divider />
-        <Dropdown.Item
-          onClick={() => {
-            const path = location.pathname || '';
-            const isUserPortal =
-              path.startsWith('/user/') || path.startsWith('/user');
-            navigate(isUserPortal ? '/user/notification' : '/notification');
-          }}
-        >
+        <Dropdown.Item onClick={() => navigate(getNotificationPath())}>
           {t('viewAllNotifications')}
         </Dropdown.Item>
       </Dropdown.Menu>

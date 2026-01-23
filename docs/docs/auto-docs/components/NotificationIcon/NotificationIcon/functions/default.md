@@ -14,7 +14,7 @@ NotificationIcon component.
 
 `Element`
 
-JSX.Element's
+JSX.Element
 
 ## Remarks
 
