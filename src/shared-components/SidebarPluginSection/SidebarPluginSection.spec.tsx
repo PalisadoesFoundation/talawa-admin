@@ -174,9 +174,7 @@ describe('SidebarPluginSection Component', () => {
       renderComponent({ onItemClick: undefined });
       const link = screen.getByTestId('plugin-plugin-1-btn').closest('a');
       expect(link).not.toBeNull();
-      await expect(async () => {
-        await userEvent.click(link as HTMLAnchorElement);
-      }).not.toThrow();
+      await userEvent.click(link as HTMLAnchorElement);
     });
   });
 

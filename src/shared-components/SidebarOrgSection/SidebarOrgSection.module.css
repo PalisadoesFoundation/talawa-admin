@@ -15,7 +15,6 @@
   height: 52px;
   display: flex;
   align-items: center;
-  /* background-color: var(--leftDrawer-profileContainer-bg); Overridden */
   outline: none;
   cursor: pointer;
 }
@@ -37,7 +36,7 @@
   border-radius: 50%;
 }
 
-.ProfileRightConatiner {
+.ProfileRightContainer {
   display: flex;
   align-items: center;
   justify-content: center;

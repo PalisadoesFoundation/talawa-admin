@@ -110,7 +110,7 @@ const SidebarOrgSection = ({
               />
             )}
           </div>
-          <div className={styles.ProfileRightConatiner}>
+          <div className={styles.ProfileRightContainer}>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
                 {data.organization.name}
