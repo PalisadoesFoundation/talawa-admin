@@ -1,0 +1,20 @@
+/**
+ * BulkActionsBar styles - re-exports relevant classes from DataTable.module.css
+ * This file exists to satisfy the CSS import naming convention.
+ */
+
+.bulkBar {
+  composes: bulkBar from './DataTable.module.css';
+}
+
+.bulkLeft {
+  composes: bulkLeft from './DataTable.module.css';
+}
+
+.bulkRight {
+  composes: bulkRight from './DataTable.module.css';
+}
+
+.bulkClear {
+  composes: bulkClear from './DataTable.module.css';
+}

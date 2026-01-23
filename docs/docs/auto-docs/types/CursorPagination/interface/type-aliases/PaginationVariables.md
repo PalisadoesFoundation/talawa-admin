@@ -12,13 +12,21 @@ Helper type to combine pagination variables with custom query variables
 
 ## Type Declaration
 
-### after
+### after?
 
-> **after**: `string` \| `null`
+> `optional` **after**: `string` \| `null`
 
-### first
+### before?
 
-> **first**: `number`
+> `optional` **before**: `string` \| `null`
+
+### first?
+
+> `optional` **first**: `number`
+
+### last?
+
+> `optional` **last**: `number`
 
 ## Type Parameters
 

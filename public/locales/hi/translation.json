@@ -1794,9 +1794,12 @@
     "loadingImage": "चित्र लोड हो रहा है...",
     "imageNotAvailable": "चित्र उपलब्ध नहीं है",
     "attachment": "अनुलग्नक",
+    "members": "सदस्य",
     "reply": "जवाब",
     "edit": "संपादित करें",
     "delete": "हटाएं",
+    "noMessages": "अभी तक कोई संदेश नहीं",
+    "you": "आप",
     "errorBoundary": {
       "title": "कुछ गलत हो गया",
       "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
@@ -2287,7 +2290,15 @@
     "talawaBranding": "तालावा ब्रांडिंग",
     "view": "देखें",
     "changeLanguage": "भाषा बदलें",
-    "userNotFoundError": "उपयोगकर्ता नहीं मिला"
+    "userNotFoundError": "उपयोगकर्ता नहीं मिला",
+    "selectAllOnPage": "इस पृष्ठ की सभी पंक्तियाँ चुनें",
+    "actions": "क्रियाएँ",
+    "bulkActions": "सामूहिक क्रियाएँ",
+    "selected": "चयनित",
+    "clear": "साफ़ करें",
+    "clearSelection": "चयन साफ़ करें",
+    "loading": "लोड हो रहा है...",
+    "selectRow": "पंक्ति {{rowKey}} चुनें"
   },
   "donation": {
     "amount_label": "राशि",

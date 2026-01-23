@@ -1794,9 +1794,12 @@
     "loadingImage": "Chargement de l'image...",
     "imageNotAvailable": "Image non disponible",
     "attachment": "pièce jointe",
+    "members": "membres",
     "reply": "Répondre",
     "edit": "Modifier",
     "delete": "Supprimer",
+    "noMessages": "Aucun message pour le moment",
+    "you": "Vous",
     "errorBoundary": {
       "title": "Quelque chose s'est mal passé",
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
@@ -2287,7 +2290,15 @@
     "talawaBranding": "Image de marque Talawa",
     "view": "Voir",
     "changeLanguage": "Changer de langue",
-    "userNotFoundError": "Utilisateur introuvable"
+    "userNotFoundError": "Utilisateur introuvable",
+    "selectAllOnPage": "Sélectionner toutes les lignes de cette page",
+    "actions": "Actions",
+    "bulkActions": "Actions groupées",
+    "selected": "sélectionné(s)",
+    "clear": "Effacer",
+    "clearSelection": "Effacer la sélection",
+    "loading": "Chargement...",
+    "selectRow": "Sélectionner la ligne {{rowKey}}"
   },
   "donation": {
     "amount_label": "Montant",
