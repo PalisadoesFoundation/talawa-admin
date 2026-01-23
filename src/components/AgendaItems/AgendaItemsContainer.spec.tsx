@@ -103,8 +103,8 @@ const mockToast = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -466,7 +466,6 @@ describe('Testing Agenda Items components', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
-        expect.any(Object),
       );
     });
   });
