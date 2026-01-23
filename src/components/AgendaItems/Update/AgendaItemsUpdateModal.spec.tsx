@@ -988,4 +988,58 @@ describe('AgendaItemsUpdateModal', () => {
       expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
     });
   });
+
+  test('filters empty URLs and attachments when modal opens via useEffect', async () => {
+    // This tests lines 61-67 in AgendaItemsUpdateModal.tsx
+    // - Effect runs on mount and filters empty strings from urls and attachments
+    const formStateWithEmptyValues = {
+      ...mockFormState1,
+      urls: ['http://example.com', '', '  ', 'http://test.com'],
+      attachments: [
+        JSON.stringify({ objectName: 'valid.jpg', mimeType: 'image/jpeg' }),
+        '',
+        JSON.stringify({ objectName: 'valid2.jpg', mimeType: 'image/jpeg' }),
+      ],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithEmptyValues}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify that setFormState was called by the useEffect to filter empty values
+    await waitFor(() => {
+      const filteringCall = mockSetFormState.mock.calls.find(
+        (call) => typeof call[0] === 'function',
+      );
+      expect(filteringCall).toBeDefined();
+
+      if (filteringCall) {
+        // Test the functional updater filters correctly
+        const prevState = formStateWithEmptyValues;
+        const result = filteringCall[0](prevState);
+        // Empty strings and whitespace-only should be filtered from urls
+        expect(result.urls).toEqual(['http://example.com', 'http://test.com']);
+        // Empty strings should be filtered from attachments
+        expect(result.attachments).toHaveLength(2);
+      }
+    });
+  });
 });

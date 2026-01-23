@@ -107,11 +107,17 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles keyboard events correctly', async () => {
     renderComponent();
 
+    // Clear any previous calls to ensure clean state
+    mockDeleteAgendaItemHandler.mockClear();
+    mockToggleDeleteModal.mockClear();
+
     // Test Escape key - BaseModal has keyboard=true by default, so it will close
     screen.getByTestId('deleteAgendaItemModal');
     await userEvent.keyboard('{Escape}');
-    // Verify Escape key triggers the close handler
+
+    // Verify Escape key triggers the close handler but NOT the delete handler
     expect(mockToggleDeleteModal).toHaveBeenCalled();
+    expect(mockDeleteAgendaItemHandler).not.toHaveBeenCalled();
 
     // Test click on confirm button
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');

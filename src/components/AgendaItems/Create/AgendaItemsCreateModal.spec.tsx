@@ -880,4 +880,82 @@ describe('AgendaItemsCreateModal', () => {
     createObjectURLSpy.mockRestore();
     revokeObjectURLSpy.mockRestore();
   });
+
+  test('shows error toast when adding empty URL', async () => {
+    // Tests line 120 - newUrl.trim() !== '' check
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    // Test with empty string (just spaces)
+    await userEvent.type(urlInput, '   ');
+    await userEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+      );
+    });
+  });
+
+  test('shows error toast for URL with invalid format', async () => {
+    // Tests line 119-120 - urlPattern regex check for invalid URL format
+    // Note: The regex allows optional protocol, so we test with invalid TLD/format instead
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    // Test URL without valid TLD - should fail the regex check
+    await userEvent.clear(urlInput);
+    await userEvent.type(urlInput, 'just-a-word');
+    await userEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+      );
+    });
+  });
 });
