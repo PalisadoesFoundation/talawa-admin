@@ -94,7 +94,6 @@ describe('DynamicDropDown component', () => {
 
   it('handles keyboard navigation with Enter key correctly', async () => {
     const user = userEvent.setup();
-
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -107,15 +106,15 @@ describe('DynamicDropDown component', () => {
       ],
     });
 
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-
-    await user.click(dropdownButton);
+    await user.click(screen.getByTestId('fieldname-dropdown-btn'));
 
     const option = screen.getByTestId('change-fieldname-btn-value2');
 
-    // await user.tab();
-    // await user.keyboard('{Enter}')
-    await user.click(option);
+    // 🔑 THIS is required by the component logic
+    option.focus();
+
+    await user.keyboard('{Enter}');
+
     expect(setFormData).toHaveBeenCalledWith(
       expect.objectContaining({
         fieldName: 'value2',
@@ -137,13 +136,21 @@ describe('DynamicDropDown component', () => {
       ],
     });
 
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await user.click(dropdownButton);
+    await user.click(screen.getByTestId('fieldname-dropdown-btn'));
 
     const option = screen.getByTestId('change-fieldname-btn-value2');
 
-    await user.click(option);
-    expect(option).toBeInTheDocument();
+    // Component expects focused option
+    option.focus();
+
+    // 🔑 literal space, not {Space}
+    await user.keyboard(' ');
+
+    expect(setFormData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fieldName: 'value2',
+      }),
+    );
   });
 
   it('ignores non-Enter/Space key presses', async () => {
@@ -375,12 +382,23 @@ describe('DynamicDropDown component', () => {
     await user.click(dropdownButton);
 
     // Blur any focused element
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
+    const originalActive = document.activeElement;
+    const nonHtml = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg',
+    );
+    Object.defineProperty(document, 'activeElement', {
+      configurable: true,
+      get: () => nonHtml,
+    });
 
     await user.keyboard('{Enter}');
     expect(setFormData).not.toHaveBeenCalled();
+
+    Object.defineProperty(document, 'activeElement', {
+      configurable: true,
+      get: () => originalActive,
+    });
   });
 
   it('handles keyboard event when focused element is not an HTMLElement', async () => {
