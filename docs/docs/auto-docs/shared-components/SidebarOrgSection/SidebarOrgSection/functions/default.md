@@ -12,7 +12,7 @@ Defined in: [src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx:46](h
 
 ### \_\_namedParameters
 
-[`ISidebarOrgSectionProps`](../../../../types/SidebarOrgSection/interface/interfaces/ISidebarOrgSectionProps.md)
+[`ISidebarOrgSectionProps`](../../../../types/shared-components/SidebarOrgSection/interface/interfaces/ISidebarOrgSectionProps.md)
 
 ## Returns
 

@@ -13,6 +13,7 @@ import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 
+const user = userEvent.setup();
 // Mock CSS modules
 vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   default: {
@@ -35,7 +36,7 @@ vi.mock('style/app-fixed.module.css', () => ({
     profileContainer: 'profileContainer',
     bgDanger: 'bgDanger',
     imageContainer: 'imageContainer',
-    ProfileRightConatiner: 'ProfileRightConatiner',
+    ProfileRightContainer: 'ProfileRightContainer',
     profileText: 'profileText',
     primaryText: 'primaryText',
     secondaryText: 'secondaryText',
@@ -49,6 +50,24 @@ vi.mock('style/app-fixed.module.css', () => ({
     userSidebarOrgFooter: 'userSidebarOrgFooter',
   },
 }));
+
+vi.mock(
+  'shared-components/SidebarOrgSection/SidebarOrgSection.module.css',
+  () => ({
+    default: {
+      organizationContainer: 'organizationContainer',
+      profileContainer: 'profileContainer',
+      bgDanger: 'bgDanger',
+      imageContainer: 'imageContainer',
+      ProfileRightContainer: 'ProfileRightContainer',
+      profileText: 'profileText',
+      primaryText: 'primaryText',
+      secondaryText: 'secondaryText',
+      ArrowIcon: 'ArrowIcon',
+      avatarContainer: 'avatarContainer',
+    },
+  }),
+);
 
 // Type definitions for better type safety
 interface IMockedResponse {
@@ -486,7 +505,6 @@ describe('LeftDrawerOrg', () => {
 
   describe('Responsive Behavior', () => {
     it('should hide drawer on mobile when navigation link is clicked', async () => {
-      const user = userEvent.setup();
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -502,7 +520,6 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should not hide drawer on desktop when navigation link is clicked', async () => {
-      const user = userEvent.setup();
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -512,13 +529,13 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
+
       await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
 
     it('should hide drawer at exactly 820px breakpoint', async () => {
-      const user = userEvent.setup();
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -528,13 +545,13 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const membersLink = screen.getByText('Members');
+
       await user.click(membersLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
     it('should hide drawer below 820px breakpoint', async () => {
-      const user = userEvent.setup();
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -544,6 +561,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const eventsLink = screen.getByText('Events');
+
       await user.click(eventsLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -690,7 +708,6 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should hide drawer on mobile when plugin link is clicked', async () => {
-      const user = userEvent.setup();
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -710,6 +727,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const pluginButton = screen.getByText('Test Plugin');
+
       await user.click(pluginButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -784,7 +802,6 @@ describe('LeftDrawerOrg', () => {
   });
 
   it('should toggle drawer state and update localStorage on click events', async () => {
-    const user = userEvent.setup();
     // Test with initial hideDrawer = false
     const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
 
@@ -792,6 +809,7 @@ describe('LeftDrawerOrg', () => {
     expect(toggleButton).toBeInTheDocument();
 
     // Test onClick functionality - clicking when drawer is visible should hide it
+
     await user.click(toggleButton);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
@@ -881,7 +899,6 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should handle window resize during interaction', async () => {
-      const user = userEvent.setup();
       renderComponent();
 
       // Start on desktop
@@ -892,6 +909,7 @@ describe('LeftDrawerOrg', () => {
       });
 
       const dashboardLink = screen.getByText('Dashboard');
+
       await user.click(dashboardLink);
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
 

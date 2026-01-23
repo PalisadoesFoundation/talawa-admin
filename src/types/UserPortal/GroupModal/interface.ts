@@ -1,6 +1,10 @@
-import { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
+import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 
-export interface InterfaceGroupModal {
+/**
+ *  Props for GroupModal component.
+ */
+
+export interface InterfaceGroupModalProps {
   isOpen: boolean;
   hide: () => void;
   eventId: string;

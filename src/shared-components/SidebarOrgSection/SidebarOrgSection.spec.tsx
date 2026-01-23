@@ -5,7 +5,7 @@ import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';
-import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
+import type { ISidebarOrgSectionProps } from 'types/shared-components/SidebarOrgSection/interface';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 

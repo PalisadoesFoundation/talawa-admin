@@ -18,7 +18,6 @@ import { FaBell, FaUsers } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
-import styles from 'style/app-fixed.module.css';
 
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
@@ -53,7 +52,7 @@ const LeftDrawer = ({
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(
     () => (
-      <div className={styles.optionList}>
+      <>
         <SidebarNavItem
           to="/orglist"
           icon={<OrganizationsIcon />}
@@ -107,7 +106,7 @@ const LeftDrawer = ({
           hideDrawer={hideDrawer}
           onItemClick={handleLinkClick}
         />
-      </div>
+      </>
     ),
     [pluginDrawerItems, t, hideDrawer, handleLinkClick],
   );
@@ -119,9 +118,11 @@ const LeftDrawer = ({
       portalType="admin"
       footerContent={
         <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard />
-          </div>
+          {!hideDrawer && (
+            <div>
+              <ProfileCard />
+            </div>
+          )}
           <SignOut hideDrawer={hideDrawer} />
         </>
       }

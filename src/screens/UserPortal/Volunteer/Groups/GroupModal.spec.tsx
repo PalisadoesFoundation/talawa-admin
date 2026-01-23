@@ -17,11 +17,11 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 
+import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import { InterfaceGroupModal } from 'types/UserPortal/GroupModal/interface';
 
 const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {
@@ -55,7 +55,7 @@ const t = {
  * Props for `GroupModal` component used in tests
  */
 
-const itemProps: InterfaceGroupModal[] = [
+const itemProps: InterfaceGroupModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -181,7 +181,7 @@ const itemProps: InterfaceGroupModal[] = [
 
 const renderGroupModal = (
   link: ApolloLink,
-  props: InterfaceGroupModal,
+  props: InterfaceGroupModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -199,6 +199,12 @@ const renderGroupModal = (
 };
 
 describe('Testing GroupModal', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -212,7 +218,7 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     const closeBtns = screen.getAllByTestId('modalCloseBtn');
     expect(closeBtns[0]).toBeInTheDocument();
-    await userEvent.click(closeBtns[0]);
+    await user.click(closeBtns[0]);
     expect(itemProps[0].hide).toHaveBeenCalled();
   });
 
@@ -226,7 +232,7 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
     expect(requestsRadio).toBeChecked();
   });
 
@@ -236,11 +242,11 @@ describe('Testing GroupModal', () => {
 
     const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const detailsRadio = screen.getByLabelText(t.details);
     expect(detailsRadio).toBeInTheDocument();
-    await userEvent.click(detailsRadio);
+    await user.click(detailsRadio);
     expect(detailsRadio).toBeChecked();
   });
 
@@ -279,16 +285,16 @@ describe('Testing GroupModal', () => {
   it('should update name input when changed', async () => {
     renderGroupModal(link1, itemProps[0]);
     const nameInput = screen.getByRole('textbox', { name: /name/i });
-    await userEvent.clear(nameInput);
-    await userEvent.type(nameInput, 'New Group Name');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'New Group Name');
     expect(nameInput).toHaveValue('New Group Name');
   });
 
   it('should update description input when changed', async () => {
     renderGroupModal(link1, itemProps[0]);
     const descInput = screen.getByRole('textbox', { name: /description/i });
-    await userEvent.clear(descInput);
-    await userEvent.type(descInput, 'New description');
+    await user.clear(descInput);
+    await user.type(descInput, 'New description');
     expect(descInput).toHaveValue('New description');
   });
 
@@ -299,16 +305,24 @@ describe('Testing GroupModal', () => {
     });
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '10');
+    await user.clear(vrInput);
+    await user.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
   });
 
   it('should clear volunteersRequired when empty string is entered', async () => {
     renderGroupModal(link1, itemProps[2]);
+
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
+
     expect(vrInput).toHaveValue(5);
     await userEvent.clear(vrInput);
+
+    // This reliably triggers onChange with value === ''
+    await user.type(vrInput, '{selectall}{backspace}');
+
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -321,6 +335,9 @@ describe('Testing GroupModal', () => {
     });
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '-1');
+    await user.clear(vrInput);
+    await user.type(vrInput, '-1');
+
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -333,6 +350,9 @@ describe('Testing GroupModal', () => {
     });
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '0');
+    await user.clear(vrInput);
+    await user.type(vrInput, '0');
+
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -348,13 +368,15 @@ describe('Testing GroupModal', () => {
     expect(vrInput).toBeInTheDocument();
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '-1');
+    await user.clear(vrInput);
+    await user.type(vrInput, '-1');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
 
-    await userEvent.clear(vrInput);
-    await userEvent.type(vrInput, '1{backspace}');
+    await user.clear(vrInput);
+    await user.type(vrInput, '1{backspace}');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
@@ -362,12 +384,18 @@ describe('Testing GroupModal', () => {
 
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '0');
+    await user.clear(vrInput);
+    await user.type(vrInput, '0');
+
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
 
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '19');
+    await user.clear(vrInput);
+    await user.type(vrInput, '19');
+
     await waitFor(() => {
       expect(vrInput).toHaveValue(19);
     });
@@ -381,12 +409,18 @@ describe('Testing GroupModal', () => {
     expect(nameInput).toBeInTheDocument();
     await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Group 2');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Group 2');
+
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByRole('textbox', { name: /description/i });
     expect(descInput).toBeInTheDocument();
     await userEvent.clear(descInput);
     await userEvent.type(descInput, 'desc new');
+    await user.clear(descInput);
+    await user.type(descInput, 'desc new');
+
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByRole('spinbutton', {
@@ -395,11 +429,14 @@ describe('Testing GroupModal', () => {
     expect(vrInput).toBeInTheDocument();
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '10');
+    await user.clear(vrInput);
+    await user.type(vrInput, '10');
+
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -416,7 +453,7 @@ describe('Testing GroupModal', () => {
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -431,12 +468,18 @@ describe('Testing GroupModal', () => {
     expect(nameInput).toBeInTheDocument();
     await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Group 2');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Group 2');
+
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByRole('textbox', { name: /description/i });
     expect(descInput).toBeInTheDocument();
     await userEvent.clear(descInput);
     await userEvent.type(descInput, 'desc new');
+    await user.clear(descInput);
+    await user.type(descInput, 'desc new');
+
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByRole('spinbutton', {
@@ -445,11 +488,14 @@ describe('Testing GroupModal', () => {
     expect(vrInput).toBeInTheDocument();
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '10');
+    await user.clear(vrInput);
+    await user.type(vrInput, '10');
+
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -492,7 +538,7 @@ describe('Testing GroupModal', () => {
 
     const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -501,7 +547,7 @@ describe('Testing GroupModal', () => {
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);
-    await userEvent.click(acceptBtn[0]);
+    await user.click(acceptBtn[0]);
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.requestAccepted);
     });
@@ -513,7 +559,7 @@ describe('Testing GroupModal', () => {
 
     const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -522,7 +568,7 @@ describe('Testing GroupModal', () => {
 
     const rejectBtn = screen.getAllByTestId('rejectBtn');
     expect(rejectBtn).toHaveLength(2);
-    await userEvent.click(rejectBtn[0]);
+    await user.click(rejectBtn[0]);
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
     });
@@ -531,7 +577,7 @@ describe('Testing GroupModal', () => {
   it('should display user names in requests table', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
@@ -580,7 +626,7 @@ describe('Testing GroupModal', () => {
 
     renderGroupModal(linkWithNullAvatar, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(1);
@@ -594,7 +640,7 @@ describe('Testing GroupModal', () => {
 
   it('should display image when user has avatarURL', async () => {
     // Create a custom itemProps with a user that has an avatarURL
-    const propsWithAvatar: InterfaceGroupModal = {
+    const propsWithAvatar: InterfaceGroupModalProps = {
       ...itemProps[0],
       group: {
         ...itemProps[0].group,
@@ -638,7 +684,7 @@ describe('Testing GroupModal', () => {
 
     renderGroupModal(link3, propsWithAvatar);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     // Wait for the image to be rendered
     const avatarImage = await screen.findByAltText(
@@ -657,7 +703,7 @@ describe('Testing GroupModal', () => {
 
     const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const userNameElements = await screen.findAllByTestId('userName');
     expect(userNameElements).toHaveLength(2);
@@ -666,7 +712,7 @@ describe('Testing GroupModal', () => {
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);
-    await userEvent.click(acceptBtn[0]);
+    await user.click(acceptBtn[0]);
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -695,7 +741,7 @@ describe('Testing GroupModal', () => {
 
     renderGroupModal(link3, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     await waitFor(() => {
       expect(screen.getByText(t.noRequests)).toBeInTheDocument();
@@ -727,7 +773,7 @@ describe('Testing GroupModal', () => {
 
     renderGroupModal(emptyLink, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     expect(screen.getByText(t.noRequests)).toBeInTheDocument();
   });
@@ -735,7 +781,7 @@ describe('Testing GroupModal', () => {
   it('should render requests table with correct headers', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     await waitFor(() => {
       expect(screen.getByText(t.volunteerName)).toBeInTheDocument();
@@ -758,7 +804,7 @@ describe('Testing GroupModal', () => {
   it('should render both accept and reject buttons for each request', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     await waitFor(() => {
       const acceptBtns = screen.getAllByTestId('acceptBtn');
@@ -771,10 +817,10 @@ describe('Testing GroupModal', () => {
   it('should call updateMembershipStatus with correct arguments on accept', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
-    await userEvent.click(acceptBtn[0]);
+    await user.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.requestAccepted);
@@ -784,10 +830,10 @@ describe('Testing GroupModal', () => {
   it('should call updateMembershipStatus with correct arguments on reject', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
+    await user.click(requestsRadio);
 
     const rejectBtn = await screen.findAllByTestId('rejectBtn');
-    await userEvent.click(rejectBtn[0]);
+    await user.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
@@ -800,6 +846,8 @@ describe('Testing GroupModal', () => {
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     await userEvent.clear(nameInput);
     await userEvent.tab();
+    await user.clear(nameInput);
+    nameInput.blur();
 
     await waitFor(() => {
       const submitBtn = screen.getByTestId('submitBtn');
@@ -816,6 +864,8 @@ describe('Testing GroupModal', () => {
     // Input invalid value
     await userEvent.type(vrInput, '-5');
     await userEvent.tab();
+    await user.type(vrInput, '-5');
+    vrInput.blur();
 
     await waitFor(() => {
       const errorMessages = screen.queryAllByText(t.invalidNumber);
@@ -826,6 +876,8 @@ describe('Testing GroupModal', () => {
       const submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toBeDisabled();
     });
+    const submitBtn = screen.getByTestId('submitBtn');
+    expect(submitBtn).toBeDisabled();
   });
 
   it('should not submit if validation errors exist', async () => {
@@ -838,9 +890,366 @@ describe('Testing GroupModal', () => {
       const submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toBeDisabled();
     });
+    await user.clear(nameInput);
+    nameInput.blur(); // Trigger error
 
     const submitBtn = screen.getByTestId('submitBtn');
     await userEvent.click(submitBtn); // Should not fire
+    expect(submitBtn).toBeDisabled();
+
+    await user.click(submitBtn); // Should not fire
     expect(NotificationToast.success).not.toHaveBeenCalled();
+  });
+
+  describe('Testing GroupModal - Additional Coverage', () => {
+    it('should prevent form submission when name is empty after being touched', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await user.clear(nameInput);
+      nameInput.blur();
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      await user.click(submitBtn);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(itemProps[0].hide).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should prevent form submission when volunteersRequired has error', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      await user.clear(vrInput);
+      await user.type(vrInput, '-5');
+
+      vrInput.blur();
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Try to submit anyway
+      await user.click(submitBtn);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(itemProps[0].hide).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should set touched state for name on blur', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await user.clear(nameInput);
+
+      nameInput.blur();
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should set touched state for volunteersRequired on blur', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      await user.clear(vrInput);
+      await user.type(vrInput, '-1');
+
+      vrInput.blur();
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should handle volunteersRequired change from null to valid number', async () => {
+      renderGroupModal(link1, itemProps[1]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      expect(vrInput).toHaveValue(null);
+
+      await user.clear(vrInput);
+      await user.type(vrInput, '5');
+
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(5);
+      });
+    });
+
+    it('should handle volunteersRequired change from valid number to null', async () => {
+      renderGroupModal(link1, itemProps[2]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      expect(vrInput).toHaveValue(5);
+
+      await user.clear(vrInput);
+
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(null);
+      });
+    });
+
+    it('should handle NaN input for volunteersRequired', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      await user.clear(vrInput);
+      // Lone '-' triggers parseInt NaN for number input
+      await user.type(vrInput, '-');
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(null);
+      });
+
+      // Blur to trigger touched state
+      vrInput.blur();
+
+      expect(vrInput).toHaveValue(null);
+    });
+
+    it('should not call updateVolunteerGroup if both name is empty and volunteersRequired has error', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await user.clear(nameInput);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      await user.clear(vrInput);
+      await user.type(vrInput, '-1');
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      await user.click(submitBtn);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should handle error during updateMembershipStatus for reject', async () => {
+      renderGroupModal(link2, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await user.click(requestsRadio);
+
+      const rejectBtn = await screen.findAllByTestId('rejectBtn');
+      await user.click(rejectBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+    });
+
+    it('should refetch requests after successful accept', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await user.click(requestsRadio);
+
+      const acceptBtn = await screen.findAllByTestId('acceptBtn');
+      await user.click(acceptBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.requestAccepted,
+        );
+      });
+    });
+
+    it('should refetch requests after successful reject', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await user.click(requestsRadio);
+
+      const rejectBtn = await screen.findAllByTestId('rejectBtn');
+      await user.click(rejectBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.requestRejected,
+        );
+      });
+    });
+
+    it('should update description to empty string when cleared', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      expect(descInput).toHaveValue('desc');
+
+      await user.clear(descInput);
+
+      expect(descInput).toHaveValue('');
+    });
+
+    it('should handle console.error in catch block of updateGroupHandler', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      renderGroupModal(link2, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Trigger Error');
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await user.click(submitBtn);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle setting volunteersRequired error state correctly', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      await user.clear(vrInput);
+      await user.type(vrInput, '0');
+
+      vrInput.blur();
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Clear the error by setting valid value
+      await user.clear(vrInput);
+      await user.type(vrInput, '5');
+
+      await waitFor(() => {
+        expect(submitBtn).not.toBeDisabled();
+      });
+    });
+
+    it('should maintain form state through multiple field changes', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await user.clear(nameInput);
+      await user.type(nameInput, 'New Name');
+
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      await user.clear(descInput);
+      await user.type(descInput, 'New Description');
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      await user.clear(vrInput);
+      await user.type(vrInput, '15');
+
+      await waitFor(() => {
+        expect(nameInput).toHaveValue('New Name');
+        expect(descInput).toHaveValue('New Description');
+        expect(vrInput).toHaveValue(15);
+      });
+    });
+
+    it('should reset volunteersRequired error when valid value is entered after invalid', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      await user.clear(vrInput);
+      await user.type(vrInput, '-5');
+
+      vrInput.blur();
+
+      let submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      await user.clear(vrInput);
+      await user.type(vrInput, '10');
+
+      await waitFor(() => {
+        submitBtn = screen.getByTestId('submitBtn');
+        expect(submitBtn).not.toBeDisabled();
+      });
+    });
+
+    it('should handle description being updated from null to a value', async () => {
+      renderGroupModal(link1, itemProps[1]);
+
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      expect(descInput).toHaveValue('');
+
+      await user.type(descInput, 'New description from null');
+
+      await waitFor(() => {
+        expect(descInput).toHaveValue('New description from null');
+      });
+    });
+  });
+
+  it('should mark name as touched when both name is empty and volunteersRequired has error (early return path)', async () => {
+    renderGroupModal(link1, itemProps[0]);
+
+    const nameInput = screen.getByRole('textbox', { name: /name/i });
+    const vrInput = screen.getByRole('spinbutton', {
+      name: /volunteers required/i,
+    });
+
+    // Make name empty
+    await user.clear(nameInput);
+
+    // Make volunteersRequired invalid
+    await user.clear(vrInput);
+    await user.type(vrInput, '-1');
+    vrInput.blur();
+
+    // Submit the FORM directly (button is disabled so we bypass it)
+    const form = screen.getByTestId('pledgeForm');
+
+    const submitEvent = new Event('submit', {
+      bubbles: true,
+      cancelable: true,
+    });
+
+    form.dispatchEvent(submitEvent);
+
+    // This specifically covers:
+    // if (volunteersRequiredError || isNameEmpty) {
+    //   if (isNameEmpty) setTouched(...)
+    //   return;
+    // }
+
+    await waitFor(() => {
+      // name should now be touched → submit still blocked
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(itemProps[0].hide).not.toHaveBeenCalled();
+    });
   });
 });

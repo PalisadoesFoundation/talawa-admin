@@ -12,7 +12,7 @@
  *   - `members` (edges array) and optional `membersCount`
  *   - `adminsCount`, `membershipRequestStatus`, `userRegistrationRequired`, `membershipRequests`, `isJoined`, `role`
  * - Membership state can be `'member'`, `'pending'`, or `'notMember'`.
- * - Uses `react-bootstrap` for buttons, `@mui/material` for tooltips, and `react-router-dom` for navigation.
+ * - Uses the shared Button component, `@mui/material` for tooltips, and `react-router-dom` for navigation.
  * - Uses `useTranslation` from `react-i18next` for localization.
  * - Uses GraphQL mutations to handle membership requests and joining organizations.
  *

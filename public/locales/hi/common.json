@@ -45,6 +45,7 @@
   "enterEmail": "ईमेल दर्ज करें",
   "emailAddress": "ईमेल पता",
   "email": "ईमेल",
+  "emailPlaceholder": "name@example.com",
   "name": "नाम",
   "desc": "विवरण",
   "enterPassword": "पासवर्ड दर्ज करें",
@@ -287,5 +288,9 @@
   "attendedEventsList": "उपस्थित इवेंट की सूची",
   "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
-  "share": "शेयर करें"
+  "share": "शेयर करें",
+  "userNotFound": "उपयोगकर्ता नहीं मिला",
+  "avatarProcessingError": "अवतार प्रोसेसिंग में त्रुटि, कृपया अपनी छवि जांचें।",
+  "viewEventStatistics": "इवेंट सांख्यिकी देखें",
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें"
 }

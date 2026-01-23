@@ -20,7 +20,8 @@
  * - Form modal with custom header styling and submit button.
  */
 import { useId } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { Modal } from 'react-bootstrap';
 import type { IBaseModalProps } from 'types/shared-components/BaseModal/interface';
 import { useTranslation } from 'react-i18next';
 import styles from './BaseModal.module.css';

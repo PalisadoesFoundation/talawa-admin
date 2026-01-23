@@ -18,7 +18,7 @@
  * />
  * ```
  */
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import styles from './PledgeDeleteModal.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

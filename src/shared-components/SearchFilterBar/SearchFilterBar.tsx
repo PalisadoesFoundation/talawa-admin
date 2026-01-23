@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import type {
   InterfaceSearchFilterBarProps,
   InterfaceSearchFilterBarAdvanced,
 } from 'types/shared-components/SearchFilterBar/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './SearchFilterBar.module.css';
 
 /**
  * SearchFilterBar component provides a unified search and filter interface.

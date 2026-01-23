@@ -17,7 +17,7 @@
  * - \@mui/material
  * - shared-components/LoadingState/LoadingState
  * - components/Avatar/Avatar
- * - subComponents/SortingButton
+ * - shared-components/SortingButton/SortingButton
  * - shared-components/SearchBar/SearchBar
  * - GraphQl/Queries/EventVolunteerQueries
  * - utils/interfaces
