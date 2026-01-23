@@ -193,6 +193,46 @@ describe('Talawa Admin Setup', () => {
     expect(exitMock).toHaveBeenCalledWith(1);
   });
 
+  it('should log error when backup restoration fails and notify manual restore needed', async () => {
+    const mockError = new Error('Initial Setup Failure');
+    vi.mocked(backupEnvFile).mockResolvedValue('path/to/backup');
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const restoreError = new Error('File system read-only');
+    vi.spyOn(fs, 'copyFileSync').mockImplementation(() => {
+      throw restoreError;
+    });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '🔄 Attempting to restore from backup...',
+    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '❌ Failed to restore backup:',
+      restoreError,
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Manual restore needed. Backup location: path/to/backup',
+      ),
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
+  });
+
   it('should handle errors during setup process (and call process.exit(1))', async () => {
     const mockError = new Error('Setup failed');
 
