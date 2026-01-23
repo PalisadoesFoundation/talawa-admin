@@ -25,15 +25,19 @@
  * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import Button from 'shared-components/Button';
+import FormCheck from 'react-bootstrap/FormCheck';
+import FormGroup from 'react-bootstrap/FormGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ADD_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
@@ -129,16 +133,16 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       show={isOpen}
       headerContent={<p className={styles.titlemodal}>{t('addVolunteer')}</p>}
     >
-      <Form
+      <form
         data-testid="volunteerForm"
         onSubmitCapture={addVolunteerHandler}
         className="p-3"
       >
         {/* Radio buttons for recurring events */}
         {isRecurring ? (
-          <Form.Group className="mb-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
+          <FormGroup className="mb-3">
+            <FormLabel>{t('applyTo')}</FormLabel>
+            <FormCheck
               type="radio"
               label={t('entireSeries')}
               name="applyTo"
@@ -146,7 +150,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               checked={applyTo === 'series'}
               onChange={() => setApplyTo('series')}
             />
-            <Form.Check
+            <FormCheck
               type="radio"
               label={t('thisEventOnly')}
               name="applyTo"
@@ -154,13 +158,18 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               checked={applyTo === 'instance'}
               onChange={() => setApplyTo('instance')}
             />
-          </Form.Group>
+          </FormGroup>
         ) : null}
 
         {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
-        <Form.Group className="d-flex mb-3 w-100">
+        <FormFieldGroup
+          name="membersSelect"
+          label={tCommon('members')}
+          required
+          touched={false}
+        >
           <Autocomplete
-            className={`${styles.noOutline} w-100`}
+            className="w-100"
             limitTags={2}
             data-testid="membersSelect"
             options={members}
@@ -171,16 +180,28 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               setUserId(newVolunteer?.id ?? '');
             }}
             renderInput={(params) => (
-              <TextField {...params} label={tCommon('members')} />
+              <div ref={params.InputProps.ref} className="w-100">
+                <div className="d-flex align-items-center gap-2">
+                  {params.InputProps.startAdornment}
+                  <input
+                    {...params.inputProps}
+                    id="membersSelect"
+                    className={`form-control ${styles.noOutline}`}
+                    placeholder={tCommon('members')}
+                    aria-label={tCommon('members')}
+                  />
+                  {params.InputProps.endAdornment}
+                </div>
+              </div>
             )}
           />
-        </Form.Group>
+        </FormFieldGroup>
 
         {/* Button to submit the volunteer form */}
         <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
           {t('addVolunteer')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
