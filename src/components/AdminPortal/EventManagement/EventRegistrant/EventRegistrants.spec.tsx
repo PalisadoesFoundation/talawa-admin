@@ -72,12 +72,9 @@ const renderEventRegistrants = (
 };
 
 describe('Event Registrants Component - Enhanced Coverage', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PaginationList from './PaginationList';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -46,6 +46,7 @@ vi.mock('../Navigator/Pagination', () => ({
 
 describe('PaginationList', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const defaultProps = {
@@ -83,10 +84,6 @@ describe('PaginationList', () => {
       })),
     });
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('renders pagination for large screens with all options', () => {
     mockMatchMedia(false); // false = large screen

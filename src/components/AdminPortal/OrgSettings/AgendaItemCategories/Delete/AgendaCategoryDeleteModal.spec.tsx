@@ -57,6 +57,7 @@ describe('AgendaCategoryDeleteModal', () => {
     mockDeleteAgendaCategoryHandler = vi.fn();
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

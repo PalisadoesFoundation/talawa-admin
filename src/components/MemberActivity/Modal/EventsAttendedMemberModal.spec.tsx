@@ -67,6 +67,7 @@ const mockEvents = Array.from({ length: 6 }, (_, index) => ({
 
 describe('EventsAttendedMemberModal', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const defaultProps = {
@@ -74,10 +75,6 @@ describe('EventsAttendedMemberModal', () => {
     setShow: vi.fn(),
     show: true,
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   test('renders modal with correct title when show is true', () => {
     render(
