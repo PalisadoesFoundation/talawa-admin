@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import AgendaCategoryPreviewModal from './AgendaCategoryPreviewModal';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 // Mock translation function
 const mockT = (key: string): string => key;
@@ -52,7 +53,8 @@ describe('AgendaCategoryPreviewModal Component', () => {
     expect(screen.queryByText(/meeting/i)).not.toBeInTheDocument();
   });
 
-  test('calls hidePreviewModal when clicking close button', () => {
+  test('calls hidePreviewModal when clicking close button', async () => {
+    const user = userEvent.setup();
     render(
       <AgendaCategoryPreviewModal
         agendaCategoryPreviewModalIsOpen={true}
@@ -65,7 +67,7 @@ describe('AgendaCategoryPreviewModal Component', () => {
     );
 
     const closeButton = screen.getByTestId('modalCloseBtn');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
@@ -87,7 +89,8 @@ describe('AgendaCategoryPreviewModal Component', () => {
     expect(screen.getByText(/createdby/i)).toBeInTheDocument();
   });
 
-  test('calls showUpdateModal and hidePreviewModal when clicking edit button', () => {
+  test('calls showUpdateModal and hidePreviewModal when clicking edit button', async () => {
+    const user = userEvent.setup();
     render(
       <AgendaCategoryPreviewModal
         agendaCategoryPreviewModalIsOpen={true}
@@ -100,13 +103,14 @@ describe('AgendaCategoryPreviewModal Component', () => {
     );
 
     const editButton = screen.getByTestId('editAgendaCategoryPreviewModalBtn');
-    fireEvent.click(editButton);
+    await user.click(editButton);
 
     expect(mockShowUpdateModal).toHaveBeenCalledTimes(1);
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  test('calls toggleDeleteModal when clicking delete button', () => {
+  test('calls toggleDeleteModal when clicking delete button', async () => {
+    const user = userEvent.setup();
     render(
       <AgendaCategoryPreviewModal
         agendaCategoryPreviewModalIsOpen={true}
@@ -119,7 +123,7 @@ describe('AgendaCategoryPreviewModal Component', () => {
     );
 
     const deleteButton = screen.getByTestId('deleteAgendaCategoryModalBtn');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
