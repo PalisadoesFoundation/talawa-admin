@@ -548,6 +548,7 @@ const LoginPage = (): JSX.Element => {
                         type="button"
                         tabIndex={-1}
                         className={styles.email_button}
+                        aria-label={tCommon('email')}
                       >
                         <EmailOutlinedIcon />
                       </Button>
@@ -587,6 +588,10 @@ const LoginPage = (): JSX.Element => {
                           onClick={togglePassword}
                           data-testid="showLoginPassword"
                           className={styles.email_button}
+                          aria-label={
+                            showPassword ? t('hidePassword') : t('showPassword')
+                          }
+                          aria-pressed={showPassword}
                         >
                           {showPassword ? (
                             <i className="fas fa-eye"></i>
@@ -751,6 +756,7 @@ const LoginPage = (): JSX.Element => {
                         type="button"
                         tabIndex={-1}
                         className={`${styles.email_button}`}
+                        aria-label={tCommon('email')}
                       >
                         <EmailOutlinedIcon />
                       </Button>
@@ -795,7 +801,11 @@ const LoginPage = (): JSX.Element => {
                           type="button"
                           onClick={togglePassword}
                           data-testid="showPassword"
-                          className={`${styles.email_button}`}
+                          className={styles.email_button}
+                          aria-label={
+                            showPassword ? t('hidePassword') : t('showPassword')
+                          }
+                          aria-pressed={showPassword}
                         >
                           {showPassword ? (
                             <i className="fas fa-eye"></i>
@@ -959,6 +969,12 @@ const LoginPage = (): JSX.Element => {
                         data-testid="showPasswordCon"
                         onClick={toggleConfirmPassword}
                         className={`${styles.email_button}`}
+                        aria-label={
+                          showConfirmPassword
+                            ? t('hidePassword')
+                            : t('showPassword')
+                        }
+                        aria-pressed={showConfirmPassword}
                       >
                         {showConfirmPassword ? (
                           <i className="fas fa-eye"></i>

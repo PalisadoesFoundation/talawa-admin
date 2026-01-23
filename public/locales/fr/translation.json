@@ -598,7 +598,8 @@
     "done": "Fait",
     "createChat": "Créer une discussion",
     "viewType": "Type de Vue",
-    "search": "rechercher"
+    "search": "rechercher",
+    "close": "Fermer"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",

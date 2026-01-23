@@ -598,7 +598,8 @@
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
-    "search": "Buscar usuarios"
+    "search": "Buscar usuarios",
+    "close": "Cerrar"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",

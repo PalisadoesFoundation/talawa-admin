@@ -598,7 +598,8 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "close": "Close"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
