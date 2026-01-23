@@ -1,5 +1,4 @@
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,
@@ -11,7 +10,13 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import Button from 'shared-components/Button';
+import FormCheck from 'react-bootstrap/FormCheck';
+import FormGroup from 'react-bootstrap/FormGroup';
+import FormLabel from 'react-bootstrap/FormLabel';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -194,15 +199,15 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </p>
       }
     >
-      <Form
+      <form
         onSubmit={mode === 'edit' ? updateGroupHandler : createGroupHandler}
         className="p-3"
       >
         {/* Radio buttons for recurring events - only show in create mode */}
         {isRecurring && mode === 'create' ? (
-          <Form.Group className="mb-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
+          <FormGroup className="mb-3">
+            <FormLabel>{t('applyTo')}</FormLabel>
+            <FormCheck
               type="radio"
               label={t('entireSeries')}
               name="applyTo"
@@ -210,7 +215,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               checked={applyTo === 'series'}
               onChange={() => setApplyTo('series')}
             />
-            <Form.Check
+            <FormCheck
               type="radio"
               label={t('thisEventOnly')}
               name="applyTo"
@@ -218,132 +223,175 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               checked={applyTo === 'instance'}
               onChange={() => setApplyTo('instance')}
             />
-          </Form.Group>
+          </FormGroup>
         ) : null}
 
         {/* Input field to enter the group name */}
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              required
-              label={tCommon('name')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={name}
-              onChange={(e) =>
-                setFormState({ ...formState, name: e.target.value })
-              }
-            />
-          </FormControl>
-        </Form.Group>
+        <div className="mb-3">
+          <FormTextField
+            name="groupName"
+            label={tCommon('name')}
+            required
+            className={styles.noOutline}
+            value={name}
+            onChange={(value) => setFormState({ ...formState, name: value })}
+          />
+        </div>
         {/* Input field to enter the group description */}
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              multiline
-              rows={3}
-              label={tCommon('description')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </FormControl>
-        </Form.Group>
+        <div className="mb-3">
+          <FormTextField
+            name="groupDescription"
+            label={tCommon('description')}
+            as="textarea"
+            rows={3}
+            className={styles.noOutline}
+            value={description ?? ''}
+            onChange={(value) =>
+              setFormState({ ...formState, description: value })
+            }
+          />
+        </div>
         {/* A dropdown to select leader for volunteer group */}
-        <Form.Group className="d-flex mb-3 w-100">
-          <Autocomplete
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
-            data-testid="leaderSelect"
-            options={members}
-            value={leader}
-            disabled={mode === 'edit'}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              member.name
-            }
-            onChange={(_, newLeader): void => {
-              if (newLeader) {
-                setFormState({
-                  ...formState,
-                  leader: newLeader,
-                  volunteerUsers: [...volunteerUsers, newLeader],
-                });
-              } else {
-                setFormState({
-                  ...formState,
-                  leader: null,
-                  volunteerUsers: volunteerUsers.filter(
-                    (user) => user.id !== leader?.id,
-                  ),
-                });
+        <div className="d-flex mb-3 w-100">
+          <FormFieldGroup
+            name="leaderSelect"
+            label={t('leader')}
+            required
+            touched={false}
+          >
+            <Autocomplete
+              className={`${styles.noOutline} w-100`}
+              limitTags={2}
+              data-testid="leaderSelect"
+              options={members}
+              value={leader}
+              disabled={mode === 'edit'}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              filterSelectedOptions={true}
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={`${t('leader')} *`} />
-            )}
-          />
-        </Form.Group>
-
-        {/* A Multi-select dropdown to select more than one volunteer */}
-        <Form.Group className="d-flex mb-3 w-100">
-          <Autocomplete
-            multiple
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
-            data-testid="volunteerSelect"
-            options={members}
-            value={volunteerUsers}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              member.name
-            }
-            disabled={mode === 'edit'}
-            onChange={(_, newUsers): void => {
-              setFormState({
-                ...formState,
-                volunteerUsers: newUsers,
-              });
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={`${t('volunteers')} *`} />
-            )}
-          />
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <FormControl fullWidth>
-            <TextField
-              label={t('volunteersRequired')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={volunteersRequired ?? ''}
-              onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
+              onChange={(_, newLeader): void => {
+                if (newLeader) {
                   setFormState({
                     ...formState,
-                    volunteersRequired: parseInt(e.target.value),
+                    leader: newLeader,
+                    volunteerUsers: [...volunteerUsers, newLeader],
                   });
-                } else if (e.target.value === '') {
+                } else {
                   setFormState({
                     ...formState,
-                    volunteersRequired: null,
+                    leader: null,
+                    volunteerUsers: volunteerUsers.filter(
+                      (user) => user.id !== leader?.id,
+                    ),
                   });
                 }
               }}
+              renderInput={(params) => (
+                <div ref={params.InputProps.ref} className="w-100">
+                  <div className="d-flex align-items-center gap-2">
+                    {params.InputProps.startAdornment}
+                    <input
+                      {...params.inputProps}
+                      id="leaderSelect"
+                      className={`form-control ${styles.noOutline}`}
+                      placeholder={t('leader')}
+                      aria-label={t('leader')}
+                    />
+                    {params.InputProps.endAdornment}
+                  </div>
+                </div>
+              )}
             />
-          </FormControl>
-        </Form.Group>
+          </FormFieldGroup>
+        </div>
+
+        {/* A Multi-select dropdown to select more than one volunteer */}
+        <div className="d-flex mb-3 w-100">
+          <FormFieldGroup
+            name="volunteerSelect"
+            label={t('volunteers')}
+            required
+            touched={false}
+          >
+            <Autocomplete
+              multiple
+              className={`${styles.noOutline} w-100`}
+              limitTags={2}
+              data-testid="volunteerSelect"
+              options={members}
+              value={volunteerUsers}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              filterSelectedOptions={true}
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
+              }
+              disabled={mode === 'edit'}
+              onChange={(_, newUsers): void => {
+                setFormState({
+                  ...formState,
+                  volunteerUsers: newUsers,
+                });
+              }}
+              renderInput={(params) => (
+                <div ref={params.InputProps.ref} className="w-100">
+                  <div className="d-flex align-items-center gap-2">
+                    {params.InputProps.startAdornment}
+                    <input
+                      {...params.inputProps}
+                      id="volunteerSelect"
+                      className={`form-control ${styles.noOutline}`}
+                      placeholder={t('volunteers')}
+                      aria-label={t('volunteers')}
+                    />
+                    {params.InputProps.endAdornment}
+                  </div>
+                </div>
+              )}
+            />
+          </FormFieldGroup>
+        </div>
+        <div className="mb-3">
+          <FormTextField
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+            type="number"
+            className={styles.noOutline}
+            value={volunteersRequired?.toString() ?? ''}
+            onChange={(value) => {
+              const trimmedValue = value.trim();
+              if (trimmedValue === '') {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: null,
+                });
+                return;
+              }
+
+              const parsed = parseInt(trimmedValue, 10);
+
+              if (Number.isNaN(parsed) || parsed <= 0) {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: null,
+                });
+                return;
+              }
+
+              setFormState({
+                ...formState,
+                volunteersRequired: parsed,
+              });
+            }}
+          />
+        </div>
 
         {/* Button to submit the volunteer group form */}
         <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
           {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
