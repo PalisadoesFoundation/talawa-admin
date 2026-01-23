@@ -22,7 +22,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
@@ -52,8 +52,8 @@ const SidebarOrgSection = ({
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
-  }>(GET_ORGANIZATION_DATA_PG, {
-    variables: { id: orgId, first: 1, after: null },
+  }>(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
   });
 
   // Don't render if drawer is hidden

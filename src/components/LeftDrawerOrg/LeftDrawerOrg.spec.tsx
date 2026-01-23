@@ -489,7 +489,7 @@ describe('LeftDrawerOrg', () => {
         name: /Error loading Organization/i,
       });
       expect(errorButton).toBeDisabled();
-      expect(errorButton.className).toContain('bgDanger');
+      expect(errorButton).toHaveClass('bgDanger');
     });
 
     it('should not show error state on profile page when data fails to load', async () => {
