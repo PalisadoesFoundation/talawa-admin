@@ -35,6 +35,7 @@ import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
@@ -63,18 +64,6 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
-
-export const areOptionsEqual = (
-  option: InterfaceUserInfoPG,
-  value: InterfaceUserInfoPG,
-): boolean => option.id === value.id;
-
-export const getMemberLabel = (member: InterfaceUserInfoPG): string => {
-  if (member.firstName || member.lastName) {
-    return `${member.firstName || ''} ${member.lastName || ''}`.trim();
-  }
-  return member.name || '';
-};
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
@@ -253,10 +242,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 'aria-label': tCommon('clear'),
               },
             }}
-            isOptionEqualToValue={(option, value) =>
-              areOptionsEqual(option, value)
-            }
-            getOptionLabel={(option) => getMemberLabel(option)}
+            isOptionEqualToValue={areOptionsEqual}
+            getOptionLabel={getMemberLabel}
             renderInput={(params) => (
               <FormFieldGroup name="pledgers" label={t('pledgers')}>
                 <div ref={params.InputProps.ref}>

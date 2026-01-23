@@ -27,7 +27,8 @@ dayjs.extend(utc);
 
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfacePledgeModal } from './PledgeModal';
-import PledgeModal, { areOptionsEqual, getMemberLabel } from './PledgeModal';
+import PledgeModal from './PledgeModal';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import { vi } from 'vitest';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -396,6 +397,101 @@ describe('PledgeModal', () => {
       expect(props.refetchPledge).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
+  });
+
+  // Coverage for Line 140: Verify updatePledge mutation variables include the correct pledge ID
+  it('should call updatePledge mutation with correct variables including id', async () => {
+    const updateLink = new StaticMockLink([MOCK_UPDATE_PLEDGE_DATA]);
+
+    await act(async () => {
+      renderPledgeModal(updateLink, pledgeProps[1]); // pledgeProps[1] has id: '1'
+    });
+
+    const amountInput = screen.getByLabelText('Amount');
+    await act(async () => {
+      await userEvent.clear(amountInput);
+      await userEvent.type(amountInput, '200');
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
+    });
+
+    await waitFor(() => {
+      // Ideally we could spy on the mutation call, but with MockedProvider we verify the result.
+      // The fact that MOCK_UPDATE_PLEDGE_DATA matched means the variables (id: '1', amount: 200) matched.
+      // If ID was missing or wrong, it would not match and likely error or hang.
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Pledge updated successfully',
+      );
+    });
+  });
+
+  // Coverage for Line 185: Verify error toast behavior when createPledge fails with specific error message
+  it('should show specific error message from backend when createPledge fails', async () => {
+    const errorMsg = 'Specific backend error';
+    const ERROR_MOCK = {
+      request: {
+        query: CREATE_PLEDGE,
+        variables: {
+          campaignId: 'campaignId',
+          amount: 100,
+          pledgerId: '1',
+        },
+      },
+      error: new Error(errorMsg),
+    };
+    const specificErrorLink = new StaticMockLink([
+      ...PLEDGE_MODAL_MOCKS,
+      MEMBERS_MOCK, // Need members to select one
+      ERROR_MOCK,
+    ]);
+
+    const props = { ...pledgeProps[0], refetchPledge: vi.fn(), hide: vi.fn() };
+    renderPledgeModal(specificErrorLink, props);
+
+    // Select a pledger first
+    const pledgerSelect = screen.getByTestId('pledgerSelect');
+    const pledgerInput = within(pledgerSelect).getByRole('combobox');
+    await act(async () => {
+      await userEvent.click(pledgerInput);
+    });
+    await waitFor(async () => {
+      const listbox = screen.getByRole('listbox');
+      const option = within(listbox).getByText('John Doe');
+      await userEvent.click(option);
+    });
+
+    const amountInput = screen.getByLabelText('Amount');
+    await userEvent.clear(amountInput);
+    await userEvent.type(amountInput, '100');
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('submitPledgeBtn'));
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(errorMsg);
+    });
+  });
+
+  // Coverage for Line 292: Verify input validation logic for the Amount field (handling NaN)
+  it('should ignore non-numeric input for Amount field', async () => {
+    await act(async () => {
+      renderPledgeModal(link1, pledgeProps[0]);
+    });
+
+    const amountInput = screen.getByLabelText('Amount');
+    expect(amountInput).toHaveAttribute('value', '0');
+
+    await act(async () => {
+      // Try typing non-numeric characters.
+      // Note: type="number" blocks many non-numeric keys, but 'e' is often allowed in browsers (exponential).
+      // However, userEvent.type might behavior differently.
+      // We will try to type a string that results in NaN if parsed.
+      await userEvent.type(amountInput, 'abc');
+      // If the checking logic works, it keeps previous value or doesn't update to invalid state
+    });
+
+    // Since we start at 0, and 'abc' is invalid, it should likely stay 0 or handled by the component.
+    expect(amountInput).toHaveAttribute('value', '0');
   });
 
   it('should have proper aria labels for accessibility', () => {

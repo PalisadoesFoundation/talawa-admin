@@ -900,7 +900,7 @@
     "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
-    "createFailed": "Failed to create pledge",
+    "createFailed": "प्रतिज्ञा बनाने में विफल",
     "title": "निधि अभियान प्रतिज्ञाएँ",
     "pledgeAmount": "प्रतिज्ञा राशि",
     "pledgeOptions": "विकल्प",

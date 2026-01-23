@@ -123,7 +123,6 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             name="volunteer"
             label={t('volunteer')}
             value={user.name}
-            onChange={() => {}}
             disabled
             data-testid="volunteerName"
             startAdornment={
@@ -157,7 +156,6 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             name="status"
             label={t('status')}
             value={statusConfig.label}
-            onChange={() => {}}
             disabled
             data-testid="volunteerStatus"
             startAdornment={statusConfig.icon}
@@ -167,7 +165,6 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             name="hoursVolunteered"
             label={t('hoursVolunteered')}
             value={hoursVolunteered?.toString() ?? '-'}
-            onChange={() => {}}
             disabled
             data-testid="hoursVolunteered"
           />

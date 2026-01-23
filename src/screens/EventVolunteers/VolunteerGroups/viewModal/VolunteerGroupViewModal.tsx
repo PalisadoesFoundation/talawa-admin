@@ -84,7 +84,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               name="name"
               label={tCommon('name')}
               value={name}
-              onChange={() => {}}
               disabled
               data-testid="groupName"
             />
@@ -95,7 +94,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 name="volunteersRequired"
                 label={tCommon('volunteersRequired')}
                 value={volunteersRequired.toString()}
-                onChange={() => {}}
                 disabled
                 data-testid="volunteersRequired"
               />
@@ -109,7 +107,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               name="description"
               label={tCommon('description')}
               value={description}
-              onChange={() => {}}
               disabled
               as="textarea"
               rows={2}
@@ -123,7 +120,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               name="leader"
               label={t('leader')}
               value={leader.name}
-              onChange={() => {}}
               disabled
               data-testid="leaderField"
               startAdornment={
@@ -157,7 +153,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               name="creator"
               label={t('creator')}
               value={creator.name}
-              onChange={() => {}}
               disabled
               data-testid="creatorField"
               startAdornment={

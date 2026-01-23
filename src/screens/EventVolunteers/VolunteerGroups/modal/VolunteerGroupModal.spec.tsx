@@ -16,10 +16,8 @@ import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
-import GroupModal, {
-  areOptionsEqual,
-  getMemberName,
-} from './VolunteerGroupModal';
+import GroupModal from './VolunteerGroupModal';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -727,12 +725,12 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
     expect(areOptionsEqual(a, b)).toBe(false);
   });
 
-  it('getMemberName returns the member name', () => {
+  it('getMemberLabel returns the member name', () => {
     const member = {
       id: '1',
       name: 'John Doe',
     } as InterfaceUserInfoPG;
 
-    expect(getMemberName(member)).toBe('John Doe');
+    expect(getMemberLabel(member)).toBe('John Doe');
   });
 });

@@ -35,9 +35,13 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       type={type}
       placeholder={placeholder}
       value={value}
-      onChange={(e) => {
-        onChange(e.target.value);
-      }}
+      onChange={
+        onChange
+          ? (e) => {
+              onChange(e.target.value);
+            }
+          : undefined
+      }
       isInvalid={isInvalid}
       disabled={disabled}
       data-testid={dataTestId}

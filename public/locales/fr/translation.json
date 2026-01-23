@@ -883,7 +883,7 @@
     "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début"
   },
   "pledges": {
-    "createFailed": "Failed to create pledge",
+    "createFailed": "Échec de la création de l'engagement",
     "title": "Engagements de campagne de financement",
     "pledgeAmount": "Montant de la promesse de don",
     "pledgeOptions": "Possibilités",

@@ -883,7 +883,7 @@
     "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
-    "createFailed": "Failed to create pledge",
+    "createFailed": "创建认捐失败",
     "title": "基金活动承诺",
     "pledgeAmount": "质押金额",
     "pledgeOptions": "选项",

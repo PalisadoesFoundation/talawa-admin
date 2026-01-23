@@ -16,7 +16,7 @@ export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'url' | 'tel';
   placeholder?: string;
   value: string;
-  onChange: (v: string) => void;
+  onChange?: (v: string) => void;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
   disabled?: boolean;

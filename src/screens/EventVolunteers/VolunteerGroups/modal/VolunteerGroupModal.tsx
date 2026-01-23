@@ -2,7 +2,6 @@ import type { ChangeEvent } from 'react';
 import Button from 'shared-components/Button';
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
 import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
@@ -12,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import {
   FormTextField,
   FormFieldGroup,
@@ -38,20 +38,6 @@ export interface InterfaceVolunteerGroupModal {
   baseEvent?: { id: string } | null;
   recurringEventInstanceId?: string;
 }
-
-/**
- * Compares two user options by their IDs.
- */
-export const areOptionsEqual = (
-  option: InterfaceUserInfoPG,
-  value: InterfaceUserInfoPG,
-): boolean => option.id === value.id;
-
-/**
- * Gets the display name for a member.
- */
-export const getMemberName = (member: InterfaceUserInfoPG): string =>
-  member.name;
 
 /**
  * A modal dialog for creating or editing a volunteer group.
@@ -279,7 +265,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             disabled={mode === 'edit'}
             isOptionEqualToValue={areOptionsEqual}
             filterSelectedOptions={true}
-            getOptionLabel={getMemberName}
+            getOptionLabel={getMemberLabel}
             onChange={(_, newLeader): void => {
               if (newLeader) {
                 setFormState({
@@ -322,7 +308,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             value={volunteerUsers}
             isOptionEqualToValue={areOptionsEqual}
             filterSelectedOptions={true}
-            getOptionLabel={getMemberName}
+            getOptionLabel={getMemberLabel}
             disabled={mode === 'edit'}
             onChange={(_, newUsers): void => {
               setFormState({

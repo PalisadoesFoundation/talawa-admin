@@ -883,7 +883,7 @@
     "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
-    "createFailed": "Failed to create pledge",
+    "createFailed": "Error al crear el compromiso",
     "title": "Compromisos de Campaña de Financiamiento",
     "startDate": "Fecha de Inicio",
     "endDate": "Fecha de Finalización",
