@@ -1,0 +1,7 @@
+.notificationContainer {
+  /*
+   * Ensure Toast notifications appear above Bootstrap modals (z-index 1055).
+   * Using !important to force override any inline styles or library defaults.
+   */
+  z-index: 9999999 !important;
+}
