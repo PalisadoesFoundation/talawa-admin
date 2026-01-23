@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
@@ -60,20 +61,22 @@ describe('RemoveUserTagModal Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls toggleRemoveUserTagModal when No button is clicked', () => {
+  it('calls toggleRemoveUserTagModal when No button is clicked', async () => {
+    const user = userEvent.setup();
     render(<RemoveUserTagModal {...defaultProps} />);
 
     const cancelButton = screen.getByTestId('modal-cancel-btn');
-    fireEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     expect(defaultProps.toggleRemoveUserTagModal).toHaveBeenCalledTimes(1);
   });
 
   it('calls handleRemoveUserTag when Yes button is clicked', async () => {
+    const user = userEvent.setup();
     render(<RemoveUserTagModal {...defaultProps} />);
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(defaultProps.handleRemoveUserTag).toHaveBeenCalledTimes(1);
@@ -81,6 +84,7 @@ describe('RemoveUserTagModal Component', () => {
   });
 
   it('disables the submit button while submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
     const pendingPromise = new Promise<void>((resolve) => {
       resolvePromise = resolve;
@@ -95,7 +99,7 @@ describe('RemoveUserTagModal Component', () => {
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(confirmButton).toBeDisabled();
 
@@ -109,6 +113,7 @@ describe('RemoveUserTagModal Component', () => {
   });
 
   it('prevents multiple submissions while already submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
     const pendingPromise = new Promise<void>((resolve) => {
       resolvePromise = resolve;
@@ -125,8 +130,8 @@ describe('RemoveUserTagModal Component', () => {
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(handleRemoveUserTag).toHaveBeenCalledTimes(1);
 
@@ -148,6 +153,7 @@ describe('RemoveUserTagModal Component', () => {
   });
 
   it('handles error when handleRemoveUserTag rejects', async () => {
+    const user = userEvent.setup();
     const error = new Error('Remove failed');
 
     const failingHandler = vi.fn().mockRejectedValue(error);
@@ -164,7 +170,7 @@ describe('RemoveUserTagModal Component', () => {
     );
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(failingHandler).toHaveBeenCalledTimes(1);

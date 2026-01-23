@@ -556,6 +556,10 @@
     "recurring": "Recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
+    "visibility": "Visibilidad",
+    "public": "Público",
+    "organizationMembers": "Miembros de la organización",
+    "inviteOnly": "Solo por invitación",
     "registerable": "Es registrable",
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
@@ -773,14 +777,16 @@
     "allDay": "Todo el dia",
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
+    "visibility": "Visibilidad",
+    "public": "Público",
+    "organizationMembers": "Miembros de la organización",
+    "inviteOnly": "Solo por invitación",
     "isRegistrable": "Es registrable",
     "close": "Cerca",
     "updatePost": "Actualizar publicación",
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
-    "registeredSuccessfully": "Successfully registered for {{eventName}}",
-    "noChangesToUpdate": "No changes to update",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
@@ -794,7 +800,9 @@
     "after": "Después de",
     "occurrences": "ocurrencias",
     "done": "Hecho",
-    "invalidDate": "Invalid Date",
+    "registeredSuccessfully": "Registrado con éxito para {{eventName}}",
+    "noChangesToUpdate": "No hay cambios para actualizar",
+    "invalidDate": "Fecha no válida",
     "createChat": "Crear chat",
     "isRegisterable": "Es Registrable",
     "creator": "Creador",
@@ -2336,11 +2344,20 @@
     "noEventsAttended": "No hay eventos asistidos"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Puntuación Media de Reseñas",
+      "rated": "Valoración {{score}} / 5"
+    },
     "title": "Estadísticas del evento",
     "reviews": {
       "title": "Reseñas",
       "emptyState": "Esperando a que la gente hable sobre el evento...",
       "filledByCount": "Completado por {{count}} personas."
+    },
+    "feedback": {
+      "title": "Análisis de comentarios",
+      "emptyState": "¡Pida a los asistentes que envíen comentarios para obtener información!",
+      "filledByCount": "{{count}} personas han completado comentarios para este evento."
     }
   },
   "verifyEmail": {

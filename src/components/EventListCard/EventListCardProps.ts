@@ -19,6 +19,7 @@ export const props: IEventListCardProps[] = [
     allDay: false,
     isPublic: false,
     isRegisterable: false,
+    isInviteOnly: false,
     refetchEvents: (): void => {
       /* refetch function */
     },
@@ -45,6 +46,7 @@ export const props: IEventListCardProps[] = [
     allDay: false,
     isPublic: true,
     isRegisterable: false,
+    isInviteOnly: false,
     refetchEvents: (): void => {
       /* refetch function */
     },
@@ -71,7 +73,8 @@ export const props: IEventListCardProps[] = [
     endTime: '06:00',
     allDay: true,
     isPublic: true,
-    isRegisterable: false,
+    isRegisterable: true,
+    isInviteOnly: false,
     creator: {
       id: '123',
       name: 'Joe David',
@@ -108,7 +111,8 @@ export const props: IEventListCardProps[] = [
     endTime: '06:00',
     allDay: true,
     isPublic: true,
-    isRegisterable: false,
+    isRegisterable: true,
+    isInviteOnly: false,
     creator: {
       id: '123',
       name: 'Joe David',
@@ -146,6 +150,7 @@ export const props: IEventListCardProps[] = [
     allDay: false,
     isPublic: true,
     isRegisterable: false,
+    isInviteOnly: false,
     refetchEvents: (): void => {
       /* refetch function */
     },
@@ -173,6 +178,7 @@ export const props: IEventListCardProps[] = [
     allDay: true,
     isPublic: true,
     isRegisterable: false,
+    isInviteOnly: false,
     refetchEvents: (): void => {
       /* refetch function */
     },
@@ -200,6 +206,7 @@ export const props: IEventListCardProps[] = [
     allDay: true,
     isPublic: true,
     isRegisterable: false,
+    isInviteOnly: false,
     refetchEvents: (): void => {
       /* refetch function */
     },

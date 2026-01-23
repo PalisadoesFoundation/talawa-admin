@@ -551,6 +551,10 @@
     "recurring": "重复",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "registerable": "可注册",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
@@ -766,6 +770,10 @@
     "allDay": "一整天",
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "isRegistrable": "可注册",
     "updatePost": "更新帖子",
     "eventDetails": "活动详情",
@@ -2336,11 +2344,20 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "平均评论分数",
+      "rated": "评分 {{score}} / 5"
+    },
     "title": "活動統計",
     "reviews": {
       "title": "評論",
       "emptyState": "等待人們談論活動...",
       "filledByCount": "已由 {{count}} 人填寫。"
+    },
+    "feedback": {
+      "title": "反饋分析",
+      "emptyState": "請要求與會者提交反饋以獲取見解！",
+      "filledByCount": "{{count}} 人已為此活動填寫反饋。"
     }
   },
   "verifyEmail": {

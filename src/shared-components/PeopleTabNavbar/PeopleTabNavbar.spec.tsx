@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import PeopleTabNavbar from './PeopleTabNavbar';
 
@@ -56,7 +57,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     title,
     sortingOptions,
@@ -90,7 +91,8 @@ describe('PeopleTabNavbar', () => {
     expect(screen.getByText('Users')).toBeInTheDocument();
   });
 
-  it('renders search bar and triggers onSearch', () => {
+  it('renders search bar and triggers onSearch', async () => {
+    const user = userEvent.setup();
     const onSearch = vi.fn<(value: string) => void>();
 
     render(
@@ -104,17 +106,15 @@ describe('PeopleTabNavbar', () => {
       />,
     );
 
-    fireEvent.change(screen.getByTestId('search-input'), {
-      target: { value: 'John' },
-    });
+    await user.type(screen.getByTestId('search-input'), 'John');
+    expect(onSearch).toHaveBeenLastCalledWith('John');
 
-    expect(onSearch).toHaveBeenCalledWith('John');
-
-    fireEvent.click(screen.getByTestId('search-button'));
+    await user.click(screen.getByTestId('search-button'));
     expect(onSearch).toHaveBeenCalledWith('clicked');
   });
 
-  it('renders sorting dropdown and handles sort change', () => {
+  it('renders sorting dropdown and handles sort change', async () => {
+    const user = userEvent.setup();
     const onSortChange = vi.fn<(value: string | number) => void>();
 
     render(
@@ -137,7 +137,7 @@ describe('PeopleTabNavbar', () => {
     expect(screen.getByText('Sort By')).toBeInTheDocument();
     expect(screen.getByText('Selected: DESC')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Oldest'));
+    await user.click(screen.getByText('Oldest'));
     expect(onSortChange).toHaveBeenCalledWith('ASC');
   });
 
@@ -161,16 +161,16 @@ describe('PeopleTabNavbar', () => {
     expect(screen.queryByTestId('eventType-sorting')).not.toBeInTheDocument();
   });
 
-  it('handles event type sort change safely when onSortChange is a no-op', () => {
+  it('handles event type sort change safely when onSortChange is a no-op', async () => {
+    const user = userEvent.setup();
+
     render(<PeopleTabNavbar showEventTypeFilter />);
 
-    // event type sorting button should exist
     const eventTypeSorting = screen.getByTestId('eventType-sorting');
     expect(eventTypeSorting).toBeInTheDocument();
 
-    // Clicking should NOT throw even though onSortChange is an empty function
-    expect(() => {
-      fireEvent.click(screen.getByText('Workshops'));
-    }).not.toThrow();
+    await expect(
+      user.click(screen.getByText('Workshops')),
+    ).resolves.not.toThrow();
   });
 });

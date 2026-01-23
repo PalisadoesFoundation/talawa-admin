@@ -1,0 +1,77 @@
+/* SidebarPluginSection.module.css */
+
+.titleHeader {
+  line-height: normal;
+  font-weight: bolder;
+  padding: 10px;
+}
+
+.simpleHeader {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.regularHeader {
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: var(--bs-secondary);
+}
+
+.pluginIcon {
+  width: 25px;
+  height: 25px;
+}
+
+.leftDrawerActiveButton,
+.leftDrawerInactiveButton {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.leftDrawerActiveButton:active,
+.leftDrawerInactiveButton:active {
+  transform: scale(0.98);
+}
+
+.leftDrawerActiveButton {
+  background-color: var(--leftDrawer-active-button-bg);
+  color: var(--leftDrawer-button-text-color, black);
+  font-weight: bold;
+}
+
+.leftDrawerInactiveButton {
+  background-color: var(--leftDrawer-inactive-button-bg);
+  color: var(--leftDrawer-button-text-color, black);
+}
+
+.leftDrawerInactiveButton:hover {
+  background-color: var(--leftDrawer-inactive-button-hover-bg);
+}
+
+.sidebarBtn {
+  background-color: transparent;
+  color: var(--sidebar-option-text-inactive);
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.sidebarBtn:hover {
+  background-color: var(--sidebar-option-bg-hover);
+  color: var(--sidebar-option-text-active);
+}
+
+.sidebarBtnActive {
+  background-color: var(--sidebar-option-bg);
+  color: var(--sidebar-option-text-active);
+  font-weight: bold;
+}
+
+.iconWrapper {
+  width: 36px;
+  min-width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
