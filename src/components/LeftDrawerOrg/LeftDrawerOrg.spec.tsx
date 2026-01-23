@@ -11,7 +11,7 @@ import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 
 const user = userEvent.setup();
 // Mock CSS modules
@@ -72,11 +72,9 @@ vi.mock(
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
-    query: typeof GET_ORGANIZATION_DATA_PG;
+    query: typeof GET_ORGANIZATION_BASIC_DATA;
     variables: {
       id: string;
-      first: number;
-      after: string | null;
     };
   };
   result?: {
@@ -264,8 +262,8 @@ const mockOrganizationDataWithoutCity = {
 const successMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 1, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     result: {
       data: mockOrganizationData,
@@ -276,8 +274,8 @@ const successMocks: IMockedResponse[] = [
 const loadingMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 1, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     delay: 30000, // Never resolve to simulate loading
   },
@@ -286,8 +284,8 @@ const loadingMocks: IMockedResponse[] = [
 const errorMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 1, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     error: new Error('Failed to fetch organization'),
   },
@@ -428,8 +426,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutAvatar: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 1, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutAvatar,
@@ -453,8 +451,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutCity: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 1, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutCity,
@@ -932,8 +930,6 @@ describe('LeftDrawerOrg', () => {
       // The query should be called with correct variables
       expect(successMocks[0].request.variables).toEqual({
         id: 'org-123',
-        first: 1,
-        after: null,
       });
     });
 
@@ -941,8 +937,8 @@ describe('LeftDrawerOrg', () => {
       const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'different-org', first: 1, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'different-org' },
           },
           result: {
             data: {
