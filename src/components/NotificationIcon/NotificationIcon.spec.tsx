@@ -183,7 +183,9 @@ describe('NotificationIcon Component', () => {
       expect(screen.getByText(/This is notification 1/)).toBeInTheDocument();
     });
     await userEvent.click(screen.getByText(/This is notification 1/));
-    expect(mockNavigate).toHaveBeenCalledWith('/notification/1');
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/notification/1');
+    });
   });
 
   it('should navigate to all notifications page', async () => {
@@ -205,7 +207,9 @@ describe('NotificationIcon Component', () => {
     await userEvent.click(
       screen.getByText('notification.viewAllNotifications'),
     );
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    });
   });
 
   it('should navigate to user notification page from user portal', async () => {
@@ -256,11 +260,22 @@ describe('NotificationIcon Component', () => {
   });
 
   it('should show unread dot for unread notifications', async () => {
-    const notifications = [
-      generateNotifications(1, false)[0],
-      generateNotifications(1, true)[0],
+    const notifications: InterfaceNotification[] = [
+      {
+        id: '1',
+        title: 'Notification 1',
+        body: 'Unread notification',
+        isRead: false,
+        navigation: '/notification/1',
+      },
+      {
+        id: '2',
+        title: 'Notification 2',
+        body: 'Read notification',
+        isRead: true,
+        navigation: '/notification/2',
+      },
     ];
-    notifications[1].id = '2';
     render(
       <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
