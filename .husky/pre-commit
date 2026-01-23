@@ -19,37 +19,50 @@
 # - Exits early if no files are staged to improve performance
 # - Delegates logic to smaller scripts for maintainability
 # - Cross-platform compatible (Linux, macOS, Windows Git Bash)
+# - Conditional pipefail support for Bash 3.0+ (graceful fallback for Bash 2.x)
 #
 # =============================================================================
 
 set -eu
 
-if [ -z "$BASH_VERSION" ]; then
-  exec bash "$0" "$@"
+# Enable pipefail for Bash 3.0+ to catch errors in pipelines
+# Falls back gracefully for legacy Bash 2.x environments
+if [ -n "${BASH_VERSION:-}" ] && [ "${BASH_VERSINFO[0]}" -ge 3 ]; then
+  set -o pipefail
 fi
 
+# Source staged file utilities
 . .husky/scripts/staged-files.sh
 
+# Verify all required development tools are available
 .husky/scripts/check-tools.sh
 
+# Create temporary files for staged file lists
 STAGED_SRC_FILE=$(mktemp)
 STAGED_ALL_FILE=$(mktemp)
 
+# Ensure cleanup on exit (success or failure)
 trap 'rm -f "$STAGED_SRC_FILE" "$STAGED_ALL_FILE"; cleanup_staged_cache 2>/dev/null || true' EXIT
 
+# Get staged source files matching Node.js/TypeScript patterns
 get_staged_files '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' > "$STAGED_SRC_FILE"
 
+# Get all staged files for final re-staging
 get_staged_files > "$STAGED_ALL_FILE"
 
+# Exit early if no files are staged
 [ ! -s "$STAGED_ALL_FILE" ] && {
   echo "No staged files to check..."
   exit 0
 }
 
+# Run Node.js checks if source files are staged
 if [ -s "$STAGED_SRC_FILE" ]; then
   .husky/scripts/precommit-node.sh "$STAGED_SRC_FILE"
 fi
 
+# Run Python checks (operates on same source file list)
 .husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
+# Re-stage all files that may have been modified by formatters
 xargs -0 git add -- < "$STAGED_ALL_FILE"
