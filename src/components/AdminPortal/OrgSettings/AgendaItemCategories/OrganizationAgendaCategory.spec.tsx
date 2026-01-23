@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -50,7 +44,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
+const user = userEvent.setup();
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
@@ -318,7 +312,7 @@ describe('Testing Agenda Categories Component', () => {
 
     await userEvent.type(searchInput, 'Category');
     await act(async () => {
-      fireEvent.keyUp(searchInput, { key: 'Enter' });
+      await user.keyboard('{enter}');
     });
     screen.debug();
     await waitFor(() => {
