@@ -73,7 +73,7 @@
 
 .updateTimeoutButtonContainer {
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
   margin-top: 20px;
 }
 

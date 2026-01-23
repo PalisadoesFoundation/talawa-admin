@@ -152,7 +152,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         <Card.Body className={styles.updateTimeoutCardBody}>
           <form onSubmit={handleOnSubmit}>
             <div className={styles.updateTimeoutLabelsContainer}>
-              <label className={`form-label ${styles.updateTimeoutCurrent}`}>
+              <div className={`form-label ${styles.updateTimeoutCurrent}`}>
                 {t('communityProfile.sessionTimeout.currentTimeout')}
                 <span
                   className={styles.updateTimeoutValue}
@@ -164,9 +164,12 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                       })
                     : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
-              </label>
+              </div>
 
-              <label className={`form-label ${styles.updateTimeoutLabel}`}>
+              <label
+                htmlFor="session-timeout-slider"
+                className={`form-label ${styles.updateTimeoutLabel}`}
+              >
                 {t('communityProfile.sessionTimeout.updateTimeout')}
               </label>
             </div>
@@ -174,6 +177,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
             <Box>
               <Slider
                 data-testid="slider-thumb"
+                id="session-timeout-slider"
                 value={timeout}
                 valueLabelDisplay="auto"
                 onChange={handleOnChange}
