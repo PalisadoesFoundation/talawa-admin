@@ -95,12 +95,7 @@ const NotificationIcon = (): JSX.Element => {
                     navigate(notification.navigation);
                     return;
                   }
-                  const path = location.pathname || '';
-                  const isUserPortal =
-                    path === '/user' || path.startsWith('/user/');
-                  navigate(
-                    isUserPortal ? '/user/notification' : '/notification',
-                  );
+                  navigate(getNotificationPath());
                 }}
               >
                 {!notification.isRead && (

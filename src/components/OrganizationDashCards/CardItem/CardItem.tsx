@@ -98,8 +98,7 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
 
           {type == 'Post' && time && (
             <span className={`${styles.cardItemDate}`}>
-              {t('postedOn')}
-              {dayjs(time).format('MMM D, YYYY')}
+              {t('postedOn')} {dayjs(time).format('MMM D, YYYY')}
             </span>
           )}
 

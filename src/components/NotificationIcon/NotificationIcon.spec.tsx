@@ -91,6 +91,7 @@ describe('NotificationIcon Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -196,12 +197,15 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
+    await waitFor(() => {
+      expect(
+        screen.getByText('notification.viewAllNotifications'),
+      ).toBeInTheDocument();
+    });
     await userEvent.click(
       screen.getByText('notification.viewAllNotifications'),
     );
-    await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith('/notification');
-    });
+    expect(mockNavigate).toHaveBeenCalledWith('/notification');
   });
 
   it('should navigate to user notification page from user portal', async () => {
