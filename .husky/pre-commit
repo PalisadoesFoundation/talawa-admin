@@ -26,7 +26,6 @@ set -eu
 
 if [ -z "$BASH_VERSION" ]; then
   exec bash "$0" "$@"
-  set -o pipefail
 fi
 
 . .husky/scripts/staged-files.sh
