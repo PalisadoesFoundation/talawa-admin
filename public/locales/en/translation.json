@@ -1778,9 +1778,12 @@
     "loadingImage": "Loading image...",
     "imageNotAvailable": "Image not available",
     "attachment": "Attachment",
+    "members": "members",
     "reply": "Reply",
     "edit": "Edit",
     "delete": "Delete",
+    "noMessages": "No messages yet",
+    "you": "You",
     "errorBoundary": {
       "title": "Something went wrong",
       "message": "An unexpected error occurred in the chat room",

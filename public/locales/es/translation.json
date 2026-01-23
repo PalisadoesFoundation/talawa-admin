@@ -1777,9 +1777,12 @@
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
+    "members": "miembros",
     "reply": "Responder",
     "edit": "Editar",
     "delete": "Eliminar",
+    "noMessages": "Aún no hay mensajes",
+    "you": "Tú",
     "errorBoundary": {
       "title": "Algo salió mal",
       "message": "Ocurrió un error inesperado en la sala de chat",
