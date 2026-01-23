@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -93,7 +93,7 @@ describe('SecuredRoute', () => {
   });
 
   describe('User Activity Tracking', () => {
-    it('should update lastActive on mouse movement', () => {
+    it('should update lastActive on mouse movement', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
 
@@ -108,14 +108,14 @@ describe('SecuredRoute', () => {
       );
 
       // Simulate mouse movement - this should update the lastActive timestamp
-      fireEvent(document, new Event('mousemove'));
+      document.dispatchEvent(new Event('mousemove'));
 
       // We can't directly test the lastActive variable since it's module-scoped,
       // but we can verify the event listener is attached by checking if the event fires
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should prevent timeout when user activity occurs within timeout window', () => {
+    it('should prevent timeout when user activity occurs within timeout window', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
       setItem('token', 'test-token');
@@ -134,7 +134,7 @@ describe('SecuredRoute', () => {
       vi.advanceTimersByTime(14 * 60 * 1000);
 
       // Simulate user activity
-      fireEvent(document, new Event('mousemove'));
+      document.dispatchEvent(new Event('mousemove'));
 
       // Advance past original timeout point
       vi.advanceTimersByTime(2 * 60 * 1000);

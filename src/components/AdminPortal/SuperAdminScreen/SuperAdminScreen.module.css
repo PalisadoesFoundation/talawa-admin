@@ -1,0 +1,9 @@
+.collapsedDrawer {
+  width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
+}
+
+.expandedDrawer {
+  width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
+}

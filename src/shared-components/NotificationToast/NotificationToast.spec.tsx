@@ -8,6 +8,8 @@ const toastMock = vi.hoisted(() => ({
   error: vi.fn(() => 'error-id'),
   warning: vi.fn(() => 'warning-id'),
   info: vi.fn(() => 'info-id'),
+  dismiss: vi.fn(),
+  promise: vi.fn(),
 }));
 
 const toastContainerSpy = vi.hoisted(() =>
@@ -17,6 +19,7 @@ const toastContainerSpy = vi.hoisted(() =>
         data-testid="toast-container"
         data-limit={props.limit}
         data-position={props.position}
+        className={props.className as string}
       />
     );
   }),
@@ -63,11 +66,12 @@ import {
   NotificationToastContainer,
 } from './NotificationToast';
 
-describe('NotificationToast', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
+// Clear mocks after each test for isolation across all describe blocks
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
+describe('NotificationToast', () => {
   it('calls toast.success with defaults for a string message', () => {
     const id = NotificationToast.success('Saved');
 
@@ -144,6 +148,32 @@ describe('NotificationToast', () => {
       expect.any(Object),
     );
   });
+
+  it('calls toast.dismiss when dismiss is invoked', () => {
+    NotificationToast.dismiss();
+
+    expect(toastMock.dismiss).toHaveBeenCalled();
+  });
+
+  it('calls toast.promise with resolved messages', () => {
+    const promiseFn = vi.fn().mockResolvedValue(undefined);
+    NotificationToast.promise(promiseFn, {
+      pending: 'Pending...',
+      success: { key: 'successMsg', namespace: 'common' },
+      error: 'Error!',
+    });
+
+    expect(getFixedTMock).toHaveBeenCalledWith(null, 'common');
+    expect(toastMock.promise).toHaveBeenCalledWith(
+      promiseFn,
+      {
+        pending: 'Pending...',
+        success: 'common:successMsg',
+        error: 'Error!',
+      },
+      expect.any(Object),
+    );
+  });
 });
 
 describe('NotificationToastContainer', () => {
@@ -163,5 +193,15 @@ describe('NotificationToastContainer', () => {
     const container = screen.getByTestId('toast-container');
     expect(container).toHaveAttribute('data-limit', '5');
     expect(container).toHaveAttribute('data-position', 'top-right');
+    // Ensure CSS module class is applied for z-index containment
+    expect(container).toHaveClass(/notificationContainer/);
+  });
+
+  it('handles undefined props correctly when called directly', () => {
+    // Direct call to hit default parameter coverage
+    render(NotificationToastContainer(undefined));
+    const toastContainer = screen.getByTestId('toast-container');
+    expect(toastContainer).toBeInTheDocument();
+    expect(toastContainer).toHaveAttribute('data-limit', '5');
   });
 });

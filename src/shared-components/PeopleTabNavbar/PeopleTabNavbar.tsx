@@ -47,7 +47,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './PeopleTabNavbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
-import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
+import type { InterfacePeopleTabNavbarProps } from 'types/shared-components/PeopleTabNavbar/interface';
 
 export default function PeopleTabNavbar({
   title,

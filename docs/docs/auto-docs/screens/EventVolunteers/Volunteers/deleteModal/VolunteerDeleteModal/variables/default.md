@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceDeleteVolunteerModal`](../interfaces/InterfaceDeleteVolunteerModal.md)\>
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L48)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L51)
