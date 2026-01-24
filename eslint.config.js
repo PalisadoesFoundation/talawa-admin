@@ -13,7 +13,7 @@ import {
   restrictImportsExcept,
   securityRestrictions,
   searchInputRestrictions,
-} from './src/test-utils/eslint-rule-data.ts';
+} from './src/config/eslint-rule-data.ts';
 
 export default [
   {

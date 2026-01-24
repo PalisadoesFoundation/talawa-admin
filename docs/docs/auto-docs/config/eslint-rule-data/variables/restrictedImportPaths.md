@@ -6,7 +6,7 @@
 
 > `const` **restrictedImportPaths**: `object`[]
 
-Defined in: [src/test-utils/eslint-rule-data.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L225)
+Defined in: [src/config/eslint-rule-data.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/config/eslint-rule-data.ts#L225)
 
 ## Type Declaration
 

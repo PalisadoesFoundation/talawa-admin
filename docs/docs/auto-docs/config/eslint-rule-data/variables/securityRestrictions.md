@@ -6,7 +6,7 @@
 
 > `const` **securityRestrictions**: `object`[]
 
-Defined in: [src/test-utils/eslint-rule-data.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L158)
+Defined in: [src/config/eslint-rule-data.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/config/eslint-rule-data.ts#L158)
 
 Security-related syntax restrictions that apply everywhere
 

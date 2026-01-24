@@ -236,7 +236,7 @@ export const restrictImportsExcept = (
     'error',
     {
       paths: restrictedImports
-        .filter(({ id }) => id && !allowedIds.includes(id))
+        .filter(({ id }) => !id || !allowedIds.includes(id))
         .map(stripId),
     },
   ] as const,

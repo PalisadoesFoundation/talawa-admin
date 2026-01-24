@@ -6,7 +6,7 @@
 
 > `const` **searchInputRestrictions**: `object`[]
 
-Defined in: [src/test-utils/eslint-rule-data.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L181)
+Defined in: [src/config/eslint-rule-data.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/config/eslint-rule-data.ts#L181)
 
 Search input restrictions - disabled for search component implementations
 

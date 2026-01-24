@@ -9,7 +9,7 @@ import {
   restrictedImportPaths,
   restrictImportsExcept,
   stripId,
-} from './eslint-rule-data';
+} from '../config/eslint-rule-data';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -239,6 +239,116 @@ describe('ESLint Search Input Restrictions', () => {
           expect(restriction.message.length).toBeGreaterThan(10);
         });
       });
+
+      it('should contain both ID-based and non-ID restrictions', () => {
+        const idBasedRestrictions = restrictedImports.filter((imp) => imp.id);
+        const nonIdRestrictions = restrictedImports.filter((imp) => !imp.id);
+
+        expect(idBasedRestrictions.length).toBeGreaterThan(0);
+        expect(nonIdRestrictions.length).toBeGreaterThan(0);
+      });
+
+      it('should have proper structure for ID-based restrictions', () => {
+        const idBasedRestrictions = restrictedImports.filter((imp) => imp.id);
+
+        idBasedRestrictions.forEach((restriction) => {
+          expect(restriction.id).toBeDefined();
+          expect(typeof restriction.id).toBe('string');
+          expect(restriction.id && restriction.id.length).toBeGreaterThan(0);
+          expect(restriction.name).toBeDefined();
+          expect(typeof restriction.name).toBe('string');
+          expect(restriction.message).toBeDefined();
+        });
+      });
+
+      it('should have proper structure for non-ID restrictions', () => {
+        const nonIdRestrictions = restrictedImports.filter((imp) => !imp.id);
+
+        nonIdRestrictions.forEach((restriction) => {
+          expect(restriction.id).toBeUndefined();
+          expect(restriction.name).toBeDefined();
+          expect(typeof restriction.name).toBe('string');
+          expect(restriction.message).toBeDefined();
+          expect(typeof restriction.message).toBe('string');
+        });
+      });
+
+      it('should have consistent naming patterns for similar restrictions', () => {
+        const muiDataGrid = restrictedImports.find(
+          (imp) => imp.id === 'mui-data-grid',
+        );
+        const muiDataGridPro = restrictedImports.find(
+          (imp) => imp.id === 'mui-data-grid-pro',
+        );
+
+        expect(muiDataGrid?.name).toBe('@mui/x-data-grid');
+        expect(muiDataGridPro?.name).toBe('@mui/x-data-grid-pro');
+        expect(muiDataGrid?.message).toContain('DataGridWrapper');
+        expect(muiDataGridPro?.message).toContain('DataGridWrapper');
+      });
+
+      it('should handle restrictions with importNames correctly', () => {
+        const restrictionsWithImportNames = restrictedImports.filter(
+          (imp) => imp.importNames,
+        );
+
+        restrictionsWithImportNames.forEach((restriction) => {
+          expect(Array.isArray(restriction.importNames)).toBe(true);
+          expect(
+            restriction.importNames && restriction.importNames.length,
+          ).toBeGreaterThan(0);
+          restriction.importNames?.forEach((importName) => {
+            expect(typeof importName).toBe('string');
+            expect(importName.length).toBeGreaterThan(0);
+          });
+        });
+      });
+
+      it('should contain all expected restriction categories', () => {
+        const restrictionNames = restrictedImports.map((imp) => imp.name);
+
+        // Should contain Material-UI related restrictions
+        expect(restrictionNames.some((name) => name.includes('@mui'))).toBe(
+          true,
+        );
+
+        // Should contain React Bootstrap related restrictions
+        expect(
+          restrictionNames.some((name) => name.includes('react-bootstrap')),
+        ).toBe(true);
+
+        // Should contain testing related restrictions
+        expect(
+          restrictionNames.some((name) => name.includes('@testing-library')),
+        ).toBe(true);
+
+        // Should contain utility restrictions
+        expect(
+          restrictionNames.some((name) => name.includes('react-toastify')),
+        ).toBe(true);
+        expect(
+          restrictionNames.some((name) => name.includes('@dicebear')),
+        ).toBe(true);
+      });
+
+      it('should have no duplicate IDs in restrictions', () => {
+        const idBasedRestrictions = restrictedImports.filter((imp) => imp.id);
+        const ids = idBasedRestrictions.map((imp) => imp.id || '');
+        const uniqueIds = [...new Set(ids)];
+
+        expect(ids.length).toBe(uniqueIds.length);
+      });
+
+      it('should have meaningful error messages with actionable guidance', () => {
+        restrictedImports.forEach((restriction) => {
+          expect(restriction.message).toMatch(
+            /(Use|use|Please use|Direct imports|Do not import|Tests)/,
+          );
+          expect(restriction.message).toMatch(
+            /(component|instead|shared|userEvent|reliability)/,
+          );
+        });
+      });
     });
 
     describe('securityRestrictions data integrity', () => {
@@ -311,16 +421,126 @@ describe('ESLint Search Input Restrictions', () => {
         expect(paths).toBeDefined();
         expect(Array.isArray(paths)).toBe(true);
 
-        // Assert that none of the allowed IDs are in the filtered paths
-        expect(
-          paths.every(
-            (p: { name: string; message?: string; importNames?: string[] }) =>
-              !allowedIds.some((id) => p.name.includes(id)),
-          ),
-        ).toBe(true);
+        // Create mapping of ID to package name for exact matching
+        const idToPackage: Record<string, string> = {
+          'mui-data-grid': '@mui/x-data-grid',
+          'rb-spinner': 'react-bootstrap',
+        };
 
-        // Assert that the paths array length decreased compared to the full list
-        expect(paths.length).toBeLessThan(restrictedImportPaths.length);
+        // Assert that allowed IDs are filtered out (their package names should not be present)
+        allowedIds.forEach((id) => {
+          const expectedPackageName = idToPackage[id];
+          const isPresent = paths.some(
+            (p: { name: string; message?: string; importNames?: string[] }) =>
+              p.name === expectedPackageName &&
+              (!p.importNames || p.importNames.includes('Spinner')),
+          );
+          expect(isPresent).toBe(false);
+        });
+
+        // Assert that non-ID restrictions are preserved
+        const fireEventRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@testing-library/react' &&
+            p.importNames?.includes('fireEvent'),
+        );
+        expect(fireEventRestriction).toBeDefined();
+
+        // Assert that the paths array length is correct (total - filtered IDs)
+        const expectedFilteredCount = 2; // mui-data-grid and rb-spinner should be filtered
+        expect(paths.length).toBe(
+          restrictedImportPaths.length - expectedFilteredCount,
+        );
+      });
+
+      it('should preserve non-ID restrictions when filtering', () => {
+        const allowedIds = ['non-existent-id'];
+        const config = restrictImportsExcept(allowedIds);
+        const paths = config['no-restricted-imports'][1].paths;
+
+        // Should contain restrictions without IDs (like @testing-library/react fireEvent)
+        const fireEventRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@testing-library/react' &&
+            p.importNames?.includes('fireEvent'),
+        );
+        expect(fireEventRestriction).toBeDefined();
+
+        // Should contain direct path restrictions without IDs
+        const directChipPath = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@mui/material/Chip',
+        );
+        expect(directChipPath).toBeDefined();
+      });
+
+      it('should filter out only specified allowed IDs while preserving others', () => {
+        const allowedIds = ['mui-data-grid'];
+        const config = restrictImportsExcept(allowedIds);
+        const paths = config['no-restricted-imports'][1].paths;
+
+        // Should NOT contain allowed ID's package
+        const dataGridRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@mui/x-data-grid',
+        );
+        expect(dataGridRestriction).toBeUndefined();
+
+        // Should still contain other ID-based restrictions
+        const spinnerRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === 'react-bootstrap' && p.importNames?.includes('Spinner'),
+        );
+        expect(spinnerRestriction).toBeDefined();
+
+        // Should preserve non-ID restrictions
+        const fireEventRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@testing-library/react' &&
+            p.importNames?.includes('fireEvent'),
+        );
+        expect(fireEventRestriction).toBeDefined();
+
+        // Verify correct count: filtered out exactly 1 restriction
+        expect(paths.length).toBe(restrictedImportPaths.length - 1);
+      });
+
+      it('should return all restrictions when no allowed IDs are specified', () => {
+        const config = restrictImportsExcept([]);
+        const paths = config['no-restricted-imports'][1].paths;
+
+        // Should contain all restrictions including both ID and non-ID based
+        expect(paths.length).toBe(restrictedImportPaths.length);
+
+        // Should contain non-ID restrictions
+        const fireEventRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@testing-library/react' &&
+            p.importNames?.includes('fireEvent'),
+        );
+        expect(fireEventRestriction).toBeDefined();
+
+        // Should contain ID-based restrictions
+        const dataGridRestriction = paths.find(
+          (p: { name: string; message?: string; importNames?: string[] }) =>
+            p.name === '@mui/x-data-grid',
+        );
+        expect(dataGridRestriction).toBeDefined();
+      });
+
+      it('should return all restrictions when default empty array is used', () => {
+        const config = restrictImportsExcept();
+        const paths = config['no-restricted-imports'][1].paths;
+
+        expect(paths.length).toBe(restrictedImportPaths.length);
+      });
+
+      it('should handle edge case with empty restrictedImports', () => {
+        const config = restrictImportsExcept(['some-id']);
+        expect(config['no-restricted-imports']).toBeDefined();
+        expect(Array.isArray(config['no-restricted-imports'][1].paths)).toBe(
+          true,
+        );
       });
     });
   });
