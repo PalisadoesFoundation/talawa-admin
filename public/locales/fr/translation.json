@@ -619,7 +619,12 @@
     "done": "Fait",
     "createChat": "Créer une discussion",
     "viewType": "Type de Vue",
-    "search": "rechercher"
+    "search": "rechercher",
+    "Events": "Événements",
+    "Workshops": "Ateliers",
+    "selectMonth": "Sélectionner le mois",
+    "selectDay": "Sélectionner le jour",
+    "selectYear": "Sélectionner l’année"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
