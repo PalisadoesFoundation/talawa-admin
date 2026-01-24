@@ -5,6 +5,10 @@ export interface InterfaceDropDownProps {
   btnTextStyle?: string;
 }
 
+/**
+ * Props for DynamicDropDown change-handling variant.
+ * `@typeParam` T - Form state shape.
+ */
 export interface InterfaceChangeDropDownProps<
   T,
 > extends InterfaceDropDownProps {

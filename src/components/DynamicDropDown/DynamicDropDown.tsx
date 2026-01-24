@@ -90,7 +90,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
         aria-label={tCommon('selectField', { fieldName: fieldName })}
       >
         <Dropdown.Toggle
-          className={`${btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}
+          className={`${btnStyle ?? 'w-100'} ${styles.dropdownToggle}`}
           data-testid={`${fieldName.toLowerCase()}-dropdown-btn`}
         >
           {getLabel(formState[fieldName] as string)}
