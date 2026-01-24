@@ -619,7 +619,12 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "Events": "Events",
+    "Workshops": "Workshops",
+    "selectMonth": "Select month",
+    "selectDay": "Select day",
+    "selectYear": "Select year"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -2256,6 +2261,10 @@
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Not Found or Disabled",
+    "notFoundOrDisabledDescription": "The required plugin for this section is either not installed, not found, or has been disabled. Please contact your administrator for assistance."
   },
   "statusBadge": {
     "completed": "Completed",

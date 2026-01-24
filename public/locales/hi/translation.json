@@ -636,7 +636,12 @@
     "done": "पूर्ण",
     "createChat": "चैट बनाएं",
     "viewType": "दृश्य प्रकार",
-    "search": "खोज"
+    "search": "खोज",
+    "Events": "कार्यक्रम",
+    "Workshops": "कार्यशालाएँ",
+    "selectMonth": "महीना चुनें",
+    "selectDay": "दिन चुनें",
+    "selectYear": "वर्ष चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -2270,6 +2275,10 @@
     "screenshotCounter": "{{current}} में से {{total}}",
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",
+    "notFoundOrDisabledDescription": "यह प्लगइन या तो मौजूद नहीं है या वर्तमान में अक्षम है। कृपया सुनिश्चित करें कि प्लगइन सही ढंग से स्थापित और सक्रिय है।"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

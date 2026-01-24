@@ -619,7 +619,12 @@
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
-    "search": "Buscar usuarios"
+    "search": "Buscar",
+    "Events": "Eventos",
+    "Workshops": "Talleres",
+    "selectMonth": "Seleccionar mes",
+    "selectDay": "Seleccionar día",
+    "selectYear": "Seleccionar año"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -2253,6 +2258,10 @@
     "screenshotCounter": "{{current}} de {{total}}",
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",
+    "notFoundOrDisabledDescription": "El plugin solicitado no se encontró o está deshabilitado. Por favor, contacte al administrador del sistema para obtener asistencia."
   },
   "statusBadge": {
     "completed": "Completado",

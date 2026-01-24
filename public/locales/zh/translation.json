@@ -619,7 +619,12 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "search": "搜索",
+    "Events": "活动",
+    "Workshops": "研讨会",
+    "selectMonth": "选择月份",
+    "selectDay": "选择日期",
+    "selectYear": "选择年份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -2270,6 +2275,10 @@
     "screenshotCounter": "{{current}} / {{total}}",
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "插件未找到或已禁用",
+    "notFoundOrDisabledDescription": "抱歉，您尝试访问的插件未找到或已被组织管理员禁用。如有疑问，请联系组织管理员。"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",
