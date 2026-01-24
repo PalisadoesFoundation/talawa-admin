@@ -31,7 +31,7 @@ import { TablePagination, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Pagination from '../Navigator/Pagination';
-import './PaginationList.css';
+import styles from './PaginationList.module.css';
 
 interface InterfacePropsInterface {
   count: number;
@@ -68,6 +68,7 @@ const PaginationList = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          className={styles.pagination}
           rowsPerPageOptions={[]}
           colSpan={5}
           count={count}
@@ -86,6 +87,7 @@ const PaginationList = ({
         />
       ) : (
         <TablePagination
+          className={styles.pagination}
           rowsPerPageOptions={[
             5,
             10,
