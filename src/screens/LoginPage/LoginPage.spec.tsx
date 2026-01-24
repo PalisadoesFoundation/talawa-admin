@@ -315,7 +315,7 @@ let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
   user = userEvent.setup();
-})
+});
 
 describe('Testing Login Page Screen', () => {
   it('Component Should be rendered properly', async () => {
