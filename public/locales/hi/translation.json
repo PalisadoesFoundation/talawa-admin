@@ -198,7 +198,16 @@
     "prev": "पिछला",
     "next": "अगला",
     "markAsRead": "पढ़ा हुआ चिह्नित करें",
-    "markAsReadAriaLabel": "सूचना '{{title}}' को पढ़ा हुआ चिह्नित करें"
+    "markAsReadAriaLabel": "सूचना '{{title}}' को पढ़ा हुआ चिह्नित करें",
+    "unreadCount_one": "{{count}} अपठित",
+    "unreadCount_other": "{{count}} अपठित",
+    "unreadCount": "{{count}} अपठित",
+    "loading": "लोड हो रहा है...",
+    "errorFetching": "सूचनाएं प्राप्त करते समय त्रुटि",
+    "unread": "अपठित",
+    "noNewNotifications": "कोई नई सूचना नहीं",
+    "viewAllNotifications": "सभी सूचनाएं देखें",
+    "openNotificationsMenu": "सूचना मेनू खोलें"
   },
   "orgList": {
     "title": "तालावा संगठन",
@@ -351,6 +360,14 @@
     "url": "यूआरएल दर्ज करें",
     "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया।",
     "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।"
+  },
+  "cardItem": {
+    "avatar": "{{title}} अवतार",
+    "eventLocation": "इवेंट स्थान",
+    "eventDate": "इवेंट तिथि",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "पर पोस्ट किया गया:",
+    "author": "लेखक:"
   },
   "dashboard": {
     "title": "डैशबोर्ड",

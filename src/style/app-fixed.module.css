@@ -878,8 +878,6 @@
 
   --input-bg: #f2f7ff;
 
-  --peopleTabUserTagTableBody: #ffffff;
-
   --peopleTabUserTagTableHeaderCell-color: #000000;
 
   --empty-state-bg: #ffffff;
@@ -2858,6 +2856,36 @@ form label,
   color: var(--groupsLabel-color);
 }
 
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+.avatarPlaceholderSize {
+  width: 40px;
+  height: 40px;
+}
 .calendar__header {
   display: flex;
   align-items: stretch;
@@ -4374,106 +4402,10 @@ form label,
   padding: 1rem 1.2rem;
 }
 
-.peopleTabComponent {
-  background: #fff;
-  padding-top: 1rem;
-  border-radius: 20px;
-  margin: 1rem;
-}
-
-.peopleTabComponentSection {
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 3rem;
-}
-
-.peopleTabUserTagContainer {
-  width: 100%;
-}
-
-.peopleTabUserTagComponentSection {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  border-radius: 10px;
-}
-
-.peopleTabUserTagColumnHeader {
-  background: #dddddd;
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTableCell {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  white-space: nowrap;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.peopleTabUserTagCreatedByButton {
-  color: #2563eb;
-  cursor: pointer;
-  transition: 0.2s ease;
-  text-decoration: underline #5f5fd9;
-}
-
-.peopleTabUserTagCreatedByButton:hover {
-  text-decoration: underline;
-  color: #1d4ed8;
-}
-
-.peopleTabUserTagTableHeader {
-  background-color: #f9fafb; /* bg-gray-50 */
-  border-top-width: 1px; /* border-y */
-  border-bottom-width: 1px;
-  border-color: #e5e7eb; /* border-gray-200 */
-  border-style: solid;
-}
-
-.peopleTabUserTagTableRow:hover {
-  background-color: #f9fafb;
-}
-
-.peopleTabUserTagTableHeaderCell {
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  font-size: 0.9rem;
-  color: var(--peopleTabUserTagTableHeaderCell-color);
-  text-transform: uppercase;
-  height: 4rem;
-}
-
-.peopleTabUserTagTableBody {
-  background: var(--peopleTabUserTagTableBody-bg);
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTable {
-  width: 100%;
-}
-
-.peopleTabNavbarButtonHeader {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-left: 4rem;
-  margin-top: 2rem;
-}
-
 .peopleTabIconWrapper:hover {
   color: #808080;
   border: 1px solid #dddddd;
   cursor: pointer;
-}
-
-.peopleTabUserEventsContainer {
-  width: 100%;
 }
 
 .peopleTabUserEventContainer {
@@ -4506,12 +4438,6 @@ form label,
   margin: 2rem 0.5rem;
   display: flex;
   flex-direction: column;
-}
-.peoplePageUserEventCardBody {
-  display: grid;
-  gap: 1rem;
-  justify-content: center;
-  grid-template-columns: repeat(2, minmax(650px, 1fr));
 }
 
 .peopleTabUserEventActionButton {
@@ -4679,16 +4605,6 @@ form label,
 
 .peopleTabUserOrganizationsEditButton:hover {
   background-color: #90c1ff;
-}
-
-.peopleTabUserOrganizationsContainer {
-  width: 100%;
-}
-
-.peopleTabUserOrganizationsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
 }
 
 .peopleTabUserEventsGrid {
@@ -8127,10 +8043,6 @@ form {
   margin-top: 20px !important;
 }
 
-/* -- RemoveUserTagModal.tsx -- */
-
-/* -- UnassignUserTagModal.tsx -- */
-
 /* -- MemberDetail.tsx -- */
 
 .allRound {
@@ -9779,48 +9691,6 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
-}
-
-.userContactDetailPersonalCardHeader {
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  background: #eaebef;
-}
-
-.userContactDetailContactCardHeader {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailProfileImage {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailEditAvatarIcon {
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.userContactDetailSaveChangesBtn {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailContactAvatarUrl {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailContactAvatarEditIcon {
-  cursor: pointer;
-  font-size: '1.2rem';
 }
 
 .custom_row_center {
