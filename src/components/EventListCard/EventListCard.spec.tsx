@@ -21,7 +21,7 @@ import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -30,7 +30,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     dismiss: vi.fn(),
   },
 }));
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 let setItem: ReturnType<typeof useLocalStorage>['setItem'];
 let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];

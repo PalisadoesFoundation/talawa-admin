@@ -37,7 +37,7 @@ const mockNotificationToast = vi.hoisted(() => ({
   dismiss: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 vi.mock('utils/convertToBase64');

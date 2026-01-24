@@ -46,7 +46,7 @@ import { useTranslation } from 'react-i18next';
 import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceMemberRequestCardProps } from 'types/Member/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 function MemberRequestCard({

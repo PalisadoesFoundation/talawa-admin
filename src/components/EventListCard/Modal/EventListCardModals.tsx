@@ -36,7 +36,7 @@ import {
   REGISTER_EVENT,
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useUpdateEventHandler } from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';
 

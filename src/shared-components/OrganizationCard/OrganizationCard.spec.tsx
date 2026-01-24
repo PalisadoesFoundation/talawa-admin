@@ -12,7 +12,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Mock utils/i18n to use the test i18n instance for NotificationToast
 vi.mock('utils/i18n', async () => {
@@ -69,7 +69,7 @@ vi.mock('shared-components/TruncatedText/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

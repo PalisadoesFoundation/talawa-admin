@@ -9,7 +9,7 @@ import { describe, test, expect, vi, beforeEach, Mock } from 'vitest';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -49,7 +49,7 @@ vi.mock('react-router', () => ({
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(),
 }));
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
