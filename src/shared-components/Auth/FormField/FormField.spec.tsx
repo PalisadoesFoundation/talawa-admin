@@ -107,6 +107,7 @@ describe('FormField', () => {
       const input = screen.getByTestId('change-input');
       await user.type(input, 'new value');
 
+      // userEvent.type fires onChange once per character typed (9 chars in 'new value')
       expect(onChange).toHaveBeenCalledTimes(9);
     });
 
