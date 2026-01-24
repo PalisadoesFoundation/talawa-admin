@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
+import type { InterfaceFormFieldProps } from '../../../types/shared-components/Auth/FormField/interface';
 
 /**
  * Reusable form field component with validation and accessibility support.

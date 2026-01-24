@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { FormField } from './FormField';
+import userEvent from '@testing-library/user-event';
 
 describe('FormField', () => {
   const defaultProps = {
@@ -10,8 +11,11 @@ describe('FormField', () => {
     onChange: vi.fn(),
   };
 
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -89,8 +93,9 @@ describe('FormField', () => {
       expect(input).toHaveValue('test value');
     });
 
-    test('calls onChange when input value changes', () => {
+    test('calls onChange when input value changes', async () => {
       const onChange = vi.fn();
+
       render(
         <FormField
           {...defaultProps}
@@ -100,19 +105,23 @@ describe('FormField', () => {
       );
 
       const input = screen.getByTestId('change-input');
-      fireEvent.change(input, { target: { value: 'new value' } });
+      await user.type(input, 'new value');
 
-      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalled();
     });
 
-    test('calls onBlur when input loses focus', () => {
+    test('calls onBlur when input loses focus', async () => {
       const onBlur = vi.fn();
+
       render(
         <FormField {...defaultProps} onBlur={onBlur} testId="blur-input" />,
       );
 
       const input = screen.getByTestId('blur-input');
-      fireEvent.blur(input);
+
+      // Focus then move focus away to trigger blur
+      await user.click(input);
+      await user.tab();
 
       expect(onBlur).toHaveBeenCalledTimes(1);
     });

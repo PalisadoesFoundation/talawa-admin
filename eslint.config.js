@@ -389,7 +389,9 @@ export default [
   {
     files: [
       'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/shared-components/Auth/FormField/**/*.{ts,tsx}',
       'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/types/shared-components/Auth/FormField/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['rb-form', 'rb-form-path']),
   },
