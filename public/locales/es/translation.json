@@ -2282,6 +2282,10 @@
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",
+    "notFoundOrDisabledDescription": "El plugin solicitado no se encontró o está deshabilitado. Por favor, contacte al administrador del sistema para obtener asistencia."
+  },
   "statusBadge": {
     "completed": "Completado",
     "pending": "Pendiente",

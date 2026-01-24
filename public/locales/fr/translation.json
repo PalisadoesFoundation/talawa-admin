@@ -2299,6 +2299,10 @@
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",
+    "notFoundOrDisabledDescription": "Le plugin auquel vous essayez d'accéder est introuvable ou désactivé. Veuillez contacter l'administrateur de votre organisation pour plus d'informations."
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",
     "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
