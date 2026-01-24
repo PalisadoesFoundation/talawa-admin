@@ -227,7 +227,7 @@ describe('GroupChatDetails', () => {
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
-    userEvent.click(closeButton);
+    await user.click(closeButton);
   });
 
   it('renders correctly', () => {
@@ -254,7 +254,7 @@ describe('GroupChatDetails', () => {
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
-    userEvent.click(closeButton);
+    await user.click(closeButton);
   });
 
   it('renders ProfileAvatarDisplay for group and members', () => {
@@ -283,7 +283,7 @@ describe('GroupChatDetails', () => {
     expect(images.length + fallbacks.length).toBeGreaterThan(0);
   });
 
-  it('cancelling editing chat title', async () => {
+  it('cancelling editing chat title', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
 
     render(
@@ -309,7 +309,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await user.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await waitFor(async () => {
@@ -317,7 +317,7 @@ describe('GroupChatDetails', () => {
     });
 
     act(() => {
-      userEvent.click(screen.getByTestId('cancelEditBtn'));
+      await user.click(screen.getByTestId('cancelEditBtn'));
     });
 
     await waitFor(
@@ -328,7 +328,7 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('edit chat title', async () => {
+  it('edit chat title', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
 
     render(
@@ -347,7 +347,7 @@ describe('GroupChatDetails', () => {
     await wait();
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await user.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await waitFor(async () => {
@@ -356,12 +356,12 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const chatNameInput = await screen.findByTestId('chatNameInput');
-      await userEvent.clear(chatNameInput);
-      await userEvent.type(chatNameInput, 'New Group name');
+      await await user.clear(chatNameInput);
+      await await user.type(chatNameInput, 'New Group name');
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('updateTitleBtn'));
+      await user.click(await screen.findByTestId('updateTitleBtn'));
     });
 
     await wait();
@@ -374,7 +374,7 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('add user to group chat using first name', async () => {
+  it('add user to group chat using first name', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -392,7 +392,7 @@ describe('GroupChatDetails', () => {
 
     await wait();
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await user.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -401,11 +401,11 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const searchUserInput = await screen.findByTestId('searchUser');
-      await userEvent.type(searchUserInput, 'Disha');
+      await await user.type(searchUserInput, 'Disha');
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('searchBtn'));
+      await user.click(await screen.findByTestId('searchBtn'));
     });
 
     await wait();
@@ -418,11 +418,11 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addUserBtn'));
+      await user.click(await screen.findByTestId('addUserBtn'));
     });
   });
 
-  it('add user to group chat using last name', async () => {
+  it('add user to group chat using last name', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -440,7 +440,7 @@ describe('GroupChatDetails', () => {
 
     await wait();
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await user.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -449,17 +449,17 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const searchUserInput = await screen.findByTestId('searchUser');
-      await userEvent.type(searchUserInput, 'Smith');
+      await user.type(searchUserInput, 'Smith');
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('searchBtn'));
+      await user.click(await screen.findByTestId('searchBtn'));
     });
 
     await wait();
   });
 
-  it('clears user search input', async () => {
+  it('clears user search input', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -477,7 +477,7 @@ describe('GroupChatDetails', () => {
 
     await wait();
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await user.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -486,7 +486,7 @@ describe('GroupChatDetails', () => {
 
     const searchInput = await screen.findByTestId('searchUser');
     await act(async () => {
-      await userEvent.type(searchInput, 'Smith');
+      await user.type(searchInput, 'Smith');
     });
 
     expect(searchInput).toHaveValue('Smith');
@@ -495,7 +495,7 @@ describe('GroupChatDetails', () => {
     // SearchBar renders a button with aria-label='Clear'
     const clearBtn = await screen.findByLabelText('Clear');
     await act(async () => {
-      userEvent.click(clearBtn);
+      await user.click(clearBtn);
     });
 
     await waitFor(() => {
@@ -503,7 +503,7 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('handling invalid image type', async () => {
+  it('handling invalid image type', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     render(
       <I18nextProvider i18n={i18n}>
@@ -527,7 +527,7 @@ describe('GroupChatDetails', () => {
       { timeout: 5000 },
     );
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
+      await user.click(await screen.findByTestId('editImageBtn'));
     });
 
     const fileInput = screen.getByTestId('fileInput');
@@ -539,7 +539,7 @@ describe('GroupChatDetails', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
   });
 
-  it('changes role and removes member via dropdown actions', async () => {
+  it('changes role and removes member via dropdown actions', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
@@ -581,12 +581,12 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = toggles.find(
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle) await act(async () => await user.click(dropdownToggle));
 
     const promoteText = await screen.findByText(
       /Promote to Admin|Demote to Regular/,
     );
-    await act(async () => userEvent.click(promoteText));
+    await act(async () => await user.click(promoteText));
 
     // wait for role change toast
     await waitFor(() =>
@@ -596,7 +596,7 @@ describe('GroupChatDetails', () => {
     const removeBtn = screen.queryByText(/Remove/);
     if (removeBtn) {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
-      await act(async () => userEvent.click(removeBtn));
+      await act(async () => await user.click(removeBtn));
       await waitFor(() =>
         expect(toastSuccess).toHaveBeenCalledWith(
           'Member removed successfully',
@@ -605,7 +605,7 @@ describe('GroupChatDetails', () => {
     }
   });
 
-  it('shows error toast when role update fails', async () => {
+  it('shows error toast when role update fails', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const toastError = vi.spyOn(NotificationToast, 'error');
@@ -651,11 +651,11 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle) await act(async () => await user.click(dropdownToggle));
 
     const promoteItem = await screen.findByText(/Promote|Demote/i);
 
-    await act(async () => userEvent.click(promoteItem));
+    await act(async () => await user.click(promoteItem));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to update role');
@@ -666,7 +666,7 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('shows error toast when removing member fails', async () => {
+  it('shows error toast when removing member fails', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -712,11 +712,11 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle) await act(async () => await user.click(dropdownToggle));
 
     const removeItem = await screen.findByText(/Remove/i);
 
-    await act(async () => userEvent.click(removeItem));
+    await act(async () => await user.click(removeItem));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to remove member');
@@ -727,7 +727,7 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('uploads image and updates chat avatar', async () => {
+  it('uploads image and updates chat avatar', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const chatRefetch = vi.fn();
 
@@ -763,7 +763,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
+      await user.click(await screen.findByTestId('editImageBtn'));
     });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
@@ -783,7 +783,7 @@ describe('GroupChatDetails', () => {
     await waitFor(() => expect(chatRefetch).toHaveBeenCalled());
   });
 
-  it('deletes chat when current user is administrator and confirms', async () => {
+  it('deletes chat when current user is administrator and confirms', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const adminChat = withSafeChat({
@@ -825,14 +825,14 @@ describe('GroupChatDetails', () => {
 
     const buttons = screen.getAllByRole('button');
     const trashButton = buttons.find((b) => b.querySelector('svg'));
-    if (trashButton) await act(async () => userEvent.click(trashButton));
+    if (trashButton) await act(async () => await user.click(trashButton));
 
     await waitFor(() =>
       expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'),
     );
   });
 
-  it('show error toast while deleting chat when current user is administrator and confirms', async () => {
+  it('show error toast while deleting chat when current user is administrator and confirms', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -877,7 +877,7 @@ describe('GroupChatDetails', () => {
 
     const buttons = screen.getAllByRole('button');
     const trashButton = buttons.find((b) => b.querySelector('svg'));
-    if (trashButton) await act(async () => userEvent.click(trashButton));
+    if (trashButton) await act(async () => await user.click(trashButton));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
@@ -886,7 +886,7 @@ describe('GroupChatDetails', () => {
     toastError.mockRestore();
     consoleError.mockRestore();
   });
-  it('shows error toast when title update fails', async () => {
+  it('shows error toast when title update fails', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -921,17 +921,17 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await user.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await act(async () => {
       const chatNameInput = await screen.findByTestId('chatNameInput');
-      await userEvent.clear(chatNameInput);
-      await userEvent.type(chatNameInput, 'New Name');
+      await await user.clear(chatNameInput);
+      await await user.type(chatNameInput, 'New Name');
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('updateTitleBtn'));
+      await user.click(await screen.findByTestId('updateTitleBtn'));
     });
 
     await waitFor(() => {
@@ -943,7 +943,7 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('shows error toast when image upload fails', async () => {
+  it('shows error toast when image upload fails', async () => { const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -968,7 +968,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
+      await user.click(await screen.findByTestId('editImageBtn'));
     });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
@@ -992,7 +992,7 @@ describe('GroupChatDetails', () => {
   });
 
   describe('LoadingState Behavior', () => {
-    it('should show LoadingState spinner while chat details are loading', async () => {
+    it('should show LoadingState spinner while chat details are loading', async () => { const user = userEvent.setup();
       useLocalStorage().setItem('userId', 'user1');
 
       const delayedMocks = mocks.map((mock) => ({
@@ -1016,7 +1016,7 @@ describe('GroupChatDetails', () => {
       // Click "Add Members" to open the modal that triggers ORGANIZATION_MEMBERS query
       const addMembersBtn = screen.getByTestId('addMembers');
       await act(async () => {
-        userEvent.click(addMembersBtn);
+        await user.click(addMembersBtn);
       });
 
       // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
@@ -1029,7 +1029,7 @@ describe('GroupChatDetails', () => {
       );
     });
 
-    it('should hide spinner and render chat details after LoadingState completes', async () => {
+    it('should hide spinner and render chat details after LoadingState completes', async () => { const user = userEvent.setup();
       useLocalStorage().setItem('userId', 'user1');
 
       render(
