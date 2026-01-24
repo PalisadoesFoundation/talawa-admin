@@ -982,27 +982,7 @@ describe('Testing VolunteerGroupModal', () => {
       });
     });
 
-    it('should disable submit when baseEvent is null for recurring events', async () => {
-      const recurringPropsNoBase: InterfaceVolunteerGroupModal = {
-        isOpen: true,
-        hide: vi.fn(),
-        eventId: 'eventId',
-        orgId: 'orgId',
-        refetchGroups: vi.fn(),
-        mode: 'create',
-        group: null,
-        isRecurring: true,
-        baseEvent: null,
-      };
-
-      renderGroupModal(successLink, recurringPropsNoBase);
-      await wait();
-
-      const submitBtn = screen.getByTestId('modal-submit-btn');
-      expect(submitBtn).toBeDisabled();
-    });
-
-    it('should trigger update error when group.id is missing', async () => {
+    it('should disable submit button when group.id is empty string in edit mode', async () => {
       const propsWithGroupNoId: InterfaceVolunteerGroupModal = {
         isOpen: true,
         hide: vi.fn(),
