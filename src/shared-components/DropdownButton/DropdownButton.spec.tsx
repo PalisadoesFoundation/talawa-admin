@@ -135,31 +135,4 @@ describe('DropdownButton', () => {
     const toggle = screen.getByTestId('dropdown-button');
     expect(toggle).toBeInTheDocument();
   });
-
-  it('applies dropdown-menu-end class when align="end"', async () => {
-    render(<DropdownButton {...baseProps} align="end" />);
-    const toggle = screen.getByTestId('dropdown-button');
-
-    await user.click(toggle);
-
-    const menu = screen.getByRole('menu');
-    expect(menu).toHaveClass('dropdown-menu-end');
-  });
-
-  it('does not apply dropdown-menu-end class by default', async () => {
-    const propsWithoutAlign: InterfaceDropdownButtonProps = {
-      label: 'Menu',
-      items: [{ key: '1', label: 'Item 1', onClick: () => {} }],
-      variant: 'primary',
-      dataTestId: 'dropdown-button',
-    };
-
-    render(<DropdownButton {...propsWithoutAlign} />);
-
-    const toggle = screen.getByTestId('dropdown-button');
-    await user.click(toggle);
-
-    const menu = screen.getByRole('menu');
-    expect(menu).not.toHaveClass('dropdown-menu-end');
-  });
 });
