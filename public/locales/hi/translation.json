@@ -2275,6 +2275,10 @@
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",
+    "notFoundOrDisabledDescription": "यह प्लगइन या तो मौजूद नहीं है या वर्तमान में अक्षम है। कृपया सुनिश्चित करें कि प्लगइन सही ढंग से स्थापित और सक्रिय है।"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",
     "commentUpdatedSuccessfully": "टिप्पणी सफलतापूर्वक अपडेट की गई",
