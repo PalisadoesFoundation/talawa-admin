@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { getPluginComponents, isPluginRegistered } from '../registry';
 import styles from './PluginRouteRenderer.module.css';
 
-import type { InterfacePluginRouteRendererProps } from '../../types/plugin/PluginRouteRenderer/interface';
+import type { InterfacePluginRouteRendererProps } from '../../types/shared-components/PluginRouteRenderer/interface';
 
 /**
  * Component to render plugin routes using the plugin registry.
