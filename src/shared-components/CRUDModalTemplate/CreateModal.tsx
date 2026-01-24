@@ -76,9 +76,14 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
-      formRef.current?.requestSubmit();
+    if (event.key === 'Enter') {
+      const target = event.target as HTMLElement;
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        formRef.current?.requestSubmit();
+      } else if (target.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+      }
     }
   };
 

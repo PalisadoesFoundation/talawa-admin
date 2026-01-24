@@ -6,7 +6,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { act, render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -34,6 +34,11 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 let successLink: StaticMockLink;
 let errorLink: StaticMockLink;
+
+async function wait(ms = 100): Promise<void> {
+  await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
+}
+
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -790,6 +795,7 @@ describe('Testing VolunteerGroupModal', () => {
     it('should handle isOptionEqualToValue for leader autocomplete', async () => {
       const user = userEvent.setup();
       renderGroupModal(successLink, modalProps[0]);
+      await wait();
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
       const leaderSelect = await screen.findByTestId('leaderSelect');

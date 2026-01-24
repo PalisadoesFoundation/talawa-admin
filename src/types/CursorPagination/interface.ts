@@ -5,8 +5,11 @@ import type { DefaultConnectionPageInfo } from '../AdminPortal/pagination';
  * Helper type to combine pagination variables with custom query variables
  */
 export type PaginationVariables<T extends Record<string, unknown>> = T & {
-  first: number;
-  after: string | null;
+  first?: number;
+  after?: string | null;
+  last?: number;
+  before?: string | null;
+  [key: string]: unknown;
 };
 
 /**
@@ -35,6 +38,7 @@ export interface InterfaceConnectionData<TNode> {
  * @typeParam TVariables - The GraphQL query variables type (defaults to `Record<string, unknown>`)
  */
 export interface InterfaceCursorPaginationManagerProps<
+  TData,
   TNode,
   TVariables extends Record<string, unknown> = Record<string, unknown>, //i18n-ignore-line
 > {
@@ -124,4 +128,66 @@ export interface InterfaceCursorPaginationManagerProps<
    * Can be a number (counter) or any value that changes
    */
   refetchTrigger?: number;
+
+  /**
+   * Direction of pagination.
+   * 'forward': Uses 'first' and 'after' (default)
+   * 'backward': Uses 'last' and 'before' (mapped via variableKeyMap if needed)
+   */
+  paginationType?: 'forward' | 'backward';
+
+  /**
+   * Map generic pagination variables (first, after, last, before) to custom query variable names.
+   * Useful when the query uses different variable names (e.g., 'lastMessages' instead of 'last').
+   */
+  variableKeyMap?: {
+    first?: string;
+    after?: string;
+    last?: string;
+    before?: string;
+  };
+
+  /**
+   * Callback to return the full query result data.
+   * Useful when the parent component needs access to metadata in the response
+   * (e.g., chat title, member count) outside of the connection data.
+   */
+  onQueryResult?: (data: TData) => void;
+
+  /**
+   * Callback to handle scroll events or restoration.
+   * If provided, the manager might delegate some scroll logic to the parent.
+   */
+  onContentScroll?: (e: React.UIEvent<HTMLElement>) => void;
+
+  /**
+   * Ref to access imperative actions
+   */
+  actionRef?: React.Ref<InterfaceCursorPaginationManagerRef<TNode>>;
+
+  /**
+   * Custom class name for the container
+   */
+  className?: string;
+
+  /**
+   * Enable infinite scroll behavior (auto-load when reaching threshold)
+   */
+  infiniteScroll?: boolean;
+
+  /**
+   * Distance from edge (top for backward, bottom for forward) to trigger load more.
+   * Default: 50px
+   */
+  scrollThreshold?: number;
+}
+
+export interface InterfaceCursorPaginationManagerRef<TNode> {
+  addItem: (item: TNode, position?: 'start' | 'end') => void;
+  removeItem: (predicate: (item: TNode) => boolean) => void;
+  updateItem: (
+    predicate: (item: TNode) => boolean,
+    updater: (item: TNode) => TNode,
+  ) => void;
+  getItems: () => TNode[];
 }
