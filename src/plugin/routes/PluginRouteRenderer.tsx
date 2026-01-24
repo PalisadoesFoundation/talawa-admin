@@ -24,13 +24,18 @@ const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
   fallback,
 }) => {
   const { t } = useTranslation();
-  const loadingFallback = fallback || <div>{t('plugins.loading')}</div>;
+  const loadingFallback = fallback ?? <div>{t('plugins.loading')}</div>;
 
   // Check if pluginId is provided
   if (!route.pluginId) {
     console.error(`Plugin ID is missing from route`);
     return (
-      <div className={styles.errorContainer}>
+      <div
+        className={styles.errorContainer}
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <h3 className={styles.errorTitle}>
           {t('plugins.errors.missingPluginId.title')}
         </h3>

@@ -446,10 +446,7 @@ describe('PluginRoutes', () => {
       const ErrorComponent = result.default;
       const { getByText } = render(<ErrorComponent />);
       expect(getByText('plugins.errors.pluginError.title')).toBeInTheDocument();
-      const pluginDetail = getByText((content, node) => {
-        return node?.textContent?.trim().startsWith('plugins.plugin') ?? false;
-      });
-      expect(pluginDetail).toHaveTextContent('plugins.plugin');
+      expect(getByText(/plugins\.plugin/)).toBeInTheDocument();
     });
   });
 
