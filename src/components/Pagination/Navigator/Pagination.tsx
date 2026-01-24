@@ -46,7 +46,7 @@ interface InterfaceTablePaginationActionsProps {
   ) => void;
 }
 
-function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
+function Pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   const theme = useTheme();
   const { t } = useTranslation('translation');
   const { count, page, rowsPerPage, onPageChange } = props;
@@ -146,4 +146,4 @@ function pagination(props: InterfaceTablePaginationActionsProps): JSX.Element {
   );
 }
 
-export default pagination;
+export default Pagination;
