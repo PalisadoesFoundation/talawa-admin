@@ -228,15 +228,13 @@ describe('Manage Tag Page', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('unassignTagModalCloseBtn'),
+        screen.findByTestId('modal-cancel-btn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('unassignTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modal-cancel-btn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('unassignTagModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modal-cancel-btn')).not.toBeInTheDocument(),
     );
   });
 
@@ -326,15 +324,13 @@ describe('Manage Tag Page', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('removeUserTagModalCloseBtn'),
+        screen.findByTestId('modal-cancel-btn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('removeUserTagModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modal-cancel-btn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('removeUserTagModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modal-cancel-btn')).not.toBeInTheDocument(),
     );
   });
 
@@ -790,7 +786,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -844,7 +840,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getByTestId('removeTag'));
 
-    await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -938,7 +934,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -988,7 +984,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getByTestId('removeTag'));
 
-    await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -1020,7 +1016,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -1037,7 +1033,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getAllByTestId('unassignTagBtn')[0]);
 
-    await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -1093,7 +1089,7 @@ describe('Manage Tag Page', () => {
     });
     await userEvent.click(screen.getByTestId('removeTag'));
 
-    await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.objectContaining({

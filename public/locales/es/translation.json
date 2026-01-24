@@ -938,7 +938,8 @@
     "pledged": "Comprometido",
     "donated": "Donado",
     "campaignNotActive": "La campaña no está actualmente activa",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "pledgeCreateFailed": "Error al crear la promesa"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",

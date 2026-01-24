@@ -345,7 +345,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             type="submit"
             className={styles.regBtn}
             data-testid="submitBtn"
-            disabled={volunteersRequiredError || !!nameError}
+            disabled={volunteersRequiredError || !!nameError || isSubmitting}
           >
             {t('updateGroup')}
           </Button>

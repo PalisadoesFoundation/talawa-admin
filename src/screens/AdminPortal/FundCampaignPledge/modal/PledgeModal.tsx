@@ -45,12 +45,9 @@ import { Autocomplete } from '@mui/material';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
-import {
-  FormFieldGroup,
-  FormSelectField,
-  FormTextField,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
-
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormSelectField } from 'shared-components/FormFieldGroup/FormSelectField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -149,7 +146,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       setIsSubmitting(true);
       try {
         if (!formState.pledgeUsers[0]?.id) {
-          throw new Error('Failed to create pledge');
+          throw new Error(t('pledgeCreateFailed'));
         }
         await createPledge({
           variables: {
@@ -180,7 +177,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   const formContent = (
     <>
-      {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
+      {/* Single-select dropdown to choose the pledger for this pledge*/}
       <FormFieldGroup
         name="pledgers"
         label={t('pledgers')}
@@ -205,12 +202,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             });
           }}
           renderInput={(params) => {
-            const { InputLabelProps, InputProps, ...otherParams } = params;
+            const { InputProps, inputProps } = params;
             return (
               <div ref={InputProps.ref} className="position-relative">
                 <input
-                  {...otherParams.inputProps}
-                  {...InputProps}
+                  {...inputProps}
                   type="text"
                   className="form-control"
                   aria-label={t('pledgers')}
