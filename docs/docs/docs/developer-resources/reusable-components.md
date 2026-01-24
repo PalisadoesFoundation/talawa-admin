@@ -862,7 +862,7 @@ Use TSDoc comments to document functions, classes, and interfaces within reusabl
 ## Shared CSS
 
 In limited cases, CSS may be shared between shared-components to avoid duplication
-and visual drift for common UI primitives (e.g. dropdowns, pickers).
+and visual drift for common UI primitives (e.g. pickers).
 
 ### Rules
 
@@ -875,9 +875,7 @@ and visual drift for common UI primitives (e.g. dropdowns, pickers).
 
 ### Current shared styles
 
-- `dropdown.module.css` — universal dropdown styles
 - `SharedPicker.module.css` — shared picker styles
-
 
 ## DropdownButton Component
 
