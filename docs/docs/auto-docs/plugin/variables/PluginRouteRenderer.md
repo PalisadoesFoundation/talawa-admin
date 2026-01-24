@@ -10,5 +10,10 @@ Defined in: [src/plugin/routes/PluginRouteRenderer.tsx:22](https://github.com/Pa
 
 Component to render plugin routes using the plugin registry.
 
-`@param` props - InterfacePluginRouteRendererProps
-`@returns` JSX.Element
+## Param
+
+InterfacePluginRouteRendererProps
+
+## Returns
+
+JSX.Element

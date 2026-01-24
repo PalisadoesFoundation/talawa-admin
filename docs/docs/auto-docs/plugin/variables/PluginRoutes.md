@@ -10,5 +10,10 @@ Defined in: [src/plugin/routes/PluginRoutes.tsx:23](https://github.com/Palisadoe
 
 Component that renders plugin routes dynamically.
 
-`@param` props - InterfacePluginRoutesProps
-`@returns` JSX.Element
+## Param
+
+InterfacePluginRoutesProps
+
+## Returns
+
+JSX.Element
