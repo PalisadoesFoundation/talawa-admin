@@ -303,6 +303,15 @@ describe('PluginRouteRenderer', () => {
 
     // Component returns early when pluginId is undefined, so isPluginRegistered is not called
     expect(isPluginRegistered).not.toHaveBeenCalled();
+
+    // Verify error UI
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('plugins.errors.missingPluginId.title'),
+    ).toBeInTheDocument();
+
+    // Verify console error
+    expectConsoleError('Plugin ID is missing from route');
   });
 
   it('should handle undefined component name', () => {
