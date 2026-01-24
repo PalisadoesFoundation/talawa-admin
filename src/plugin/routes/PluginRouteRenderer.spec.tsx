@@ -192,6 +192,7 @@ describe('PluginRouteRenderer', () => {
 
     expect(isPluginRegistered).toHaveBeenCalledWith('registered-plugin');
     expect(screen.getByText('plugins.loading')).toBeInTheDocument();
+    expect(screen.getByText('Mock Component')).toBeInTheDocument();
   });
 
   it('should handle multiple components from same plugin', () => {
