@@ -267,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
-    "all": "All"
+    "all": "All",
+    "firstPage": "first page",
+    "previousPage": "previous page",
+    "nextPage": "next page",
+    "lastPage": "last page"
   },
   "requests": {
     "profile": "Profile",
@@ -357,7 +361,19 @@
     "social": "Social Media Links",
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
-    "resetData": "Successfully reset the Profile Details."
+    "resetData": "Successfully reset the Profile Details.",
+    "sessionTimeout": {
+      "title": "Login Session Timeout",
+      "currentTimeout": "Current Timeout:",
+      "noTimeoutSet": "No timeout set",
+      "minutes": " {{count}} minutes",
+      "updateTimeout": "Update Timeout",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Update"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
