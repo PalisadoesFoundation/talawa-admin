@@ -107,6 +107,35 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: 'members-new',
+        first: 3,
+        skip: 0,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: '64001660a711c62d5b4076b1',
+                  name: 'Jane Doe Sr',
+                  emailAddress: 'jane@example.com',
+                  avatarURL: 'mockImageNew',
+                  createdAt: dayjs.utc().toISOString(),
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -188,6 +217,28 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     await wait();
     expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+  });
+
+  it('Component should normalize members from organization members edges', async () => {
+    mockId = 'members-new';
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
+    expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+    expect(screen.getByText('Jane Doe Sr')).toBeInTheDocument();
+    const images = screen.getAllByRole('img');
+    expect(images[0]).toHaveAttribute('src', 'mockImageNew');
   });
 
   it('Handles GraphQL errors properly', async () => {

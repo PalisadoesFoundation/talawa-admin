@@ -78,7 +78,10 @@ describe('Testing AttendedEventList', () => {
     await waitFor(() => {
       const link = container.querySelector('a');
       expect(link).not.toBeNull();
-      expect(link).toHaveAttribute('href', expect.stringContaining('/event/'));
+      expect(link).toHaveAttribute(
+        'href',
+        expect.stringContaining('/admin/event/'),
+      );
     });
   });
 

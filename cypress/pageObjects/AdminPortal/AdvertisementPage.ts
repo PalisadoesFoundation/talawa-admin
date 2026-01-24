@@ -17,9 +17,9 @@ export class AdvertisementPage {
   private readonly _deleteConfirmBtn = '[data-testid="delete_yes"]';
 
   visitAdvertisementPage(timeout = 10000) {
-    cy.visit('/orglist');
+    cy.visit('/admin/orglist');
     cy.get('[data-cy="manageBtn"]').should('be.visible').first().click();
-    cy.url({ timeout }).should('match', /\/orgdash\/[a-f0-9-]+/);
+    cy.url({ timeout }).should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
     cy.get('body').then(($body) => {
       const drawerElement = $body.find('[data-testid="leftDrawerContainer"]');
       if (drawerElement.length > 0) {
@@ -38,7 +38,7 @@ export class AdvertisementPage {
       .scrollIntoView()
       .should('exist')
       .click({ force: true });
-    cy.url().should('match', /\/orgads\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgads\/[a-f0-9-]+/);
     return this;
   }
 

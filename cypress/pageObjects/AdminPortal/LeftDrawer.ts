@@ -4,10 +4,10 @@ export class LeftDrawer {
     cy.viewport(1200, 900);
     // Stabilize assertions by waiting on org data
     cy.intercept('POST', '**/graphql').as('graphql');
-    cy.visit('/orglist');
+    cy.visit('/admin/orglist');
     // Visit any organization to check OrgBtn test id
     cy.get('[data-testid="manageBtn"]').first().click();
-    cy.url().should('include', '/orgdash');
+    cy.url().should('include', '/admin/orgdash');
     cy.wait('@graphql', { timeout: 15000 });
   }
 

@@ -199,15 +199,13 @@
     "next": "Next",
     "markAsRead": "Mark as Read",
     "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
-    "unreadCount_one": "{{count}} unread",
-    "unreadCount_other": "{{count}} unread",
-    "unreadCount": "{{count}} unread",
     "loading": "Loading...",
-    "errorFetching": "Error fetching notifications",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
-    "noNewNotifications": "No new notifications",
-    "viewAllNotifications": "View all notifications",
-    "openNotificationsMenu": "Open notifications menu"
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizations",
@@ -269,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
-    "all": "All"
+    "all": "All",
+    "firstPage": "first page",
+    "previousPage": "previous page",
+    "nextPage": "next page",
+    "lastPage": "last page"
   },
   "requests": {
     "profile": "Profile",
@@ -359,15 +361,19 @@
     "social": "Social Media Links",
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
-    "resetData": "Successfully reset the Profile Details."
-  },
-  "cardItem": {
-    "avatar": "{{title}} avatar",
-    "eventLocation": "Event Location",
-    "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Posted on:",
-    "author": "Author:"
+    "resetData": "Successfully reset the Profile Details.",
+    "sessionTimeout": {
+      "title": "Login Session Timeout",
+      "currentTimeout": "Current Timeout:",
+      "noTimeoutSet": "No timeout set",
+      "minutes": " {{count}} minutes",
+      "updateTimeout": "Update Timeout",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Update"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -613,7 +619,12 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "Events": "Events",
+    "Workshops": "Workshops",
+    "selectMonth": "Select month",
+    "selectDay": "Select day",
+    "selectYear": "Select year"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -752,6 +763,7 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -1923,6 +1935,8 @@
     "pdfGeneratedSuccessfully": "PDF generated successfully!",
     "errorGeneratingPdf": "Error generating pdf",
     "unknownError": "Unknown error",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
     "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
     "checkedIn": "Checked In",
@@ -2246,6 +2260,10 @@
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Not Found or Disabled",
+    "notFoundOrDisabledDescription": "The required plugin for this section is either not installed, not found, or has been disabled. Please contact your administrator for assistance."
   },
   "statusBadge": {
     "completed": "Completed",

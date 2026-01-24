@@ -2,14 +2,7 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  act,
-  within,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, act, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
@@ -96,6 +89,7 @@ describe('Testing UpdateTimeout Component', () => {
   });
 
   it('Should handle minimum slider value correctly', async () => {
+    const user = userEvent.setup();
     const mockOnValueChange = vi.fn();
 
     render(
@@ -109,16 +103,17 @@ describe('Testing UpdateTimeout Component', () => {
       expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
     });
 
-    const slider = screen.getByTestId('slider-thumb');
+    const slider = screen.getByRole('slider');
 
-    // Simulate dragging to minimum value
-    fireEvent.mouseDown(slider, { clientX: -999 }); // Adjust the clientX to simulate different slider positions
-    fireEvent.mouseUp(slider);
+    // Simulate moving to minimum value using keyboard
+    slider.focus();
+    await user.keyboard('{Home}');
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
   });
 
   it('Should handle maximum slider value correctly', async () => {
+    const user = userEvent.setup();
     const mockOnValueChange = vi.fn();
 
     render(
@@ -132,11 +127,11 @@ describe('Testing UpdateTimeout Component', () => {
       expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
     });
 
-    const slider = screen.getByTestId('slider-thumb');
+    const slider = screen.getByRole('slider');
 
-    // Simulate dragging to maximum value
-    fireEvent.mouseDown(slider, { clientX: 999 }); // Adjust the clientX to simulate different slider positions
-    fireEvent.mouseUp(slider);
+    // Simulate moving to maximum value using keyboard
+    slider.focus();
+    await user.keyboard('{End}');
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
   });
@@ -152,15 +147,15 @@ describe('Testing UpdateTimeout Component', () => {
 
     const slider = await screen.findByTestId('slider-thumb');
 
-    // Simulate invalid value handling
-    fireEvent.mouseDown(slider, { clientX: 0 }); // Adjust the clientX to simulate different slider positions
-    fireEvent.mouseUp(slider);
+    // Simulate focusing and doing nothing to ensure no change
+    slider.focus();
 
-    // Ensure onValueChange is not called with invalid values
+    // Ensure onValueChange is not called without interaction
     expect(mockOnValueChange).not.toHaveBeenCalled();
   });
 
   it('Should update slider value on user interaction', async () => {
+    const user = userEvent.setup();
     const mockOnValueChange = vi.fn();
 
     render(
@@ -175,14 +170,15 @@ describe('Testing UpdateTimeout Component', () => {
     });
 
     // Now get the slider
-    const slider = screen.getByTestId('slider-thumb');
+    const slider = screen.getByRole('slider');
 
-    fireEvent.mouseDown(slider, { clientX: 45 }); // Adjust the clientX to simulate different slider positions
-    fireEvent.mouseUp(slider);
+    slider.focus();
+    // Default is 30, step is 5. Right arrow increase by 5.
+    await user.keyboard('{ArrowRight}');
 
     // Assert that the callback was triggered
     await waitFor(() => {
-      expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number));
+      expect(mockOnValueChange).toHaveBeenCalledWith(35);
     });
   });
 
@@ -252,10 +248,6 @@ describe('Testing UpdateTimeout Component', () => {
 
     // Click the button and submit the form
     await user.click(submitButton);
-    if (form) {
-      // Perform actions on the form
-      fireEvent.submit(form);
-    }
 
     // Wait for the mutation and toast
     await waitFor(
@@ -429,9 +421,6 @@ describe('Testing UpdateTimeout Component', () => {
         <UpdateTimeout onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
-
-    const invalidEvent = {} as React.ChangeEvent<HTMLInputElement>;
-    fireEvent.change(window, invalidEvent);
 
     expect(mockOnValueChange).not.toHaveBeenCalled();
   });

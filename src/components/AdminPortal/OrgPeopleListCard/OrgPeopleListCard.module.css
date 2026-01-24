@@ -1,0 +1,11 @@
+.closeButton {
+  composes: closeButton from '../../../style/app-fixed.module.css';
+}
+
+.addButton {
+  composes: addButton from '../../../style/app-fixed.module.css';
+}
+
+.removeButton {
+  composes: removeButton from '../../../style/app-fixed.module.css';
+}

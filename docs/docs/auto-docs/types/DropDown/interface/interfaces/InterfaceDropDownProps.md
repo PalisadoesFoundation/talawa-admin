@@ -6,6 +6,10 @@
 
 Defined in: [src/types/DropDown/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L2)
 
+## Extended by
+
+- [`InterfaceChangeDropDownProps`](InterfaceChangeDropDownProps.md)
+
 ## Properties
 
 ### btnStyle?

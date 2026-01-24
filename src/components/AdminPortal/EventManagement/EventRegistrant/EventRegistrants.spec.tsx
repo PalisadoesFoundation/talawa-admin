@@ -4,13 +4,8 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  cleanup,
-  waitFor,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, cleanup, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -77,12 +72,9 @@ const renderEventRegistrants = (
 };
 
 describe('Event Registrants Component - Enhanced Coverage', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -229,31 +221,29 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Prevents deletion of checked-in user', async () => {
+    const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(() => {
-      const checkedInButton = screen.getByRole('button', {
-        name: 'Checked In',
-      });
-
-      expect(checkedInButton).toBeDisabled();
-
-      fireEvent.click(checkedInButton);
+    const checkedInButton = await screen.findByRole('button', {
+      name: 'Checked In',
     });
+
+    expect(checkedInButton).toBeDisabled();
+
+    await user.click(checkedInButton);
 
     expect(NotificationToast.warning).not.toHaveBeenCalled();
   });
 
   test('Successfully triggers delete for non-checked-in registrant', async () => {
+    const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(() => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-
-      fireEvent.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+
+    await user.click(unregisterButton);
 
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
@@ -272,19 +262,18 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Prevents deletion with NotificationToast error when checked-in user removal attempted programmatically', async () => {
+    const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(() => {
-      const checkedInButton = screen.getByRole('button', {
-        name: 'Checked In',
-      });
-
-      // Button should be disabled for checked-in users
-      expect(checkedInButton).toBeDisabled();
-
-      // Even if clicked programmatically, no side effects should occur
-      fireEvent.click(checkedInButton);
+    const checkedInButton = await screen.findByRole('button', {
+      name: 'Checked In',
     });
+
+    // Button should be disabled for checked-in users
+    expect(checkedInButton).toBeDisabled();
+
+    // Even if clicked programmatically, no side effects should occur
+    await user.click(checkedInButton);
 
     // No warning or error toast should be shown
     expect(NotificationToast.warning).not.toHaveBeenCalled();
@@ -358,14 +347,13 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Refresh functionality test
   test('Refreshes data after successful deletion', async () => {
+    const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(() => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-      fireEvent.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+    await user.click(unregisterButton);
 
     await waitFor(
       () => {
@@ -381,14 +369,13 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Error handling test
   test('Handles deletion error gracefully', async () => {
+    const user = userEvent.setup();
     renderEventRegistrants(ERROR_DELETION_MOCKS);
 
-    await waitFor(() => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-      fireEvent.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+    await user.click(unregisterButton);
 
     await waitFor(
       () => {

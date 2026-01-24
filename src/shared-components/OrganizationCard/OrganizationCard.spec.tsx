@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OrganizationCard from './OrganizationCard';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
@@ -199,7 +200,7 @@ describe('OrganizationCard', () => {
     expect(button).toHaveTextContent('Manage');
 
     fireEvent.click(button);
-    expect(mockNavigate).toHaveBeenCalledWith('/orgdash/123');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/orgdash/123');
   });
 
   it('renders "Visit" button and navigates correctly for joined user', () => {

@@ -199,15 +199,13 @@
     "next": "下一页",
     "markAsRead": "标记为已读",
     "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
-    "unreadCount_one": "{{count}} 未读",
-    "unreadCount_other": "{{count}} 未读",
-    "unreadCount": "{{count}} 未读",
-    "loading": "加载中...",
-    "errorFetching": "获取通知时出错",
-    "unread": "未读",
-    "noNewNotifications": "没有新通知",
-    "viewAllNotifications": "查看所有通知",
-    "openNotificationsMenu": "打开通知菜单"
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -269,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "每页行数",
-    "all": "全部"
+    "all": "全部",
+    "firstPage": "第一页",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "lastPage": "最后一页"
   },
   "requests": {
     "profile": "个人资料",
@@ -359,15 +361,19 @@
     "social": "社交媒体链接",
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
-    "resetData": "成功重置个人资料详细信息。"
-  },
-  "cardItem": {
-    "avatar": "{{title}} 头像",
-    "eventLocation": "活动地点",
-    "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "发布于：",
-    "author": "作者："
+    "resetData": "成功重置个人资料详细信息。",
+    "sessionTimeout": {
+      "title": "登录会话超时",
+      "currentTimeout": "当前超时：",
+      "noTimeoutSet": "未设置超时",
+      "minutes": " {{count}} 分钟",
+      "updateTimeout": "更新超时",
+      "min15": "15 分钟",
+      "min30": "30 分钟",
+      "min45": "45 分钟",
+      "min60": "60 分钟",
+      "update": "更新"
+    }
   },
   "dashboard": {
     "title": "仪表板",
@@ -613,7 +619,12 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "search": "搜索",
+    "Events": "活动",
+    "Workshops": "研讨会",
+    "selectMonth": "选择月份",
+    "selectDay": "选择日期",
+    "selectYear": "选择年份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -2263,6 +2274,10 @@
     "screenshotCounter": "{{current}} / {{total}}",
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "插件未找到或已禁用",
+    "notFoundOrDisabledDescription": "抱歉，您尝试访问的插件未找到或已被组织管理员禁用。如有疑问，请联系组织管理员。"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",

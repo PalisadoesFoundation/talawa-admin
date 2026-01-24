@@ -199,15 +199,13 @@
     "next": "Siguiente",
     "markAsRead": "Marcar como leído",
     "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída",
-    "unreadCount_one": "{{count}} sin leer",
-    "unreadCount_other": "{{count}} sin leer",
-    "unreadCount": "{{count}} sin leer",
-    "loading": "Cargando...",
-    "errorFetching": "Error al obtener notificaciones",
-    "unread": "Sin leer",
-    "noNewNotifications": "No hay nuevas notificaciones",
-    "viewAllNotifications": "Ver todas las notificaciones",
-    "openNotificationsMenu": "Abrir menú de notificaciones"
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -269,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
-    "all": "Todos"
+    "all": "Todos",
+    "firstPage": "primera página",
+    "previousPage": "página anterior",
+    "nextPage": "página siguiente",
+    "lastPage": "última página"
   },
   "requests": {
     "profile": "Perfil",
@@ -359,15 +361,19 @@
     "social": "Enlaces de redes sociales",
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
-    "resetData": "Restablezca correctamente los detalles del perfil."
-  },
-  "cardItem": {
-    "avatar": "avatar de {{title}}",
-    "eventLocation": "Ubicación del Evento",
-    "eventDate": "Fecha del Evento",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Publicado el:",
-    "author": "Autor:"
+    "resetData": "Restablezca correctamente los detalles del perfil.",
+    "sessionTimeout": {
+      "title": "Tiempo de espera de sesión",
+      "currentTimeout": "Tiempo de espera actual:",
+      "noTimeoutSet": "Sin tiempo de espera establecido",
+      "minutes": " {{count}} minutos",
+      "updateTimeout": "Actualizar tiempo de espera",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Actualizar"
+    }
   },
   "dashboard": {
     "title": "Panel de",
@@ -613,7 +619,12 @@
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
-    "search": "Buscar usuarios"
+    "search": "Buscar",
+    "Events": "Eventos",
+    "Workshops": "Talleres",
+    "selectMonth": "Seleccionar mes",
+    "selectDay": "Seleccionar día",
+    "selectYear": "Seleccionar año"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -2246,6 +2257,10 @@
     "screenshotCounter": "{{current}} de {{total}}",
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",
+    "notFoundOrDisabledDescription": "El plugin solicitado no se encontró o está deshabilitado. Por favor, contacte al administrador del sistema para obtener asistencia."
   },
   "statusBadge": {
     "completed": "Completado",

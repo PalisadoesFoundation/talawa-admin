@@ -189,7 +189,7 @@ const organizationFunds = (): JSX.Element => {
   }, [funds, searchText]);
 
   const handleClick = (fundId: string): void => {
-    navigate(`/orgfundcampaign/${orgId}/${fundId}`);
+    navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
   };
 
   if (fundError) {

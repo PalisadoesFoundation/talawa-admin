@@ -464,7 +464,7 @@ describe('EventListCardModals', () => {
       previewProps.openEventDashboard();
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/event/org1/event1');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/event/org1/event1');
   });
 
   test('toggles delete modal', () => {

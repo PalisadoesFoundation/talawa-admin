@@ -226,20 +226,6 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
-// const MOCKS_EMPTY = [
-//   {
-//     request: {
-//       query: ORGANIZATIONS_LIST,
-//       variables: { id: '123' },
-//     },
-//     result: {
-//       data: {
-//         organizations: [],
-//       },
-//     },
-//   },
-// ];
-
 const defaultScreens = [
   'People',
   'Events',
@@ -367,13 +353,18 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    resizeWindow(800);
-    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
+    const previousWidth = window.innerWidth;
+    try {
+      resizeWindow(800);
+      expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopleBtn = screen.getAllByTestId(/People/i)[0];
-    await userEvent.click(peopleBtn);
-    await wait();
-    expect(window.location.pathname).toContain('user/people/123');
+      const peopleBtn = screen.getAllByTestId(/People/i)[0];
+      await userEvent.click(peopleBtn);
+      await wait();
+      expect(window.location.pathname).toContain('user/people/123');
+    } finally {
+      resizeWindow(previousWidth);
+    }
   });
 
   it('Testing when image is present for Organization', async () => {
@@ -394,28 +385,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
   });
-
-  // it('Testing when Organization does not exists', async () => {
-  //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
-  //   setItem('FirstName', 'John');
-  //   setItem('LastName', 'Doe');
-  //   render(
-  //     <MockedProvider link={linkEmpty}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <UserSidebarOrg {...props} hideDrawer={null} />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  //   expect(
-  //     screen.getByText(/Error Occured while loading the Organization/i),
-  //   ).toBeInTheDocument();
-  // });
 
   it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
