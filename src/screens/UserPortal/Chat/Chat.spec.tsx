@@ -285,19 +285,20 @@ const mockUnreadChatsRefetch = {
   },
 };
 
+const repeatMocks = <T,>(mock: T, count: number): T[] =>
+  Array.from({ length: count }, () => mock);
+
 const mocks = [
   mockChatsList,
   mockChatsListRefetch,
-  {
-    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-    result: { data: mockChatsListData },
-  },
-  {
-    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-    result: { data: mockChatsListData },
-  },
-  mockUnreadChats,
-  mockUnreadChats,
+  ...repeatMocks(
+    {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: { data: mockChatsListData },
+    },
+    2,
+  ),
+  ...repeatMocks(mockUnreadChats, 2),
   mockUnreadChatsRefetch,
   // Add duplicated mocks to prevent "No more mocked responses" error
   mockChatsList,
@@ -305,9 +306,7 @@ const mocks = [
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
   },
-  mockUnreadChats,
-  mockUnreadChats,
-  mockUnreadChats,
+  ...repeatMocks(mockUnreadChats, 3),
 ];
 
 describe('Chat Component - Comprehensive Coverage', () => {

@@ -560,12 +560,9 @@ describe('Testing User Pledge Screen', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -587,8 +584,9 @@ describe('Testing User Pledge Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link1}>
+      <MockedProvider link={link1} cache={cache}>
         <MemoryRouter initialEntries={['/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
