@@ -68,8 +68,10 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const [isUpdated, setisUpdated] = useState(false);
+  const params = useParams();
   const storedUserId = getItem('id') || getItem('userId');
-  const currentId = location.state?.id || storedUserId || id;
+  const currentId =
+    location.state?.id || id || params.userId || storedUserId || '';
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [newAvatarUploaded, setNewAvatarUploaded] = useState(false);
 
@@ -97,14 +99,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
-  const isUser = location.pathname.split('/')[1] === 'user';
-  const isAdmin = location.pathname.split('/')[1] === 'admin';
-  const params = useParams();
-  const userId: string =
-    (!(isUser || isAdmin)
-      ? params.userId
-      : getItem('userId') || getItem('id')) || '';
-  const resolvedUserId = currentId || userId;
+  const resolvedUserId = currentId;
   useEffect(() => {
     document.title = t('title');
   }, [t]);
