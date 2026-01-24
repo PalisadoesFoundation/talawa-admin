@@ -32,7 +32,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import styles from './Register.module.css';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceRegisterProps {

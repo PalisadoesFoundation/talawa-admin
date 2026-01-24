@@ -7,7 +7,7 @@ import {
   UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
   UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
@@ -26,7 +26,7 @@ vi.mock('@apollo/client', async () => {
   };
 });
 
-vi.mock('components/NotificationToast/NotificationToast', async () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', async () => ({
   NotificationToast: {
     info: vi.fn(),
     error: vi.fn(),

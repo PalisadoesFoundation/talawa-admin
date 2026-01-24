@@ -43,7 +43,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface TestInterfaceUpdateTimeoutProps {
   onValueChange?: (value: number) => void;

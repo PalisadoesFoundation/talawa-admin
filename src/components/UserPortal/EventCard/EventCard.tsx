@@ -53,7 +53,7 @@ import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 
 function eventCard(props: InterfaceEvent): JSX.Element {

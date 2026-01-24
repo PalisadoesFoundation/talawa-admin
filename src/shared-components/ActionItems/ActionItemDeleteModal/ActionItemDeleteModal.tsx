@@ -35,7 +35,7 @@ import type {
   IActionItemInfo,
   IDeleteActionItemInput,
 } from 'types/shared-components/ActionItems/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
