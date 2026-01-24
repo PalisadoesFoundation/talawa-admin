@@ -48,13 +48,14 @@
 }
 
 .titleContainer {
+  padding: 10px;
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
 }
 
 .titleContainer h1 {
-  font-size: var(--font-size-28);
+  font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-gray-500);
   margin-top: var(--space-2);

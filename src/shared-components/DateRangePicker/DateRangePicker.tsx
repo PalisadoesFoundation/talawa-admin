@@ -24,7 +24,6 @@ import React, { useCallback, useMemo } from 'react';
 import DatePicker from 'shared-components/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -158,10 +157,15 @@ export default function DateRangePicker({
       className={`${styles.root} ${className ?? ''}`}
       data-testid={dataTestId}
     >
-      <Form.Group>
+      <div role="group">
         <Row className={styles.controlsRow}>
           <Col xs={12} sm={6}>
-            <Form.Label>{t('startDate')}</Form.Label>
+            <label
+              className={styles.pickerLabel}
+              htmlFor={`${dataTestId}-start-input`}
+            >
+              {t('startDate')}
+            </label>
             <DatePicker
               value={startDayjs}
               onChange={handleStartChange}
@@ -175,7 +179,12 @@ export default function DateRangePicker({
             />
           </Col>
           <Col xs={12} sm={6}>
-            <Form.Label>{t('endDate')}</Form.Label>
+            <label
+              className={styles.pickerLabel}
+              htmlFor={`${dataTestId}-end-input`}
+            >
+              {t('endDate')}
+            </label>
             <DatePicker
               value={endDayjs}
               onChange={handleEndChange}
@@ -218,14 +227,14 @@ export default function DateRangePicker({
         )}
 
         {helperText && (
-          <Form.Text
-            className={error ? 'text-danger' : undefined}
+          <small
+            className={`text-muted ${error ? 'text-danger' : ''}`}
             data-testid={`${dataTestId}-helper`}
           >
             {helperText}
-          </Form.Text>
+          </small>
         )}
-      </Form.Group>
+      </div>
     </div>
   );
 }

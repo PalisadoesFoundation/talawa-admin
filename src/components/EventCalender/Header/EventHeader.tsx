@@ -85,19 +85,6 @@ function EventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
-          <SortingButton
-            title={t('eventType')}
-            sortingOptions={[
-              { label: 'Events', value: 'Events' },
-              { label: 'Workshops', value: 'Workshops' },
-            ]}
-            selectedOption={t('eventType')}
-            onSortChange={() => {}}
-            dataTestIdPrefix="eventType"
-            className={styles.dropdown}
-            buttonLabel={t('eventType')}
-          />
-
           <Button
             className={styles.dropdown}
             onClick={showInviteModal}
