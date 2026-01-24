@@ -131,7 +131,6 @@ describe('DropdownButton', () => {
     };
 
     render(<DropdownButton {...propsWithoutClassName} />);
-
     const toggle = screen.getByTestId('dropdown-button');
     expect(toggle).toBeInTheDocument();
   });
