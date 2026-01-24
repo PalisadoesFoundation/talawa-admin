@@ -9,6 +9,7 @@ import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePluginRoutes } from '../hooks';
+import styles from './PluginRoutes.module.css';
 import type { IRouteExtension } from '../types';
 
 interface IPluginRoutesProps {
@@ -52,29 +53,18 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
           // Return a fallback error component
           return {
             default: () => (
-              <div
-                style={{
-                  padding: '40px',
-                  textAlign: 'center',
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #dee2e6',
-                  borderRadius: '8px',
-                  margin: '20px',
-                }}
-              >
-                <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+              <div className={styles.errorContainer}>
+                <h3 className={styles.errorTitle}>
                   {t('plugins.errors.pluginError.title')}
                 </h3>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                <p className={styles.errorText}>
                   {t('plugins.errors.pluginError.failedToLoad')}:{' '}
                   <strong>{route.component}</strong>
                 </p>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                <p className={styles.errorText}>
                   {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
                 </p>
-                <p style={{ color: '#6c757d', fontSize: '14px' }}>
-                  {error.message}
-                </p>
+                <p className={styles.errorDescription}>{error.message}</p>
               </div>
             ),
           };

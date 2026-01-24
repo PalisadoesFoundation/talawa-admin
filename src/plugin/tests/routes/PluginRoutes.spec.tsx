@@ -266,7 +266,7 @@ describe('PluginRoutes', () => {
       );
 
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
 
     it('should use custom fallback when provided', () => {
@@ -395,10 +395,10 @@ describe('PluginRoutes', () => {
 
       const ErrorComponent = result.default;
       const { getByText } = render(<ErrorComponent />);
-      expect(getByText('Plugin Error')).toBeInTheDocument();
-      expect(getByText(/Failed to load component/)).toHaveTextContent(
-        'MissingComponent',
-      );
+      expect(getByText('plugins.errors.pluginError.title')).toBeInTheDocument();
+      expect(
+        getByText(/plugins.errors.pluginError.failedToLoad/),
+      ).toBeInTheDocument();
     });
 
     it('surfaces error fallback when import throws', async () => {
@@ -448,9 +448,9 @@ describe('PluginRoutes', () => {
 
       const ErrorComponent = result.default;
       const { getByText } = render(<ErrorComponent />);
-      expect(getByText('Plugin Error')).toBeInTheDocument();
+      expect(getByText('plugins.errors.pluginError.title')).toBeInTheDocument();
       const pluginDetail = getByText((content, node) => {
-        return node?.textContent?.trim().startsWith('Plugin:') ?? false;
+        return node?.textContent?.trim().startsWith('plugins.plugin') ?? false;
       });
       expect(pluginDetail).toHaveTextContent('plugins.plugin');
     });
@@ -478,7 +478,7 @@ describe('PluginRoutes', () => {
       // Should render the route structure with suspense wrapper
       expect(screen.getByTestId('route-/error')).toBeInTheDocument();
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
 
     it('should handle routes with non-existent components', () => {

@@ -9,6 +9,7 @@ import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { IRouteExtension } from '../types';
 import { getPluginComponents, isPluginRegistered } from '../registry';
+import styles from './PluginRouteRenderer.module.css';
 
 interface IPluginRouteRendererProps {
   route: IRouteExtension;
@@ -29,23 +30,14 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
   if (!route.pluginId) {
     console.error(`Plugin ID is missing from route`);
     return (
-      <div
-        style={{
-          padding: '40px',
-          textAlign: 'center',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          margin: '20px',
-        }}
-      >
-        <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+      <div className={styles.errorContainer}>
+        <h3 className={styles.errorTitle}>
           {t('plugins.errors.missingPluginId.title')}
         </h3>
-        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+        <p className={styles.errorText}>
           {t('plugins.component')}: <strong>{route.component}</strong>
         </p>
-        <p style={{ color: '#6c757d', fontSize: '14px' }}>
+        <p className={styles.errorDescription}>
           {t('plugins.errors.missingPluginId.description')}
         </p>
       </div>
@@ -56,23 +48,14 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
   if (!isPluginRegistered(route.pluginId)) {
     console.error(`Plugin '${route.pluginId}' not found in plugin registry`);
     return (
-      <div
-        style={{
-          padding: '40px',
-          textAlign: 'center',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          margin: '20px',
-        }}
-      >
-        <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+      <div className={styles.errorContainer}>
+        <h3 className={styles.errorTitle}>
           {t('plugins.errors.notRegistered.title')}
         </h3>
-        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+        <p className={styles.errorText}>
           {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
-        <p style={{ color: '#6c757d', fontSize: '14px' }}>
+        <p className={styles.errorDescription}>
           {t('plugins.errors.notRegistered.description')}{' '}
           <code>src/plugin/registry.ts</code>
         </p>
@@ -86,20 +69,11 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
   if (!pluginComponents) {
     console.error(`No components found for plugin '${route.pluginId}'`);
     return (
-      <div
-        style={{
-          padding: '40px',
-          textAlign: 'center',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          margin: '20px',
-        }}
-      >
-        <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+      <div className={styles.errorContainer}>
+        <h3 className={styles.errorTitle}>
           {t('plugins.errors.noComponents.title')}
         </h3>
-        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+        <p className={styles.errorText}>
           {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
       </div>
@@ -114,26 +88,17 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
       `Component '${route.component}' not found in plugin '${route.pluginId}'`,
     );
     return (
-      <div
-        style={{
-          padding: '40px',
-          textAlign: 'center',
-          backgroundColor: '#f8f9fa',
-          border: '1px solid #dee2e6',
-          borderRadius: '8px',
-          margin: '20px',
-        }}
-      >
-        <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+      <div className={styles.errorContainer}>
+        <h3 className={styles.errorTitle}>
           {t('plugins.errors.componentNotFound.title')}
         </h3>
-        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+        <p className={styles.errorText}>
           {t('plugins.component')}: <strong>{route.component}</strong>
         </p>
-        <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+        <p className={styles.errorText}>
           {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
-        <p style={{ color: '#6c757d', fontSize: '14px' }}>
+        <p className={styles.errorDescription}>
           {t('plugins.errors.componentNotFound.availableComponents', {
             components: Object.keys(pluginComponents).join(', '),
           })}
