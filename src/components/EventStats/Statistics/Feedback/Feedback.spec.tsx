@@ -1,6 +1,6 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 import { render, waitFor } from '@testing-library/react';
-import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { NotificationToastContainer } from 'shared-components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';

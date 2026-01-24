@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { NotificationToastContainer } from 'shared-components/NotificationToast/NotificationToast';
 import {
   LocalizationProvider,
   AdapterDayjs,

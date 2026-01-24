@@ -22,7 +22,7 @@ import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';

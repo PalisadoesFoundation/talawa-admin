@@ -26,7 +26,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 
