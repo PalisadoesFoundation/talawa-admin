@@ -550,6 +550,7 @@ export default [
     files: [
       'src/shared-components/SearchFilterBar/SearchFilterBar.tsx',
       'src/shared-components/DataTable/SearchBar.tsx',
+      'src/shared-components/SearchBar/SearchBar.tsx',
     ],
     rules: {
       'no-restricted-syntax': ['error', ...securityRestrictions],
