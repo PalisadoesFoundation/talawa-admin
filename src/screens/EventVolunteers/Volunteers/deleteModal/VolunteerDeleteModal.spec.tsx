@@ -14,7 +14,7 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceDeleteVolunteerModal } from 'types/AdminPortal/VolunteerDeleteModal/interface';
+import type { InterfaceVolunteerDeleteModalProps } from 'types/AdminPortal/VolunteerDeleteModal/interface';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -52,7 +52,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceDeleteVolunteerModal[] = [
+const itemProps: InterfaceVolunteerDeleteModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -104,7 +104,7 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
   },
 ];
 
-let recurringItemProps: InterfaceDeleteVolunteerModal;
+let recurringItemProps: InterfaceVolunteerDeleteModalProps;
 let recurringItemPropsHide: ReturnType<typeof vi.fn>;
 let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
 
@@ -153,7 +153,7 @@ const linkInstanceDelete = new StaticMockLink(mockDeleteForInstance);
 
 const renderVolunteerDeleteModal = (
   link: ApolloLink,
-  props: InterfaceDeleteVolunteerModal,
+  props: InterfaceVolunteerDeleteModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>

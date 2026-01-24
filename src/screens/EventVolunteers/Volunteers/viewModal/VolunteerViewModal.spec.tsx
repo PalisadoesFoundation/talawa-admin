@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
-import type { InterfaceVolunteerViewModal } from 'types/AdminPortal/VolunteerViewModal/interface';
+import type { InterfaceVolunteerViewModalProps } from 'types/AdminPortal/VolunteerViewModal/interface';
 import VolunteerViewModal from './VolunteerViewModal';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -23,7 +23,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceVolunteerViewModal[] = [
+const itemProps: InterfaceVolunteerViewModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -116,7 +116,7 @@ const itemProps: InterfaceVolunteerViewModal[] = [
 ];
 
 const renderVolunteerViewModal = (
-  props: InterfaceVolunteerViewModal,
+  props: InterfaceVolunteerViewModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider>

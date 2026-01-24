@@ -50,13 +50,11 @@ import {
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-import type { InterfaceVolunteerGroupViewModal } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
+import type { InterfaceVolunteerGroupViewModalProps } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
 
-const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
-  isOpen,
-  hide,
-  group,
-}) => {
+const VolunteerGroupViewModal: React.FC<
+  InterfaceVolunteerGroupViewModalProps
+> = ({ isOpen, hide, group }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 

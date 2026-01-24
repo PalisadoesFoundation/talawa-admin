@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceVolunteerViewModal
+# Interface: InterfaceVolunteerViewModalProps
 
 Defined in: [src/types/AdminPortal/VolunteerViewModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerViewModal/interface.ts#L6)
 

@@ -3,7 +3,7 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 /**
  * Props for VolunteerDeleteModal component.
  */
-export interface InterfaceDeleteVolunteerModal {
+export interface InterfaceVolunteerDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
   volunteer: InterfaceEventVolunteerInfo;

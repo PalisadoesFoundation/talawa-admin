@@ -55,9 +55,9 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-import type { InterfaceVolunteerViewModal } from 'types/AdminPortal/VolunteerViewModal/interface';
+import type { InterfaceVolunteerViewModalProps } from 'types/AdminPortal/VolunteerViewModal/interface';
 
-const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
+const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
   isOpen,
   hide,
   volunteer,

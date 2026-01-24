@@ -33,9 +33,9 @@ import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-import type { InterfaceDeleteVolunteerModal } from 'types/AdminPortal/VolunteerDeleteModal/interface';
+import type { InterfaceVolunteerDeleteModalProps } from 'types/AdminPortal/VolunteerDeleteModal/interface';
 
-const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
+const VolunteerDeleteModal: React.FC<InterfaceVolunteerDeleteModalProps> = ({
   isOpen,
   hide,
   volunteer,

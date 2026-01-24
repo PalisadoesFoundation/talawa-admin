@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceDeleteVolunteerModal
+# Interface: InterfaceVolunteerDeleteModalProps
 
 Defined in: [src/types/AdminPortal/VolunteerDeleteModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/VolunteerDeleteModal/interface.ts#L6)
 

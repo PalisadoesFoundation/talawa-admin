@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
-import type { InterfaceVolunteerGroupViewModal } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
+import type { InterfaceVolunteerGroupViewModalProps } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -26,7 +26,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceVolunteerGroupViewModal[] = [
+const itemProps: InterfaceVolunteerGroupViewModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -98,7 +98,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
 ];
 
 const renderGroupViewModal = (
-  props: InterfaceVolunteerGroupViewModal,
+  props: InterfaceVolunteerGroupViewModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider>
