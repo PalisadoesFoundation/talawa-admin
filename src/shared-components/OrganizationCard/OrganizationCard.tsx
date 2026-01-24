@@ -261,7 +261,7 @@ function OrganizationCard({
             {/* Button to manage the organization */}
             {role === 'admin' ? (
               <Button
-                onClick={() => navigate(`/orgdash/${id}`)}
+                onClick={() => navigate(`/admin/orgdash/${id}`)}
                 data-testid="manageBtn"
                 data-cy="manageBtn"
                 className={styles.manageBtn}

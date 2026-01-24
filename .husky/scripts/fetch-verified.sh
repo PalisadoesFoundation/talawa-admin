@@ -105,7 +105,7 @@ fetch_and_verify() {
 
     local tmp
     tmp="$(mktemp -t fetch.XXXXXX)"
-    trap "rm -f '$tmp'" RETURN
+    trap 'rm -f "$tmp"' RETURN
 
     if command -v curl >/dev/null 2>&1; then
       curl -sSfL "$url" -o "$tmp"

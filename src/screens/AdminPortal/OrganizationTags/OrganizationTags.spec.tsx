@@ -1,14 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -130,17 +123,20 @@ vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
 const renderOrganizationTags = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId"
+                element={<OrganizationTags />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>
@@ -248,7 +244,8 @@ describe('Organisation Tags Page', () => {
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'searchUserTag');
 
     // Wait for debounced search to complete
     // should render the two searched tags from the mock data
@@ -364,7 +361,8 @@ describe('Organisation Tags Page', () => {
 
     // Trigger search by changing the input value
     // The mock PageHeader's onChange handler calls onSearch with the input value
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'searchUserTag');
 
     // Wait for the search results to load
     await waitFor(() => {
@@ -404,7 +402,7 @@ describe('Organisation Tags Page', () => {
     });
 
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     expect(getByText(translations.createTag)).toBeInTheDocument();
   });
@@ -476,7 +474,7 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
@@ -550,7 +548,8 @@ describe('Organisation Tags Page', () => {
 
     // Search for tags that have parent/ancestor tags
     const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'searchUserTag');
 
     // Wait for debounced search to complete
     await waitFor(() => {
@@ -635,7 +634,8 @@ describe('Organisation Tags Page', () => {
 
     const input = screen.getByPlaceholderText(translations.searchByName);
     // Type search term with leading and trailing whitespace
-    fireEvent.change(input, { target: { value: '  searchUserTag  ' } });
+    await userEvent.clear(input);
+    await userEvent.type(input, '  searchUserTag  ');
 
     // Wait for debounced search to complete
     // The component should trim the whitespace before searching
@@ -660,7 +660,7 @@ describe('Organisation Tags Page', () => {
 
     // Trigger infinite scroll
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     await wait();
 
@@ -882,7 +882,7 @@ describe('Organisation Tags Page', () => {
 
     // Trigger load more
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     await wait();
 
@@ -1049,7 +1049,7 @@ describe('Organisation Tags Page', () => {
     // prevResult will be the initial result (edges: null).
     // The code `...(prevResult.organization?.tags?.edges || [])` (Line 115) will execute the `|| []` branch.
     const triggerBtn = screen.getByTestId('trigger-load-more');
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     // Wait for the Apollo cache to update and React to re-render
     await wait(1000);
@@ -1063,7 +1063,7 @@ describe('Organisation Tags Page', () => {
     // Let's verify line 102 coverage by clicking again.
     // The component logic is: if (!hasNextPage) return;
     // We force the click. The function loadMoreTags runs. The guard clause returns early.
-    fireEvent.click(triggerBtn);
+    await userEvent.click(triggerBtn);
 
     // Nothing crashes, no network error (mocks would error if unexpected request made).
     await wait();

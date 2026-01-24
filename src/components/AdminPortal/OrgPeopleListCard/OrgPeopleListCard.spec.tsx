@@ -214,7 +214,7 @@ describe('Testing Organization People List Card', () => {
     expect(props.toggleRemoveModal).toHaveBeenCalled();
 
     // Close via close button
-    const closeButton = screen.getByRole('button', { name: '' }); // Close icon button
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeButton);
     expect(props.toggleRemoveModal).toHaveBeenCalled();
   });
@@ -231,7 +231,7 @@ describe('Testing Organization People List Card', () => {
     );
 
     await waitFor(() => {
-      expect(window.location.pathname).toBe('/orglist');
+      expect(window.location.pathname).toBe('/admin/orglist');
     });
   });
 });

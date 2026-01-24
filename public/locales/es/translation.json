@@ -199,15 +199,13 @@
     "next": "Siguiente",
     "markAsRead": "Marcar como leído",
     "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída",
-    "unreadCount_one": "{{count}} sin leer",
-    "unreadCount_other": "{{count}} sin leer",
-    "unreadCount": "{{count}} sin leer",
-    "loading": "Cargando...",
-    "errorFetching": "Error al obtener notificaciones",
-    "unread": "Sin leer",
-    "noNewNotifications": "No hay nuevas notificaciones",
-    "viewAllNotifications": "Ver todas las notificaciones",
-    "openNotificationsMenu": "Abrir menú de notificaciones"
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -360,14 +358,6 @@
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
     "resetData": "Restablezca correctamente los detalles del perfil."
-  },
-  "cardItem": {
-    "avatar": "avatar de {{title}}",
-    "eventLocation": "Ubicación del Evento",
-    "eventDate": "Fecha del Evento",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Publicado el:",
-    "author": "Autor:"
   },
   "dashboard": {
     "title": "Panel de",

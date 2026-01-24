@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { ApolloLink } from '@apollo/client';
-import type { InterfaceTagActionsProps } from './TagActions';
+import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 import TagActions from './TagActions';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
@@ -86,12 +86,12 @@ const renderTagActionsModal = (
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<TagActions {...props} />}
               />
             </Routes>

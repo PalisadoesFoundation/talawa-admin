@@ -13,7 +13,7 @@ describe('Admin Login Functionality', () => {
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, userData.password);
 
-        cy.url().should('include', '/orglist');
+        cy.url().should('include', '/admin/orglist');
       });
     });
   });

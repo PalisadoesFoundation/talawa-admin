@@ -225,9 +225,7 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Click to open modal
-    await act(async () => {
-      await user.click(editButton);
-    });
+    await user.click(editButton);
 
     await waitFor(() => {
       expect(getByTestId('event-list-card-modals')).toBeInTheDocument();
