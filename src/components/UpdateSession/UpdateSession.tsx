@@ -103,10 +103,7 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
    * @param e - The event triggered by slider movement.
    * @param newValue - The new value of the slider.
    */
-  const handleOnChange = (
-    e: Event,
-    newValue: number | number[],
-  ): void => {
+  const handleOnChange = (e: Event, newValue: number | number[]): void => {
     if (typeof newValue === 'number') {
       setTimeout(newValue);
 
@@ -158,8 +155,8 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
                 >
                   {communityTimeout !== undefined
                     ? t('communityProfile.sessionTimeout.minutes', {
-                      count: communityTimeout,
-                    })
+                        count: communityTimeout,
+                      })
                     : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
               </div>

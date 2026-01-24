@@ -81,7 +81,7 @@ vi.mock('utils/errorHandler', () => ({
 
 describe('Testing UpdateTimeout Component', () => {
   beforeEach(() => {
-    vi.spyOn(console, 'warn').mockImplementation(() => { });
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
   afterEach(() => {
