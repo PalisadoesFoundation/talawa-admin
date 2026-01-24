@@ -1,59 +1,106 @@
-.avatarImage {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0; /* allow truncation */
+.card {
+  padding: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .row {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  min-height: 56px;
+}
+
+.snoBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1rem;
+}
+
+.avatarImage {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  font-size: 1.05rem;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.name {
-  font-weight: 600;
-  font-size: 0.95rem;
-  line-height: 1.2;
-}
-
 .email {
-  font-size: 0.875rem;
-  color: rgba(80, 80, 80, 0.9);
+  font-size: 0.98rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .role {
-  font-size: 0.85rem;
-  color: rgba(120, 120, 120, 0.95);
+  font-size: 0.98rem;
+  min-width: 80px;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* actionsSlot — serial number badge */
-.actionsSlot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
+.name,
+.email {
+  min-width: 0;
+  flex: 1 1 200px;
 }
 
-.serialBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 28px;
-  padding: 0 8px;
-  border-radius: 999px;
-  background-color: rgba(0, 0, 0, 0.06);
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: #111827;
+@media (max-width: 768px) {
+  .row {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .avatarImage {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .name,
+  .email {
+    font-size: 0.98rem;
+    flex-basis: 100%;
+    margin-bottom: 0.25rem;
+  }
+  .role {
+    min-width: 80px;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-height: unset;
+  }
+  .snoBadge {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+  .avatarImage {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.25rem;
+  }
+  .name,
+  .email,
+  .role {
+    font-size: 0.95rem;
+    flex-basis: 100%;
+    min-width: 0;
+  }
 }

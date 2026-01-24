@@ -54,31 +54,40 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   role,
   sno,
 }) => {
-  const imageSlot = image ? (
-    <img
-      src={image}
-      alt={name}
-      className={styles.avatarImage}
-      data-testid={`people-${id}-image`}
-    />
-  ) : (
-    <Avatar name={name} alt={name} avatarStyle={styles.avatarImage} />
-  );
-
   return (
     <UserPortalCard
       variant="compact"
       dataTestId={`people-card-${id}`}
-      imageSlot={imageSlot}
+      className={styles.card}
     >
-      <div className={styles.content}>
-        <span data-testid={`people-sno-${id}`}>{sno}</span>
-
-        <b data-testid={`people-name-${id}`}>{name}</b>
-
-        <span data-testid={`people-email-${id}`}>{email}</span>
-
-        <div data-testid={`people-role-${id}`}>{role}</div>
+      <div className={styles.row}>
+        <span className={styles.snoBadge} data-testid={`people-sno-${id}`}>
+          {sno}
+        </span>
+        {image ? (
+          <img
+            src={image}
+            alt={name}
+            className={styles.avatarImage}
+            data-testid={`people-${id}-image`}
+          />
+        ) : (
+          <Avatar
+            name={name}
+            alt={name}
+            avatarStyle={styles.avatarImage}
+            size={56}
+          />
+        )}
+        <b className={styles.name} data-testid={`people-name-${id}`}>
+          {name}
+        </b>
+        <span className={styles.email} data-testid={`people-email-${id}`}>
+          {email}
+        </span>
+        <div className={styles.role} data-testid={`people-role-${id}`}>
+          {role}
+        </div>
       </div>
     </UserPortalCard>
   );
