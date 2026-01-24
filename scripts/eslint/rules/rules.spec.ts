@@ -1,15 +1,15 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { ESLint } from 'eslint';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
   restrictedImports,
-  securityRestrictions,
-  searchInputRestrictions,
   restrictedImportPaths,
   restrictImportsExcept,
   stripId,
-} from '../config/eslint-rule-data';
+  securityRestrictions,
+  searchInputRestrictions,
+} from './rules.ts';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -17,7 +17,7 @@ const dirname = path.dirname(filename);
 describe('ESLint Search Input Restrictions', () => {
   const createLinter = async () => {
     const eslint = new ESLint({
-      overrideConfigFile: path.resolve(dirname, '../../eslint.config.js'),
+      overrideConfigFile: path.resolve(dirname, '../../../eslint.config.js'),
     });
     return eslint;
   };
