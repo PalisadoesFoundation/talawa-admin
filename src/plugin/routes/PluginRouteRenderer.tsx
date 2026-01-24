@@ -53,7 +53,12 @@ const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
   if (!isPluginRegistered(route.pluginId)) {
     console.error(`Plugin '${route.pluginId}' not found in plugin registry`);
     return (
-      <div className={styles.errorContainer}>
+      <div
+        className={styles.errorContainer}
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <h3 className={styles.errorTitle}>
           {t('plugins.errors.notRegistered.title')}
         </h3>

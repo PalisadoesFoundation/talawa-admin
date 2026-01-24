@@ -52,7 +52,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render plugin component when plugin is registered', () => {
