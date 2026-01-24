@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
@@ -18,6 +17,13 @@ import type {
  * This component handles the login form UI and submission logic, delegating
  * authentication to the SIGNIN_QUERY GraphQL query. It supports both admin
  * and user login modes via the isAdmin prop.
+ *
+ * @param isAdmin - Whether the login form is rendered for an admin user
+ * @param onSuccess - Callback invoked with the authentication token on successful login
+ * @param onError - Callback invoked when the login request fails
+ * @param testId - Optional test ID used for querying the component in tests
+ *
+ * @returns A JSX element rendering the login form
  *
  * @example
  * ```tsx
@@ -100,23 +106,19 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       <h3 data-testid={`${testId}-heading`}>
         {isAdmin ? t('adminLogin') : t('userLogin')}
       </h3>
-      <FormFieldGroup name="email" label={tCommon('email')} required>
-        <EmailField
-          value={formData.email}
-          onChange={handleEmailChange}
-          testId={`${testId}-email`}
-        />
-      </FormFieldGroup>
+      <EmailField
+        value={formData.email}
+        onChange={handleEmailChange}
+        testId={`${testId}-email`}
+      />
 
-      <FormFieldGroup name="password" label={tCommon('password')} required>
-        <PasswordField
-          label={tCommon('password')}
-          value={formData.password}
-          onChange={handlePasswordChange}
-          placeholder={tCommon('enterPassword')}
-          testId={`${testId}-password`}
-        />
-      </FormFieldGroup>
+      <PasswordField
+        label={tCommon('password')}
+        value={formData.password}
+        onChange={handlePasswordChange}
+        placeholder={tCommon('enterPassword')}
+        testId={`${testId}-password`}
+      />
 
       <Button
         type="submit"
