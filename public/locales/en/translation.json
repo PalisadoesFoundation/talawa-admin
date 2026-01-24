@@ -619,7 +619,12 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "Events": "Events",
+    "Workshops": "Workshops",
+    "selectMonth": "Select month",
+    "selectDay": "Select day",
+    "selectYear": "Select year"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",

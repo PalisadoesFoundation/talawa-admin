@@ -41,10 +41,10 @@ describe('SecuredRoute', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     // Clean up any timers or event listeners
     vi.clearAllTimers();
     vi.useRealTimers();
-    vi.restoreAllMocks();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
