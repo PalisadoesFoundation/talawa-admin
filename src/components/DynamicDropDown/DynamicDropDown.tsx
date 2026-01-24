@@ -44,16 +44,8 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import styles from 'style/app-fixed.module.css';
-import type { InterfaceDropDownProps } from 'types/DropDown/interface';
-
-interface InterfaceChangeDropDownProps<T> extends InterfaceDropDownProps {
-  setFormState: React.Dispatch<React.SetStateAction<T>>;
-  formState: T;
-  fieldOptions: { value: string; label: string }[];
-  fieldName: string;
-  handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+import styles from './DynamicDropDown.module.css';
+import type { InterfaceChangeDropDownProps } from 'types/DropDown/interface';
 
 const DynamicDropDown = <T extends Record<string, unknown>>({
   parentContainerStyle = '',

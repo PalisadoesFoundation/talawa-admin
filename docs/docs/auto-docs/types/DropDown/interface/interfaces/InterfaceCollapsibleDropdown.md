@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCollapsibleDropdown
 
-Defined in: [src/types/DropDown/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L8)
+Defined in: [src/types/DropDown/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L18)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/DropDown/interface.ts:8](https://github.com/PalisadoesFou
 
 > **setShowDropdown**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/DropDown/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L11)
+Defined in: [src/types/DropDown/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L21)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/DropDown/interface.ts:11](https://github.com/PalisadoesFo
 
 > **showDropdown**: `boolean`
 
-Defined in: [src/types/DropDown/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L9)
+Defined in: [src/types/DropDown/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L19)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/DropDown/interface.ts:9](https://github.com/PalisadoesFou
 
 > **target**: [`TargetsType`](../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)
 
-Defined in: [src/types/DropDown/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L10)
+Defined in: [src/types/DropDown/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L20)

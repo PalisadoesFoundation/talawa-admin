@@ -33,7 +33,6 @@ const renderComponent = (props: Record<string, unknown> = {}) => {
 describe('DynamicDropDown component', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
   it('renders and handles selection correctly', async () => {
     const user = userEvent.setup();
