@@ -108,9 +108,6 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
@@ -128,7 +125,6 @@ describe('Testing Event Dashboard Screen', () => {
     // Clean up after each test
     localStorageMock.clear();
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
@@ -227,9 +223,7 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Click to open modal
-    await act(async () => {
-      await user.click(editButton);
-    });
+    await user.click(editButton);
 
     await waitFor(() => {
       expect(getByTestId('event-list-card-modals')).toBeInTheDocument();

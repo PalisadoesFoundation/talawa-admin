@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PaginationList from './PaginationList';
@@ -119,7 +119,7 @@ describe('PaginationList', () => {
 
   it('calls onRowsPerPageChange when rows per page changes', async () => {
     const user = userEvent.setup();
-    mockMatchMedia(false); // false = large screen
+    mockMatchMedia(false); // large screen
 
     const onRowsPerPageChange = vi.fn();
 
@@ -137,7 +137,9 @@ describe('PaginationList', () => {
 
     await user.selectOptions(select, '30');
 
-    expect(onRowsPerPageChange).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(onRowsPerPageChange).toHaveBeenCalled();
+    });
   });
 
   it('displays correct page information', () => {

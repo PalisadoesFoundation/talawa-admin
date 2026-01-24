@@ -180,7 +180,6 @@ describe('Testing OrganizationScreen', () => {
   });
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   const renderComponent = (): void => {
@@ -244,7 +243,8 @@ describe('Testing OrganizationScreen', () => {
 
     // Wait for the component to update
     await waitFor(() => {
-      const hasExpand = mainPage.classList.contains(styles.expand);
+      const currentMainPage = screen.getByTestId('mainpageright');
+      const hasExpand = currentMainPage.classList.contains(styles.expand);
       // The class should toggle from its initial state
       expect(hasExpand).toBe(!initialHasExpand);
     });

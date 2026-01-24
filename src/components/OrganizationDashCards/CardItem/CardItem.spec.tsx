@@ -97,7 +97,7 @@ describe('CardItem Component', () => {
     expect(screen.getByText('#1 Post Title')).toBeInTheDocument();
   });
 
-  it('handles image error by falling back to default image for Post', async () => {
+  it('handles image error by falling back to default image for Post', () => {
     const props: InterfaceCardItem = {
       type: 'Post',
       title: 'Post with Image Error',
@@ -139,7 +139,7 @@ describe('CardItem Component', () => {
     );
   });
 
-  it('renders MembershipRequest with Avatar when image fails to load', async () => {
+  it('renders MembershipRequest with Avatar when image fails to load', () => {
     const props: InterfaceCardItem = {
       type: 'MembershipRequest',
       title: 'Jane Smith',

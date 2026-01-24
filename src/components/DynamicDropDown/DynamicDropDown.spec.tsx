@@ -111,8 +111,7 @@ describe('DynamicDropDown component', () => {
     const option = screen.getByTestId('change-fieldname-btn-value2');
 
     // 🔑 THIS is required by the component logic
-    option.focus();
-
+    await user.click(option);
     await user.keyboard('{Enter}');
 
     expect(setFormData).toHaveBeenCalledWith(
@@ -141,10 +140,9 @@ describe('DynamicDropDown component', () => {
     const option = screen.getByTestId('change-fieldname-btn-value2');
 
     // Component expects focused option
-    option.focus();
-
+    await user.click(option);
     // 🔑 literal space, not {Space}
-    await user.keyboard(' ');
+    await user.keyboard('{space}');
 
     expect(setFormData).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -392,13 +390,15 @@ describe('DynamicDropDown component', () => {
       get: () => nonHtml,
     });
 
-    await user.keyboard('{Enter}');
-    expect(setFormData).not.toHaveBeenCalled();
-
-    Object.defineProperty(document, 'activeElement', {
-      configurable: true,
-      get: () => originalActive,
-    });
+    try {
+      await user.keyboard('{Enter}');
+      expect(setFormData).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => originalActive,
+      });
+    }
   });
 
   it('handles keyboard event when focused element is not an HTMLElement', async () => {
