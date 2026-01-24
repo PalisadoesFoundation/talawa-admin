@@ -328,7 +328,6 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<MemberDetail />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (
@@ -347,6 +346,7 @@ function App(): React.ReactElement {
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
+              <Route path="/user/settings" element={<MemberDetail />} />
               <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />

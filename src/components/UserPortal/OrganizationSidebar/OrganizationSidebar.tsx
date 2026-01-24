@@ -91,7 +91,38 @@ export default function OrganizationSidebar(): JSX.Element {
    */
   useEffect(() => {
     if (memberData) {
-      setMembers(memberData.organizationsMemberConnection.edges);
+      const legacyMembers = memberData.organizationsMemberConnection?.edges;
+      if (legacyMembers) {
+        setMembers(legacyMembers);
+        return;
+      }
+
+      const edges = memberData.organization?.members?.edges ?? [];
+      const normalizedMembers: InterfaceMemberInfo[] = edges.map(
+        (edge: {
+          node?: {
+            id?: string;
+            name?: string;
+            emailAddress?: string;
+            avatarURL?: string;
+            createdAt?: string;
+          };
+        }) => {
+          const fullName = edge.node?.name ?? '';
+          const [firstName = '', ...lastNameParts] = fullName.split(' ');
+          return {
+            _id: edge.node?.id ?? '',
+            firstName,
+            lastName: lastNameParts.join(' '),
+            email: edge.node?.emailAddress ?? '',
+            image: edge.node?.avatarURL ?? '',
+            createdAt: edge.node?.createdAt ?? '',
+            organizationsBlockedBy: [],
+          };
+        },
+      );
+
+      setMembers(normalizedMembers);
     }
   }, [memberData]);
 
