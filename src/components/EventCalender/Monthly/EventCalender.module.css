@@ -270,6 +270,7 @@
   padding: var(--space-6);
   background-color: var(--calendar-bg);
   min-height: 80vh;
+  margin-right: 0.8rem;
 }
 
 .calendar__header {

@@ -13,10 +13,6 @@
   color: var(--color-gray-900);
 }
 
-.paddedInput {
-  padding-right: calc(var(--picker-icon-space) + var(--space-4));
-}
-
 /* Container styling to match SearchBar */
 .pickerInputContainer {
   display: flex;

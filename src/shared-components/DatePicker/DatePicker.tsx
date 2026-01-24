@@ -3,7 +3,7 @@
  *
  * @remarks
  * Note: This component sets enableAccessibleFieldDOMStructure=\{false\}
- * to maintain compatibility with react-bootstrap Form.Control styling.
+ * to maintain compatibility with custom input styling.
  * This disables MUI's accessible field structure. The tradeoff is acceptable
  * because we provide:
  * - Custom label element with htmlFor association
@@ -17,9 +17,8 @@ import {
   DatePickerSlotProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { Form } from 'react-bootstrap';
 import type { Dayjs } from 'dayjs';
-import commonStyles from '../SharedPicker.module.css';
+import styles from './DatePicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 /**
@@ -59,10 +58,10 @@ interface InterfaceDatePickerProps {
 }
 
 /**
- * DatePicker wrapper component that integrates MUI DatePicker with react-bootstrap styling.
+ * DatePicker wrapper component that integrates MUI DatePicker with custom styling.
  *
  * This component provides a standardized date picker interface that maintains consistency
- * across the application by using react-bootstrap Form.Control for styling.
+ * across the application using design tokens for styling.
  *
  * @param props - The component props.
  *
@@ -96,7 +95,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
         {label && (
           <label
             htmlFor={dataTestId}
-            className={`form-label ${disabled ? 'text-muted' : ''} ${commonStyles.pickerLabel}`}
+            className={`form-label ${disabled ? 'text-muted' : ''} ${styles.pickerLabel}`}
           >
             {label}
           </label>
@@ -109,9 +108,9 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
           minDate={minDate}
           maxDate={maxDate}
           disabled={disabled}
-          className={commonStyles.fullWidth} // Applied directly to component, className prop moved to wrapper div
-          // Disabled to maintain compatibility with custom Form.Control slot
-          // MUI's accessible field structure conflicts with our react-bootstrap integration
+          className={styles.fullWidth} // Applied directly to component, className prop moved to wrapper div
+          // Disabled to maintain compatibility with custom textField slot
+          // MUI's accessible field structure conflicts with our custom input styling
           enableAccessibleFieldDOMStructure={false}
           slotProps={slotProps}
           data-testid={dataTestId}
@@ -132,21 +131,21 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
               } = props;
               return (
                 <div
-                  className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
+                  className={`${styles.pickerInputContainer} ${textFieldClassName || ''}`.trim()}
                 >
-                  <Form.Control
+                  <input
                     {...inputProps}
                     {...other}
-                    id={dataTestId} // Link label to input
-                    ref={ref}
+                    id={dataTestId}
+                    ref={ref as React.Ref<HTMLInputElement>}
                     required={props.required}
                     disabled={props.disabled}
                     data-testid={dataTestId}
                     data-cy={dataCy}
-                    className={`${commonStyles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? commonStyles.paddedInput : ''}`.trim()}
+                    className={styles.pickerInput}
                   />
                   {InputProps?.endAdornment && (
-                    <div className="position-absolute end-0 top-50 translate-middle-y pe-2">
+                    <div className={styles.pickerIconButton}>
                       {InputProps.endAdornment}
                     </div>
                   )}

@@ -1,14 +1,22 @@
 .root {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 15px;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+  margin-right: var(--space-4);
+}
+
+.pickerLabel {
+  margin-bottom: var(--space-3);
+  display: block;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-900);
 }
 
 .controlsRow {
   display: flex;
   flex-direction: row;
-  gap: 0.75rem;
+  gap: var(--space-4);
   align-items: flex-end;
   flex-wrap: wrap;
 }
@@ -20,22 +28,47 @@
 
 .presetRow {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-3);
   flex-wrap: wrap;
-  margin-top: 0.5rem;
+  margin-top: var(--space-4);
 }
 
 .presetButton {
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background: transparent;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
+  border: var(--border-1) solid var(--color-gray-200);
+  background-color: var(--color-white);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md)
+    rgba(149, 156, 202, 0.08);
   cursor: pointer;
-  font-size: 0.875rem;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-900);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.presetButton:hover:not(:disabled) {
+  border-color: var(--color-blue-500);
+  background-color: var(--color-blue-100);
+}
+
+.presetButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .presetButtonActive {
-  background: var(--bs-primary, #0d6efd);
-  color: white;
-  border-color: var(--bs-primary, #0d6efd);
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-blue-200);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md)
+    rgba(23, 120, 242, 0.2);
+}
+
+.presetButtonActive:hover:not(:disabled) {
+  background-color: var(--color-blue-100);
+  border-color: var(--color-blue-100);
 }
