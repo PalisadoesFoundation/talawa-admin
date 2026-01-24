@@ -43,7 +43,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from './UpdateSession.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import Button from 'shared-components/Button/Button';
 
 import { InterfaceUpdateTimeoutProps } from 'types/AdminPortal/UpdateSession/interface';
@@ -196,7 +196,7 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
             <div className={styles.updateTimeoutButtonContainer}>
               <Button
                 type="submit"
-                className={styles.addButton}
+                className={styles.updateTimeoutButton}
                 data-testid="update-button"
               >
                 {t('communityProfile.sessionTimeout.update')}
