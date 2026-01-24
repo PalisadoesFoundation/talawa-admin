@@ -101,4 +101,34 @@ describe('DropdownButton', () => {
 
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
+
+  it('renders without className prop', async () => {
+    const propsWithoutClassName: InterfaceDropdownButtonProps = {
+      label: 'Menu',
+      items: [{ key: '1', label: 'Item 1', onClick: () => {} }],
+      variant: 'primary',
+      dataTestId: 'dropdown-button',
+    };
+
+    render(<DropdownButton {...propsWithoutClassName} />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    expect(toggle).toBeInTheDocument();
+  });
+
+  it('uses default align value when not specified', async () => {
+    const propsWithoutAlign: InterfaceDropdownButtonProps = {
+      label: 'Menu',
+      items: [{ key: '1', label: 'Item 1', onClick: () => {} }],
+      variant: 'primary',
+      dataTestId: 'dropdown-button',
+    };
+
+    render(<DropdownButton {...propsWithoutAlign} />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    await user.click(toggle);
+
+    expect(screen.getByRole('button', { name: 'Item 1' })).toBeInTheDocument();
+  });
 });

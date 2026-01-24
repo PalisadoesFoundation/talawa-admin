@@ -257,13 +257,16 @@ export default [
       'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
       'src/shared-components/DatePicker/**/*.{ts,tsx}',
       'src/shared-components/TimePicker/**/*.{ts,tsx}',
-      'src/index.tsx',
     ],
     rules: restrictImportsExcept([
       'mui-date-pickers',
       'rb-form',
       'rb-form-path',
     ]),
+  },
+  {
+    files: ['src/index.tsx'],
+    rules: restrictImportsExcept(['mui-date-pickers']),
   },
   /**
    * Exemption: DataTable wrapper component
