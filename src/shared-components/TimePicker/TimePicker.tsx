@@ -11,6 +11,7 @@
  * - Proper keyboard navigation support
  * - Screen reader compatibility through ARIA attributes
  */
+import { Form } from 'react-bootstrap';
 import React from 'react';
 import {
   TimePicker as MuiTimePicker,
@@ -20,7 +21,6 @@ import {
 import type { Dayjs } from 'dayjs';
 import commonStyles from './TimePicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 /**
  * Component Props for TimePicker
@@ -135,10 +135,10 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                 <div
                   className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
                 >
-                  <FormFieldGroup
+                  <Form.Control
                     {...inputProps}
                     {...other}
-                    id={dataTestId} // Link label to input
+                    id={dataTestId}
                     ref={ref}
                     disabled={disabled}
                     required={props.required}

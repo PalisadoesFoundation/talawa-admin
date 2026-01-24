@@ -11,6 +11,7 @@
  * - Proper keyboard navigation support
  * - Screen reader compatibility through ARIA attributes
  */
+import { Form } from 'react-bootstrap';
 import React from 'react';
 import {
   DatePicker as MuiDatePicker,
@@ -20,7 +21,6 @@ import {
 import type { Dayjs } from 'dayjs';
 import commonStyles from './DatePicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 /**
  * Component Props for DatePicker
@@ -134,10 +134,10 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 <div
                   className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
                 >
-                  <FormFieldGroup
+                  <Form.Control
                     {...inputProps}
                     {...other}
-                    id={dataTestId} // Link label to input
+                    id={dataTestId}
                     ref={ref}
                     required={props.required}
                     disabled={props.disabled}
