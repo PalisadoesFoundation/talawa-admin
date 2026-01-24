@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L28)
+Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L26)
 
 ## Parameters
 
