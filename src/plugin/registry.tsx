@@ -7,6 +7,7 @@
  */
 
 import React, { lazy } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { getPluginManager } from './manager';
 import type {
   IPluginManifest,
@@ -57,18 +58,29 @@ function createErrorComponent(
     },
   };
 
-  return () => (
-    <div style={errorStyles.container}>
-      <h3 style={errorStyles.heading}>Plugin Error</h3>
-      <p style={errorStyles.text}>
-        Failed to load component: <strong>{componentName}</strong>
-      </p>
-      <p style={errorStyles.text}>
-        Plugin: <strong>{pluginId}</strong>
-      </p>
-      <p style={errorStyles.smallText}>{error}</p>
-    </div>
-  );
+  return function ErrorComponent() {
+    const { t } = useTranslation('translation', { keyPrefix: 'plugin' });
+    return (
+      <div style={errorStyles.container}>
+        <h3 style={errorStyles.heading}>{t('error')}</h3>
+        <p style={errorStyles.text}>
+          <Trans
+            i18nKey="failedToLoad"
+            values={{ componentName }}
+            components={{ 1: <strong /> }}
+          />
+        </p>
+        <p style={errorStyles.text}>
+          <Trans
+            i18nKey="id"
+            values={{ pluginId }}
+            components={{ 1: <strong /> }}
+          />
+        </p>
+        <p style={errorStyles.smallText}>{error}</p>
+      </div>
+    );
+  };
 }
 
 /**

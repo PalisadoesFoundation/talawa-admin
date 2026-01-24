@@ -1406,6 +1406,8 @@
     "menu": "मेनू"
   },
   "organizationSidebar": {
+    "loading": "लोड हो रहा है...",
+    "ends": "समाप्त",
     "viewAll": "सभी को देखें",
     "events": "आयोजन",
     "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
@@ -1770,6 +1772,10 @@
     "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
+    "starredMessages": "तारांकित संदेश",
+    "all": "सब",
+    "unread": "अपठित",
+    "groups": "समूह",
     "title": "चैट्स",
     "deleteChat": "चैट हटाएं",
     "add": "जोड़ें",
@@ -2212,6 +2218,11 @@
     "groupsAvailable": "{{count}} समूह उपलब्ध",
     "volunteersRequired": "आवश्यक",
     "signedUp": "पंजीकृत"
+  },
+  "plugin": {
+    "error": "प्लगइन त्रुटि",
+    "failedToLoad": "घटक लोड करने में विफल: <1>{{componentName}}</1>",
+    "id": "प्लगइन: <1>{{pluginId}}</1>"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

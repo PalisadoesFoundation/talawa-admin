@@ -1301,6 +1301,11 @@
     "asYourCountry": "Como su país",
     "actions": "Acciones"
   },
+  "plugin": {
+    "error": "Error del complemento",
+    "failedToLoad": "Error al cargar el componente: <1>{{componentName}}</1>",
+    "id": "Complemento: <1>{{pluginId}}</1>"
+  },
   "userLogin": {
     "login": "Acceso",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -1389,6 +1394,8 @@
     "chat": "Chat"
   },
   "organizationSidebar": {
+    "loading": "Cargando...",
+    "ends": "Finaliza",
     "viewAll": "Ver todo",
     "events": "Eventos",
     "members": "Miembros",
@@ -1753,6 +1760,10 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "starredMessages": "Mensajes destacados",
+    "all": "Todos",
+    "unread": "No leídos",
+    "groups": "Grupos",
     "title": "Chats",
     "deleteChat": "Eliminar Chat",
     "add": "Agregar",

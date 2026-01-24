@@ -25,6 +25,28 @@ vi.mock('../manager', () => ({
     getLoadedPlugins: vi.fn(),
   })),
 }));
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+  Trans: ({
+    i18nKey,
+    values,
+  }: {
+    i18nKey: string;
+    values: Record<string, string>;
+  }) =>
+    React.createElement(
+      'span',
+      null,
+      `${i18nKey} ${values ? JSON.stringify(values) : ''}`,
+    ),
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
+}));
 
 // Mock fetch
 
