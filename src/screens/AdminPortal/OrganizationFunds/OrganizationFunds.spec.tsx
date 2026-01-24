@@ -1,7 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -90,8 +89,10 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationFunds Screen =>', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockedUseParams.mockReset();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -197,14 +198,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
-    await userEvent.click(createFundBtn);
+    await user.click(createFundBtn);
 
     await waitFor(() => {
       const modalTitle = screen.getByTestId('modalTitle');
       expect(modalTitle).toHaveTextContent(translations.fundCreate);
     });
 
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
@@ -220,14 +221,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     const editFundBtn = await screen.findAllByTestId('editFundBtn');
     await waitFor(() => expect(editFundBtn[0]).toBeInTheDocument());
-    await userEvent.click(editFundBtn[0]);
+    await user.click(editFundBtn[0]);
 
     await waitFor(() =>
       expect(
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -243,8 +244,8 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it (SearchBar now uses onChange, not searchBtn)
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.clear(searchField);
-    await userEvent.type(searchField, '2');
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     // Wait and verify search results - search now triggers on type
     await waitFor(
@@ -331,7 +332,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     expect(createdOnHeader).toBeInTheDocument();
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 
@@ -361,7 +362,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const fundName = await screen.findAllByTestId('fundName');
     expect(fundName[0]).toBeInTheDocument();
-    fireEvent.click(fundName[0]);
+    await user.click(fundName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -374,7 +375,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
     expect(viewBtn[0]).toBeInTheDocument();
-    fireEvent.click(viewBtn[0]);
+    await user.click(viewBtn[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -408,7 +409,7 @@ describe('OrganizationFunds Screen =>', () => {
       ) as HTMLButtonElement | null;
 
       if (nextButton && !nextButton.disabled) {
-        fireEvent.click(nextButton);
+        await user.click(nextButton);
         await wait(300);
       }
     }
@@ -429,14 +430,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'testsearch');
+    await user.type(searchField, 'testsearch');
 
     // Verify search text is entered (onChange trims spaces)
     expect(searchField).toHaveValue('testsearch');
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     // Verify search input is cleared
     await waitFor(() => {
@@ -459,7 +460,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Type a search term that won't match any funds
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'nonexistentfundxyz');
+    await user.type(searchField, 'nonexistentfundxyz');
 
     // Verify "No results found for" message is displayed
     await waitFor(() => {
@@ -506,11 +507,11 @@ describe('OrganizationFunds Screen =>', () => {
     );
 
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
 
       // Click again to toggle sort direction
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 
