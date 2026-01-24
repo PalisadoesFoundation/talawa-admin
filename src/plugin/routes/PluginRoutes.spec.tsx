@@ -2,8 +2,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import type { ComponentType, ReactNode } from 'react';
-import PluginRoutes from '../../routes/PluginRoutes';
-import { usePluginRoutes } from '../../hooks';
+import PluginRoutes from './PluginRoutes';
+import { usePluginRoutes } from '../hooks';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -38,8 +38,7 @@ function createRouteRenderer() {
   return component;
 }
 
-// Mock the hooks
-vi.mock('../../hooks', () => ({
+vi.mock('../hooks', () => ({
   usePluginRoutes: vi.fn(),
 }));
 
@@ -114,11 +113,8 @@ describe('PluginRoutes', () => {
     lazyImportFunctions.length = 0;
   });
 
-  // Restore console spy used in the 'surfaces error fallback when import throws' test.
-  // This relies on vi.restoreAllMocks() to clean up spies only, not a full mock reset.
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {

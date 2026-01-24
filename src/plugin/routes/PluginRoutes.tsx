@@ -15,7 +15,10 @@ import type { IRouteExtension } from '../types';
 import type { InterfacePluginRoutesProps } from '../../types/plugin/PluginRoutes/interface';
 
 /**
- * Component that renders plugin routes dynamically
+ * Component that renders plugin routes dynamically.
+ *
+ * `@param` props - InterfacePluginRoutesProps
+ * `@returns` JSX.Element
  */
 const PluginRoutes: React.FC<InterfacePluginRoutesProps> = ({
   userPermissions = [],

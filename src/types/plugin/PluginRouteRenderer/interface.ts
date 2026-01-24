@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactElement } from 'react';
 import type { IRouteExtension } from '../../../plugin/types';
 
 /**
@@ -6,5 +6,5 @@ import type { IRouteExtension } from '../../../plugin/types';
  */
 export interface InterfacePluginRouteRendererProps {
   route: IRouteExtension;
-  fallback?: React.ReactElement;
+  fallback?: ReactElement;
 }

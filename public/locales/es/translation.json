@@ -2426,7 +2426,7 @@
     "resendButton": "Resend Verification Email",
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "goToLogin": "Ir a iniciar sesión"
   },
   "plugins": {
     "loading": "Cargando complemento...",
