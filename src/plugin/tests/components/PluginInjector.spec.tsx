@@ -6,10 +6,10 @@ import { usePluginInjectors } from '../../hooks';
 import { getPluginComponent } from '../../registry';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
+import i18nForTest from 'utils/i18nForTest';
 dayjs.extend(utc);
 
-import styles from 'style/app-fixed.module.css';
+import styles from './PluginInjector.module.css';
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
@@ -125,7 +125,9 @@ describe('PluginInjector', () => {
     const { container } = render(<PluginInjector injectorType="G1" />);
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
+    expect(container.firstChild).toHaveTextContent(
+      i18nForTest.t('pluginInjector.notFoundOrDisabled'),
+    );
   });
 
   it('should handle null injectors', () => {
@@ -134,7 +136,9 @@ describe('PluginInjector', () => {
     const { container } = render(<PluginInjector injectorType="G1" />);
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
+    expect(container.firstChild).toHaveTextContent(
+      i18nForTest.t('pluginInjector.notFoundOrDisabled'),
+    );
   });
 
   it('should handle undefined injectors', () => {
@@ -143,7 +147,9 @@ describe('PluginInjector', () => {
     const { container } = render(<PluginInjector injectorType="G1" />);
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
+    expect(container.firstChild).toHaveTextContent(
+      i18nForTest.t('pluginInjector.notFoundOrDisabled'),
+    );
   });
 
   it('should apply custom className', () => {

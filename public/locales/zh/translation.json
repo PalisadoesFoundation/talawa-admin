@@ -2275,6 +2275,10 @@
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "插件未找到或已禁用",
+    "notFoundOrDisabledDescription": "抱歉，您尝试访问的插件未找到或已被组织管理员禁用。如有疑问，请联系组织管理员。"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",
     "commentUpdatedSuccessfully": "评论更新成功",
