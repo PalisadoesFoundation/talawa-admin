@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormField } from '../FormField/FormField';
-import { EmailField } from '../EmailField/EmailField';
+import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { PasswordStrengthIndicator } from '../PasswordStrengthIndicator/PasswordStrengthIndicator';
 import { OrgSelector } from '../OrgSelector/OrgSelector';

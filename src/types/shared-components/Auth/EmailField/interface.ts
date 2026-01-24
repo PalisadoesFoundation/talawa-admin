@@ -20,7 +20,7 @@ export interface InterfaceEmailFieldProps {
   /** Change handler called when input value changes */
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 
-  /** Placeholder text for the input - defaults to "name@example.com" */
+  /** Placeholder text for the input - defaults to "name\@example.com" */
   placeholder?: string;
 
   /** Error message to display - null or undefined means no error */

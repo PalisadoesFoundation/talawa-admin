@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { Form, Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import { EmailField } from '../EmailField/EmailField';
+import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
@@ -95,24 +96,27 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   };
 
   return (
-    <Form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
+    <form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
       <h3 data-testid={`${testId}-heading`}>
         {isAdmin ? t('adminLogin') : t('userLogin')}
       </h3>
+      <FormFieldGroup name="email" label={tCommon('email')} required>
+        <EmailField
+          value={formData.email}
+          onChange={handleEmailChange}
+          testId={`${testId}-email`}
+        />
+      </FormFieldGroup>
 
-      <EmailField
-        value={formData.email}
-        onChange={handleEmailChange}
-        testId={`${testId}-email`}
-      />
-
-      <PasswordField
-        label={tCommon('password')}
-        value={formData.password}
-        onChange={handlePasswordChange}
-        placeholder={tCommon('enterPassword')}
-        testId={`${testId}-password`}
-      />
+      <FormFieldGroup name="password" label={tCommon('password')} required>
+        <PasswordField
+          label={tCommon('password')}
+          value={formData.password}
+          onChange={handlePasswordChange}
+          placeholder={tCommon('enterPassword')}
+          testId={`${testId}-password`}
+        />
+      </FormFieldGroup>
 
       <Button
         type="submit"
@@ -122,7 +126,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       >
         {loading ? t('loading') : tCommon('login')}
       </Button>
-    </Form>
+    </form>
   );
 };
 

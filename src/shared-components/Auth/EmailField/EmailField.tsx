@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FormField } from '../FormField/FormField';
-import type { InterfaceEmailFieldProps } from '../../../types/Auth/EmailField/interface';
+import { FormField } from '../../../components/Auth/FormField/FormField';
+import type { InterfaceEmailFieldProps } from '../../../types/shared-components/Auth/EmailField/interface';
 
 /**
  * Reusable email input field component.
