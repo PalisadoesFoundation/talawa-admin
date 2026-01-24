@@ -259,7 +259,11 @@ export default [
       'src/shared-components/TimePicker/**/*.{ts,tsx}',
       'src/index.tsx',
     ],
-    rules: restrictImportsExcept(['mui-date-pickers', 'rb-form', 'rb-form-path']),
+    rules: restrictImportsExcept([
+      'mui-date-pickers',
+      'rb-form',
+      'rb-form-path',
+    ]),
   },
   /**
    * Exemption: DataTable wrapper component
