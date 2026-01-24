@@ -184,7 +184,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Search by Groups', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     // Wait for LoadingState to complete and table data to render
     await waitFor(() => {
@@ -212,7 +211,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Search by Leader', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     // Wait for LoadingState to complete and table data to render
     await waitFor(() => {
@@ -263,7 +261,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Open and close ViewModal', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
     await user.click(viewGroupBtn[0]);
@@ -275,7 +272,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Open and Close Delete Modal', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     const deleteGroupBtn = await screen.findAllByTestId('deleteGroupBtn');
     await user.click(deleteGroupBtn[0]);
@@ -287,7 +283,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Open and close GroupModal (Edit)', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
     await user.click(editGroupBtn[0]);
@@ -299,7 +294,6 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Open and close GroupModal (Create)', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const user = userEvent.setup();
 
     // Wait for LoadingState to complete and table data to render
     await waitFor(() => {
@@ -317,7 +311,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should filter groups by leader name with case insensitive search', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -342,7 +335,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should filter groups by leader name with partial match', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -368,7 +360,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should filter groups by group name with case insensitive search', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -387,7 +378,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should handle empty search term - show all groups', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -411,7 +401,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should handle leader search with null/empty leader name', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -437,7 +426,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should handle group name search with null/empty group name', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -457,7 +445,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should test complete filter function execution path', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -495,7 +482,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should execute debouncedSearch function and trigger filtering via search button', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -530,7 +516,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should execute leader search branch in filter function via Enter key', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -566,7 +551,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should execute group name search branch in filter function via search button', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -599,7 +583,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should test case sensitivity in search filtering via Enter key', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -623,7 +606,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should trigger debouncedSearch on Enter key press', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -644,7 +626,6 @@ describe('Testing VolunteerGroups Screen', () => {
     it('should trigger debouncedSearch on search button click', async () => {
       mockRouteParams();
       renderVolunteerGroups(link1);
-      const user = userEvent.setup();
 
       await waitFor(() => {
         expect(screen.getByTestId('searchBy')).toBeInTheDocument();

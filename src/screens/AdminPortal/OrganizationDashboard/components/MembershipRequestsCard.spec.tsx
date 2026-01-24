@@ -54,7 +54,7 @@ describe('MembershipRequestsCard Component', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-  })
+  });
 
   afterEach(() => {
     toastMocks.success.mockReset();
@@ -105,7 +105,6 @@ describe('MembershipRequestsCard Component', () => {
   });
 
   it('calls onViewAllClick when view all button is clicked', async () => {
-    const user = userEvent.setup();
     render(<MembershipRequestsCard {...mockProps} />);
 
     // Use the specific test id for membership requests button
@@ -175,7 +174,6 @@ describe('MembershipRequestsCard Component', () => {
   });
 
   it('shows toast when clicking volunteer rankings view all', async () => {
-    const user = userEvent.setup();
     render(<MembershipRequestsCard {...mockProps} />);
 
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
@@ -185,7 +183,6 @@ describe('MembershipRequestsCard Component', () => {
   });
 
   it('handles async onViewAllClick correctly', async () => {
-    const user = userEvent.setup();
     const asyncClickHandler = vi.fn().mockResolvedValue(undefined);
     const asyncProps = { ...mockProps, onViewAllClick: asyncClickHandler };
     render(<MembershipRequestsCard {...asyncProps} />);

@@ -370,7 +370,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing registration functionality', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -428,7 +427,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -485,7 +483,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing registration functionality, when password and confirm password is not same', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -542,7 +539,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing registration functionality, when input is not filled correctly', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -599,7 +595,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('switches to login tab on successful registration', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -660,7 +655,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('switches to login tab on successful registration correct data', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -722,7 +716,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing toggle login register portion', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -762,7 +755,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing login functionality', async () => {
-    const user = userEvent.setup();
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
     render(
@@ -791,7 +783,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing wrong login functionality', async () => {
-    const user = userEvent.setup();
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
     render(
@@ -820,7 +811,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing password preview feature for login', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -847,7 +837,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing password preview feature for register', async () => {
-    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -891,7 +880,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing confirm password preview feature', async () => {
-    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -951,7 +939,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
-    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -996,7 +983,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
-    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1041,7 +1027,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
-    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1084,7 +1069,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
-    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1242,7 +1226,6 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should handle pending invitation token on successful login', async () => {
-    const user = userEvent.setup();
     const mockToken = 'test-invitation-token';
 
     // Mock getItem to return pending invitation token
@@ -1281,7 +1264,6 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should handle pending invitation token on successful registration', async () => {
-    const user = userEvent.setup();
     const mockToken = 'test-invitation-token';
 
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
@@ -1346,7 +1328,6 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should not redirect when no pending invitation token exists', async () => {
-    const user = userEvent.setup();
     // Mock getItem to return null for pending invitation token
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
       if (key === 'pendingInvitationToken') return null;
@@ -1381,7 +1362,6 @@ describe('Testing invitation functionality', () => {
 });
 
 it('Render the Select Organization list and change the option', async () => {
-  const user = userEvent.setup();
   // Skip this test for admin path since register button is removed
   Object.defineProperty(window, 'location', {
     configurable: true,
@@ -1529,7 +1509,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('bypasses recaptcha when feature is off', async () => {
-    const user = userEvent.setup();
     vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
@@ -1560,7 +1539,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows toast for invalid name during registration', async () => {
-    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
@@ -1582,7 +1560,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows toast for weak password', async () => {
-    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
@@ -1601,7 +1578,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('warns when non-admin logs in from admin portal', async () => {
-    const user = userEvent.setup();
     setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
       ...MOCKS.filter((m) => m.request.query !== SIGNIN_QUERY),
@@ -1678,7 +1654,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('resets signup recaptcha when signup fails', async () => {
-    const user = userEvent.setup();
     const FAIL_MOCK = [
       {
         request: {
@@ -1747,7 +1722,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows error toast when recaptcha verification fails during signup', async () => {
-    const user = userEvent.setup();
     const RECAPTCHA_ERROR_MOCK = [
       {
         request: {
@@ -1792,7 +1766,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows email invalid toast when email is too short', async () => {
-    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
@@ -1814,7 +1787,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows not found warning when signIn returns null', async () => {
-    const user = userEvent.setup();
     const NULL_SIGNIN_MOCK = [
       {
         request: {
@@ -1844,7 +1816,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows account locked message with countdown when retryAfter is provided', async () => {
-    const user = userEvent.setup();
     // Set retryAfter to 15 minutes from now
     const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
@@ -1899,7 +1870,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows generic account locked message when retryAfter is missing', async () => {
-    const user = userEvent.setup();
     const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
       {
         request: {
@@ -1951,7 +1921,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('handles non-account_locked GraphQL errors via errorHandler', async () => {
-    const user = userEvent.setup();
     const OTHER_GRAPHQL_ERROR_MOCK = [
       {
         request: {
@@ -2002,7 +1971,6 @@ describe('Extra coverage for 100 %', () => {
 
 describe('Cookie-based authentication verification', () => {
   it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
-    const user = userEvent.setup();
     const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
       {
         request: {
@@ -2100,7 +2068,6 @@ describe('Cookie-based authentication verification', () => {
 
   // Test case for registration/signup flow
   it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
-    const user = userEvent.setup();
     const SIGNUP_SUCCESS_MOCK = [
       {
         request: {
@@ -2210,7 +2177,6 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('Testing login error handling (catch block)', async () => {
-    const user = userEvent.setup();
     const ERROR_MOCKS = [
       {
         request: {
@@ -2347,7 +2313,6 @@ describe('Cookie-based authentication verification', () => {
     });
 
     it('redirects to login on back to login button click', async () => {
-      const user = userEvent.setup();
       setLocationPath('/register');
       renderLoginPage();
       await wait();
@@ -2416,7 +2381,6 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -2448,7 +2412,6 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('Testing login functionality with verified email clears storage flags', async () => {
-    const user = userEvent.setup();
     const formData = { email: 'verified@gmail.com', password: 'password123' };
 
     render(

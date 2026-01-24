@@ -147,8 +147,8 @@ const generateNotifications = (
 let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
-  user = userEvent.setup();
-})
+  user = userEvent.setup(); // applies to all tests
+});
 
 afterEach(() => {
   vi.clearAllMocks();

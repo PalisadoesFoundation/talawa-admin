@@ -90,7 +90,6 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
 
 describe('OrganizationFunds Screen =>', () => {
   let user: ReturnType<typeof userEvent.setup>;
-  
   beforeEach(() => {
     mockedUseParams.mockReset();
     user = userEvent.setup();
@@ -192,7 +191,6 @@ describe('OrganizationFunds Screen =>', () => {
   it('open and close Create Fund modal', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -216,7 +214,6 @@ describe('OrganizationFunds Screen =>', () => {
   it('open and close update fund modal', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -240,7 +237,6 @@ describe('OrganizationFunds Screen =>', () => {
   it('Search the Funds list by name', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -427,7 +423,6 @@ describe('OrganizationFunds Screen =>', () => {
   it('should clear the search input when clear button is clicked', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -453,7 +448,6 @@ describe('OrganizationFunds Screen =>', () => {
   it('should display "noResultsFoundFor" message when search yields no results', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
-    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();

@@ -544,7 +544,7 @@ let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
   user = userEvent.setup();
-})
+});
 
 describe('PostsPage Component', () => {
   beforeEach(() => {

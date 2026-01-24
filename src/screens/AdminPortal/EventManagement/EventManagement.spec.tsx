@@ -102,7 +102,7 @@ describe('Event Management', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-  })
+  });
 
   beforeAll(() => {
     vi.mock('react-router', async () => {
@@ -197,7 +197,6 @@ describe('Event Management', () => {
     });
 
     it('switches between all available tabs', async () => {
-      const user = userEvent.setup();
       renderEventManagement();
 
       const tabsToTest = [
@@ -253,7 +252,6 @@ describe('Event Management', () => {
     });
 
     it('renders dropdown with all options', async () => {
-      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
@@ -279,7 +277,6 @@ describe('Event Management', () => {
     });
 
     it('switches tabs through dropdown selection', async () => {
-      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
