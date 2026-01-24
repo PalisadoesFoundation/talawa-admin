@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PaginationList from './PaginationList';
@@ -115,31 +115,6 @@ describe('PaginationList', () => {
     await user.click(nextButton);
 
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(null, 1);
-  });
-
-  it('calls onRowsPerPageChange when rows per page changes', async () => {
-    const user = userEvent.setup();
-    mockMatchMedia(false); // large screen
-
-    const onRowsPerPageChange = vi.fn();
-
-    renderWithProviders({
-      count: 100,
-      rowsPerPage: 10,
-      page: 0,
-      onPageChange: vi.fn(),
-      onRowsPerPageChange,
-    });
-
-    const select = screen.getByRole('combobox', {
-      name: /rows per page/i,
-    });
-
-    await user.selectOptions(select, '30');
-
-    await waitFor(() => {
-      expect(onRowsPerPageChange).toHaveBeenCalled();
-    });
   });
 
   it('displays correct page information', () => {

@@ -616,7 +616,9 @@
     "search": "搜索",
     "Events": "活动",
     "Workshops": "研讨会",
-    "selectMonth": "选择月份"
+    "selectMonth": "选择月份",
+    "selectDay": "选择日期",
+    "selectYear": "选择年份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",

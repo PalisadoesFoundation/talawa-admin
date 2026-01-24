@@ -73,7 +73,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('should render the Action Item Categories Screen', async () => {
-    userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -187,7 +186,7 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes Create Category modal', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -197,17 +196,16 @@ describe('Testing Organisation Action Item Categories', () => {
 
     const addCategoryBtn = screen.getByTestId('createActionItemCategoryBtn');
     expect(addCategoryBtn).toBeInTheDocument();
-    await userEvent.click(addCategoryBtn);
+    await user.click(addCategoryBtn);
 
     await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
   it('open and closes Edit Category modal', async () => {
-    userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
@@ -224,7 +222,7 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes View Category modal', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for categories to load
@@ -232,7 +230,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(viewCategoryBtn).toBeInTheDocument();
 
     // Open view modal
-    await userEvent.click(viewCategoryBtn);
+    await user.click(viewCategoryBtn);
 
     // Check modal is open by looking for the modal content
     await waitFor(() =>
@@ -240,14 +238,14 @@ describe('Testing Organisation Action Item Categories', () => {
     );
 
     // Close the view modal
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
   it('Search categories by name', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -258,8 +256,8 @@ describe('Testing Organisation Action Item Categories', () => {
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    await userEvent.type(searchInput, 'Category 1');
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.type(searchInput, 'Category 1');
+    await user.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -267,7 +265,7 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by description', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -279,8 +277,8 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by description - "Test description" matches Category 1's description
-    await userEvent.type(searchInput, 'Test description');
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.type(searchInput, 'Test description');
+    await user.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -288,7 +286,7 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name and clear the input by backspace', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -300,7 +298,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Clear the search input by backspace
-    await userEvent.type(searchInput, 'A{backspace}');
+    await user.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -308,7 +306,7 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name on press of ENTER', async () => {
-    userEvent.setup();
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -320,7 +318,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Simulate typing and pressing ENTER
-    await userEvent.type(searchInput, 'Category 1{enter}');
+    await user.type(searchInput, 'Category 1{enter}');
 
     // Wait for the filtering to complete
     await waitFor(() => {
@@ -332,7 +330,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('should render Empty Action Item Categories Screen', async () => {
-    userEvent.setup();
     renderActionItemCategories(link2, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -341,7 +338,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('should render the Action Item Categories Screen with error', async () => {
-    userEvent.setup();
     renderActionItemCategories(link3, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
@@ -350,7 +346,6 @@ describe('Testing Organisation Action Item Categories', () => {
 
   describe('LoadingState Behavior', () => {
     it('should show spinner initially and hide after data loads', async () => {
-      userEvent.setup();
       renderActionItemCategories(link1, 'orgId');
 
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
@@ -363,7 +358,6 @@ describe('Testing Organisation Action Item Categories', () => {
     });
 
     it('should render content after LoadingState completes', async () => {
-      userEvent.setup();
       renderActionItemCategories(link1, 'orgId');
 
       await waitFor(() => {
@@ -374,7 +368,6 @@ describe('Testing Organisation Action Item Categories', () => {
     });
 
     it('should handle LoadingState with empty results', async () => {
-      userEvent.setup();
       renderActionItemCategories(link2, 'orgId');
 
       await waitFor(() => {

@@ -616,7 +616,9 @@
     "search": "Buscar usuarios",
     "Events": "Eventos",
     "Workshops": "Talleres",
-    "selectMonth": "Seleccionar mes"
+    "selectMonth": "Seleccionar mes",
+    "selectDay": "Seleccionar día",
+    "selectYear": "Seleccionar año"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
