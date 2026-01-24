@@ -2439,7 +2439,7 @@
       },
       "notRegistered": {
         "title": "प्लगइन पंजीकृत नहीं है",
-        "description": "कृपया इस प्लगइन को रजिस्ट्री में जोड़ें"
+        "description": "कृपया इस प्लगइन को रजिस्ट्री में जोड़ें {{registryPath}}"
       },
       "noComponents": {
         "title": "कोई घटक नहीं मिला"

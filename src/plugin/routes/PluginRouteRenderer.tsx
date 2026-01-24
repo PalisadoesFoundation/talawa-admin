@@ -7,19 +7,16 @@
 
 import React, { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { IRouteExtension } from '../types';
+
 import { getPluginComponents, isPluginRegistered } from '../registry';
 import styles from './PluginRouteRenderer.module.css';
 
-interface IPluginRouteRendererProps {
-  route: IRouteExtension;
-  fallback?: React.ReactElement;
-}
+import type { InterfacePluginRouteRendererProps } from '../../types/plugin/PluginRouteRenderer/interface';
 
 /**
  * Component to render plugin routes using the plugin registry
  */
-const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
+const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
   route,
   fallback,
 }) => {
@@ -56,8 +53,9 @@ const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
           {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
         </p>
         <p className={styles.errorDescription}>
-          {t('plugins.errors.notRegistered.description')}{' '}
-          <code>src/plugin/registry.ts</code>
+          {t('plugins.errors.notRegistered.description', {
+            registryPath: 'src/plugin/registry.ts',
+          })}
         </p>
       </div>
     );

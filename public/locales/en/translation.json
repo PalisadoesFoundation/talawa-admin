@@ -2442,7 +2442,7 @@
       },
       "notRegistered": {
         "title": "Plugin Not Registered",
-        "description": "Please add this plugin to the plugin registry in"
+        "description": "Please add this plugin to the plugin registry in {{registryPath}}"
       },
       "noComponents": {
         "title": "No Components Found"

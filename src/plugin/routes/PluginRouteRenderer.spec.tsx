@@ -1,13 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
-import { render } from '@testing-library/react';
-import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
-import { getPluginComponents, isPluginRegistered } from '../../registry';
+import { render, screen } from '@testing-library/react';
+import PluginRouteRenderer from './PluginRouteRenderer';
+import { getPluginComponents, isPluginRegistered } from '../registry';
 
 // Mock the registry
-vi.mock('../../registry', () => ({
+vi.mock('../registry', () => ({
   getPluginComponents: vi.fn(),
   isPluginRegistered: vi.fn(),
+}));
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
 }));
 
 // Mock React.Suspense
@@ -124,18 +131,24 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should render default fallback when no fallback provided', () => {
+    const mockComponents = {
+      TestComponent: vi.fn(() => <div>Mock Component</div>),
+    };
+
     const route = {
       path: '/test',
       component: 'TestComponent',
-      pluginId: 'unregistered-plugin',
+      pluginId: 'registered-plugin',
       permissions: ['READ'],
     };
 
-    vi.mocked(isPluginRegistered).mockReturnValue(false);
+    vi.mocked(isPluginRegistered).mockReturnValue(true);
+    vi.mocked(getPluginComponents).mockReturnValue(mockComponents);
 
     render(<PluginRouteRenderer route={route} />);
 
-    expect(isPluginRegistered).toHaveBeenCalledWith('unregistered-plugin');
+    expect(isPluginRegistered).toHaveBeenCalledWith('registered-plugin');
+    expect(screen.getByText('plugins.loading')).toBeInTheDocument();
   });
 
   it('should handle multiple components from same plugin', () => {

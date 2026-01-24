@@ -2439,7 +2439,7 @@
       },
       "notRegistered": {
         "title": "Complemento no registrado",
-        "description": "Por favor añada este complemento al registro en"
+        "description": "Por favor añada este complemento al registro en {{registryPath}}"
       },
       "noComponents": {
         "title": "No se encontraron componentes"

@@ -117,6 +117,7 @@ describe('PluginRoutes', () => {
   // Restore console spy used in the 'surfaces error fallback when import throws' test.
   // This relies on vi.restoreAllMocks() to clean up spies only, not a full mock reset.
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

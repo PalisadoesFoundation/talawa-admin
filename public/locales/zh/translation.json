@@ -2439,7 +2439,7 @@
       },
       "notRegistered": {
         "title": "插件未注册",
-        "description": "请将此插件添加到插件注册表中"
+        "description": "请将此插件添加到插件注册表中 {{registryPath}}"
       },
       "noComponents": {
         "title": "未找到组件"
