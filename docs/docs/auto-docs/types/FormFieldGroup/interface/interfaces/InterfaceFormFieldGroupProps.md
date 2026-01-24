@@ -40,6 +40,22 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 ***
 
+### hideLabel?
+
+> `optional` **hideLabel**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+
+***
+
+### inline?
+
+> `optional` **inline**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+
+***
+
 ### label
 
 > **label**: `string`

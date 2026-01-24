@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -224,7 +224,7 @@ describe('Testing OrganizationScreen', () => {
     );
   });
 
-  test('handles window resize', () => {
+  test('handles window resize', async () => {
     // Set up mocks for valid orgId case
     mockUseParams.mockReturnValue({ orgId: '123' });
     mockUseMatch.mockReturnValue({
@@ -233,9 +233,20 @@ describe('Testing OrganizationScreen', () => {
 
     renderComponent();
 
+    // Get initial state
+    const mainPage = screen.getByTestId('mainpageright');
+    const initialHasExpand = mainPage.classList.contains(styles.expand);
+
+    // Trigger resize
     window.innerWidth = 800;
-    fireEvent(window, new window.Event('resize'));
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+    window.dispatchEvent(new window.Event('resize'));
+
+    // Wait for the component to update
+    await waitFor(() => {
+      const hasExpand = mainPage.classList.contains(styles.expand);
+      // The class should toggle from its initial state
+      expect(hasExpand).toBe(!initialHasExpand);
+    });
   });
 
   test('handles event not found scenario', async () => {

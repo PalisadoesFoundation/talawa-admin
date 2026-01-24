@@ -91,3 +91,104 @@
   border-radius: 6px;
   background: #f9f9f9;
 }
+
+/* Selection column styles */
+.selectCol {
+  width: 42px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+/* Actions column styles */
+.actionsCol {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Bulk actions bar styles */
+.bulkBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: #f6f8fa;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.bulkLeft {
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.bulkRight {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bulkBtn {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: #f0f0f0;
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkClear {
+  border: 1px solid #ddd;
+  background: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.bulkClear:hover {
+  background: #f0f0f0;
+}
