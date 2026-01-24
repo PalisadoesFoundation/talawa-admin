@@ -1871,10 +1871,6 @@ form label,
   color: var(--search-button-border);
 }
 
-.testRedBackground {
-  background-color: red;
-}
-
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
