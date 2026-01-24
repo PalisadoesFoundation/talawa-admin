@@ -16,7 +16,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import { MOCKS } from './PledgesMocks';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import type { ApolloLink } from '@apollo/client';
+import { ApolloLink, InMemoryCache } from '@apollo/client';
 import Pledges from './Pledges';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -530,8 +530,9 @@ const translations = JSON.parse(
 );
 
 const renderMyPledges = (link: ApolloLink): RenderResult => {
+  const cache = new InMemoryCache();
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} cache={cache}>
       <MemoryRouter initialEntries={['/user/pledges/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -297,7 +297,17 @@ const mocks = [
     result: { data: mockChatsListData },
   },
   mockUnreadChats,
+  mockUnreadChats,
   mockUnreadChatsRefetch,
+  // Add duplicated mocks to prevent "No more mocked responses" error
+  mockChatsList,
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  mockUnreadChats,
+  mockUnreadChats,
+  mockUnreadChats,
 ];
 
 describe('Chat Component - Comprehensive Coverage', () => {

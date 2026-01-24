@@ -4,12 +4,11 @@
  * layout based on the screen size, providing a compact view for
  * smaller screens and a detailed view for larger screens.
  *
- * @component
- * @param {number} count - Total number of items to paginate.
- * @param {number} rowsPerPage - Number of rows displayed per page.
- * @param {number} page - Current page index (zero-based).
- * @param {(event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void} onPageChange - Callback triggered when the page changes.
- * @param {(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void} onRowsPerPageChange - Callback triggered when the rows per page value changes.
+ * @param count - Total number of items to paginate.
+ * @param rowsPerPage - Number of rows displayed per page.
+ * @param page - Current page index (zero-based).
+ * @param onPageChange - Callback triggered when the page changes.
+ * @param onRowsPerPageChange - Callback triggered when the rows per page value changes.
  *
  * @remarks
  * - The component uses the `useTranslation` hook to support internationalization.
@@ -83,6 +82,7 @@ const PaginationList = ({
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
+          component="div"
         />
       ) : (
         <TablePagination
@@ -107,6 +107,7 @@ const PaginationList = ({
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
           labelRowsPerPage={t('rowsPerPage')}
+          component="div"
         />
       )}
     </>

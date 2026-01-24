@@ -80,6 +80,8 @@ describe('Plugin Registry', () => {
     Object.keys(manifestCache).forEach((key) => {
       delete manifestCache[key];
     });
+    // Mock console.error to avoid polluting test output
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
