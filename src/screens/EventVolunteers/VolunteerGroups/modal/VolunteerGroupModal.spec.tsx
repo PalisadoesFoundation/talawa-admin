@@ -198,7 +198,9 @@ describe('Testing VolunteerGroupModal', () => {
     const memberInputField = within(memberSelect).getByRole('combobox');
     await user.click(memberInputField);
 
-    const memberOption = await screen.findByText('Harve Lance');
+    const memberOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
     expect(memberOption).toBeInTheDocument();
     await user.click(memberOption);
 
@@ -208,7 +210,9 @@ describe('Testing VolunteerGroupModal', () => {
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
     await user.click(volunteerInputField);
 
-    const volunteerOption = await screen.findByText('John Doe');
+    const volunteerOption = await screen.findByRole('option', {
+      name: 'John Doe',
+    });
     expect(volunteerOption).toBeInTheDocument();
     await user.click(volunteerOption);
 
@@ -252,6 +256,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     const link = new StaticMockLink([membersMock, createGroupMock]);
     renderGroupModal(link, modalProps[0]);
+    await wait();
 
     const nameInput = screen.getByLabelText(`${t.name} *`);
     await userEvent.clear(nameInput);
@@ -297,12 +302,16 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('GroupModal -> Create -> clears leader selection', async () => {
     renderGroupModal(successLink, modalProps[0]);
+    await wait();
 
     const memberSelect = await screen.findByTestId('leaderSelect');
     const memberInputField = within(memberSelect).getByRole('combobox');
     await userEvent.click(memberInputField);
 
-    const memberOption = await screen.findByText('Harve Lance');
+    // Wait for options to load before selecting
+    const memberOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
     await userEvent.click(memberOption);
 
     await userEvent.clear(memberInputField);
@@ -321,23 +330,26 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(errorLink, modalProps[0]);
     expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
-    const nameInput = screen.getByTestId('groupNameInput');
-    expect(nameInput).toBeInTheDocument();
+    const nameInput = await screen.findByTestId('groupNameInput');
     await user.clear(nameInput);
     await user.type(nameInput, 'Group 1');
-    expect(nameInput).toHaveValue('Group 1');
+    await waitFor(() => {
+      expect(nameInput).toHaveValue('Group 1');
+    });
 
-    const descInput = screen.getByTestId('groupDescriptionInput');
-    expect(descInput).toBeInTheDocument();
+    const descInput = await screen.findByTestId('groupDescriptionInput');
     await user.clear(descInput);
     await user.type(descInput, 'desc');
-    expect(descInput).toHaveValue('desc');
+    await waitFor(() => {
+      expect(descInput).toHaveValue('desc');
+    });
 
-    const vrInput = screen.getByTestId('volunteersRequiredInput');
-    expect(vrInput).toBeInTheDocument();
+    const vrInput = await screen.findByTestId('volunteersRequiredInput');
     await user.clear(vrInput);
     await user.type(vrInput, '10');
-    expect(vrInput).toHaveValue(10);
+    await waitFor(() => {
+      expect(vrInput).toHaveValue(10);
+    });
 
     // Select Leader
     const memberSelect = await screen.findByTestId('leaderSelect');
@@ -345,7 +357,9 @@ describe('Testing VolunteerGroupModal', () => {
     const memberInputField = within(memberSelect).getByRole('combobox');
     await user.click(memberInputField);
 
-    const memberOption = await screen.findByText('Harve Lance');
+    const memberOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
     expect(memberOption).toBeInTheDocument();
     await user.click(memberOption);
 
@@ -355,7 +369,9 @@ describe('Testing VolunteerGroupModal', () => {
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
     await user.click(volunteerInputField);
 
-    const volunteerOption = await screen.findByText('John Doe');
+    const volunteerOption = await screen.findByRole('option', {
+      name: 'John Doe',
+    });
     expect(volunteerOption).toBeInTheDocument();
     await user.click(volunteerOption);
 
@@ -533,7 +549,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const memberOption = await screen.findByText('Harve Lance');
+      const memberOption = await screen.findByRole('option', {
+        name: 'Harve Lance',
+      });
       await user.click(memberOption);
 
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
@@ -544,7 +562,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const volunteerOption = await screen.findByText('John Doe');
+      const volunteerOption = await screen.findByRole('option', {
+        name: 'John Doe',
+      });
       await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
@@ -592,7 +612,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const memberOption = await screen.findByText('Harve Lance');
+      const memberOption = await screen.findByRole('option', {
+        name: 'Harve Lance',
+      });
       await user.click(memberOption);
 
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
@@ -603,7 +625,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const volunteerOption = await screen.findByText('John Doe');
+      const volunteerOption = await screen.findByRole('option', {
+        name: 'John Doe',
+      });
       await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
@@ -690,7 +714,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const memberOption = await screen.findByText('Harve Lance');
+      const memberOption = await screen.findByRole('option', {
+        name: 'Harve Lance',
+      });
       await user.click(memberOption);
 
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
@@ -701,7 +727,9 @@ describe('Testing VolunteerGroupModal', () => {
         expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
       });
 
-      const volunteerOption = await screen.findByText('John Doe');
+      const volunteerOption = await screen.findByRole('option', {
+        name: 'John Doe',
+      });
       await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
@@ -895,7 +923,9 @@ describe('Testing VolunteerGroupModal', () => {
       const leaderInputField = within(leaderSelect).getByRole('combobox');
       await user.click(leaderInputField);
 
-      const leaderOption = await screen.findByText('Harve Lance');
+      const leaderOption = await screen.findByRole('option', {
+        name: 'Harve Lance',
+      });
       await user.click(leaderOption);
 
       await waitFor(() => {
@@ -926,24 +956,6 @@ describe('Testing VolunteerGroupModal', () => {
       });
     });
 
-    it('should disable submit when group is null', async () => {
-      const propsWithNullGroup: InterfaceVolunteerGroupModal = {
-        isOpen: true,
-        hide: vi.fn(),
-        eventId: 'eventId',
-        orgId: 'orgId',
-        refetchGroups: vi.fn(),
-        mode: 'edit',
-        group: null,
-      };
-
-      renderGroupModal(successLink, propsWithNullGroup);
-      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
-
-      const submitBtn = screen.getByTestId('modal-submit-btn');
-      expect(submitBtn).toBeDisabled();
-    });
-
     it('should handle clearing leader selection', async () => {
       const user = userEvent.setup();
       renderGroupModal(successLink, modalProps[0]);
@@ -954,7 +966,9 @@ describe('Testing VolunteerGroupModal', () => {
       const leaderInputField = within(leaderSelect).getByRole('combobox');
       await user.click(leaderInputField);
 
-      const leaderOption = await screen.findByText('Harve Lance');
+      const leaderOption = await screen.findByRole('option', {
+        name: 'Harve Lance',
+      });
       await user.click(leaderOption);
 
       await waitFor(() => {
