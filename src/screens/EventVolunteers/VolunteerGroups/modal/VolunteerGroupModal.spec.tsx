@@ -20,6 +20,8 @@ import GroupModal from './VolunteerGroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import { CREATE_VOLUNTEER_GROUP } from 'GraphQl/Mutations/EventVolunteerMutation';
+import type { MockedResponse } from '@apollo/react-testing';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -216,6 +218,98 @@ describe('Testing VolunteerGroupModal', () => {
       expect(modalProps[0].refetchGroups).toHaveBeenCalled();
       expect(modalProps[0].hide).toHaveBeenCalled();
     });
+  });
+
+  it('GroupModal -> Create -> leader already selected as volunteer', async () => {
+    const membersMock = MOCKS[1] as MockedResponse;
+    const createGroupMock: MockedResponse = {
+      request: {
+        query: CREATE_VOLUNTEER_GROUP,
+        variables: {
+          data: {
+            eventId: 'eventId',
+            leaderId: 'userId',
+            name: 'Group 1',
+            description: 'desc',
+            volunteersRequired: 1,
+            volunteerUserIds: ['userId'],
+          },
+        },
+      },
+      result: {
+        data: {
+          createEventVolunteerGroup: {
+            id: 'groupId',
+          },
+        },
+      },
+    };
+
+    const link = new StaticMockLink([membersMock, createGroupMock]);
+    renderGroupModal(link, modalProps[0]);
+
+    const nameInput = screen.getByLabelText(`${t.name} *`);
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 1');
+
+    const descInput = screen.getByLabelText(t.description);
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc');
+
+    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '1');
+
+    // Select volunteer first
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+    await userEvent.click(volunteerInputField);
+    const volunteerOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
+    await userEvent.click(volunteerOption);
+
+    // Select leader that already exists in volunteer list
+    const memberSelect = await screen.findByTestId('leaderSelect');
+    const memberInputField = within(memberSelect).getByRole('combobox');
+    await userEvent.click(memberInputField);
+    const memberOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
+    await userEvent.click(memberOption);
+
+    const submitBtn = screen.getByTestId('submitBtn');
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupCreated,
+      );
+      expect(modalProps[0].refetchGroups).toHaveBeenCalled();
+      expect(modalProps[0].hide).toHaveBeenCalled();
+    });
+  });
+
+  it('GroupModal -> Create -> clears leader selection', async () => {
+    renderGroupModal(successLink, modalProps[0]);
+
+    const memberSelect = await screen.findByTestId('leaderSelect');
+    const memberInputField = within(memberSelect).getByRole('combobox');
+    await userEvent.click(memberInputField);
+
+    const memberOption = await screen.findByText('Harve Lance');
+    await userEvent.click(memberOption);
+
+    const clearButton = within(memberSelect).getByLabelText(/clear/i);
+    await userEvent.click(clearButton);
+
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+    await userEvent.click(volunteerInputField);
+
+    expect(
+      await screen.findByRole('option', { name: 'Harve Lance' }),
+    ).toBeInTheDocument();
   });
 
   it('GroupModal -> Create -> Error', async () => {

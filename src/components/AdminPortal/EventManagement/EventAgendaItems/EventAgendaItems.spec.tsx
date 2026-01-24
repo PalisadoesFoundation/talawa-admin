@@ -6,6 +6,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
+import * as reactRouter from 'react-router';
 import i18n from 'utils/i18nForTest';
 import {
   LocalizationProvider,
@@ -412,6 +413,27 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(getByText(translations.createAgendaItem)).toBeInTheDocument();
     });
+  });
+
+  it('renders fallback when orgId is missing', () => {
+    const useParamsSpy = vi
+      .spyOn(reactRouter, 'useParams')
+      .mockReturnValue({ orgId: undefined });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    renderEventAgendaItems({});
+
+    expect(
+      screen.getByText(translations.errorLoadingAgendaCategories),
+    ).toBeInTheDocument();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'EventAgendaItems: missing orgId in route params.',
+    );
+
+    useParamsSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 
   it('render error component on unsuccessful agenda item query', async () => {
