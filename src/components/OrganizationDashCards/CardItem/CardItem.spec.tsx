@@ -20,9 +20,6 @@ describe('CardItem Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
   it('renders Event type card with all properties', () => {
     const props: InterfaceCardItem = {
       type: 'Event',

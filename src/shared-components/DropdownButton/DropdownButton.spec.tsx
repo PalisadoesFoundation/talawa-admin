@@ -58,13 +58,33 @@ describe('DropdownButton', () => {
     expect(toggle).toBeDisabled();
   });
 
-  it('maps xl size to lg Bootstrap size', async () => {
+  it('maps xl size to btn-lg Bootstrap class', () => {
     render(<DropdownButton {...baseProps} size="xl" />);
-
     const toggle = screen.getByTestId('dropdown-button');
-    await user.click(toggle);
 
-    expect(toggle).toBeInTheDocument();
+    expect(toggle).toHaveClass('btn-lg');
+  });
+
+  it('maps sm size to btn-sm Bootstrap class', () => {
+    render(<DropdownButton {...baseProps} size="sm" />);
+    const toggle = screen.getByTestId('dropdown-button');
+
+    expect(toggle).toHaveClass('btn-sm');
+  });
+
+  it('maps lg size to btn-lg Bootstrap class', () => {
+    render(<DropdownButton {...baseProps} size="lg" />);
+    const toggle = screen.getByTestId('dropdown-button');
+
+    expect(toggle).toHaveClass('btn-lg');
+  });
+
+  it('does not apply Bootstrap size classes for default md size', () => {
+    render(<DropdownButton {...baseProps} size="md" />);
+    const toggle = screen.getByTestId('dropdown-button');
+
+    expect(toggle).not.toHaveClass('btn-sm');
+    expect(toggle).not.toHaveClass('btn-lg');
   });
 
   it('maps sm size correctly to Bootstrap size', () => {
@@ -116,7 +136,17 @@ describe('DropdownButton', () => {
     expect(toggle).toBeInTheDocument();
   });
 
-  it('uses default align value when not specified', async () => {
+  it('applies dropdown-menu-end class when align="end"', async () => {
+    render(<DropdownButton {...baseProps} align="end" />);
+    const toggle = screen.getByTestId('dropdown-button');
+
+    await user.click(toggle);
+
+    const menu = screen.getByRole('menu');
+    expect(menu).toHaveClass('dropdown-menu-end');
+  });
+
+  it('does not apply dropdown-menu-end class by default', async () => {
     const propsWithoutAlign: InterfaceDropdownButtonProps = {
       label: 'Menu',
       items: [{ key: '1', label: 'Item 1', onClick: () => {} }],
@@ -129,6 +159,7 @@ describe('DropdownButton', () => {
     const toggle = screen.getByTestId('dropdown-button');
     await user.click(toggle);
 
-    expect(screen.getByRole('button', { name: 'Item 1' })).toBeInTheDocument();
+    const menu = screen.getByRole('menu');
+    expect(menu).not.toHaveClass('dropdown-menu-end');
   });
 });

@@ -246,10 +246,11 @@ export default [
    *
    * These wrapper components need direct access to @mui/x-date-pickers
    * to provide standardized date/time picker interfaces for the application.
+   * They also need react-bootstrap Form for rendering the text input field
+   *  via Form.Control in the picker's textField slot.
    *
-   * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
-   * Other restricted imports (like react-bootstrap Modal) are still blocked.
-   * Allowed ID: mui-date-pickers.
+   * Note: Other restricted imports (like react-bootstrap Modal) are still blocked.
+   * Allowed IDs: mui-date-pickers, rb-form, rb-form-path.
    */
   {
     files: [
@@ -264,6 +265,13 @@ export default [
       'rb-form-path',
     ]),
   },
+  /**
+   * Exemption: Application entry point
+   *
+   * src/index.tsx requires direct access to `@mui/x-date-pickers` for
+   * configuring the LocalizationProvider at the application root.
+   * Allowed ID: mui-date-pickers.
+   */
   {
     files: ['src/index.tsx'],
     rules: restrictImportsExcept(['mui-date-pickers']),
