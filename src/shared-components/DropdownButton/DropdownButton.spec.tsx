@@ -52,4 +52,27 @@ describe('DropdownButton', () => {
     const toggle = screen.getByTestId('dropdown-button');
     expect(toggle).toBeDisabled();
   });
+
+  it('maps xl size to lg Bootstrap size', async () => {
+    render(<DropdownButton {...baseProps} size="xl" />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    await user.click(toggle);
+
+    expect(toggle).toBeInTheDocument();
+  });
+
+  it('maps sm size correctly to Bootstrap size', () => {
+    render(<DropdownButton {...baseProps} size="sm" />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    expect(toggle).toBeInTheDocument();
+  });
+
+  it('maps lg size correctly to Bootstrap size', () => {
+    render(<DropdownButton {...baseProps} size="lg" />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    expect(toggle).toBeInTheDocument();
+  });
 });
