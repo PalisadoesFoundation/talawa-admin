@@ -28,7 +28,7 @@ const PluginRoutes: React.FC<InterfacePluginRoutesProps> = ({
   const { t } = useTranslation();
   const routes = usePluginRoutes(userPermissions, isAdmin);
   const safeRoutes = Array.isArray(routes) ? routes : [];
-  const loadingFallback = fallback || <div>{t('plugins.loading')}</div>;
+  const loadingFallback = fallback ?? <div>{t('plugins.loading')}</div>;
 
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
@@ -52,7 +52,12 @@ const PluginRoutes: React.FC<InterfacePluginRoutesProps> = ({
           // Return a fallback error component
           return {
             default: () => (
-              <div className={styles.errorContainer}>
+              <div
+                className={styles.errorContainer}
+                role="alert"
+                aria-live="polite"
+                aria-atomic="true"
+              >
                 <h3 className={styles.errorTitle}>
                   {t('plugins.errors.pluginError.title')}
                 </h3>
