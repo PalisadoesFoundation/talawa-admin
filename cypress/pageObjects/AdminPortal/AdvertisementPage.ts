@@ -38,7 +38,7 @@ export class AdvertisementPage {
       .scrollIntoView()
       .should('exist')
       .click({ force: true });
-    cy.url().should('match', /\/orgads\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgads\/[a-f0-9-]+/);
     return this;
   }
 
