@@ -7,7 +7,7 @@
  * a slider to update the timeout value. The updated value is submitted to the server
  * via a GraphQL mutation.
  *
- * Props interface: TestInterfaceUpdateTimeoutProps
+ * Props interface: InterfaceUpdateTimeoutProps
  * - onValueChange: Optional callback function triggered when the slider value changes.
  *
  * @param props - Component props.
@@ -25,7 +25,7 @@
  * - Displays a success toast on successful update or handles errors gracefully.
  *
  * Dependencies:
- * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
+ * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
  * TODO:
@@ -97,19 +97,21 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
    *
    * @param e - The event triggered by slider movement.
    */
+  /**
+   * Handles changes to the slider value and updates the timeout state.
+   *
+   * @param e - The event triggered by slider movement.
+   * @param newValue - The new value of the slider.
+   */
   const handleOnChange = (
-    e: Event | React.ChangeEvent<HTMLInputElement>,
+    e: Event,
+    newValue: number | number[],
   ): void => {
-    if ('target' in e && e.target) {
-      const target = e.target as HTMLInputElement;
-      // Ensure the value is a number and not NaN
-      const value = parseInt(target.value, 10);
-      if (!Number.isNaN(value)) {
-        setTimeout(value);
+    if (typeof newValue === 'number') {
+      setTimeout(newValue);
 
-        if (onValueChange) {
-          onValueChange(value);
-        }
+      if (onValueChange) {
+        onValueChange(newValue);
       }
     }
   };
@@ -156,8 +158,8 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
                 >
                   {communityTimeout !== undefined
                     ? t('communityProfile.sessionTimeout.minutes', {
-                        count: communityTimeout,
-                      })
+                      count: communityTimeout,
+                    })
                     : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
               </div>
