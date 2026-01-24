@@ -1,9 +1,9 @@
 .cardItem {
-  composes: cardItem from 'style/app-fixed.module.css';
+  composes: cardItem from '../../../../style/app-fixed.module.css';
 }
 
 .iconWrapper {
-  composes: iconWrapper from 'style/app-fixed.module.css';
+  composes: iconWrapper from '../../../../style/app-fixed.module.css';
 }
 
 .themeOverlay {
