@@ -2,6 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { ESLint } from 'eslint';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  restrictedImports,
+  securityRestrictions,
+  searchInputRestrictions,
+  restrictedImportPaths,
+  restrictImportsExcept,
+  stripId,
+} from './eslint-rule-data';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -41,63 +49,31 @@ describe('ESLint Search Input Restrictions', () => {
       );
     });
 
-    it('should error on input with search placeholder', async () => {
-      const code = `
-        import React from 'react';
-        
-        function TestComponent() {
-          return <input placeholder="Search users..." />;
-        }
-      `;
+    it.each([
+      ['search', 'Search users...'],
+      ['Find', 'Find items'],
+      ['Query', 'Query items'],
+    ])(
+      'should error on input with "%s" in placeholder',
+      async (keyword, placeholder) => {
+        const code = `
+          import React from 'react';
+          
+          function TestComponent() {
+            return <input placeholder="${placeholder}" />;
+          }
+        `;
 
-      const messages = await lintCode(code);
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search-related placeholder'),
-      );
+        const messages = await lintCode(code);
+        const searchError = messages.find(
+          (msg) =>
+            msg.ruleId === 'no-restricted-syntax' &&
+            msg.message.includes('search-related placeholder'),
+        );
 
-      expect(searchError).toBeDefined();
-      expect(searchError?.message).toContain('SearchBar or SearchFilterBar');
-    });
-
-    it('should error on input with "Find" in placeholder', async () => {
-      const code = `
-        import React from 'react';
-        
-        function TestComponent() {
-          return <input placeholder="Find items" />;
-        }
-      `;
-
-      const messages = await lintCode(code);
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search-related placeholder'),
-      );
-
-      expect(searchError).toBeDefined();
-    });
-
-    it('should error on input with "Query" in placeholder', async () => {
-      const code = `
-        import React from 'react';
-        
-        function TestComponent() {
-          return <input placeholder="Query items" />;
-        }
-      `;
-
-      const messages = await lintCode(code);
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search-related placeholder'),
-      );
-
-      expect(searchError).toBeDefined();
-    });
+        expect(searchError).toBeDefined();
+      },
+    );
 
     it('should error on input with search-related name attribute', async () => {
       const code = `
@@ -137,24 +113,27 @@ describe('ESLint Search Input Restrictions', () => {
       expect(searchError).toBeDefined();
     });
 
-    it('should error on input with search-related aria-label', async () => {
-      const code = `
-        import React from 'react';
-        
-        function TestComponent() {
-          return <input aria-label="Search for products" />;
-        }
-      `;
+    it.each(['Search for products', 'Query for products', 'Find for products'])(
+      'should error on input with search-related aria-label: "%s"',
+      async (ariaLabel) => {
+        const code = `
+          import React from 'react';
+          
+          function TestComponent() {
+            return <input aria-label="${ariaLabel}" />;
+          }
+        `;
 
-      const messages = await lintCode(code);
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search-related aria-label'),
-      );
+        const messages = await lintCode(code);
+        const searchError = messages.find(
+          (msg) =>
+            msg.ruleId === 'no-restricted-syntax' &&
+            msg.message.includes('search-related aria-label'),
+        );
 
-      expect(searchError).toBeDefined();
-    });
+        expect(searchError).toBeDefined();
+      },
+    );
 
     it('should allow regular input without search-related attributes', async () => {
       const code = `
@@ -177,49 +156,34 @@ describe('ESLint Search Input Restrictions', () => {
   });
 
   describe('Exemptions for search components', () => {
-    it('should allow search inputs in SearchBar component', async () => {
-      const code = `
-        import React from 'react';
-        
-        function SearchBar() {
-          return <input type="search" placeholder="Search..." />;
-        }
-      `;
-
-      const messages = await lintCode(
-        code,
-        'src/shared-components/DataTable/SearchBar.tsx',
-      );
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search'),
-      );
-
-      expect(searchError).toBeUndefined();
-    });
-
-    it('should allow search inputs in SearchFilterBar component', async () => {
-      const code = `
-        import React from 'react';
-        
-        function SearchFilterBar() {
-          return <input type="search" id="searchInput" />;
-        }
-      `;
-
-      const messages = await lintCode(
-        code,
+    it.each([
+      ['DataTable SearchBar', 'src/shared-components/DataTable/SearchBar.tsx'],
+      ['SearchBar', 'src/shared-components/SearchBar/SearchBar.tsx'],
+      [
+        'SearchFilterBar',
         'src/shared-components/SearchFilterBar/SearchFilterBar.tsx',
-      );
-      const searchError = messages.find(
-        (msg) =>
-          msg.ruleId === 'no-restricted-syntax' &&
-          msg.message.includes('search'),
-      );
+      ],
+    ])(
+      'should allow search inputs in %s component',
+      async (componentName, filePath) => {
+        const code = `
+          import React from 'react';
+          
+          function ${componentName.replace(/\s+/g, '')}() {
+            return <input type="search" placeholder="Search..." />;
+          }
+        `;
 
-      expect(searchError).toBeUndefined();
-    });
+        const messages = await lintCode(code, filePath);
+        const searchError = messages.find(
+          (msg) =>
+            msg.ruleId === 'no-restricted-syntax' &&
+            msg.message.includes('search'),
+        );
+
+        expect(searchError).toBeUndefined();
+      },
+    );
 
     it('should not allow search inputs in other DataTable components', async () => {
       const code = `
@@ -241,6 +205,104 @@ describe('ESLint Search Input Restrictions', () => {
       );
 
       expect(searchError).not.toBeUndefined();
+    });
+  });
+
+  describe('ESLint Rule Data Tests', () => {
+    describe('restrictedImports data integrity', () => {
+      it('should have all required import restrictions', () => {
+        expect(restrictedImports.length).toBeGreaterThan(20);
+
+        // Check for key restrictions
+        const muiDataGrid = restrictedImports.find(
+          (imp) => imp.id === 'mui-data-grid',
+        );
+        expect(muiDataGrid).toBeDefined();
+        expect(muiDataGrid?.name).toBe('@mui/x-data-grid');
+
+        const rbSpinner = restrictedImports.find(
+          (imp) => imp.id === 'rb-spinner',
+        );
+        expect(rbSpinner).toBeDefined();
+        expect(rbSpinner?.name).toBe('react-bootstrap');
+        expect(rbSpinner?.importNames).toEqual(['Spinner']);
+      });
+
+      it('should have proper message formats', () => {
+        restrictedImports.forEach((restriction) => {
+          expect(restriction.message).toBeDefined();
+          expect(typeof restriction.message).toBe('string');
+          expect(restriction.message.length).toBeGreaterThan(10);
+        });
+      });
+    });
+
+    describe('securityRestrictions data integrity', () => {
+      it('should have security-related syntax restrictions', () => {
+        expect(securityRestrictions.length).toBe(3);
+
+        securityRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toBeDefined();
+          expect(restriction.message).toBeDefined();
+          expect(typeof restriction.selector).toBe('string');
+          expect(typeof restriction.message).toBe('string');
+        });
+      });
+
+      it('should target authorization security risks', () => {
+        const authRestriction = securityRestrictions.find((restriction) =>
+          restriction.message.includes('Security Risk'),
+        );
+        expect(authRestriction).toBeDefined();
+        expect(authRestriction?.selector).toContain('authorization');
+      });
+    });
+
+    describe('searchInputRestrictions data integrity', () => {
+      it('should have search input related restrictions', () => {
+        expect(searchInputRestrictions.length).toBe(5);
+
+        searchInputRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toBeDefined();
+          expect(restriction.message).toBeDefined();
+          expect(restriction.message).toContain('search');
+        });
+      });
+    });
+
+    describe('helper functions', () => {
+      it('should strip ID from rule objects', () => {
+        const ruleWithId = {
+          id: 'test-id',
+          name: 'test-package',
+          message: 'Test message',
+        };
+
+        const stripped = stripId(ruleWithId);
+
+        expect(stripped).not.toHaveProperty('id');
+        expect(stripped.name).toBe('test-package');
+        expect(stripped.message).toBe('Test message');
+      });
+
+      it('should create restricted import paths without IDs', () => {
+        expect(restrictedImportPaths.length).toBe(restrictedImports.length);
+
+        restrictedImportPaths.forEach((path) => {
+          expect(path).not.toHaveProperty('id');
+          expect(path.name).toBeDefined();
+        });
+      });
+
+      it('should create rule configuration with allowed IDs filtered', () => {
+        const allowedIds = ['mui-data-grid', 'rb-spinner'];
+        const config = restrictImportsExcept(allowedIds);
+
+        expect(config).toHaveProperty('no-restricted-imports');
+        expect(Array.isArray(config['no-restricted-imports'])).toBe(true);
+        expect(config['no-restricted-imports'][0]).toBe('error');
+        expect(typeof config['no-restricted-imports'][1]).toBe('object');
+      });
     });
   });
 });
