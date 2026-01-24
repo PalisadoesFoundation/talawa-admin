@@ -45,9 +45,14 @@ vi.mock('../Navigator/Pagination', () => ({
 }));
 
 describe('PaginationList', () => {
+  const originalMatchMedia = window.matchMedia;
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
   });
   const defaultProps = {
     count: 100,

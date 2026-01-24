@@ -206,16 +206,17 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes Edit Category modal', async () => {
+    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
     await waitFor(() => expect(editCategoryBtn).toBeInTheDocument());
-    await userEvent.click(editCategoryBtn);
+    await user.click(editCategoryBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
