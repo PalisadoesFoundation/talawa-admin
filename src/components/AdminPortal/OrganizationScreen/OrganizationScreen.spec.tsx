@@ -165,7 +165,6 @@ describe('Testing OrganizationScreen', () => {
   afterAll(() => {
     clearAllItems('Talawa-admin');
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
@@ -181,7 +180,7 @@ describe('Testing OrganizationScreen', () => {
     mockNavigate.mockReset();
   });
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderComponent = (): void => {
@@ -245,7 +244,8 @@ describe('Testing OrganizationScreen', () => {
 
     // Wait for the component to update
     await waitFor(() => {
-      const hasExpand = mainPage.classList.contains(styles.expand);
+      const currentMainPage = screen.getByTestId('mainpageright');
+      const hasExpand = currentMainPage.classList.contains(styles.expand);
       // The class should toggle from its initial state
       expect(hasExpand).toBe(!initialHasExpand);
     });
