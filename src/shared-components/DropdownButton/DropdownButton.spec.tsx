@@ -87,20 +87,6 @@ describe('DropdownButton', () => {
     expect(toggle).not.toHaveClass('btn-lg');
   });
 
-  it('maps sm size correctly to Bootstrap size', () => {
-    render(<DropdownButton {...baseProps} size="sm" />);
-
-    const toggle = screen.getByTestId('dropdown-button');
-    expect(toggle).toBeInTheDocument();
-  });
-
-  it('maps lg size correctly to Bootstrap size', () => {
-    render(<DropdownButton {...baseProps} size="lg" />);
-
-    const toggle = screen.getByTestId('dropdown-button');
-    expect(toggle).toBeInTheDocument();
-  });
-
   it('calls onClick handler when an enabled item is clicked', async () => {
     const mockOnClick = vi.fn();
     const testProps: InterfaceDropdownButtonProps = {

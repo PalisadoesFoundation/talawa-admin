@@ -137,18 +137,21 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
+    // Get the original image
     const img = screen.getByAltText('Jane Smith avatar');
-    expect(img).toBeInTheDocument();
 
-    // Simulate image load error
+    // Trigger error
     act(() => {
       img.dispatchEvent(new Event('error'));
     });
 
+    // Assert fallback SVG is rendered
     await waitFor(() => {
-      const avatar = screen.getByRole('img');
-      expect(avatar).toHaveAttribute('src');
-      expect(avatar.getAttribute('src')).toContain('svg');
+      const fallbackImg = screen.getByTestId('cardItem').querySelector('img');
+      expect(fallbackImg).toHaveAttribute(
+        'src',
+        expect.stringContaining('data:image/svg+xml'),
+      );
     });
   });
 
