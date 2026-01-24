@@ -13,6 +13,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import { FaExchangeAlt } from 'react-icons/fa';
+import { useQuery } from '@apollo/client';
 
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
@@ -22,6 +23,7 @@ import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import styles from './UserSidebarOrg.module.css';
 
 export interface InterfaceUserSidebarOrgProps {
@@ -39,8 +41,15 @@ const UserSidebarOrg = ({
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
-  const role = getItem<string>('role');
-  const canSwitchToAdmin = role !== null && role !== 'regular';
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'cache-first',
+  });
+  const roleFromAuth = currentUserData?.user?.role ?? null;
+  const storedRole = getItem<string>('role');
+  const resolvedRole = (roleFromAuth ?? storedRole ?? '').toLowerCase();
+  const allowedRoles = ['administrator', 'admin', 'superadmin'];
+  const canSwitchToAdmin =
+    resolvedRole.length > 0 && allowedRoles.includes(resolvedRole);
 
   const [showDropdown, setShowDropdown] = React.useState(false);
 
