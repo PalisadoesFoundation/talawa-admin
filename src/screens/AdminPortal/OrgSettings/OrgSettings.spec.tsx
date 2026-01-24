@@ -49,7 +49,10 @@ const renderOrganisationSettings = (
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
-              <Route path="/admin/orgsetting/:orgId" element={<OrgSettings />} />
+              <Route
+                path="/admin/orgsetting/:orgId"
+                element={<OrgSettings />}
+              />
               <Route
                 path="/"
                 element={
