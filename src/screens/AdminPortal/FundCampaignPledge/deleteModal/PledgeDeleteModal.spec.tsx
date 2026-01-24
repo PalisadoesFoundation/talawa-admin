@@ -109,7 +109,8 @@ describe('PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
     expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('modal-delete-btn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(pledgeProps.refetchPledge).toHaveBeenCalled();
@@ -124,7 +125,8 @@ describe('PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link2, pledgeProps);
     expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
-    userEvent.click(screen.getByTestId('modal-delete-btn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(

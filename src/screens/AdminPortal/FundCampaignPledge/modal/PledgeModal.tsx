@@ -252,12 +252,19 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             type="number"
             value={formState.pledgeAmount.toString()}
             onChange={(value) => {
-              const parsed = parseInt(value);
-              if (!isNaN(parsed)) {
+              if (value === '') {
                 setFormState({
                   ...formState,
-                  pledgeAmount: Math.max(0, parsed),
+                  pledgeAmount: 0,
                 });
+              } else {
+                const parsed = parseInt(value);
+                if (!isNaN(parsed)) {
+                  setFormState({
+                    ...formState,
+                    pledgeAmount: Math.max(0, parsed),
+                  });
+                }
               }
             }}
             touched={true}

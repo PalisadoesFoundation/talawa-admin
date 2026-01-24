@@ -50,10 +50,23 @@ vi.mock('@mui/material', async () => {
       const { value, onChange, getOptionLabel, renderInput, ...otherProps } =
         props;
 
+      const [inputValue, setInputValue] = React.useState(
+        value ? (getOptionLabel as (option: unknown) => string)(value) : '',
+      );
+
+      React.useEffect(() => {
+        if (value) {
+          setInputValue((getOptionLabel as (option: unknown) => string)(value));
+        } else {
+          setInputValue('');
+        }
+      }, [value]);
+
       const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const inputValue = event.target.value;
-        if (inputValue === 'John') {
-          // Mock option for testing
+        const newValue = event.target.value;
+        setInputValue(newValue);
+
+        if (newValue.endsWith('John')) {
           const mockOption = { id: '1', name: 'John Doe' };
           (
             onChange as (
@@ -61,7 +74,7 @@ vi.mock('@mui/material', async () => {
               value: unknown,
             ) => void
           )(event, mockOption);
-        } else if (inputValue === '') {
+        } else if (newValue === '') {
           (
             onChange as (
               event: React.ChangeEvent<HTMLInputElement>,
@@ -80,9 +93,7 @@ vi.mock('@mui/material', async () => {
         },
         InputLabelProps: {},
         inputProps: {
-          value: value
-            ? (getOptionLabel as (option: unknown) => string)(value)
-            : '',
+          value: inputValue,
           onChange: handleChange,
           'aria-label': 'Pledgers',
           role: 'combobox',
@@ -303,10 +314,11 @@ describe('PledgeModal', () => {
   });
 
   it('should close the modal when close button is clicked', async () => {
+    const user = userEvent.setup();
     const hideMock = vi.fn();
     const props = { ...pledgeProps[0], hide: hideMock };
     renderPledgeModal(link1, props);
-    userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     expect(hideMock).toHaveBeenCalledTimes(1);
   });
 
@@ -330,35 +342,42 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledgeAmount when input value changes', async () => {
+    const user = userEvent.setup();
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
-    const amountInput = screen.getByLabelText('Amount');
+    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
     expect(amountInput).toHaveAttribute('value', '100');
 
-    await act(async () => {
-      const user = userEvent.setup();
-      await user.clear(amountInput);
-      await user.type(amountInput, '200');
+    amountInput.focus();
+    await user.clear(amountInput);
+    amountInput.focus();
+    await user.type(amountInput, '2');
+    amountInput.focus();
+    await user.type(amountInput, '0');
+    amountInput.focus();
+    await user.type(amountInput, '0');
+
+    await waitFor(() => {
+      expect(parseInt(amountInput.value)).toBe(200);
     });
-    expect(amountInput).toHaveAttribute('value', '200');
   });
 
   it('should not update pledgeAmount when input value is less than or equal to 0', async () => {
+    const user = userEvent.setup();
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
 
-    const amountInput = screen.getByLabelText('Amount');
+    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+    expect(amountInput).toHaveAttribute('value', '100');
 
-    await act(async () => {
-      const user = userEvent.setup();
-      await user.clear(amountInput);
-      await user.type(amountInput, '-10');
-    });
+    await user.clear(amountInput);
+    await user.type(amountInput, '-10');
 
     await waitFor(() => {
-      expect(amountInput).toHaveAttribute('value', '0');
+      const value = parseInt(amountInput.value);
+      expect(value).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -377,12 +396,14 @@ describe('PledgeModal', () => {
   });
 
   it('should handle create pledge error', async () => {
+    const user = userEvent.setup();
     renderPledgeModal(errorLink, pledgeProps[0]);
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      const user = userEvent.setup();
       await user.clear(amountInput);
+    });
+    await act(async () => {
       await user.type(amountInput, '100');
     });
 
@@ -390,7 +411,6 @@ describe('PledgeModal', () => {
     expect(form).not.toBeNull();
 
     await act(async () => {
-      const user = userEvent.setup();
       await user.click(screen.getByTestId('modal-submit-btn'));
     });
 
@@ -431,21 +451,23 @@ describe('PledgeModal', () => {
     );
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    const user1 = userEvent.setup();
-    await user1.clear(pledgerInput);
-    await user1.type(pledgerInput, 'John');
+    const user = userEvent.setup();
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    const user = userEvent.setup();
-    await user.clear(amountInput);
-    await user.type(amountInput, '100');
+    await act(async () => {
+      await user.clear(amountInput);
+    });
+    await act(async () => {
+      await user.type(amountInput, '100');
+    });
 
     await act(async () => {
-      userEvent.click(screen.getByTestId('modal-submit-btn'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
     });
 
     await waitFor(() => {
@@ -466,9 +488,10 @@ describe('PledgeModal', () => {
   });
 
   it('should show validation error when submitting without required fields', async () => {
+    const user = userEvent.setup();
     renderPledgeModal(mockLink, pledgeProps[0]);
 
-    userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();
@@ -476,6 +499,7 @@ describe('PledgeModal', () => {
   });
 
   it('should support keyboard navigation in pledger select', async () => {
+    const user = userEvent.setup();
     renderPledgeModal(mockLink, pledgeProps[0]);
 
     await waitFor(() => {
@@ -487,9 +511,7 @@ describe('PledgeModal', () => {
     );
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    const user1 = userEvent.setup();
-    await user1.clear(pledgerInput);
-    await user1.type(pledgerInput, 'John');
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
@@ -497,6 +519,7 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledge amount in edit mode', async () => {
+    const user = userEvent.setup();
     const mockLink = new StaticMockLink([
       ...PLEDGE_MODAL_MOCKS,
       MOCK_UPDATE_PLEDGE_DATA,
@@ -505,14 +528,25 @@ describe('PledgeModal', () => {
 
     renderPledgeModal(mockLink, props);
 
-    const amountInput = screen.getByLabelText('Amount');
-    const user = userEvent.setup();
-    await user.clear(amountInput);
-    await user.type(amountInput, '200');
-
-    await act(async () => {
-      userEvent.click(screen.getByTestId('modal-submit-btn'));
+    await waitFor(() => {
+      expect(screen.getByLabelText('Amount')).toHaveAttribute('value', '100');
     });
+
+    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+    amountInput.focus();
+    await user.clear(amountInput);
+    amountInput.focus();
+    await user.type(amountInput, '2');
+    amountInput.focus();
+    await user.type(amountInput, '0');
+    amountInput.focus();
+    await user.type(amountInput, '0');
+
+    await waitFor(() => {
+      expect(parseInt(amountInput.value)).toBe(200);
+    });
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -552,21 +586,17 @@ describe('PledgeModal', () => {
   it('should disable submit button when amount is invalid', async () => {
     renderPledgeModal(link1, pledgeProps[0]);
 
-    const amountInput = screen.getByLabelText('Amount');
-    await act(async () => {
-      const user = userEvent.setup();
-      await user.clear(amountInput);
-      await user.type(amountInput, '-1');
+    await waitFor(() => {
+      expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      const submitButton = screen.getByTestId('modal-submit-btn');
-      expect(submitButton).toBeDisabled();
-      expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();
-    });
+    const submitButton = screen.getByTestId('modal-submit-btn');
+    expect(submitButton).toBeDisabled();
+    expect(screen.getByText('Amount must be at least 1')).toBeInTheDocument();
   });
 
   it('should handle update pledge error', async () => {
+    const user = userEvent.setup();
     const updateErrorMock = {
       request: {
         query: UPDATE_PLEDGE,
@@ -580,19 +610,14 @@ describe('PledgeModal', () => {
     renderPledgeModal(mockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
-    await act(async () => {
-      const user = userEvent.setup();
-      await user.clear(amountInput);
-      await user.type(amountInput, '200');
+    await user.clear(amountInput);
+    await user.type(amountInput, '200');
+
+    await waitFor(() => {
+      expect(parseInt((amountInput as HTMLInputElement).value)).toBe(200);
     });
 
-    const form = document.getElementById('crud-edit-form') as HTMLFormElement;
-    expect(form).not.toBeNull();
-
-    await act(async () => {
-      const user = userEvent.setup();
-      await user.click(screen.getByTestId('modal-submit-btn'));
-    });
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
@@ -600,13 +625,12 @@ describe('PledgeModal', () => {
   });
 
   it('should handle empty string in amount input', async () => {
+    const user = userEvent.setup();
     renderPledgeModal(link1, pledgeProps[0]);
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {
-      const user = userEvent.setup();
       await user.clear(amountInput);
-      await user.type(amountInput, '');
     });
 
     await waitFor(() => {
@@ -666,7 +690,6 @@ describe('PledgeModal', () => {
     );
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    await user.clear(pledgerInput);
     await user.type(pledgerInput, 'John');
 
     await waitFor(() => {

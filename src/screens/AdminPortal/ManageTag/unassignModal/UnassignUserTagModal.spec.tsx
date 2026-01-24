@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import UnassignUserTagModal, {
   InterfaceUnassignUserTagModalProps,
@@ -67,20 +68,22 @@ describe('UnassignUserTagModal Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls toggleUnassignUserTagModal when No button is clicked', () => {
+  it('calls toggleUnassignUserTagModal when No button is clicked', async () => {
+    const user = userEvent.setup();
     render(<UnassignUserTagModal {...defaultProps} />);
 
     const cancelButton = screen.getByTestId('modal-cancel-btn');
-    fireEvent.click(cancelButton);
+    await user.click(cancelButton);
 
     expect(defaultProps.toggleUnassignUserTagModal).toHaveBeenCalledTimes(1);
   });
 
   it('calls handleUnassignUserTag when Yes button is clicked', async () => {
+    const user = userEvent.setup();
     render(<UnassignUserTagModal {...defaultProps} />);
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(defaultProps.handleUnassignUserTag).toHaveBeenCalledTimes(1);
@@ -88,6 +91,7 @@ describe('UnassignUserTagModal Component', () => {
   });
 
   it('disables the submit button while submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
 
     const pendingPromise = new Promise<void>((resolve) => {
@@ -103,7 +107,7 @@ describe('UnassignUserTagModal Component', () => {
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(confirmButton).toBeDisabled();
 
@@ -117,6 +121,7 @@ describe('UnassignUserTagModal Component', () => {
   });
 
   it('prevents multiple submissions while already submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
 
     const pendingPromise = new Promise<void>((resolve) => {
@@ -134,8 +139,8 @@ describe('UnassignUserTagModal Component', () => {
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(handleUnassignUserTag).toHaveBeenCalledTimes(1);
 
@@ -155,6 +160,7 @@ describe('UnassignUserTagModal Component', () => {
   });
 
   it('handles error when handleUnassignUserTag rejects', async () => {
+    const user = userEvent.setup();
     const error = new Error('Unassign failed');
 
     let rejectFn: ((reason?: unknown) => void) | undefined;
@@ -179,7 +185,7 @@ describe('UnassignUserTagModal Component', () => {
     );
 
     const confirmButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(failingHandler).toHaveBeenCalledTimes(1);
