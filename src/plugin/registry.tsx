@@ -14,6 +14,7 @@ import type {
   IRouteExtension,
   IInjectorExtension,
 } from './types';
+import styles from './registry.module.css';
 
 /**
  * Dynamic Plugin Component Registry
@@ -35,49 +36,26 @@ function createErrorComponent(
   componentName: string,
   error: string,
 ): React.ComponentType {
-  const errorStyles = {
-    container: {
-      padding: '40px',
-      textAlign: 'center' as const,
-      backgroundColor: '#f8f9fa',
-      border: '1px solid #dee2e6',
-      borderRadius: '8px',
-      margin: '20px',
-    },
-    heading: {
-      color: '#dc3545',
-      marginBottom: '16px',
-    },
-    text: {
-      color: '#6c757d',
-      marginBottom: '8px',
-    },
-    smallText: {
-      color: '#6c757d',
-      fontSize: '14px',
-    },
-  };
-
   return function ErrorComponent() {
     const { t } = useTranslation('translation', { keyPrefix: 'plugin' });
     return (
-      <div style={errorStyles.container}>
-        <h3 style={errorStyles.heading}>{t('error')}</h3>
-        <p style={errorStyles.text}>
+      <div className={styles.errorContainer}>
+        <h3 className={styles.errorHeading}>{t('error')}</h3>
+        <p className={styles.errorText}>
           <Trans
             i18nKey="failedToLoad"
             values={{ componentName }}
             components={{ 1: <strong /> }}
           />
         </p>
-        <p style={errorStyles.text}>
+        <p className={styles.errorText}>
           <Trans
             i18nKey="id"
             values={{ pluginId }}
             components={{ 1: <strong /> }}
           />
         </p>
-        <p style={errorStyles.smallText}>{error}</p>
+        <p className={styles.errorSmallText}>{error}</p>
       </div>
     );
   };

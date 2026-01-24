@@ -375,6 +375,11 @@
       "update": "更新"
     }
   },
+  "plugin": {
+    "error": "插件错误",
+    "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
+    "id": "插件：<1>{{pluginId}}</1>"
+  },
   "dashboard": {
     "title": "仪表板",
     "about": "关于",
@@ -2256,11 +2261,6 @@
     "loadingFeatures": "加载功能...",
     "loadingChangelog": "加载更新日志...",
     "changelog": "更新日志",
-    "plugin": {
-      "error": "插件错误",
-      "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
-      "id": "插件：<1>{{pluginId}}</1>"
-    },
     "v": "版本",
     "failedToUploadPlugin": "上传插件失败。",
     "uploadPlugin": "上传插件",

@@ -221,7 +221,7 @@ export default function chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <Dropdown style={{ cursor: 'pointer' }}>
+              <Dropdown className={styles.dropdownToggle}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
@@ -304,12 +304,7 @@ export default function chat(): JSX.Element {
 
                   <div
                     data-testid="contactCardContainer"
-                    className={styles.contactCardContainer}
-                    style={{
-                      maxHeight: 'calc(100vh - 200px)',
-                      overflowY: 'auto',
-                      flex: 1,
-                    }}
+                    className={`${styles.contactCardContainer} ${styles.contactCardList}`}
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {
