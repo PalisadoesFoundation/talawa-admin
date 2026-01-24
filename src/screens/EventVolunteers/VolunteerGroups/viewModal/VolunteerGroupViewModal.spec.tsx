@@ -1,15 +1,17 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
-import type { InterfaceVolunteerGroupViewModal } from './VolunteerGroupViewModal';
+import type { InterfaceVolunteerGroupViewModal } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';

@@ -125,7 +125,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   clearAllItems();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing Forgot Password screen', () => {

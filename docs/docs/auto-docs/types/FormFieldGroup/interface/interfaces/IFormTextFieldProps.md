@@ -16,6 +16,8 @@ Props for FormFieldGroup component.
 
 \[`x`: `string`\]: `unknown`
 
+Additional HTML input attributes passed through to the underlying control
+
 ## Properties
 
 ### data-testid?

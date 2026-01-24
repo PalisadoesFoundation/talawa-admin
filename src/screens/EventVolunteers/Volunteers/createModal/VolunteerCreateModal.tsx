@@ -120,7 +120,17 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         NotificationToast.error((error as Error).message);
       }
     },
-    [userId, eventId, isRecurring, applyTo, baseEvent],
+    [
+      userId,
+      eventId,
+      isRecurring,
+      applyTo,
+      baseEvent,
+      addVolunteer,
+      refetchVolunteers,
+      hide,
+      t,
+    ],
   );
 
   return (

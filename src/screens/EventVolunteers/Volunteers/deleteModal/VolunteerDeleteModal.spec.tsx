@@ -1,7 +1,9 @@
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -12,7 +14,7 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
+import type { InterfaceDeleteVolunteerModal } from 'types/AdminPortal/VolunteerDeleteModal/interface';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';

@@ -1,13 +1,14 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
-import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
+import type { InterfaceVolunteerViewModal } from 'types/AdminPortal/VolunteerViewModal/interface';
 import VolunteerViewModal from './VolunteerViewModal';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -156,13 +157,13 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Modal Functionality', () => {
-    it('should call hide function when close button is clicked', () => {
+    it('should call hide function when close button is clicked', async () => {
       const hideMock = vi.fn();
       const props = { ...itemProps[0], hide: hideMock };
       renderVolunteerViewModal(props);
 
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await userEvent.click(closeButton);
 
       expect(hideMock).toHaveBeenCalledTimes(1);
     });

@@ -22,5 +22,6 @@ export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
   disabled?: boolean;
+  /** Additional HTML input attributes passed through to the underlying control */
   [x: string]: unknown;
 }

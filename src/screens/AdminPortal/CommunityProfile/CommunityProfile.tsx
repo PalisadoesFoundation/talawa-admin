@@ -233,7 +233,6 @@ const CommunityProfile = (): JSX.Element => {
           <div className="mb-3">{t('communityProfileInfo')}</div>
           <form onSubmit={handleOnSubmit}>
             <FormTextField
-              id="communityName"
               name="name"
               label={t('communityName')}
               value={profileVariable.name}
@@ -298,6 +297,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="facebook"
                   name="facebookURL"
@@ -312,6 +312,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="instagram"
                   name="instagramURL"
@@ -326,6 +327,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={XLogo} alt={`X ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="X"
                   name="xURL"
@@ -340,6 +342,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="linkedIn"
                   name="linkedInURL"
@@ -354,6 +357,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={GithubLogo} alt={`Github ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="github"
                   name="githubURL"
@@ -368,6 +372,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="youtube"
                   name="youtubeURL"
@@ -382,6 +387,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="reddit"
                   name="redditURL"
@@ -396,6 +402,7 @@ const CommunityProfile = (): JSX.Element => {
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
                 <input
+                  aria-label={`${t('social')} ${t('url')}`}
                   type="url"
                   id="slack"
                   name="slackURL"

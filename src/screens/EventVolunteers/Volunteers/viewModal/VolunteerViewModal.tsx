@@ -39,7 +39,6 @@
  * ```
  */
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -56,11 +55,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-export interface InterfaceVolunteerViewModal {
-  isOpen: boolean;
-  hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo;
-}
+import type { InterfaceVolunteerViewModal } from 'types/AdminPortal/VolunteerViewModal/interface';
 
 const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   isOpen,

@@ -733,4 +733,23 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
 
     expect(getMemberLabel(member)).toBe('John Doe');
   });
+
+  it('getMemberLabel returns combined first and last name', () => {
+    const member = {
+      id: '2',
+      firstName: 'Jane',
+      lastName: 'Smith',
+    } as InterfaceUserInfoPG;
+
+    expect(getMemberLabel(member)).toBe('Jane Smith');
+  });
+
+  it('getMemberLabel returns first name only when last name is missing', () => {
+    const member = {
+      id: '3',
+      firstName: 'Alice',
+    } as InterfaceUserInfoPG;
+
+    expect(getMemberLabel(member)).toBe('Alice');
+  });
 });

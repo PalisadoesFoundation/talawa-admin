@@ -17,7 +17,7 @@
  * ```
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and button components.
+ * - Uses `BaseModal` and `Button` from shared-components.
  * - Integrates `react-i18next` for translations.
  * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
  * - Displays success or error messages using `NotificationToast`.
@@ -28,22 +28,12 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-
-export interface InterfaceDeleteVolunteerModal {
-  isOpen: boolean;
-  hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo;
-  refetchVolunteers: () => void;
-  // New props for recurring events
-  isRecurring?: boolean;
-  eventId?: string;
-}
+import type { InterfaceDeleteVolunteerModal } from 'types/AdminPortal/VolunteerDeleteModal/interface';
 
 const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   isOpen,
