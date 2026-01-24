@@ -68,7 +68,7 @@ export interface IEventFormSubmitPayload extends IEventFormBase {
 export interface IEventFormProps {
   initialValues: IEventFormValues;
   onSubmit: (payload: IEventFormSubmitPayload) => Promise<void> | void;
-  onCancel: () => void;
+  onCancel?: () => void;
   submitLabel: string;
   t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string, options?: Record<string, unknown>) => string;
@@ -80,4 +80,7 @@ export interface IEventFormProps {
   submitting?: boolean;
   showRecurrenceToggle?: boolean;
   showCancelButton?: boolean;
+  readOnly?: boolean;
+  footerActions?: React.ReactNode;
+  hideSubmitButton?: boolean;
 }

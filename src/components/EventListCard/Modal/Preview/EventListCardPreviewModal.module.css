@@ -9,6 +9,8 @@
   border: 1px solid var(--color-gray-100);
   padding: var(--space-2) var(--space-4);
   font-weight: var(--font-weight-medium);
+  display: inline-block; /* Ensure it shares the line */
+  width: auto;
 }
 
 .addButton:hover {
@@ -22,6 +24,8 @@
   border: 1px solid var(--color-red-100);
   padding: var(--space-2) var(--space-4);
   font-weight: var(--font-weight-medium);
+  display: inline-block; /* Ensure it shares the line */
+  width: auto;
 }
 
 .removeButton:hover {

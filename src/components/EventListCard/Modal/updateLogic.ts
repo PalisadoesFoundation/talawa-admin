@@ -10,6 +10,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import type { IEventFormSubmitPayload } from 'types/EventForm/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 
 // Extend dayjs with utc plugin
@@ -19,6 +20,108 @@ import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTy
 interface IEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
+
+/**
+ * Determines if the recurrence rule has changed between the submitted payload and the original event.
+ *
+ * Compares recurrence presence, frequency, interval, day/month patterns, count, and end date
+ * to detect any modifications to the recurrence configuration.
+ *
+ * @param payload - The form submission payload containing the new event data
+ * @param eventListCardProps - The original event properties from the event list card
+ * @returns `true` if any recurrence property has changed, `false` otherwise
+ */
+export const hasRecurrenceChanged = (
+  payload: IEventFormSubmitPayload,
+  eventListCardProps: IEventListCard,
+): boolean => {
+  // If no recurrence rule in payload but one existed, or vice versa
+  const hadRecurrence = !!eventListCardProps.recurrenceRule;
+  const hasRecurrence = !!payload.recurrenceRule;
+  if (hadRecurrence !== hasRecurrence) return true;
+  if (!hasRecurrence) return false;
+
+  const original = eventListCardProps.recurrenceRule;
+  const current = payload.recurrenceRule;
+
+  if (!original || !current) return false; // Should be covered above but TS safety
+
+  // Deep compare needed fields
+  return (
+    original.frequency !== current.frequency ||
+    original.interval !== current.interval ||
+    JSON.stringify(original.byDay) !== JSON.stringify(current.byDay) ||
+    JSON.stringify(original.byMonth) !== JSON.stringify(current.byMonth) ||
+    JSON.stringify(original.byMonthDay) !==
+      JSON.stringify(current.byMonthDay) ||
+    original.count !== current.count ||
+    original.recurrenceEndDate !== current.recurrenceEndDate
+  );
+};
+
+/**
+ * Computes which update scopes are available when editing a recurring event instance.
+ *
+ * Determines whether the user can update just this instance, this and following instances,
+ * or the entire series based on what fields have changed.
+ *
+ * @param payload - The form submission payload containing the new event data
+ * @param eventListCardProps - The original event properties from the event list card
+ * @returns An object with boolean fields:
+ *   - `single`: `true` if updating only this instance is allowed (when recurrence hasn't changed)
+ *   - `following`: `true` (always available for recurring instances)
+ *   - `entireSeries`: `true` if only name or description changed (allows bulk metadata updates)
+ *
+ * @remarks
+ * - The `entireSeries` option is only available when ONLY name/description changed
+ * - Changes to start/end times, location, visibility, or recurrence prevent `entireSeries` updates
+ * - The `single` option is disabled when the recurrence structure itself has changed
+ */
+export const getAvailableUpdateOptions = (
+  payload: IEventFormSubmitPayload,
+  eventListCardProps: IEventListCard,
+) => {
+  const recurrenceChanged = hasRecurrenceChanged(payload, eventListCardProps);
+
+  // Check if only metadata changed
+  const nameChanged = payload.name !== eventListCardProps.name;
+  const descriptionChanged =
+    payload.description !== eventListCardProps.description;
+  const locationChanged = payload.location !== eventListCardProps.location;
+  const publicChanged = payload.isPublic !== eventListCardProps.isPublic;
+  const registerableChanged =
+    payload.isRegisterable !== eventListCardProps.isRegisterable;
+  const inviteOnlyChanged =
+    payload.isInviteOnly !== (eventListCardProps.isInviteOnly ?? false);
+  const allDayChanged = payload.allDay !== eventListCardProps.allDay;
+
+  // But for "hasOnlyNameOrDesc", we just check if OTHER critical things didn't change.
+  // Actually, entireSeries is usually allowed unless recurrence structure changed incompatibly?
+  // The previous logic was strict: ONLY name/desc.
+  // Let's stick to previous logic intent:
+  // If recurrence structure changed, we can't update series easily (?) or maybe we can?
+  // Previous Code: `return ((nameChanged || descriptionChanged) && !locationChanged && !publicChanged ...)`
+
+  const startChanged = payload.startAtISO !== eventListCardProps.startAt;
+  const endChanged = payload.endAtISO !== eventListCardProps.endAt;
+
+  const onlyNameOrDescriptionChanged =
+    (nameChanged || descriptionChanged) &&
+    !locationChanged &&
+    !publicChanged &&
+    !registerableChanged &&
+    !inviteOnlyChanged &&
+    !allDayChanged &&
+    !recurrenceChanged &&
+    !startChanged &&
+    !endChanged; // And assumption: times didn't change either?
+
+  return {
+    single: !recurrenceChanged,
+    following: true,
+    entireSeries: onlyNameOrDescriptionChanged,
+  };
+};
 
 interface IEventUpdateInput {
   id: string;

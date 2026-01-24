@@ -10,6 +10,14 @@ Props for the VisibilitySelector component.
 
 ## Properties
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L10)
+
+***
+
 ### setVisibility()
 
 > **setVisibility**: (`visibility`) => `void`

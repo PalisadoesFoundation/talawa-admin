@@ -10,4 +10,5 @@ export interface InterfaceRecurrenceDropdownProps {
   onToggle: (isOpen: boolean) => void;
   onSelect: (option: InterfaceRecurrenceOption) => void;
   t: (key: string) => string;
+  disabled?: boolean;
 }

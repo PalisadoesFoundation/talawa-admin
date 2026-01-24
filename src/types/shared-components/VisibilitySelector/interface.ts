@@ -7,4 +7,5 @@ export interface InterfaceVisibilitySelectorProps {
   visibility: EventVisibility;
   setVisibility: (visibility: EventVisibility) => void;
   tCommon: (key: string) => string;
+  disabled?: boolean;
 }

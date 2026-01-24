@@ -1152,7 +1152,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      const submitBtn = screen.getByTestId('createEventBtn');
       await userEvent.click(submitBtn);
     }
 
@@ -1207,7 +1207,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // Submit form
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      const submitBtn = screen.getByTestId('createEventBtn');
       await userEvent.click(submitBtn);
     }
 
@@ -1773,7 +1773,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // Submit form
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      const submitBtn = screen.getByTestId('createEventBtn');
       await userEvent.click(submitBtn);
     }
 
@@ -1953,7 +1953,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(options[2]);
 
     const form = screen.getByTestId('eventTitleInput').closest('form');
-    const submitBtn = screen.getByRole('button', { name: /create event/i });
+    const submitBtn = screen.getByTestId('createEventBtn');
     if (form) await userEvent.click(submitBtn);
 
     await wait(500);

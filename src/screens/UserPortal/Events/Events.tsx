@@ -428,7 +428,7 @@ export default function Events(): JSX.Element {
           initialValues={defaultEventValues}
           onSubmit={handleCreateEvent}
           onCancel={toggleCreateEventModal}
-          submitLabel={t('createEvent')}
+          submitLabel={tCommon('create')}
           t={t}
           tCommon={tCommon}
           showCreateChat

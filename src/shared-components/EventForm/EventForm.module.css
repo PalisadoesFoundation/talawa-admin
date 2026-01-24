@@ -1,0 +1,119 @@
+/* EventForm Component Styles */
+
+/* Bold Input Labels */
+.eventFormContainer :global(.form-label),
+.eventFormContainer label {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-2);
+}
+
+/* Toggle Container */
+.checkboxdivEvents {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-left: var(--space-2); /* Add spacing from left border */
+}
+
+/* Toggle Row */
+.dispflexEvents {
+  display: flex !important;
+  justify-content: flex-start;
+  align-items: center !important;
+  width: 100%;
+  flex-direction: row-reverse;
+  min-height: 2.5rem;
+}
+
+.dispflexEvents > label {
+  flex: 1;
+  text-align: left;
+  margin-left: var(--space-3);
+  margin-bottom: 0;
+  align-self: center;
+  line-height: normal;
+  margin-top: -2px; /* Visual fix: shift label UP to match toggle center */
+}
+
+.dispflexEvents > .switch {
+  margin-bottom: 0 !important;
+}
+
+/* Visibility Radio Buttons Alignment */
+.eventFormContainer :global(.form-check) {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
+  padding-left: 3rem; /* Increased from 2rem to 3rem for better balance */
+}
+
+.eventFormContainer :global(.form-check-input) {
+  margin-top: 0;
+  margin-right: var(--space-3);
+  float: none;
+}
+
+/* Input Fields */
+.inputField {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  color: var(--color-gray-700);
+  padding: var(--space-2);
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.inputField:focus {
+  border-color: var(--color-gray-300);
+  outline: none;
+}
+
+/* Date/Time Containers */
+.datedivEvents {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  gap: var(--space-4);
+}
+
+.dateboxEvents {
+  margin-right: var(--space-4);
+  flex: 1;
+}
+
+.datediv {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+  gap: var(--space-4);
+}
+
+/* Buttons */
+.addButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: 1px solid var(--color-gray-100);
+  padding: var(--space-2) var(--space-4);
+  font-weight: var(--font-weight-medium);
+}
+
+.addButton:hover {
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-gray-200);
+  width: 100%;
+}
