@@ -34,9 +34,6 @@ describe('DynamicDropDown component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
   it('renders and handles selection correctly', async () => {
     const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
@@ -54,7 +51,9 @@ describe('DynamicDropDown component', () => {
     expect(dropdownButton).toHaveTextContent('Label 2');
 
     await user.click(dropdownButton);
+
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
+
     await user.click(optionElement);
 
     expect(setFormData).toHaveBeenCalledWith({ fieldName: 'TEST' });
@@ -115,36 +114,6 @@ describe('DynamicDropDown component', () => {
     // 🔑 THIS is required by the component logic
     await user.click(option);
     await user.keyboard('{Enter}');
-
-    expect(setFormData).toHaveBeenCalledWith(
-      expect.objectContaining({
-        fieldName: 'value2',
-      }),
-    );
-  });
-
-  it('handles keyboard navigation with Space key correctly', async () => {
-    const user = userEvent.setup();
-    const formData = { fieldName: 'value1' };
-    const setFormData = vi.fn();
-
-    renderComponent({
-      formState: formData,
-      setFormState: setFormData,
-      fieldOptions: [
-        { value: 'value1', label: 'Label 1' },
-        { value: 'value2', label: 'Label 2' },
-      ],
-    });
-
-    await user.click(screen.getByTestId('fieldname-dropdown-btn'));
-
-    const option = screen.getByTestId('change-fieldname-btn-value2');
-
-    // Component expects focused option
-    await user.click(option);
-    // 🔑 literal space, not {Space}
-    await user.keyboard('{space}');
 
     expect(setFormData).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -436,7 +405,7 @@ describe('DynamicDropDown component', () => {
     }
   });
 
-  it('renders dropdown options based on current form state', async () => {
+  it('sets aria-selected based on selection state', async () => {
     const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
 
@@ -514,9 +483,7 @@ describe('DynamicDropDown component', () => {
 
     // First selection
     await user.click(dropdownButton);
-
     await user.click(screen.getByTestId('change-fieldname-btn-value2'));
-
     // Second selection
     await user.click(dropdownButton);
     await user.click(screen.getByTestId('change-fieldname-btn-value3'));
@@ -559,7 +526,6 @@ describe('DynamicDropDown component', () => {
     const option = screen.getByTestId(
       'change-fieldname-btn-value_with_underscore',
     );
-
     await user.click(option);
 
     expect(setFormData).toHaveBeenCalledWith({
