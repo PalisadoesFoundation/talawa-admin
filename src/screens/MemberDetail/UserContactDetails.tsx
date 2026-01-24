@@ -68,7 +68,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const [isUpdated, setisUpdated] = useState(false);
-  const currentId = location.state?.id || getItem('id') || id;
+  const storedUserId = getItem('id') || getItem('userId');
+  const currentId = location.state?.id || storedUserId || id;
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [newAvatarUploaded, setNewAvatarUploaded] = useState(false);
 
@@ -103,6 +104,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     (!(isUser || isAdmin)
       ? params.userId
       : getItem('userId') || getItem('id')) || '';
+  const resolvedUserId = currentId || userId;
   useEffect(() => {
     document.title = t('title');
   }, [t]);
@@ -110,7 +112,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const { data, loading, error } = useQuery(GET_USER_BY_ID, {
     variables: {
       input: {
-        id: currentId,
+        id: resolvedUserId,
       },
       fetchPolicy: 'no-cache',
     },
@@ -196,7 +198,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       state: formState.state,
       workPhoneNumber: formState.workPhoneNumber,
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
-      ...(!isUser && !isAdmin ? { id: userId } : {}),
+      ...(resolvedUserId ? { id: resolvedUserId } : {}),
     };
 
     const input = removeEmptyFields(data);
@@ -206,7 +208,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
         refetchQueries: [
           {
             query: GET_USER_BY_ID,
-            variables: { input: { id: currentId } },
+            variables: { input: { id: resolvedUserId } },
           },
         ],
       });
