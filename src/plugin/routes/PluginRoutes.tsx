@@ -12,7 +12,7 @@ import { usePluginRoutes } from '../hooks';
 import styles from './PluginRoutes.module.css';
 import type { IRouteExtension } from '../types';
 
-import type { InterfacePluginRoutesProps } from '../../types/plugin/PluginRoutes/interface';
+import type { InterfacePluginRoutesProps } from '../../types/shared-components/PluginRoutes/interface';
 
 /**
  * Component that renders plugin routes dynamically.
