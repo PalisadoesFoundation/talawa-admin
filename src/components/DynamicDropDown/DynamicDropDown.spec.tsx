@@ -326,14 +326,14 @@ describe('DynamicDropDown component', () => {
     expect(containerElement).toHaveClass('m-2');
   });
 
-  it('applies default btnStyle when empty string is provided', () => {
+  it('falls back to default btnStyle when empty string is provided', () => {
     renderComponent({
       btnStyle: '',
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    // When btnStyle is empty string, the ternary operator returns 'w-100'
-    // but we need to check for the actual classes applied
+
+    // default styling should apply (no custom class injected)
     expect(dropdownButton.className).toContain('dropdown-toggle');
   });
 
@@ -350,68 +350,32 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     await user.click(dropdownButton);
 
-    // Blur any focused element
-    const originalActive = document.activeElement;
-    const nonHtml = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg',
+    // Mock document.activeElement to a non-HTMLElement
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      document,
+      'activeElement',
     );
+
     Object.defineProperty(document, 'activeElement', {
       configurable: true,
-      get: () => nonHtml,
+      get: () => document.createElementNS('http://www.w3.org/2000/svg', 'svg'),
     });
 
     try {
       await user.keyboard('{Enter}');
       expect(setFormData).not.toHaveBeenCalled();
     } finally {
-      Object.defineProperty(document, 'activeElement', {
-        configurable: true,
-        get: () => originalActive,
-      });
+      if (originalDescriptor) {
+        Object.defineProperty(document, 'activeElement', originalDescriptor);
+      }
     }
   });
 
-  it('handles keyboard event when focused element is not an HTMLElement', async () => {
-    const user = userEvent.setup();
-    const formData = { fieldName: 'value1' };
-    const setFormData = vi.fn();
-
-    renderComponent({
-      formState: formData,
-      setFormState: setFormData,
-    });
-
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await user.click(dropdownButton);
-
-    const originalActive = document.activeElement;
-    const nonHtml = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'svg',
-    );
-    Object.defineProperty(document, 'activeElement', {
-      configurable: true,
-      get: () => nonHtml,
-    });
-    try {
-      await user.keyboard('{Enter}');
-      expect(setFormData).not.toHaveBeenCalled();
-    } finally {
-      Object.defineProperty(document, 'activeElement', {
-        configurable: true,
-        get: () => originalActive,
-      });
-    }
-  });
-
-  it('sets aria-selected based on selection state', async () => {
+  it('renders selected option correctly based on formState', async () => {
     const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
 
-    renderComponent({
-      formState: formData,
-    });
+    renderComponent({ formState: formData });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     await user.click(dropdownButton);
@@ -419,17 +383,12 @@ describe('DynamicDropDown component', () => {
     const selectedOption = screen.getByTestId('change-fieldname-btn-value2');
     const unselectedOption = screen.getByTestId('change-fieldname-btn-TEST');
 
+    // Selected option should reflect selection visually / structurally
     expect(selectedOption).toBeInTheDocument();
     expect(unselectedOption).toBeInTheDocument();
 
-    expect(selectedOption).toHaveAttribute(
-      'data-testid',
-      'change-fieldname-btn-value2',
-    );
-    expect(unselectedOption).toHaveAttribute(
-      'data-testid',
-      'change-fieldname-btn-TEST',
-    );
+    // Selection is reflected in the button label, not aria-selected
+    expect(dropdownButton).toHaveTextContent('Label 2');
   });
 
   it('has correct aria-label on dropdown container', () => {
@@ -526,6 +485,7 @@ describe('DynamicDropDown component', () => {
     const option = screen.getByTestId(
       'change-fieldname-btn-value_with_underscore',
     );
+
     await user.click(option);
 
     expect(setFormData).toHaveBeenCalledWith({
