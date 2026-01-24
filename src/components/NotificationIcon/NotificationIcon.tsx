@@ -1,21 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
-import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
-import { Dropdown } from 'react-bootstrap';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate, useLocation } from 'react-router';
-import styles from './NotificationIcon.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
-import { useTranslation } from 'react-i18next';
-
-interface InterfaceNotification {
-  id: string;
-  title: string;
-  body: string;
-  isRead: boolean;
-  navigation?: string;
-}
-
 /**
  * NotificationIcon component.
  *
@@ -26,6 +8,30 @@ interface InterfaceNotification {
  *
  * @returns JSX.Element
  */
+import React, { useState, useEffect } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
+import { Dropdown } from 'react-bootstrap';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useNavigate, useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
+import styles from './NotificationIcon.module.css';
+import useLocalStorage from 'utils/useLocalstorage';
+
+interface InterfaceNotification {
+  id: string;
+  title: string;
+  body: string;
+  isRead: boolean;
+  navigation?: string;
+}
+
+const getNotificationPath = (pathname: string): string => {
+  const path = pathname || '';
+  const isUserPortal = path.startsWith('/user');
+  return isUserPortal ? '/user/notification' : '/admin/notification';
+};
+
 const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
@@ -45,16 +51,12 @@ const NotificationIcon = (): JSX.Element => {
   });
   const navigate = useNavigate();
   const location = useLocation();
-
-  const getNotificationPath = (): string => {
-    const path = location.pathname || '';
-    const isUserPortal = path === '/user' || path.startsWith('/user/');
-    return isUserPortal ? '/user/notification' : '/notification';
-  };
+  const notificationPath = getNotificationPath(location.pathname);
 
   const unreadCount: number = (
     (data?.user?.notifications as InterfaceNotification[]) || []
   ).filter((n: InterfaceNotification) => !n.isRead).length;
+
   useEffect(() => {
     setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);
@@ -89,13 +91,15 @@ const NotificationIcon = (): JSX.Element => {
             notifications.map((notification) => (
               <Dropdown.Item
                 key={notification.id}
-                className={`${styles.notificationItem} ${styles.clickable}`}
+                className={`${styles.notificationItem} ${
+                  notification.navigation ? styles.clickable : ''
+                }`}
                 onClick={() => {
                   if (notification.navigation) {
                     navigate(notification.navigation);
                     return;
                   }
-                  navigate(getNotificationPath());
+                  navigate(notificationPath);
                 }}
               >
                 {!notification.isRead && (
@@ -115,7 +119,7 @@ const NotificationIcon = (): JSX.Element => {
             <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
           ))}
         <Dropdown.Divider />
-        <Dropdown.Item onClick={() => navigate(getNotificationPath())}>
+        <Dropdown.Item onClick={() => navigate(notificationPath)}>
           {t('viewAllNotifications')}
         </Dropdown.Item>
       </Dropdown.Menu>

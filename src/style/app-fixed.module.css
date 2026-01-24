@@ -5787,7 +5787,7 @@ form label,
   margin-right: 8px;
 }
 
-.modelHeaderDelete {
+.modalHeaderDelete {
   background-color: var(--card-header-background-color);
 }
 
@@ -8942,8 +8942,7 @@ form {
   max-width: var(--modal-max-width);
 }
 
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
 }
 

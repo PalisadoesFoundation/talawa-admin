@@ -9,7 +9,7 @@ export class AdminEventPage {
 
   visitEventPage(): void {
     cy.get(this._eventsTabButton).should('be.visible').click();
-    cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgevents\/[a-f0-9-]+/);
   }
 
   createEvent(title: string, description: string, location: string): this {

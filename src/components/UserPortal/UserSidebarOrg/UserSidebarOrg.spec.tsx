@@ -367,13 +367,18 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    resizeWindow(800);
-    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
+    const previousWidth = window.innerWidth;
+    try {
+      resizeWindow(800);
+      expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopleBtn = screen.getAllByTestId(/People/i)[0];
-    await userEvent.click(peopleBtn);
-    await wait();
-    expect(window.location.pathname).toContain('user/people/123');
+      const peopleBtn = screen.getAllByTestId(/People/i)[0];
+      await userEvent.click(peopleBtn);
+      await wait();
+      expect(window.location.pathname).toContain('user/people/123');
+    } finally {
+      resizeWindow(previousWidth);
+    }
   });
 
   it('Testing when image is present for Organization', async () => {

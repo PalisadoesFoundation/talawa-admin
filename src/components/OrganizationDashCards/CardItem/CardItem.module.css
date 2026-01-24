@@ -1,75 +1,43 @@
 .cardItem {
-  border: 1px solid var(--cardItem-border, #e9ecef);
-  background: var(--orgCard-bg, #fff);
-  padding: 16px;
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  transition: box-shadow 0.2s;
+  composes: cardItem from '../../../style/app-fixed.module.css';
 }
 
-.cardItem:hover {
-  box-shadow: var(--hover-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+.CardItemImage {
+  composes: CardItemImage from '../../../style/app-fixed.module.css';
 }
 
-.cardItemImage {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
+.CardItemMainDiv {
+  composes: CardItemMainDiv from '../../../style/app-fixed.module.css';
 }
 
-.cardItemMainDiv {
-  width: 100%;
-  min-width: 0;
+.CardItemMainDivEvent {
+  composes: CardItemMainDivEvent from '../../../style/app-fixed.module.css';
 }
 
-.cardItemMainDivEvent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.cardItemtitle {
+  composes: cardItemtitle from '../../../style/app-fixed.module.css';
 }
 
 .upcomingEventsTitle {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--primaryText-color, #000);
+  composes: upcomingEventsTitle from '../../../style/app-fixed.module.css';
 }
 
-.cardItemDate {
-  display: block;
-  font-size: 0.85rem;
-  color: var(--cardItem-time-color, #495057);
+.CardItemDate {
+  composes: CardItemDate from '../../../style/app-fixed.module.css';
 }
 
 .cardItemAuthor {
-  font-size: 0.9rem;
-  color: var(--cardItem-creator-color, #a8c7fa);
+  composes: cardItemAuthor from '../../../style/app-fixed.module.css';
 }
 
 .rightCard {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-top: 4px;
+  composes: rightCard from '../../../style/app-fixed.module.css';
 }
 
 .location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--cardItem-location-color, #0056b3);
-  font-size: 0.85rem;
+  composes: location from '../../../style/app-fixed.module.css';
 }
 
 .time {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: var(--cardItem-time-color, #495057);
-  font-size: 0.85rem;
+  composes: time from '../../../style/app-fixed.module.css';
 }

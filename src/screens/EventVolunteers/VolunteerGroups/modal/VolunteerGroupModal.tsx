@@ -273,10 +273,15 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               }
               onChange={(_, newLeader): void => {
                 if (newLeader) {
+                  const leaderExists = volunteerUsers.some(
+                    (user) => user.id === newLeader.id,
+                  );
                   setFormState({
                     ...formState,
                     leader: newLeader,
-                    volunteerUsers: [...volunteerUsers, newLeader],
+                    volunteerUsers: leaderExists
+                      ? volunteerUsers
+                      : [...volunteerUsers, newLeader],
                   });
                 } else {
                   setFormState({
