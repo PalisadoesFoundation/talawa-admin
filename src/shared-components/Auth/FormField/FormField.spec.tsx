@@ -107,7 +107,7 @@ describe('FormField', () => {
       const input = screen.getByTestId('change-input');
       await user.type(input, 'new value');
 
-      expect(onChange).toHaveBeenCalled();
+      expect(onChange).toHaveBeenCalledTimes(9);
     });
 
     test('calls onBlur when input loses focus', async () => {
