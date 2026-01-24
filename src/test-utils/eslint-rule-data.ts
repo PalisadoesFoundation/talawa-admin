@@ -212,15 +212,26 @@ export const searchInputRestrictions = [
 ];
 
 // Helper functions for rule processing
-export const stripId = (entry: { id?: string; [key: string]: unknown }) => {
-  const { id, ...rule } = entry;
-  void id;
+export const stripId = (entry: {
+  id?: string;
+  name: string;
+  message?: string;
+  importNames?: string[];
+}) => {
+  const { id: _id, ...rule } = entry;
   return rule;
 };
 
 export const restrictedImportPaths = restrictedImports.map(stripId);
 
-export const restrictImportsExcept = (allowedIds: string[] = []) => ({
+export const restrictImportsExcept = (
+  allowedIds: string[] = [],
+): {
+  'no-restricted-imports': readonly [
+    'error',
+    { paths: { name: string; message?: string; importNames?: string[] }[] },
+  ];
+} => ({
   'no-restricted-imports': [
     'error',
     {

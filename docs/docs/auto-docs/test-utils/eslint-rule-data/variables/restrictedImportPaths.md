@@ -6,8 +6,18 @@
 
 > `const` **restrictedImportPaths**: `object`[]
 
-Defined in: [src/test-utils/eslint-rule-data.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L221)
+Defined in: [src/test-utils/eslint-rule-data.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L225)
 
-## Index Signature
+## Type Declaration
 
-\[`key`: `string`\]: `unknown`
+### importNames?
+
+> `optional` **importNames**: `string`[]
+
+### message?
+
+> `optional` **message**: `string`
+
+### name
+
+> **name**: `string`

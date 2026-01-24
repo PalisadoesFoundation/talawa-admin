@@ -16,6 +16,30 @@ Defined in: [src/test-utils/eslint-rule-data.ts:215](https://github.com/Palisado
 
 `string`
 
+#### importNames?
+
+`string`[]
+
+#### message?
+
+`string`
+
+#### name
+
+`string`
+
 ## Returns
 
 `object`
+
+### importNames?
+
+> `optional` **importNames**: `string`[]
+
+### message?
+
+> `optional` **message**: `string`
+
+### name
+
+> **name**: `string`

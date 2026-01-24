@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { ESLint } from 'eslint';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -27,6 +27,10 @@ describe('ESLint Search Input Restrictions', () => {
     const results = await eslint.lintText(code, { filePath: filename });
     return results[0]?.messages || [];
   };
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
   describe('Direct search input restrictions', () => {
     it('should error on <input type="search">', async () => {
@@ -265,7 +269,7 @@ describe('ESLint Search Input Restrictions', () => {
         searchInputRestrictions.forEach((restriction) => {
           expect(restriction.selector).toBeDefined();
           expect(restriction.message).toBeDefined();
-          expect(restriction.message).toContain('search');
+          expect(restriction.message.toLowerCase()).toContain('search');
         });
       });
     });
@@ -302,6 +306,21 @@ describe('ESLint Search Input Restrictions', () => {
         expect(Array.isArray(config['no-restricted-imports'])).toBe(true);
         expect(config['no-restricted-imports'][0]).toBe('error');
         expect(typeof config['no-restricted-imports'][1]).toBe('object');
+
+        const paths = config['no-restricted-imports'][1].paths;
+        expect(paths).toBeDefined();
+        expect(Array.isArray(paths)).toBe(true);
+
+        // Assert that none of the allowed IDs are in the filtered paths
+        expect(
+          paths.every(
+            (p: { name: string; message?: string; importNames?: string[] }) =>
+              !allowedIds.some((id) => p.name.includes(id)),
+          ),
+        ).toBe(true);
+
+        // Assert that the paths array length decreased compared to the full list
+        expect(paths.length).toBeLessThan(restrictedImportPaths.length);
       });
     });
   });

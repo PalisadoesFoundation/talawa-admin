@@ -6,7 +6,7 @@
 
 > **restrictImportsExcept**(`allowedIds`): `object`
 
-Defined in: [src/test-utils/eslint-rule-data.ts:223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L223)
+Defined in: [src/test-utils/eslint-rule-data.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/eslint-rule-data.ts#L227)
 
 ## Parameters
 
