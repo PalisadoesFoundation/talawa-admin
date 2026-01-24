@@ -72,7 +72,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
             >
               <TableCell>
                 <Link
-                  to={`/event/${currentOrg}/${event.id}`}
+                  to={`/admin/event/${currentOrg}/${event.id}`}
                   className="d-flex justify-items-center align-items-center text-primary text-decoration-none"
                 >
                   <DateIcon

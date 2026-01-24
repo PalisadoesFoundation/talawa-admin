@@ -1,12 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  fireEvent,
-  within,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -2491,7 +2486,7 @@ describe('Cookie-based authentication verification', () => {
     );
   });
 
-  it('Redirects to /orglist if user is already logged in as administrator', async () => {
+  it('Redirects to /admin/orglist if user is already logged in as administrator', async () => {
     mockUseLocalStorage.getItem.mockImplementation((key) => {
       if (key === 'IsLoggedIn') return 'TRUE';
       if (key === 'role') return 'administrator';
@@ -2511,7 +2506,7 @@ describe('Cookie-based authentication verification', () => {
     );
 
     await waitFor(() => {
-      expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 });

@@ -68,9 +68,12 @@ const VerifyEmail = (): JSX.Element => {
 
   // Verify email on component mount
   useEffect(() => {
+    let isActive = true;
     const verifyEmailToken = async (): Promise<void> => {
       if (!token) {
-        setVerificationState('error');
+        if (isActive) {
+          setVerificationState('error');
+        }
         return;
       }
 
@@ -78,6 +81,10 @@ const VerifyEmail = (): JSX.Element => {
         const { data } = await verifyEmail({
           variables: { token },
         });
+
+        if (!isActive) {
+          return;
+        }
 
         if (data?.verifyEmail?.success) {
           setVerificationState('success');
@@ -88,6 +95,9 @@ const VerifyEmail = (): JSX.Element => {
           setVerificationState('error');
         }
       } catch (error: unknown) {
+        if (!isActive) {
+          return;
+        }
         setVerificationState('error');
         const err = error as {
           message?: string;
@@ -105,7 +115,10 @@ const VerifyEmail = (): JSX.Element => {
       }
     };
 
-    verifyEmailToken();
+    void verifyEmailToken();
+    return () => {
+      isActive = false;
+    };
   }, [token, verifyEmail, t, removeItem]);
 
   /**

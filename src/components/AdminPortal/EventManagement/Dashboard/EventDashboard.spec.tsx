@@ -108,9 +108,6 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
@@ -119,6 +116,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   beforeEach(() => {
+    user = userEvent.setup();
     // Clear localStorage before each test
     localStorageMock.clear();
   });
@@ -126,7 +124,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
@@ -225,9 +223,7 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Click to open modal
-    await act(async () => {
-      await user.click(editButton);
-    });
+    await user.click(editButton);
 
     await waitFor(() => {
       expect(getByTestId('event-list-card-modals')).toBeInTheDocument();
@@ -438,10 +434,10 @@ describe('Testing Event Dashboard Screen', () => {
 
     it('should hide spinner and render event details after LoadingState completes', async () => {
       const mockLink = new StaticMockLink(MOCKS_WITH_TIME);
-      const { getByTestId } = renderEventDashboard(mockLink);
+      const { getByTestId, queryByTestId } = renderEventDashboard(mockLink);
       await wait();
 
-      expect(document.querySelector('spinner')).not.toBeInTheDocument();
+      expect(queryByTestId('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
     });
   });

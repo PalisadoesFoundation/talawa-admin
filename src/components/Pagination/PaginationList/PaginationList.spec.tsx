@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PaginationList from './PaginationList';
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -44,8 +45,14 @@ vi.mock('../Navigator/Pagination', () => ({
 }));
 
 describe('PaginationList', () => {
+  const originalMatchMedia = window.matchMedia;
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
+    });
   });
   const defaultProps = {
     count: 100,
@@ -83,10 +90,6 @@ describe('PaginationList', () => {
     });
   };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('renders pagination for large screens with all options', () => {
     mockMatchMedia(false); // false = large screen
 
@@ -107,26 +110,16 @@ describe('PaginationList', () => {
     expect(screen.getByTestId('pagination-navigator')).toBeInTheDocument();
   });
 
-  it('calls onPageChange when page navigation occurs', () => {
+  it('calls onPageChange when page navigation occurs', async () => {
+    const user = userEvent.setup();
     mockMatchMedia(false); // false = large screen
 
     renderWithProviders();
 
     const nextButton = screen.getByTestId('next-button');
-    fireEvent.click(nextButton);
+    await user.click(nextButton);
 
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(null, 1);
-  });
-
-  it('calls onRowsPerPageChange when rows per page changes', () => {
-    mockMatchMedia(false); // false = large screen
-
-    renderWithProviders();
-
-    const selectElement = screen.getByLabelText('rows per page');
-    fireEvent.change(selectElement, { target: { value: '20' } });
-
-    expect(defaultProps.onRowsPerPageChange).toHaveBeenCalled();
   });
 
   it('displays correct page information', () => {

@@ -6,8 +6,10 @@ import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -21,7 +23,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
 import { MOCKS } from './OrganizationEventsMocks';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { green } from '@mui/material/colors';
 
 const mockGetItem = vi.fn((key: string): string | null => {
@@ -72,7 +74,7 @@ Object.defineProperty(window, 'location', {
       }
     }),
     reload: vi.fn(),
-    pathname: '/orglist',
+    pathname: '/admin/orglist',
     search: '',
     hash: '',
     origin: 'http://localhost',
@@ -122,8 +124,8 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     warning: vi.fn(),
     error: vi.fn(),
@@ -198,14 +200,14 @@ describe('Organisation Events Page', () => {
     );
 
   test('renders events page and keeps current route', async () => {
-    window.location.assign('/orglist');
+    window.location.assign('/admin/orglist');
 
     const { container } = renderWithLink(defaultLink);
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Month');
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
   });
 
   test('renders when there is no mock event data (no events query result)', async () => {
@@ -293,7 +295,7 @@ describe('Organisation Events Page', () => {
       ).toBeInTheDocument(),
     );
 
-    expect(toast.warning).not.toHaveBeenCalled();
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
 
     await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
@@ -498,7 +500,7 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
     );
 
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
 
     const messages = mockWarn.mock.calls.map((args) => args.join(' '));
     expect(

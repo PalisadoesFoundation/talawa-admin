@@ -50,14 +50,14 @@ const OrganizationScreen = (): JSX.Element => {
   });
   // Get the current location to determine the translation key
   const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
-  const isEventPath = useMatch('/event/:orgId/:eventId');
+  const isEventPath = useMatch('/admin/event/:orgId/:eventId');
   const eventId = isEventPath?.params.eventId;
   const shouldFetchEventName = Boolean(orgId && eventId);
   const EVENTS_PAGE_SIZE = 100;

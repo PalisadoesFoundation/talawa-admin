@@ -1,7 +1,4 @@
-/**
- * Props for CardItem component.
- */
-export interface InterfaceCardItemProps {
+export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
   title: string;
   time?: string;

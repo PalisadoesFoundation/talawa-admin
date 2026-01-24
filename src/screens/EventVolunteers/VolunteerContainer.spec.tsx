@@ -11,8 +11,10 @@ import VolunteerContainer from './VolunteerContainer';
 import userEvent from '@testing-library/user-event';
 import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 
 /**
@@ -60,7 +62,7 @@ vi.mock('react-router', async () => {
 const renderVolunteerContainer = (): RenderResult => {
   return render(
     <MockedProvider link={new StaticMockLink(MOCKS)}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
