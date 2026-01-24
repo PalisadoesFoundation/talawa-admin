@@ -18,12 +18,12 @@ export class AdminDashboardPage {
   ];
 
   visit() {
-    cy.visit('/orglist');
+    cy.visit('/admin/orglist');
     return this;
   }
 
   verifyOnDashboard(timeout = 20000) {
-    cy.url({ timeout }).should('include', '/orglist');
+    cy.url({ timeout }).should('include', '/admin/orglist');
     cy.get(this._orgcardContainer, { timeout }).should('be.visible');
     cy.contains('Admin Portal', { timeout }).should('be.visible');
     return this;
@@ -34,7 +34,7 @@ export class AdminDashboardPage {
       .should('be.visible')
       .first()
       .click();
-    cy.url().should('match', /\/orgdash\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
     return this;
   }
 
