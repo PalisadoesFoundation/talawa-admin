@@ -46,11 +46,9 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import Button from 'shared-components/Button/Button';
 
-interface TestInterfaceUpdateTimeoutProps {
-  onValueChange?: (value: number) => void;
-}
+import { InterfaceUpdateTimeoutProps } from 'types/AdminPortal/UpdateSession/interface';
 
-const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
+const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
   onValueChange,
 }): JSX.Element => {
   const { t } = useTranslation('translation');
@@ -112,8 +110,6 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         if (onValueChange) {
           onValueChange(value);
         }
-      } else {
-        console.warn('Invalid timeout value:', target.value);
       }
     }
   };

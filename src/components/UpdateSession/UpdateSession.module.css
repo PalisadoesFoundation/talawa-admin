@@ -12,7 +12,8 @@
 }
 
 .updateTimeoutCard {
-  width: 700px;
+  width: 100%;
+  max-width: 700px;
   background: var(--updateTimeoutCard-bg);
   border: none;
   border-radius: 16px;
@@ -56,7 +57,7 @@
 .updateTimeoutLabelsContainer {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
 }
 
 .updateTimeoutValue {
