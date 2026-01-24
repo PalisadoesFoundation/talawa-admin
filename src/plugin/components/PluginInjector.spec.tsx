@@ -1,23 +1,23 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { ComponentType } from 'react';
 import { render, screen } from '@testing-library/react';
-import PluginInjector from '../../components/PluginInjector';
-import { usePluginInjectors } from '../../hooks';
-import { getPluginComponent } from '../../registry';
+import PluginInjector from './PluginInjector';
+import { usePluginInjectors } from '../hooks';
+import { getPluginComponent } from '../registry';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
+import i18nForTest from 'utils/i18nForTest';
 dayjs.extend(utc);
 
-import styles from 'style/app-fixed.module.css';
+import styles from './PluginInjector.module.css';
 
 // Mock the hooks
-vi.mock('../../hooks', () => ({
+vi.mock('../hooks', () => ({
   usePluginInjectors: vi.fn(),
 }));
 
 // Mock the registry
-vi.mock('../../registry', () => ({
+vi.mock('../registry', () => ({
   getPluginComponent: vi.fn(),
 }));
 
@@ -125,25 +125,9 @@ describe('PluginInjector', () => {
     const { container } = render(<PluginInjector injectorType="G1" />);
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
-  });
-
-  it('should handle null injectors', () => {
-    vi.mocked(usePluginInjectors).mockReturnValue([]);
-
-    const { container } = render(<PluginInjector injectorType="G1" />);
-
-    expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
-  });
-
-  it('should handle undefined injectors', () => {
-    vi.mocked(usePluginInjectors).mockReturnValue([]);
-
-    const { container } = render(<PluginInjector injectorType="G1" />);
-
-    expect(usePluginInjectors).toHaveBeenCalledWith('G1');
-    expect(container.firstChild).toBeNull();
+    expect(container.firstChild).toHaveTextContent(
+      i18nForTest.t('pluginInjector.notFoundOrDisabled'),
+    );
   });
 
   it('should apply custom className', () => {
