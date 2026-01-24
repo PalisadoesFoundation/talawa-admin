@@ -8,6 +8,12 @@
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
+  "frequency": "频率",
+  "repeatsEvery": "每重复一次",
+  "day": "天",
+  "week": "周",
+  "month": "月",
+  "year": "年",
   "invalidDetailsMessage": "请检查您输入的详细信息。",
   "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {

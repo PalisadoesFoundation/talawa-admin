@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, FormControl } from 'react-bootstrap';
+import { FormCheckField } from '../FormFieldGroup/FormCheckField';
+import { FormTextField } from '../FormFieldGroup/FormTextField';
 import DatePicker from '../DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -14,7 +15,7 @@ import type {
   InterfaceRecurrenceRule,
   RecurrenceEndOptionType,
 } from '../../utils/recurrenceUtils';
-import styles from '../../style/app-fixed.module.css';
+import styles from './RecurrenceEndOptionsSection.module.css';
 
 interface InterfaceRecurrenceEndOptionsSectionProps {
   frequency: Frequency;
@@ -48,7 +49,7 @@ export const RecurrenceEndOptionsSection: React.FC<
     <div className="mb-3">
       <span className="fw-semibold text-secondary">{t('ends')}</span>
       <div className="ms-3 mt-3">
-        <Form>
+        <div>
           {recurrenceEndOptions
             .filter(
               (option) =>
@@ -56,7 +57,7 @@ export const RecurrenceEndOptionsSection: React.FC<
             )
             .map((option, index) => (
               <div key={index} className="my-2 d-flex align-items-center">
-                <Form.Check
+                <FormCheckField
                   type="radio"
                   id={`radio-${index}`}
                   label={t(option)}
@@ -67,12 +68,12 @@ export const RecurrenceEndOptionsSection: React.FC<
                   checked={option === selectedRecurrenceEndOption}
                   data-testid={`${option}`}
                   data-cy={`recurrenceEndOption-${option}`}
-                  aria-label={t(option)}
                 />
 
                 {option === endsOn && (
                   <div className="ms-3">
                     <DatePicker
+                      name="recurrenceEndDate"
                       label={t('endDate')}
                       data-testid="customRecurrenceEndDatePicker"
                       data-cy="customRecurrenceEndDatePicker"
@@ -109,14 +110,25 @@ export const RecurrenceEndOptionsSection: React.FC<
                 )}
                 {option === endsAfter && (
                   <>
-                    <FormControl
+                    <FormTextField
+                      name="recurrenceCount"
+                      label=""
+                      hideLabel
                       type="number"
-                      value={localCount}
-                      onChange={onCountChange}
-                      onDoubleClick={(e) => {
+                      value={localCount.toString()}
+                      onChange={(value) => {
+                        // Create synthetic event to match expected interface
+                        const syntheticEvent = {
+                          target: { value },
+                        } as React.ChangeEvent<HTMLInputElement>;
+                        onCountChange(syntheticEvent);
+                      }}
+                      onDoubleClick={(
+                        e: React.MouseEvent<HTMLInputElement>,
+                      ) => {
                         (e.target as HTMLInputElement).select();
                       }}
-                      onKeyDown={(e) => {
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                         if (
                           e.key === '-' ||
                           e.key === '+' ||
@@ -140,7 +152,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                 )}
               </div>
             ))}
-        </Form>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,8 @@
-/* Shared styles moved to SharedPicker.module.css */
+.timePicker {
+  width: 100%;
+}
 
-.paddedInput {
-  padding-right: var(--picker-icon-space);
+/* Migrated from SharedPicker.module.css */
+.fullWidth {
+  width: 100%;
 }

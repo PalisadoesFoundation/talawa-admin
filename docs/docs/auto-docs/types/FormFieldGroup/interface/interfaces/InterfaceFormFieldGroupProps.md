@@ -16,6 +16,14 @@ Props for FormFieldGroup component.
 
 ## Properties
 
+### className?
+
+> `optional` **className**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+
+***
+
 ### data-testid?
 
 > `optional` **data-testid**: `string`

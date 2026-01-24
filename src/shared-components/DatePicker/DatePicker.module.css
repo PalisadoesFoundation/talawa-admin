@@ -1,0 +1,21 @@
+.wrapper {
+  display: flex !important;
+  position: relative !important;
+  width: 100%;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.paddedInput {
+  padding-right: calc(40px + 0.75rem);
+}
+
+.adornment {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  padding-right: 0.5rem !important;
+}

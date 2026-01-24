@@ -8,6 +8,12 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "frequency": "Frequency",
+  "repeatsEvery": "Repeats Every",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "invalidDetailsMessage": "Please check the details you entered.",
   "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {

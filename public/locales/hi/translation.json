@@ -8,6 +8,12 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "frequency": "आवृत्ति",
+  "repeatsEvery": "हर बार दोहराता है",
+  "day": "दिन",
+  "week": "सप्ताह",
+  "month": "महीना",
+  "year": "वर्ष",
   "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
   "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {

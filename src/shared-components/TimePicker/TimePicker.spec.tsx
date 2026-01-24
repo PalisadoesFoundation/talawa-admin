@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -38,15 +39,16 @@ describe('TimePicker', () => {
     expect(input.value).toMatch(/10:30/);
   });
 
-  it('calls onChange when time is modified', () => {
+  it('calls onChange when time is modified', async () => {
+    const user = userEvent.setup();
     renderWithProvider(
       <TimePicker label="Select Time" value={null} onChange={mockOnChange} />,
     );
 
     // Simulate user typing a time.
     const input = screen.getByRole('textbox');
-    // Using fireEvent to bypass JSDOM selectionStart issues
-    fireEvent.change(input, { target: { value: '11:00 AM' } });
+    await user.clear(input);
+    await user.type(input, '11:00 AM');
 
     // Verify the Dayjs value is passed as the first argument
     expect(mockOnChange).toHaveBeenCalled();
@@ -134,6 +136,24 @@ describe('TimePicker', () => {
     expect(input.value).toBe('');
   });
 
+  it('applies textFieldClassName when provided by MUI slot props', () => {
+    renderWithProvider(
+      <TimePicker
+        label="Select Time"
+        value={null}
+        onChange={mockOnChange}
+        slotProps={{
+          textField: {
+            className: 'mui-textfield-class',
+          },
+        }}
+      />,
+    );
+
+    const wrapper = document.querySelector('.mui-textfield-class');
+    expect(wrapper).toBeInTheDocument();
+  });
+
   // Edge case: undefined value renders empty input
   it('renders empty input when value is undefined', () => {
     renderWithProvider(
@@ -194,16 +214,20 @@ describe('TimePicker', () => {
   });
 
   // Rapid onChange calls
-  it('handles rapid successive onChange calls', () => {
+  it('handles rapid successive onChange calls', async () => {
+    const user = userEvent.setup();
     renderWithProvider(
       <TimePicker label="Select Time" value={null} onChange={mockOnChange} />,
     );
     const input = screen.getByRole('textbox');
 
     // Simulate rapid changes
-    fireEvent.change(input, { target: { value: '09:00 AM' } });
-    fireEvent.change(input, { target: { value: '10:00 AM' } });
-    fireEvent.change(input, { target: { value: '11:00 AM' } });
+    await user.clear(input);
+    await user.type(input, '09:00 AM');
+    await user.clear(input);
+    await user.type(input, '10:00 AM');
+    await user.clear(input);
+    await user.type(input, '11:00 AM');
 
     // Verify onChange was called multiple times
     expect(mockOnChange).toHaveBeenCalled();
@@ -211,14 +235,16 @@ describe('TimePicker', () => {
   });
 
   // Invalid input handling
-  it('handles invalid user input gracefully', () => {
+  it('handles invalid user input gracefully', async () => {
+    const user = userEvent.setup();
     renderWithProvider(
       <TimePicker label="Select Time" value={null} onChange={mockOnChange} />,
     );
     const input = screen.getByRole('textbox');
 
     // Enter invalid time format
-    fireEvent.change(input, { target: { value: 'invalid-time' } });
+    await user.clear(input);
+    await user.type(input, 'invalid-time');
 
     // Component should still render without crashing
     expect(input).toBeInTheDocument();

@@ -1,31 +1,34 @@
 /**
- * DatePicker component - A wrapper around MUI DatePicker with custom styling
+ * DatePicker component - A wrapper around MUI DatePicker with FormFieldGroup integration
  *
  * @remarks
- * Note: This component sets enableAccessibleFieldDOMStructure=\{false\}
- * to maintain compatibility with react-bootstrap Form.Control styling.
- * This disables MUI's accessible field structure. The tradeoff is acceptable
- * because we provide:
- * - Custom label element with htmlFor association
- * - aria-label on the input field via slotProps
- * - Proper keyboard navigation support
- * - Screen reader compatibility through ARIA attributes
+ * This component integrates MUI DatePicker with our FormFieldGroup pattern to provide:
+ * - Consistent validation and error handling
+ * - Proper accessibility with ARIA attributes
+ * - Label and help text management
+ * - Touch state tracking for validation UX
+ *
+ * Note: This component sets `enableAccessibleFieldDOMStructure` to false
+ * to maintain compatibility with react-bootstrap styling while still
+ * providing full accessibility through FormFieldGroup's ARIA support.
  */
-import React from 'react';
+import React, { useId } from 'react';
 import {
   DatePicker as MuiDatePicker,
   DatePickerSlotProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { Form } from 'react-bootstrap';
-import type { Dayjs } from 'dayjs';
-import commonStyles from '../SharedPicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { Dayjs } from 'dayjs';
+import { FormFieldGroup } from '../FormFieldGroup/FormFieldGroup';
+import styles from './DatePicker.module.css';
 
 /**
  * Component Props for DatePicker
  */
 interface InterfaceDatePickerProps {
+  /** Unique name identifier for the field */
+  name?: string;
   /** Label displayed for the date picker */
   label?: string;
   /**
@@ -38,12 +41,24 @@ interface InterfaceDatePickerProps {
    * @param date - The new date value.
    */
   onChange: (date: Dayjs | null) => void;
+  /**
+   * Callback fired when the field is blurred (for touch tracking)
+   */
+  onBlur?: () => void;
   /** Minimum selectable date constraint */
   minDate?: Dayjs;
   /** Maximum selectable date constraint */
   maxDate?: Dayjs;
   /** Whether the date picker is disabled */
   disabled?: boolean;
+  /** Whether the field is required */
+  required?: boolean;
+  /** Error message to display when validation fails */
+  error?: string;
+  /** Whether the field has been touched (for validation UX) */
+  touched?: boolean;
+  /** Additional help text displayed below the field */
+  helpText?: string;
   /** Additional CSS class name to be applied to the root element */
   className?: string;
   /** Test ID for testing purposes, applied to the underlying input */
@@ -58,63 +73,74 @@ interface InterfaceDatePickerProps {
   format?: string;
 }
 
-/**
- * DatePicker wrapper component that integrates MUI DatePicker with react-bootstrap styling.
- *
- * This component provides a standardized date picker interface that maintains consistency
- * across the application by using react-bootstrap Form.Control for styling.
- *
- * @param props - The component props.
- *
- * @example
- * ```tsx
- * <DatePicker
- *   label="Select Date"
- *   value={selectedDate}
- *   onChange={setSelectedDate}
- *   minDate={dayjs()}
- * />
- * ```
- */
 const DatePicker: React.FC<InterfaceDatePickerProps> = ({
+  name,
   label,
   value,
   onChange,
+  onBlur,
   minDate,
   maxDate,
   disabled,
+  required,
+  error,
+  touched,
+  helpText,
   className,
   'data-testid': dataTestId,
   'data-cy': dataCy,
   slotProps,
   slots: customSlots,
-  format,
+  format = 'MM/DD/YYYY',
 }) => {
+  const generatedId = useId();
+  const effectiveName = name || generatedId;
+  const inputId = (dataTestId || `datepicker-${effectiveName}`) as string;
+  const showError = touched && error;
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className={className}>
-        {label && (
-          <label
-            htmlFor={dataTestId}
-            className={`form-label ${disabled ? 'text-muted' : ''} ${commonStyles.pickerLabel}`}
-          >
-            {label}
-          </label>
-        )}
+      <FormFieldGroup
+        name={effectiveName}
+        label={label || ''}
+        required={required}
+        error={showError ? error : undefined}
+        helpText={helpText}
+        className={className}
+      >
         <MuiDatePicker
           format={format}
-          // Normalize undefined to null to prevent controlled/uncontrolled warnings
           value={value === undefined ? null : value}
           onChange={onChange}
           minDate={minDate}
           maxDate={maxDate}
           disabled={disabled}
-          className={commonStyles.fullWidth} // Applied directly to component, className prop moved to wrapper div
-          // Disabled to maintain compatibility with custom Form.Control slot
-          // MUI's accessible field structure conflicts with our react-bootstrap integration
+          className={styles.fullWidth}
           enableAccessibleFieldDOMStructure={false}
-          slotProps={slotProps}
-          data-testid={dataTestId}
+          slotProps={{
+            ...slotProps,
+            textField: {
+              ...slotProps?.textField,
+              // Handle onBlur with safe type checking
+              onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                onBlur?.();
+                const textFieldProps = slotProps?.textField;
+                if (
+                  typeof textFieldProps === 'object' &&
+                  textFieldProps !== null &&
+                  'onBlur' in textFieldProps &&
+                  typeof (textFieldProps as { onBlur: unknown }).onBlur ===
+                    'function'
+                ) {
+                  (
+                    textFieldProps as {
+                      onBlur: (ev: React.FocusEvent<HTMLInputElement>) => void;
+                    }
+                  ).onBlur(e);
+                }
+              },
+            },
+          }}
           slots={{
             ...customSlots,
             textField: (props) => {
@@ -130,23 +156,36 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 className: textFieldClassName,
                 ...other
               } = props;
+
               return (
                 <div
-                  className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
+                  className={`${styles.wrapper} ${textFieldClassName || ''}`.trim()}
                 >
-                  <Form.Control
+                  <input
                     {...inputProps}
                     {...other}
-                    id={dataTestId} // Link label to input
+                    id={inputId}
                     ref={ref}
-                    required={props.required}
-                    disabled={props.disabled}
+                    required={required}
+                    disabled={disabled}
+                    aria-required={required}
+                    aria-invalid={showError ? 'true' : 'false'}
+                    aria-describedby={
+                      showError
+                        ? `${inputId}-error`
+                        : helpText
+                          ? `${inputId}-help`
+                          : undefined
+                    }
                     data-testid={dataTestId}
                     data-cy={dataCy}
-                    className={`${commonStyles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? commonStyles.paddedInput : ''}`.trim()}
+                    className={`form-control ${styles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? styles.paddedInput : ''} ${showError ? 'is-invalid' : ''}`.trim()}
                   />
                   {InputProps?.endAdornment && (
-                    <div className="position-absolute end-0 top-50 translate-middle-y pe-2">
+                    <div
+                      className={styles.adornment}
+                      data-testid="datepicker-adornment"
+                    >
                       {InputProps.endAdornment}
                     </div>
                   )}
@@ -155,22 +194,12 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
             },
           }}
         />
-      </div>
+      </FormFieldGroup>
     </LocalizationProvider>
   );
 };
 
 export default DatePicker;
 
-/**
- * Re-exported MUI date picker LocalizationProvider for test utilities and localization support.
- * Allows tests and other modules to import MUI date picker localization without direct \@mui dependencies.
- * Requires \@mui/x-date-pickers to be installed.
- */
 export { LocalizationProvider } from '@mui/x-date-pickers';
-
-/**
- * Re-exported MUI date picker AdapterDayjs for Day.js integration.
- * Provides Day.js adapter for MUI date pickers. Requires both \@mui/x-date-pickers and dayjs to be installed and configured.
- */
 export { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

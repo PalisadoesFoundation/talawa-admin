@@ -30,6 +30,10 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:20](https:/
 
 Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L25)
 
+#### Overrides
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`className`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#classname)
+
 ***
 
 ### data-testid?

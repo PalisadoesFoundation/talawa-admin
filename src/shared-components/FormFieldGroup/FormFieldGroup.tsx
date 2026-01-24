@@ -21,6 +21,7 @@ export const FormFieldGroup: React.FC<
   children,
   inline,
   hideLabel,
+  className,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const showError = touched && !!error;
@@ -45,7 +46,7 @@ export const FormFieldGroup: React.FC<
   }
 
   return (
-    <Form.Group controlId={name}>
+    <Form.Group controlId={name} className={className}>
       <Form.Label htmlFor={name} className={hideLabel ? 'visually-hidden' : ''}>
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}

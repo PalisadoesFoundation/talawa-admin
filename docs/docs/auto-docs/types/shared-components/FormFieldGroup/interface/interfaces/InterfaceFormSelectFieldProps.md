@@ -22,6 +22,18 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:9](https://
 
 ***
 
+### className?
+
+> `optional` **className**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`className`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#classname)
+
+***
+
 ### data-testid?
 
 > `optional` **data-testid**: `string`

@@ -11,6 +11,7 @@ export interface InterfaceFormFieldGroupProps {
   'data-testid'?: string;
   inline?: boolean;
   hideLabel?: boolean;
+  className?: string;
 }
 
 export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
