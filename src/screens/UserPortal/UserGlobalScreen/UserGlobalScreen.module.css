@@ -119,6 +119,19 @@
   }
 }
 
+@media (max-width: 820px) {
+  .pageContainer {
+    padding-left: var(--space-5);
+  }
+
+  .contract,
+  .expand {
+    margin-left: 0;
+    padding-left: 0;
+    animation: none;
+  }
+}
+
 @media (max-width: 1120px) {
   .collapseSidebarButton {
     width: var(--space-19);

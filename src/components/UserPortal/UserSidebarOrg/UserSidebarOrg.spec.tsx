@@ -895,4 +895,21 @@ describe('Dropdown State Management', () => {
       screen.getByRole('button', { name: /Dropdown Menu/i }),
     ).toBeInTheDocument();
   });
+
+  it('shows switch to admin portal button for admin users', () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
+  });
 });

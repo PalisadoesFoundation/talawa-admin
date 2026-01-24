@@ -9,7 +9,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaExchangeAlt } from 'react-icons/fa';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
@@ -17,6 +17,8 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
+import useLocalStorage from 'utils/useLocalstorage';
+import styles from './UserSidebar.module.css';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean;
@@ -29,6 +31,9 @@ const UserSidebar = ({
 }: InterfaceUserSidebarProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
+  const { getItem } = useLocalStorage();
+  const role = getItem<string>('role');
+  const canSwitchToAdmin = role !== null && role !== 'regular';
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = useMemo(() => [], []);
@@ -105,6 +110,19 @@ const UserSidebar = ({
       headerContent={headerContent}
       footerContent={
         <>
+          {canSwitchToAdmin && (
+            <div className={styles.switchPortalWrapper}>
+              <SidebarNavItem
+                to="/admin/orglist"
+                icon={<FaExchangeAlt />}
+                label={tCommon('switchToAdminPortal')}
+                testId="switchToAdminPortalBtn"
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                iconType="react-icon"
+              />
+            </div>
+          )}
           {!hideDrawer && (
             <div>
               <ProfileCard portal="user" />
