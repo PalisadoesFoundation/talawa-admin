@@ -303,8 +303,7 @@ const mocks = [
 describe('Chat Component - Comprehensive Coverage', () => {
   let getItemMock: Mock;
   let setItemMock: Mock;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let user: any;
+  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     user = userEvent.setup();
