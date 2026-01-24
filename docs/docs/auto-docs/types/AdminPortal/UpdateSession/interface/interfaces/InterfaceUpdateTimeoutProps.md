@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUpdateTimeoutProps
 
-Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UpdateSession/interface.ts#L1)
+Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UpdateSession/interface.ts#L4)
+
+Props for UpdateTimeout component.
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:1](https://github.
 
 > `optional` **onValueChange**: (`value`) => `void`
 
-Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UpdateSession/interface.ts#L2)
+Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UpdateSession/interface.ts#L8)
+
+Callback invoked when the timeout value changes.
 
 #### Parameters
 
