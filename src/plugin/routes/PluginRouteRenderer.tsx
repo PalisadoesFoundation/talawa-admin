@@ -80,7 +80,12 @@ const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
   if (!pluginComponents) {
     console.error(`No components found for plugin '${route.pluginId}'`);
     return (
-      <div className={styles.errorContainer}>
+      <div
+        className={styles.errorContainer}
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <h3 className={styles.errorTitle}>
           {t('plugins.errors.noComponents.title')}
         </h3>
@@ -99,7 +104,12 @@ const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
       `Component '${route.component}' not found in plugin '${route.pluginId}'`,
     );
     return (
-      <div className={styles.errorContainer}>
+      <div
+        className={styles.errorContainer}
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         <h3 className={styles.errorTitle}>
           {t('plugins.errors.componentNotFound.title')}
         </h3>
