@@ -2415,19 +2415,6 @@
       "filledByCount": "{{count}} लोगों ने इस इवेंट के लिए फीडबैक भरा है।"
     }
   },
-  "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
-  },
   "plugins": {
     "loading": "प्लगइन लोड हो रहा है...",
     "component": "कम्पोनेंट",
@@ -2453,5 +2440,18 @@
         "failedToLoad": "घटक लोड करने में विफल"
       }
     }
+  },
+  "verifyEmail": {
+    "title": "ईमेल सत्यापित करें",
+    "verifying": "आपका ईमेल सत्यापित किया जा रहा है...",
+    "success": "ईमेल सत्यापित!",
+    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉगिन कर सकते हैं।",
+    "error": "सत्यापन विफल",
+    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
+    "loginRequired": "कृपया अपना ईमेल सत्यापित करने के लिए लॉगिन करें।",
+    "resendButton": "सत्यापन ईमेल पुनः भेजें",
+    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
+    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
+    "goToLogin": "लॉगिन पर जाएं"
   }
 }

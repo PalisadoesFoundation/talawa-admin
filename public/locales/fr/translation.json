@@ -2419,14 +2419,14 @@
     "title": "Verify Email",
     "verifying": "Verifying your email...",
     "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
     "error": "Verification Failed",
     "invalidToken": "The verification link is invalid or has expired.",
     "loginRequired": "Please login to verify your email.",
     "resendButton": "Resend Verification Email",
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "goToLogin": "Aller à la connexion"
   },
   "plugins": {
     "loading": "Chargement du plugin...",

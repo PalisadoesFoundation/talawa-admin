@@ -49,11 +49,17 @@ describe('PluginRouteRenderer', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
+
+  const expectConsoleError = (message: string, ...args: unknown[]) => {
+    expect(console.error).toHaveBeenCalledWith(message, ...args);
+  };
 
   it('should render plugin component when plugin is registered', () => {
     const mockComponents = {
@@ -90,6 +96,20 @@ describe('PluginRouteRenderer', () => {
 
     expect(isPluginRegistered).toHaveBeenCalledWith('unregistered-plugin');
     expect(getPluginComponents).not.toHaveBeenCalled();
+
+    // Verify error UI
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('plugins.errors.notRegistered.title'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/plugins.errors.notRegistered.description/),
+    ).toBeInTheDocument();
+
+    // Verify console error
+    expectConsoleError(
+      "Plugin 'unregistered-plugin' not found in plugin registry",
+    );
   });
 
   it('should render fallback when component is not found', () => {
@@ -111,6 +131,20 @@ describe('PluginRouteRenderer', () => {
 
     expect(isPluginRegistered).toHaveBeenCalledWith('test-plugin');
     expect(getPluginComponents).toHaveBeenCalledWith('test-plugin');
+
+    // Verify error UI
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('plugins.errors.componentNotFound.title'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/plugins.errors.componentNotFound.availableComponents/),
+    ).toBeInTheDocument();
+
+    // Verify console error
+    expectConsoleError(
+      "Component 'NonExistentComponent' not found in plugin 'test-plugin'",
+    );
   });
 
   it('should render fallback when plugin components are null', () => {
@@ -128,6 +162,15 @@ describe('PluginRouteRenderer', () => {
 
     expect(isPluginRegistered).toHaveBeenCalledWith('test-plugin');
     expect(getPluginComponents).toHaveBeenCalledWith('test-plugin');
+
+    // Verify error UI
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('plugins.errors.noComponents.title'),
+    ).toBeInTheDocument();
+
+    // Verify console error
+    expectConsoleError("No components found for plugin 'test-plugin'");
   });
 
   it('should render default fallback when no fallback provided', () => {
@@ -208,6 +251,15 @@ describe('PluginRouteRenderer', () => {
 
     // Component returns early when pluginId is empty, so isPluginRegistered is not called
     expect(isPluginRegistered).not.toHaveBeenCalled();
+
+    // Verify error UI
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByText('plugins.errors.missingPluginId.title'),
+    ).toBeInTheDocument();
+
+    // Verify console error
+    expectConsoleError('Plugin ID is missing from route');
   });
 
   it('should handle empty component name', () => {
