@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import CardItem from './CardItem';
 import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
 import dayjs from 'dayjs';
@@ -148,11 +148,10 @@ describe('CardItem Component', () => {
       img.dispatchEvent(new Event('error'));
     });
 
-    // After error, the Avatar should be displayed (has empty alt text)
     await waitFor(() => {
-      const avatar = screen.getByAltText('');
-      expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
+      const avatar = screen.getByRole('img');
+      expect(avatar).toHaveAttribute('src');
+      expect(avatar.getAttribute('src')).toContain('svg');
     });
   });
 
