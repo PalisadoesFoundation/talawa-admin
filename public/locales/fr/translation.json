@@ -204,8 +204,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} non lu",
+    "unreadCount_other": "{{count}} non lus",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "Avatar de {{title}}",
+    "eventLocation": "Lieu de l'événement",
+    "eventDate": "Date de l'événement",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Publié le :",
+    "author": "Auteur :"
   },
   "orgList": {
     "title": "Organisations Talawa",

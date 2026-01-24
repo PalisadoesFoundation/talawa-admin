@@ -269,7 +269,11 @@
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
-    "all": "All"
+    "all": "All",
+    "firstPage": "First Page",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "lastPage": "Last Page"
   },
   "requests": {
     "profile": "Profile",
@@ -359,7 +363,19 @@
     "social": "Social Media Links",
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
-    "resetData": "Successfully reset the Profile Details."
+    "resetData": "Successfully reset the Profile Details.",
+    "sessionTimeout": {
+      "title": "Login Session Timeout",
+      "currentTimeout": "Current Timeout:",
+      "noTimeoutSet": "No timeout set",
+      "minutes": " {{count}} minutes",
+      "updateTimeout": "Update Timeout",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Update"
+    }
   },
   "cardItem": {
     "avatar": "{{title}} avatar",
@@ -613,7 +629,12 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "Events": "Events",
+    "Workshops": "Workshops",
+    "selectMonth": "Select Month",
+    "selectDay": "Select Day",
+    "selectYear": "Select Year"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",

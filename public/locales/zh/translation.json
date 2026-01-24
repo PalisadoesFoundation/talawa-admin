@@ -204,8 +204,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} 条未读",
+    "unreadCount_other": "{{count}} 条未读",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} 头像",
+    "eventLocation": "活动地点",
+    "eventDate": "活动日期",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "发布于：",
+    "author": "作者："
   },
   "orgList": {
     "title": "塔拉瓦组织",

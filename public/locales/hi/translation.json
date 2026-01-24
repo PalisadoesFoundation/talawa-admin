@@ -204,8 +204,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} अपठित",
+    "unreadCount_other": "{{count}} अपठित",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} अवतार",
+    "eventLocation": "कार्यक्रम स्थान",
+    "eventDate": "कार्यक्रम तिथि",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "प्रकाशित:",
+    "author": "लेखक:"
   },
   "orgList": {
     "title": "तालावा संगठन",
