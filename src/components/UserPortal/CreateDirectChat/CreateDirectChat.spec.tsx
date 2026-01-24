@@ -260,6 +260,31 @@ describe('CreateDirectChatModal', () => {
     expect(screen.queryByText('Test User 3')).not.toBeInTheDocument();
   });
 
+  test('should clear the search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await screen.findAllByTestId('user');
+
+    const searchInput = screen.getByTestId('searchUser');
+    const searchButton = screen.getByTestId('submitBtn');
+
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
+
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
+      expect(userRows.length).toBe(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
+    expect(screen.queryByLabelText(/clear/i)).not.toBeInTheDocument();
+  });
+
   test('should prevent creating a duplicate chat', async () => {
     const user = userEvent.setup();
     const existingChats: GroupChat[] = [
