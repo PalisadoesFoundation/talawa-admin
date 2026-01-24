@@ -7,15 +7,20 @@ export interface InterfaceDropDownProps {
 
 /**
  * Props for DynamicDropDown change-handling variant.
- * `@typeParam` T - Form state shape.
+ * @typeParam T - Form state shape.
  */
 export interface InterfaceChangeDropDownProps<
   T,
 > extends InterfaceDropDownProps {
+  /** State setter for the form. */
   setFormState: React.Dispatch<React.SetStateAction<T>>;
+  /** Current form state. */
   formState: T;
+  /** Dropdown options. */
   fieldOptions: { value: string; label: string }[];
+  /** Form field name bound to this dropdown. */
   fieldName: string;
+  /** Optional custom change handler. */
   handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 

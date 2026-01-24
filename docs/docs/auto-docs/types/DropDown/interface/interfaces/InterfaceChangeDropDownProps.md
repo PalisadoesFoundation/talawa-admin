@@ -7,7 +7,6 @@
 Defined in: [src/types/DropDown/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L12)
 
 Props for DynamicDropDown change-handling variant.
-`@typeParam` T - Form state shape.
 
 ## Extends
 
@@ -18,6 +17,8 @@ Props for DynamicDropDown change-handling variant.
 ### T
 
 `T`
+
+Form state shape.
 
 ## Properties
 
@@ -49,7 +50,9 @@ Defined in: [src/types/DropDown/interface.ts:5](https://github.com/PalisadoesFou
 
 > **fieldName**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L18)
+Defined in: [src/types/DropDown/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L22)
+
+Form field name bound to this dropdown.
 
 ***
 
@@ -57,7 +60,9 @@ Defined in: [src/types/DropDown/interface.ts:18](https://github.com/PalisadoesFo
 
 > **fieldOptions**: `object`[]
 
-Defined in: [src/types/DropDown/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L17)
+Defined in: [src/types/DropDown/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L20)
+
+Dropdown options.
 
 #### label
 
@@ -73,7 +78,9 @@ Defined in: [src/types/DropDown/interface.ts:17](https://github.com/PalisadoesFo
 
 > **formState**: `T`
 
-Defined in: [src/types/DropDown/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L16)
+Defined in: [src/types/DropDown/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L18)
+
+Current form state.
 
 ***
 
@@ -81,7 +88,9 @@ Defined in: [src/types/DropDown/interface.ts:16](https://github.com/PalisadoesFo
 
 > `optional` **handleChange**: (`e`) => `void`
 
-Defined in: [src/types/DropDown/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L19)
+Defined in: [src/types/DropDown/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L24)
+
+Optional custom change handler.
 
 #### Parameters
 
@@ -111,4 +120,6 @@ Defined in: [src/types/DropDown/interface.ts:3](https://github.com/PalisadoesFou
 
 > **setFormState**: `Dispatch`\<`SetStateAction`\<`T`\>\>
 
-Defined in: [src/types/DropDown/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L15)
+Defined in: [src/types/DropDown/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L16)
+
+State setter for the form.
