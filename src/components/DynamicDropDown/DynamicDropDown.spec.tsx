@@ -414,12 +414,24 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     await user.click(dropdownButton);
 
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+    const originalActive = document.activeElement;
+    const nonHtml = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg',
+    );
+    Object.defineProperty(document, 'activeElement', {
+      configurable: true,
+      get: () => nonHtml,
+    });
+    try {
+      await user.keyboard('{Enter}');
+      expect(setFormData).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => originalActive,
+      });
     }
-
-    await user.keyboard('{Enter}');
-    expect(setFormData).not.toHaveBeenCalled();
   });
 
   it('renders dropdown options based on current form state', async () => {

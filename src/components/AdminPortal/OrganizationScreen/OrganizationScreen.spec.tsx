@@ -165,7 +165,6 @@ describe('Testing OrganizationScreen', () => {
   afterAll(() => {
     clearAllItems('Talawa-admin');
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   beforeEach(() => {

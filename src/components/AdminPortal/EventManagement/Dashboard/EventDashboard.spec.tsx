@@ -434,10 +434,10 @@ describe('Testing Event Dashboard Screen', () => {
 
     it('should hide spinner and render event details after LoadingState completes', async () => {
       const mockLink = new StaticMockLink(MOCKS_WITH_TIME);
-      const { getByTestId } = renderEventDashboard(mockLink);
+      const { getByTestId, queryByTestId } = renderEventDashboard(mockLink);
       await wait();
 
-      expect(document.querySelector('spinner')).not.toBeInTheDocument();
+      expect(queryByTestId('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
     });
   });
