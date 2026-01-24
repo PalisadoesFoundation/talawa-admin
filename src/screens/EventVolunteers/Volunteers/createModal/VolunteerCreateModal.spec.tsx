@@ -359,5 +359,28 @@ describe('Testing VolunteerCreateModal', () => {
         expect(submitBtn).toBeDisabled();
       });
     });
+
+    it('should show error when submit is called without selecting a volunteer', async () => {
+      renderCreateModal(createLink(), itemProps[0]);
+
+      const form = screen
+        .getByTestId('volunteerCreateModal')
+        .querySelector('form');
+      expect(form).toBeInTheDocument();
+
+      if (form) {
+        const submitEvent = new Event('submit', {
+          bubbles: true,
+          cancelable: true,
+        });
+        form.dispatchEvent(submitEvent);
+
+        await waitFor(() => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            t.selectVolunteer,
+          );
+        });
+      }
+    });
   });
 });

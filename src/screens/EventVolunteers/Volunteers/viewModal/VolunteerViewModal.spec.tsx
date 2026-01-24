@@ -328,46 +328,57 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Field onChange handlers', () => {
-    it('should handle volunteer name field onChange', async () => {
-      const user = userEvent.setup();
+    it('should have no-op onChange handler for volunteer name field', () => {
       renderVolunteerViewModal(itemProps[0]);
 
-      const volunteerNameField = screen.getByTestId('volunteerName');
-      const input = volunteerNameField.querySelector('input');
+      const input = screen.getByTestId('volunteerName') as HTMLInputElement;
+      const onChange = input.onchange;
 
-      if (input) {
-        await user.clear(input);
-        await user.type(input, 'New Name');
-        expect(input).toHaveValue('Teresa Bradley');
-      }
+      if (onChange) onChange.call(input, new Event('change'));
+
+      expect(input).toHaveValue('Teresa Bradley');
     });
 
-    it('should handle status field onChange', async () => {
-      const user = userEvent.setup();
+    it('should have no-op onChange handler for status field', () => {
       renderVolunteerViewModal(itemProps[0]);
 
-      const statusField = screen.getByTestId('volunteerStatus');
-      const input = statusField.querySelector('input');
+      const input = screen.getByTestId('volunteerStatus') as HTMLInputElement;
+      const onChange = input.onchange;
 
-      if (input) {
-        await user.clear(input);
-        await user.type(input, 'New Status');
-        expect(input).toHaveValue('Accepted');
-      }
+      if (onChange) onChange.call(input, new Event('change'));
+
+      expect(input).toHaveValue('Accepted');
     });
 
-    it('should handle hours volunteered field onChange', async () => {
-      const user = userEvent.setup();
+    it('should have no-op onChange handler for hours volunteered field', () => {
       renderVolunteerViewModal(itemProps[0]);
 
-      const hoursField = screen.getByTestId('hoursVolunteered');
-      const input = hoursField.querySelector('input');
+      const input = screen.getByTestId('hoursVolunteered') as HTMLInputElement;
+      const onChange = input.onchange;
 
-      if (input) {
-        await user.clear(input);
-        await user.type(input, '20');
-        expect(input).toHaveValue('10');
-      }
+      if (onChange) onChange.call(input, new Event('change'));
+
+      expect(input).toHaveValue('10');
+    });
+
+    it('should keep all fields disabled and read-only', () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const nameInput = screen.getByTestId('volunteerName') as HTMLInputElement;
+      const statusInput = screen.getByTestId(
+        'volunteerStatus',
+      ) as HTMLInputElement;
+      const hoursInput = screen.getByTestId(
+        'hoursVolunteered',
+      ) as HTMLInputElement;
+
+      expect(nameInput).toBeDisabled();
+      expect(statusInput).toBeDisabled();
+      expect(hoursInput).toBeDisabled();
+
+      expect(nameInput).toHaveValue('Teresa Bradley');
+      expect(statusInput).toHaveValue('Accepted');
+      expect(hoursInput).toHaveValue('10');
     });
   });
 });

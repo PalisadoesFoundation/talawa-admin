@@ -1,4 +1,3 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   LocalizationProvider,
@@ -178,6 +177,64 @@ describe('Testing VolunteerGroupViewModal', () => {
       expect(input).toBeInTheDocument();
       expect(input).toBeDisabled();
       expect(input).toHaveValue('Wilt Shepherd');
+    });
+
+    it('should have no-op onChange handlers for all fields', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      const nameInput = screen.getByTestId('groupName') as HTMLInputElement;
+      const descInput = screen.getByTestId(
+        'groupDescription',
+      ) as HTMLInputElement;
+      const leaderInput = screen.getByTestId('groupLeader') as HTMLInputElement;
+      const creatorInput = screen.getByTestId(
+        'groupCreator',
+      ) as HTMLInputElement;
+
+      const nameOnChange = nameInput.onchange;
+      const descOnChange = descInput.onchange;
+      const leaderOnChange = leaderInput.onchange;
+      const creatorOnChange = creatorInput.onchange;
+
+      if (nameOnChange) nameOnChange.call(nameInput, new Event('change'));
+      if (descOnChange) descOnChange.call(descInput, new Event('change'));
+      if (leaderOnChange) leaderOnChange.call(leaderInput, new Event('change'));
+      if (creatorOnChange)
+        creatorOnChange.call(creatorInput, new Event('change'));
+
+      expect(nameInput).toHaveValue('Group 1');
+      expect(descInput).toHaveValue('desc');
+      expect(leaderInput).toHaveValue('Teresa Bradley');
+      expect(creatorInput).toHaveValue('Wilt Shepherd');
+    });
+
+    it('should have no-op onChange handler for volunteersRequired field', () => {
+      renderGroupViewModal(itemProps[1]);
+
+      const input = screen.getByTestId(
+        'volunteersRequired',
+      ) as HTMLInputElement;
+      const onChange = input.onchange;
+
+      if (onChange) onChange.call(input, new Event('change'));
+
+      expect(input).toHaveValue('10');
+    });
+  });
+
+  describe('Volunteers table', () => {
+    it('should render volunteers table when volunteers exist', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      expect(screen.getByText(t.volunteers)).toBeInTheDocument();
+      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+      expect(screen.getByText('1')).toBeInTheDocument();
+    });
+
+    it('should not render volunteers table when volunteers array is empty', () => {
+      renderGroupViewModal(itemProps[1]);
+
+      expect(screen.queryByText(t.volunteers)).not.toBeInTheDocument();
     });
   });
 });

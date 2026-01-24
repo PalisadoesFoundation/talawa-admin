@@ -834,7 +834,6 @@ describe('Testing VolunteerGroupModal', () => {
     });
 
     it('should handle error notification when updating group with missing id (line 198-199)', async () => {
-      // Create a spy to intercept the NotificationToast.error call
       const errorSpy = vi.spyOn(NotificationToast, 'error');
 
       const propsWithNullGroup: InterfaceVolunteerGroupModal = {
@@ -850,11 +849,98 @@ describe('Testing VolunteerGroupModal', () => {
       renderGroupModal(successLink, propsWithNullGroup);
       expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
-      // Button should be disabled which prevents reaching lines 198-199
       const submitBtn = screen.getByTestId('modal-submit-btn');
       expect(submitBtn).toBeDisabled();
 
       errorSpy.mockRestore();
+    });
+
+    it('should handle clearing leader selection', async () => {
+      const user = userEvent.setup();
+      renderGroupModal(successLink, modalProps[0]);
+      await wait();
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const leaderSelect = await screen.findByTestId('leaderSelect');
+      const leaderInputField = within(leaderSelect).getByRole('combobox');
+      await user.click(leaderInputField);
+
+      const leaderOption = await screen.findByText('Harve Lance');
+      await user.click(leaderOption);
+
+      await waitFor(() => {
+        expect(leaderInputField).toHaveValue('Harve Lance');
+      });
+
+      await user.clear(leaderInputField);
+
+      await waitFor(() => {
+        expect(leaderInputField).toHaveValue('');
+      });
+    });
+
+    it('should handle baseEvent missing error for recurring events', async () => {
+      const errorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const recurringPropsNoBase: InterfaceVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        eventId: 'eventId',
+        orgId: 'orgId',
+        refetchGroups: vi.fn(),
+        mode: 'create',
+        group: null,
+        isRecurring: true,
+        baseEvent: null,
+      };
+
+      renderGroupModal(successLink, recurringPropsNoBase);
+      await wait();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+
+      errorSpy.mockRestore();
+    });
+
+    it('should trigger update error when group.id is missing', async () => {
+      const propsWithGroupNoId: InterfaceVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        eventId: 'eventId',
+        orgId: 'orgId',
+        refetchGroups: vi.fn(),
+        mode: 'edit',
+        group: {
+          id: '',
+          name: 'Test Group',
+          description: 'Test Description',
+          volunteersRequired: 5,
+          leader: {
+            id: 'leaderId1',
+            name: 'Harve Lance',
+            emailAddress: 'harve@example.com',
+            avatarURL: null,
+          },
+          creator: {
+            id: 'creatorId1',
+            name: 'Wilt Shepherd',
+            emailAddress: 'wilt@example.com',
+            avatarURL: null,
+          },
+          volunteers: [],
+          event: { id: 'eventId' },
+          isTemplate: false,
+          isInstanceException: false,
+          createdAt: dayjs().toISOString(),
+        },
+      };
+
+      renderGroupModal(successLink, propsWithGroupNoId);
+      await wait();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
     });
   });
 });
