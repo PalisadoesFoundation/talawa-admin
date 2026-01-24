@@ -16,8 +16,8 @@ import type { InterfacePluginRouteRendererProps } from '../../types/plugin/Plugi
 /**
  * Component to render plugin routes using the plugin registry.
  *
- * `@param` props - InterfacePluginRouteRendererProps
- * `@returns` JSX.Element
+ * @param props - InterfacePluginRouteRendererProps
+ * @returns JSX.Element
  */
 const PluginRouteRenderer: React.FC<InterfacePluginRouteRendererProps> = ({
   route,
