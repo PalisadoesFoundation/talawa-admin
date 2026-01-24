@@ -2,8 +2,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import DropdownButton from './DropdownButton';
 import { InterfaceDropdownButtonProps } from 'types/shared-components/DropdownButton/interface';
+import { vi } from 'vitest';
 
 describe('DropdownButton', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const baseProps: InterfaceDropdownButtonProps = {
     label: 'Menu',
     items: [
@@ -74,5 +79,26 @@ describe('DropdownButton', () => {
 
     const toggle = screen.getByTestId('dropdown-button');
     expect(toggle).toBeInTheDocument();
+  });
+
+  it('calls onClick handler when an enabled item is clicked', async () => {
+    const mockOnClick = vi.fn();
+    const testProps: InterfaceDropdownButtonProps = {
+      ...baseProps,
+      items: [
+        { key: '1', label: 'Item 1', onClick: mockOnClick },
+        { key: '2', label: 'Item 2', onClick: () => {}, disabled: true },
+      ],
+    };
+
+    render(<DropdownButton {...testProps} />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    await user.click(toggle);
+
+    const item1 = screen.getByRole('button', { name: 'Item 1' });
+    await user.click(item1);
+
+    expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 });
