@@ -216,7 +216,7 @@ export default function Events(): JSX.Element {
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION, {
-    errorPolicy: 'all',
+    errorPolicy: 'none', // Changed from 'all' - only throw if mutation actually fails
   });
 
   // Get user details from local storage
@@ -281,15 +281,21 @@ export default function Events(): JSX.Element {
         NotificationToast.success(t('eventCreated') as string);
         try {
           await refetch();
-        } catch {
+        } catch (refetchError) {
           // Refetch failure is non-critical, suppressing error
+          // Event was created successfully, just the list refresh failed
+          console.warn('Event created but list refresh failed:', refetchError);
         }
         setFormResetKey((prev) => prev + 1);
         createEventModal.close();
+        // Return early to prevent error handler from running
+        return;
       } else if (errors && errors.length > 0) {
+        // Only throw if mutation actually failed (no data returned)
         throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
+      // Only show error if we didn't already handle success above
       errorHandler(t, error);
     }
   };

@@ -1,4 +1,5 @@
 /**
+ * Component: EventListCardModals
  *
  * This component manages the modals for event list cards, including preview and delete modals.
  * It handles event updates, deletions, and user registration for events.
@@ -16,18 +17,20 @@
  * - Provides functionality to register for events and navigate to the event dashboard.
  * - Uses Apollo Client mutations for updating and deleting events.
  *
+ * @see {@link useModalState} for modal visibility management.
+ *
  */
 // translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
-import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
-import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+
 import {
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -37,8 +40,13 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { useUpdateEventHandler } from './updateLogic';
+import {
+  useUpdateEventHandler,
+  hasRecurrenceChanged,
+  getAvailableUpdateOptions,
+} from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';
+import type { IEventFormSubmitPayload } from 'types/EventForm/interface';
 
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
@@ -50,13 +58,25 @@ import styles from './EventListCardModals.module.css';
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 
+interface IEventListCard extends InterfaceEvent {
+  refetchEvents?: () => void;
+}
+
+interface IEventListCardModalProps {
+  eventListCardProps: IEventListCard;
+  eventModalIsOpen: boolean;
+  hideViewModal: () => void;
+  t: (key: string, options?: Record<string, unknown>) => string;
+  tCommon: (key: string, options?: Record<string, unknown>) => string;
+}
+
 function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
   t,
   tCommon,
-}: InterfaceEventListCardModalsProps): JSX.Element {
+}: IEventListCardModalProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -65,197 +85,119 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [allDayChecked, setAllDayChecked] = useState(eventListCardProps.allDay);
-  const [publicChecked, setPublicChecked] = useState(
-    eventListCardProps.isPublic,
-  );
-  const [registerableChecked, setRegisterableChecked] = useState(
-    eventListCardProps.isRegisterable,
-  );
-  const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
-    Boolean(eventListCardProps.isInviteOnly),
-  );
-  const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const {
+    isOpen: eventDeleteModalIsOpen,
+    close: closeEventDeleteModal,
+    toggle: toggleDeleteModal,
+  } = useModalState();
+
+  const {
+    isOpen: eventUpdateModalIsOpen,
+    open: openEventUpdateModal,
+    close: closeEventUpdateModal,
+    toggle: toggleUpdateModal,
+  } = useModalState();
+
   const [updateOption, setUpdateOption] = useState<
     'single' | 'following' | 'entireSeries'
   >('single');
-  const [eventStartDate, setEventStartDate] = useState(
-    new Date(eventListCardProps.startAt),
-  );
-  const [eventEndDate, setEventEndDate] = useState(
-    new Date(eventListCardProps.endAt),
-  );
-  // Initialize recurrence with default pattern for recurring events
-  const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
-    eventListCardProps.recurrenceRule
-      ? {
-          ...eventListCardProps.recurrenceRule,
-          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-            : undefined,
-          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-        }
-      : null,
-  );
 
-  // Store the original recurrence rule to detect changes
-  const [originalRecurrence] = useState<InterfaceRecurrenceRule | null>(
-    eventListCardProps.recurrenceRule
-      ? {
-          ...eventListCardProps.recurrenceRule,
-          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-            : undefined,
-          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-        }
-      : null,
-  );
+  // Pending payload from EventForm submit
+  const [pendingPayload, setPendingPayload] =
+    useState<IEventFormSubmitPayload | null>(null);
 
-  useEffect(() => {
-    setRecurrence(
-      eventListCardProps.recurrenceRule
-        ? {
-            ...eventListCardProps.recurrenceRule,
-            endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-              ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-              : undefined,
-            never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-          }
-        : null,
-    );
-  }, [eventListCardProps.recurrenceRule]);
-
-  // Helper function to check if recurrence rule has changed
-  const hasRecurrenceChanged = (): boolean => {
-    if (!originalRecurrence && !recurrence) return false;
-    if (!originalRecurrence || !recurrence) return true;
-
-    // Deep compare the two objects for any changes
-    const changed =
-      originalRecurrence.frequency !== recurrence.frequency ||
-      originalRecurrence.interval !== recurrence.interval ||
-      JSON.stringify(originalRecurrence.byDay) !==
-        JSON.stringify(recurrence.byDay) ||
-      JSON.stringify(originalRecurrence.byMonth) !==
-        JSON.stringify(recurrence.byMonth) ||
-      JSON.stringify(originalRecurrence.byMonthDay) !==
-        JSON.stringify(recurrence.byMonthDay) ||
-      originalRecurrence.count !== recurrence.count ||
-      originalRecurrence.endDate?.toISOString() !==
-        recurrence.endDate?.toISOString() ||
-      originalRecurrence.never !== recurrence.never;
-
-    return changed;
-  };
-
-  // Helper function to check if only name/description changed (eligible for entireSeries update)
-  const hasOnlyNameOrDescriptionChanged = (): boolean => {
-    const nameChanged = formState.name !== eventListCardProps.name;
-    const descriptionChanged =
-      formState.eventDescription !== eventListCardProps.description;
-    const locationChanged = formState.location !== eventListCardProps.location;
-    const publicChanged = publicChecked !== eventListCardProps.isPublic;
-    const registrableChanged =
-      registerableChecked !== eventListCardProps.isRegisterable;
-    const inviteOnlyChanged =
-      inviteOnlyChecked !== Boolean(eventListCardProps.isInviteOnly);
-    const allDayChanged = allDayChecked !== eventListCardProps.allDay;
-    const recurrenceChanged = hasRecurrenceChanged();
-
-    // Return true if only name/description changed, and no other fields changed
-    return (
-      (nameChanged || descriptionChanged) &&
-      !locationChanged &&
-      !publicChanged &&
-      !registrableChanged &&
-      !inviteOnlyChanged &&
-      !allDayChanged &&
-      !recurrenceChanged
-    );
-  };
-
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
-
-  const [formState, setFormState] = useState({
-    name: eventListCardProps.name,
-    eventDescription: eventListCardProps.description,
-    location: eventListCardProps.location,
-    startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
-    endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
-  });
-
-  // Automatically switch to "following" option when recurrence rule changes
-  useEffect(() => {
-    if (hasRecurrenceChanged() && updateOption === 'single') {
-      setUpdateOption('following');
-    }
-  }, [recurrence, updateOption]);
-
-  // Compute available options reactively
   const availableUpdateOptions = useMemo(() => {
-    const recurrenceChanged = hasRecurrenceChanged();
-    const onlyNameOrDescChanged = hasOnlyNameOrDescriptionChanged();
-
-    return {
-      single: !recurrenceChanged,
-      following: true,
-      entireSeries: onlyNameOrDescChanged,
-    };
-  }, [
-    recurrence,
-    formState,
-    publicChecked,
-    registerableChecked,
-    inviteOnlyChecked,
-    allDayChecked,
-    eventStartDate,
-    eventEndDate,
-  ]);
+    if (!pendingPayload)
+      return { single: false, following: false, entireSeries: false };
+    return getAvailableUpdateOptions(pendingPayload, eventListCardProps);
+  }, [pendingPayload, eventListCardProps]);
 
   // Ensure updateOption is always valid
   useEffect(() => {
-    if (
-      !availableUpdateOptions[
-        updateOption as keyof typeof availableUpdateOptions
-      ]
-    ) {
+    if (pendingPayload && !availableUpdateOptions[updateOption]) {
       if (availableUpdateOptions.following) {
         setUpdateOption('following');
       }
     }
-  }, [availableUpdateOptions, updateOption]);
+  }, [availableUpdateOptions, updateOption, pendingPayload]);
 
   const { updateEventHandler } = useUpdateEventHandler();
 
-  // This function is called when the update button is clicked
-  const handleEventUpdate = async (): Promise<void> => {
+  // Handle Submit from EventForm
+  const handleFormSubmit = async (
+    payload: IEventFormSubmitPayload,
+  ): Promise<void> => {
     const isRecurringInstance =
       !eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id;
 
     if (isRecurringInstance) {
-      setEventUpdateModalIsOpen(true);
+      setPendingPayload(payload);
+      openEventUpdateModal();
     } else {
+      // Standalone submit - convert payload to old interface format
+      const formState = {
+        name: payload.name,
+        eventdescrip: payload.description,
+        location: payload.location,
+        startTime: dayjs.utc(payload.startAtISO).format('HH:mm:ss'),
+        endTime: dayjs.utc(payload.endAtISO).format('HH:mm:ss'),
+      };
+
       await updateEventHandler({
         eventListCardProps,
         formState,
-        allDayChecked,
-        publicChecked,
-        registerableChecked,
-        inviteOnlyChecked,
-        eventStartDate,
-        eventEndDate,
-        recurrence,
-        updateOption,
-        hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
+        alldaychecked: payload.allDay,
+        publicchecked: payload.isPublic,
+        registrablechecked: payload.isRegisterable,
+        inviteOnlyChecked: payload.isInviteOnly,
+        eventStartDate: payload.startDate,
+        eventEndDate: payload.endDate,
+        recurrence: payload.recurrenceRule,
+        updateOption: 'single', // Irrelevant for standalone
         t,
         hideViewModal,
-        setEventUpdateModalIsOpen,
+        setEventUpdateModalIsOpen: (isOpen) =>
+          isOpen ? openEventUpdateModal() : closeEventUpdateModal(),
         refetchEvents,
       });
     }
+  };
+
+  // Confirm update for recurring usage
+  const confirmRecurringUpdate = async () => {
+    if (!pendingPayload) return;
+
+    // Convert payload to old interface format
+    const formState = {
+      name: pendingPayload.name,
+      eventdescrip: pendingPayload.description,
+      location: pendingPayload.location,
+      startTime: dayjs.utc(pendingPayload.startAtISO).format('HH:mm:ss'),
+      endTime: dayjs.utc(pendingPayload.endAtISO).format('HH:mm:ss'),
+    };
+
+    await updateEventHandler({
+      eventListCardProps,
+      formState,
+      alldaychecked: pendingPayload.allDay,
+      publicchecked: pendingPayload.isPublic,
+      registrablechecked: pendingPayload.isRegisterable,
+      inviteOnlyChecked: pendingPayload.isInviteOnly,
+      eventStartDate: pendingPayload.startDate,
+      eventEndDate: pendingPayload.endDate,
+      recurrence: pendingPayload.recurrenceRule,
+      updateOption,
+      hasRecurrenceChanged: hasRecurrenceChanged(
+        pendingPayload,
+        eventListCardProps,
+      ),
+      t,
+      hideViewModal,
+      setEventUpdateModalIsOpen: (isOpen) =>
+        isOpen ? openEventUpdateModal() : closeEventUpdateModal(),
+      refetchEvents,
+    });
   };
 
   const [deleteStandaloneEvent] = useMutation(DELETE_STANDALONE_EVENT_MUTATION);
@@ -331,7 +273,7 @@ function EventListCardModals({
 
       if (data) {
         NotificationToast.success(t('eventDeleted') as string);
-        setEventDeleteModalIsOpen(false);
+        closeEventDeleteModal();
         hideViewModal();
         if (refetchEvents) {
           refetchEvents();
@@ -340,14 +282,6 @@ function EventListCardModals({
     } catch (error: unknown) {
       errorHandler(t, error);
     }
-  };
-
-  const toggleDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
-  };
-
-  const toggleUpdateModal = (): void => {
-    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
   };
 
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(
@@ -395,29 +329,12 @@ function EventListCardModals({
         tCommon={tCommon}
         isRegistered={isRegistered}
         userId={userId as string}
-        eventStartDate={eventStartDate}
-        eventEndDate={eventEndDate}
-        setEventStartDate={setEventStartDate}
-        setEventEndDate={setEventEndDate}
-        allDayChecked={allDayChecked}
-        setAllDayChecked={setAllDayChecked}
-        publicChecked={publicChecked}
-        setPublicChecked={setPublicChecked}
-        registerableChecked={registerableChecked}
-        setRegisterableChecked={setRegisterableChecked}
-        inviteOnlyChecked={inviteOnlyChecked}
-        setInviteOnlyChecked={setInviteOnlyChecked}
-        formState={formState}
-        setFormState={setFormState}
         registerEventHandler={registerEventHandler}
-        handleEventUpdate={handleEventUpdate}
+        onFormSubmit={handleFormSubmit}
         openEventDashboard={openEventDashboard}
-        recurrence={recurrence}
-        setRecurrence={setRecurrence}
-        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
       />
 
+      {/* delete modal */}
       <EventListCardDeleteModal
         eventListCardProps={eventListCardProps}
         eventDeleteModalIsOpen={eventDeleteModalIsOpen}
@@ -427,16 +344,18 @@ function EventListCardModals({
         deleteEventHandler={deleteEventHandler}
       />
 
+      {/* update modal */}
       <BaseModal
         size="lg"
-        dataTestId={TEST_ID_UPDATE_EVENT_MODAL(eventListCardProps.id)}
+        // i18n-ignore-next-line
+        dataTestId={`updateEventModal${eventListCardProps.id}`}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
         keyboard={false}
         centered
         title={t('updateEvent')}
-        headerClassName={`${styles.modalHeader}`}
+        headerClassName={`${styles.modalHeader} text-white`}
         footer={
           <>
             <Button
@@ -451,25 +370,7 @@ function EventListCardModals({
             <Button
               type="button"
               className={`btn ${styles.addButton}`}
-              onClick={() =>
-                updateEventHandler({
-                  eventListCardProps,
-                  formState,
-                  allDayChecked,
-                  publicChecked,
-                  registerableChecked,
-                  inviteOnlyChecked,
-                  eventStartDate,
-                  eventEndDate,
-                  recurrence,
-                  updateOption,
-                  hasRecurrenceChanged: hasRecurrenceChanged(),
-                  t,
-                  hideViewModal,
-                  setEventUpdateModalIsOpen,
-                  refetchEvents,
-                })
-              }
+              onClick={confirmRecurringUpdate}
               data-testid="confirmUpdateEventBtn"
             >
               {t('updateEvent')}
@@ -480,6 +381,7 @@ function EventListCardModals({
         <div>
           <p>{t('updateRecurringEventMsg')}</p>
           <div>
+            {/* Only show "update this instance" option if recurrence rule hasn't changed */}
             {availableUpdateOptions.single && (
               <FormCheckField
                 type="radio"
@@ -490,7 +392,6 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('single')}
                 label={t('updateThisInstance')}
                 className="mb-2"
-                data-testid="update-single-radio"
               />
             )}
             {availableUpdateOptions.following && (
@@ -503,9 +404,9 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('following')}
                 label={t('updateThisAndFollowing')}
                 className="mb-2"
-                data-testid="update-following-radio"
               />
             )}
+            {/* Show "update entire series" option only when only name/description changed */}
             {availableUpdateOptions.entireSeries && (
               <FormCheckField
                 type="radio"
@@ -516,7 +417,6 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('entireSeries')}
                 label={t('updateEntireSeries')}
                 className="mb-2"
-                data-testid="update-entire-series-radio"
               />
             )}
           </div>

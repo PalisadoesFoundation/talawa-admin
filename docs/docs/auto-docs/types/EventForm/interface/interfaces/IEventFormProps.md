@@ -33,6 +33,22 @@ Defined in: [src/types/EventForm/interface.ts:79](https://github.com/PalisadoesF
 
 ***
 
+### footerActions?
+
+> `optional` **footerActions**: `ReactNode`
+
+Defined in: [src/types/EventForm/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L84)
+
+***
+
+### hideSubmitButton?
+
+> `optional` **hideSubmitButton**: `boolean`
+
+Defined in: [src/types/EventForm/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L85)
+
+***
+
 ### initialValues
 
 > **initialValues**: [`IEventFormValues`](IEventFormValues.md)
@@ -41,9 +57,9 @@ Defined in: [src/types/EventForm/interface.ts:69](https://github.com/PalisadoesF
 
 ***
 
-### onCancel()
+### onCancel()?
 
-> **onCancel**: () => `void`
+> `optional` **onCancel**: () => `void`
 
 Defined in: [src/types/EventForm/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L71)
 
@@ -68,6 +84,14 @@ Defined in: [src/types/EventForm/interface.ts:70](https://github.com/PalisadoesF
 #### Returns
 
 `void` \| `Promise`\<`void`\>
+
+***
+
+### readOnly?
+
+> `optional` **readOnly**: `boolean`
+
+Defined in: [src/types/EventForm/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L83)
 
 ***
 

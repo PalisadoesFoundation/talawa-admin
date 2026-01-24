@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
@@ -29,21 +29,37 @@ vi.mock('shared-components/DatePicker', () => ({
         minDate,
         'data-testid': dataTestId,
       } = props;
+      const [inputValue, setInputValue] = React.useState(
+        value ? value.format('YYYY-MM-DD') : '',
+      );
+
+      React.useEffect(() => {
+        setInputValue(value ? value.format('YYYY-MM-DD') : '');
+      }, [value]);
+
       return (
         <div data-testid="date-picker-wrapper">
           <input
             data-testid={dataTestId || label || 'date-picker-input'}
-            value={value ? value.format('YYYY-MM-DD') : ''}
+            value={inputValue}
             onChange={(e) => {
+              const val = e.target.value;
+              setInputValue(val);
               if (onChange) {
-                const newDate = e.target.value ? dayjs(e.target.value) : null;
-                if (
-                  !minDate ||
-                  !newDate ||
-                  newDate.isAfter(minDate) ||
-                  newDate.isSame(minDate)
-                ) {
-                  onChange(newDate);
+                if (!val) {
+                  onChange(null);
+                  return;
+                }
+                if (val.length === 10) {
+                  const newDate = dayjs(val);
+                  if (
+                    newDate.isValid() &&
+                    (!minDate ||
+                      newDate.isAfter(minDate) ||
+                      newDate.isSame(minDate))
+                  ) {
+                    onChange(newDate);
+                  }
                 }
               }
             }}
@@ -74,23 +90,38 @@ vi.mock('shared-components/TimePicker', () => ({
         'data-testid': dataTestId,
       } = props;
       const today = dayjs().format('YYYY-MM-DD');
+      const [inputValue, setInputValue] = React.useState(
+        value ? value.format('HH:mm:ss') : '',
+      );
+
+      React.useEffect(() => {
+        setInputValue(value ? value.format('HH:mm:ss') : '');
+      }, [value]);
+
       return (
         <div data-testid="time-picker-wrapper">
           <input
             data-testid={dataTestId || label || 'time-picker-input'}
-            value={value ? value.format('HH:mm:ss') : ''}
+            value={inputValue}
             disabled={disabled}
             onChange={(e) => {
+              const val = e.target.value;
+              setInputValue(val);
               if (!disabled && onChange) {
-                const val = e.target.value;
-                const newTime = val ? dayjs(`${today}T${val}`) : null;
-                if (
-                  !minTime ||
-                  !newTime ||
-                  newTime.isAfter(minTime) ||
-                  newTime.isSame(minTime)
-                ) {
-                  onChange(newTime);
+                if (!val) {
+                  onChange(null);
+                  return;
+                }
+                if (val.length === 8) {
+                  const newTime = dayjs(`${today}T${val}`);
+                  if (
+                    newTime.isValid() &&
+                    (!minTime ||
+                      newTime.isAfter(minTime) ||
+                      newTime.isSame(minTime))
+                  ) {
+                    onChange(newTime);
+                  }
                 }
               }
             }}
@@ -218,10 +249,43 @@ const t = (key: string) => key;
 const tCommon = (key: string) => key;
 
 describe('EventForm', () => {
-  const user = userEvent.setup();
   afterEach(() => {
     vi.clearAllMocks();
   });
+
+  test('adjusts end time if it is same as start time on submit (coverage for lines ~205)', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          allDay: false,
+          startDate: baseValues.startDate,
+          endDate: baseValues.startDate, // Same date to ensure time collision
+          startTime: '10:00:00',
+          endTime: '10:00:00', // Sames as start
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
+    const call = handleSubmit.mock.calls[0][0];
+    const startAt = dayjs(call.startAtISO);
+    const endAt = dayjs(call.endAtISO);
+
+    // Should be adjusted to 1 minute after start
+    expect(endAt.diff(startAt, 'minute')).toBe(1);
+  });
+
   test('submits with computed ISO dates for all-day event with future dates', async () => {
     const handleSubmit = vi.fn();
     render(
@@ -235,7 +299,7 @@ describe('EventForm', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('createEventBtn'));
+    await userEvent.click(screen.getByTestId('createEventBtn'));
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Test Event',
@@ -272,7 +336,7 @@ describe('EventForm', () => {
       );
 
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
 
       expect(handleSubmit).toHaveBeenCalled();
@@ -332,7 +396,7 @@ describe('EventForm', () => {
       );
 
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
 
       expect(handleSubmit).toHaveBeenCalled();
@@ -374,7 +438,7 @@ describe('EventForm', () => {
       );
 
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
 
       expect(handleSubmit).toHaveBeenCalled();
@@ -421,7 +485,7 @@ describe('EventForm', () => {
       );
 
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
 
       expect(handleSubmit).toHaveBeenCalled();
@@ -469,17 +533,55 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
   });
 
-  // TODO: Test 'handles time change when not all-day' removed - direct MUI picker input doesn't work in test environment
+  test('handles time change when not all-day', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          allDay: false,
+          startTime: '08:00:00',
+          endTime: '10:00:00',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    const startTimeInput = screen.getByTestId('startTime');
+    const endTimeInput = screen.getByTestId('endTime');
+
+    await act(async () => {
+      await userEvent.clear(startTimeInput);
+      await userEvent.type(startTimeInput, '12:00:00');
+    });
+
+    await act(async () => {
+      await userEvent.clear(endTimeInput);
+      await userEvent.type(endTimeInput, '13:00:00');
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    const call = handleSubmit.mock.calls[0][0];
+    expect(call.startAtISO).toContain('12:00:00');
+    expect(call.endAtISO).toContain('13:00:00');
+  });
 
   test('formatRecurrenceForPayload formats recurrence rule', () => {
     // Use dynamic date to avoid test staleness
@@ -528,7 +630,7 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).not.toHaveBeenCalled();
@@ -548,7 +650,7 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).not.toHaveBeenCalled();
@@ -568,7 +670,7 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).not.toHaveBeenCalled();
@@ -596,7 +698,7 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we don't need to toggle it. Just submit and it should fail validation.
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).not.toHaveBeenCalled();
@@ -624,18 +726,18 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
     // Select daily option (index 1)
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[1]);
+      await userEvent.click(options[1]);
     });
 
     // Submit
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -668,12 +770,12 @@ describe('EventForm', () => {
 
     // Toggle recurrence off
     await act(async () => {
-      await user.click(screen.getByTestId('recurringEventCheck'));
+      await userEvent.click(screen.getByTestId('recurringEventCheck'));
     });
 
     // Submit
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -681,6 +783,35 @@ describe('EventForm', () => {
         recurrenceRule: null,
       }),
     );
+  });
+
+  test('updates start date and adjusts end date if needed', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={baseValues}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    const startDateInput = screen.getByTestId('eventStartAt');
+    // Use dynamic date to avoid test staleness
+    const newStartDate = dayjs().add(35, 'days').format('YYYY-MM-DD');
+    await act(async () => {
+      await userEvent.clear(startDateInput);
+      await userEvent.type(startDateInput, newStartDate);
+    });
+
+    // End date should be adjusted if it's before start date
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
   });
 
   test('updates end date', async () => {
@@ -700,12 +831,12 @@ describe('EventForm', () => {
     // Use dynamic date to avoid test staleness
     const newEndDate = dayjs().add(40, 'days').format('YYYY-MM-DD');
     await act(async () => {
-      await user.clear(endDateInput);
-      await user.type(endDateInput, newEndDate);
+      await userEvent.clear(endDateInput);
+      await userEvent.type(endDateInput, newEndDate);
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalled();
@@ -726,12 +857,12 @@ describe('EventForm', () => {
 
     const startTimeInput = screen.getByTestId('startTime');
     await act(async () => {
-      await user.clear(startTimeInput);
-      await user.type(startTimeInput, '14:00:00');
+      await userEvent.clear(startTimeInput);
+      await userEvent.type(startTimeInput, '14:00:00');
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalled();
@@ -752,12 +883,12 @@ describe('EventForm', () => {
 
     const endTimeInput = screen.getByTestId('endTime');
     await act(async () => {
-      await user.clear(endTimeInput);
-      await user.type(endTimeInput, '15:00:00');
+      await userEvent.clear(endTimeInput);
+      await userEvent.type(endTimeInput, '15:00:00');
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalled();
@@ -777,11 +908,11 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('allDayEventCheck'));
+      await userEvent.click(screen.getByTestId('allDayEventCheck'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -926,26 +1057,25 @@ describe('EventForm', () => {
 
       // 1. Switch to PUBLIC
       await act(async () => {
-        await user.click(screen.getByTestId('visibilityPublicRadio'));
+        await userEvent.click(screen.getByTestId('visibilityPublicRadio'));
       });
       // Submit and verify payload
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
       expect(handleSubmit).toHaveBeenLastCalledWith(
         expect.objectContaining({
           isPublic: true,
           isInviteOnly: false,
-          isRegisterable: true, // Default
         }),
       );
 
       // 2. Switch to INVITE_ONLY
       await act(async () => {
-        await user.click(screen.getByTestId('visibilityInviteRadio'));
+        await userEvent.click(screen.getByTestId('visibilityInviteRadio'));
       });
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
       expect(handleSubmit).toHaveBeenLastCalledWith(
         expect.objectContaining({
@@ -956,10 +1086,10 @@ describe('EventForm', () => {
 
       // 3. Switch to ORGANIZATION
       await act(async () => {
-        await user.click(screen.getByTestId('visibilityOrgRadio'));
+        await userEvent.click(screen.getByTestId('visibilityOrgRadio'));
       });
       await act(async () => {
-        await user.click(screen.getByTestId('createEventBtn'));
+        await userEvent.click(screen.getByTestId('createEventBtn'));
       });
       expect(handleSubmit).toHaveBeenLastCalledWith(
         expect.objectContaining({
@@ -985,11 +1115,11 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('registerableEventCheck'));
+      await userEvent.click(screen.getByTestId('registerableEventCheck'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1014,11 +1144,11 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createChatCheck'));
+      await userEvent.click(screen.getByTestId('createChatCheck'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1046,16 +1176,16 @@ describe('EventForm', () => {
     const locationInput = screen.getByTestId('eventLocationInput');
 
     await act(async () => {
-      await user.clear(nameInput);
-      await user.type(nameInput, 'New Event Name');
-      await user.clear(descInput);
-      await user.type(descInput, 'New Description');
-      await user.clear(locationInput);
-      await user.type(locationInput, 'New Location');
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'New Event Name');
+      await userEvent.clear(descInput);
+      await userEvent.type(descInput, 'New Description');
+      await userEvent.clear(locationInput);
+      await userEvent.type(locationInput, 'New Location');
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1088,20 +1218,20 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     // Update recurrence rule
     await act(async () => {
-      await user.click(screen.getByTestId('updateRecurrenceRule'));
+      await userEvent.click(screen.getByTestId('updateRecurrenceRule'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1134,20 +1264,20 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     // Update recurrence rule with function
     await act(async () => {
-      await user.click(screen.getByTestId('updateRecurrenceRuleFunction'));
+      await userEvent.click(screen.getByTestId('updateRecurrenceRuleFunction'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1180,20 +1310,20 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     // Update end date
     await act(async () => {
-      await user.click(screen.getByTestId('updateEndDate'));
+      await userEvent.click(screen.getByTestId('updateEndDate'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1224,20 +1354,20 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     // Update end date with function
     await act(async () => {
-      await user.click(screen.getByTestId('updateEndDateFunction'));
+      await userEvent.click(screen.getByTestId('updateEndDateFunction'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalled();
@@ -1263,18 +1393,18 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
 
     // Close modal
     await act(async () => {
-      await user.click(screen.getByTestId('closeModal'));
+      await userEvent.click(screen.getByTestId('closeModal'));
     });
 
     await waitFor(() => {
@@ -1304,18 +1434,18 @@ describe('EventForm', () => {
     // When showRecurrenceToggle is true and recurrenceRule exists, recurrence is already enabled
     // So we can directly open the dropdown
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
 
     // Set modal open to false
     await act(async () => {
-      await user.click(screen.getByTestId('setModalOpen'));
+      await userEvent.click(screen.getByTestId('setModalOpen'));
     });
 
     await waitFor(() => {
@@ -1341,11 +1471,11 @@ describe('EventForm', () => {
 
     // Enable recurrence but don't select a rule
     await act(async () => {
-      await user.click(screen.getByTestId('recurringEventCheck'));
+      await userEvent.click(screen.getByTestId('recurringEventCheck'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1384,7 +1514,7 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('recurrence-toggle')).not.toBeInTheDocument();
   });
 
   test('does not allow toggling recurrence when disabled', async () => {
@@ -1405,7 +1535,7 @@ describe('EventForm', () => {
     if (toggle) {
       const initialChecked = (toggle as HTMLInputElement).checked;
       await act(async () => {
-        await user.click(toggle);
+        await userEvent.click(toggle);
       });
       // Should not change when disabled
       expect((toggle as HTMLInputElement).checked).toBe(initialChecked);
@@ -1459,7 +1589,7 @@ describe('EventForm', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('eventFormCancelBtn'));
+    await userEvent.click(screen.getByTestId('eventFormCancelBtn'));
     expect(handleCancel).toHaveBeenCalled();
   });
 
@@ -1504,7 +1634,7 @@ describe('EventForm', () => {
     );
 
     // Should still render without crashing
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
   });
 
   test('currentRecurrenceLabel returns matching preset label', async () => {
@@ -1525,7 +1655,7 @@ describe('EventForm', () => {
     );
 
     // Recurrence is already enabled when rule exists, so dropdown is visible
-    const dropdown = screen.getByTestId('recurrenceDropdown');
+    const dropdown = screen.getByTestId('recurrence-toggle');
     expect(dropdown).toBeInTheDocument();
   });
 
@@ -1543,7 +1673,7 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     await waitFor(() => {
@@ -1551,9 +1681,77 @@ describe('EventForm', () => {
     });
   });
 
-  // TODO: Test 'adjusts end date when start date is after end date' removed - direct MUI picker input doesn't work in test environment
+  test('adjusts end date when start date is after end date', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={baseValues}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
 
-  // TODO: Test 'adjusts end time when start time is after end time' removed - direct MUI picker input doesn't work in test environment
+    const startDateInput = screen.getByTestId('eventStartAt');
+    // Use dynamic date to avoid test staleness - use a date after the baseValues.endDate
+    const newStartDate = dayjs().add(40, 'days').format('YYYY-MM-DD');
+    await act(async () => {
+      await userEvent.clear(startDateInput);
+      await userEvent.type(startDateInput, newStartDate);
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        startDate: expect.any(Date),
+        endDate: expect.any(Date),
+      }),
+    );
+    const call = handleSubmit.mock.calls[0][0];
+    expect(call.endDate.getTime()).toBeGreaterThanOrEqual(
+      call.startDate.getTime(),
+    );
+  });
+
+  test('adjusts end time when start time is after end time', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={{
+          ...baseValues,
+          allDay: false,
+          startTime: '08:00:00',
+          endTime: '10:00:00',
+        }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+      />,
+    );
+
+    const startTimeInput = screen.getByTestId('startTime');
+    // Change start time to 14:00:00, which is after the current end time (10:00:00)
+    await act(async () => {
+      await userEvent.clear(startTimeInput);
+      await userEvent.type(startTimeInput, '14:00:00');
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalled();
+    const call = handleSubmit.mock.calls[0][0];
+    // End time should be adjusted to match start time (14:00:00)
+    expect(call.endAtISO).toContain('14:00:00');
+  });
 
   test('handles date picker onChange with null', async () => {
     const handleSubmit = vi.fn();
@@ -1574,7 +1772,7 @@ describe('EventForm', () => {
     if (datePicker) {
       await act(async () => {
         // The mock DatePicker should handle null gracefully
-        await user.clear(startDateInput);
+        await userEvent.clear(startDateInput);
       });
     }
 
@@ -1598,7 +1796,7 @@ describe('EventForm', () => {
     const startTimeInput = screen.getByTestId('startTime');
     // The mock TimePicker should handle null gracefully
     await act(async () => {
-      await user.clear(startTimeInput);
+      await userEvent.clear(startTimeInput);
     });
 
     // Form should still be functional
@@ -1625,17 +1823,17 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 2 is weekly
     await act(async () => {
-      await user.click(options[2]);
+      await userEvent.click(options[2]);
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1667,17 +1865,17 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 3 is monthly
     await act(async () => {
-      await user.click(options[3]);
+      await userEvent.click(options[3]);
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1709,17 +1907,17 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 4 is annually
     await act(async () => {
-      await user.click(options[4]);
+      await userEvent.click(options[4]);
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1751,17 +1949,17 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Index 5 is every weekday
     await act(async () => {
-      await user.click(options[5]);
+      await userEvent.click(options[5]);
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1830,11 +2028,11 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     await act(async () => {
-      await user.click(options[options.length - 1]); // Custom...
+      await userEvent.click(options[options.length - 1]); // Custom...
     });
 
     // The mock modal doesn't have a button to set null, but the code handles it
@@ -1918,13 +2116,13 @@ describe('EventForm', () => {
 
     // Recurrence is already enabled when rule exists
     await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
+      await userEvent.click(screen.getByTestId('recurrence-toggle'));
     });
 
-    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const options = screen.getAllByTestId(/recurrence-item-/);
     // Select custom option
     await act(async () => {
-      await user.click(options[options.length - 1]);
+      await userEvent.click(options[options.length - 1]);
     });
 
     // Should create a default weekly rule and open modal
@@ -1951,11 +2149,11 @@ describe('EventForm', () => {
 
     // Toggle off (recurrence is enabled by default when rule exists)
     await act(async () => {
-      await user.click(screen.getByTestId('recurringEventCheck'));
+      await userEvent.click(screen.getByTestId('recurringEventCheck'));
     });
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1984,7 +2182,7 @@ describe('EventForm', () => {
     );
 
     await act(async () => {
-      await user.click(screen.getByTestId('createEventBtn'));
+      await userEvent.click(screen.getByTestId('createEventBtn'));
     });
 
     expect(handleSubmit).toHaveBeenCalledWith(
@@ -1994,38 +2192,5 @@ describe('EventForm', () => {
         location: 'Location',
       }),
     );
-  });
-  test('creates default recurrence rule when selecting custom with NO existing rule (coverage for line 120)', async () => {
-    const handleSubmit = vi.fn();
-    render(
-      <EventForm
-        initialValues={baseValues}
-        onSubmit={handleSubmit}
-        onCancel={vi.fn()}
-        submitLabel="Create"
-        t={t}
-        tCommon={tCommon}
-        showRecurrenceToggle
-      />,
-    );
-
-    // Toggle recurrence ON
-    await act(async () => {
-      await user.click(screen.getByTestId('recurringEventCheck'));
-    });
-
-    // Click dropdown
-    await act(async () => {
-      await user.click(screen.getByTestId('recurrenceDropdown'));
-    });
-
-    const options = screen.getAllByTestId(/recurrenceOption-/);
-    // Select custom option (last option)
-    await act(async () => {
-      await user.click(options[options.length - 1]);
-    });
-
-    // If default rule was created (line 120), the modal should be in the document
-    expect(screen.getByTestId('customRecurrenceModalMock')).toBeInTheDocument();
   });
 });

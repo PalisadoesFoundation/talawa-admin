@@ -9305,27 +9305,20 @@ form {
 }
 
 .checkboxdivEvents {
-  display: flex;
-  flex-wrap: wrap;
-  --events-gap: 1rem;
-  gap: var(--events-gap, 1rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+  padding-inline-start: 12px; /* Align with Bootstrap form-control padding */
 }
 
-.checkboxdivEvents > div {
-  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
-  min-width: 200px;
+@media (max-width: 600px) {
+  .checkboxdivEvents {
+    grid-template-columns: 1fr;
+  }
 }
 
-.dispflexEvents {
-  display: flex;
-  align-items: center;
-}
-
-.dispflexEvents > input {
-  border: none;
-  box-shadow: none;
-  margin-top: 5px;
-}
+/* Align radio buttons in visibility selector to match toggle switches */
 
 /* -- LeaveOrganization.tsx -- */
 /* -- Organizations.tsx -- */
@@ -9339,6 +9332,56 @@ form {
 
 .maxWidth {
   max-width: 800px;
+}
+
+/* --- UI Refinements Phase 3 --- */
+
+/* Bold Input Labels SCPED to EventForm to avoid global side effects */
+/* Bold Input Labels SCPED to EventForm to avoid global side effects */
+/* Target both .form-label class AND raw label elements to be safe */
+.eventFormContainer :global(.form-label),
+.eventFormContainer label {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-md);
+  margin-bottom: var(--space-2);
+}
+
+/* Improve Toggle Vertical Alignment */
+.dispflexEvents {
+  display: flex !important;
+  justify-content: flex-start;
+  align-items: center !important; /* Forces vertical centering */
+  width: 100%;
+  flex-direction: row-reverse;
+  min-height: 2.5rem;
+}
+
+.dispflexEvents > label {
+  flex: 1;
+  text-align: left;
+  margin-left: var(--space-3);
+  margin-bottom: 0;
+  align-self: center; /* Double check centering */
+  line-height: normal; /* Reset line-height if needed */
+  margin-top: -2px; /* Visual fix: shift label UP to match toggle center */
+}
+
+.dispflexEvents > .switch {
+  margin-bottom: 0 !important; /* Remove bootstrap margins */
+}
+
+/* Visibility Radio Buttons Alignment */
+.eventFormContainer :global(.form-check) {
+  display: flex;
+  align-items: center; /* Vertically center radio with text block */
+  margin-bottom: var(--space-2);
+  padding-left: 2rem; /* Increased padding to prevent touching border */
+}
+
+.eventFormContainer :global(.form-check-input) {
+  margin-top: 0; /* Remove default bootstrap top margin */
+  margin-right: var(--space-3);
+  float: none; /* remove float */
 }
 
 .content {

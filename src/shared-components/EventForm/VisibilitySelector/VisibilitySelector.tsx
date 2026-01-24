@@ -4,7 +4,8 @@
  */
 // translation-check-keyPrefix: common
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import FormCheck from 'react-bootstrap/FormCheck';
+import FormLabel from 'react-bootstrap/FormLabel';
 import type { InterfaceVisibilitySelectorProps } from 'types/shared-components/VisibilitySelector/interface';
 
 /**
@@ -16,12 +17,19 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
   visibility,
   setVisibility,
   tCommon,
+  disabled = false,
 }) => {
   return (
     <div className="mb-3">
-      <Form.Label>{tCommon('eventVisibility')}</Form.Label>
-      <div className="ms-3">
-        <Form.Check
+      <FormLabel className="fw-bold fs-5">
+        {tCommon('eventVisibility')}
+      </FormLabel>
+      <div
+        className="ms-3"
+        role="radiogroup"
+        aria-label={tCommon('eventVisibility')}
+      >
+        <FormCheck
           type="radio"
           id="visibility-public"
           label={
@@ -37,8 +45,9 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('PUBLIC')}
           className="mb-2"
           data-testid="visibilityPublicRadio"
+          disabled={disabled}
         />
-        <Form.Check
+        <FormCheck
           type="radio"
           id="visibility-org"
           label={
@@ -54,8 +63,9 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('ORGANIZATION')}
           className="mb-2"
           data-testid="visibilityOrgRadio"
+          disabled={disabled}
         />
-        <Form.Check
+        <FormCheck
           type="radio"
           id="visibility-invite"
           label={
@@ -71,6 +81,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           onChange={() => setVisibility('INVITE_ONLY')}
           className="mb-2"
           data-testid="visibilityInviteRadio"
+          disabled={disabled}
         />
       </div>
     </div>

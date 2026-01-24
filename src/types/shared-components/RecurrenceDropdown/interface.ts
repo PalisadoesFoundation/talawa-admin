@@ -6,8 +6,7 @@ import type { InterfaceRecurrenceOption } from 'shared-components/EventForm/util
 export interface InterfaceRecurrenceDropdownProps {
   recurrenceOptions: InterfaceRecurrenceOption[];
   currentLabel: string;
-  isOpen: boolean;
-  onToggle: (isOpen: boolean) => void;
   onSelect: (option: InterfaceRecurrenceOption) => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
+  disabled?: boolean;
 }

@@ -4,7 +4,7 @@
 
 # Interface: IAttendanceStatisticsModalProps
 
-Defined in: [src/types/Event/interface.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L202)
+Defined in: [src/types/Event/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L173)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:202](https://github.com/PalisadoesFoun
 
 > **handleClose**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L204)
+Defined in: [src/types/Event/interface.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L175)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoun
 
 > **memberData**: [`IMember`](IMember.md)[]
 
-Defined in: [src/types/Event/interface.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L210)
+Defined in: [src/types/Event/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L181)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/interface.ts:210](https://github.com/PalisadoesFoun
 
 > **show**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L203)
+Defined in: [src/types/Event/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L174)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:203](https://github.com/PalisadoesFoun
 
 > **statistics**: `object`
 
-Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L205)
+Defined in: [src/types/Event/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L176)
 
 #### attendanceRate
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoun
 
 > **t**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/Event/interface.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L211)
+Defined in: [src/types/Event/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L182)
 
 #### Parameters
 

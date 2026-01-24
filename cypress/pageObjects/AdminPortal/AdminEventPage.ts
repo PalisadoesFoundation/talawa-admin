@@ -98,24 +98,22 @@ export class AdminEventPage {
     this.openEventDetails(existingName);
 
     // Wait for edit form to load and update fields, breaking up command chains
-    cy.get('[data-cy="updateName"]', { timeout: 10000 }).should('be.visible');
-    cy.get('[data-cy="updateName"]').clear();
-    cy.get('[data-cy="updateName"]').type(newName);
-    cy.get('[data-cy="updateName"]').should('have.value', newName);
+    // Note: The shared EventForm uses the same selectors for both create and update
+    cy.get(this._eventTitleInput, { timeout: 10000 }).should('be.visible');
+    cy.get(this._eventTitleInput).clear();
+    cy.get(this._eventTitleInput).type(newName);
+    cy.get(this._eventTitleInput).should('have.value', newName);
 
-    cy.get('[data-cy="updateDescription"]').should('be.visible');
-    cy.get('[data-cy="updateDescription"]').clear();
-    cy.get('[data-cy="updateDescription"]').type(newDescription);
+    cy.get(this._eventDescriptionInput).should('be.visible');
+    cy.get(this._eventDescriptionInput).clear();
+    cy.get(this._eventDescriptionInput).type(newDescription);
 
-    cy.get('[data-cy="updateLocation"]').should('be.visible');
-    cy.get('[data-cy="updateLocation"]').clear();
-    cy.get('[data-cy="updateLocation"]').type(newLocation);
+    cy.get(this._eventLocationInput).should('be.visible');
+    cy.get(this._eventLocationInput).clear();
+    cy.get(this._eventLocationInput).type(newLocation);
 
-    // Click update button
-    cy.get('[data-cy="previewUpdateEventBtn"]')
-      .should('be.visible')
-      .and('be.enabled')
-      .click();
+    // Click update button (which is the same 'createEventBtn' in the shared form)
+    cy.get(this._createEventBtn).should('be.visible').and('be.enabled').click();
 
     cy.assertToast('Event updated successfully.');
 
@@ -126,7 +124,7 @@ export class AdminEventPage {
     // Find and click on the event card
     this.openEventDetails(eventName);
 
-    // Click delete button in event details
+    // Click delete button in event details (Footer Action in PreviewModal)
     cy.get('[data-cy="deleteEventModalBtn"]', { timeout: 10000 })
       .should('be.visible')
       .click();

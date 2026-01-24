@@ -1,0 +1,17 @@
+/* RecurrenceDropdown Component Styles */
+
+.dropdown {
+  width: 100%;
+}
+
+.dropdownButton {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dropdownMenu {
+  width: 100%;
+}

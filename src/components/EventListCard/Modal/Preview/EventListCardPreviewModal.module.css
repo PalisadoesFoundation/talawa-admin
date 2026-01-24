@@ -8,9 +8,11 @@
 .addButton {
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
-  border: 1px solid var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-100);
   padding: var(--space-2) var(--space-4);
   font-weight: var(--font-weight-medium);
+  display: inline-block; /* Ensure it shares the line */
+  width: auto;
 }
 
 .addButton:hover {
@@ -21,9 +23,11 @@
 .removeButton {
   background-color: var(--color-red-100);
   color: var(--color-red-500);
-  border: 1px solid var(--color-red-100);
+  border: var(--border-1) solid var(--color-red-100);
   padding: var(--space-2) var(--space-4);
   font-weight: var(--font-weight-medium);
+  display: inline-block; /* Ensure it shares the line */
+  width: auto;
 }
 
 .removeButton:hover {
@@ -33,11 +37,11 @@
 
 .inputField {
   background-color: var(--color-white);
-  border: 1px solid var(--color-gray-200);
+  border: var(--border-1) solid var(--color-gray-200);
   color: var(--color-gray-700);
   padding: var(--space-2);
   width: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px var(--color-gray-200);
   margin-top: var(--space-2);
   margin-bottom: var(--space-2);
 }

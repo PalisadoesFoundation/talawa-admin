@@ -1,5 +1,5 @@
-// translation-check-keyPrefix: eventListCard
 import { useMutation } from '@apollo/client';
+// translation-check-keyPrefix: eventListCard
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -10,21 +10,160 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type {
-  InterfaceEventUpdateInput,
-  InterfaceUpdateEventHandlerProps,
-} from 'types/EventListCard/interface';
+import type { IEventFormSubmitPayload } from 'types/EventForm/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+
+interface IEventListCard extends InterfaceEvent {
+  refetchEvents?: () => void;
+}
 
 /**
- * Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
+ * Determines if the recurrence rule has changed between the submitted payload and the original event.
  *
- * @returns An object containing the update logic:
- * - updateEventHandler: `(args: IUpdateEventHandlerProps) => Promise<void>` - Asynchronous function that handles the event update process, including validation and mutation execution.
+ * Compares recurrence presence, frequency, interval, day/month patterns, count, and end date
+ * to detect any modifications to the recurrence configuration.
+ *
+ * @param payload - The form submission payload containing the new event data
+ * @param eventListCardProps - The original event properties from the event list card
+ * @returns `true` if any recurrence property has changed, `false` otherwise
  */
+export const hasRecurrenceChanged = (
+  payload: IEventFormSubmitPayload,
+  eventListCardProps: IEventListCard,
+): boolean => {
+  // If no recurrence rule in payload but one existed, or vice versa
+  const hadRecurrence = !!eventListCardProps.recurrenceRule;
+  const hasRecurrence = !!payload.recurrenceRule;
+  if (hadRecurrence !== hasRecurrence) return true;
+  if (!hasRecurrence) return false;
+
+  const original = eventListCardProps.recurrenceRule;
+  const current = payload.recurrenceRule;
+
+  if (!original || !current) return false; // Should be covered above but TS safety
+
+  // Deep compare needed fields
+  return (
+    original.frequency !== current.frequency ||
+    original.interval !== current.interval ||
+    JSON.stringify(original.byDay) !== JSON.stringify(current.byDay) ||
+    JSON.stringify(original.byMonth) !== JSON.stringify(current.byMonth) ||
+    JSON.stringify(original.byMonthDay) !==
+      JSON.stringify(current.byMonthDay) ||
+    original.count !== current.count ||
+    original.recurrenceEndDate !== current.recurrenceEndDate
+  );
+};
+
+/**
+ * Computes which update scopes are available when editing a recurring event instance.
+ *
+ * Determines whether the user can update just this instance, this and following instances,
+ * or the entire series based on what fields have changed.
+ *
+ * @param payload - The form submission payload containing the new event data
+ * @param eventListCardProps - The original event properties from the event list card
+ * @returns An object with boolean fields:
+ *   - `single`: `true` if updating only this instance is allowed (when recurrence hasn't changed)
+ *   - `following`: `true` (always available for recurring instances)
+ *   - `entireSeries`: `true` if only name or description changed (allows bulk metadata updates)
+ *
+ * @remarks
+ * - The `entireSeries` option is only available when ONLY name/description changed
+ * - Changes to start/end times, location, visibility, or recurrence prevent `entireSeries` updates
+ * - The `single` option is disabled when the recurrence structure itself has changed
+ */
+export const getAvailableUpdateOptions = (
+  payload: IEventFormSubmitPayload,
+  eventListCardProps: IEventListCard,
+) => {
+  const recurrenceChanged = hasRecurrenceChanged(payload, eventListCardProps);
+
+  // Check if only metadata changed
+  const nameChanged = payload.name !== eventListCardProps.name;
+  const descriptionChanged =
+    payload.description !== eventListCardProps.description;
+  const locationChanged = payload.location !== eventListCardProps.location;
+  const publicChanged = payload.isPublic !== eventListCardProps.isPublic;
+  const registerableChanged =
+    payload.isRegisterable !== eventListCardProps.isRegisterable;
+  const inviteOnlyChanged =
+    payload.isInviteOnly !== (eventListCardProps.isInviteOnly ?? false);
+  const allDayChanged = payload.allDay !== eventListCardProps.allDay;
+
+  // But for "hasOnlyNameOrDesc", we just check if OTHER critical things didn't change.
+  // Actually, entireSeries is usually allowed unless recurrence structure changed incompatibly?
+  // The previous logic was strict: ONLY name/desc.
+  // Let's stick to previous logic intent:
+  // If recurrence structure changed, we can't update series easily (?) or maybe we can?
+  // Previous Code: `return ((nameChanged || descriptionChanged) && !locationChanged && !publicChanged ...)`
+
+  const startChanged = payload.startAtISO !== eventListCardProps.startAt;
+  const endChanged = payload.endAtISO !== eventListCardProps.endAt;
+
+  const onlyNameOrDescriptionChanged =
+    (nameChanged || descriptionChanged) &&
+    !locationChanged &&
+    !publicChanged &&
+    !registerableChanged &&
+    !inviteOnlyChanged &&
+    !allDayChanged &&
+    !recurrenceChanged &&
+    !startChanged &&
+    !endChanged; // And assumption: times didn't change either?
+
+  return {
+    single: !recurrenceChanged,
+    following: true,
+    entireSeries: onlyNameOrDescriptionChanged,
+  };
+};
+
+interface IEventUpdateInput {
+  id: string;
+  name?: string;
+  description?: string;
+  location?: string;
+  isPublic?: boolean;
+  isRegisterable?: boolean;
+  isInviteOnly?: boolean;
+  allDay?: boolean;
+  startAt?: string;
+  endAt?: string;
+  recurrenceRule?: InterfaceRecurrenceRule | null;
+  recurrence?: InterfaceRecurrenceRule | null;
+}
+
+interface IFormState {
+  name: string;
+  eventdescrip: string;
+  location: string;
+  startTime: string;
+  endTime: string;
+}
+
+interface IUpdateEventHandlerProps {
+  eventListCardProps: IEventListCard;
+  formState: IFormState;
+  alldaychecked: boolean;
+  publicchecked: boolean;
+  registrablechecked: boolean;
+  inviteOnlyChecked: boolean;
+  eventStartDate: Date;
+  eventEndDate: Date;
+  recurrence: InterfaceRecurrenceRule | null;
+  updateOption: 'single' | 'following' | 'entireSeries';
+  hasRecurrenceChanged?: boolean; // Add this parameter
+  t: (key: string) => string;
+  hideViewModal: () => void;
+  setEventUpdateModalIsOpen: (isOpen: boolean) => void;
+  refetchEvents?: () => void;
+}
+
 export const useUpdateEventHandler = () => {
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [updateSingleRecurringEventInstance] = useMutation(
@@ -40,9 +179,9 @@ export const useUpdateEventHandler = () => {
   const updateEventHandler = async ({
     eventListCardProps,
     formState,
-    allDayChecked,
-    publicChecked,
-    registerableChecked,
+    alldaychecked,
+    publicchecked,
+    registrablechecked,
     inviteOnlyChecked,
     eventStartDate,
     eventEndDate,
@@ -53,64 +192,62 @@ export const useUpdateEventHandler = () => {
     hideViewModal,
     setEventUpdateModalIsOpen,
     refetchEvents,
-  }: InterfaceUpdateEventHandlerProps): Promise<void> => {
+  }: IUpdateEventHandlerProps): Promise<void> => {
     const isRecurringInstance =
       !eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id;
 
     try {
       let data;
-      const updateInput: InterfaceEventUpdateInput = {
-        id: eventListCardProps.id,
-      };
+      const updateInput: IEventUpdateInput = { id: eventListCardProps.id };
 
       // Only include fields that have actually changed
       if (formState.name !== eventListCardProps.name) {
         updateInput.name = formState.name;
       }
-      if (formState.eventDescription !== eventListCardProps.description) {
-        updateInput.description = formState.eventDescription;
+      if (formState.eventdescrip !== eventListCardProps.description) {
+        updateInput.description = formState.eventdescrip;
       }
       if (formState.location !== eventListCardProps.location) {
         updateInput.location = formState.location;
       }
-      if (publicChecked !== eventListCardProps.isPublic) {
-        updateInput.isPublic = publicChecked;
+      if (publicchecked !== eventListCardProps.isPublic) {
+        updateInput.isPublic = publicchecked;
       }
-      if (registerableChecked !== eventListCardProps.isRegisterable) {
-        updateInput.isRegisterable = registerableChecked;
+      if (registrablechecked !== eventListCardProps.isRegisterable) {
+        updateInput.isRegisterable = registrablechecked;
       }
       if (inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)) {
         updateInput.isInviteOnly = inviteOnlyChecked;
       }
-      if (allDayChecked !== eventListCardProps.allDay) {
-        updateInput.allDay = allDayChecked;
+      if (alldaychecked !== eventListCardProps.allDay) {
+        updateInput.allDay = alldaychecked;
       }
 
-      const newStartAt = allDayChecked
+      const newStartAt = alldaychecked
         ? dayjs.utc(eventStartDate).isValid()
           ? dayjs.utc(eventStartDate).startOf('day').toISOString()
           : ''
         : dayjs.utc(eventStartDate).isValid()
           ? dayjs
               .utc(eventStartDate)
-              .hour(parseInt(formState.startTime.split(':')[0], 10) || 0)
-              .minute(parseInt(formState.startTime.split(':')[1], 10) || 0)
-              .second(parseInt(formState.startTime.split(':')[2], 10) || 0)
+              .hour(parseInt(formState.startTime.split(':')[0]))
+              .minute(parseInt(formState.startTime.split(':')[1]))
+              .second(parseInt(formState.startTime.split(':')[2]))
               .millisecond(0)
               .toISOString()
           : '';
 
-      const newEndAt = allDayChecked
+      const newEndAt = alldaychecked
         ? dayjs.utc(eventEndDate).isValid()
           ? dayjs.utc(eventEndDate).endOf('day').toISOString()
           : ''
         : dayjs.utc(eventEndDate).isValid()
           ? dayjs
               .utc(eventEndDate)
-              .hour(parseInt(formState.endTime.split(':')[0], 10) || 0)
-              .minute(parseInt(formState.endTime.split(':')[1], 10) || 0)
-              .second(parseInt(formState.endTime.split(':')[2], 10) || 0)
+              .hour(parseInt(formState.endTime.split(':')[0]))
+              .minute(parseInt(formState.endTime.split(':')[1]))
+              .second(parseInt(formState.endTime.split(':')[2]))
               .millisecond(0)
               .toISOString()
           : '';
@@ -120,7 +257,7 @@ export const useUpdateEventHandler = () => {
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : (() => {
-            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.startTime}`;
+            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
             return dayjs.utc(dateTimeStr).isValid()
               ? dayjs.utc(dateTimeStr).toISOString()
               : '';
@@ -130,13 +267,17 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : (() => {
-            const endDateTimeStr = `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`;
-
-            return dayjs.utc(endDateTimeStr).isValid()
-              ? dayjs.utc(endDateTimeStr).toISOString()
-              : '';
-          })();
+        : dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .isValid()
+          ? dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .toISOString()
+          : '';
 
       // Only include timing changes if they actually changed
       if (newStartAt !== originalStartAt) {
@@ -189,7 +330,7 @@ export const useUpdateEventHandler = () => {
             break;
           }
           case 'entireSeries': {
-            const entireSeriesInput: InterfaceEventUpdateInput = {
+            const entireSeriesInput: IEventUpdateInput = {
               id: eventListCardProps.id,
             };
 
@@ -197,25 +338,25 @@ export const useUpdateEventHandler = () => {
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }
-            if (formState.eventDescription !== eventListCardProps.description) {
-              entireSeriesInput.description = formState.eventDescription;
+            if (formState.eventdescrip !== eventListCardProps.description) {
+              entireSeriesInput.description = formState.eventdescrip;
             }
             if (formState.location !== eventListCardProps.location) {
               entireSeriesInput.location = formState.location;
             }
-            if (publicChecked !== eventListCardProps.isPublic) {
-              entireSeriesInput.isPublic = publicChecked;
+            if (publicchecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicchecked;
             }
-            if (registerableChecked !== eventListCardProps.isRegisterable) {
-              entireSeriesInput.isRegisterable = registerableChecked;
+            if (registrablechecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registrablechecked;
             }
             if (
               inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
             ) {
               entireSeriesInput.isInviteOnly = inviteOnlyChecked;
             }
-            if (allDayChecked !== eventListCardProps.allDay) {
-              entireSeriesInput.allDay = allDayChecked;
+            if (alldaychecked !== eventListCardProps.allDay) {
+              entireSeriesInput.allDay = alldaychecked;
             }
 
             // Only include timing changes if they actually changed
@@ -236,7 +377,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        NotificationToast.success(t('eventUpdated'));
+        NotificationToast.success(t('eventUpdated') as string);
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

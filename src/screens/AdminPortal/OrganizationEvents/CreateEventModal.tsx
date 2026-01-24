@@ -113,7 +113,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
-      const { data: createEventData } = await create({
+      const { data: createEventData, errors } = await create({
         variables: { input },
       });
 
@@ -122,8 +122,14 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         onEventCreated();
         setFormResetKey((prev) => prev + 1);
         onClose();
+        // Return early to prevent error handler from running
+        return;
+      } else if (errors && errors.length > 0) {
+        // Only throw if mutation actually failed (no data returned)
+        throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
+      // Only show error if we didn't already handle success above
       errorHandler(t, error);
     }
   };
