@@ -199,15 +199,13 @@
     "next": "Next",
     "markAsRead": "Mark as Read",
     "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
-    "unreadCount_one": "{{count}} unread",
-    "unreadCount_other": "{{count}} unread",
-    "unreadCount": "{{count}} unread",
     "loading": "Loading...",
-    "errorFetching": "Error fetching notifications",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
-    "noNewNotifications": "No new notifications",
-    "viewAllNotifications": "View all notifications",
-    "openNotificationsMenu": "Open notifications menu"
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizations",
@@ -360,14 +358,6 @@
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
     "resetData": "Successfully reset the Profile Details."
-  },
-  "cardItem": {
-    "avatar": "{{title}} avatar",
-    "eventLocation": "Event Location",
-    "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Posted on:",
-    "author": "Author:"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -752,6 +742,7 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -1923,6 +1914,8 @@
     "pdfGeneratedSuccessfully": "PDF generated successfully!",
     "errorGeneratingPdf": "Error generating pdf",
     "unknownError": "Unknown error",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
     "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
     "checkedIn": "Checked In",

@@ -199,15 +199,13 @@
     "next": "下一页",
     "markAsRead": "标记为已读",
     "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
-    "unreadCount_one": "{{count}} 未读",
-    "unreadCount_other": "{{count}} 未读",
-    "unreadCount": "{{count}} 未读",
-    "loading": "加载中...",
-    "errorFetching": "获取通知时出错",
-    "unread": "未读",
-    "noNewNotifications": "没有新通知",
-    "viewAllNotifications": "查看所有通知",
-    "openNotificationsMenu": "打开通知菜单"
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -360,14 +358,6 @@
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
     "resetData": "成功重置个人资料详细信息。"
-  },
-  "cardItem": {
-    "avatar": "{{title}} 头像",
-    "eventLocation": "活动地点",
-    "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "发布于：",
-    "author": "作者："
   },
   "dashboard": {
     "title": "仪表板",

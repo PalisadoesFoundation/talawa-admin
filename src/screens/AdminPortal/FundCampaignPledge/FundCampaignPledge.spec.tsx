@@ -1,18 +1,14 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -89,9 +85,9 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
             );
           }
 
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? 'fundsLink'
-            : item.to?.includes('/orgfundcampaign/')
+            : item.to?.includes('/admin/orgfundcampaign/')
               ? 'campaignsLink'
               : 'breadcrumbLink';
 
@@ -449,14 +445,14 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
       <MemoryRouter
-        initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
+        initialEntries={['/admin/fundCampaignPledge/orgId/fundCampaignId']}
       >
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                  path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -492,12 +488,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
+        <MemoryRouter initialEntries={['/admin/fundCampaignPledge/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/"
+                  path="/admin/fundCampaignPledge/"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -638,10 +634,8 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Search the Pledges list by Users', async () => {
     renderFundCampaignPledge(link1);
     const searchPledger = await screen.findByTestId('searchPledger');
-    fireEvent.change(searchPledger, {
-      target: { value: 'John' },
-    });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.type(searchPledger, 'John');
+    await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -664,7 +658,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Verify fund link is present with correct href
     const fundsLink = screen.getByTestId('fundsLink');
     expect(fundsLink).toBeInTheDocument();
-    expect(fundsLink).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(fundsLink).toHaveAttribute('href', '/admin/orgfunds/orgId');
     expect(fundsLink).toHaveTextContent('Test Fund');
 
     // Verify campaign link is present with correct href
@@ -672,7 +666,7 @@ describe('Testing Campaign Pledge Screen', () => {
     expect(campaignsLink).toBeInTheDocument();
     expect(campaignsLink).toHaveAttribute(
       'href',
-      '/orgfundcampaign/orgId/fundId123',
+      '/admin/orgfundcampaign/orgId/fundId123',
     );
     expect(campaignsLink).toHaveTextContent('Test Campaign');
 
@@ -1018,11 +1012,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('amount_ASC'));
+    await userEvent.click(screen.getByTestId('amount_ASC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1044,11 +1038,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('amount_DESC'));
+    await userEvent.click(screen.getByTestId('amount_DESC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1070,11 +1064,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('endDate_DESC'));
+    await userEvent.click(screen.getByTestId('endDate_DESC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1098,11 +1092,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('endDate_ASC'));
+    await userEvent.click(screen.getByTestId('endDate_ASC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1152,7 +1146,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Directly test the sorting by manipulating the state
     const filterButton = screen.getByTestId('filter');
-    fireEvent.click(filterButton);
+    await userEvent.click(filterButton);
 
     // The default case should maintain the original order
     await waitFor(() => {
@@ -1182,11 +1176,11 @@ describe('Testing Campaign Pledge Screen', () => {
     ];
 
     for (const option of sortOptions) {
-      fireEvent.click(screen.getByTestId('filter'));
+      await userEvent.click(screen.getByTestId('filter'));
       await waitFor(() => {
         expect(screen.getByTestId(option)).toBeInTheDocument();
       });
-      fireEvent.click(screen.getByTestId(option));
+      await userEvent.click(screen.getByTestId(option));
 
       await waitFor(() => {
         const amountCells = screen.getAllByTestId('amountCell');
@@ -1430,8 +1424,12 @@ describe('Testing Campaign Pledge Screen', () => {
     // Find the search input
     const searchInput = screen.getByTestId('searchPledger');
     expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(searchInput).toBeEnabled();
+    });
 
     // Type in the search input with leading/trailing spaces
+    await userEvent.click(searchInput);
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '  John Doe  ');
 
@@ -1452,6 +1450,7 @@ describe('Testing Campaign Pledge Screen', () => {
     );
 
     // Clear and type again to ensure the callback is covered
+    await userEvent.click(searchInput);
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
 

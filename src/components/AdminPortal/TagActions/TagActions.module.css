@@ -1,0 +1,39 @@
+.modalHeader {
+  composes: modalHeader from '../../../style/app-fixed.module.css';
+}
+
+.removeButton {
+  composes: removeButton from '../../../style/app-fixed.module.css';
+}
+
+.addButton {
+  composes: addButton from '../../../style/app-fixed.module.css';
+}
+
+.scrollContainer {
+  composes: scrollContainer from '../../../style/app-fixed.module.css';
+}
+
+.tagBadge {
+  composes: tagBadge from '../../../style/app-fixed.module.css';
+}
+
+.removeFilterIcon {
+  composes: removeFilterIcon from '../../../style/app-fixed.module.css';
+}
+
+.inputField {
+  composes: inputField from '../../../style/app-fixed.module.css';
+}
+
+.loadingDiv {
+  composes: loadingDiv from '../../../style/app-fixed.module.css';
+}
+
+.tagActionsScrollableDiv {
+  height: 300px;
+  overflow: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

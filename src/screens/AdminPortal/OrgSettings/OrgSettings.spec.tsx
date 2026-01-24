@@ -1,12 +1,15 @@
 import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -35,12 +38,15 @@ const renderOrganisationSettings = (
   routerMocks.useParams.mockReturnValue({ orgId });
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
+      <MemoryRouter initialEntries={[`/admin/orgsetting/${orgId}`]}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
+                <Route
+                  path="/admin/orgsetting/:orgId"
+                  element={<OrgSettings />}
+                />
                 <Route
                   path="/"
                   element={
@@ -78,11 +84,11 @@ describe('Organisation Settings Page', () => {
     const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider>
-        <MemoryRouter initialEntries={['/orgsetting/']}>
+        <MemoryRouter initialEntries={['/admin/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/" element={OrgSettings} />
+                <Route path="/admin/orgsetting/" element={OrgSettings} />
                 <Route
                   path="/"
                   element={
@@ -137,6 +143,7 @@ describe('Organisation Settings Page', () => {
 
   it('should switch to action item categories tab when clicked', async () => {
     renderOrganisationSettings();
+    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -145,7 +152,7 @@ describe('Organisation Settings Page', () => {
     const actionItemButton = screen.getByTestId('actionItemCategoriesSettings');
     expect(actionItemButton).toBeInTheDocument();
 
-    fireEvent.click(actionItemButton);
+    await user.click(actionItemButton);
 
     // Check if action item categories tab is now displayed
     await waitFor(() => {
@@ -160,6 +167,7 @@ describe('Organisation Settings Page', () => {
 
   it('should switch to agenda item categories tab when clicked', async () => {
     renderOrganisationSettings();
+    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -168,7 +176,7 @@ describe('Organisation Settings Page', () => {
     const agendaItemButton = screen.getByTestId('agendaItemCategoriesSettings');
     expect(agendaItemButton).toBeInTheDocument();
 
-    fireEvent.click(agendaItemButton);
+    await user.click(agendaItemButton);
 
     // Check if agenda item categories tab is now displayed
     await waitFor(() => {
@@ -183,19 +191,20 @@ describe('Organisation Settings Page', () => {
 
   it('should switch between tabs correctly', async () => {
     renderOrganisationSettings();
+    const user = userEvent.setup();
 
     // Wait for component to load with general tab active
     await waitFor(() => screen.getByTestId('generalTab'));
 
     // Switch to action item categories
-    fireEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    await user.click(screen.getByTestId('actionItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
       expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
     });
 
     // Switch to agenda item categories
-    fireEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    await user.click(screen.getByTestId('agendaItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
       expect(
@@ -204,7 +213,7 @@ describe('Organisation Settings Page', () => {
     });
 
     // Switch back to general
-    fireEvent.click(screen.getByTestId('generalSettings'));
+    await user.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
       expect(
@@ -240,6 +249,7 @@ describe('Organisation Settings Page', () => {
 
   it('should apply correct CSS classes to active and inactive tabs', async () => {
     renderOrganisationSettings();
+    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -255,7 +265,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click action item categories tab
-    fireEvent.click(actionButton);
+    await user.click(actionButton);
     await waitFor(() => screen.getByTestId('actionItemCategoriesTab'));
 
     // Now action item categories should be active
@@ -264,7 +274,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click agenda item categories tab
-    fireEvent.click(agendaButton);
+    await user.click(agendaButton);
     await waitFor(() => screen.getByTestId('agendaItemCategoriesTab'));
 
     // Now agenda item categories should be active

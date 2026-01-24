@@ -5,7 +5,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -53,7 +54,7 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
     return (
       <nav data-testid="breadcrumbs">
         {items.map((item, index) => {
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? item.to?.includes('/campaigns')
               ? 'campaignsLink'
               : 'fundsLink'
@@ -88,21 +89,21 @@ const translations = JSON.parse(
 const renderFundCampaign = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgfundcampaign/orgId/fundId']}>
+      <MemoryRouter initialEntries={['/admin/orgfundcampaign/orgId/fundId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
+                  path="/admin/orgfundcampaign/:orgId/:fundId"
                   element={<OrganizationFundCampaign />}
                 />
                 <Route
-                  path="/fundCampaignPledge/orgId/campaignId1"
+                  path="/admin/fundCampaignPledge/orgId/campaignId1"
                   element={<div data-testid="pledgeScreen"></div>}
                 />
                 <Route
-                  path="/orgfunds/orgId"
+                  path="/admin/orgfunds/orgId"
                   element={<div data-testid="fundScreen"></div>}
                 />
                 <Route
@@ -146,13 +147,13 @@ describe('FundCampaigns Screen', () => {
     mockRouteParams('', '');
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/orgfundcampaign/']}>
+        <MemoryRouter initialEntries={['/admin/orgfundcampaign/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18nForTest}>
                 <Routes>
                   <Route
-                    path="/orgfundcampaign/"
+                    path="/admin/orgfundcampaign/"
                     element={<OrganizationFundCampaign />}
                   />
                   <Route
@@ -341,8 +342,8 @@ describe('FundCampaigns Screen', () => {
     const fundBreadcrumb = await screen.findByTestId('fundsLink');
     expect(fundBreadcrumb).toBeInTheDocument();
     // Verify the breadcrumb link has the correct href to the funds page
-    expect(fundBreadcrumb).toHaveAttribute('href', '/orgfunds/orgId');
-    expect(fundBreadcrumb).toHaveAttribute('data-to', '/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('href', '/admin/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('data-to', '/admin/orgfunds/orgId');
   });
 
   it('should sort campaigns by start date when clicking start date column header', async () => {
