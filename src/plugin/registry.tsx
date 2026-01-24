@@ -43,6 +43,7 @@ function createErrorComponent(
         <h3 className={styles.errorHeading}>{t('error')}</h3>
         <p className={styles.errorText}>
           <Trans
+            t={t}
             i18nKey="failedToLoad"
             values={{ componentName }}
             components={{ 1: <strong /> }}
@@ -50,6 +51,7 @@ function createErrorComponent(
         </p>
         <p className={styles.errorText}>
           <Trans
+            t={t}
             i18nKey="id"
             values={{ pluginId }}
             components={{ 1: <strong /> }}
