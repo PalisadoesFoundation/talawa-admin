@@ -267,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "每页行数",
-    "all": "全部"
+    "all": "全部",
+    "firstPage": "第一页",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "lastPage": "最后一页"
   },
   "requests": {
     "profile": "个人资料",
@@ -357,7 +361,19 @@
     "social": "社交媒体链接",
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
-    "resetData": "成功重置个人资料详细信息。"
+    "resetData": "成功重置个人资料详细信息。",
+    "sessionTimeout": {
+      "title": "登录会话超时",
+      "currentTimeout": "当前超时：",
+      "noTimeoutSet": "未设置超时",
+      "minutes": " {{count}} 分钟",
+      "updateTimeout": "更新超时",
+      "min15": "15 分钟",
+      "min30": "30 分钟",
+      "min45": "45 分钟",
+      "min60": "60 分钟",
+      "update": "更新"
+    }
   },
   "dashboard": {
     "title": "仪表板",

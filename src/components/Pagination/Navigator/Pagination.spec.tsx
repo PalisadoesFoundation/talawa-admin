@@ -3,9 +3,11 @@ import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { I18nextProvider } from 'react-i18next';
 import Pagination from './Pagination';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
+import i18n from 'utils/i18nForTest';
 import { describe, it, vi, expect } from 'vitest';
 
 describe('Pagination component tests', () => {
@@ -25,7 +27,9 @@ describe('Pagination component tests', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
-          <Pagination {...defaultProps} />
+          <I18nextProvider i18n={i18n}>
+            <Pagination {...defaultProps} />
+          </I18nextProvider>
         </Provider>
       </BrowserRouter>,
     );
@@ -62,7 +66,9 @@ describe('Pagination component tests', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
-          <Pagination {...defaultProps} page={0} />
+          <I18nextProvider i18n={i18n}>
+            <Pagination {...defaultProps} page={0} />
+          </I18nextProvider>
         </Provider>
       </BrowserRouter>,
     );
@@ -83,7 +89,9 @@ describe('Pagination component tests', () => {
       <BrowserRouter>
         <Provider store={store}>
           <ThemeProvider theme={rtlTheme}>
-            <Pagination {...defaultProps} />
+            <I18nextProvider i18n={i18n}>
+              <Pagination {...defaultProps} />
+            </I18nextProvider>
           </ThemeProvider>
         </Provider>
       </BrowserRouter>,
@@ -104,10 +112,14 @@ describe('Pagination component tests', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
-          <Pagination
-            {...defaultProps}
-            page={Math.ceil(defaultProps.count / defaultProps.rowsPerPage) - 1}
-          />
+          <I18nextProvider i18n={i18n}>
+            <Pagination
+              {...defaultProps}
+              page={
+                Math.ceil(defaultProps.count / defaultProps.rowsPerPage) - 1
+              }
+            />
+          </I18nextProvider>
         </Provider>
       </BrowserRouter>,
     );

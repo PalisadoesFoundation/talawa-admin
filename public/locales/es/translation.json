@@ -267,7 +267,11 @@
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
-    "all": "Todos"
+    "all": "Todos",
+    "firstPage": "primera página",
+    "previousPage": "página anterior",
+    "nextPage": "página siguiente",
+    "lastPage": "última página"
   },
   "requests": {
     "profile": "Perfil",
@@ -357,7 +361,19 @@
     "social": "Enlaces de redes sociales",
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
-    "resetData": "Restablezca correctamente los detalles del perfil."
+    "resetData": "Restablezca correctamente los detalles del perfil.",
+    "sessionTimeout": {
+      "title": "Tiempo de espera de sesión",
+      "currentTimeout": "Tiempo de espera actual:",
+      "noTimeoutSet": "Sin tiempo de espera establecido",
+      "minutes": " {{count}} minutos",
+      "updateTimeout": "Actualizar tiempo de espera",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Actualizar"
+    }
   },
   "dashboard": {
     "title": "Panel de",
