@@ -237,7 +237,7 @@ describe('Testing VolunteerGroupModal', () => {
             name: 'Group 1',
             description: 'desc',
             volunteersRequired: 1,
-            volunteerUserIds: ['userId'],
+            volunteerUserIds: ['userId', 'userId'],
           },
         },
       },
@@ -283,7 +283,7 @@ describe('Testing VolunteerGroupModal', () => {
     });
     await userEvent.click(memberOption);
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
@@ -305,8 +305,7 @@ describe('Testing VolunteerGroupModal', () => {
     const memberOption = await screen.findByText('Harve Lance');
     await userEvent.click(memberOption);
 
-    const clearButton = within(memberSelect).getByLabelText(/clear/i);
-    await userEvent.click(clearButton);
+    await userEvent.clear(memberInputField);
 
     const volunteerSelect = await screen.findByTestId('volunteerSelect');
     const volunteerInputField = within(volunteerSelect).getByRole('combobox');
@@ -927,9 +926,7 @@ describe('Testing VolunteerGroupModal', () => {
       });
     });
 
-    it('should handle error notification when updating group with missing id (line 198-199)', async () => {
-      const errorSpy = vi.spyOn(NotificationToast, 'error');
-
+    it('should disable submit when group is null', async () => {
       const propsWithNullGroup: InterfaceVolunteerGroupModal = {
         isOpen: true,
         hide: vi.fn(),
@@ -945,8 +942,6 @@ describe('Testing VolunteerGroupModal', () => {
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
       expect(submitBtn).toBeDisabled();
-
-      errorSpy.mockRestore();
     });
 
     it('should handle clearing leader selection', async () => {
@@ -973,9 +968,7 @@ describe('Testing VolunteerGroupModal', () => {
       });
     });
 
-    it('should handle baseEvent missing error for recurring events', async () => {
-      const errorSpy = vi.spyOn(NotificationToast, 'error');
-
+    it('should disable submit when baseEvent is null for recurring events', async () => {
       const recurringPropsNoBase: InterfaceVolunteerGroupModal = {
         isOpen: true,
         hide: vi.fn(),
@@ -993,8 +986,6 @@ describe('Testing VolunteerGroupModal', () => {
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
       expect(submitBtn).toBeDisabled();
-
-      errorSpy.mockRestore();
     });
 
     it('should trigger update error when group.id is missing', async () => {

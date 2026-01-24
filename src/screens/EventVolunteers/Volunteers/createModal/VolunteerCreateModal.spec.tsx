@@ -369,6 +369,9 @@ describe('Testing VolunteerCreateModal', () => {
       expect(form).toBeInTheDocument();
 
       if (form) {
+        // Directly dispatch submit event to test form validation
+        // This simulates scenarios where form is submitted programmatically
+        // (e.g., via Enter key) without selecting a volunteer
         const submitEvent = new Event('submit', {
           bubbles: true,
           cancelable: true,
