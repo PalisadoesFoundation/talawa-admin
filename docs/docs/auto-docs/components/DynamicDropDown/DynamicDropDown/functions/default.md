@@ -6,7 +6,7 @@
 
 > **default**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L58)
+Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L50)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:58](https://gith
 
 ### \_\_namedParameters
 
-`InterfaceChangeDropDownProps`\<`T`\>
+[`InterfaceChangeDropDownProps`](../../../../types/DropDown/interface/interfaces/InterfaceChangeDropDownProps.md)\<`T`\>
 
 ## Returns
 

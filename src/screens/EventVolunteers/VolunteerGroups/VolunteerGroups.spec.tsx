@@ -6,7 +6,7 @@ import {
 } from 'shared-components/DateRangePicker';
 
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -62,13 +62,13 @@ const debounceWait = async (ms = 300): Promise<void> => {
 const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
-                  path="/event/:orgId/:eventId"
+                  path="/admin/event/:orgId/:eventId"
                   element={<VolunteerGroups />}
                 />
                 <Route
@@ -87,12 +87,15 @@ const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
 /** Mock useParams to provide consistent test data */
 
 describe('Testing VolunteerGroups Screen', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -108,11 +111,11 @@ describe('Testing VolunteerGroups Screen', () => {
     mockRouteParams('', '');
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
+        <MemoryRouter initialEntries={['/admin/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/" element={<VolunteerGroups />} />
+                <Route path="/admin/event/" element={<VolunteerGroups />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -158,10 +161,10 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by members_DESC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const volunteersDESC = await screen.findByTestId('volunteers_DESC');
     expect(volunteersDESC).toBeInTheDocument();
-    fireEvent.click(volunteersDESC);
+    await user.click(volunteersDESC);
 
     let groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 1');
@@ -169,10 +172,10 @@ describe('Testing VolunteerGroups Screen', () => {
     // Sort by members_ASC
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const volunteersASC = await screen.findByTestId('volunteers_ASC');
     expect(volunteersASC).toBeInTheDocument();
-    fireEvent.click(volunteersASC);
+    await user.click(volunteersASC);
 
     groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 2');
@@ -192,13 +195,13 @@ describe('Testing VolunteerGroups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    await userEvent.click(searchToggle);
+    await user.click(searchToggle);
 
     const searchByGroup = await screen.findByTestId('group');
     expect(searchByGroup).toBeInTheDocument();
-    await userEvent.click(searchByGroup);
+    await user.click(searchByGroup);
 
-    await userEvent.type(searchInput, '1');
+    await user.type(searchInput, '1');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -219,14 +222,14 @@ describe('Testing VolunteerGroups Screen', () => {
 
     const searchToggle = await screen.findByTestId('searchByToggle');
     expect(searchToggle).toBeInTheDocument();
-    await userEvent.click(searchToggle);
+    await user.click(searchToggle);
 
     const searchByLeader = await screen.findByTestId('leader');
     expect(searchByLeader).toBeInTheDocument();
-    await userEvent.click(searchByLeader);
+    await user.click(searchByLeader);
 
     // Search by name on press of ENTER
-    await userEvent.type(searchInput, 'Bruce');
+    await user.type(searchInput, 'Bruce');
     await debounceWait();
 
     const groupName = await screen.findAllByTestId('groupName');
@@ -260,10 +263,10 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const viewGroupBtn = await screen.findAllByTestId('viewGroupBtn');
-    await userEvent.click(viewGroupBtn[0]);
+    await user.click(viewGroupBtn[0]);
 
     expect(await screen.findByText(t.groupDetails)).toBeInTheDocument();
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and Close Delete Modal', async () => {
@@ -271,10 +274,10 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const deleteGroupBtn = await screen.findAllByTestId('deleteGroupBtn');
-    await userEvent.click(deleteGroupBtn[0]);
+    await user.click(deleteGroupBtn[0]);
 
     expect(await screen.findByText(t.deleteGroup)).toBeInTheDocument();
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close GroupModal (Edit)', async () => {
@@ -282,10 +285,10 @@ describe('Testing VolunteerGroups Screen', () => {
     renderVolunteerGroups(link1);
 
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
-    await userEvent.click(editGroupBtn[0]);
+    await user.click(editGroupBtn[0]);
 
     expect(await screen.findAllByText(t.updateGroup)).toHaveLength(2);
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and close GroupModal (Create)', async () => {
@@ -298,10 +301,10 @@ describe('Testing VolunteerGroups Screen', () => {
     });
 
     const createGroupBtn = screen.getByTestId('createGroupBtn');
-    await userEvent.click(createGroupBtn);
+    await user.click(createGroupBtn);
 
     expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await user.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   describe('Search and Filter Functionality', () => {
@@ -315,13 +318,13 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Switch to search by leader
       const searchToggle = await screen.findByTestId('searchByToggle');
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByLeader = await screen.findByTestId('leader');
-      await userEvent.click(searchByLeader);
+      await user.click(searchByLeader);
 
       // Test case insensitive search with leader name
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'BRUCE'); // Uppercase to test toLowerCase()
+      await user.type(searchInput, 'BRUCE'); // Uppercase to test toLowerCase()
       await debounceWait();
 
       // This should match "Bruce Trainer" from the mock data
@@ -339,13 +342,13 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Switch to search by leader
       const searchToggle = await screen.findByTestId('searchByToggle');
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByLeader = await screen.findByTestId('leader');
-      await userEvent.click(searchByLeader);
+      await user.click(searchByLeader);
 
       // Test partial match with includes() functionality
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'ruce'); // Partial match for "Bruce"
+      await user.type(searchInput, 'ruce'); // Partial match for "Bruce"
       await debounceWait();
 
       // Should find groups with leaders containing "ruce"
@@ -364,7 +367,7 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Search by group name (default)
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'GROUP'); // Uppercase to test toLowerCase()
+      await user.type(searchInput, 'GROUP'); // Uppercase to test toLowerCase()
       await debounceWait();
 
       // This tests the else branch: groupName.toLowerCase().includes(searchTerm.toLowerCase())
@@ -382,11 +385,11 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Start with a search term
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'test');
+      await user.type(searchInput, 'test');
       await debounceWait();
 
       // Clear the search term
-      await userEvent.clear(searchInput);
+      await user.clear(searchInput);
       await debounceWait();
 
       // Should show all groups when search term is empty
@@ -405,13 +408,13 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Switch to search by leader
       const searchToggle = await screen.findByTestId('searchByToggle');
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByLeader = await screen.findByTestId('leader');
-      await userEvent.click(searchByLeader);
+      await user.click(searchByLeader);
 
       // Search for something that won't match any leader
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'NonexistentLeader');
+      await user.type(searchInput, 'NonexistentLeader');
       await debounceWait();
 
       // This tests the fallback: group.leader?.name || ''
@@ -430,7 +433,7 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Search for something specific to test the fallback logic
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'NonexistentGroup');
+      await user.type(searchInput, 'NonexistentGroup');
       await debounceWait();
 
       // This tests the fallback: group.name || ''
@@ -457,17 +460,17 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Test leader search branch
       const searchToggle = await screen.findByTestId('searchByToggle');
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByLeader = await screen.findByTestId('leader');
-      await userEvent.click(searchByLeader);
+      await user.click(searchByLeader);
 
-      await userEvent.type(searchInput, 'a'); // Generic search that should match
+      await user.type(searchInput, 'a'); // Generic search that should match
       await debounceWait();
 
       // Switch back to group search to test else branch
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByGroup = await screen.findByTestId('group');
-      await userEvent.click(searchByGroup);
+      await user.click(searchByGroup);
 
       await debounceWait();
 
@@ -486,11 +489,11 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Type in search input
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, '1');
+      await user.type(searchInput, '1');
 
       // Click search button to trigger onSearch (debouncedSearch)
       const searchBtn = screen.getByTestId('searchBtn');
-      await userEvent.click(searchBtn);
+      await user.click(searchBtn);
 
       // Wait for debounce to complete
       await debounceWait(400);
@@ -520,14 +523,14 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // Switch to leader search first
       const searchToggle = await screen.findByTestId('searchByToggle');
-      await userEvent.click(searchToggle);
+      await user.click(searchToggle);
       const searchByLeader = await screen.findByTestId('leader');
-      await userEvent.click(searchByLeader);
+      await user.click(searchByLeader);
 
       // Type and press Enter to trigger search
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'Bruce');
-      await userEvent.keyboard('{Enter}');
+      await user.type(searchInput, 'Bruce');
+      await user.keyboard('{Enter}');
 
       // Wait for debounce to complete
       await debounceWait(400);
@@ -555,11 +558,11 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // searchBy should be 'group' by default, so we test the else branch
       const searchInput = screen.getByTestId('searchBy');
-      await userEvent.type(searchInput, 'Group');
+      await user.type(searchInput, 'Group');
 
       // Click search button to trigger onSearch
       const searchBtn = screen.getByTestId('searchBtn');
-      await userEvent.click(searchBtn);
+      await user.click(searchBtn);
 
       // Wait for debounce to complete
       await debounceWait(400);
@@ -588,8 +591,8 @@ describe('Testing VolunteerGroups Screen', () => {
       const searchInput = screen.getByTestId('searchBy');
 
       // Test case insensitive search with mixed case
-      await userEvent.type(searchInput, 'gRoUp');
-      await userEvent.keyboard('{Enter}'); // Trigger search
+      await user.type(searchInput, 'gRoUp');
+      await user.keyboard('{Enter}'); // Trigger search
       await debounceWait(400);
 
       // This specifically tests the toLowerCase() method calls:
@@ -611,8 +614,8 @@ describe('Testing VolunteerGroups Screen', () => {
       const searchInput = screen.getByTestId('searchBy');
 
       // Type and press Enter to trigger the onSearch callback
-      await userEvent.type(searchInput, '2');
-      await userEvent.keyboard('{Enter}');
+      await user.type(searchInput, '2');
+      await user.keyboard('{Enter}');
       await debounceWait(400);
 
       // This ensures debouncedSearch is called and filtering occurs
@@ -632,8 +635,8 @@ describe('Testing VolunteerGroups Screen', () => {
       const searchBtn = screen.getByTestId('searchBtn');
 
       // Type and click search button
-      await userEvent.type(searchInput, '3');
-      await userEvent.click(searchBtn);
+      await user.type(searchInput, '3');
+      await user.click(searchBtn);
       await debounceWait(400);
 
       // This ensures debouncedSearch is called and filtering occurs

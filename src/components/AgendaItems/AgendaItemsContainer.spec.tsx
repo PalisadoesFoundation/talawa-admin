@@ -137,6 +137,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const formData = {
@@ -407,6 +408,7 @@ describe('Testing Agenda Items components', () => {
 
     const titleInput = screen.getByLabelText(translations.title);
     const descriptionInput = screen.getByLabelText(translations.description);
+
     await user.clear(titleInput);
     await user.clear(descriptionInput);
     await user.type(titleInput, formData.title);

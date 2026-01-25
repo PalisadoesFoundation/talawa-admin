@@ -436,7 +436,7 @@ describe('Event Attendance Component', () => {
       await waitFor(() => {
         const memberLinks = screen.queryAllByRole('link');
         const memberNameLinks = memberLinks.filter((link) =>
-          link.getAttribute('href')?.includes('/member/'),
+          link.getAttribute('href')?.includes('/admin/member/'),
         );
         expect(memberNameLinks.length).toBeGreaterThan(0);
         memberNameLinks.forEach((link) => {

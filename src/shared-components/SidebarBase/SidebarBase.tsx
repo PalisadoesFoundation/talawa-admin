@@ -38,7 +38,12 @@ const SidebarBase = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    const isToggleKey =
+      event.key === 'Enter' ||
+      event.key === ' ' ||
+      event.key === 'Space' ||
+      event.key === 'Spacebar';
+    if (isToggleKey) {
       event.preventDefault();
       handleToggle();
     }

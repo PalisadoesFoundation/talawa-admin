@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -73,7 +73,7 @@ const paginationMock = vi.hoisted(() => ({
 }));
 
 vi.mock(
-  'components/Pagination/PaginationList/PaginationList',
+  'shared-components/PaginationList/PaginationList',
   () => paginationMock,
 );
 
@@ -512,8 +512,9 @@ test('should search organizations when pressing Enter key', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  fireEvent.change(searchInput, { target: { value: 'Search Term' } });
-  fireEvent.keyUp(searchInput, { key: 'Enter' });
+  await userEvent.clear(searchInput);
+  await userEvent.type(searchInput, 'Search Term');
+  await userEvent.type(searchInput, '{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -539,10 +540,11 @@ test('should search organizations when clicking search button', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  fireEvent.change(searchInput, { target: { value: 'Search Term' } });
+  await userEvent.clear(searchInput);
+  await userEvent.type(searchInput, 'Search Term');
 
   const searchButton = screen.getByTestId('searchBtn');
-  fireEvent.click(searchButton);
+  await userEvent.click(searchButton);
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -630,14 +632,14 @@ test('Pagination basic functionality works', async () => {
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
   expect(rowsPerPageSelect).toHaveValue('5');
 
-  fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+  await userEvent.selectOptions(rowsPerPageSelect, '10');
   expect(rowsPerPageSelect).toHaveValue('10');
 
   const currentPage = screen.getByTestId('current-page');
   expect(currentPage.textContent).toBe('0');
 
   const nextButton = screen.getByTestId('next-page');
-  fireEvent.click(nextButton);
+  await userEvent.click(nextButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('current-page').textContent).toBe('1');
@@ -708,7 +710,7 @@ test('should handle search with special characters', async () => {
   expect(searchInput.value).toBe('@#$%');
 
   const searchButton = screen.getByTestId('searchBtn');
-  fireEvent.click(searchButton);
+  await userEvent.click(searchButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
@@ -1287,7 +1289,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Go to next page first
   const nextButton = screen.getByTestId('next-page');
-  fireEvent.click(nextButton);
+  await userEvent.click(nextButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('current-page').textContent).toBe('1');
@@ -1295,7 +1297,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Change rows per page
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
-  fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+  await userEvent.selectOptions(rowsPerPageSelect, '10');
 
   // Page should reset to 0
   await waitFor(() => {

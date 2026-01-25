@@ -6,20 +6,14 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L42)
-
-Displays information about an event, post, or membership request as a styled card.
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L34)
 
 ## Parameters
 
 ### props
 
-[`InterfaceCardItemProps`](../../../../../types/components/OrganizationDashCards/CardItem/interface/interfaces/InterfaceCardItemProps.md)
-
-Component props from InterfaceCardItemProps.
+[`InterfaceCardItem`](../../../../../types/AdminPortal/OrganizationDashCards/CardItem/interface/interfaces/InterfaceCardItem.md)
 
 ## Returns
 
 `Element`
-
-JSX.Element

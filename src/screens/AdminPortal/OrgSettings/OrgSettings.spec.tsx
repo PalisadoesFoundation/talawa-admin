@@ -1,22 +1,32 @@
-import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrgSettings from './OrgSettings';
 import { MOCKS } from './OrgSettings.mocks';
+import userEvent from '@testing-library/user-event';
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
 }));
+
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
+    '@mui/x-date-pickers',
+  );
+  return {
+    ...actual,
+    LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+  };
+});
 
 vi.mock('react-router', async () => {
   const actual =
@@ -35,21 +45,22 @@ const renderOrganisationSettings = (
   routerMocks.useParams.mockReturnValue({ orgId });
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
+      <MemoryRouter initialEntries={[`/admin/orgsetting/${orgId}`]}>
         <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
-                <Route
-                  path="/"
-                  element={
-                    <div data-testid="paramsError">Redirected to Home</div>
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route
+                path="/admin/orgsetting/:orgId"
+                element={<OrgSettings />}
+              />
+              <Route
+                path="/"
+                element={
+                  <div data-testid="paramsError">Redirected to Home</div>
+                }
+              />
+            </Routes>
+          </I18nextProvider>
         </Provider>
       </MemoryRouter>
     </MockedProvider>,
@@ -57,32 +68,29 @@ const renderOrganisationSettings = (
 };
 
 describe('Organisation Settings Page', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    user = userEvent.setup();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const SetupRedirectTest = async (): Promise<ReactElement> => {
+  it('should redirect to fallback URL if URL params are undefined', async () => {
     routerMocks.useParams.mockReturnValue({
       orgId: undefined as unknown as string,
     });
-    const orgSettingsModule = await import('./OrgSettings');
-    return <orgSettingsModule.default />;
-  };
-
-  it('should redirect to fallback URL if URL params are undefined', async () => {
-    const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider>
-        <MemoryRouter initialEntries={['/orgsetting/']}>
+        <MemoryRouter initialEntries={['/admin/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/" element={OrgSettings} />
+                <Route path="/admin/orgsetting/" element={<OrgSettings />} />
                 <Route
                   path="/"
                   element={
@@ -145,7 +153,7 @@ describe('Organisation Settings Page', () => {
     const actionItemButton = screen.getByTestId('actionItemCategoriesSettings');
     expect(actionItemButton).toBeInTheDocument();
 
-    fireEvent.click(actionItemButton);
+    await user.click(actionItemButton);
 
     // Check if action item categories tab is now displayed
     await waitFor(() => {
@@ -168,7 +176,7 @@ describe('Organisation Settings Page', () => {
     const agendaItemButton = screen.getByTestId('agendaItemCategoriesSettings');
     expect(agendaItemButton).toBeInTheDocument();
 
-    fireEvent.click(agendaItemButton);
+    await user.click(agendaItemButton);
 
     // Check if agenda item categories tab is now displayed
     await waitFor(() => {
@@ -188,14 +196,14 @@ describe('Organisation Settings Page', () => {
     await waitFor(() => screen.getByTestId('generalTab'));
 
     // Switch to action item categories
-    fireEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    await user.click(screen.getByTestId('actionItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
       expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
     });
 
     // Switch to agenda item categories
-    fireEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    await user.click(screen.getByTestId('agendaItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
       expect(
@@ -204,7 +212,7 @@ describe('Organisation Settings Page', () => {
     });
 
     // Switch back to general
-    fireEvent.click(screen.getByTestId('generalSettings'));
+    await user.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
       expect(
@@ -255,7 +263,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click action item categories tab
-    fireEvent.click(actionButton);
+    await user.click(actionButton);
     await waitFor(() => screen.getByTestId('actionItemCategoriesTab'));
 
     // Now action item categories should be active
@@ -264,7 +272,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click agenda item categories tab
-    fireEvent.click(agendaButton);
+    await user.click(agendaButton);
     await waitFor(() => screen.getByTestId('agendaItemCategoriesTab'));
 
     // Now agenda item categories should be active

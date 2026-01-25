@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -65,14 +65,17 @@ const debounceWait = async (ms = 400): Promise<void> => {
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/leaderboard/orgId']}>
+      <MemoryRouter initialEntries={['/admin/leaderboard/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
                 <Route
-                  path="/member/:orgId"
+                  path="/admin/leaderboard/:orgId"
+                  element={<Leaderboard />}
+                />
+                <Route
+                  path="/admin/member/:orgId/:userId"
                   element={<div data-testid="memberScreen" />}
                 />
                 <Route
@@ -114,11 +117,11 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/leaderboard/']}>
+        <MemoryRouter initialEntries={['/admin/leaderboard/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/leaderboard/" element={<Leaderboard />} />
+                <Route path="/admin/leaderboard/" element={<Leaderboard />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -155,20 +158,20 @@ describe('Testing Leaderboard Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hours_DESC
-    fireEvent.click(sortBtn);
+    await userEvent.click(sortBtn);
     const hoursDesc = await screen.findByTestId('hours_DESC');
     expect(hoursDesc).toBeInTheDocument();
-    fireEvent.click(hoursDesc);
+    await userEvent.click(hoursDesc);
 
     let userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Teresa Bradley');
 
     // Sort by hours_ASC
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await userEvent.click(sortBtn);
     const hoursAsc = await screen.findByTestId('hours_ASC');
     expect(hoursAsc).toBeInTheDocument();
-    fireEvent.click(hoursAsc);
+    await userEvent.click(hoursAsc);
 
     userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Jane Doe');
@@ -186,11 +189,11 @@ describe('Testing Leaderboard Screen', () => {
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
 
-    fireEvent.click(filter);
+    await userEvent.click(filter);
     const timeFrameAll = await screen.findByTestId('allTime');
     expect(timeFrameAll).toBeInTheDocument();
 
-    fireEvent.click(timeFrameAll);
+    await userEvent.click(timeFrameAll);
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(4);
   });
@@ -208,11 +211,11 @@ describe('Testing Leaderboard Screen', () => {
 
     // Filter by weekly
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await userEvent.click(filter);
 
     const timeFrameWeekly = await screen.findByTestId('weekly');
     expect(timeFrameWeekly).toBeInTheDocument();
-    fireEvent.click(timeFrameWeekly);
+    await userEvent.click(timeFrameWeekly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(1);
@@ -229,11 +232,11 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by monthly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await userEvent.click(filter);
 
     const timeFrameMonthly = await screen.findByTestId('monthly');
     expect(timeFrameMonthly).toBeInTheDocument();
-    fireEvent.click(timeFrameMonthly);
+    await userEvent.click(timeFrameMonthly);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
@@ -252,11 +255,11 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by yearly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await userEvent.click(filter);
 
     const timeFrameYearly = await screen.findByTestId('yearly');
     expect(timeFrameYearly).toBeInTheDocument();
-    fireEvent.click(timeFrameYearly);
+    await userEvent.click(timeFrameYearly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(3);
@@ -311,11 +314,13 @@ describe('Testing Leaderboard Screen', () => {
     expect(searchInput).toBeInTheDocument();
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    fireEvent.keyDown(userName[0], { key: 'Enter' });
+    userName[0].focus();
+    await userEvent.keyboard('{Enter}');
     expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
   });
 
   it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
+    const user = userEvent.setup();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -325,7 +330,8 @@ describe('Testing Leaderboard Screen', () => {
 
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    fireEvent.keyDown(userName[0], { key: ' ' });
+    expect(userName[0]).toHaveFocus();
+    await user.keyboard(' ');
 
     await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();

@@ -28,22 +28,14 @@ import dayjs from 'dayjs';
 import styles from './CardItem.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
+import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
 import { useTranslation } from 'react-i18next';
 
-import type { InterfaceCardItemProps } from 'types/components/OrganizationDashCards/CardItem/interface';
-
-/**
- * Displays information about an event, post, or membership request as a styled card.
- *
- * @param props - Component props from InterfaceCardItemProps.
- * @returns JSX.Element
- */
-
-const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'cardItem' });
+const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, enddate, time, location, image } =
     props;
   const [imgOk, setImgOk] = useState(true);
+  const { t: tCommon } = useTranslation('common');
 
   // Reset imgOk when image prop changes to allow retrying with new URL
   useEffect(() => {
@@ -56,13 +48,13 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
         {type !== 'Event' && (
-          <div className={styles.cardItemImage}>
+          <div className={styles.CardItemImage}>
             {image && imgOk ? (
               <img
                 src={image}
-                alt={t('avatar', { title })}
+                alt={`${title} ${tCommon('avatar')}`}
                 crossOrigin="anonymous"
-                className={styles.cardItemImage}
+                className={styles.CardItemImage}
                 loading="lazy"
                 decoding="async"
                 onError={() => setImgOk(false)}
@@ -70,16 +62,16 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
             ) : type === 'MembershipRequest' ? (
               <Avatar
                 data-testid="display-img"
-                avatarStyle={styles.cardItemImage}
+                avatarStyle={styles.CardItemImage}
                 name={`${title}`}
-                alt={t('avatar', { title })}
+                alt=""
               />
             ) : (
               <img
                 src={DefaultImg}
-                alt={t('avatar', { title })}
+                alt={`${title}`}
                 crossOrigin="anonymous"
-                className={styles.cardItemImage}
+                className={styles.CardItemImage}
                 loading="lazy"
                 decoding="async"
               />
@@ -88,31 +80,33 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
         )}
 
         <div
-          className={`${styles.cardItemMainDiv} ${type === 'Event' ? styles.cardItemMainDivEvent : ''}`}
+          className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
         >
           {title && (
-            <div className={`${styles.upcomingEventsTitle} `} title={title}>
+            <div
+              className={`${styles.cardItemtitle} ${styles.upcomingEventsTitle} `}
+              title={title}
+            >
               {title}
             </div>
           )}
 
           {type == 'Post' && time && (
-            <span className={`${styles.cardItemDate}`}>
-              {t('postedOn')} {dayjs(time).format('MMM D, YYYY')}
+            <span className={`${styles.CardItemDate}`}>
+              Posted on:
+              {dayjs(time).format('MMM D, YYYY')}
             </span>
           )}
 
           {creator && (
-            <div className={styles.cardItemAuthor}>
-              {t('author')} {creator.name}
-            </div>
+            <div className={styles.cardItemAuthor}>Author: {creator.name}</div>
           )}
 
           <div className={styles.rightCard}>
             {location && (
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
-                  title={t('eventLocation')}
+                  title={tCommon('location')}
                   stroke="var(--bs-primary)"
                   width={22}
                   height={22}
@@ -124,7 +118,7 @@ const CardItem = (props: InterfaceCardItemProps): JSX.Element => {
               <span className={`${styles.time} fst-normal fw-semibold`}>
                 {type === 'Event' && (
                   <DateIcon
-                    title={t('eventDate')}
+                    title={tCommon('eventDate')}
                     fill="var(--bs-gray-600)"
                     width={20}
                     height={20}

@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -61,12 +61,15 @@ const debounceWait = async (ms = 300): Promise<void> => {
 const renderVolunteers = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/:orgId/:eventId" element={<Volunteers />} />
+                <Route
+                  path="/admin/event/:orgId/:eventId"
+                  element={<Volunteers />}
+                />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -97,11 +100,11 @@ describe('Testing Volunteers Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '', eventId: '' });
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
+        <MemoryRouter initialEntries={['/admin/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/" element={<Volunteers />} />
+                <Route path="/admin/event/" element={<Volunteers />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -139,12 +142,12 @@ describe('Testing Volunteers Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hoursVolunteered_DESC
-    fireEvent.click(sortBtn);
+    await userEvent.click(sortBtn);
     const hoursVolunteeredDESC = await screen.findByTestId(
       'hoursVolunteered_DESC',
     );
     expect(hoursVolunteeredDESC).toBeInTheDocument();
-    fireEvent.click(hoursVolunteeredDESC);
+    await userEvent.click(hoursVolunteeredDESC);
 
     let volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
@@ -152,12 +155,12 @@ describe('Testing Volunteers Screen', () => {
     // Sort by hoursVolunteered_ASC
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await userEvent.click(sortBtn);
     const hoursVolunteeredASC = await screen.findByTestId(
       'hoursVolunteered_ASC',
     );
     expect(hoursVolunteeredASC).toBeInTheDocument();
-    fireEvent.click(hoursVolunteeredASC);
+    await userEvent.click(hoursVolunteeredASC);
 
     volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -206,12 +209,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
-    fireEvent.click(filterBtn);
+    await userEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('all'));
+    await userEvent.click(screen.getByTestId('all'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName).toHaveLength(3); // volunteer1, volunteer2, volunteer3
@@ -226,12 +229,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Pending
-    fireEvent.click(filterBtn);
+    await userEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('pending'));
+    await userEvent.click(screen.getByTestId('pending'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -246,12 +249,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Accepted
-    fireEvent.click(filterBtn);
+    await userEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('accepted'));
+    await userEvent.click(screen.getByTestId('accepted'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');

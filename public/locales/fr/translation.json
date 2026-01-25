@@ -163,6 +163,7 @@
     "requests": "Demandes d'Adhésion",
     "communityProfile": "Profil de la Communauté",
     "notification": "Notifications",
+    "switchToUserPortal": "Passer au portail utilisateur",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "utilisateurs",
@@ -192,6 +193,11 @@
     "logout": "Déconnexion",
     "close": "Fermer"
   },
+  "plugin": {
+    "error": "Erreur de plugin",
+    "failedToLoad": "Échec du chargement du composant : <1>{{componentName}}</1>",
+    "id": "Plugin : <1>{{pluginId}}</1>"
+  },
   "notification": {
     "title": "Notifications",
     "allCaughtUp": "Vous êtes à jour !",
@@ -199,15 +205,13 @@
     "next": "Suivant",
     "markAsRead": "Marquer comme lues",
     "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue",
-    "unreadCount_one": "{{count}} non lu",
-    "unreadCount_other": "{{count}} non lus",
-    "unreadCount": "{{count}} non lus",
-    "loading": "Chargement...",
-    "errorFetching": "Erreur lors de la récupération des notifications",
-    "unread": "Non lu",
-    "noNewNotifications": "Aucune nouvelle notification",
-    "viewAllNotifications": "Voir toutes les notifications",
-    "openNotificationsMenu": "Ouvrir le menu des notifications"
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -269,7 +273,11 @@
   },
   "paginationList": {
     "rowsPerPage": "lignes par page",
-    "all": "Tous"
+    "all": "Tous",
+    "firstPage": "première page",
+    "previousPage": "page précédente",
+    "nextPage": "page suivante",
+    "lastPage": "dernière page"
   },
   "requests": {
     "profile": "Profil",
@@ -359,15 +367,19 @@
     "social": "Liens vers les réseaux sociaux",
     "url": "Entrer l'URL",
     "profileChangedMsg": "Les détails du profil ont été mis à jour avec succès.",
-    "resetData": "Réinitialisez avec succès les détails du profil."
-  },
-  "cardItem": {
-    "avatar": "avatar de {{title}}",
-    "eventLocation": "Lieu de l'Événement",
-    "eventDate": "Date de l'Événement",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Publié le :",
-    "author": "Auteur :"
+    "resetData": "Réinitialisez avec succès les détails du profil.",
+    "sessionTimeout": {
+      "title": "Délai d'expiration de la session",
+      "currentTimeout": "Délai actuel :",
+      "noTimeoutSet": "Aucun délai défini",
+      "minutes": " {{count}} minutes",
+      "updateTimeout": "Mettre à jour le délai",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Mettre à jour"
+    }
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -376,8 +388,8 @@
     "statistics": "Statistiques",
     "posts": "Des postes",
     "events": "Événements",
-    "blockedUsers": "Utilisateurs bloqués",
     "venues": "Lieux",
+    "blockedUsers": "Utilisateurs bloqués",
     "viewAll": "Voir tout",
     "upcomingEvents": "évènements à venir",
     "noUpcomingEvents": "Aucun événement à venir",
@@ -613,7 +625,12 @@
     "done": "Fait",
     "createChat": "Créer une discussion",
     "viewType": "Type de Vue",
-    "search": "rechercher"
+    "search": "rechercher",
+    "Events": "Événements",
+    "Workshops": "Ateliers",
+    "selectMonth": "Sélectionner le mois",
+    "selectDay": "Sélectionner le jour",
+    "selectYear": "Sélectionner l’année"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1396,6 +1413,8 @@
     "menu": "Menu"
   },
   "organizationSidebar": {
+    "loading": "Chargement...",
+    "ends": "Se termine",
     "viewAll": "Voir tout",
     "events": "Événements",
     "noEvents": "Aucun événement à afficher",
@@ -1760,6 +1779,10 @@
     "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
+    "starredMessages": "Messages favoris",
+    "all": "Tous",
+    "unread": "Non lus",
+    "groups": "Groupes",
     "title": "Discussions",
     "deleteChat": "Supprimer le Chat",
     "add": "Ajouter",
@@ -2265,6 +2288,10 @@
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",
+    "notFoundOrDisabledDescription": "Le plugin auquel vous essayez d'accéder est introuvable ou désactivé. Veuillez contacter l'administrateur de votre organisation pour plus d'informations."
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",
     "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
@@ -2390,16 +2417,42 @@
     }
   },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "Vérifier l'e-mail",
+    "verifying": "Vérification de votre e-mail...",
+    "success": "E-mail vérifié !",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "error": "Échec de la vérification",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "loginRequired": "Veuillez vous connecter pour vérifier votre e-mail.",
+    "resendButton": "Renvoyer l'e-mail de vérification",
+    "resendSuccess": "L'e-mail de vérification a été renvoyé avec succès.",
+    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
+    "goToLogin": "Aller à la connexion"
+  },
+  "plugins": {
+    "loading": "Chargement du plugin...",
+    "component": "Composant",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "ID du plugin manquant",
+        "description": "Cette route n'a pas d'ID de plugin valide"
+      },
+      "notRegistered": {
+        "title": "Plugin non enregistré",
+        "description": "Veuillez ajouter ce plugin au registre dans {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "Aucun composant trouvé"
+      },
+      "componentNotFound": {
+        "title": "Composant non trouvé",
+        "availableComponents": "Composants disponibles : {{components}}"
+      },
+      "pluginError": {
+        "title": "Erreur du plugin",
+        "failedToLoad": "Échec du chargement du composant"
+      }
+    }
   }
 }

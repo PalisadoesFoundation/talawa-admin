@@ -256,41 +256,59 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </div>
         {/* A dropdown to select leader for volunteer group */}
         <div className="d-flex mb-3 w-100">
-          <Autocomplete
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
-            data-testid="leaderSelect"
-            options={members}
-            value={leader}
-            disabled={mode === 'edit'}
-            isOptionEqualToValue={areOptionsEqual}
-            filterSelectedOptions={true}
-            getOptionLabel={getMemberLabel}
-            onChange={(_, newLeader): void => {
-              if (newLeader) {
-                setFormState({
-                  ...formState,
-                  leader: newLeader,
-                  volunteerUsers: [...volunteerUsers, newLeader],
-                });
-              } else {
-                setFormState({
-                  ...formState,
-                  leader: null,
-                  volunteerUsers: volunteerUsers.filter(
-                    (user) => user.id !== leader?.id,
-                  ),
-                });
+          <FormFieldGroup
+            name="leaderSelect"
+            label={t('leader')}
+            required
+            touched={false}
+          >
+            <Autocomplete
+              className={`${styles.noOutline} w-100`}
+              limitTags={2}
+              data-testid="leaderSelect"
+              options={members}
+              value={leader}
+              disabled={mode === 'edit'}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
+              filterSelectedOptions={true}
+              getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                member.name
               }
-            }}
-            renderInput={(params) => (
-              <FormFieldGroup name="leader" label={`${t('leader')} *`}>
-                <div ref={params.InputProps.ref}>
-                  <input
-                    {...params.inputProps}
-                    className="form-control"
-                    data-testid="leaderInput"
-                  />
+              onChange={(_, newLeader): void => {
+                if (newLeader) {
+                  const leaderExists = volunteerUsers.some(
+                    (user) => user.id === newLeader.id,
+                  );
+                  setFormState({
+                    ...formState,
+                    leader: newLeader,
+                    volunteerUsers: leaderExists
+                      ? volunteerUsers
+                      : [...volunteerUsers, newLeader],
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    leader: null,
+                    volunteerUsers: volunteerUsers.filter(
+                      (user) => user.id !== leader?.id,
+                    ),
+                  });
+                }
+              }}
+              renderInput={(params) => (
+                <div ref={params.InputProps.ref} className="w-100">
+                  <div className="d-flex align-items-center gap-2">
+                    {params.InputProps.startAdornment}
+                    <input
+                      {...params.inputProps}
+                      id="leaderSelect"
+                      className={`form-control ${styles.noOutline}`}
+                      placeholder={t('leader')}
+                      aria-label={t('leader')}
+                    />
+                    {params.InputProps.endAdornment}
+                  </div>
                 </div>
               </FormFieldGroup>
             )}

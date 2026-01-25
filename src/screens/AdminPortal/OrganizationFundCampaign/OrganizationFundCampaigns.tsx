@@ -131,7 +131,7 @@ const orgFundCampaign = (): JSX.Element => {
   }, [campaignsData, searchText]);
 
   const handleClick = (campaignId: string): void => {
-    navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
+    navigate(`/admin/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
   const { fundName, isArchived } = useMemo(() => {
@@ -386,11 +386,11 @@ const orgFundCampaign = (): JSX.Element => {
         items={[
           {
             label: fundName,
-            to: `/orgfunds/${orgId}`,
+            to: `/admin/orgfunds/${orgId}`,
           },
           {
             label: t('title'),
-            to: `/orgfunds/${orgId}/campaigns`,
+            to: `/admin/orgfunds/${orgId}/campaigns`,
           },
         ]}
       />
