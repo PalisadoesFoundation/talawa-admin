@@ -72,6 +72,7 @@
     "test": "cross-env TZ=UTC vitest run",
     "test:watch": "cross-env TZ=UTC vitest --ui",
     "test:coverage": "cross-env TZ=UTC vitest run --coverage",
+    "test:eslint-rules": "cross-env TZ=UTC VITEST_SUITE=eslint vitest run",
     "test:shard": "cross-env TZ=UTC node scripts/run-shard.js",
     "test:shard:coverage": "cross-env TZ=UTC node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",

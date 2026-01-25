@@ -5,6 +5,8 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
+const isEslintSuite = process.env.VITEST_SUITE === 'eslint';
+const isSharded = !!process.env.SHARD_INDEX || !!process.env.SHARD_COUNT;
 const cpuCount = cpus().length;
 
 const MAX_CI_THREADS = 12; // Reduced to leave headroom
@@ -17,6 +19,17 @@ const ciThreads = Math.min(
 
 const localThreads = Math.min(MAX_LOCAL_THREADS, Math.max(4, cpuCount));
 
+const baseTestInclude = [
+  'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+  'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
+];
+const eslintTestInclude = [
+  'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}',
+];
+const testInclude = isEslintSuite
+  ? eslintTestInclude
+  : [...baseTestInclude, ...(isSharded ? [] : eslintTestInclude)];
+
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
   build: {
@@ -26,11 +39,7 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for faster tests
   },
   test: {
-    include: [
-      'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}'
-    ],
+    include: testInclude,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
