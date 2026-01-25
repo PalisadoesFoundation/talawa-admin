@@ -11,7 +11,7 @@ import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 import {
   restrictedImportPaths,
   restrictImportsExcept,
-    securityRestrictions,
+  securityRestrictions,
   searchInputRestrictions,
 } from './scripts/eslint/rules/rules.ts';
 
