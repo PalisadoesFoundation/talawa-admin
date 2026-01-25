@@ -301,5 +301,7 @@
   "selectRow": "Sélectionner la ligne {{rowKey}}",
   "bulkActions": "Actions en masse",
   "selected": "sélectionnés",
-  "clearSelection": "Effacer la sélection"
+  "clearSelection": "Effacer la sélection",
+  "toggleSidebar": "Basculer la barre latérale",
+  "picture": "Photo de {{name}}"
 }

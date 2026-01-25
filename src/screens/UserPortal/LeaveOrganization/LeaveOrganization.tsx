@@ -14,6 +14,7 @@ import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
+import styles from './LeaveOrganization.module.css';
 
 const userEmail = (() => {
   try {
@@ -137,11 +138,11 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <div className="text-center mt-4" role="status">
+      <output className={styles.loadingContainer}>
         <LoadingState isLoading={orgLoading} variant="spinner">
           <div />
         </LoadingState>
-      </div>
+      </output>
     );
   }
   if (orgError)
@@ -159,9 +160,8 @@ const LeaveOrganization = (): JSX.Element => {
 
   return (
     <div>
-      <br />
-      <h1>{organization?.name}</h1>
-      <p>{organization?.description}</p>
+      <h1 className={styles.title}>{organization?.name}</h1>
+      <p className={styles.description}>{organization?.description}</p>
 
       <Button variant="danger" onClick={() => setShowModal(true)}>
         {t('leaveOrganization.leaveOrganization')}
@@ -207,7 +207,7 @@ const LeaveOrganization = (): JSX.Element => {
                   variant="danger"
                   disabled={loading}
                   onClick={handleVerifyAndLeave}
-                  aria-label="confirm-leave-button"
+                  aria-label={t('leaveOrganization.confirmLeaveButton')}
                 >
                   {t('common:confirm')}
                 </Button>
