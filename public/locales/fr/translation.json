@@ -8,6 +8,9 @@
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
+  "role": {
+    "member": "Membre"
+  },
   "invalidDetailsMessage": "Veuillez vérifier les détails saisis.",
   "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour.",
   "leaderboard": {

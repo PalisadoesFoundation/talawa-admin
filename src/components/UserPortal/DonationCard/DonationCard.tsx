@@ -6,7 +6,10 @@
  * @remarks
  * Uses `UserPortalCard` for layout and formats the timestamp with the active locale.
  *
- * @param props - Donation details to render on the card.
+ * @param id - Donation identifier used for labels and test ids.
+ * @param name - Donor display name to render.
+ * @param amount - Donation amount to display.
+ * @param updatedAt - ISO timestamp of the donation for localized date formatting.
  * @returns JSX element representing the donation card.
  *
  * @example

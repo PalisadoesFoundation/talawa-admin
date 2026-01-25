@@ -318,7 +318,8 @@ export default function createDirectChatModal({
                             <TableCell align="center">
                               {userDetails.name}
                               <br />
-                              {userDetails.role || 'Member'}
+                              {userDetails.role ||
+                                t('role.member', { defaultValue: 'Member' })}
                             </TableCell>
                             <TableCell align="center">
                               <Button
