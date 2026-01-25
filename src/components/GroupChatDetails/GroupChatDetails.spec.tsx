@@ -205,7 +205,8 @@ describe('GroupChatDetails', () => {
     expect(toastSpy).toHaveBeenCalledWith('User not found');
   });
 
-  it('renders correctly without name and image', () => {
+  it('renders correctly without name and image', async () => {
+    const user = userEvent.setup();
     const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
@@ -230,7 +231,8 @@ describe('GroupChatDetails', () => {
     await user.click(closeButton);
   });
 
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
+    const user = userEvent.setup();
     const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
@@ -316,7 +318,7 @@ describe('GroupChatDetails', () => {
       expect(await screen.findByTestId('cancelEditBtn')).toBeInTheDocument();
     });
 
-    act(() => {
+    await act(async () => {
       await user.click(screen.getByTestId('cancelEditBtn'));
     });
 
