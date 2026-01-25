@@ -1703,7 +1703,6 @@
     "calendarView": "Vue du calendrier",
     "allDay": "Toute la journée",
     "eventCreated": "Événement créé et publié avec succès.",
-    "eventDetails": "Détails de l'évènement",
     "eventName": "Nom",
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",

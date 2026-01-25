@@ -1689,7 +1689,6 @@
     "calendarView": "Vista de calendario",
     "allDay": "Todo el dia",
     "eventCreated": "Evento creado y publicado exitosamente.",
-    "eventDetails": "Detalles del evento",
     "eventName": "Nombre",
     "enterName": "Introducir nombre",
     "eventDescription": "Descripción",
@@ -2493,6 +2492,8 @@
   },
   "memberActivity": {
     "dateNA": "Fecha N/A",
+    "yes": "Sí",
+    "no": "No",
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
     "numberOfAttendees": "Número de asistentes"
