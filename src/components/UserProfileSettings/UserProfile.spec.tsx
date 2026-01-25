@@ -119,11 +119,7 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/clara.jpg',
     };
 
-    const castedUser = userDetails as unknown as Parameters<
-      typeof UserProfile
-    >[0];
-
-    const { getByText } = renderWithProviders(<UserProfile {...castedUser} />);
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
     expect(
       getByText(
         `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
@@ -136,7 +132,7 @@ describe('UserProfile Component', () => {
       firstName: 'Null',
       lastName: 'User',
       email: 'null@example.com',
-      createdAt: null as unknown as Date,
+      createdAt: null,
       image: 'https://example.com/null.jpg',
     };
 
@@ -149,7 +145,7 @@ describe('UserProfile Component', () => {
       firstName: 'Undefined',
       lastName: 'User',
       email: 'undefined@example.com',
-      createdAt: undefined as unknown as Date,
+      createdAt: undefined,
       image: 'https://example.com/undefined.jpg',
     };
 

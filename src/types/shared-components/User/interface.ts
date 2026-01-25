@@ -4,7 +4,7 @@ export interface InterfaceUser {
   id: string;
   address?: Address;
   birthDate?: Date;
-  createdAt: Date;
+  createdAt: Date | string | null | undefined;
   email: string;
   firstName: string;
   lastName: string;

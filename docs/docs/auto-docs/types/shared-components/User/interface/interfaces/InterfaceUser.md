@@ -34,7 +34,7 @@ Defined in: [src/types/shared-components/User/interface.ts:6](https://github.com
 
 ### createdAt
 
-> **createdAt**: `Date`
+> **createdAt**: `string` \| `Date`
 
 Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L7)
 
