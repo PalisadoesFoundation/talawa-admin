@@ -355,7 +355,7 @@ describe('LeaveOrganization Component', () => {
     await userEvent.click(screen.getByText('Continue'));
 
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     await userEvent.click(confirmButton);
     await waitFor(() => {
@@ -393,7 +393,7 @@ describe('LeaveOrganization Component', () => {
       'different@example.com',
     );
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     await userEvent.click(confirmButton);
     await waitFor(() => {
@@ -522,7 +522,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     await userEvent.click(confirmButton);
 
@@ -579,7 +579,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     await userEvent.click(confirmButton);
 
@@ -641,9 +641,9 @@ describe('LeaveOrganization Component', () => {
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
     await userEvent.type(emailInput, 'test@example.com');
 
-    // Use aria-label to find the confirm button
+    // Use the button text to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     await userEvent.click(confirmButton);
 
