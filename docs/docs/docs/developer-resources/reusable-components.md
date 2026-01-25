@@ -214,7 +214,7 @@ Some shared components are wrappers around third-party UI libraries. To enforce 
 - `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
 - `react-toastify` -> use `NotificationToast`
 
-These restrictions are enforced by `no-restricted-imports` in `eslint.config.js`.
+These restrictions are enforced by `no-restricted-imports` in `eslint.config.js` and defined in `scripts/eslint/rules/imports.ts`.
 
 ### Where direct imports are allowed
 
@@ -278,7 +278,7 @@ Allowed IDs by folder:
 
 ### Adding a new restricted import or wrapper
 
-1. Add a new entry to `restrictedImports` in `eslint.config.js` with a unique `id`, `name`, and `message`.
+1. Add a new entry to `restrictedImports` in `scripts/eslint/rules/imports.ts` with a unique `id`, `name`, and `message`.
 2. Allow that ID in the wrapper folder override using `restrictImportsExcept([...])`.
 3. Update this document to list the new restriction and allowed folder(s).
 
@@ -291,6 +291,100 @@ If you see an error like:
 ```
 
 it means you are importing a restricted library outside the allowed wrapper folders. Switch to the shared wrapper component or update the ESLint exception only if you are building the wrapper itself.
+
+## Search Input Restrictions
+
+### Insert Location
+
+Add this section in the **"Wrapper Components and Restricted Imports"** section:
+
+**After:** The "Troubleshooting" subsection (ends with "...or update the ESLint exception only if you are building the wrapper itself.")
+
+**Before:** The "i18n" subsection (starts with "### i18n")
+
+---
+
+### New Section to Add
+
+#### Search Input Components
+
+Direct HTML search inputs are restricted to enforce consistent search UX patterns across the application. Use the standardized search components instead.
+
+##### What is restricted (and what to use instead)
+
+- Direct `<input type="search">` elements → use `SearchBar` or `SearchFilterBar`
+- Input elements with search-related attributes (placeholder, name, id, aria-label containing "search", "find", or "query") → use `SearchBar` or `SearchFilterBar`
+
+These restrictions are enforced by `no-restricted-syntax` in `eslint.config.js` and defined in `scripts/eslint/rules/rules.ts` under `searchInputRestrictions`.
+
+##### Where direct search inputs are allowed
+
+Direct search input implementations are only allowed inside the search component wrappers themselves:
+- `src/shared-components/SearchBar/SearchBar.tsx`
+- `src/shared-components/SearchFilterBar/SearchFilterBar.tsx`
+- `src/shared-components/DataTable/SearchBar.tsx`
+
+The ESLint config exempts these specific files from search input restrictions while maintaining other security restrictions.
+
+##### Available Search Components
+
+**SearchBar**
+- Path: `src/shared-components/SearchBar/`
+- Use for: Simple standalone search inputs
+- Features: Basic search input with consistent styling and accessibility
+
+**SearchFilterBar**
+- Path: `src/shared-components/SearchFilterBar/`
+- Use for: Search combined with filtering options
+- Features: Integrated search and filter controls
+
+**DataTable SearchBar**
+- Path: `src/shared-components/DataTable/SearchBar.tsx`
+- Use for: Table-specific search functionality
+- Features: Search optimized for data table contexts
+
+##### Troubleshooting
+
+If you see an error like:
+
+```
+Direct <input type="search"> is not allowed. Use SearchBar or SearchFilterBar components instead.
+```
+
+or
+
+```
+Input with search-related placeholder detected. Use SearchBar or SearchFilterBar components for search functionality.
+```
+
+it means you are attempting to create a search input outside the allowed wrapper components. Switch to using `SearchBar` or `SearchFilterBar` instead, or update the ESLint exception only if you are building a new search wrapper component itself.
+
+##### Rationale
+
+This restriction ensures:
+1. **Consistent UX**: All search inputs behave and appear the same across the application
+2. **Accessibility**: Search components include proper ARIA labels, roles, and keyboard navigation
+3. **Maintainability**: Search behavior changes only need to be made in one place
+4. **Best practices**: Prevents ad-hoc search implementations that may lack proper debouncing, validation, or accessibility features
+
+##### Adding a new search component wrapper
+
+If you need to create a new search component wrapper:
+
+1. Create the component in `src/shared-components/YourSearchComponent/`
+2. Add an exemption in `eslint.config.js`:
+   ```javascript
+   {
+     files: [
+       'src/shared-components/YourSearchComponent/YourSearchComponent.tsx',
+     ],
+     rules: {
+       'no-restricted-syntax': ['error', ...securityRestrictions],
+     },
+   }
+   ```
+3. Update this documentation to list the new search component
+4. Ensure the component follows accessibility guidelines and includes proper TypeScript interfaces
 
 ### i18n
 
