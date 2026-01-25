@@ -1,21 +1,16 @@
 /**
- * DonationCard Component
+ * Displays a compact donation card for the user portal.
  *
- * Renders a card displaying donation details including donor name,
- * donation amount, and donation date.
- *
- * @component
- * @param props - Props for the DonationCard component.
- * @param props.name - Name of the donor.
- * @param props.amount - Donated amount.
- * @param props.updatedAt - ISO timestamp of the donation.
- *
- * @returns JSX.Element representing a donation card.
+ * Shows the donor name, amount, and a localized donation date with a view action.
  *
  * @remarks
- * - Formats the donation date into a readable string.
- * - Uses `UserPortalCard` for consistent layout.
- * - Styling is handled via CSS Modules.
+ * Uses `UserPortalCard` for layout and formats the timestamp with the active locale.
+ *
+ * @param id - Donation identifier used for labels and test ids.
+ * @param name - Donor display name to render.
+ * @param amount - Donation amount to display.
+ * @param updatedAt - ISO timestamp of the donation for localized date formatting.
+ * @returns JSX element representing the donation card.
  *
  * @example
  * ```tsx
@@ -28,12 +23,12 @@
  */
 
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 import type { InterfaceDonationCardProps } from 'types/Donation/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './DonationCard.module.css';
 
 const DonationCard: React.FC<InterfaceDonationCardProps> = ({
   id,
