@@ -6,7 +6,7 @@
  * for localization and handles navigation based on the presence of an organization ID.
  *
  * @param props - The properties passed to the component.
- * @param title - The title of the event. Defaults to the localized dogsCare label if not provided.
+ * @param name - The name of the event. Defaults to the localized dogsCare label if not provided.
  * @param description - The description of the event.
  * @param date - The date of the event.
  * @param location - The location of the event.
@@ -40,7 +40,8 @@ import type { IEventListCard } from 'types/Event/interface';
  * Props for the EventListCard component.
  */
 
-function eventListCard(props: IEventListCard): JSX.Element {
+function EventListCard(props: IEventListCard): JSX.Element {
+  const { name } = props;
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
@@ -78,7 +79,7 @@ function eventListCard(props: IEventListCard): JSX.Element {
       >
         <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
-            {props.name ? <>{props.name}</> : <>{t('dogsCare')}</>}
+            {name ? <>{name}</> : <>{t('dogsCare')}</>}
           </h2>
         </div>
       </div>
@@ -94,4 +95,4 @@ function eventListCard(props: IEventListCard): JSX.Element {
   );
 }
 
-export default eventListCard;
+export default EventListCard;

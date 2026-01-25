@@ -161,7 +161,7 @@ describe('Testing PromotedPost Component', () => {
   it('Component should not display image when image prop is null', async () => {
     const propsWithNull = {
       ...props,
-      image: null as unknown as string,
+      image: null,
     };
 
     const { queryByRole } = render(
@@ -185,7 +185,7 @@ describe('Testing PromotedPost Component', () => {
   it('Component should not display image when image prop is undefined', async () => {
     const propsWithUndefined = {
       ...props,
-      image: undefined as unknown as string,
+      image: undefined,
     };
 
     const { queryByRole } = render(

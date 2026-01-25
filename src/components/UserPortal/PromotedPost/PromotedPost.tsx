@@ -3,17 +3,17 @@
  * This component is used to display promoted content with a title,
  * optional image, and a header indicating that the content is promoted.
  *
- * `@param` id - A unique identifier for the promoted post.
- * `@param` image - The URL of the image associated with the promoted post.
- * `@param` title - The title of the promoted post.
- * `@returns` A JSX element representing the promoted post card.
+ * @param id - A unique identifier for the promoted post.
+ * @param image - The URL of the image associated with the promoted post.
+ * @param title - The title of the promoted post.
+ * @returns A JSX element representing the promoted post card.
  *
- * `@remarks`
+ * @remarks
  * The component uses `react-bootstrap` for styling the card layout.
  * The `StarPurple500Icon` from Material-UI is used to indicate promoted content.
  * Custom styles are applied using CSS modules from `style/app.module.css`.
  *
- * `@example`
+ * @example
  * ```tsx
  * <PromotedPost
  *   id="12345"

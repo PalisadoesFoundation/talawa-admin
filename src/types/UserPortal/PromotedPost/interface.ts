@@ -1,8 +1,8 @@
 /**
- * Props for EventAttendedCard items.
+ * Props for PromotedPost component.
  */
 export interface InterfacePromotedPostProps {
   id: string;
-  image: string;
+  image: string | null | undefined;
   title: string;
 }
