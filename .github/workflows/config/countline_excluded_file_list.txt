@@ -1,4 +1,4 @@
-src/screens/LoginPage/LoginPage.tsx
+src/screens/Auth/LoginPage/LoginPage.tsx
 src/GraphQl/Queries/Queries.ts
 src/screens/OrgList/OrgList.tsx
 src/GraphQl/Mutations/mutations.ts
