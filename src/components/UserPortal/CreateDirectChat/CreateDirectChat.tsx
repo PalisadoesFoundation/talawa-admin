@@ -266,9 +266,8 @@ export default function createDirectChatModal({
                 onChange={(value) => setUserName(value)}
                 onSearch={(value) => handleUserModalSearchChange(value)}
                 onClear={() => {
-                  // Clearing the input is enough; SearchBar's clear action will
-                  // also trigger onSearch('') which performs the refetch.
                   setUserName('');
+                  handleUserModalSearchChange('');
                 }}
                 inputTestId="searchUser"
                 buttonTestId="submitBtn"
