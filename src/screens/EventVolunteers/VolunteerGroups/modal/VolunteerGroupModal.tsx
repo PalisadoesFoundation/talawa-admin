@@ -13,10 +13,8 @@ import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
-import {
-  FormTextField,
-  FormFieldGroup,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -336,14 +334,23 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               });
             }}
             renderInput={(params) => (
-              <FormFieldGroup name="volunteers" label={`${t('volunteers')} *`}>
-                <div ref={params.InputProps.ref}>
+              <FormFieldGroup
+                name="volunteers"
+                label={t('volunteers')}
+                required
+              >
+                <div
+                  ref={params.InputProps.ref}
+                  className="d-flex align-items-center w-100"
+                >
+                  {params.InputProps.startAdornment}
                   <input
                     {...params.inputProps}
                     id="volunteers"
                     className="form-control"
                     data-testid="volunteersInput"
                   />
+                  {params.InputProps.endAdornment}
                 </div>
               </FormFieldGroup>
             )}
