@@ -358,8 +358,8 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const chatNameInput = await screen.findByTestId('chatNameInput');
-      await await user.clear(chatNameInput);
-      await await user.type(chatNameInput, 'New Group name');
+      await user.clear(chatNameInput);
+      await user.type(chatNameInput, 'New Group name');
     });
 
     await act(async () => {
@@ -403,7 +403,7 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const searchUserInput = await screen.findByTestId('searchUser');
-      await await user.type(searchUserInput, 'Disha');
+      await user.type(searchUserInput, 'Disha');
     });
 
     await act(async () => {
@@ -928,8 +928,8 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       const chatNameInput = await screen.findByTestId('chatNameInput');
-      await await user.clear(chatNameInput);
-      await await user.type(chatNameInput, 'New Name');
+      await user.clear(chatNameInput);
+      await user.type(chatNameInput, 'New Name');
     });
 
     await act(async () => {
@@ -1031,7 +1031,7 @@ describe('GroupChatDetails', () => {
       );
     });
 
-    it('should hide spinner and render chat details after LoadingState completes', async () => { const user = userEvent.setup();
+    it('should hide spinner and render chat details after LoadingState completes', async () => {
       useLocalStorage().setItem('userId', 'user1');
 
       render(
