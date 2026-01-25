@@ -50,7 +50,9 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(translation.memberActivity.yes),
+    ).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
@@ -193,7 +195,7 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Non-Recurring Event')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.getByText(translation.memberActivity.no)).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Non-Recurring Event' });
@@ -239,7 +241,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with No Attendees')).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(translation.memberActivity.yes),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -282,7 +286,7 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with Empty Attendees')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(screen.getByText(translation.memberActivity.no)).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -327,7 +331,9 @@ describe('CustomTableCell', () => {
     expect(
       screen.getByText('Event with Undefined Attendees'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(translation.memberActivity.yes),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 

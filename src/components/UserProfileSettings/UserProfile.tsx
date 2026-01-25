@@ -39,9 +39,15 @@ import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 
-const joinedDate = (param: string | Date, unavailableText: string): string => {
+const joinedDate = (
+  param: string | Date | null | undefined,
+  unavailableText: string,
+): string => {
+  if (!param) {
+    return unavailableText;
+  }
   const date = typeof param === 'string' ? new Date(param) : param;
-  if (date?.toDateString() === 'Invalid Date') {
+  if (Number.isNaN(date.getTime())) {
     return unavailableText;
   }
   const day = date.getDate();
@@ -103,7 +109,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
                   {tCommon('joined')}{' '}
-                  {createdAt && joinedDate(createdAt, tCommon('unavailable'))}
+                  {joinedDate(createdAt, tCommon('unavailable'))}
                 </span>
               </span>
             </div>

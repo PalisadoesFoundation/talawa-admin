@@ -105,7 +105,7 @@ const EventAttendedCard = ({
               </div>
             )}
           </Col>
-          {isAdministrator && (
+          {isAdministrator && orgId && eventId && (
             <Col xs={2} md={1} className="text-end">
               <Link
                 to={`/admin/event/${orgId}/${eventId}`}

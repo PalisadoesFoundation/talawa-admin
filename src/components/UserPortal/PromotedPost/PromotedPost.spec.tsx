@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { render, waitFor } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
@@ -42,6 +43,10 @@ describe('Testing PromotedPost Component', () => {
       image: '',
       title: 'Test Post',
     };
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly', async () => {
