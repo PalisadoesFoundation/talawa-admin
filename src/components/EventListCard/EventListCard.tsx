@@ -5,7 +5,7 @@
  * to interact with it by opening a modal for more information. It uses translations
  * for localization and handles navigation based on the presence of an organization ID.
  *
- * * `@param` props - EventListCard props (see IEventListCard). If `props.name` is missing, the header falls back to the localized `t('dogsCare')` label.
+ * @param props - EventListCard props (see IEventListCard). If `props.name` is missing, the header falls back to the localized `t('dogsCare')` label.
  *
  * @returns A JSX element representing the event card and its associated modal.
  *
