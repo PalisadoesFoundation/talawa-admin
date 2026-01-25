@@ -1,0 +1,41 @@
+.header {
+  position: sticky;
+  top: var(--space-0);
+  background: white;
+}
+
+.userInfo {
+  display: flex;
+  border-bottom: var(--space-1) solid var(--color-black);
+  padding-bottom: var(--space-3);
+  align-items: center;
+  margin-top: var(--space-3);
+  gap: var(--space-4);
+}
+
+.contactImage {
+  width: var(--space-9) !important;
+  height: auto !important;
+  border-radius: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userDetails {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-size-sm);
+  gap: var(--space-3);
+}
+
+.userDetails .subtitle {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-400);
+  margin: 0;
+}
+
+.userDetails .title {
+  font-size: var(--font-size-lg);
+  margin: 0;
+}

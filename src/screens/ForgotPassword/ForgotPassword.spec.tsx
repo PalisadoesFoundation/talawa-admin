@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   FORGOT_PASSWORD_MUTATION,
   GENERATE_OTP_MUTATION,
@@ -20,7 +20,7 @@ import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const { setItem, removeItem, clearAllItems } = useLocalStorage();
 
-const toastMocks = vi.hoisted(() => ({
+const notificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
   warn: vi.fn(),
@@ -35,8 +35,8 @@ vi.mock('utils/i18n', async () => {
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: notificationToastMocks,
 }));
 
 const MOCKS = [
@@ -131,7 +131,7 @@ afterEach(() => {
 
 describe('Testing Forgot Password screen', () => {
   it('Component should be rendered properly', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
+    window.history.pushState({}, 'Test page', '/admin/orglist');
 
     render(
       <MockedProvider link={link}>
@@ -151,7 +151,7 @@ describe('Testing Forgot Password screen', () => {
     expect(screen.getByText(/Registered Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Get Otp/i)).toBeInTheDocument();
     expect(screen.getByText(/Back to Login/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
   });
 
   it('Testing, If user is already loggedIn', async () => {
@@ -198,7 +198,7 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
@@ -368,9 +368,8 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         translations.emailNotRegistered,
-        expect.any(Object),
       );
     });
   });
@@ -398,9 +397,8 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.errorSendingMail,
-        expect.any(Object),
       );
     });
   });
@@ -429,9 +427,8 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
-        expect.any(Object),
       );
     });
   });

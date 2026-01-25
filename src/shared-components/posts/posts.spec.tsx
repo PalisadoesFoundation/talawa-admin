@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
@@ -21,6 +15,7 @@ import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'test-utils/I18nextProviderMock';
 import dayjs from 'dayjs';
+import userEvent from '@testing-library/user-event';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockNotificationToast } = vi.hoisted(() => ({
@@ -531,19 +526,25 @@ const previewPostErrorMock: MockedResponse = {
 // Helper render function
 const renderComponent = (
   mocks: MockedResponse[],
-  path = '/orgpost/123',
+  path = '/admin/orgpost/123',
 ): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
       <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[path]}>
           <Routes>
-            <Route path="/orgpost/:orgId" element={<PostsPage />} />
+            <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
           </Routes>
         </MemoryRouter>
       </MockedProvider>
     </I18nextProvider>,
   );
+
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup();
+});
 
 describe('PostsPage Component', () => {
   beforeEach(() => {
@@ -584,7 +585,7 @@ describe('PostsPage Component', () => {
 
       renderComponent(
         [orgPostListMock, emptyPinnedPostsMock, previewPostErrorMock],
-        `/orgpost/123?${searchParams.toString()}`,
+        `/admin/orgpost/123?${searchParams.toString()}`,
       );
 
       await waitFor(() => {
@@ -631,7 +632,7 @@ describe('PostsPage Component', () => {
 
       renderComponent(
         [orgPostListMock, emptyPinnedPostsMock, previewPostLoadingMock],
-        `/orgpost/123?${searchParams.toString()}`,
+        `/admin/orgpost/123?${searchParams.toString()}`,
       );
 
       // Should show loading state initially
@@ -654,9 +655,7 @@ describe('PostsPage Component', () => {
 
       // Open modal
       const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
-      await act(async () => {
-        fireEvent.click(pinnedPostButton);
-      });
+      await user.click(pinnedPostButton);
 
       await waitFor(() => {
         expect(screen.getByTestId('post-view-modal')).toBeInTheDocument();
@@ -664,9 +663,7 @@ describe('PostsPage Component', () => {
 
       // Close modal
       const closeButton = screen.getByTestId('close-post-view-button');
-      await act(async () => {
-        fireEvent.click(closeButton);
-      });
+      await user.click(closeButton);
 
       await waitFor(() => {
         expect(screen.queryByTestId('post-view-modal')).not.toBeInTheDocument();
@@ -705,15 +702,11 @@ describe('PostsPage Component', () => {
 
         // Open modal
         const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
-        await act(async () => {
-          fireEvent.click(pinnedPostButton);
-        });
+        await user.click(pinnedPostButton);
 
         // Close the modal
         const closeButton = screen.getByTestId('close-post-view-button');
-        await act(async () => {
-          fireEvent.click(closeButton);
-        });
+        await user.click(closeButton);
 
         // Verify URL was updated with remaining query parameters
         expect(mockReplaceState).toHaveBeenCalledWith(
@@ -765,15 +758,11 @@ describe('PostsPage Component', () => {
 
         // Open modal
         const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
-        await act(async () => {
-          fireEvent.click(pinnedPostButton);
-        });
+        await user.click(pinnedPostButton);
 
         // Close the modal
         const closeButton = screen.getByTestId('close-post-view-button');
-        await act(async () => {
-          fireEvent.click(closeButton);
-        });
+        await user.click(closeButton);
 
         // Verify URL was updated without query parameters (empty query string)
         expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/test/path');
@@ -802,9 +791,8 @@ describe('PostsPage Component', () => {
       const searchInput = screen.getByTestId('searchByName');
 
       // Enter search term
-      await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'test' } });
-      });
+      await user.clear(searchInput);
+      await user.type(searchInput, 'test');
 
       // Wait for filtering to activate
       await waitFor(
@@ -816,9 +804,7 @@ describe('PostsPage Component', () => {
       );
 
       // Clear search term
-      await act(async () => {
-        fireEvent.change(searchInput, { target: { value: '' } });
-      });
+      await user.clear(searchInput);
 
       await waitFor(
         () => {
@@ -854,9 +840,8 @@ describe('PostsPage Component', () => {
     });
 
     const searchInput = screen.getByTestId('searchByName');
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'test search' } });
-    });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'test search');
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
@@ -927,9 +912,7 @@ describe('Sorting Functionality', () => {
     });
 
     const sortSelect = screen.getByTestId('sortpost-toggle-select');
-    await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'latest' } });
-    });
+    await user.selectOptions(sortSelect, 'latest');
 
     // Should handle empty posts gracefully and not crash
     await waitFor(() => {
@@ -946,9 +929,8 @@ describe('Sorting Functionality', () => {
     });
 
     const sortSelect = screen.getByTestId('sortpost-toggle-select');
-    await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'oldest' } });
-    });
+
+    await user.selectOptions(sortSelect, 'oldest');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
@@ -970,14 +952,10 @@ describe('Sorting Functionality', () => {
     const sortSelect = screen.getByTestId('sortpost-toggle-select');
 
     // Sort by latest first
-    await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'latest' } });
-    });
+    await user.selectOptions(sortSelect, 'latest');
 
     // Reset to None
-    await act(async () => {
-      fireEvent.change(sortSelect, { target: { value: 'None' } });
-    });
+    await user.selectOptions(sortSelect, 'None');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
@@ -1006,9 +984,7 @@ describe('Create Post Modal', () => {
 
     // Open modal
     const createButton = screen.getByTestId('createPostModalBtn');
-    await act(async () => {
-      fireEvent.click(createButton);
-    });
+    await user.click(createButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
@@ -1016,9 +992,7 @@ describe('Create Post Modal', () => {
 
     // Close modal
     const closeButton = screen.getByTestId('close-create-modal');
-    await act(async () => {
-      fireEvent.click(closeButton);
-    });
+    await user.click(closeButton);
 
     expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
   });
@@ -1056,9 +1030,8 @@ describe('Infinite Scroll', () => {
     const searchInput = screen.getByTestId('searchByName');
 
     // Enter search term to activate filtering
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'test' } });
-    });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'test');
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
@@ -1066,9 +1039,7 @@ describe('Infinite Scroll', () => {
     });
 
     // Clear search to return to paginated view
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: '' } });
-    });
+    await user.clear(searchInput);
 
     await waitFor(() => {
       const renderer = screen.getByTestId('posts-renderer');
@@ -1217,9 +1188,7 @@ describe('Edge Cases', () => {
     });
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
-    await act(async () => {
-      fireEvent.click(loadMoreButton);
-    });
+    await user.click(loadMoreButton);
 
     // Should not crash and maintain current state
     await waitFor(() => {
@@ -1254,9 +1223,7 @@ describe('Edge Cases', () => {
     });
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
-    await act(async () => {
-      fireEvent.click(loadMoreButton);
-    });
+    await user.click(loadMoreButton);
 
     await waitFor(() => {
       expect(mockNotificationToast.error).toHaveBeenCalledWith(
@@ -1407,7 +1374,7 @@ describe('HandleSorting Edge Case', () => {
     let infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
 
-    fireEvent.change(sortSelect, { target: { value: 'None' } });
+    await user.selectOptions(sortSelect, 'None');
 
     await waitFor(() => {
       expect(sortSelect).toHaveValue('None');
@@ -1509,9 +1476,7 @@ describe('FetchMore Success Coverage', () => {
     });
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
-    await act(async () => {
-      fireEvent.click(loadMoreButton);
-    });
+    await user.click(loadMoreButton);
 
     // Wait for the new post to be loaded and verify pageInfo is handled
     await waitFor(() => {

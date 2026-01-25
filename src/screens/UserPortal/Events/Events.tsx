@@ -209,10 +209,13 @@ export default function Events(): JSX.Element {
   });
 
   // Mutation to create a new event
-  const [create] = useMutation(CREATE_EVENT_MUTATION);
+  const [create] = useMutation(CREATE_EVENT_MUTATION, {
+    errorPolicy: 'all',
+  });
 
   // Get user details from local storage
-  const userId = getItem('id') as string;
+  // Get user details from local storage
+  const userId = (getItem('userId') || getItem('id') || '') as string;
 
   const storedRole = getItem('role') as string | null;
   const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
@@ -260,14 +263,25 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
-      const { data: createEventData } = await create({
+      const { data: createEventData, errors } = await create({
         variables: { input },
       });
+
+      // Handle partial success: prioritize data over errors
+      // If createEventData exists, treat as success even if errors are present
+      // This handles GraphQL partial success scenarios where mutation succeeds
+      // but some non-critical fields may have issues
       if (createEventData) {
         NotificationToast.success(t('eventCreated') as string);
-        refetch();
+        try {
+          await refetch();
+        } catch {
+          // Refetch failure is non-critical, suppressing error
+        }
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);
+      } else if (errors && errors.length > 0) {
+        throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -296,6 +310,7 @@ export default function Events(): JSX.Element {
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,
       isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly,
       // Add recurring event information
       isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
       baseEvent: edge.node.baseEvent,
@@ -309,26 +324,33 @@ export default function Events(): JSX.Element {
         id: '',
         name: '',
       },
-      attendees: [], // Adjust if attendees are added to schema
+      attendees: edge.node.attendees || [],
     }),
   ); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
-      // Handle rate limiting errors more gracefully - check multiple variations
-      const isRateLimitError =
-        eventDataError.message?.toLowerCase().includes('too many requests') ||
-        eventDataError.message?.toLowerCase().includes('rate limit') ||
-        eventDataError.message?.includes('Please try again later');
+      // Check if we have valid data (partial data scenario)
+      const hasData =
+        Array.isArray(data?.organization?.events?.edges) &&
+        data.organization.events.edges.length > 0;
 
-      if (isRateLimitError) {
-        // Just suppress rate limit errors silently
+      // Handle rate limiting and auth errors
+      const errorMessage = eventDataError.message?.toLowerCase() || '';
+      const isRateLimitError =
+        errorMessage.includes('too many requests') ||
+        errorMessage.includes('rate limit') ||
+        eventDataError.message?.includes('Please try again later');
+      const isAuthError = errorMessage.includes('not authorized');
+
+      // Suppress rate limit errors or auth errors if we have partial data
+      if (isRateLimitError || (isAuthError && hasData)) {
         return;
       }
 
       // For other errors (like empty results), handle them properly
       errorHandler(t, eventDataError);
     }
-  }, [eventDataError, t]);
+  }, [eventDataError, data, t]);
 
   /**
    * Shows the modal for creating a new event.

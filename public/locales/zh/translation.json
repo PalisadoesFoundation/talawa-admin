@@ -84,7 +84,12 @@
     "communityLogo": "社区标志",
     "organizations": "组织",
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
-    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
+    "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "您的电子邮件未验证。请检查收件箱中的验证链接。",
+    "resendVerification": "重新发送验证邮件",
+    "resendFailed": "重新发送验证邮件失败，请重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -158,6 +163,7 @@
     "requests": "会员申请",
     "communityProfile": "社区资料",
     "notification": "通知",
+    "switchToUserPortal": "切换到用户门户",
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
@@ -193,7 +199,14 @@
     "prev": "上一页",
     "next": "下一页",
     "markAsRead": "标记为已读",
-    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -255,7 +268,11 @@
   },
   "paginationList": {
     "rowsPerPage": "每页行数",
-    "all": "全部"
+    "all": "全部",
+    "firstPage": "第一页",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "lastPage": "最后一页"
   },
   "requests": {
     "profile": "个人资料",
@@ -345,7 +362,24 @@
     "social": "社交媒体链接",
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
-    "resetData": "成功重置个人资料详细信息。"
+    "resetData": "成功重置个人资料详细信息。",
+    "sessionTimeout": {
+      "title": "登录会话超时",
+      "currentTimeout": "当前超时：",
+      "noTimeoutSet": "未设置超时",
+      "minutes": " {{count}} 分钟",
+      "updateTimeout": "更新超时",
+      "min15": "15 分钟",
+      "min30": "30 分钟",
+      "min45": "45 分钟",
+      "min60": "60 分钟",
+      "update": "更新"
+    }
+  },
+  "plugin": {
+    "error": "插件错误",
+    "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
+    "id": "插件：<1>{{pluginId}}</1>"
   },
   "dashboard": {
     "title": "仪表板",
@@ -546,6 +580,10 @@
     "recurring": "重复",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "registerable": "可注册",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
@@ -587,7 +625,12 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "search": "搜索",
+    "Events": "活动",
+    "Workshops": "研讨会",
+    "selectMonth": "选择月份",
+    "selectDay": "选择日期",
+    "selectYear": "选择年份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -735,10 +778,8 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
-    "attachmentPreview": "附件预览",
-    "event": "活动",
-    "search": "搜索",
     "attachmentPreview": "附件預覽",
+    "event": "活动",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
     "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
   },
@@ -763,6 +804,10 @@
     "allDay": "一整天",
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "isRegistrable": "可注册",
     "updatePost": "更新帖子",
     "eventDetails": "活动详情",
@@ -1367,6 +1412,8 @@
     "menu": "菜单"
   },
   "organizationSidebar": {
+    "loading": "加载中...",
+    "ends": "结束",
     "viewAll": "查看全部",
     "events": "活动",
     "noEvents": "没有可显示的活动",
@@ -1496,13 +1543,10 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
-    "removingAttendee": "正在删除与会者...",
-    "attendeeRemovedSuccessfully": "与会者已成功删除",
-    "errorRemovingAttendee": "删除与会者时出错",
-    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "checkedIn": "已签到",
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
@@ -1734,6 +1778,10 @@
     "advertisementLoading": "广告加载中..."
   },
   "userChat": {
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "群组",
     "title": "聊天",
     "add": "添加",
     "chat": "聊天",
@@ -1786,9 +1834,12 @@
     "loadingImage": "正在加载图片…",
     "imageNotAvailable": "图片不可用",
     "attachment": "附件",
+    "members": "成员",
     "reply": "回复",
     "edit": "编辑",
     "delete": "删除",
+    "noMessages": "暂时没有消息",
+    "you": "你",
     "errorBoundary": {
       "title": "出现问题",
       "message": "聊天室中发生了意外错误",
@@ -1912,12 +1963,10 @@
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
     "unknownError": "未知错误",
-    "checkedIn": "已签到",
-    "downloadTag": "下载标签",
-    "checkInButton": "签到",
-    "searchAttendees": "搜尋參與者",
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
+    "checkInButton": "签到",
+    "searchAttendees": "搜尋參與者",
     "checkIn": "簽到",
     "eventCheckInManagement": "活動簽到管理",
     "checkInMembers": "签到成员",
@@ -2238,6 +2287,10 @@
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "插件未找到或已禁用",
+    "notFoundOrDisabledDescription": "抱歉，您尝试访问的插件未找到或已被组织管理员禁用。如有疑问，请联系组织管理员。"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",
     "commentUpdatedSuccessfully": "评论更新成功",
@@ -2281,7 +2334,15 @@
     "talawaBranding": "Talawa 品牌形象",
     "view": "查看",
     "changeLanguage": "更改语言",
-    "userNotFoundError": "未找到用户"
+    "userNotFoundError": "未找到用户",
+    "selectAllOnPage": "选择此页所有行",
+    "actions": "操作",
+    "bulkActions": "批量操作",
+    "selected": "已选择",
+    "clear": "清除",
+    "clearSelection": "清除选择",
+    "loading": "加载中...",
+    "selectRow": "选择第 {{rowKey}} 行"
   },
   "donation": {
     "amount_label": "金额",
@@ -2338,11 +2399,33 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "平均评论分数",
+      "rated": "评分 {{score}} / 5"
+    },
     "title": "活動統計",
     "reviews": {
       "title": "評論",
       "emptyState": "等待人們談論活動...",
       "filledByCount": "已由 {{count}} 人填寫。"
+    },
+    "feedback": {
+      "title": "反饋分析",
+      "emptyState": "請要求與會者提交反饋以獲取見解！",
+      "filledByCount": "{{count}} 人已為此活動填寫反饋。"
     }
+  },
+  "verifyEmail": {
+    "title": "验证您的邮箱",
+    "verifying": "正在验证您的邮箱...",
+    "success": "验证成功!",
+    "successMessage": "您的邮箱已成功验证。您现在可以登录了。",
+    "error": "验证失败",
+    "invalidToken": "无效或过期的验证链接。",
+    "loginRequired": "请登录以继续。",
+    "resendButton": "重新发送验证邮件",
+    "resendSuccess": "验证邮件发送成功!",
+    "resendFailed": "发送验证邮件失败。请稍后再试。",
+    "goToLogin": "前往登录"
   }
 }

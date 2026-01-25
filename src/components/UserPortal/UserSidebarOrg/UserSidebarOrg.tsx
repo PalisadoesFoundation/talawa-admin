@@ -2,31 +2,9 @@
  * UserSidebarOrg Component
  *
  * This component represents the sidebar for the user portal with organization-specific navigation.
- * It provides navigation options and user-related functionalities.
  *
- * @component
- * @param {InterfaceUserSidebarOrgProps} props - The props for the component.
- * @param {string} props.orgId - The ID of the organization.
- * @param {TargetsType[]} props.targets - Array of navigation targets.
- * @param {boolean} props.hideDrawer - State to determine the visibility of the sidebar.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setHideDrawer - Function to update hideDrawer state.
- *
- * @returns {JSX.Element} The rendered UserSidebarOrg component.
- *
- * @remarks
- * - The sidebar includes dynamic navigation based on the `targets` prop.
- * - The sidebar auto-hides on smaller screens (viewport width <= 820px) when a link is clicked.
- * - **REFACTORED**: Now uses shared SidebarBase, SidebarNavItem, and SidebarPluginSection components
- *
- * @example
- * ```tsx
- * <UserSidebarOrg
- *   orgId="123"
- *   targets={[{ name: 'dashboard', url: '/dashboard' }]}
- *   hideDrawer={false}
- *   setHideDrawer={setHideDrawerFunction}
- * />
- * ```
+ * @param props - The props for the component.
+ * @returns The rendered UserSidebarOrg component.
  */
 
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
@@ -34,15 +12,19 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
+import { FaExchangeAlt } from 'react-icons/fa';
+import { useQuery } from '@apollo/client';
 
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
+import useLocalStorage from 'utils/useLocalstorage';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import styles from './UserSidebarOrg.module.css';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -58,6 +40,16 @@ const UserSidebarOrg = ({
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+  const { getItem } = useLocalStorage();
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'cache-first',
+  });
+  const roleFromAuth = currentUserData?.user?.role ?? null;
+  const storedRole = getItem<string>('role');
+  const resolvedRole = (roleFromAuth ?? storedRole ?? '').toLowerCase();
+  const allowedRoles = ['administrator', 'admin', 'superadmin'];
+  const canSwitchToAdmin =
+    resolvedRole.length > 0 && allowedRoles.includes(resolvedRole);
 
   const [showDropdown, setShowDropdown] = React.useState(false);
 
@@ -85,7 +77,7 @@ const UserSidebarOrg = ({
 
   const drawerContent = useMemo(
     () => (
-      <div className={styles.optionList}>
+      <>
         {targets.map((target) => {
           const { name, url, subTargets } = target;
 
@@ -129,7 +121,7 @@ const UserSidebarOrg = ({
           onItemClick={handleLinkClick}
           useSimpleButton={true}
         />
-      </div>
+      </>
     ),
     [
       targets,
@@ -147,11 +139,25 @@ const UserSidebarOrg = ({
       hideDrawer={hideDrawer}
       setHideDrawer={setHideDrawer}
       portalType="user"
-      backgroundColor="#f0f7fb"
+      backgroundColor="var(--sidebar-bg-user)"
       persistToggleState={false}
       headerContent={headerContent}
       footerContent={
         <>
+          {canSwitchToAdmin && (
+            <div className={styles.switchPortalWrapper}>
+              <SidebarNavItem
+                to="/admin/orglist"
+                icon={<FaExchangeAlt />}
+                label={tCommon('switchToAdminPortal')}
+                testId="switchToAdminPortalBtn"
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                useSimpleButton={true}
+                iconType="react-icon"
+              />
+            </div>
+          )}
           {!hideDrawer && (
             <div>
               <ProfileCard portal="user" />

@@ -37,6 +37,7 @@ export const MOCKS_WITH_TIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [{ _id: 'user1' }, { _id: 'user2' }],
           creator: {
             _id: 'creator1',
@@ -70,6 +71,7 @@ export const MOCKS_WITHOUT_TIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [{ _id: 'user1' }, { _id: 'user2' }],
           creator: {
             _id: 'creator1',
@@ -141,6 +143,7 @@ export const MOCKS_NO_LOCATION = [
           location: null,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {
             _id: 'creator1',
@@ -186,6 +189,7 @@ export const MOCKS_INVALID_DATETIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {
             _id: 'creator1',

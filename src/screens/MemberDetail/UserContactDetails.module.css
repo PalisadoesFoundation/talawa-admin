@@ -1,0 +1,53 @@
+.allRound {
+  border-radius: 16px;
+}
+.cardControl {
+  margin-bottom: 20px;
+  display: none;
+}
+.inputColor {
+  background: #f1f3f6;
+}
+.saveChangesBtn {
+  background-color: #a8c7fa;
+  color: #555;
+}
+.topRadius {
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  color: #555;
+  background: #eaebef;
+}
+
+.userContactDetailPersonalCardHeader {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background: #eaebef;
+}
+.userContactDetailContactAvatarUrl {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailContactAvatarEditIcon {
+  cursor: pointer;
+  font-size: '1.2rem';
+  border: none;
+}
+.dateboxMemberDetail {
+  border-radius: 7px;
+  border-color: #e8e5e5;
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}

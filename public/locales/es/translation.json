@@ -84,7 +84,12 @@
     "organizations": "Organizaciones",
     "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
     "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
-    "backToLogin": "Volver al inicio de sesión"
+    "backToLogin": "Volver al inicio de sesión",
+    "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Perfil de Administrador",
@@ -158,6 +163,7 @@
     "requests": "Solicitudes de Membresía",
     "communityProfile": "Perfil de la Comunidad",
     "notification": "Notificaciones",
+    "switchToUserPortal": "Cambiar al portal de usuario",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menú",
     "users": "usuarios",
@@ -193,7 +199,14 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "markAsRead": "Marcar como leído",
-    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída"
+    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -255,7 +268,11 @@
   },
   "paginationList": {
     "rowsPerPage": "filas por página",
-    "all": "Todos"
+    "all": "Todos",
+    "firstPage": "primera página",
+    "previousPage": "página anterior",
+    "nextPage": "página siguiente",
+    "lastPage": "última página"
   },
   "requests": {
     "profile": "Perfil",
@@ -345,7 +362,19 @@
     "social": "Enlaces de redes sociales",
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
-    "resetData": "Restablezca correctamente los detalles del perfil."
+    "resetData": "Restablezca correctamente los detalles del perfil.",
+    "sessionTimeout": {
+      "title": "Tiempo de espera de sesión",
+      "currentTimeout": "Tiempo de espera actual:",
+      "noTimeoutSet": "Sin tiempo de espera establecido",
+      "minutes": " {{count}} minutos",
+      "updateTimeout": "Actualizar tiempo de espera",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Actualizar"
+    }
   },
   "dashboard": {
     "title": "Panel de",
@@ -551,6 +580,10 @@
     "recurring": "Recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
+    "visibility": "Visibilidad",
+    "public": "Público",
+    "organizationMembers": "Miembros de la organización",
+    "inviteOnly": "Solo por invitación",
     "registerable": "Es registrable",
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
@@ -587,7 +620,12 @@
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
-    "search": "Buscar usuarios"
+    "search": "Buscar",
+    "Events": "Eventos",
+    "Workshops": "Talleres",
+    "selectMonth": "Seleccionar mes",
+    "selectDay": "Seleccionar día",
+    "selectYear": "Seleccionar año"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -735,10 +773,8 @@
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
-    "attachmentPreview": "Vista previa del archivo adjunto",
-    "event": "Evento",
-    "search": "Buscar",
     "attachmentPreview": "Vista previa del adjunto",
+    "event": "Evento",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
@@ -770,14 +806,16 @@
     "allDay": "Todo el dia",
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
+    "visibility": "Visibilidad",
+    "public": "Público",
+    "organizationMembers": "Miembros de la organización",
+    "inviteOnly": "Solo por invitación",
     "isRegistrable": "Es registrable",
     "close": "Cerca",
     "updatePost": "Actualizar publicación",
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
-    "registeredSuccessfully": "Successfully registered for {{eventName}}",
-    "noChangesToUpdate": "No changes to update",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
@@ -791,7 +829,9 @@
     "after": "Después de",
     "occurrences": "ocurrencias",
     "done": "Hecho",
-    "invalidDate": "Invalid Date",
+    "registeredSuccessfully": "Registrado con éxito para {{eventName}}",
+    "noChangesToUpdate": "No hay cambios para actualizar",
+    "invalidDate": "Fecha no válida",
     "createChat": "Crear chat",
     "isRegisterable": "Es Registrable",
     "creator": "Creador",
@@ -1262,6 +1302,11 @@
     "asYourCountry": "Como su país",
     "actions": "Acciones"
   },
+  "plugin": {
+    "error": "Error del complemento",
+    "failedToLoad": "Error al cargar el componente: <1>{{componentName}}</1>",
+    "id": "Complemento: <1>{{pluginId}}</1>"
+  },
   "userLogin": {
     "login": "Acceso",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -1350,6 +1395,8 @@
     "chat": "Chat"
   },
   "organizationSidebar": {
+    "loading": "Cargando...",
+    "ends": "Finaliza",
     "viewAll": "Ver todo",
     "events": "Eventos",
     "members": "Miembros",
@@ -1479,13 +1526,10 @@
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados",
-    "removingAttendee": "Eliminando el asistente...",
-    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
-    "errorRemovingAttendee": "Error al eliminar asistente",
-    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "removingAttendee": "Eliminando asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
     "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "checkedIn": "Registrado",
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
@@ -1717,6 +1761,10 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "starredMessages": "Mensajes destacados",
+    "all": "Todos",
+    "unread": "No leídos",
+    "groups": "Grupos",
     "title": "Chats",
     "deleteChat": "Eliminar Chat",
     "add": "Agregar",
@@ -1769,9 +1817,12 @@
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
+    "members": "miembros",
     "reply": "Responder",
     "edit": "Editar",
     "delete": "Eliminar",
+    "noMessages": "Aún no hay mensajes",
+    "you": "Tú",
     "errorBoundary": {
       "title": "Algo salió mal",
       "message": "Ocurrió un error inesperado en la sala de chat",
@@ -1899,8 +1950,6 @@
     "downloadTag": "Descargar etiqueta",
     "checkInButton": "Registrarse",
     "searchAttendees": "Buscar asistentes",
-    "checkedIn": "Registrado",
-    "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
     "eventCheckInManagement": "Gestión de registro de eventos",
     "checkInMembers": "Registrar miembros",
@@ -2221,6 +2270,10 @@
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",
+    "notFoundOrDisabledDescription": "El plugin solicitado no se encontró o está deshabilitado. Por favor, contacte al administrador del sistema para obtener asistencia."
+  },
   "statusBadge": {
     "completed": "Completado",
     "pending": "Pendiente",
@@ -2281,7 +2334,15 @@
     "talawaBranding": "Marca Talawa",
     "view": "Ver",
     "changeLanguage": "Cambiar idioma",
-    "userNotFoundError": "Usuario no encontrado"
+    "userNotFoundError": "Usuario no encontrado",
+    "selectAllOnPage": "Seleccionar todas las filas de esta página",
+    "actions": "Acciones",
+    "bulkActions": "Acciones masivas",
+    "selected": "seleccionado(s)",
+    "clear": "Limpiar",
+    "clearSelection": "Limpiar selección",
+    "loading": "Cargando...",
+    "selectRow": "Seleccionar fila {{rowKey}}"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2338,11 +2399,33 @@
     "noEventsAttended": "No hay eventos asistidos"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Puntuación Media de Reseñas",
+      "rated": "Valoración {{score}} / 5"
+    },
     "title": "Estadísticas del evento",
     "reviews": {
       "title": "Reseñas",
       "emptyState": "Esperando a que la gente hable sobre el evento...",
       "filledByCount": "Completado por {{count}} personas."
+    },
+    "feedback": {
+      "title": "Análisis de comentarios",
+      "emptyState": "¡Pida a los asistentes que envíen comentarios para obtener información!",
+      "filledByCount": "{{count}} personas han completado comentarios para este evento."
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
   }
 }

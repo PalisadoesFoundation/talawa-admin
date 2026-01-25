@@ -33,9 +33,9 @@
  */
 import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import React, { useState, useEffect, type JSX } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './YearlyEventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,
@@ -199,6 +199,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             allDay={event.allDay}
             isPublic={event.isPublic}
             isRegisterable={event.isRegisterable}
+            isInviteOnly={event.isInviteOnly}
             attendees={event.attendees || []}
             creator={event.creator}
             userId={userId}

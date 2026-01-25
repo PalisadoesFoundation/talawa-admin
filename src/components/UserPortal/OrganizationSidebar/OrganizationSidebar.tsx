@@ -5,19 +5,13 @@
  * and upcoming events. It fetches data using GraphQL queries and provides links
  * to view all members and events.
  *
- * @component
- * @returns {JSX.Element} The rendered OrganizationSidebar component.
+ * @returns The rendered OrganizationSidebar component.
  *
  * @remarks
  * - Uses `useQuery` from Apollo Client to fetch members and events data.
  * - Displays loading indicators while data is being fetched.
  * - Uses `useTranslation` for internationalization.
  * - Extracts `organizationId` from URL parameters using `useParams`.
- *
- * @dependencies
- * - React, React Router, Apollo Client, dayjs, react-bootstrap, Material-UI icons.
- * - Custom styles from `OrganizationSidebar.module.css`.
- * - GraphQL queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `ORGANIZATION_EVENT_CONNECTION_LIST`.
  *
  * @example
  * ```tsx
@@ -33,7 +27,7 @@ import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -97,7 +91,38 @@ export default function OrganizationSidebar(): JSX.Element {
    */
   useEffect(() => {
     if (memberData) {
-      setMembers(memberData.organizationsMemberConnection.edges);
+      const legacyMembers = memberData.organizationsMemberConnection?.edges;
+      if (legacyMembers) {
+        setMembers(legacyMembers);
+        return;
+      }
+
+      const edges = memberData.organization?.members?.edges ?? [];
+      const normalizedMembers: InterfaceMemberInfo[] = edges.map(
+        (edge: {
+          node?: {
+            id?: string;
+            name?: string;
+            emailAddress?: string;
+            avatarURL?: string;
+            createdAt?: string;
+          };
+        }) => {
+          const fullName = edge.node?.name ?? '';
+          const [firstName = '', ...lastNameParts] = fullName.split(' ');
+          return {
+            _id: edge.node?.id ?? '',
+            firstName,
+            lastName: lastNameParts.join(' '),
+            email: edge.node?.emailAddress ?? '',
+            image: edge.node?.avatarURL ?? '',
+            createdAt: edge.node?.createdAt ?? '',
+            organizationsBlockedBy: [],
+          };
+        },
+      );
+
+      setMembers(normalizedMembers);
     }
   }, [memberData]);
 
@@ -120,7 +145,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {memberLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -165,7 +190,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {eventsLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -189,7 +214,8 @@ export default function OrganizationSidebar(): JSX.Element {
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+                      {t('ends')}{' '}
+                      <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
                   </div>
                 </ListGroup.Item>

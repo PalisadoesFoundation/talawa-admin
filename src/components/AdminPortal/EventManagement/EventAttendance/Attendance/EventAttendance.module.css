@@ -1,0 +1,36 @@
+.membername {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--membername-color);
+  text-decoration: none;
+}
+
+.eventsAttended {
+  color: var(--eventsAttended-membername-color);
+}
+
+.createButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  padding-right: 30px;
+  padding-inline-end: 30px;
+  width: 425px;
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}

@@ -76,21 +76,17 @@ const renderEventListCard = (
 
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgevents/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
-                  path="/orgevents/:orgId"
+                  path="/admin/orgevents/:orgId"
                   element={<EventListCard key={key} {...restProps} />}
                 />
                 <Route
-                  path="/event/:orgId/"
-                  element={<EventListCard key={key} {...restProps} />}
-                />
-                <Route
-                  path="/event/:orgId/:eventId"
+                  path="/admin/event/:orgId/:eventId"
                   element={<div>Event Dashboard (Admin)</div>}
                 />
                 <Route
@@ -139,6 +135,7 @@ describe('Testing Event List Card', () => {
               allDay={true}
               isPublic={true}
               isRegisterable={false}
+              isInviteOnly={false}
               attendees={[]}
               creator={{}}
             />
@@ -261,17 +258,17 @@ describe('Testing Event List Card', () => {
     const { key, ...otherProps } = props[4];
     render(
       <MockedProvider link={link2}>
-        <MemoryRouter initialEntries={['/orgevents/orgId']}>
+        <MemoryRouter initialEntries={['/admin/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
-                    path="/orgevents/:orgId"
+                    path="/admin/orgevents/:orgId"
                     element={<EventListCard key={key} {...otherProps} />}
                   />
                   <Route
-                    path="/event/:orgId/"
+                    path="/admin/event/:orgId/:eventId"
                     element={<EventListCard key={key} {...otherProps} />}
                   />
                 </Routes>

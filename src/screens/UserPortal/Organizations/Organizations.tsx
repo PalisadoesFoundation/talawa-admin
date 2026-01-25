@@ -32,14 +32,16 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+  CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +50,10 @@ import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
@@ -117,8 +123,71 @@ export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
+  const { t: tCommon } = useTranslation('common');
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useLocalStorage();
+
+  // Email verification warning state
+  const [showEmailWarning, setShowEmailWarning] = useState(false);
+  const [hasDismissed, setHasDismissed] = useState(false);
+
+  // Fetch current user status to sync verification state
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'network-only', // Ensure fresh data
+  });
+
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
+
+  // Check for email verification status on component mount and sync with backend
+  useEffect(() => {
+    if (hasDismissed) return;
+
+    // Priority: API data > LocalStorage
+    if (currentUserData?.currentUser) {
+      if (currentUserData.currentUser.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Only store boolean flag, not PII
+        setItem('emailNotVerified', 'true');
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      if (emailNotVerified === 'true') {
+        setShowEmailWarning(true);
+      }
+    }
+  }, [currentUserData, getItem, removeItem, setItem, hasDismissed]);
+
+  const handleDismissWarning = (): void => {
+    setShowEmailWarning(false);
+    setHasDismissed(true);
+    removeItem('emailNotVerified');
+    removeItem('unverifiedEmail');
+  };
+
+  const handleResendVerification = async (): Promise<void> => {
+    try {
+      const { data } = await resendVerificationEmail();
+      if (data?.sendVerificationEmail?.success) {
+        NotificationToast.success(tLogin('emailResent'));
+      } else {
+        NotificationToast.info(tLogin('resendFailed'));
+      }
+    } catch (error) {
+      errorHandler(tCommon, error);
+    }
+  };
+
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -280,9 +349,7 @@ export default function Organizations(): React.JSX.Element {
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.organizationsContainer} ${
-          hideDrawer
-            ? styles.organizationsContainerExpanded
-            : styles.organizationsContainerContracted
+          hideDrawer ? styles.marginLeft80 : styles.marginLeft260
         } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
@@ -294,6 +361,35 @@ export default function Organizations(): React.JSX.Element {
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
+
+          {/* Email Verification Warning Banner */}
+          {showEmailWarning && (
+            <Alert
+              variant="warning"
+              dismissible
+              onClose={handleDismissWarning}
+              className="mb-3"
+              data-testid="email-verification-warning"
+              aria-live="polite"
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{tLogin('emailNotVerified')}</strong>
+                </div>
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={resendLoading}
+                  data-testid="resend-verification-btn"
+                >
+                  {resendLoading
+                    ? tCommon('loading')
+                    : tLogin('resendVerification')}
+                </Button>
+              </div>
+            </Alert>
+          )}
 
           {/* Refactored Header Structure */}
           <div className={styles.calendar__header}>

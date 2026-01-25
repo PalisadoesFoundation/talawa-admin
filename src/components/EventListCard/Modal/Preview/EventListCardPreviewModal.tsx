@@ -23,6 +23,8 @@
  * @param setPublicChecked - Function to toggle the public event setting.
  * @param registrablechecked - Indicates if the event is registrable.
  * @param setRegistrableChecked - Function to toggle the registrable event setting.
+ * @param inviteOnlyChecked - Indicates if the event is invite-only.
+ * @param setInviteOnlyChecked - Function to toggle the invite-only event setting.
  * @param formState - The state of the form fields.
  * @param setFormState - Function to update the form state.
  * @param registerEventHandler - Function to handle event registration.
@@ -33,9 +35,12 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
-import { Button, Form, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCardPreviewModal.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
 import TimePicker from 'shared-components/TimePicker/TimePicker';
 import dayjs from 'dayjs';
@@ -70,6 +75,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setPublicChecked,
   registrablechecked,
   setRegistrableChecked,
+
+  inviteOnlyChecked,
+  setInviteOnlyChecked,
   formState,
   setFormState,
   registerEventHandler,
@@ -271,7 +279,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 {t('deleteEvent')}
               </Button>
             )}
-            {eventListCardProps.userRole === UserRole.REGULAR &&
+            {eventListCardProps.isRegisterable &&
+              eventListCardProps.userRole === UserRole.REGULAR &&
               !(eventListCardProps.creator?.id === userId) &&
               (isRegistered ? (
                 <Button className={styles.addButton} variant="success" disabled>
@@ -291,11 +300,11 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         }
         centered={true}
       >
-        <Form>
+        <div>
           {/* Event Name */}
-          <p className={styles.previewEventListCardModals}>{t('eventName')}</p>
-          <Form.Control
-            type="name"
+          <FormTextField
+            name="eventname"
+            label={t('eventName')}
             id="eventname"
             className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
@@ -307,18 +316,14 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.name.substring(0, 100) + '...'
                 : formState.name || ''
             }
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
+            onChange={(val) => setFormState({ ...formState, name: val })}
             disabled={!canEditEvent}
           />
 
           {/* Description */}
-          <p className={styles.previewEventListCardModals}>
-            {tCommon('description')}
-          </p>
-          <Form.Control
-            type="eventdescrip"
+          <FormTextField
+            name="eventdescrip"
+            label={tCommon('description')}
             id="eventdescrip"
             className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
@@ -330,18 +335,16 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.eventdescrip.substring(0, 256) + '...'
                 : formState.eventdescrip || ''
             }
-            onChange={(e) =>
-              setFormState({ ...formState, eventdescrip: e.target.value })
+            onChange={(val) =>
+              setFormState({ ...formState, eventdescrip: val })
             }
             disabled={!canEditEvent}
           />
 
           {/* Location */}
-          <p className={styles.previewEventListCardModals}>
-            {tCommon('location')}
-          </p>
-          <Form.Control
-            type="text"
+          <FormTextField
+            name="location"
+            label={tCommon('location')}
             id="location"
             className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
@@ -349,9 +352,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-cy="updateLocation"
             required
             value={formState.location || ''}
-            onChange={(e) =>
-              setFormState({ ...formState, location: e.target.value })
-            }
+            onChange={(val) => setFormState({ ...formState, location: val })}
             disabled={!canEditEvent}
           />
 
@@ -426,33 +427,82 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
           <div className={styles.checkboxdiv}>
             <div className={styles.dispflexOrganizationEvents}>
               <label htmlFor="allday">{t('allDay')}?</label>
-              <Form.Switch
+              <FormCheckField
                 id="allday"
-                type="checkbox"
+                name="allday"
+                label=""
+                type="switch"
                 data-testid="updateAllDay"
                 className={`me-4 ${styles.switch}`}
                 checked={alldaychecked}
-                onChange={() => setAllDayChecked(!alldaychecked)}
+                onChange={() => {
+                  const newAllDayChecked = !alldaychecked;
+                  setAllDayChecked(newAllDayChecked);
+                  if (
+                    !newAllDayChecked &&
+                    formState.startTime === formState.endTime
+                  ) {
+                    const start = timeToDayJs(formState.startTime);
+                    const newEnd = start.add(1, 'hour').format('HH:mm:ss');
+                    setFormState({ ...formState, endTime: newEnd });
+                  }
+                }}
                 disabled={!canEditEvent}
               />
             </div>
             <div className={styles.dispflexOrganizationEvents}>
-              <label htmlFor="ispublic">{t('isPublic')}?</label>
-              <Form.Switch
-                id="ispublic"
-                type="checkbox"
-                data-testid="updateIsPublic"
-                className={`me-4 ${styles.switch}`}
-                checked={publicchecked}
-                onChange={() => setPublicChecked(!publicchecked)}
-                disabled={!canEditEvent}
-              />
+              <fieldset className="mb-3">
+                <legend className="mb-2">{t('visibility')}</legend>
+                <div role="radiogroup" aria-label={t('visibility')}>
+                  <FormCheckField
+                    inline
+                    type="radio"
+                    label={t('public')}
+                    name="eventVisibility"
+                    id="visibility-public"
+                    checked={publicchecked}
+                    onChange={() => {
+                      setPublicChecked(true);
+                      setInviteOnlyChecked(false);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                  <FormCheckField
+                    inline
+                    type="radio"
+                    label={t('organizationMembers')}
+                    name="eventVisibility"
+                    id="visibility-members"
+                    checked={!publicchecked && !inviteOnlyChecked}
+                    onChange={() => {
+                      setPublicChecked(false);
+                      setInviteOnlyChecked(false);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                  <FormCheckField
+                    inline
+                    type="radio"
+                    label={t('inviteOnly')}
+                    name="eventVisibility"
+                    id="visibility-inviteonly"
+                    checked={!publicchecked && inviteOnlyChecked}
+                    onChange={() => {
+                      setPublicChecked(false);
+                      setInviteOnlyChecked(true);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                </div>
+              </fieldset>
             </div>
             <div className={styles.dispflexOrganizationEvents}>
               <label htmlFor="registrable">{t('isRegistrable')}?</label>
-              <Form.Switch
+              <FormCheckField
                 id="registrable"
-                type="checkbox"
+                name="registrable"
+                label=""
+                type="switch"
                 data-testid="updateRegistrable"
                 className={`me-4 ${styles.switch}`}
                 checked={registrablechecked}
@@ -486,7 +536,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               </Dropdown.Menu>
             </Dropdown>
           )}
-        </Form>
+        </div>
       </BaseModal>
 
       {recurrence && isRecurringEvent && (

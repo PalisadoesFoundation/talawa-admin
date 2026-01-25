@@ -3,7 +3,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
@@ -11,6 +12,60 @@ import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+// Mock CSS modules
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+    brandingContainer: 'brandingContainer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    organizationContainer: 'organizationContainer',
+    profileContainer: 'profileContainer',
+    bgDanger: 'bgDanger',
+    imageContainer: 'imageContainer',
+    ProfileRightContainer: 'ProfileRightContainer',
+    profileText: 'profileText',
+    primaryText: 'primaryText',
+    secondaryText: 'secondaryText',
+    ArrowIcon: 'ArrowIcon',
+    titleHeader: 'titleHeader',
+    optionList: 'optionList',
+    leftDrawerActiveButton: 'leftDrawerActiveButton',
+    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
+    iconWrapper: 'iconWrapper',
+    avatarContainer: 'avatarContainer',
+    userSidebarOrgFooter: 'userSidebarOrgFooter',
+  },
+}));
+
+vi.mock(
+  'shared-components/SidebarOrgSection/SidebarOrgSection.module.css',
+  () => ({
+    default: {
+      organizationContainer: 'organizationContainer',
+      profileContainer: 'profileContainer',
+      bgDanger: 'bgDanger',
+      imageContainer: 'imageContainer',
+      ProfileRightContainer: 'ProfileRightContainer',
+      profileText: 'profileText',
+      primaryText: 'primaryText',
+      secondaryText: 'secondaryText',
+      ArrowIcon: 'ArrowIcon',
+      avatarContainer: 'avatarContainer',
+    },
+  }),
+);
 
 // Type definitions for better type safety
 interface IMockedResponse {
@@ -164,35 +219,6 @@ vi.mock('assets/svgs/plugins.svg?react', () => ({
   )),
 }));
 
-// Mock CSS modules
-vi.mock('../../style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    brandingContainer: 'brandingContainer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    organizationContainer: 'organizationContainer',
-    profileContainer: 'profileContainer',
-    bgDanger: 'bgDanger',
-    imageContainer: 'imageContainer',
-    ProfileRightConatiner: 'ProfileRightConatiner',
-    profileText: 'profileText',
-    primaryText: 'primaryText',
-    secondaryText: 'secondaryText',
-    ArrowIcon: 'ArrowIcon',
-    titleHeader: 'titleHeader',
-    optionList: 'optionList',
-    leftDrawerActiveButton: 'leftDrawerActiveButton',
-    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
-    iconWrapper: 'iconWrapper',
-    avatarContainer: 'avatarContainer',
-    userSidebarOrgFooter: 'userSidebarOrgFooter',
-  },
-}));
-
 const mockOrganizationData = {
   organization: {
     id: 'org-123',
@@ -264,9 +290,9 @@ describe('LeftDrawerOrg', () => {
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
     targets: [
-      { name: 'Dashboard', url: '/orgdash/org-123' },
-      { name: 'Members', url: '/orgpeople/org-123' },
-      { name: 'Events', url: '/orgevents/org-123' },
+      { name: 'Dashboard', url: '/admin/orgdash/org-123' },
+      { name: 'Members', url: '/admin/orgpeople/org-123' },
+      { name: 'Events', url: '/admin/orgevents/org-123' },
       {
         name: 'Action Items',
         url: undefined,
@@ -314,7 +340,7 @@ describe('LeftDrawerOrg', () => {
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
     mocks: IMockedResponse[] = successMocks,
-    initialRoute = '/orgdash/org-123',
+    initialRoute = '/admin/orgdash/org-123',
   ) => {
     return render(
       <MockedProvider mocks={mocks}>
@@ -455,7 +481,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should not show error state on profile page when data fails to load', async () => {
-      renderComponent({}, errorMocks, '/member/user-123');
+      renderComponent({}, errorMocks, '/admin/member/user-123');
 
       await waitFor(() => {
         expect(
@@ -476,7 +502,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -491,7 +518,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
@@ -506,7 +534,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const membersLink = screen.getByText('Members');
-      fireEvent.click(membersLink);
+      const user = userEvent.setup();
+      await user.click(membersLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -521,7 +550,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const eventsLink = screen.getByText('Events');
-      fireEvent.click(eventsLink);
+      const user = userEvent.setup();
+      await user.click(eventsLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -532,31 +562,31 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard').closest('a');
-      expect(dashboardLink).toHaveAttribute('href', '/orgdash/org-123');
+      expect(dashboardLink).toHaveAttribute('href', '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveAttribute('href', '/orgpeople/org-123');
+      expect(membersLink).toHaveAttribute('href', '/admin/orgpeople/org-123');
 
       const eventsLink = screen.getByText('Events').closest('a');
-      expect(eventsLink).toHaveAttribute('href', '/orgevents/org-123');
+      expect(eventsLink).toHaveAttribute('href', '/admin/orgevents/org-123');
     });
 
     it('should apply active styles when on corresponding route', () => {
-      renderComponent({}, successMocks, '/orgpeople/org-123');
+      renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
       expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
       expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const iconComponents = screen.getAllByTestId('icon-component');
       const dashboardIcon = iconComponents.find(
@@ -567,7 +597,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render inactive icon with correct fill color', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const iconComponents = screen.getAllByTestId('icon-component');
       const inactiveIcon = iconComponents.find(
@@ -579,7 +609,9 @@ describe('LeftDrawerOrg', () => {
     it('should handle special icon name mapping for Membership Requests', () => {
       const propsWithRequests = {
         ...defaultProps,
-        targets: [{ name: 'Membership Requests', url: '/orgrequests/org-123' }],
+        targets: [
+          { name: 'Membership Requests', url: '/admin/requests/org-123' },
+        ],
       };
 
       renderComponent(propsWithRequests);
@@ -666,7 +698,7 @@ describe('LeftDrawerOrg', () => {
       expect(screen.getByTestId('plugin-logo')).toBeInTheDocument();
     });
 
-    it('should hide drawer on mobile when plugin link is clicked', () => {
+    it('should hide drawer on mobile when plugin link is clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -686,7 +718,8 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const pluginButton = screen.getByText('Test Plugin');
-      fireEvent.click(pluginButton);
+      const user = userEvent.setup();
+      await user.click(pluginButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -729,7 +762,7 @@ describe('LeftDrawerOrg', () => {
 
   describe('Profile Page Detection', () => {
     it('should detect profile page when pathname contains user ID', () => {
-      renderComponent({}, successMocks, '/member/user-123');
+      renderComponent({}, successMocks, '/admin/member/user-123');
 
       // Profile page detection is internal state, but we can test its effect
       // by checking that error message doesn't show on profile page
@@ -739,7 +772,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should not detect profile page when pathname contains different ID', () => {
-      renderComponent({}, successMocks, '/member/other-user');
+      renderComponent({}, successMocks, '/admin/member/other-user');
 
       // This should not be considered a profile page for the current user
       expect(true).toBe(true); // Profile page logic is internal
@@ -759,7 +792,7 @@ describe('LeftDrawerOrg', () => {
     expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
   });
 
-  it('should toggle drawer state and update localStorage on click events', () => {
+  it('should toggle drawer state and update localStorage on click events', async () => {
     // Test with initial hideDrawer = false
     const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
 
@@ -767,7 +800,8 @@ describe('LeftDrawerOrg', () => {
     expect(toggleButton).toBeInTheDocument();
 
     // Test onClick functionality - clicking when drawer is visible should hide it
-    fireEvent.click(toggleButton);
+    const user = userEvent.setup();
+    await user.click(toggleButton);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -782,7 +816,7 @@ describe('LeftDrawerOrg', () => {
     const toggleButtonCollapsed = screen.getByTestId('toggleBtn');
 
     // Test onClick when drawer is hidden - clicking should show it
-    fireEvent.click(toggleButtonCollapsed);
+    await user.click(toggleButtonCollapsed);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
@@ -855,7 +889,7 @@ describe('LeftDrawerOrg', () => {
       expect(screen.getByTestId('collapsible-dropdown')).toBeInTheDocument();
     });
 
-    it('should handle window resize during interaction', () => {
+    it('should handle window resize during interaction', async () => {
       renderComponent();
 
       // Start on desktop
@@ -866,7 +900,8 @@ describe('LeftDrawerOrg', () => {
       });
 
       const dashboardLink = screen.getByText('Dashboard');
-      fireEvent.click(dashboardLink);
+      const user = userEvent.setup();
+      await user.click(dashboardLink);
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
 
       // Change to mobile during next interaction
@@ -876,7 +911,7 @@ describe('LeftDrawerOrg', () => {
         value: 800,
       });
 
-      fireEvent.click(dashboardLink);
+      await user.click(dashboardLink);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
   });

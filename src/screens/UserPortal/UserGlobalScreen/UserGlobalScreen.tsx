@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './UserGlobalScreen.module.css';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 

@@ -28,7 +28,8 @@
  * - `FORGOT_PASSWORD_MUTATION`: Resets the user's password using the OTP and new password.
  *
  * UI Components:
- * - `Form` and `Button` from React Bootstrap for form handling and submission.
+ * - Uses native HTML form elements (`<form>`, `<input>`, `<label>`) for accessibility and structure.
+ * - `Button` from `shared-components/Button` for consistent styling.
  * - `Loader`: Displays a loading spinner during mutation operations.
  * - `KeyLogo`: SVG logo for visual representation.
  * - `Link`: For navigation back to the login page.
@@ -53,8 +54,8 @@ import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Form } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
@@ -93,7 +94,7 @@ const ForgotPassword = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
-      window.location.replace('/orglist');
+      window.location.replace('/admin/orglist');
     }
     return () => {
       removeItem('otpToken');
@@ -188,12 +189,12 @@ const ForgotPassword = (): JSX.Element => {
               </h3>
               {showEnterEmail ? (
                 <div className="mt-4">
-                  <Form onSubmit={getOTP}>
-                    <Form.Label htmlFor="registeredEmail">
+                  <form onSubmit={getOTP}>
+                    <label className="form-label" htmlFor="registeredEmail">
                       {t('registeredEmail')}:
-                    </Form.Label>
+                    </label>
                     <div className="position-relative">
-                      <Form.Control
+                      <input
                         type="email"
                         className="form-control"
                         id="registeredEmail"
@@ -213,13 +214,15 @@ const ForgotPassword = (): JSX.Element => {
                     >
                       {t('getOtp')}
                     </Button>
-                  </Form>
+                  </form>
                 </div>
               ) : (
                 <div className="mt-4">
-                  <Form onSubmit={submitForgotPassword}>
-                    <Form.Label htmlFor="userOtp">{t('enterOtp')}:</Form.Label>
-                    <Form.Control
+                  <form onSubmit={submitForgotPassword}>
+                    <label className="form-label" htmlFor="userOtp">
+                      {t('enterOtp')}:
+                    </label>
+                    <input
                       type="number"
                       className="form-control"
                       id="userOtp"
@@ -234,10 +237,10 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Form.Label htmlFor="newPassword">
+                    <label className="form-label" htmlFor="newPassword">
                       {t('enterNewPassword')}:
-                    </Form.Label>
-                    <Form.Control
+                    </label>
+                    <input
                       type="password"
                       className="form-control"
                       id="newPassword"
@@ -253,10 +256,10 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Form.Label htmlFor="confirmNewPassword">
+                    <label className="form-label" htmlFor="confirmNewPassword">
                       {t('cofirmNewPassword')}:
-                    </Form.Label>
-                    <Form.Control
+                    </label>
+                    <input
                       type="password"
                       className="form-control"
                       id="confirmNewPassword"
@@ -275,7 +278,7 @@ const ForgotPassword = (): JSX.Element => {
                     <Button type="submit" className="mt-2 w-100">
                       {t('changePassword')}
                     </Button>
-                  </Form>
+                  </form>
                 </div>
               )}
               <div className="d-flex justify-content-between items-center mt-4">

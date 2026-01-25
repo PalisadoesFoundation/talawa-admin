@@ -6,15 +6,13 @@
 
 > **EventStatsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L38)
+Defined in: [src/components/EventStats/EventStatsWrapper.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L19)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-#### _id
-
-`string`
+[`InterfaceEventStatsWrapperProps`](../../../../types/AdminPortal/EventStatsWrapper/interface/interfaces/InterfaceEventStatsWrapperProps.md)
 
 ## Returns
 

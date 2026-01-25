@@ -28,7 +28,7 @@ declare global {
        */
       loginByApi(role: string): Chainable<Subject>;
       /**
-       * @param expectedMessage The expected text (string or RegExp)
+       * @param expectedMessage - The expected text (string or RegExp)
        */
       assertToast(expectedMessage: string | RegExp): Chainable<void>;
     }
@@ -87,7 +87,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       if (role === 'user') {
         cy.url({ timeout: 15000 }).should('include', '/user/organizations');
       } else {
-        cy.url({ timeout: 15000 }).should('include', '/orglist');
+        cy.url({ timeout: 15000 }).should('include', '/admin/orglist');
       }
     });
   });

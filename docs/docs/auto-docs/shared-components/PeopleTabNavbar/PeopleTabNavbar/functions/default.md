@@ -12,7 +12,7 @@ Defined in: [src/shared-components/PeopleTabNavbar/PeopleTabNavbar.tsx:52](https
 
 ### \_\_namedParameters
 
-[`InterfacePeopleTabNavbarProps`](../../../../types/PeopleTab/interface/interfaces/InterfacePeopleTabNavbarProps.md)
+[`InterfacePeopleTabNavbarProps`](../../../../types/shared-components/PeopleTabNavbar/interface/interfaces/InterfacePeopleTabNavbarProps.md)
 
 ## Returns
 

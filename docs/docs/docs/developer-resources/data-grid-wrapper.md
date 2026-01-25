@@ -265,7 +265,7 @@ import { Edit, Delete } from '@mui/icons-material';
   rows={users}
   columns={columns}
   onRowClick={(row) => {
-    navigate(`/users/${row.id}`);
+    navigate(`/admin/users/${row.id}`);
   }}
 />
 ```
@@ -323,7 +323,7 @@ export const UsersScreen = () => {
         defaultPageSize: 25,
         pageSizeOptions: [10, 25, 50, 100],
       }}
-      onRowClick={(row) => navigate(`/users/${row.id}`)}
+      onRowClick={(row) => navigate(`/admin/users/${row.id}`)}
       emptyStateMessage="No users found"
     />
   );

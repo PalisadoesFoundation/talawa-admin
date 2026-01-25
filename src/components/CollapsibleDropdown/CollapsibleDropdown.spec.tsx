@@ -1,5 +1,5 @@
-import React, { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, expect, test, vi, afterEach, beforeEach } from 'vitest';
 import type { Location } from '@remix-run/router';
+import userEvent from '@testing-library/user-event';
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -107,7 +108,8 @@ describe('Testing CollapsibleDropdown component', () => {
     expect(screen.getByText('SubCategory 2')).toBeInTheDocument();
   });
 
-  test('Dropdown should be rendered and functioning correctly', () => {
+  test('Dropdown should be rendered and functioning correctly', async () => {
+    const user = userEvent.setup();
     const props = createProps();
     render(
       <BrowserRouter>
@@ -123,9 +125,7 @@ describe('Testing CollapsibleDropdown component', () => {
     const nonActiveDropdownBtn = screen.getByText('SubCategory 2');
 
     // Check if dropdown is rendered with correct classes
-    act(() => {
-      fireEvent.click(activeDropdownBtn);
-    });
+    await user.click(activeDropdownBtn);
     expect(parentDropdownBtn).toBeInTheDocument();
     expect(parentDropdownBtn.className).toMatch(/^_leftDrawerActiveButton_/);
 
@@ -143,23 +143,17 @@ describe('Testing CollapsibleDropdown component', () => {
 
     // Check if dropdown is collapsed after clicking on it
     // Since showDropdown is true (controlled component), clicking calls setShowDropdown(!true) = false
-    act(() => {
-      fireEvent.click(parentDropdownBtn);
-    });
+    await user.click(parentDropdownBtn);
     expect(props.setShowDropdown).toHaveBeenCalledWith(false);
 
     // Clicking again also calls setShowDropdown(false) since the controlled prop is still true
     // (The component doesn't control its own state, the parent does via the prop)
-    act(() => {
-      fireEvent.click(parentDropdownBtn);
-    });
+    await user.click(parentDropdownBtn);
     // Both calls should be with false since showDropdown prop remains true throughout
     expect(props.setShowDropdown).toHaveBeenLastCalledWith(false);
 
     // Click on non-active dropdown button and check if it navigates to the correct URL
-    act(() => {
-      fireEvent.click(nonActiveDropdownBtn);
-    });
+    await user.click(nonActiveDropdownBtn);
     expect(window.location.pathname).toBe('/sub-category-2');
   });
 
@@ -268,7 +262,8 @@ describe('Testing CollapsibleDropdown component', () => {
   });
 
   describe('Navigation through all subTargets', () => {
-    test('navigates correctly to each subTarget', () => {
+    test('navigates correctly to each subTarget', async () => {
+      const user = userEvent.setup();
       const props = createProps({
         target: {
           name: 'DropDown Category',
@@ -321,23 +316,17 @@ describe('Testing CollapsibleDropdown component', () => {
 
       // Navigate to first subTarget
       const subTarget1 = screen.getByText('SubCategory 1');
-      act(() => {
-        fireEvent.click(subTarget1);
-      });
+      await user.click(subTarget1);
       expect(window.location.pathname).toBe('/sub-category-1');
 
       // Navigate to second subTarget
       const subTarget2 = screen.getByText('SubCategory 2');
-      act(() => {
-        fireEvent.click(subTarget2);
-      });
+      await user.click(subTarget2);
       expect(window.location.pathname).toBe('/sub-category-2');
 
       // Navigate to third subTarget
       const subTarget3 = screen.getByText('SubCategory 3');
-      act(() => {
-        fireEvent.click(subTarget3);
-      });
+      await user.click(subTarget3);
       expect(window.location.pathname).toBe('/sub-category-3');
     });
 

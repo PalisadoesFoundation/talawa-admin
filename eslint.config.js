@@ -42,9 +42,22 @@ const restrictedImports = [
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
   {
+    id: 'rb-modal-path',
+    name: 'react-bootstrap/Modal',
+    message:
+      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
+  },
+
+  {
     id: 'rb-form',
     name: 'react-bootstrap',
     importNames: ['Form'],
+    message:
+      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
+  },
+  {
+    id: 'rb-form-path',
+    name: 'react-bootstrap/Form',
     message:
       'Do not import Form directly. Use the shared FormFieldGroup component instead.',
   },
@@ -84,7 +97,7 @@ const restrictedImports = [
     id: 'react-toastify',
     name: 'react-toastify',
     message:
-      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
+      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead.',
   },
   {
     id: 'dicebear-core',
@@ -93,8 +106,19 @@ const restrictedImports = [
       'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
   },
   {
+    name: '@testing-library/react',
+    importNames: ['fireEvent'],
+    message:
+      'Tests in this file use fireEvent for user interactions; our test standards require using userEvent from @testing-library/user-event for interaction fidelity and test reliability.',
+  },
+  {
     name: '@mui/material',
     importNames: ['Chip'],
+    message:
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+  },
+  {
+    name: '@mui/material/Chip',
     message:
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
   },
@@ -105,8 +129,18 @@ const restrictedImports = [
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
   {
+    name: '@mui/material/TextField',
+    message:
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
     name: '@mui/material',
     importNames: ['FormControl'],
+    message:
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
+    name: '@mui/material/FormControl',
     message:
       'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
@@ -118,7 +152,6 @@ const restrictedImports = [
   },
   {
     name: '@mui/material/Button',
-    importNames: ['Button'],
     message:
       'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
   },
@@ -347,32 +380,34 @@ export default [
     rules: restrictImportsExcept(['rb-spinner']),
   },
   /**
-   * Exemption: FormFieldGroup component files
+   * Exemption: FormFieldGroup and FormField component files
    *
-   * FormFieldGroup files need direct react-bootstrap Form access for wrapper implementation.
-   * These files are the only ones allowed to import Form directly from react-bootstrap.
-   * Allowed ID: rb-form.
+   * FormFieldGroup and FormField files need direct react-bootstrap Form access for wrapper implementation.
++  * These files are the only ones allowed to import Form directly from react-bootstrap.
+   * Allowed ID: rb-form, rb-form-path.
    */
   {
     files: [
       'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/shared-components/Auth/FormField/**/*.{ts,tsx}',
       'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/types/shared-components/Auth/FormField/**/*.{ts,tsx}',
     ],
-    rules: restrictImportsExcept(['rb-form']),
+    rules: restrictImportsExcept(['rb-form', 'rb-form-path']),
   },
   /**
    * Exemption: BaseModal component files
    *
    * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
    * These files are the only ones allowed to import Modal directly from react-bootstrap.
-   * Allowed ID: rb-modal.
+   * Allowed ID: rb-modal, rb-modal-path.
    */
   {
     files: [
       'src/shared-components/BaseModal/**/*.{ts,tsx}',
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
-    rules: restrictImportsExcept(['rb-modal']),
+    rules: restrictImportsExcept(['rb-modal', 'rb-modal-path']),
   },
 
   /**
@@ -384,8 +419,8 @@ export default [
    */
   {
     files: [
-      'src/components/NotificationToast/**/*.{ts,tsx}',
-      'src/types/NotificationToast/**/*.{ts,tsx}',
+      'src/shared-components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/shared-components/NotificationToast/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['react-toastify']),
   },

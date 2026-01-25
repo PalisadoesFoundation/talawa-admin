@@ -33,15 +33,15 @@
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Tooltip } from '@mui/material';
-import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './EventAttendance.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from '../Statistics/EventStatistics';
 import AttendedEventList from '../AttendanceList/AttendedEventList';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
@@ -163,7 +163,7 @@ function EventAttendance(): JSX.Element {
         filterable: false,
         renderCell: (params) => (
           <Link
-            to={`/member/${currentUrl}/${params.row.id}`}
+            to={`/admin/member/${currentUrl}/${params.row.id}`}
             state={{ id: params.row.id }}
             className={styles.membername}
           >
