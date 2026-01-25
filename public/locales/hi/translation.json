@@ -810,7 +810,7 @@
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
   "eventListCard": {
-    "dogsCare": "Dogs Care",
+    "dogsCare": "कुत्तों की देखभाल",
     "deleteEvent": "ईवेंट हटाएँ",
     "deleteEventMsg": "क्या आप इस ईवेंट को हटाना चाहते हैं?",
     "deleteRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे हटाना चाहते हैं:",

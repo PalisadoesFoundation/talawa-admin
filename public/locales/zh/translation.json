@@ -798,7 +798,7 @@
     "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
   },
   "eventListCard": {
-    "dogsCare": "Dogs Care",
+    "dogsCare": "狗狗护理",
     "deleteEvent": "删除事件",
     "deleteEventMsg": "您想删除此事件吗？",
     "deleteRecurringEventMsg": "这是一个重复事件。请选择您想要如何删除它：",

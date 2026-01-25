@@ -5,7 +5,7 @@
  * and displays the information in a card format using the `EventAttendedCard` component.
  * It handles loading and error states gracefully.
  *
- * @param props - The props for the component.
+ * @param eventsId - The event id to fetch details for.
  *
  * @returns A React component that displays event details or appropriate
  * loading/error messages.

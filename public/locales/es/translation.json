@@ -793,7 +793,7 @@
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
-    "dogsCare": "Dogs Care",
+    "dogsCare": "Cuidado de Perros",
     "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",

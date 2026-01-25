@@ -798,7 +798,7 @@
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
-    "dogsCare": "Dogs Care",
+    "dogsCare": "Soins des Chiens",
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
     "deleteRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le supprimer :",
