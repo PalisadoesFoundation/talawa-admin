@@ -17,7 +17,7 @@ import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   InterfaceDonation,

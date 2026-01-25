@@ -376,6 +376,11 @@
       "update": "更新"
     }
   },
+  "plugin": {
+    "error": "插件错误",
+    "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
+    "id": "插件：<1>{{pluginId}}</1>"
+  },
   "dashboard": {
     "title": "仪表板",
     "about": "关于",
@@ -1407,6 +1412,8 @@
     "menu": "菜单"
   },
   "organizationSidebar": {
+    "loading": "加载中...",
+    "ends": "结束",
     "viewAll": "查看全部",
     "events": "活动",
     "noEvents": "没有可显示的活动",
@@ -1771,6 +1778,10 @@
     "advertisementLoading": "广告加载中..."
   },
   "userChat": {
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "群组",
     "title": "聊天",
     "add": "添加",
     "chat": "聊天",
