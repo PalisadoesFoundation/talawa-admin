@@ -42,13 +42,13 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import { socialMediaLinks } from '../../constants';
+import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
-import { FormFieldGroup } from '../../shared-components/FormFieldGroup/FormFieldGroup';
+import { FormFieldGroup } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
 
 const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
