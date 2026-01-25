@@ -2427,5 +2427,31 @@
     "resendSuccess": "验证邮件发送成功!",
     "resendFailed": "发送验证邮件失败。请稍后再试。",
     "goToLogin": "前往登录"
+  },
+  "plugins": {
+    "loading": "正在加载插件...",
+    "component": "组件",
+    "plugin": "插件",
+    "errors": {
+      "missingPluginId": {
+        "title": "缺少插件 ID",
+        "description": "此路由没有有效的插件 ID"
+      },
+      "notRegistered": {
+        "title": "插件未注册",
+        "description": "请将此插件添加到插件注册表中 {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "未找到组件"
+      },
+      "componentNotFound": {
+        "title": "未找到组件",
+        "availableComponents": "可用组件: {{components}}"
+      },
+      "pluginError": {
+        "title": "插件错误",
+        "failedToLoad": "加载组件失败"
+      }
+    }
   }
 }

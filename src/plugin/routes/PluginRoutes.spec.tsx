@@ -2,8 +2,15 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import type { ComponentType, ReactNode } from 'react';
-import PluginRoutes from '../../routes/PluginRoutes';
-import { usePluginRoutes } from '../../hooks';
+import PluginRoutes from './PluginRoutes';
+import { usePluginRoutes } from '../hooks';
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
 
 const lazyImportFunctions: Array<() => Promise<unknown>> = [];
 
@@ -31,8 +38,7 @@ function createRouteRenderer() {
   return component;
 }
 
-// Mock the hooks
-vi.mock('../../hooks', () => ({
+vi.mock('../hooks', () => ({
   usePluginRoutes: vi.fn(),
 }));
 
@@ -107,10 +113,8 @@ describe('PluginRoutes', () => {
     lazyImportFunctions.length = 0;
   });
 
-  // Restore console spy used in the 'surfaces error fallback when import throws' test.
-  // This relies on vi.restoreAllMocks() to clean up spies only, not a full mock reset.
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -259,7 +263,7 @@ describe('PluginRoutes', () => {
       );
 
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
 
     it('should use custom fallback when provided', () => {
@@ -388,10 +392,10 @@ describe('PluginRoutes', () => {
 
       const ErrorComponent = result.default;
       const { getByText } = render(<ErrorComponent />);
-      expect(getByText('Plugin Error')).toBeInTheDocument();
-      expect(getByText(/Failed to load component/)).toHaveTextContent(
-        'MissingComponent',
-      );
+      expect(getByText('plugins.errors.pluginError.title')).toBeInTheDocument();
+      expect(
+        getByText(/plugins.errors.pluginError.failedToLoad/),
+      ).toBeInTheDocument();
     });
 
     it('surfaces error fallback when import throws', async () => {
@@ -414,7 +418,9 @@ describe('PluginRoutes', () => {
 
         const ErrorComponent = result.default;
         const { getByText } = render(<ErrorComponent />);
-        expect(getByText('Plugin Error')).toBeInTheDocument();
+        expect(
+          getByText('plugins.errors.pluginError.title'),
+        ).toBeInTheDocument();
         expect(consoleErrorSpy).toHaveBeenCalledWith(
           "Failed to load plugin component 'ErrorComponent' from 'error-plugin':",
           expect.any(Error),
@@ -439,11 +445,8 @@ describe('PluginRoutes', () => {
 
       const ErrorComponent = result.default;
       const { getByText } = render(<ErrorComponent />);
-      expect(getByText('Plugin Error')).toBeInTheDocument();
-      const pluginDetail = getByText((content, node) => {
-        return node?.textContent?.trim().startsWith('Plugin:') ?? false;
-      });
-      expect(pluginDetail).toHaveTextContent('Plugin:');
+      expect(getByText('plugins.errors.pluginError.title')).toBeInTheDocument();
+      expect(getByText(/plugins\.plugin/)).toBeInTheDocument();
     });
   });
 
@@ -469,7 +472,7 @@ describe('PluginRoutes', () => {
       // Should render the route structure with suspense wrapper
       expect(screen.getByTestId('route-/error')).toBeInTheDocument();
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
 
     it('should handle routes with non-existent components', () => {
@@ -514,7 +517,7 @@ describe('PluginRoutes', () => {
       );
 
       // Should show loading state
-      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+      expect(screen.getByText('plugins.loading')).toBeInTheDocument();
     });
   });
 
