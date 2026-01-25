@@ -166,6 +166,7 @@ vi.mock(
 
 const mockActionItem: IActionItemInfo = {
   id: 'actionItemId1',
+  isTemplate: false,
   volunteerId: 'userId1',
   volunteerGroupId: null,
   categoryId: 'categoryId1',
@@ -260,6 +261,7 @@ const mockEventData = {
             ...mockActionItem,
             id: 'actionItemId2',
             volunteerId: 'userId3',
+            isTemplate: false,
             isCompleted: true,
             volunteer: {
               id: 'volunteerId2',
@@ -380,10 +382,8 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
-  beforeEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {

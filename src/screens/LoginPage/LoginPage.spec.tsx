@@ -1,12 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  fireEvent,
-  within,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -317,6 +311,12 @@ vi.mock('react-google-recaptcha', async () => {
   return { __esModule: true, default: recaptcha };
 });
 
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup();
+});
+
 describe('Testing Login Page Screen', () => {
   it('Component Should be rendered properly', async () => {
     Object.defineProperty(window, 'location', {
@@ -405,23 +405,23 @@ describe('Testing Login Page Screen', () => {
     // Check if goToRegisterPortion exists before clicking
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
@@ -461,23 +461,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
@@ -517,23 +517,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
@@ -573,23 +573,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
@@ -629,23 +629,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
@@ -690,23 +690,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
@@ -745,7 +745,7 @@ describe('Testing Login Page Screen', () => {
 
     // Only test this if we're not on the admin path and the register button exists
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
 
       // The goToLoginPortion button has been removed, so this test is no longer valid
       // Skip this part or check for a different condition
@@ -771,13 +771,13 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
@@ -799,13 +799,13 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
@@ -828,9 +828,9 @@ describe('Testing Login Page Screen', () => {
     const input = screen.getByTestId('password') as HTMLInputElement;
     const toggleText = screen.getByTestId('showLoginPassword');
     expect(input.type).toBe('password');
-    await userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('text');
-    await userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
@@ -864,15 +864,15 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       const input = screen.getByTestId('passwordField') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPassword');
       expect(input.type).toBe('password');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('text');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('password');
     }
 
@@ -906,15 +906,15 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       const input = screen.getByTestId('cpassword') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPasswordCon');
       expect(input.type).toBe('password');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('text');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('password');
     }
 
@@ -966,10 +966,10 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1010,10 +1010,10 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1054,12 +1054,12 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1096,12 +1096,12 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1252,12 +1252,9 @@ describe('Testing invitation functionality', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -1304,27 +1301,21 @@ describe('Testing invitation functionality', () => {
     // Click register button
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       // Fill registration form
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-      await userEvent.type(
-        screen.getByTestId('signInEmail'),
-        'johndoe@gmail.com',
-      );
-      await userEvent.type(
-        screen.getByPlaceholderText('Password'),
-        'Johndoe@123',
-      );
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+      await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+      await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         'Johndoe@123',
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Verify that removeItem was called with the pending invitation token
@@ -1358,12 +1349,9 @@ describe('Testing invitation functionality', () => {
     await wait();
 
     // Fill login form
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -1401,16 +1389,17 @@ it('Render the Select Organization list and change the option', async () => {
 
   const registerButton = screen.queryByTestId('goToRegisterPortion');
   if (registerButton) {
-    await userEvent.click(registerButton);
+    await user.click(registerButton);
     await wait();
 
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
     autocomplete.focus();
 
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    fireEvent.keyDown(autocomplete, { key: 'Enter' });
+    await user.clear(input);
+    await user.type(input, 'a');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
   }
 });
 
@@ -1541,12 +1530,9 @@ describe('Extra coverage for 100 %', () => {
     );
     await wait();
     // Verify recaptcha is bypassed by submitting login without token
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     // Should succeed without recaptcha interaction
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
@@ -1556,16 +1542,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
+    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
+    await user.type(screen.getByPlaceholderText('Password'), 'Valid@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Valid@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1577,16 +1563,13 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
-    await userEvent.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'weak',
-    );
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
+    await user.type(screen.getByPlaceholderText('Password'), 'weak');
+    await user.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1621,13 +1604,10 @@ describe('Extra coverage for 100 %', () => {
     ];
     renderLoginPage(NON_ADMIN_MOCK);
     await wait();
-    await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'pass',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
       'Sorry! you are not Authorised!',
@@ -1726,22 +1706,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(FAIL_MOCK);
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'johndoe@gmail.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      'Johndoe@123',
-    );
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Johndoe@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
 
     expect(resetReCAPTCHA).toHaveBeenCalled();
@@ -1775,16 +1749,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(RECAPTCHA_ERROR_MOCK);
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
       expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
@@ -1795,16 +1769,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'Test@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
+    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Test@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1833,13 +1807,10 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(NULL_SIGNIN_MOCK);
     await wait();
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'pass',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
@@ -1879,13 +1850,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(ACCOUNT_LOCKED_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should show the account locked message with countdown (15 minutes)
@@ -1930,13 +1901,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should show generic account locked message (without countdown)
@@ -1980,13 +1951,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should call errorHandler which shows the error message
@@ -2055,13 +2026,13 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'testPassword',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2155,26 +2126,20 @@ describe('Cookie-based authentication verification', () => {
     await wait();
 
     // Switch to Register tab
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
     // Fill registration form
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'New User');
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'newuser@example.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      'Password@123',
-    );
-    await userEvent.type(
+    await user.type(screen.getByPlaceholderText(/Name/i), 'New User');
+    await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Password@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Password@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
 
     // Submit registration
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
 
     await wait();
 
@@ -2309,17 +2274,14 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'password',
-    );
+    await user.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'password');
 
     // reCAPTCHA is now integrated directly in the mutation
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2354,7 +2316,7 @@ describe('Cookie-based authentication verification', () => {
       setLocationPath('/register');
       renderLoginPage();
       await wait();
-      await userEvent.click(screen.getByTestId('goToLoginPortion'));
+      await user.click(screen.getByTestId('goToLoginPortion'));
       await wait();
       expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
     });
@@ -2435,18 +2397,12 @@ describe('Cookie-based authentication verification', () => {
 
     const [loginRecaptcha] = screen.getAllByTestId('mock-recaptcha');
 
-    await userEvent.type(loginRecaptcha, 'fake-recaptcha-token');
+    await user.type(loginRecaptcha, 'fake-recaptcha-token');
 
-    await userEvent.type(
-      screen.getByTestId('loginEmail'),
-      'testadmin2@example.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'Pass@123',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'testadmin2@example.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'Pass@123');
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2472,13 +2428,13 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2491,7 +2447,7 @@ describe('Cookie-based authentication verification', () => {
     );
   });
 
-  it('Redirects to /orglist if user is already logged in as administrator', async () => {
+  it('Redirects to /admin/orglist if user is already logged in as administrator', async () => {
     mockUseLocalStorage.getItem.mockImplementation((key) => {
       if (key === 'IsLoggedIn') return 'TRUE';
       if (key === 'role') return 'administrator';
@@ -2511,7 +2467,7 @@ describe('Cookie-based authentication verification', () => {
     );
 
     await waitFor(() => {
-      expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 });

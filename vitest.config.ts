@@ -28,7 +28,8 @@ export default defineConfig({
   test: {
     include: [
       'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'config/**/*.{spec,test}.{js,jsx,ts,tsx}'
+      'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}'
     ],
     exclude: [
       '**/node_modules/**',
@@ -83,7 +84,8 @@ export default defineConfig({
         'cypress/**',
         'cypress.config.ts',
         '.github/**', // Exclude GitHub workflows and scripts
-        'scripts/**', // Exclude build/setup scripts (includes eslint-plugin-vitest-isolation)
+        'scripts/!(eslint)/**', // Exclude scripts except eslint folder
+        'scripts/*.{js,ts}',     // Exclude individual files in scripts root
         'config/**', // Exclude configuration files
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],

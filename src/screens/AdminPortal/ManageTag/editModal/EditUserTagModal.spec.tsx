@@ -1,11 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
   InterfaceEditUserTagModalProps,
 } from './EditUserTagModal';
 
 import type { TFunction } from 'i18next';
+import userEvent from '@testing-library/user-event';
 
 // Mock the CSS module
 vi.mock('./EditUserTagModal.module.css', () => ({
@@ -37,8 +38,11 @@ describe('EditUserTagModal Component', () => {
     tCommon: mockTCommon,
   };
 
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -70,27 +74,40 @@ describe('EditUserTagModal Component', () => {
     expect(inputField).toHaveValue('Test Tag');
   });
 
-  it('calls setNewTagName when input changes', () => {
-    render(<EditUserTagModal {...defaultProps} />);
+  it('calls setNewTagName when input changes', async () => {
+    function Wrapper() {
+      const [tagName, setTagName] = React.useState('Test Tag');
+
+      return (
+        <EditUserTagModal
+          {...defaultProps}
+          newTagName={tagName}
+          setNewTagName={setTagName}
+        />
+      );
+    }
+
+    render(<Wrapper />);
 
     const inputField = screen.getByTestId('tagNameInput');
-    fireEvent.change(inputField, { target: { value: 'Updated Tag' } });
 
-    expect(defaultProps.setNewTagName).toHaveBeenCalledTimes(1);
-    expect(defaultProps.setNewTagName).toHaveBeenCalledWith('Updated Tag');
+    await user.clear(inputField);
+    await user.type(inputField, 'Updated Tag');
+
+    expect(inputField).toHaveValue('Updated Tag');
   });
 
-  it('calls hideEditUserTagModal when cancel button is clicked', () => {
+  it('calls hideEditUserTagModal when cancel button is clicked', async () => {
     render(<EditUserTagModal {...defaultProps} />);
 
-    fireEvent.click(screen.getByTestId('closeEditTagModalBtn'));
+    await user.click(screen.getByTestId('closeEditTagModalBtn'));
     expect(defaultProps.hideEditUserTagModal).toHaveBeenCalledTimes(1);
   });
 
   it('calls handleEditUserTag when form is submitted with valid input', async () => {
     render(<EditUserTagModal {...defaultProps} />);
 
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    await user.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).toHaveBeenCalledTimes(1);
@@ -100,7 +117,7 @@ describe('EditUserTagModal Component', () => {
   it('does not call handleEditUserTag when form is submitted with empty input', async () => {
     render(<EditUserTagModal {...defaultProps} newTagName="" />);
 
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    await user.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
@@ -110,7 +127,7 @@ describe('EditUserTagModal Component', () => {
   it('does not call handleEditUserTag when form is submitted with whitespace-only input', async () => {
     render(<EditUserTagModal {...defaultProps} newTagName="   " />);
 
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    await user.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();

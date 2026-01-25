@@ -40,6 +40,12 @@
   .contract,
   .expand {
     animation: none;
+    margin-left: 0;
+    padding-left: var(--space-5);
+  }
+
+  .contentContainer {
+    margin-left: 0;
   }
 }
 

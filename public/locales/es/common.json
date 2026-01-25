@@ -55,6 +55,8 @@
   "talawaAdminPortal": "Talawa Admin Portal",
   "adminPortal": "Portal de administración",
   "userPortal": "Portal de usuario",
+  "switchToUserPortal": "Cambiar al portal de usuario",
+  "switchToAdminPortal": "Cambiar al portal de administrador",
   "address": "Address",
   "location": "Location",
   "enterLocation": "Enter Location",

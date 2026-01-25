@@ -10,7 +10,7 @@ import {
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
 
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';

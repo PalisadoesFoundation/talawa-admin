@@ -46,7 +46,6 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../shared-components/FormFieldGroup/FormFieldGroup';
@@ -182,7 +181,7 @@ const LoginPage = (): JSX.Element => {
       const storedRole = getItem('role');
       const target =
         storedRole === 'administrator' || storedRole === 'superuser'
-          ? '/orglist'
+          ? '/admin/orglist'
           : '/user/organizations';
       navigate(target);
       extendSession();
@@ -425,7 +424,7 @@ const LoginPage = (): JSX.Element => {
           return;
         }
         startSession();
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        navigate(role === 'admin' ? '/admin/orglist' : '/user/organizations');
       } else {
         NotificationToast.warning(tErrors('notFound') as string);
       }
@@ -985,13 +984,40 @@ const LoginPage = (): JSX.Element => {
                           });
                         }}
                         options={organizations}
-                        renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={t('organizations')}
-                            className={styles.selectOrgText}
-                          />
-                        )}
+                        renderInput={(params) => {
+                          const { InputProps, inputProps } = params;
+                          const {
+                            className,
+                            startAdornment,
+                            endAdornment,
+                            ref,
+                            onMouseDown,
+                          } = InputProps;
+                          const {
+                            className: inputClassName,
+                            ...restInputProps
+                          } = inputProps;
+
+                          return (
+                            <FormFieldGroup
+                              name="signOrg"
+                              label={t('organizations')}
+                            >
+                              <div
+                                ref={ref}
+                                className={`${className ?? ''} ${styles.selectOrgText}`}
+                                onMouseDown={onMouseDown}
+                              >
+                                {startAdornment}
+                                <input
+                                  {...restInputProps}
+                                  className={`${inputClassName ?? ''} form-control`}
+                                />
+                                {endAdornment}
+                              </div>
+                            </FormFieldGroup>
+                          );
+                        }}
                       />
                     </div>
                   </div>

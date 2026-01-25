@@ -34,7 +34,7 @@ export class ActionItemPage {
 
   visitEventsPage() {
     cy.get(this.eventsTabButton).should('be.visible').click();
-    cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgevents\/[a-f0-9-]+/);
     return this;
   }
 

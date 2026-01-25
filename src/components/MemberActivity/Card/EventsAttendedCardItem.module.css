@@ -1,0 +1,35 @@
+.eventsAttendedCard {
+  composes: eventsAttendedCard from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardDate {
+  composes: eventsAttendedCardDate from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardDateMonth {
+  composes: eventsAttendedCardDateMonth from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardDateNA {
+  composes: eventsAttendedCardDateNA from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardTitle {
+  composes: eventsAttendedCardTitle from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardLocation {
+  composes: eventsAttendedCardLocation from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardChevron {
+  composes: eventsAttendedCardChevron from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardChevronIcon {
+  composes: eventsAttendedCardChevronIcon from '../../../../style/app-fixed.module.css';
+}
+
+.eventsAttendedCardAccent {
+  composes: eventsAttendedCardAccent from '../../../../style/app-fixed.module.css';
+}
