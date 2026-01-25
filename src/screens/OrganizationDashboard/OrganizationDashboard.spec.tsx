@@ -6,8 +6,8 @@ import {
   render,
   screen,
   waitFor,
-  fireEvent,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
@@ -78,6 +78,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('navigates to requests page when clicking on membership requests card', async () => {
+    const user = userEvent.setup();
     renderWithProviders({ mocks: MOCKS });
 
     await waitFor(() => {
@@ -94,7 +95,7 @@ describe('OrganizationDashboard', () => {
     expect(requestsCardButton).not.toBeNull();
 
     if (requestsCardButton) {
-      fireEvent.click(requestsCardButton);
+      await user.click(requestsCardButton);
     } else {
       throw new Error('Membership requests card button not found');
     }
@@ -154,6 +155,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('shows success toast when clicking on membership requests view button', async () => {
+    const user = userEvent.setup();
     renderWithProviders({ mocks: MOCKS });
 
     await waitFor(() => {
@@ -163,19 +165,19 @@ describe('OrganizationDashboard', () => {
     });
 
     const viewRequestsBtn = screen.getByTestId('viewAllMembershipRequests');
-    fireEvent.click(viewRequestsBtn);
+    await user.click(viewRequestsBtn);
     expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
 
     const viewLeaderBtn = screen.getByTestId('viewAllLeadeboard');
-    fireEvent.click(viewLeaderBtn);
+    await user.click(viewLeaderBtn);
     expect(toast.success).toHaveBeenCalledWith('comingSoon');
 
     const viewEventsBtn = screen.getByTestId('viewAllEvents');
-    fireEvent.click(viewEventsBtn);
+    await user.click(viewEventsBtn);
     expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
 
     const viewPostBtn = screen.getByTestId('viewAllPosts');
-    fireEvent.click(viewPostBtn);
+    await user.click(viewPostBtn);
     expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
   });
 
@@ -229,33 +231,36 @@ describe('OrganizationDashboard', () => {
   });
 
   it('handles navigation to posts page', async () => {
+    const user = userEvent.setup();
     renderWithProviders({ mocks: MOCKS });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const postsCountElement = screen.getByTestId('postsCount');
-      fireEvent.click(postsCountElement);
+      await user.click(postsCountElement);
 
       expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
     });
   });
 
   it('handles navigation to events page', async () => {
+    const user = userEvent.setup();
     renderWithProviders({ mocks: MOCKS });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const eventsCountElement = screen.getByTestId('eventsCount');
-      fireEvent.click(eventsCountElement);
+      await user.click(eventsCountElement);
 
       expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
     });
   });
 
   it('handles navigation to blocked users page', async () => {
+    const user = userEvent.setup();
     renderWithProviders({ mocks: MOCKS });
 
-    await waitFor(() => {
+    await waitFor(async () => {
       const blockedUsersCountElement = screen.getByTestId('blockedUsersCount');
-      fireEvent.click(blockedUsersCountElement);
+      await user.click(blockedUsersCountElement);
 
       expect(mockedNavigate).toHaveBeenCalledWith('/blockuser/orgId');
     });
@@ -461,6 +466,7 @@ describe('OrganizationDashboard', () => {
     });
 
     it('navigates to venues page when clicking on venues card', async () => {
+      const user = userEvent.setup();
       renderWithProviders({ mocks: MOCKS });
 
       await waitFor(() => {
@@ -472,7 +478,7 @@ describe('OrganizationDashboard', () => {
       });
 
       const venuesCard = screen.getByTestId('venuesCount');
-      fireEvent.click(venuesCard);
+      await user.click(venuesCard);
 
       await waitFor(() => {
         expect(mockedNavigate).toHaveBeenCalledWith('/orgvenues/orgId');
@@ -546,6 +552,7 @@ describe('OrganizationDashboard', () => {
 
   describe('Async navigation handlers', () => {
     it('handles async navigation for view all events button', async () => {
+      const user = userEvent.setup();
       renderWithProviders({ mocks: MOCKS });
 
       await waitFor(() => {
@@ -555,13 +562,14 @@ describe('OrganizationDashboard', () => {
       const viewAllEventsButton = screen.getByTestId('viewAllEvents');
 
       await waitFor(async () => {
-        fireEvent.click(viewAllEventsButton);
+        await user.click(viewAllEventsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
       });
     });
 
     it('handles async navigation for view all posts button', async () => {
+      const user = userEvent.setup();
       renderWithProviders({ mocks: MOCKS });
 
       await waitFor(() => {
@@ -571,13 +579,14 @@ describe('OrganizationDashboard', () => {
       const viewAllPostsButton = screen.getByTestId('viewAllPosts');
 
       await waitFor(async () => {
-        fireEvent.click(viewAllPostsButton);
+        await user.click(viewAllPostsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
       });
     });
 
     it('handles async navigation for view all membership requests button', async () => {
+      const user = userEvent.setup();
       renderWithProviders({ mocks: MOCKS });
 
       await waitFor(() => {
@@ -589,7 +598,7 @@ describe('OrganizationDashboard', () => {
       );
 
       await waitFor(async () => {
-        fireEvent.click(viewAllRequestsButton);
+        await user.click(viewAllRequestsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
       });

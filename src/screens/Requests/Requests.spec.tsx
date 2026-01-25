@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -850,7 +850,6 @@ describe('Testing Requests screen', () => {
     await wait(100);
 
     await userEvent.clear(searchInput);
-    fireEvent.change(searchInput, { target: { value: '' } });
     await wait(200);
 
     expect(screen.getByRole('grid')).toBeInTheDocument();

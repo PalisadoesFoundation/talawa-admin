@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -177,13 +177,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Search the Campaigns list by Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
-    fireEvent.change(searchField, {
-      target: { value: '2' },
-    });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await user.clear(searchField);
+    await user.type(searchField, '2');
+    await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();
@@ -210,17 +210,18 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by Latest end Date', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
     expect(sortBtn).toBeInTheDocument();
 
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const latestEndDateOption = screen.getByTestId('endAt_DESC');
     expect(latestEndDateOption).toBeInTheDocument();
 
-    fireEvent.click(latestEndDateOption);
+    await user.click(latestEndDateOption);
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
@@ -235,17 +236,18 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Sort the Campaigns list by Earliest end Date', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
     expect(sortBtn).toBeInTheDocument();
 
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const earliestEndDateOption = screen.getByTestId('endAt_ASC');
     expect(earliestEndDateOption).toBeInTheDocument();
 
-    fireEvent.click(earliestEndDateOption);
+    await user.click(earliestEndDateOption);
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
@@ -260,17 +262,18 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should set sort by goalAmount_ASC when Lowest Goal is selected', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
     expect(sortBtn).toBeInTheDocument();
 
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const lowestGoalOption = screen.getByTestId('goalAmount_ASC');
     expect(lowestGoalOption).toBeInTheDocument();
 
-    fireEvent.click(lowestGoalOption);
+    await user.click(lowestGoalOption);
 
     // Verify that campaigns are still displayed after sorting
     await waitFor(() => {
@@ -283,17 +286,18 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should set sort by goalAmount_DESC when Highest Goal is selected', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const sortBtn = await screen.findByTestId('filter');
     expect(sortBtn).toBeInTheDocument();
 
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const highestGoalOption = screen.getByTestId('goalAmount_DESC');
     expect(highestGoalOption).toBeInTheDocument();
 
-    fireEvent.click(highestGoalOption);
+    await user.click(highestGoalOption);
 
     // Verify that campaigns are still displayed after sorting
     await waitFor(() => {
@@ -306,12 +310,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on Campaign Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const campaignName = await screen.findAllByTestId('campaignName');
     expect(campaignName[0]).toBeInTheDocument();
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -319,12 +324,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on View Pledge', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
     expect(viewBtn[0]).toBeInTheDocument();
-    fireEvent.click(viewBtn[0]);
+    await user.click(viewBtn[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -332,12 +338,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should render the Fund screen on fund breadcrumb click', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const fundBreadcrumb = await screen.findByTestId('fundsLink');
     expect(fundBreadcrumb).toBeInTheDocument();
-    fireEvent.click(fundBreadcrumb);
+    await user.click(fundBreadcrumb);
 
     await waitFor(() => {
       expect(screen.getByTestId('fundScreen')).toBeInTheDocument();

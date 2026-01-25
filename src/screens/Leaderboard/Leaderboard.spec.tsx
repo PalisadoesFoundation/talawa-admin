@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -130,6 +130,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('Check Sorting Functionality', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -141,26 +142,27 @@ describe('Testing Leaderboard Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hours_DESC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const hoursDesc = await screen.findByTestId('hours_DESC');
     expect(hoursDesc).toBeInTheDocument();
-    fireEvent.click(hoursDesc);
+    await user.click(hoursDesc);
 
     let userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Teresa Bradley');
 
     // Sort by hours_ASC
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const hoursAsc = await screen.findByTestId('hours_ASC');
     expect(hoursAsc).toBeInTheDocument();
-    fireEvent.click(hoursAsc);
+    await user.click(hoursAsc);
 
     userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Jane Doe');
   });
 
   it('Check Timeframe filter Functionality (All Time)', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -172,16 +174,17 @@ describe('Testing Leaderboard Screen', () => {
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
 
-    fireEvent.click(filter);
+    await user.click(filter);
     const timeFrameAll = await screen.findByTestId('allTime');
     expect(timeFrameAll).toBeInTheDocument();
 
-    fireEvent.click(timeFrameAll);
+    await user.click(timeFrameAll);
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(4);
   });
 
   it('Check Timeframe filter Functionality (Weekly)', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -194,17 +197,18 @@ describe('Testing Leaderboard Screen', () => {
 
     // Filter by weekly
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await user.click(filter);
 
     const timeFrameWeekly = await screen.findByTestId('weekly');
     expect(timeFrameWeekly).toBeInTheDocument();
-    fireEvent.click(timeFrameWeekly);
+    await user.click(timeFrameWeekly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(1);
   });
 
   it('Check Timeframe filter Functionality (Monthly)', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -215,17 +219,18 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by monthly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await user.click(filter);
 
     const timeFrameMonthly = await screen.findByTestId('monthly');
     expect(timeFrameMonthly).toBeInTheDocument();
-    fireEvent.click(timeFrameMonthly);
+    await user.click(timeFrameMonthly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
   });
 
   it('Check Timeframe filter Functionality (Yearly)', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -236,17 +241,18 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by yearly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    fireEvent.click(filter);
+    await user.click(filter);
 
     const timeFrameYearly = await screen.findByTestId('yearly');
     expect(timeFrameYearly).toBeInTheDocument();
-    fireEvent.click(timeFrameYearly);
+    await user.click(timeFrameYearly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(3);
   });
 
   it('Search Volunteers', async () => {
+    const user = userEvent.setup();
     vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -254,9 +260,9 @@ describe('Testing Leaderboard Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by name on press of ENTER
-    await userEvent.type(searchInput, 'T');
+    await user.type(searchInput, 'T');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
