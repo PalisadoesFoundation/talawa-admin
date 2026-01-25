@@ -73,16 +73,14 @@ global.URL.createObjectURL = vi.fn(() => 'mock-object-url');
 global.URL.revokeObjectURL = vi.fn();
 
 // Mock HTMLFormElement.prototype.requestSubmit for jsdom
-// TODO: Remove once jsdom adds native support
-if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
-  HTMLFormElement.prototype.requestSubmit = function () {
-    if (this.checkValidity()) {
-      this.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      );
-    }
-  };
-}
+// TODO: Remove once jsdom adds native support without throwing
+HTMLFormElement.prototype.requestSubmit = function () {
+  if (this.checkValidity()) {
+    this.dispatchEvent(
+      new Event('submit', { cancelable: true, bubbles: true }),
+    );
+  }
+};
 afterAll(() => {
   console.error = originalError;
   console.warn = originalWarn;
