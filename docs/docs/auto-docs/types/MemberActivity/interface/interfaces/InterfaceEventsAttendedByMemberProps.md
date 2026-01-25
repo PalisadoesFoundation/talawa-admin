@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventsAttendedByMemberProps
 
-Defined in: [src/types/MemberActivity/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L8)
+Defined in: [src/types/MemberActivity/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L11)
 
 Props for EventsAttendedByMember component.
 
@@ -14,4 +14,4 @@ Props for EventsAttendedByMember component.
 
 > **eventsId**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L9)
+Defined in: [src/types/MemberActivity/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L12)

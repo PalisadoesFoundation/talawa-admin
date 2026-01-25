@@ -4,7 +4,9 @@
 
 # Interface: InterfaceCustomTableCellProps
 
-Defined in: [src/types/MemberActivity/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L1)
+Defined in: [src/types/MemberActivity/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L4)
+
+Props for CustomTableCell component.
 
 ## Properties
 
@@ -12,4 +14,4 @@ Defined in: [src/types/MemberActivity/interface.ts:1](https://github.com/Palisad
 
 > **eventId**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L2)
+Defined in: [src/types/MemberActivity/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L5)
