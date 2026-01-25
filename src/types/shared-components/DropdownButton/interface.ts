@@ -1,10 +1,7 @@
 import type { ReactNode } from 'react';
 import { ButtonSize } from 'shared-components/Button';
-import {
-  DropdownItem,
-  DropdownButtonVariant,
-} from 'shared-components/DropdownButton/DropdownButton.types';
-
+import { DropdownButtonVariant } from './DropdownButtonVariant/interface';
+import { DropdownItem } from './DropdownItem/interface';
 /**
  * Props for DropdownButton component.
  */
@@ -17,6 +14,7 @@ export interface InterfaceDropdownButtonProps {
   size?: ButtonSize;
 
   align?: 'start' | 'end';
-  dataTestId?: string;
   className?: string;
+  dataTestId?: string;
+  labelTestId?: string;
 }

@@ -4,9 +4,9 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfaceTimePickerProps`\>
+> `const` **default**: `React.FC`\<[`InterfaceTimePickerProps`](../../../../types/shared-components/TimePicker/interface/interfaces/InterfaceTimePickerProps.md)\>
 
-Defined in: [src/shared-components/TimePicker/TimePicker.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/TimePicker/TimePicker.tsx#L79)
+Defined in: [src/shared-components/TimePicker/TimePicker.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/TimePicker/TimePicker.tsx#L41)
 
 TimePicker wrapper component that integrates MUI TimePicker with react-bootstrap styling.
 

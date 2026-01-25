@@ -25,6 +25,7 @@ const DropdownButton = ({
   dataTestId,
   align = 'start',
   className,
+  labelTestId,
 }: InterfaceDropdownButtonProps) => {
   return (
     <Dropdown className={styles.dropdown}>
@@ -36,7 +37,7 @@ const DropdownButton = ({
         data-testid={dataTestId}
         className={`${styles.dropdownToggle} ${className ?? ''}`}
       >
-        {label}
+        <span data-testid={labelTestId}>{label}</span>
       </Dropdown.Toggle>
 
       <Dropdown.Menu align={align} className={styles.dropdownMenu}>
@@ -45,6 +46,7 @@ const DropdownButton = ({
             key={item.key}
             onClick={item.onClick}
             disabled={item.disabled}
+            data-testid={item.dataTestId}
             className={styles.dropdownItem}
           >
             {item.label}

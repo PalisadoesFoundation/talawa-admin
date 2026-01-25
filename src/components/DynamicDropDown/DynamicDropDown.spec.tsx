@@ -93,7 +93,7 @@ describe('DynamicDropDown component', () => {
     expect(setFormData).not.toHaveBeenCalled();
   });
 
-  it('handles keyboard navigation with Enter key correctly', async () => {
+  it('selects option when clicked', async () => {
     const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
@@ -213,6 +213,8 @@ describe('DynamicDropDown component', () => {
 
     expect(selectedOption).toBeInTheDocument();
     expect(unselectedOption).toBeInTheDocument();
+
+    expect(dropdownButton).toHaveTextContent('Label 2');
   });
 
   it('updates form state with correct field name when selecting option', async () => {
@@ -369,26 +371,6 @@ describe('DynamicDropDown component', () => {
         Object.defineProperty(document, 'activeElement', originalDescriptor);
       }
     }
-  });
-
-  it('renders selected option correctly based on formState', async () => {
-    const user = userEvent.setup();
-    const formData = { fieldName: 'value2' };
-
-    renderComponent({ formState: formData });
-
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await user.click(dropdownButton);
-
-    const selectedOption = screen.getByTestId('change-fieldname-btn-value2');
-    const unselectedOption = screen.getByTestId('change-fieldname-btn-TEST');
-
-    // Selected option should reflect selection visually / structurally
-    expect(selectedOption).toBeInTheDocument();
-    expect(unselectedOption).toBeInTheDocument();
-
-    // Selection is reflected in the button label, not aria-selected
-    expect(dropdownButton).toHaveTextContent('Label 2');
   });
 
   it('has correct aria-label on dropdown container', () => {

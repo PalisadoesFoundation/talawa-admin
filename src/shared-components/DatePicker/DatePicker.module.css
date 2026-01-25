@@ -3,14 +3,13 @@
 }
 
 .fullWidth {
-  width: 100%;
+  composes: fullWidth from '../common/css/SharedPicker.module.css';
 }
 
 .pickerLabel {
-  margin-bottom: 0.5rem;
-  display: block;
+  composes: pickerLabel from '../common/css/SharedPicker.module.css';
 }
 
 .paddedInput {
-  padding-right: calc(var(--picker-icon-space) + 0.75rem);
+  composes: paddedInput from '../common/css/SharedPicker.module.css';
 }

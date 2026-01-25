@@ -15,49 +15,11 @@ import { Form } from 'react-bootstrap';
 import React from 'react';
 import {
   TimePicker as MuiTimePicker,
-  TimePickerSlotProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import type { Dayjs } from 'dayjs';
 import commonStyles from './TimePicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
-/**
- * Component Props for TimePicker
- */
-interface InterfaceTimePickerProps {
-  /** Label displayed for the time picker */
-  label?: string;
-  /**
-   * Current time value.
-   * Represented as a Dayjs object or null if no time is selected.
-   */
-  value?: Dayjs | null;
-  /**
-   * Callback fired when the time changes.
-   * @param date - The new time value.
-   */
-  onChange: (date: Dayjs | null) => void;
-  /** Minimum selectable time constraint */
-  minTime?: Dayjs;
-  /** Maximum selectable time constraint */
-  maxTime?: Dayjs;
-  /** Whether the time picker is disabled */
-  disabled?: boolean;
-  /** Additional CSS class name to be applied to the root element */
-  className?: string;
-  /** Test ID for testing purposes, applied to the underlying input */
-  'data-testid'?: string;
-  /** Additional props passed to MUI TimePicker slots (e.g., actionBar, layout) */
-  slotProps?: Partial<TimePickerSlotProps<false>>;
-  /** Custom slot component overrides (e.g., openPickerIcon, leftArrowIcon) */
-  slots?: Record<string, React.ElementType>;
-  /** Step increments for time controls (hours, minutes, seconds) */
-  timeSteps?: { hours?: number; minutes?: number; seconds?: number };
-  /** Whether to disable the open picker button */
-  disableOpenPicker?: boolean;
-}
-
+import { InterfaceTimePickerProps } from 'types/shared-components/TimePicker/interface';
 /**
  * TimePicker wrapper component that integrates MUI TimePicker with react-bootstrap styling.
  *
@@ -90,12 +52,14 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
   timeSteps,
   disableOpenPicker,
 }) => {
+  const generatedId = React.useId();
+  const inputId = dataTestId ?? generatedId;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={className}>
         {label && (
           <label
-            htmlFor={dataTestId}
+            htmlFor={inputId}
             className={`form-label ${disabled ? 'text-muted' : ''} ${commonStyles.pickerLabel}`}
           >
             {label}
@@ -138,7 +102,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                   <Form.Control
                     {...inputProps}
                     {...other}
-                    id={dataTestId}
+                    id={inputId}
                     ref={ref}
                     disabled={disabled}
                     required={props.required}
@@ -162,4 +126,5 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
   );
 };
 
+export type { TimePickerSlotProps } from '@mui/x-date-pickers';
 export default TimePicker;
