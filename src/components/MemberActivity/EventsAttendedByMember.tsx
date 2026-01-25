@@ -26,6 +26,7 @@ import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
+import styles from './EventsAttendedByMember.module.css';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -45,7 +46,7 @@ function EventsAttendedByMember({
 
   if (error)
     return (
-      <div data-testid="error" className="error-state">
+      <div data-testid="error" className={styles.errorState}>
         <p>{t('unableToLoadEventDetails')}</p>
       </div>
     );

@@ -34,7 +34,7 @@ import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 

@@ -27,7 +27,7 @@
  */
 import React from 'react';
 import { Card } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './PromotedPost.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import { useTranslation } from 'react-i18next';
 
