@@ -1133,8 +1133,9 @@
     "title": "404 未找到",
     "talawaAdmin": "塔拉瓦管理员",
     "talawaUser": "塔拉瓦用户",
-    "notFoundMsg": "哎呀！",
-    "backToHome": "返回首页"
+    "notFoundMsg": "哎呀！您请求的页面未找到！",
+    "backToHome": "回到首页",
+    "logoAlt": "徽标"
   },
   "orgContribution": {
     "title": "塔拉瓦 贡献",
@@ -1450,7 +1451,9 @@
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
     "unexpectedError": "发生了意外错误。请重试。",
-    "moreOptions": "更多选择"
+    "moreOptions": "更多选择",
+    "scrollLeft": "向左滚动",
+    "scrollRight": "向右滚动"
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
@@ -2090,7 +2093,8 @@
     "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
     "continue": "继续",
     "missingRequiredInfo": "无法处理请求：缺少必需信息。",
-    "organizationNotFound": "未找到组织"
+    "organizationNotFound": "未找到组织",
+    "confirmLeaveButton": "确认离开"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
@@ -2456,5 +2460,8 @@
         "failedToLoad": "加载组件失败"
       }
     }
+  },
+  "csv": {
+    "demographics": "{{category}} 人口统计"
   }
 }

@@ -25,3 +25,17 @@
   text-align: center;
   margin-top: var(--space-8);
 }
+
+.loadingContainer {
+  text-align: center;
+  margin-top: var(--space-7);
+}
+
+.title {
+  margin-top: var(--space-6);
+  /* Approx replacement for <br /> + default h1 margin behavior */
+}
+
+.description {
+  margin-bottom: var(--space-3);
+}

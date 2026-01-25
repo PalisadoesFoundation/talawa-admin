@@ -782,7 +782,6 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
@@ -1179,7 +1178,8 @@
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
     "notFoundMsg": "Oops! The Page you requested was not found!",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "logoAlt": "Logo"
   },
   "orgContribution": {
     "title": "Talawa Contributions",
@@ -1495,7 +1495,9 @@
     "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
@@ -2076,7 +2078,8 @@
     "emailMismatchError": "The email you entered does not match your account email.",
     "continue": "Continue",
     "missingRequiredInfo": "Unable to process request: Missing required information.",
-    "organizationNotFound": "Organization not found"
+    "organizationNotFound": "Organization not found",
+    "confirmLeaveButton": "Confirm leave"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
@@ -2459,5 +2462,8 @@
         "failedToLoad": "Failed to load component"
       }
     }
+  },
+  "csv": {
+    "demographics": "{{category}} Demographics"
   }
 }

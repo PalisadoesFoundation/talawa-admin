@@ -5,12 +5,11 @@
  * deleting and toggling pin status. It displays post content, creator information,
  * and provides admin/creator-specific actions through a dropdown menu.
  *
- * @param props - The properties for the PinnedPostCard component.
- * @param props.pinnedPost - The pinned post data containing id, caption, creator, etc.
- * @param props.onStoryClick - Callback function triggered when the post story is clicked.
- * @param props.onPostUpdate - Optional callback function triggered after post updates.
+ * @param pinnedPost - The pinned post data containing id, caption, creator, etc.
+ * @param onStoryClick - Callback function triggered when the post story is clicked.
+ * @param onPostUpdate - Optional callback function triggered after any post updates.
  *
- * @returns {JSX.Element} A JSX element representing the pinned post card.
+ * @returns A JSX element representing the pinned posts carousel layout.
  *
  * @remarks
  * - Only administrators can pin/unpin posts
@@ -39,7 +38,6 @@ import {
   Typography,
   Avatar,
   Box,
-  Button,
   IconButton,
   Container,
   Menu,
@@ -63,6 +61,7 @@ import useLocalStorage from '../../utils/useLocalstorage';
 import styles from './pinnedPostsLayout.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { Button } from '../Button';
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   pinnedPost,
@@ -165,7 +164,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               <>
                 <IconButton
                   size="small"
-                  aria-label="more options"
+                  aria-label={t('moreOptions')}
                   onClick={handleDropdownOpen}
                   data-testid="more-options-button"
                   aria-haspopup="menu"
@@ -290,7 +289,8 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Button
               variant="contained"
-              startIcon={<Visibility />}
+              icon={<Visibility />}
+              iconPosition="start"
               onClick={() => onStoryClick(pinnedPost.node)}
               data-testid="view-post-btn"
               className={styles.viewPostButton}

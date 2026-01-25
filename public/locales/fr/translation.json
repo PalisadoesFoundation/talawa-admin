@@ -1116,8 +1116,9 @@
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
     "talawaUser": "Utilisateur Talawa",
-    "notFoundMsg": "Oops! ",
-    "backToHome": "De retour à la maison"
+    "notFoundMsg": "Oups ! La page que vous avez demandée est introuvable !",
+    "backToHome": "Retour à l'accueil",
+    "logoAlt": "Logo"
   },
   "statusBadge": {
     "completed": "Terminé",
@@ -1450,7 +1451,9 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "plus d'options"
+    "moreOptions": "Plus d'options",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite"
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
@@ -2090,7 +2093,8 @@
     "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
     "continue": "Continuer",
     "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
-    "organizationNotFound": "Organisation non trouvée"
+    "organizationNotFound": "Organisation non trouvée",
+    "confirmLeaveButton": "Confirmer le départ"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2456,5 +2460,8 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
+  },
+  "csv": {
+    "demographics": "Démographie de {{category}}"
   }
 }
