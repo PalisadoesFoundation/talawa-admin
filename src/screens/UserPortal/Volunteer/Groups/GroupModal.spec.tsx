@@ -1186,7 +1186,7 @@ describe('Testing GroupModal', () => {
     vrInput.blur();
 
     // Submit the FORM directly (button is disabled so we bypass it)
-    const form = screen.getByTestId('pledgeForm');
+    const form = screen.getByTestId('groupForm');
 
     const submitEvent = new Event('submit', {
       bubbles: true,

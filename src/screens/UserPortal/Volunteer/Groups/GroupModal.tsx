@@ -1,30 +1,3 @@
-/**
- * A modal dialog for creating or editing a volunteer group.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param eventId - The ID of the event associated with volunteer group.
- * @param orgId - The ID of the organization associated with volunteer group.
- * @param group - The volunteer group object to be edited.
- * @param refetchGroups - Function to refetch the volunteer groups after creation or update.
- * @returns The rendered modal component.
- *
- * The `VolunteerGroupModal` component displays a form within a modal dialog for creating or editing a Volunteer Group.
- * It includes fields for entering the group name, description, volunteersRequired, and selecting volunteers/leaders.
- *
- * The modal includes:
- * - A header with a title indicating the current mode (create or edit) and a close button.
- * - A form with:
- * - An input field for entering the group name.
- * - A textarea for entering the group description.
- * - An input field for entering the number of volunteers required.
- * - A submit button to create or update the pledge.
- *
- * On form submission, the component either:
- * - Calls `updateVoluneerGroup` mutation to update an existing group, or
- *
- * Success or error messages are displayed using toast notifications based on the result of the mutation.
- */
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
@@ -58,6 +31,9 @@ import { FaXmark } from 'react-icons/fa6';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button/Button';
 
+/**
+ * Props for the GroupModal component.
+ */
 export interface InterfaceGroupModal {
   isOpen: boolean;
   hide: () => void;
@@ -66,6 +42,31 @@ export interface InterfaceGroupModal {
   refetchGroups: () => void;
 }
 
+/**
+ * A modal dialog for editing a volunteer group.
+ *
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Function to close the modal.
+ * @param eventId - The ID of the event associated with the volunteer group.
+ * @param group - The volunteer group object to be edited.
+ * @param refetchGroups - Function to refetch the volunteer groups after an update.
+ * @returns The rendered modal component.
+ *
+ * The `GroupModal` component displays a form within a modal dialog for editing a Volunteer Group.
+ * It includes fields for entering the group name, description, and volunteersRequired.
+ *
+ * The modal includes:
+ * - A toggle to switch between "details" and "requests" views.
+ * - A form with:
+ *   - An input field for entering the group name.
+ *   - A textarea for entering the group description.
+ *   - An input field for entering the number of volunteers required.
+ *   - A submit button to update the group.
+ * - A requests view showing pending membership requests with accept/reject actions.
+ *
+ * On form submission, the component calls `updateVolunteerGroup` mutation to update the group.
+ * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ */
 const GroupModal: React.FC<InterfaceGroupModal> = ({
   isOpen,
   hide,
@@ -195,7 +196,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        console.log(error);
+        console.error(error);
         NotificationToast.error((error as Error).message);
       } finally {
         setIsSubmitting(false);
@@ -253,7 +254,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
 
       {modalType === 'details' ? (
         <form
-          data-testid="pledgeForm"
+          data-testid="groupForm"
           onSubmit={updateGroupHandler}
           className="p-3"
         >
