@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../../public/locales/en/translation.json';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
@@ -125,7 +126,7 @@ describe('Testing Event Card In User portal', () => {
           query: REGISTER_EVENT,
           variables: { id: '123' },
         },
-        error: new Error('Failed to register for the event'),
+        error: new Error(translation.userEventCard.failedToRegister),
       },
     ];
 
@@ -147,7 +148,7 @@ describe('Testing Event Card In User portal', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `Failed to register for the event`,
+        translation.userEventCard.failedToRegister,
       );
     });
   });

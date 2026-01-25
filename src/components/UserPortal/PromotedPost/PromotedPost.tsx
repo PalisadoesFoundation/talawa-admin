@@ -3,12 +3,10 @@
  * This component is used to display promoted content with a title,
  * optional image, and a header indicating that the content is promoted.
  *
- * @component
- * @param props - The properties passed to the component.
- * @param props.id - A unique identifier for the promoted post.
- * @param props.image - The URL of the image associated with the promoted post.
- *                       If no image is provided, the image section will not be rendered.
- * @param props.title - The title of the promoted post, displayed in the card header and body.
+ * @param props - The properties passed to the component:
+ * - id: A unique identifier for the promoted post.
+ * - image: The URL of the image associated with the promoted post.
+ * - title: The title of the promoted post.
  *
  * @returns A JSX element representing the promoted post card.
  *
@@ -26,14 +24,12 @@
  * />
  * ```
  *
- * @fileoverview
- * This file defines the `PromotedPost` component, which is part of the
- * `UserPortal` feature in the Talawa Admin project.
  */
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
+import { useTranslation } from 'react-i18next';
 
 interface InterfacePostCardProps {
   id: string;
@@ -44,6 +40,7 @@ interface InterfacePostCardProps {
 export default function promotedPost(
   props: InterfacePostCardProps,
 ): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'promotedPost' });
   return (
     <>
       <Card className="my-3">
@@ -63,7 +60,7 @@ export default function promotedPost(
           {props.image && (
             <img
               src={props.image}
-              alt={`Promoted content: ${props.title}`}
+              alt={t('promotedContent', { title: props.title })}
               className={styles.imageContainerPromotedPost}
             />
           )}

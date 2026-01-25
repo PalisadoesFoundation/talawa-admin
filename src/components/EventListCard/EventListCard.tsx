@@ -81,7 +81,7 @@ function eventListCard(props: IEventListCard): JSX.Element {
       >
         <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
-            {props.name ? <>{props.name}</> : <>Dogs Care</>}
+            {props.name ? <>{props.name}</> : <>{t('dogsCare')}</>}
           </h2>
         </div>
       </div>

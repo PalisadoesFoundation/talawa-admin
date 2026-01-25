@@ -798,6 +798,7 @@
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
+    "dogsCare": "Dogs Care",
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
     "deleteRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le supprimer :",
@@ -1569,6 +1570,7 @@
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "settings": {
+    "dummyPicture": "image factice",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
     "profileSettings": "Paramètres de profil",
@@ -1737,6 +1739,7 @@
     "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
+    "failedToRegister": "Échec de l'inscription à l'événement",
     "starts": "Départs",
     "ends": "Prend fin",
     "creator": "Créateur",
@@ -2485,6 +2488,16 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/D",
+    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
+    "eventNotFound": "Événement introuvable ou supprimé",
+    "numberOfAttendees": "Nombre de participants"
+  },
+  "promotedPost": {
+    "title": "Contenu Promu",
+    "promotedContent": "Contenu promu : {{title}}"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

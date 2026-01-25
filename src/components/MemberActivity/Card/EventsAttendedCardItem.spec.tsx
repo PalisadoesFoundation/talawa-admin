@@ -5,6 +5,9 @@ import EventAttendedCard from './EventsAttendedCardItem';
 import type { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../../public/locales/en/translation.json';
 
 // Mock react-router Link (not react-router-dom!) to avoid router context issues
 vi.mock('react-router', async () => {
@@ -44,7 +47,9 @@ describe('EventAttendedCard', () => {
   const renderComponent = (props = mockProps): void => {
     render(
       <BrowserRouter>
-        <EventAttendedCard {...props} />
+        <I18nextProvider i18n={i18nForTest}>
+          <EventAttendedCard {...props} />
+        </I18nextProvider>
       </BrowserRouter>,
     );
   };
@@ -103,7 +108,9 @@ describe('EventAttendedCard', () => {
         startdate: 'invalid-date',
       };
       renderComponent(propsWithInvalidDate);
-      expect(screen.getByText('Date N/A')).toBeInTheDocument();
+      expect(
+        screen.getByText(translation.memberActivity.dateNA),
+      ).toBeInTheDocument();
     });
 
     it('renders "Date N/A" for missing date', () => {
@@ -112,7 +119,9 @@ describe('EventAttendedCard', () => {
         startdate: undefined,
       };
       renderComponent(propsWithoutDate);
-      expect(screen.getByText('Date N/A')).toBeInTheDocument();
+      expect(
+        screen.getByText(translation.memberActivity.dateNA),
+      ).toBeInTheDocument();
     });
 
     it('renders "Date N/A" for empty date string', () => {
@@ -121,7 +130,9 @@ describe('EventAttendedCard', () => {
         startdate: '',
       };
       renderComponent(propsWithEmptyDate);
-      expect(screen.getByText('Date N/A')).toBeInTheDocument();
+      expect(
+        screen.getByText(translation.memberActivity.dateNA),
+      ).toBeInTheDocument();
     });
   });
 

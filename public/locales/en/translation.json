@@ -783,7 +783,6 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
-    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -798,6 +797,7 @@
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
   },
   "eventListCard": {
+    "dogsCare": "Dogs Care",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
@@ -1552,6 +1552,7 @@
     "postImagePreview": "Post Image Preview"
   },
   "settings": {
+    "dummyPicture": "dummy picture",
     "eventAttended": "Events Attended",
     "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
@@ -1720,6 +1721,7 @@
     "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
+    "failedToRegister": "Failed to register for the event",
     "starts": "Starts",
     "ends": "Ends",
     "creator": "Creator",
@@ -2485,6 +2487,16 @@
         "failedToLoad": "Failed to load component"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/A",
+    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
+    "eventNotFound": "Event not found or has been deleted",
+    "numberOfAttendees": "Number of attendees"
+  },
+  "promotedPost": {
+    "title": "Promoted Content",
+    "promotedContent": "Promoted content: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

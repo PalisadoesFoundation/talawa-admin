@@ -7,14 +7,22 @@ import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../public/locales/en/translation.json';
 
 describe('EventsAttendedByMember', () => {
   test('renders loading state initially', () => {
     render(
       <BrowserRouter>
-        <MockedProvider mocks={mocks}>
-          <EventsAttendedByMember eventsId="event123" />
-        </MockedProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <MockedProvider mocks={mocks}>
+              <EventsAttendedByMember eventsId="event123" />
+            </MockedProvider>
+          </I18nextProvider>
+        </BrowserRouter>
+        ,
       </BrowserRouter>,
     );
 
@@ -25,25 +33,35 @@ describe('EventsAttendedByMember', () => {
   test('renders error state when query fails', async () => {
     render(
       <BrowserRouter>
-        <MockedProvider mocks={errorMocks}>
-          <EventsAttendedByMember eventsId="event123" />
-        </MockedProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <MockedProvider mocks={errorMocks}>
+              <EventsAttendedByMember eventsId="event123" />
+            </MockedProvider>
+          </I18nextProvider>
+        </BrowserRouter>
+        ,
       </BrowserRouter>,
     );
 
     const errorMessage = await screen.findByTestId('error');
     expect(errorMessage).toBeInTheDocument();
     expect(
-      screen.getByText('Unable to load event details. Please try again later.'),
+      screen.getByText(translation.memberActivity.unableToLoadEventDetails),
     ).toBeInTheDocument();
   });
 
   test('renders event card with correct data when query succeeds', async () => {
     render(
       <BrowserRouter>
-        <MockedProvider mocks={mocks}>
-          <EventsAttendedByMember eventsId="event123" />
-        </MockedProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <MockedProvider mocks={mocks}>
+              <EventsAttendedByMember eventsId="event123" />
+            </MockedProvider>
+          </I18nextProvider>
+        </BrowserRouter>
+        ,
       </BrowserRouter>,
     );
 
@@ -78,9 +96,14 @@ describe('EventsAttendedByMember', () => {
 
     render(
       <BrowserRouter>
-        <MockedProvider mocks={fallbackMocks}>
-          <EventsAttendedByMember eventsId="event123" />
-        </MockedProvider>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <MockedProvider mocks={fallbackMocks}>
+              <EventsAttendedByMember eventsId="event123" />
+            </MockedProvider>
+          </I18nextProvider>
+        </BrowserRouter>
+        ,
       </BrowserRouter>,
     );
 

@@ -37,6 +37,7 @@ import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './EventsAttendedCardItem.module.css';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceCardItem {
   title: string;
@@ -55,6 +56,7 @@ const EventAttendedCard = ({
   orgId,
   eventId,
 }: InterfaceCardItem): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const { getItem } = useLocalStorage();
 
   // Check if user is administrator - only administrators can navigate to event details
@@ -87,7 +89,7 @@ const EventAttendedCard = ({
                 <div
                   className={`fs-7 fw-bold ${styles.eventsAttendedCardDateNA}`}
                 >
-                  Date N/A
+                  {t('dateNA')}
                 </div>
               )}
             </div>

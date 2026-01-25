@@ -99,7 +99,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
           );
         }
       } catch (error) {
-        NotificationToast.error(`Failed to register for the event`);
+        NotificationToast.error(t('failedToRegister'));
         NotificationToast.error(error as string);
       }
     }

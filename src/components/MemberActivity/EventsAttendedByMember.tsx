@@ -5,11 +5,9 @@
  * and displays the information in a card format using the `EventAttendedCard` component.
  * It handles loading and error states gracefully.
  *
- * @component
- * @param {InterfaceEventsAttendedByMember} props - The props for the component.
- * @param {string} props.eventsId - The ID of the event to fetch details for.
+ * @param props - The props for the component.
  *
- * @returns {JSX.Element} A React component that displays event details or appropriate
+ * @returns A React component that displays event details or appropriate
  * loading/error messages.
  *
  * @example
@@ -27,6 +25,7 @@ import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -35,6 +34,7 @@ interface InterfaceEventsAttendedByMember {
 function EventsAttendedByMember({
   eventsId,
 }: InterfaceEventsAttendedByMember): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const {
     data: events,
     loading,
@@ -46,7 +46,7 @@ function EventsAttendedByMember({
   if (error)
     return (
       <div data-testid="error" className="error-state">
-        <p>Unable to load event details. Please try again later.</p>
+        <p>{t('unableToLoadEventDetails')}</p>
       </div>
     );
 

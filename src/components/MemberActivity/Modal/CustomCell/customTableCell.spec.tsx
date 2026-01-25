@@ -14,6 +14,9 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../../../public/locales/en/translation.json';
 
 describe('CustomTableCell', () => {
   afterEach(() => {
@@ -22,13 +25,15 @@ describe('CustomTableCell', () => {
   it('renders event details correctly', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event123" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event123" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -55,11 +60,13 @@ describe('CustomTableCell', () => {
   it('displays loading state', () => {
     render(
       <MockedProvider mocks={[]}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <I18nextProvider i18n={i18nForTest}>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event123" />
+            </tbody>
+          </table>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -79,19 +86,19 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={errorMock}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <I18nextProvider i18n={i18nForTest}>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event123" />
+            </tbody>
+          </table>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          'Unable to load event details. Please try again later.',
-        ),
+        screen.getByText(translation.memberActivity.unableToLoadEventDetails),
       ).toBeInTheDocument();
     });
   });
@@ -124,19 +131,21 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={noEventMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event999" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event999" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByText('Event not found or has been deleted'),
+        screen.getByText(translation.memberActivity.eventNotFound),
       ).toBeInTheDocument();
     });
   });
@@ -169,13 +178,15 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={nonRecurringEventMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event456" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event456" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -213,13 +224,15 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={noAttendeesMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event789" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event789" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -254,13 +267,15 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={emptyAttendeesMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event000" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event000" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -295,13 +310,15 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={undefinedAttendeesMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event111" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event111" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -338,13 +355,15 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={dateTestMock}>
-        <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event222" />
-            </tbody>
-          </table>
-        </BrowserRouter>
+        <I18nextProvider i18n={i18nForTest}>
+          <BrowserRouter>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event222" />
+              </tbody>
+            </table>
+          </BrowserRouter>
+        </I18nextProvider>
       </MockedProvider>,
     );
 

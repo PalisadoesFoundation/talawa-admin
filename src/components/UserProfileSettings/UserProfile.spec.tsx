@@ -5,6 +5,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../public/locales/en/translation.json';
 import { describe, it, expect } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -61,7 +62,7 @@ describe('UserProfile Component', () => {
     const { getByAltText } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByAltText('dummy picture')).toBeInTheDocument();
+    expect(getByAltText(translation.settings.dummyPicture)).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
     const userDetails = {

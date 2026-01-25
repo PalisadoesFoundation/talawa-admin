@@ -30,7 +30,8 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
@@ -72,7 +73,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               ) : (
                 <Avatar
                   name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
+                  alt={t('dummyPicture')}
                 />
               )}
             </div>

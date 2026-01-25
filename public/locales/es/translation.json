@@ -793,6 +793,7 @@
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
+    "dogsCare": "Dogs Care",
     "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",
@@ -1552,6 +1553,7 @@
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
   "settings": {
+    "dummyPicture": "imagen ficticia",
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "No hay eventos asistidos",
@@ -1720,6 +1722,7 @@
     "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
+    "failedToRegister": "Error al registrarse para el evento",
     "location": "Ubicación",
     "starts": "Empieza",
     "ends": "Termina",
@@ -2485,6 +2488,16 @@
         "failedToLoad": "Error al cargar el componente"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Fecha N/A",
+    "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
+    "eventNotFound": "Evento no encontrado o ha sido eliminado",
+    "numberOfAttendees": "Número de asistentes"
+  },
+  "promotedPost": {
+    "title": "Contenido Promocionado",
+    "promotedContent": "Contenido promocionado: {{title}}"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
