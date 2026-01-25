@@ -1,5 +1,4 @@
 import { useMutation } from '@apollo/client';
-// translation-check-keyPrefix: eventListCard
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -55,7 +54,7 @@ interface IUpdateEventHandlerProps {
   recurrence: InterfaceRecurrenceRule | null;
   updateOption: 'single' | 'following' | 'entireSeries';
   hasRecurrenceChanged?: boolean; // Add this parameter
-  t: (key: string) => string;
+  t: (key: string, options?: object) => string;
   hideViewModal: () => void;
   setEventUpdateModalIsOpen: (isOpen: boolean) => void;
   refetchEvents?: () => void;
@@ -127,12 +126,12 @@ export const useUpdateEventHandler = () => {
           : ''
         : dayjs.utc(eventStartDate).isValid()
           ? dayjs
-              .utc(eventStartDate)
-              .hour(parseInt(formState.startTime.split(':')[0]))
-              .minute(parseInt(formState.startTime.split(':')[1]))
-              .second(parseInt(formState.startTime.split(':')[2]))
-              .millisecond(0)
-              .toISOString()
+            .utc(eventStartDate)
+            .hour(parseInt(formState.startTime.split(':')[0]))
+            .minute(parseInt(formState.startTime.split(':')[1]))
+            .second(parseInt(formState.startTime.split(':')[2]))
+            .millisecond(0)
+            .toISOString()
           : '';
 
       const newEndAt = alldaychecked
@@ -141,12 +140,12 @@ export const useUpdateEventHandler = () => {
           : ''
         : dayjs.utc(eventEndDate).isValid()
           ? dayjs
-              .utc(eventEndDate)
-              .hour(parseInt(formState.endTime.split(':')[0]))
-              .minute(parseInt(formState.endTime.split(':')[1]))
-              .second(parseInt(formState.endTime.split(':')[2]))
-              .millisecond(0)
-              .toISOString()
+            .utc(eventEndDate)
+            .hour(parseInt(formState.endTime.split(':')[0]))
+            .minute(parseInt(formState.endTime.split(':')[1]))
+            .second(parseInt(formState.endTime.split(':')[2]))
+            .millisecond(0)
+            .toISOString()
           : '';
 
       const originalStartAt = eventListCardProps.allDay
@@ -154,26 +153,35 @@ export const useUpdateEventHandler = () => {
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : (() => {
-            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
-            return dayjs.utc(dateTimeStr).isValid()
-              ? dayjs.utc(dateTimeStr).toISOString()
-              : '';
-          })();
+          const dateTimeStr = t('isoDateTime', {
+            date: dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD'),
+            time: eventListCardProps.startTime,
+          });
+          return dayjs.utc(dateTimeStr).isValid()
+            ? dayjs.utc(dateTimeStr).toISOString()
+            : '';
+        })();
 
       const originalEndAt = eventListCardProps.allDay
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
         : dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .isValid()
+          .utc(
+            t('isoDateTime', {
+              date: dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD'),
+              time: eventListCardProps.endTime,
+            }),
+          )
+          .isValid()
           ? dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .toISOString()
+            .utc(
+              t('isoDateTime', {
+                date: dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD'),
+                time: eventListCardProps.endTime,
+              }),
+            )
+            .toISOString()
           : '';
 
       // Only include timing changes if they actually changed

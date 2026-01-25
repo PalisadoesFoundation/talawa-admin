@@ -304,5 +304,14 @@
   "unavailable": "不可用",
   "clearSelection": "清除选择",
   "toggleSidebar": "切换侧边栏",
-  "picture": "{{name}} 图片"
+  "picture": "{{name}} 图片",
+  "isoDateTime": "{{date}}T{{time}}",
+  "dummyDateTime": "2015-03-04T{{time}}",
+  "peopleCardDataTestId": "people-card-{{id}}",
+  "backupEnvFileName": ".env.{{timestamp}}",
+  "userIdLabel": "userId",
+  "idLabel": "id",
+  "userRoute": "user/{{compId}}",
+  "userOrgRoute": "user/{{compId}}/{{orgId}}",
+  "peopleSnoDataTestId": "people-sno-{{id}}"
 }

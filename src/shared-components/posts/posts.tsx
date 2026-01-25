@@ -86,7 +86,8 @@ export default function PostsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
-  const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
+  const userId =
+    getItem<string>(t('userIdLabel')) ?? getItem<string>(t('idLabel')) ?? null;
   const [showPostViewModal, setShowPostViewModal] = useState(false);
   const [searchParams] = useSearchParams();
 
