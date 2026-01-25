@@ -304,5 +304,14 @@
   "unavailable": "अनुपलब्ध",
   "clearSelection": "चयन साफ़ करें",
   "toggleSidebar": "साइडबार टॉगल करें",
-  "picture": "{{name}} चित्र"
+  "picture": "{{name}} चित्र",
+  "isoDateTime": "{{date}}T{{time}}",
+  "dummyDateTime": "2015-03-04T{{time}}",
+  "peopleCardDataTestId": "people-card-{{id}}",
+  "backupEnvFileName": ".env.{{timestamp}}",
+  "userIdLabel": "userId",
+  "idLabel": "id",
+  "userRoute": "user/{{compId}}",
+  "userOrgRoute": "user/{{compId}}/{{orgId}}",
+  "peopleSnoDataTestId": "people-sno-{{id}}"
 }
