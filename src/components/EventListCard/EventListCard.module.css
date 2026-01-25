@@ -33,8 +33,7 @@
   grid-column: auto / span 2;
 }
 
-.cardsEventListCard:first-child:nth-last-child(even),
-.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
+.cardsEventListCard:first-child:nth-last-child(even) {
   grid-column: auto / span 1;
 }
 
