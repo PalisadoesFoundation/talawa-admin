@@ -4,12 +4,13 @@
  * layout based on the screen size, providing a compact view for
  * smaller screens and a detailed view for larger screens.
  *
- * @component
- * @param {number} count - Total number of items to paginate.
- * @param {number} rowsPerPage - Number of rows displayed per page.
- * @param {number} page - Current page index (zero-based).
- * @param {(event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => void} onPageChange - Callback triggered when the page changes.
- * @param {(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void} onRowsPerPageChange - Callback triggered when the rows per page value changes.
+ * @param props - Props for the component
+ * @param count - Total number of items to paginate.
+ * @param rowsPerPage - Number of rows displayed per page.
+ * @param page - Current page index (zero-based).
+ * @param onPageChange - Callback triggered when the page changes.
+ * @param onRowsPerPageChange - Callback triggered when the rows per page value changes.
+ * @returns JSX.Element
  *
  * @remarks
  * - The component uses the `useTranslation` hook to support internationalization.
@@ -31,21 +32,9 @@ import React from 'react';
 import { TablePagination, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import Pagination from '../Navigator/Pagination';
-import './PaginationList.css';
-
-interface InterfacePropsInterface {
-  count: number;
-  rowsPerPage: number;
-  page: number;
-  onPageChange: (
-    event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => void;
-  onRowsPerPageChange: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
-}
+import Pagination from 'components/Pagination/Navigator/Pagination';
+import styles from './PaginationList.module.css';
+import type { InterfacePaginationListProps } from 'types/shared-components/PaginationList/interface';
 
 const PaginationList = ({
   count,
@@ -53,7 +42,7 @@ const PaginationList = ({
   page,
   onPageChange,
   onRowsPerPageChange,
-}: InterfacePropsInterface): JSX.Element => {
+}: InterfacePaginationListProps): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'paginationList',
   });
@@ -69,6 +58,7 @@ const PaginationList = ({
             alignItems: 'center',
             justifyContent: 'center',
           }}
+          className={styles.pagination}
           rowsPerPageOptions={[]}
           colSpan={5}
           count={count}
@@ -76,16 +66,18 @@ const PaginationList = ({
           page={page}
           SelectProps={{
             inputProps: {
-              'aria-label': 'rows per page',
+              'aria-label': t('rowsPerPage'),
             },
             native: true,
           }}
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
+          component="div"
         />
       ) : (
         <TablePagination
+          className={styles.pagination}
           rowsPerPageOptions={[
             5,
             10,
@@ -99,7 +91,7 @@ const PaginationList = ({
           page={page}
           SelectProps={{
             inputProps: {
-              'aria-label': 'rows per page',
+              'aria-label': t('rowsPerPage'),
             },
             native: true,
           }}
@@ -107,6 +99,7 @@ const PaginationList = ({
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
           labelRowsPerPage={t('rowsPerPage')}
+          component="div"
         />
       )}
     </>

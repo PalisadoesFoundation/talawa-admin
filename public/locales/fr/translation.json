@@ -193,6 +193,11 @@
     "logout": "Déconnexion",
     "close": "Fermer"
   },
+  "plugin": {
+    "error": "Erreur de plugin",
+    "failedToLoad": "Échec du chargement du composant : <1>{{componentName}}</1>",
+    "id": "Plugin : <1>{{pluginId}}</1>"
+  },
   "notification": {
     "title": "Notifications",
     "allCaughtUp": "Vous êtes à jour !",
@@ -383,8 +388,8 @@
     "statistics": "Statistiques",
     "posts": "Des postes",
     "events": "Événements",
-    "blockedUsers": "Utilisateurs bloqués",
     "venues": "Lieux",
+    "blockedUsers": "Utilisateurs bloqués",
     "viewAll": "Voir tout",
     "upcomingEvents": "évènements à venir",
     "noUpcomingEvents": "Aucun événement à venir",
@@ -1407,6 +1412,8 @@
     "menu": "Menu"
   },
   "organizationSidebar": {
+    "loading": "Chargement...",
+    "ends": "Se termine",
     "viewAll": "Voir tout",
     "events": "Événements",
     "noEvents": "Aucun événement à afficher",
@@ -1771,6 +1778,10 @@
     "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
+    "starredMessages": "Messages favoris",
+    "all": "Tous",
+    "unread": "Non lus",
+    "groups": "Groupes",
     "title": "Discussions",
     "deleteChat": "Supprimer le Chat",
     "add": "Ajouter",

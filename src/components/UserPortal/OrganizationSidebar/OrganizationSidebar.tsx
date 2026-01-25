@@ -145,7 +145,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {memberLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -190,7 +190,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {eventsLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -214,7 +214,8 @@ export default function OrganizationSidebar(): JSX.Element {
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+                      {t('ends')}{' '}
+                      <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
                   </div>
                 </ListGroup.Item>

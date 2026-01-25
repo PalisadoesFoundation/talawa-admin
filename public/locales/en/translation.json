@@ -1,4 +1,9 @@
 {
+  "plugin": {
+    "error": "Plugin Error",
+    "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
+    "id": "Plugin: <1>{{pluginId}}</1>"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -1452,6 +1457,8 @@
     "menu": "menu"
   },
   "organizationSidebar": {
+    "loading": "Loading...",
+    "ends": "Ends",
     "viewAll": "View all",
     "events": "Events",
     "noEvents": "No Events to show",
@@ -1755,6 +1762,10 @@
     "advertisementLoading": "Loading advertisements..."
   },
   "userChat": {
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups",
     "title": "Chats",
     "add": "Add",
     "chat": "Chat",
