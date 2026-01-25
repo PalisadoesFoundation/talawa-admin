@@ -81,3 +81,9 @@
   font-size: var(--font-size-sm);
   color: var(--color-gray-700);
 }
+
+.formGroup {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}

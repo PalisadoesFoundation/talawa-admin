@@ -259,7 +259,7 @@ describe('SidebarBase Component', () => {
     it('has aria-label on toggle button', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
-      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
+      expect(toggleBtn).toHaveAttribute('aria-label', 'toggleSidebar');
     });
 
     it('has button type attribute', () => {

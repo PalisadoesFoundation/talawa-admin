@@ -213,8 +213,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} non lu",
+    "unreadCount_other": "{{count}} non lus",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "Avatar de {{title}}",
+    "eventLocation": "Lieu de l'événement",
+    "eventDate": "Date de l'événement",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Publié le :",
+    "author": "Auteur :"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -1116,8 +1126,9 @@
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
     "talawaUser": "Utilisateur Talawa",
-    "notFoundMsg": "Oops! ",
-    "backToHome": "De retour à la maison"
+    "notFoundMsg": "Oups ! La page que vous avez demandée est introuvable !",
+    "backToHome": "Retour à l'accueil",
+    "logoAlt": "Logo"
   },
   "statusBadge": {
     "completed": "Terminé",
@@ -1450,7 +1461,9 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "plus d'options"
+    "moreOptions": "Plus d'options",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite"
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
@@ -2090,7 +2103,8 @@
     "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
     "continue": "Continuer",
     "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
-    "organizationNotFound": "Organisation non trouvée"
+    "organizationNotFound": "Organisation non trouvée",
+    "confirmLeaveButton": "Confirmer le départ"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2164,7 +2178,21 @@
     "viewGroup": "Voir le groupe de bénévoles",
     "editGroup": "Modifier le groupe de bénévoles",
     "invalidNumber": "Nombre invalide",
-    "viewToggle": "Basculer la vue"
+    "viewToggle": "Basculer la vue",
+    "recurringVolunteerTitle": "Être bénévole pour {{eventName}}",
+    "recurringGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "Souhaitez-vous être bénévole pour toute la série ou seulement pour cette occurrence ?",
+    "recurringGroupDescription": "Souhaitez-vous rejoindre \"{{groupName}}\" pour toute la série ou seulement pour cette occurrence ?",
+    "volunteerForEntireSeries": "Être bénévole pour toute la série",
+    "volunteerForSeriesDescription": "Vous serez bénévole pour tous les événements de cette série récurrente",
+    "joinGroupForSeriesDescription": "Vous rejoindrez ce groupe pour tous les événements de la série récurrente",
+    "volunteerForThisInstanceOnly": "Être bénévole pour cette occurrence uniquement",
+    "volunteerForInstanceDescription": "Vous serez bénévole uniquement pour l'événement du {{date}}",
+    "joinGroupForInstanceDescription": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
+    "submitRequest": "Envoyer la demande",
+    "baseEventRequired": "Événement de base requis",
+    "selectVolunteer": "Sélectionner un bénévole",
+    "volunteerScope": "Portée du bénévole"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2456,5 +2484,8 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
+  },
+  "csv": {
+    "demographics": "Démographie de {{category}}"
   }
 }
