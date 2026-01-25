@@ -6,7 +6,7 @@ import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import LoginPage from 'screens/LoginPage/LoginPage';
+import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
