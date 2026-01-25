@@ -38,7 +38,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from 'react-bootstrap';
-import Button from 'shared-components/Button';
+import Button from 'shared-components/Button/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -232,11 +232,13 @@ const CommunityProfile = (): JSX.Element => {
         <Card.Body>
           <div className="mb-3">{t('communityProfileInfo')}</div>
           <form onSubmit={handleOnSubmit}>
-            <FormFieldGroup label={t('communityName')} name="name" required>
+            <FormFieldGroup
+              label={t('communityName')}
+              name="communityName"
+              required
+            >
               <input
                 type="text"
-                id="name"
-                name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
                 className={`form-control mb-3 ${styles.inputField}`}
@@ -277,19 +279,21 @@ const CommunityProfile = (): JSX.Element => {
               />
             </FormFieldGroup>
             <FormFieldGroup label={t('social')} name="social">
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="facebook"
-                  name="facebookURL"
-                  data-testid="facebook"
-                  value={profileVariable.facebookURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
+              <div id="social">
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
+                  <input
+                    type="url"
+                    id="facebook"
+                    name="facebookURL"
+                    data-testid="facebook"
+                    value={profileVariable.facebookURL}
+                    onChange={handleOnChange}
+                    className={`form-control ${styles.inputField}`}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
               </div>
 
               <div className="mb-3 d-flex align-items-center gap-3">
