@@ -1557,6 +1557,7 @@
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "No hay eventos asistidos",
+    "profilePicture": "foto de perfil",
     "profileSettings": "Configuración de perfil",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",
@@ -1728,7 +1729,8 @@
     "ends": "Termina",
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
-    "register": "Registro"
+    "register": "Registro",
+    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}"
   },
   "advertisement": {
     "title": "Anuncios",

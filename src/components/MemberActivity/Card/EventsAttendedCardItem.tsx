@@ -38,16 +38,7 @@ import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './EventsAttendedCardItem.module.css';
 import { useTranslation } from 'react-i18next';
-
-export interface InterfaceCardItem {
-  title: string;
-  time?: string;
-  startdate?: string;
-  creator?: string;
-  location?: string;
-  eventId?: string;
-  orgId?: string;
-}
+import type { InterfaceCardItem } from 'types/MemberActivity/interface';
 
 const EventAttendedCard = ({
   title,

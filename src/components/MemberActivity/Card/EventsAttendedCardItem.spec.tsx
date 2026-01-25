@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import EventAttendedCard from './EventsAttendedCardItem';
-import type { InterfaceCardItem } from './EventsAttendedCardItem';
+import type { InterfaceCardItem } from 'types/MemberActivity/interface';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { I18nextProvider } from 'react-i18next';
@@ -62,6 +62,7 @@ describe('EventAttendedCard', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

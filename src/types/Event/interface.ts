@@ -125,7 +125,7 @@ export interface IEventHeaderProps {
   showInviteModal: () => void;
 }
 
-interface IEventListCard extends IEvent {
+export interface IEventListCard extends IEvent {
   refetchEvents?: () => void;
 }
 

@@ -1573,6 +1573,7 @@
     "dummyPicture": "虚拟图片",
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",
+    "profilePicture": "个人资料图片",
     "profileSettings": "配置文件设置",
     "gender": "性别",
     "phoneNumber": "电话号码",
@@ -1745,7 +1746,8 @@
     "creator": "创作者",
     "alreadyRegistered": "已经注册",
     "location": "位置",
-    "register": "注册"
+    "register": "注册",
+    "registeredSuccessfully": "成功注册 {{eventName}}"
   },
   "advertisement": {
     "title": "广告",
@@ -2491,6 +2493,8 @@
   },
   "memberActivity": {
     "dateNA": "日期不可用",
+    "yes": "是",
+    "no": "否",
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
     "numberOfAttendees": "出席人数"

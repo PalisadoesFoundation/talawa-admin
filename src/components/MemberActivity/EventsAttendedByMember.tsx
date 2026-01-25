@@ -27,14 +27,11 @@ import EventAttendedCard from './Card/EventsAttendedCardItem';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import styles from './EventsAttendedByMember.module.css';
-
-interface InterfaceEventsAttendedByMember {
-  eventsId: string;
-}
+import type { InterfaceEventsAttendedByMemberProps } from 'types/MemberActivity/interface';
 
 function EventsAttendedByMember({
   eventsId,
-}: InterfaceEventsAttendedByMember): JSX.Element {
+}: InterfaceEventsAttendedByMemberProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const {
     data: events,

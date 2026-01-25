@@ -31,15 +31,12 @@ import styles from './PromotedPost.module.css';
 import StarPurple500Icon from '@mui/icons-material/StarPurple500';
 import { useTranslation } from 'react-i18next';
 
-interface InterfacePostCardProps {
-  id: string;
-  image: string;
-  title: string;
-}
+import type { InterfacePromotedPostProps } from 'types/UserPortal/PromotedPost/interface';
 
-export default function promotedPost(
-  props: InterfacePostCardProps,
+export default function PromotedPost(
+  props: InterfacePromotedPostProps,
 ): JSX.Element {
+  const { title, image } = props;
   const { t } = useTranslation('translation', { keyPrefix: 'promotedPost' });
   return (
     <>
@@ -48,19 +45,19 @@ export default function promotedPost(
           <div className={`${styles.cardHeaderPromotedPost}`}>
             {/* Icon indicating promoted content */}
             <StarPurple500Icon />
-            {'Promoted Content'}
+            {t('title')}
           </div>
         </Card.Header>
         <Card.Body>
           {/* Display the title of the promoted content */}
-          <Card.Title>{props.title}</Card.Title>
+          <Card.Title>{title}</Card.Title>
           {/* Display a brief description or the title again */}
-          <Card.Text>{props.title}</Card.Text>
+          <Card.Text>{title}</Card.Text>
           {/* Conditionally render the image if provided */}
-          {props.image && (
+          {image && (
             <img
-              src={props.image}
-              alt={t('promotedContent', { title: props.title })}
+              src={image}
+              alt={t('promotedContent', { title })}
               className={styles.imageContainerPromotedPost}
             />
           )}

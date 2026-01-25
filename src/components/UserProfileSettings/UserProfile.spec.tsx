@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import translation from '../../../public/locales/en/translation.json';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -22,6 +22,9 @@ const renderWithProviders = (ui: React.ReactElement) =>
   );
 
 describe('UserProfile Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('renders with complete user data and shows truncated name and email', () => {
     const userDetails = {
       firstName: 'Christopher',

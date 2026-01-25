@@ -1568,6 +1568,7 @@
     "dummyPicture": "डमी चित्र",
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
+    "profilePicture": "प्रोफ़ाइल चित्र",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",
     "phoneNumber": "फ़ोन नंबर",
@@ -1740,7 +1741,8 @@
     "creator": "निर्माता",
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
-    "register": "पंजीकरण करें"
+    "register": "पंजीकरण करें",
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -2491,6 +2493,8 @@
   },
   "memberActivity": {
     "dateNA": "दिनांक उपलब्ध नहीं",
+    "yes": "हाँ",
+    "no": "नहीं",
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
     "numberOfAttendees": "उपस्थित लोगों की संख्या"

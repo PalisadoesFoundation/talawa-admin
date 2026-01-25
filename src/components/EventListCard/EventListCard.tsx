@@ -35,13 +35,10 @@ import { useTranslation } from 'react-i18next';
 import styles from './EventListCard.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { IEventListCard } from 'types/Event/interface';
 /**
  * Props for the EventListCard component.
  */
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
 
 function eventListCard(props: IEventListCard): JSX.Element {
   const { t } = useTranslation('translation', {

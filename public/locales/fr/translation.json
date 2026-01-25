@@ -1573,6 +1573,7 @@
     "dummyPicture": "image factice",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
+    "profilePicture": "photo de profil",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",
@@ -1745,7 +1746,8 @@
     "creator": "Créateur",
     "alreadyRegistered": "Déjà enregistré",
     "location": "Lieu",
-    "register": "Inscription"
+    "register": "S'inscrire",
+    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}"
   },
   "advertisement": {
     "title": "Annonces",
@@ -2491,6 +2493,8 @@
   },
   "memberActivity": {
     "dateNA": "Date N/D",
+    "yes": "Oui",
+    "no": "Non",
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
     "numberOfAttendees": "Nombre de participants"

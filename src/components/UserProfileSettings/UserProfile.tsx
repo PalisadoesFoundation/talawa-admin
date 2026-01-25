@@ -38,10 +38,10 @@ import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 
-const joinedDate = (param: string | Date): string => {
+const joinedDate = (param: string | Date, unavailableText: string): string => {
   const date = typeof param === 'string' ? new Date(param) : param;
   if (date?.toDateString() === 'Invalid Date') {
-    return 'Unavailable';
+    return unavailableText;
   }
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
@@ -67,9 +67,9 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         </div>
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
-            <div className={styles.imgContianer}>
+            <div className={styles.imgContainer}>
               {image && image !== 'null' ? (
-                <img src={image} alt={`profile picture`} />
+                +(<img src={image} alt={t('profilePicture')} />)
               ) : (
                 <Avatar
                   name={`${firstName} ${lastName}`}
@@ -101,7 +101,8 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} {createdAt && joinedDate(createdAt)}
+                  {tCommon('joined')} +{' '}
+                  {createdAt && joinedDate(createdAt, tCommon('unavailable'))}
                 </span>
               </span>
             </div>

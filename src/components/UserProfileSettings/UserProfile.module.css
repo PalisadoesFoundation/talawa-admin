@@ -21,13 +21,13 @@
   gap: 1.5rem;
 }
 
-.imgContianer {
+.imgContainer {
   width: 100px;
   height: 100px;
   flex-shrink: 0;
 }
 
-.imgContianer img {
+.imgContainer img {
   width: 100%;
   height: 100%;
   border-radius: 50%;

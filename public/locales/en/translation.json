@@ -1566,6 +1566,7 @@
     "state": "City/State",
     "country": "Country",
     "resetChanges": "Reset Changes",
+    "profilePicture": "profile picture",
     "profileDetails": "Profile Details",
     "deleteUserMessage": "By clicking on Delete User button your user will be permanently deleted along with its events, tags and all related data.",
     "copyLink": "Copy Profile Link",
@@ -1682,7 +1683,6 @@
     "calendarView": "Calendar View",
     "allDay": "All Day",
     "eventCreated": "Event created and posted successfully.",
-    "eventDetails": "Event Details",
     "eventName": "Name",
     "enterName": "Enter Name",
     "enterDescription": "Enter Description",
@@ -1727,7 +1727,8 @@
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "location": "location",
-    "register": "register"
+    "register": "register",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -2490,6 +2491,8 @@
   },
   "memberActivity": {
     "dateNA": "Date N/A",
+    "yes": "Yes",
+    "no": "No",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
     "numberOfAttendees": "Number of attendees"

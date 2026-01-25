@@ -43,7 +43,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   clearAllItems();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing Event Card In User portal', () => {
