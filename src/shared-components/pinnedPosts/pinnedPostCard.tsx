@@ -58,7 +58,7 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { errorHandler } from '../../utils/errorHandler';
 import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
-import styles from './pinnedPostsLayout.module.css';
+import styles from './pinnedPostCard.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Button } from '../Button';
