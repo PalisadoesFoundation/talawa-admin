@@ -377,6 +377,7 @@
       "noTimeoutSet": "Aucun délai défini",
       "minutes": " {{count}} minutes",
       "updateSession": "Mettre à jour la session",
+      "updateTimeout": "Mettre à jour le délai",
       "min15": "15 min",
       "min30": "30 min",
       "min45": "45 min",

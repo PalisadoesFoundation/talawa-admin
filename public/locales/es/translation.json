@@ -372,6 +372,7 @@
       "noTimeoutSet": "Sin tiempo de espera establecido",
       "minutes": " {{count}} minutos",
       "updateSession": "Actualizar sesión",
+      "updateTimeout": "Actualizar tiempo de espera",
       "min15": "15 min",
       "min30": "30 min",
       "min45": "45 min",

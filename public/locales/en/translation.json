@@ -377,6 +377,7 @@
       "noTimeoutSet": "No timeout set",
       "minutes": " {{count}} minutes",
       "updateSession": "Update Session",
+      "updateTimeout": "Update Timeout",
       "min15": "15 min",
       "min30": "30 min",
       "min45": "45 min",

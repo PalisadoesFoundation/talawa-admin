@@ -196,7 +196,7 @@ describe('Testing UpdateSession Component', () => {
     await wait();
 
     // Use getAllByText to get all elements with "Update Timeout" text
-    const updateSessionElements = screen.getAllByText(/Update Timeout/i);
+    const updateSessionElements = screen.getAllByText(/Update Session/i);
     expect(updateSessionElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
@@ -357,7 +357,7 @@ describe('Testing UpdateSession Component', () => {
     // Assertions to verify the component handles null community object correctly
     // Use getAllByText to get all elements with "Update Timeout" text
     const updateSessionElements = screen.getAllByText(/Update Timeout/i);
-    expect(updateSessionElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    expect(updateSessionElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
 

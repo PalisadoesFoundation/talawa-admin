@@ -165,7 +165,7 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
                 htmlFor="session-timeout-slider"
                 className={`form-label ${styles.updateTimeoutLabel}`}
               >
-                {t('communityProfile.sessionTimeout.updateTimeout')}
+                {t('communityProfile.sessionTimeout.updateSession')}
               </label>
             </div>
 

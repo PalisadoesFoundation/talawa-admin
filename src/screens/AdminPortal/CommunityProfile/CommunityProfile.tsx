@@ -61,7 +61,7 @@ import {
 import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import UpdateSession from '../../../components/AdminPortal/UpdateSession/UpdateSession';
+import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 const CommunityProfile = (): JSX.Element => {
@@ -235,7 +235,7 @@ const CommunityProfile = (): JSX.Element => {
             <FormFieldGroup label={t('communityName')} name="name" required>
               <input
                 type="text"
-                id="communityName"
+                id="name"
                 name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
