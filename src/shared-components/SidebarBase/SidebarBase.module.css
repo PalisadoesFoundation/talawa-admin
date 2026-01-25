@@ -238,7 +238,14 @@
 
 .collapsedDrawer {
   width: var(--sidebar-collapsed-width);
+  min-width: var(--sidebar-collapsed-width);
+  max-width: var(--sidebar-collapsed-width);
   overflow-x: hidden !important;
+}
+
+.leftDrawer.collapsedDrawer {
+  width: var(--sidebar-collapsed-width) !important;
+  max-width: var(--sidebar-collapsed-width);
 }
 
 .sidebarText {
@@ -332,10 +339,17 @@
 }
 
 @media (max-width: 820px) {
-  .leftDrawer {
+  .leftDrawer.expandedDrawer {
     width: 100%;
     left: 0;
     right: 0;
+  }
+
+  .collapsedDrawer {
+    width: var(--sidebar-collapsed-width);
+    max-width: var(--sidebar-collapsed-width);
+    right: auto;
+    box-sizing: border-box;
   }
 
   .inactiveDrawer {

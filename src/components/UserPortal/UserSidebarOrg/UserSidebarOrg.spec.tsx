@@ -9,7 +9,7 @@ import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER, ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
@@ -95,7 +95,24 @@ const props: InterfaceUserSidebarOrgProps = {
   setHideDrawer: vi.fn(),
 };
 
+const createCurrentUserMock = (role: string) => ({
+  request: {
+    query: CURRENT_USER,
+  },
+  result: {
+    data: {
+      user: {
+        role,
+      },
+    },
+  },
+});
+
+const CURRENT_USER_REGULAR_MOCK = createCurrentUserMock('regular');
+const CURRENT_USER_ADMIN_MOCK = createCurrentUserMock('administrator');
+
 const MOCKS = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -161,6 +178,7 @@ const MOCKS = [
 ];
 
 const MOCKS_WITH_IMAGE = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -226,6 +244,8 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
+const MOCKS_ADMIN = [CURRENT_USER_ADMIN_MOCK, ...MOCKS.slice(1)];
+
 const defaultScreens = [
   'People',
   'Events',
@@ -273,6 +293,7 @@ afterEach(() => {
 
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
+const linkAdmin = new StaticMockLink(MOCKS_ADMIN, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
@@ -894,5 +915,22 @@ describe('Dropdown State Management', () => {
     expect(
       screen.getByRole('button', { name: /Dropdown Menu/i }),
     ).toBeInTheDocument();
+  });
+
+  it('shows switch to admin portal button for admin users', () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider link={linkAdmin}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
   });
 });

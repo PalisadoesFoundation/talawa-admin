@@ -55,6 +55,8 @@
   "talawaAdminPortal": "Talawa 管理门户",
   "adminPortal": "管理门户",
   "userPortal": "用户门户",
+  "switchToUserPortal": "切换到用户门户",
+  "switchToAdminPortal": "切换到管理员门户",
   "address": "地址",
   "location": "位置",
   "enterLocation": "输入位置",
