@@ -2,7 +2,7 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, act, within, waitFor } from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
@@ -59,13 +59,7 @@ const MOCKS = [
   },
 ];
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+import { wait } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -197,7 +191,7 @@ describe('Testing UpdateSession Component', () => {
 
     // Use getAllByText to get all elements with "Update Session" text
     const updateSessionElements = screen.getAllByText(/Update Session/i);
-    expect(updateSessionElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    expect(updateSessionElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
     expect(screen.getByText(/15 min/i)).toBeInTheDocument();

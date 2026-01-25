@@ -10,7 +10,7 @@
  * Props interface: InterfaceUpdateSessionProps
  * - onValueChange: Optional callback function triggered when the slider value changes.
  *
- * @param props - Component props.
+ * @param onValueChange - Optional callback fired when the slider value changes.
  * @returns The rendered component.
  *
  * @example
