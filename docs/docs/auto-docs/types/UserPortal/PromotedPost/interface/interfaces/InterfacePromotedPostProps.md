@@ -6,7 +6,7 @@
 
 Defined in: [src/types/UserPortal/PromotedPost/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L4)
 
-Props for EventAttendedCard items.
+Props for PromotedPost component.
 
 ## Properties
 
