@@ -71,7 +71,7 @@ const SidebarBase = ({
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
           type="button"
-          aria-label="Toggle sidebar"
+          aria-label={tCommon('toggleSidebar')}
         >
           <FaBars
             className={`${styles.hamburgerIcon} ${

@@ -1138,8 +1138,9 @@
     "title": "404 नहीं मिला",
     "talawaAdmin": "तलावा प्रशासन",
     "talawaUser": "तलावा उपयोगकर्ता",
-    "notFoundMsg": "उफ़! ",
-    "backToHome": "घर वापिस जा रहा हूँ"
+    "notFoundMsg": "oops! आपके द्वारा अनुरोधित पृष्ठ नहीं मिला!",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएँ",
+    "logoAlt": "प्रतीक चिन्ह"
   },
   "orgContribution": {
     "title": "तलावा योगदान",
@@ -1455,7 +1456,9 @@
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
-    "moreOptions": "अधिक विकल्प"
+    "moreOptions": "अधिक विकल्प",
+    "scrollLeft": "बायें स्क्रॉल करें",
+    "scrollRight": "दायें स्क्रॉल करें"
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
@@ -2095,7 +2098,8 @@
     "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
     "continue": "जारी रखें",
     "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
-    "organizationNotFound": "संगठन नहीं मिला"
+    "organizationNotFound": "संगठन नहीं मिला",
+    "confirmLeaveButton": "छोड़ने की पुष्टि करें"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
@@ -2480,5 +2484,8 @@
     "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
     "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
     "goToLogin": "लॉगिन पर जाएं"
+  },
+  "csv": {
+    "demographics": "{{category}} जनसांख्यिकी"
   }
 }

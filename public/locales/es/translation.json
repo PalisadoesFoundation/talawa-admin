@@ -1121,8 +1121,9 @@
     "title": "404 No encontrado",
     "talawaAdmin": "Administrador de Talawa",
     "talawaUser": "Usuario de Talawa",
-    "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
-    "backToHome": "De vuelta a casa"
+    "notFoundMsg": "¡Vaya! ¡No se encontró la página que solicitó!",
+    "backToHome": "Volver al inicio",
+    "logoAlt": "Logo"
   },
   "orgContribution": {
     "title": "Contribuciones Talawa",
@@ -1441,9 +1442,11 @@
     "noMoreComments": "No hay más comentarios",
     "noComments": "Sin comentarios",
     "postedOn": "Publicado el {{date}}",
-    "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
+    "emptyCommentError": "Por favor, ingrese un comentario antes de enviar.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
-    "moreOptions": "más opciones"
+    "moreOptions": "Más opciones",
+    "scrollLeft": "Desplazarse a la izquierda",
+    "scrollRight": "Desplazarse a la derecha"
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
@@ -2083,7 +2086,8 @@
     "emailMismatchError": "El correo electrónico que ingresaste no coincide con el de tu cuenta.",
     "continue": "Continuar",
     "missingRequiredInfo": "No se puede procesar la solicitud: Falta información requerida.",
-    "organizationNotFound": "Organización no encontrada"
+    "organizationNotFound": "Organización no encontrada",
+    "confirmLeaveButton": "Confirmar salida"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Selector de vista de voluntarios",
@@ -2480,5 +2484,8 @@
         "failedToLoad": "Error al cargar el componente"
       }
     }
+  },
+  "csv": {
+    "demographics": "Demografía de {{category}}"
   }
 }
