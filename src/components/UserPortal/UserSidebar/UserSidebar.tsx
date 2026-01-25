@@ -33,7 +33,10 @@ const UserSidebar = ({
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const role = getItem<string>('role');
-  const canSwitchToAdmin = role !== null && role !== 'regular';
+  const allowedRoles = ['administrator', 'admin', 'superadmin'];
+  const resolvedRole = (role ?? '').toLowerCase();
+  const canSwitchToAdmin =
+    resolvedRole.length > 0 && allowedRoles.includes(resolvedRole);
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = useMemo(() => [], []);

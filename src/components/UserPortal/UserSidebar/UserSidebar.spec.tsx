@@ -279,6 +279,18 @@ describe('UserSidebar', () => {
       expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
     });
 
+    it('should not render switch to admin portal button for user role', () => {
+      mockUseLocalStorage.mockReturnValueOnce({
+        setItem: vi.fn(),
+        getItem: vi.fn(() => 'user'),
+      });
+      renderComponent();
+
+      expect(
+        screen.queryByTestId('switchToAdminPortalBtn'),
+      ).not.toBeInTheDocument();
+    });
+
     it('should render navigation links with correct text', () => {
       renderComponent();
 
