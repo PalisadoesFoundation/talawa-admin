@@ -345,7 +345,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
   const renderComponent = (customMocks: MockType[] = mocks as MockType[]) =>
     render(
-      <MockedProvider mocks={customMocks}>
+      <MockedProvider mocks={customMocks} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <Chat />

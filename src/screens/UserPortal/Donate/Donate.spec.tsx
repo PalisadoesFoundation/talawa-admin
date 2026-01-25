@@ -364,7 +364,7 @@ const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
 const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
 const renderDonate = (mocks = MOCKS) => {
   return render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
