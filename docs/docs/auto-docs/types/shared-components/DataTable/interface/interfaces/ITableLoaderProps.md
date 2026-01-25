@@ -4,7 +4,7 @@
 
 # Interface: ITableLoaderProps\<T\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:589](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L589)
+Defined in: [src/types/shared-components/DataTable/interface.ts:660](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L660)
 
 Props for the table loading skeleton component
 
@@ -23,7 +23,7 @@ either as a full table skeleton or as an overlay on top of existing data.
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:600](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L600)
+Defined in: [src/types/shared-components/DataTable/interface.ts:671](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L671)
 
 Accessible label for the loading table, used for screen readers
 
@@ -33,7 +33,7 @@ Accessible label for the loading table, used for screen readers
 
 > `optional` **asOverlay**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:597](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L597)
+Defined in: [src/types/shared-components/DataTable/interface.ts:668](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L668)
 
 When true, render as a translucent overlay over existing table content instead of standalone
 
@@ -43,7 +43,7 @@ When true, render as a translucent overlay over existing table content instead o
 
 > **columns**: [`IColumnDef`](IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:591](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L591)
+Defined in: [src/types/shared-components/DataTable/interface.ts:662](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L662)
 
 Column definitions to match the structure of the actual table
 
@@ -53,6 +53,6 @@ Column definitions to match the structure of the actual table
 
 > `optional` **rows**: `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:594](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L594)
+Defined in: [src/types/shared-components/DataTable/interface.ts:665](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L665)
 
 Number of skeleton rows to display (default: 5)

@@ -4,7 +4,7 @@
 
 # Interface: IUseTableDataResult\<TRow, TData\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L292)
+Defined in: [src/types/shared-components/DataTable/interface.ts:298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L298)
 
 Result of the useTableData hook
 
@@ -24,7 +24,7 @@ Result of the useTableData hook
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L296)
+Defined in: [src/types/shared-components/DataTable/interface.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L302)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:296](https://git
 
 > **fetchMore**: \<`TFetchData`, `TFetchVars`\>(`fetchMoreOptions`) => `Promise`\<`ApolloQueryResult`\<`TFetchData`\>\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L299)
+Defined in: [src/types/shared-components/DataTable/interface.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L305)
 
 #### Type Parameters
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://git
 
 > **loading**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L294)
+Defined in: [src/types/shared-components/DataTable/interface.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L300)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:294](https://git
 
 > **loadingMore**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L295)
+Defined in: [src/types/shared-components/DataTable/interface.ts:301](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L301)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:295](https://git
 
 > **networkStatus**: `NetworkStatus`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L300)
+Defined in: [src/types/shared-components/DataTable/interface.ts:306](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L306)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:300](https://git
 
 > **pageInfo**: [`IPageInfo`](IPageInfo.md)
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L297)
+Defined in: [src/types/shared-components/DataTable/interface.ts:303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L303)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:297](https://git
 
 > **refetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`TData`\>\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L298)
+Defined in: [src/types/shared-components/DataTable/interface.ts:304](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L304)
 
 #### Parameters
 
@@ -110,4 +110,4 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:298](https://git
 
 > **rows**: `TRow`[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L293)
+Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L299)

@@ -819,7 +819,13 @@ describe('DataTable', () => {
     const data = [{ name: 'Ada' }];
 
     render(
-      <DataTable data={data} columns={columns} loadingMore skeletonRows={2} />,
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        loadingMore
+        skeletonRows={2}
+      />,
     );
 
     const appended = document.querySelectorAll(
@@ -1629,6 +1635,7 @@ describe('DataTable', () => {
         selectable
         rowKey="id"
         rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+        paginationMode="client"
         loadingMore
         skeletonRows={2}
       />,
@@ -1895,8 +1902,8 @@ describe('DataTable', () => {
     // Pagination.tsx line 52 covered
 
     // 3) Test row action boolean disable
-    const actionBtn = screen.getByTestId('action-btn-edit');
-    expect(actionBtn).toBeDisabled();
+    const actionBtns = screen.getAllByTestId('action-btn-edit');
+    actionBtns.forEach((btn) => expect(btn).toBeDisabled());
     // ActionsCell.tsx line 20-22 covered (boolean branch)
 
     // 4) Test TableLoader default rows
@@ -1905,6 +1912,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         loading
+        paginationMode="client"
         // Missing skeletonRows to test default = 5
       />,
     );
@@ -1966,5 +1974,113 @@ describe('DataTable', () => {
     // Bulk action button should NOT be disabled (once row is selected)
     await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
+  });
+});
+
+describe('defaultCompare boolean/date branches', () => {
+  type Row = {
+    id: string;
+    name: string;
+    active?: boolean | null;
+    date?: Date | null;
+  };
+  // Use dynamic dates to avoid hardcoded date strings
+  const date1 = dayjs().subtract(1, 'year').toDate();
+  const date2 = null;
+  const date3 = dayjs().add(1, 'year').toDate();
+  const date4 = undefined;
+  const rows: Row[] = [
+    { id: '1', name: 'Alice', active: false, date: date1 },
+    { id: '2', name: 'Bob', active: null, date: date2 },
+    { id: '3', name: 'Charlie', active: true, date: date3 },
+    { id: '4', name: 'Nulls', active: undefined, date: date4 },
+  ];
+  const columns = [
+    {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'active',
+      header: 'Active',
+      accessor: 'active' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'date',
+      header: 'Date',
+      accessor: 'date' as const,
+      meta: { sortable: true },
+    },
+  ];
+
+  it('sorts boolean column (false < true, nulls last)', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const th = screen.getByRole('button', { name: /active/i });
+    // Ascending: false, true, null/undefined
+    await userEvent.click(th);
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: true, false, null/undefined (nulls last)
+    await userEvent.click(th);
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Bob', 'Nulls', 'Charlie', 'Alice']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('sorts date column (earliest < latest, nulls last)', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const th = screen.getByRole('button', { name: /date/i });
+    // Ascending: earliest, latest, null/undefined
+    await userEvent.click(th);
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: latest, earliest, null/undefined (nulls last)
+    await userEvent.click(th);
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Bob', 'Nulls', 'Charlie', 'Alice']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts boolean and date columns', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const thBool = screen.getByRole('button', { name: /active/i });
+    const thDate = screen.getByRole('button', { name: /date/i });
+    // Keyboard sort boolean
+    thBool.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard('{Enter}');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date
+    thDate.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard('{Enter}');
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
   });
 });

@@ -4,7 +4,7 @@
 
 # Interface: IBulkAction\<T\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:570](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L570)
+Defined in: [src/types/shared-components/DataTable/interface.ts:641](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L641)
 
 Bulk action for operations on multiple selected rows.
 
@@ -29,7 +29,7 @@ const bulkActions: IBulkAction<User>[] = [
 
 > `optional` **confirm**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:580](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L580)
+Defined in: [src/types/shared-components/DataTable/interface.ts:651](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L651)
 
 Optional confirmation message shown before executing the action
 
@@ -39,7 +39,7 @@ Optional confirmation message shown before executing the action
 
 > `optional` **disabled**: `boolean` \| (`rows`, `keys`) => `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:578](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L578)
+Defined in: [src/types/shared-components/DataTable/interface.ts:649](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L649)
 
 Disable this action (boolean or function returning boolean based on selection)
 
@@ -49,7 +49,7 @@ Disable this action (boolean or function returning boolean based on selection)
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:572](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L572)
+Defined in: [src/types/shared-components/DataTable/interface.ts:643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L643)
 
 Unique identifier for the action
 
@@ -59,7 +59,7 @@ Unique identifier for the action
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L574)
+Defined in: [src/types/shared-components/DataTable/interface.ts:645](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L645)
 
 Button label text
 
@@ -69,7 +69,7 @@ Button label text
 
 > **onClick**: (`rows`, `keys`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:576](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L576)
+Defined in: [src/types/shared-components/DataTable/interface.ts:647](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L647)
 
 Callback when action is triggered with selected rows and their keys
 

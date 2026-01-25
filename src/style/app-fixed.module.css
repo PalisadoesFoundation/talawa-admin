@@ -10765,8 +10765,30 @@ form {
 
 /* -- DataTable Component Styles -- */
 
+:root {
+  --datatable-border: #ddd;
+  --datatable-surface: #ffffff;
+  --datatable-text: #555555;
+  --datatable-focus-outline: var(--primary-theme-color, #1778f2);
+  --datatable-focus-ring: var(--focus-ring-color, #90caf9);
+  --datatable-focus-background: #e3f2fd;
+  --datatable-hover-bg: var(--row-hover-bg, #f0f0f0);
+  --datatable-bulk-bg: #f6f8fa;
+  --datatable-bulk-border: #e5e7eb;
+  --datatable-bulk-text: #333333;
+  --datatable-muted-text: #666666;
+  --datatable-error-text: #842029;
+  --datatable-error-border: #f5c2c7;
+  --datatable-error-bg: #f8d7da;
+  --datatable-empty-border: #dddddd;
+  --datatable-empty-bg: #f9f9f9;
+  --datatable-skeleton-base: var(--skeleton-base, #e0e0e0);
+  --datatable-skeleton-highlight: var(--skeleton-highlight, #f0f0f0);
+}
+
 .dataTableWrapper {
   width: 100%;
+  position: relative;
   overflow-x: auto;
 }
 
@@ -10821,12 +10843,16 @@ form {
 .dataSkeletonCell {
   height: 1em;
   width: 100%;
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background: linear-gradient(
+    90deg,
+    var(--datatable-skeleton-highlight) 25%,
+    var(--datatable-skeleton-base) 50%,
+    var(--datatable-skeleton-highlight) 75%
+  );
   border-radius: 4px;
-  animation: skeleton-loading 1.2s ease-in-out infinite;
+  animation: datatable-loading 1.2s ease-in-out infinite;
 }
-
-@keyframes skeleton-loading {
+@keyframes datatable-loading {
   0% {
     background-position: -200px 0;
   }
@@ -10834,6 +10860,226 @@ form {
   100% {
     background-position: calc(200px + 100%) 0;
   }
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+.sortable:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+}
+
+.sortable:focus-visible {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--datatable-focus-ring);
+  background: var(--datatable-focus-background);
+}
+
+.headerInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sortIndicator {
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+.active {
+  opacity: 1;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+
+.searchWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--datatable-border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: var(--datatable-surface);
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  min-width: 220px;
+}
+
+.searchInput:focus-visible,
+.searchInput:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.searchClear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  color: var(--datatable-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchClear:hover {
+  color: var(--primaryText-color, #000000);
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dataErrorState {
+  padding: 16px;
+  text-align: left;
+  color: var(--datatable-error-text);
+  background: var(--datatable-error-bg);
+  border: 1px solid var(--datatable-error-border);
+  border-radius: 6px;
+}
+
+.dataErrorDetails {
+  margin-top: 4px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  color: var(--errorState-color, #5c1a21);
+}
+
+.loading {
+  padding: 16px;
+  text-align: center;
+}
+
+.dataEmptyState {
+  padding: 16px;
+  text-align: center;
+  color: var(--datatable-text);
+  border: 1px solid var(--datatable-empty-border);
+  border-radius: 6px;
+  background: var(--datatable-empty-bg);
+}
+
+.selectCol {
+  width: 42px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.actionsCol {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--datatable-bulk-bg);
+  border: 1px solid var(--datatable-bulk-border);
+  border-radius: 8px;
+}
+
+.bulkLeft {
+  color: var(--datatable-bulk-text);
+  font-size: 0.9rem;
+}
+
+.bulkRight {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bulkBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkClear {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--datatable-muted-text);
+}
+
+.bulkClear:hover {
+  background: var(--datatable-hover-bg);
+}
+
+.dataLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* OrgSelector Component Styles */

@@ -2,6 +2,12 @@ import React from 'react';
 import type { QueryResult, NetworkStatus } from '@apollo/client';
 
 /**
+ * SortDirection type alias for 'asc' | 'desc'.
+ * Used for clarity in DataTable props and state.
+ */
+export type SortDirection = 'asc' | 'desc';
+
+/**
  * Header can be:
  * - plain text
  * - ReactNode (JSX, fragments, icons, tooltips, etc.)
@@ -310,7 +316,7 @@ export interface IUseTableDataResult<TRow, TData = unknown> {
  *
  * CALL SITE VERIFICATION:
  * - DataTable.tsx: pageSize = 10 (default numeric), totalItems = (totalItems ?? data.length)
- * - All props destructured from typed IDataTableProps&lt;T&gt; interface
+ * - All props destructured from typed IDataTableProps<T> interface
  * - No URL parameters or form inputs directly coerced to number here
  *
  * Future consideration: If external callers provide string pageSize/totalItems,
@@ -330,7 +336,7 @@ export interface IPaginationControlsProps {
  * Props for a generic DataTable component
  */
 
-export interface IBaseDataTableProps<T, TValue = unknown> {
+export interface InterfaceBaseDataTableProps<T, TValue = unknown> {
   data: T[];
   columns: Array<IColumnDef<T, TValue>>;
   loading?: boolean;
@@ -498,17 +504,82 @@ type PaginationProps =
   | ServerPaginationProps
   | NoPaginationProps;
 
-// i18n-ignore-next-line
-export type IDataTableProps<T, TValue = unknown> = IBaseDataTableProps<
-  T,
-  TValue
-> &
-  PaginationProps;
+/**
+ * Sorting configuration for DataTable component
+ * @typeParam T - The row data type
+ */
+interface IDataTableSortingProps<T> {
+  /**
+   * If true, disables local sorting and expects the parent to handle sorting (server-side sort).
+   */
+  serverSort?: boolean;
+
+  /**
+   * Controlled sort state. When provided, sorting is controlled by the parent.
+   * Should be an array of sort state objects (columnId, direction).
+   */
+  sortBy?: ISortState[];
+
+  /**
+   * Controlled sort direction for single-column sorting (legacy or simple use cases).
+   * Use SortDirection type alias.
+   */
+  sortDirection?: SortDirection;
+
+  /**
+   * Initial uncontrolled sort direction for single-column sorting.
+   * Used to set the default sort direction on mount. Use SortDirection type alias.
+   */
+  initialSortDirection?: SortDirection;
+
+  /**
+   * Callback fired when the sort state changes (column or direction).
+   * Receives an object with sortBy (array of ISortState), and optionally sortDirection and column for legacy/single-column compatibility.
+   * This aligns with the sortBy prop for multi-column sorting.
+   */
+  onSortChange?: (args: {
+    sortBy: ISortState[];
+    sortDirection?: SortDirection;
+    column?: IColumnDef<T>;
+  }) => void;
+
+  /**
+   * Initial uncontrolled sort column id (legacy single-column only).
+   * Used to set the default sort column on mount.
+   */
+  initialSortBy?: string;
+}
+
+/**
+ * Props for the DataTable component.
+ *
+ * Combines base table props, pagination configuration, and sorting options.
+ * Supports client-side, server-side, or no pagination modes via discriminated union.
+ *
+ * @typeParam T - The row data type
+ * @typeParam TValue - The cell value type (default: unknown)
+ */
+type DataTableBase<T, TValue> =
+  // Base props
+  InterfaceBaseDataTableProps<T, TValue>;
+type DataTableWithPagination<T, TValue> =
+  // With pagination
+  DataTableBase<T, TValue> & PaginationProps;
+type DataTableComplete<T, TValue> =
+  // With sorting props
+  DataTableWithPagination<T, TValue> &
+    // Sorting
+    IDataTableSortingProps<T>;
+
+// Combined DataTable props type
+export type IDataTableProps<T, TValue = unknown> =
+  // Props union
+  DataTableComplete<T, TValue>;
 
 /** Sorting state */
 export interface ISortState {
   columnId: string;
-  direction: 'asc' | 'desc';
+  direction: SortDirection;
 }
 
 /** Filter state */
@@ -524,7 +595,7 @@ export interface ITableState {
   sorting?: ISortState[];
   filters?: IFilterState[];
   globalSearch?: string;
-  selectedRows?: Set<Key>;
+  selectedRows?: ReadonlySet<Key>;
 }
 
 /**
