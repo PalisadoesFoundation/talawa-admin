@@ -127,6 +127,7 @@ export interface IEventHeaderProps {
 
 /**
  * Props for EventListCard component.
+ *
  * `@remarks` Extends IEvent and adds optional refetchEvents callback.
  */
 export interface IEventListCard extends IEvent {
