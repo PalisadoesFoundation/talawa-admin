@@ -80,7 +80,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999' },
+          variables: { eventId: 'event123' },
         },
         error: new Error('An error occurred'),
       },
@@ -107,17 +107,6 @@ describe('CustomTableCell', () => {
 
   it('displays no event found message', async () => {
     const noEventMock = [
-      {
-        request: {
-          query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            event: null,
-          },
-        },
-      },
       {
         request: {
           query: EVENT_DETAILS,

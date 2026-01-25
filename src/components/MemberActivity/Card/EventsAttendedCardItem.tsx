@@ -111,6 +111,7 @@ const EventAttendedCard = ({
                 to={`/admin/event/${orgId}/${eventId}`}
                 state={{ id: eventId }}
                 className="text-decoration-none"
+                aria-label={t('viewEventDetails')}
               >
                 <div
                   className={`rounded-circle d-flex align-items-center justify-content-center ${styles.eventsAttendedCardChevron}`}

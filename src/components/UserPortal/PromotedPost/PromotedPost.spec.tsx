@@ -50,7 +50,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should be rendered properly', async () => {
-    render(
+    const { getAllByText } = render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -63,12 +63,14 @@ describe('Testing PromotedPost Component', () => {
     );
 
     await wait();
+    const titleElements = getAllByText('Test Post');
+    expect(titleElements.length).toBeGreaterThan(0);
   });
 
   it('Component should be rendered properly if prop image is not undefined', async () => {
     props.image = 'promotedPostImage';
 
-    render(
+    const { getAllByText, getByRole } = render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -81,6 +83,9 @@ describe('Testing PromotedPost Component', () => {
     );
 
     await wait();
+    const titleElements = getAllByText('Test Post');
+    expect(titleElements.length).toBeGreaterThan(0);
+    expect(getByRole('img')).toHaveAttribute('src', 'promotedPostImage');
   });
 
   it('Component should display the icon correctly', async () => {
