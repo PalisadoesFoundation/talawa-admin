@@ -1,10 +1,13 @@
+/**
+ * Props for User entity shared across portals.
+ */
 import type { Address } from './type';
 
 export interface InterfaceUser {
   id: string;
   address?: Address;
   birthDate?: Date;
-  createdAt: Date | string | null | undefined;
+  createdAt?: Date | string | null;
   email: string;
   firstName: string;
   lastName: string;
@@ -16,6 +19,9 @@ export interface InterfaceUser {
   avatarURL?: string;
 }
 
+/**
+ * Props for User in attendee context.
+ */
 export interface InterfaceUserAttendee {
   id: string;
   user: {
