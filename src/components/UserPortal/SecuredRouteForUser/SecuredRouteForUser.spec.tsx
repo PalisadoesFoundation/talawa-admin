@@ -74,6 +74,7 @@ const renderWithRouter = (initialEntry = '/user/organizations') => {
 
 describe('SecuredRouteForUser', () => {
   const originalLocation = window.location;
+  const originalScrollTo = window.scrollTo;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -85,8 +86,9 @@ describe('SecuredRouteForUser', () => {
       value: { href: '' },
     });
     Object.defineProperty(window, 'scrollTo', {
-      value: vi.fn(),
+      configurable: true,
       writable: true,
+      value: vi.fn(),
     });
   });
 
@@ -99,6 +101,11 @@ describe('SecuredRouteForUser', () => {
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
+    });
+    Object.defineProperty(window, 'scrollTo', {
+      configurable: true,
+      writable: true,
+      value: originalScrollTo,
     });
   });
 

@@ -440,27 +440,25 @@ describe('Testing Advertisement Register Component', () => {
     await userEvent.clear(screen.getByTestId('advertisementNameInput'));
     await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    const user = userEvent.setup();
-
-    await user.selectOptions(
+    await userEvent.selectOptions(
       screen.getByTestId('advertisementTypeSelect'),
       'banner',
     );
 
-    await user.clear(screen.getByTestId('advertisementDescriptionInput'));
-    await user.type(
+    await userEvent.clear(screen.getByTestId('advertisementDescriptionInput'));
+    await userEvent.type(
       screen.getByTestId('advertisementDescriptionInput'),
       'this is a banner',
     );
 
-    await user.clear(screen.getByTestId('advertisementStartDate'));
-    await user.type(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
       screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
 
-    await user.clear(screen.getByTestId('advertisementEndDate'));
-    await user.type(
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
       screen.getByTestId('advertisementEndDate'),
       dateConstants.create.endAtISO.split('T')[0],
     );

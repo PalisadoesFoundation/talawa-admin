@@ -420,6 +420,7 @@ function AdvertisementRegister({
             <input
               className={styles.inputField}
               type="text"
+              id="name"
               placeholder={t('EXname')}
               autoComplete="off"
               required
@@ -434,6 +435,7 @@ function AdvertisementRegister({
           <FormFieldGroup name="description" label={t('Rdesc')}>
             <input
               className={styles.inputField}
+              id="description"
               type="text"
               placeholder={t('EXdesc')}
               autoComplete="off"
@@ -449,10 +451,10 @@ function AdvertisementRegister({
             <FormFieldGroup name="attachments" label={t('Rmedia')}>
               <input
                 className={styles.inputField}
+                id="advertisementMedia"
                 accept="image/*, video/*"
                 name="advertisementMedia"
                 type="file"
-                id="advertisementMedia"
                 multiple
                 onChange={handleFileUpload}
                 data-cy="advertisementMediaInput"
@@ -497,6 +499,7 @@ function AdvertisementRegister({
           <FormFieldGroup name="type" label={t('Rtype')} required>
             <select
               className={styles.inputField}
+              id="type"
               aria-label={t('Rtype')}
               value={formState.type}
               onChange={(e) =>
@@ -515,6 +518,7 @@ function AdvertisementRegister({
             <input
               className={styles.inputField}
               type="date"
+              id="startAt"
               required
               value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
               onChange={(e) => {
@@ -528,6 +532,7 @@ function AdvertisementRegister({
             <input
               className={styles.inputField}
               type="date"
+              id="endAt"
               required
               value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
               onChange={(e) => {
