@@ -1,22 +1,14 @@
 /**
- * This component renders a modal for creating a direct chat with a user.
- * It allows users to search for other users and initiate a direct chat.
+ * Modal that lets a user start a direct chat with another member.
  *
- * @file CreateDirectChat.tsx
- * @module components/UserPortal/CreateDirectChat
- *
- * @param {InterfaceCreateDirectChatProps} props - The props for the component.
- * @param {boolean} props.createDirectChatModalisOpen - Determines if the modal is open.
- * @param {() => void} props.toggleCreateDirectChatModal - Function to toggle the modal visibility.
- * @param {(variables?: Partial<{ id: string }>) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
- * @param {GroupChat[]} props.chats - List of existing group chats.
- *
- * @returns {JSX.Element} The rendered CreateDirectChat modal component.
+ * Presents a searchable member list and creates the two-person chat plus memberships.
  *
  * @remarks
- * - Uses Apollo Client for GraphQL queries and mutations.
- * - Integrates with Material-UI and React-Bootstrap for UI components.
- * - Includes a search functionality to filter users by name.
+ * Uses Apollo Client for member queries and chat mutations, Material UI and React-Bootstrap for UI,
+ * and i18n strings for labels.
+ *
+ * @param props - Modal controls, refetch handler, and existing chats.
+ * @returns The rendered CreateDirectChat modal.
  *
  * @example
  * ```tsx
@@ -27,11 +19,10 @@
  *   chats={existingChats}
  * />
  * ```
- *
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import type {
   ApolloCache,
   ApolloQueryResult,
@@ -47,6 +38,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Table from '@mui/material/Table';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -55,7 +47,7 @@ import TableRow from '@mui/material/TableRow';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
@@ -250,121 +242,115 @@ export default function createDirectChatModal({
       resetButtonText={tErrors('resetButton')}
       onReset={chatsListRefetch}
     >
-      <Modal
-        data-testid="createDirectChatModal"
+      <BaseModal
+        dataTestId="createDirectChatModal"
         show={createDirectChatModalisOpen}
         onHide={toggleCreateDirectChatModal}
-        contentClassName={styles.modalContent}
+        title={t('chat', { defaultValue: 'Chat' })}
+        className={styles.modalContent}
+        headerTestId="createDirectChat"
       >
-        <Modal.Header closeButton data-testid="createDirectChat">
-          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <LoadingState
-            isLoading={allUsersLoading}
-            variant="inline"
-            size="lg"
-            data-testid="createDirectChatLoading"
-          >
-            <>
-              <div className={styles.inputContainer}>
-                <SearchBar
-                  placeholder={t('searchFullName', {
-                    defaultValue: 'Search full name',
-                  })}
-                  value={userName}
-                  onChange={(value) => setUserName(value)}
-                  onSearch={(value) => handleUserModalSearchChange(value)}
-                  onClear={() => {
-                    // Clearing the input is enough; SearchBar's clear action will
-                    // also trigger onSearch('') which performs the refetch.
-                    setUserName('');
-                  }}
-                  inputTestId="searchUser"
-                  buttonTestId="submitBtn"
-                />
-              </div>
-              <TableContainer
-                className={styles.tableContainer}
-                component={Paper}
+        <LoadingState
+          isLoading={allUsersLoading}
+          variant="inline"
+          size="lg"
+          data-testid="createDirectChatLoading"
+        >
+          <>
+            <div className={styles.inputContainer}>
+              <SearchBar
+                placeholder={t('searchFullName', {
+                  defaultValue: 'Search full name',
+                })}
+                value={userName}
+                onChange={(value) => setUserName(value)}
+                onSearch={(value) => handleUserModalSearchChange(value)}
+                onClear={() => {
+                  setUserName('');
+                  handleUserModalSearchChange('');
+                }}
+                inputTestId="searchUser"
+                buttonTestId="submitBtn"
+              />
+            </div>
+            <TableContainer className={styles.tableContainer} component={Paper}>
+              <Table
+                aria-label={t('organizationMembersTable', {
+                  defaultValue: 'Organization Members Table',
+                })}
               >
-                <Table
-                  aria-label={t('organizationMembersTable', {
-                    defaultValue: 'Organization Members Table',
-                  })}
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        {tCommon('hash', { defaultValue: '#' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('user', { defaultValue: 'User' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('chat', { defaultValue: 'Chat' })}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {allUsersData &&
-                      allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges
-                        .filter(
-                          ({
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      {tCommon('hash', { defaultValue: '#' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('user', { defaultValue: 'User' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('chat', { defaultValue: 'Chat' })}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allUsersData &&
+                    allUsersData.organization?.members?.edges?.length > 0 &&
+                    allUsersData.organization.members.edges
+                      .filter(
+                        ({
+                          node: userDetails,
+                        }: {
+                          node: InterfaceOrganizationMember;
+                        }) => userDetails.id !== userId,
+                      )
+                      .map(
+                        (
+                          {
                             node: userDetails,
-                          }: {
-                            node: InterfaceOrganizationMember;
-                          }) => userDetails.id !== userId,
-                        )
-                        .map(
-                          (
-                            {
-                              node: userDetails,
-                            }: { node: InterfaceOrganizationMember },
-                            index: number,
-                          ) => (
-                            <TableRow data-testid="user" key={userDetails.id}>
-                              <TableCell component="th" scope="row">
-                                {index + 1}
-                              </TableCell>
-                              <TableCell align="center">
-                                {userDetails.name}
-                                <br />
-                                {userDetails.role || 'Member'}
-                              </TableCell>
-                              <TableCell align="center">
-                                <Button
-                                  onClick={() => {
-                                    handleCreateDirectChat(
-                                      userDetails.id,
-                                      userDetails.name,
-                                      chats,
-                                      t,
-                                      createChat,
-                                      createChatMembership,
-                                      organizationId,
-                                      userId,
-                                      currentUserName,
-                                      chatsListRefetch,
-                                      toggleCreateDirectChatModal,
-                                    );
-                                  }}
-                                  data-testid="addBtn"
-                                >
-                                  {t('add', { defaultValue: 'Add' })}
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ),
-                        )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          </LoadingState>
-        </Modal.Body>
-      </Modal>
+                          }: { node: InterfaceOrganizationMember },
+                          index: number,
+                        ) => (
+                          <TableRow data-testid="user" key={userDetails.id}>
+                            <TableCell component="th" scope="row">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell align="center">
+                              {userDetails.name}
+                              <br />
+                              {userDetails.role ||
+                                t('role.member', { defaultValue: 'Member' })}
+                            </TableCell>
+                            <TableCell align="center">
+                              <Button
+                                onClick={() => {
+                                  handleCreateDirectChat(
+                                    userDetails.id,
+                                    userDetails.name,
+                                    chats,
+                                    t,
+                                    createChat,
+                                    createChatMembership,
+                                    organizationId,
+                                    userId,
+                                    currentUserName,
+                                    chatsListRefetch,
+                                    toggleCreateDirectChatModal,
+                                  );
+                                }}
+                                data-testid="addBtn"
+                              >
+                                {t('add', { defaultValue: 'Add' })}
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ),
+                      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        </LoadingState>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 }
