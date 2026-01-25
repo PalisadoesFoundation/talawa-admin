@@ -178,7 +178,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/BittuB
 
 ### type?
 
-> `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
+> `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"url"` \| `"tel"`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/FormFieldGroup/interface.ts#L17)
 

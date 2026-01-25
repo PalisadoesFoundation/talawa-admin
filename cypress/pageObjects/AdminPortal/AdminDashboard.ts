@@ -5,25 +5,25 @@ export class AdminDashboardPage {
   private readonly _logoutButton: string = '[data-testid="signOutBtn"]';
   private readonly _loginEmailInput: string = '[data-cy="loginEmail"]';
   private readonly _drawerOptions = [
-    { label: 'People', url: '/orgpeople/' },
-    { label: 'Tags', url: '/orgtags/' },
-    { label: 'Events', url: '/orgevents/' },
-    { label: 'Venues', url: '/orgvenues/' },
-    { label: 'Posts', url: '/orgpost/' },
-    { label: 'Block/Unblock', url: '/blockuser/' },
-    { label: 'Advertisement', url: '/orgads/' },
-    { label: 'Funds', url: '/orgfunds/' },
-    { label: 'Membership Requests', url: '/requests/' },
-    { label: 'Settings', url: '/orgsetting/' },
+    { label: 'People', url: '/admin/orgpeople/' },
+    { label: 'Tags', url: '/admin/orgtags/' },
+    { label: 'Events', url: '/admin/orgevents/' },
+    { label: 'Venues', url: '/admin/orgvenues/' },
+    { label: 'Posts', url: '/admin/orgpost/' },
+    { label: 'Block/Unblock', url: '/admin/blockuser/' },
+    { label: 'Advertisement', url: '/admin/orgads/' },
+    { label: 'Funds', url: '/admin/orgfunds/' },
+    { label: 'Membership Requests', url: '/admin/requests/' },
+    { label: 'Settings', url: '/admin/orgsetting/' },
   ];
 
   visit() {
-    cy.visit('/orglist');
+    cy.visit('/admin/orglist');
     return this;
   }
 
   verifyOnDashboard(timeout = 20000) {
-    cy.url({ timeout }).should('include', '/orglist');
+    cy.url({ timeout }).should('include', '/admin/orglist');
     cy.get(this._orgcardContainer, { timeout }).should('be.visible');
     cy.contains('Admin Portal', { timeout }).should('be.visible');
     return this;
@@ -34,7 +34,7 @@ export class AdminDashboardPage {
       .should('be.visible')
       .first()
       .click();
-    cy.url().should('match', /\/orgdash\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgdash\/[a-f0-9-]+/);
     return this;
   }
 

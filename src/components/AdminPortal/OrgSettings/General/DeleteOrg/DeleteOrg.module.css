@@ -1,0 +1,31 @@
+.DeleteOrgCard {
+  composes: DeleteOrgCard from '../../../../../style/app-fixed.module.css';
+}
+
+.deleteCardHeader {
+  composes: deleteCardHeader from '../../../../../style/app-fixed.module.css';
+}
+
+.textBox {
+  composes: textBox from '../../../../../style/app-fixed.module.css';
+}
+
+.deleteButton {
+  composes: deleteButton from '../../../../../style/app-fixed.module.css';
+}
+
+.icon {
+  composes: icon from '../../../../../style/app-fixed.module.css';
+}
+
+.modalHeaderDelete {
+  composes: modalHeaderDelete from '../../../../../style/app-fixed.module.css';
+}
+
+.btnDelete {
+  composes: btnDelete from '../../../../../style/app-fixed.module.css';
+}
+
+.btnConfirmDelete {
+  composes: btnConfirmDelete from '../../../../../style/app-fixed.module.css';
+}

@@ -111,12 +111,12 @@ const renderAddPeopleToTagModal = (
 ): RenderResult => {
   return render(
     <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<AddPeopleToTag {...props} />}
               />
             </Routes>
@@ -132,12 +132,12 @@ const renderComponent = (
 ): RenderResult =>
   render(
     <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-      <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={
                   <AddPeopleToTag {...defaultProps} {...(customProps ?? {})} />
                 }
@@ -280,7 +280,6 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     const input = screen.getByPlaceholderText(translations.firstName);
-
     // use a value that exists in mocks
     await user.click(input);
     await user.paste('usersToAssignTo');
@@ -292,7 +291,6 @@ describe('Organisation Tags Page', () => {
     // clear button exists because query succeeded
     const clearBtn = await screen.findByTestId('clearFirstNameSearch');
     await user.click(clearBtn);
-
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
@@ -316,7 +314,6 @@ describe('Organisation Tags Page', () => {
     // SearchBar renders a clear button when value is not empty
     const clearBtn = await screen.findByTestId('clearLastNameSearch');
     await user.click(clearBtn);
-
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
@@ -425,12 +422,12 @@ describe('Organisation Tags Page', () => {
     await act(async () => {
       rerender(
         <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+          <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
-                    path="/orgtags/:orgId/manageTag/:tagId"
+                    path="/admin/orgtags/:orgId/manageTag/:tagId"
                     element={
                       <AddPeopleToTag
                         {...defaultProps}

@@ -244,11 +244,11 @@ const fundCampaignPledge = (): JSX.Element => {
       <div>
         <BreadcrumbsComponent
           items={[
-            { label: fundName, to: `/orgfunds/${orgId}` },
+            { label: fundName, to: `/admin/orgfunds/${orgId}` },
             fundId
               ? {
                   label: campaignInfo?.name,
-                  to: `/orgfundcampaign/${orgId}/${fundId}`,
+                  to: `/admin/orgfundcampaign/${orgId}/${fundId}`,
                 }
               : { label: campaignInfo?.name },
             { translationKey: 'pledges.pledges', isCurrent: true },
