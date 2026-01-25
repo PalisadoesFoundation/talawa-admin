@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import translation from '../../../public/locales/en/translation.json';
+import common from '../../../public/locales/en/common.json';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -107,7 +108,7 @@ describe('UserProfile Component', () => {
     };
 
     const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
   });
   it('handles createdAt passed as a string and formats it correctly', () => {
     const userDetails = {
@@ -140,7 +141,7 @@ describe('UserProfile Component', () => {
     };
 
     const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
   });
 
   it('renders "Unavailable" when createdAt is undefined', () => {
@@ -153,6 +154,6 @@ describe('UserProfile Component', () => {
     };
 
     const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
   });
 });

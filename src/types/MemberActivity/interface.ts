@@ -1,3 +1,6 @@
+/**
+ * Props for CustomTableCell component.
+ */
 export interface InterfaceCustomTableCellProps {
   eventId: string;
 }
@@ -9,6 +12,9 @@ export interface InterfaceEventsAttendedByMemberProps {
   eventsId: string;
 }
 
+/**
+ * Props for EventAttendedCard items displaying event details.
+ */
 export interface InterfaceCardItem {
   title: string;
   time?: string;
