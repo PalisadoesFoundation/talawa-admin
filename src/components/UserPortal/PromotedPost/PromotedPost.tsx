@@ -11,7 +11,7 @@
  * @remarks
  * The component uses `react-bootstrap` for styling the card layout.
  * The `StarPurple500Icon` from Material-UI is used to indicate promoted content.
- * Custom styles are applied using CSS modules from `style/app.module.css`.
+ * Custom styles are applied using CSS modules from `./PromotedPost.module.css`.
  *
  * @example
  * ```tsx

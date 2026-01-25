@@ -5,12 +5,7 @@
  * to interact with it by opening a modal for more information. It uses translations
  * for localization and handles navigation based on the presence of an organization ID.
  *
- * @param props - The properties passed to the component.
- * @param name - The name of the event. Defaults to the localized dogsCare label if not provided.
- * @param description - The description of the event.
- * @param date - The date of the event.
- * @param location - The location of the event.
- * @param refetchEvents - Optional callback function to refetch events.
+ * * `@param` props - EventListCard props (see IEventListCard). If `props.name` is missing, the header falls back to the localized `t('dogsCare')` label.
  *
  * @returns A JSX element representing the event card and its associated modal.
  *
@@ -20,10 +15,11 @@
  *
  * @example
  * ```tsx
- * <EventListCard
- *   title="Community Meetup"
+ *  <EventListCard
+ *   name="Community Meetup"
  *   description="A meetup for the local community."
- *   date=dayjs().subtract(1, 'year').month(9).date(15).format('YYYY-MM-DD')
+ *   startAt={dayjs().subtract(1, 'year').month(9).date(15).toISOString()}
+ *   endAt={dayjs().subtract(1, 'year').month(9).date(15).add(2, 'hours').toISOString()}
  *   location="Community Hall"
  *   refetchEvents={fetchEvents}
  * />
