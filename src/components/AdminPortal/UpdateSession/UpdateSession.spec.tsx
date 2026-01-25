@@ -100,7 +100,7 @@ describe('Testing UpdateSession Component', () => {
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     const slider = screen.getByRole('slider');
@@ -124,7 +124,7 @@ describe('Testing UpdateSession Component', () => {
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     const slider = screen.getByRole('slider');
@@ -166,7 +166,7 @@ describe('Testing UpdateSession Component', () => {
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     // Now get the slider
@@ -195,7 +195,7 @@ describe('Testing UpdateSession Component', () => {
 
     await wait();
 
-    // Use getAllByText to get all elements with "Update Timeout" text
+    // Use getAllByText to get all elements with "Update Session" text
     const updateSessionElements = screen.getAllByText(/Update Session/i);
     expect(updateSessionElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
 
@@ -355,8 +355,8 @@ describe('Testing UpdateSession Component', () => {
     await wait();
 
     // Assertions to verify the component handles null community object correctly
-    // Use getAllByText to get all elements with "Update Timeout" text
-    const updateSessionElements = screen.getAllByText(/Update Timeout/i);
+    // Use getAllByText to get all elements with "Update Session" text
+    const updateSessionElements = screen.getAllByText(/Update Session/i);
     expect(updateSessionElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
