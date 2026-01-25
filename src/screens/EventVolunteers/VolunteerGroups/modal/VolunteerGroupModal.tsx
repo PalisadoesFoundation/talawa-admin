@@ -3,6 +3,7 @@ import Button from 'shared-components/Button';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
+  InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
 import styles from './VolunteerGroupModal.module.css';
@@ -310,9 +311,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                     {params.InputProps.endAdornment}
                   </div>
                 </div>
-              </FormFieldGroup>
-            )}
-          />
+              )}
+            />
+          </FormFieldGroup>
         </div>
 
         {/* A Multi-select dropdown to select more than one volunteer */}
@@ -339,6 +340,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 <div ref={params.InputProps.ref}>
                   <input
                     {...params.inputProps}
+                    id="volunteers"
                     className="form-control"
                     data-testid="volunteersInput"
                   />
