@@ -149,7 +149,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
 
       <div className={`d-flex flex-row ${styles.eventActions}`}>
         {loading ? (
-          <HourglassBottomIcon fontSize="small" />
+          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
         ) : isRegistered ? (
           <Button size="sm" disabled>
             {t('alreadyRegistered')}

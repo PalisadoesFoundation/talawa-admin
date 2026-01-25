@@ -78,6 +78,41 @@ describe('Testing Event Card In User portal', () => {
     isRecurringEventException: false,
   };
 
+  it('shows loading spinner when registration is in flight', async () => {
+    const user = userEvent.setup();
+    const delayedMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            registerForEvent: [{ _id: '123' }],
+          },
+        },
+        delay: 500,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerBtn = screen.getByText('Register');
+    await user.click(registerBtn);
+
+    expect(screen.getByTestId('loadingIcon')).toBeInTheDocument();
+  });
+
   it('When the user is already registered', async () => {
     setItem('userId', '234');
     const { queryByText } = render(

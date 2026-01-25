@@ -125,7 +125,11 @@ export interface IEventHeaderProps {
   showInviteModal: () => void;
 }
 
+/**
+ * Props for EventListCard component extending base event properties.
+ */
 export interface IEventListCard extends IEvent {
+  /** Optional callback to refresh the events list after modifications. */
   refetchEvents?: () => void;
 }
 

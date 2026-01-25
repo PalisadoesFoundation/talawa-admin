@@ -121,7 +121,7 @@ describe('Testing PromotedPost Component', () => {
     );
 
     await waitFor(() => {
-      const title = queryAllByText('Test Post') as HTMLElement[];
+      const title = queryAllByText('Test Post');
       expect(title[0]).toBeInTheDocument();
     });
   });

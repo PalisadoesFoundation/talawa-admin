@@ -42,6 +42,6 @@
 
 .userProfileName {
   font-weight: 700;
-  font-size: 28px;
+  font-size: 1.75rem;
   color: var(--primaryText-color, #000000);
 }
