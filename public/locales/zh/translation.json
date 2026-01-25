@@ -371,7 +371,7 @@
       "currentTimeout": "当前超时：",
       "noTimeoutSet": "未设置超时",
       "minutes": " {{count}} 分钟",
-      "updateTimeout": "更新超时",
+      "updateSession": "更新会话",
       "min15": "15 分钟",
       "min30": "30 分钟",
       "min45": "45 分钟",

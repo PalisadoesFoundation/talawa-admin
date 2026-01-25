@@ -1,13 +1,13 @@
 /**
  *
- * UpdateTimeout Component
+ * UpdateSession Component
  *
  * A React component that allows users to update the session timeout for a community.
  * It fetches the current timeout value from the server, displays it, and provides
  * a slider to update the timeout value. The updated value is submitted to the server
  * via a GraphQL mutation.
  *
- * Props interface: InterfaceUpdateTimeoutProps
+ * Props interface: InterfaceUpdateSessionProps
  * - onValueChange: Optional callback function triggered when the slider value changes.
  *
  * @param props - Component props.
@@ -15,7 +15,7 @@
  *
  * @example
  * ```tsx
- * <UpdateTimeout onValueChange={(value) => console.log(value)} />
+ * <UpdateSession onValueChange={(value) => console.log(value)} />
  * ```
  *
  * @remarks
@@ -46,9 +46,9 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import Button from 'shared-components/Button/Button';
 
-import { InterfaceUpdateTimeoutProps } from 'types/AdminPortal/UpdateSession/interface';
+import { InterfaceUpdateSessionProps } from 'types/AdminPortal/UpdateSession/interface';
 
-const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
+const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
   onValueChange,
 }): JSX.Element => {
   const { t } = useTranslation('translation');
@@ -208,4 +208,4 @@ const UpdateTimeout: React.FC<InterfaceUpdateTimeoutProps> = ({
   );
 };
 
-export default UpdateTimeout;
+export default UpdateSession;
