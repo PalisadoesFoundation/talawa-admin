@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceValidationResult
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L4)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:4](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/ValidationInterfaces.ts#L4)
 
 Result of a validation operation.
 
@@ -14,7 +14,7 @@ Result of a validation operation.
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L8)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/ValidationInterfaces.ts#L8)
 
 Error message if validation failed
 
@@ -24,6 +24,6 @@ Error message if validation failed
 
 > **isValid**: `boolean`
 
-Defined in: [src/types/Auth/ValidationInterfaces.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/ValidationInterfaces.ts#L6)
+Defined in: [src/types/Auth/ValidationInterfaces.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/ValidationInterfaces.ts#L6)
 
 Whether the validation passed

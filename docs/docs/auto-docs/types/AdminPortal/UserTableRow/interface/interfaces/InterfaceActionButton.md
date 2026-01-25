@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceActionButton
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L26)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:26](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L26)
 
 Action button configuration interface
 
@@ -14,7 +14,7 @@ Action button configuration interface
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L33)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L33)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L32)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L32)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.
 
 > `optional` **icon**: `ReactElement`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L29)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L29)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.
 
 > **label**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L27)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L27)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.
 
 > **onClick**: (`user`) => `void`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L28)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L28)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L31)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L31)
 
 ***
 
@@ -72,4 +72,4 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.
 
 > `optional` **variant**: [`InterfaceActionVariant`](../type-aliases/InterfaceActionVariant.md)
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L30)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:30](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/UserTableRow/interface.ts#L30)

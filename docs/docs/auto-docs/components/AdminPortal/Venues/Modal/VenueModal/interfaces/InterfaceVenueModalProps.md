@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: InterfaceVenueModalProps
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L49)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:49](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L49)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:49](https://
 
 > **edit**: `boolean`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L55)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:55](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L55)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:55](https://
 
 > **onHide**: () => `void`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L51)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:51](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L51)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:51](https://
 
 > **orgId**: `string`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L53)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:53](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L53)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:53](https://
 
 > **refetchVenues**: () => `void`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L52)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:52](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L52)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:52](https://
 
 > **show**: `boolean`
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L50)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:50](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L50)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:50](https://
 
 > `optional` **venueData**: [`InterfaceQueryVenueListItem`](../../../../../../utils/interfaces/interfaces/InterfaceQueryVenueListItem.md)
 
-Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L54)
+Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:54](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L54)

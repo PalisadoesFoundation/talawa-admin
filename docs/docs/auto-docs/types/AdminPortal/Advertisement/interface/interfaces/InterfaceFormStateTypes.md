@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceFormStateTypes
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L21)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L21)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github
 
 > **attachments**: `File`[]
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L28)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L28)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L25)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:25](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:25](https://github
 
 > **endAt**: `Date`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L26)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L26)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github
 
 > `optional` **existingAttachments**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L29)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L29)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L22)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:22](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L22)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:22](https://github
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L27)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L27)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:27](https://github
 
 > **startAt**: `Date`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L24)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:24](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L24)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:24](https://github
 
 > **type**: `string`
 
-Defined in: [src/types/AdminPortal/Advertisement/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L23)
+Defined in: [src/types/AdminPortal/Advertisement/interface.ts:23](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/Advertisement/interface.ts#L23)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IPaginationControlsProps
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L319)
+Defined in: [src/types/shared-components/DataTable/interface.ts:319](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L319)
 
 Props for pagination controls (minimal API used by current component)
 
@@ -28,7 +28,7 @@ restore explicit coercion: Number.isFinite(Number(totalItems)) && Number.isFinit
 
 > **onPageChange**: (`page`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L327)
+Defined in: [src/types/shared-components/DataTable/interface.ts:327](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L327)
 
 Callback when page changes
 
@@ -48,7 +48,7 @@ Callback when page changes
 
 > **page**: `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L321)
+Defined in: [src/types/shared-components/DataTable/interface.ts:321](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L321)
 
 Current page number (1-indexed)
 
@@ -58,7 +58,7 @@ Current page number (1-indexed)
 
 > **pageSize**: `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L323)
+Defined in: [src/types/shared-components/DataTable/interface.ts:323](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L323)
 
 Number of items per page
 
@@ -68,6 +68,6 @@ Number of items per page
 
 > **totalItems**: `number`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L325)
+Defined in: [src/types/shared-components/DataTable/interface.ts:325](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L325)
 
 Total number of items across all pages

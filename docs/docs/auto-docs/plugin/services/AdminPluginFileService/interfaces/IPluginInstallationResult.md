@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IPluginInstallationResult
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L25)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:25](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L25)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:25](https://github.co
 
 > `optional` **error**: `string`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L32)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:32](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L32)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:32](https://github.co
 
 > **filesWritten**: `number`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L29)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:29](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L29)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:29](https://github.co
 
 > **manifest**: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md)
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L31)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:31](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L31)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:31](https://github.co
 
 > **path**: `string`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L28)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:28](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L28)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:28](https://github.co
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L27)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:27](https://github.co
 
 > **success**: `boolean`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L26)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:26](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L26)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:26](https://github.co
 
 > **writtenFiles**: `string`[]
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L30)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:30](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/plugin/services/AdminPluginFileService.ts#L30)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IUpdateActionItemForInstanceInput
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L145)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:145](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L145)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:145](https://g
 
 > **actionId**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L146)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:146](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L146)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:146](https://g
 
 > `optional` **assignedAt**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L154)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:154](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L154)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:154](https://g
 
 > `optional` **categoryId**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L153)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:153](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L153)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:153](https://g
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L150)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:150](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L150)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:150](https://g
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L149)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:149](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L149)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:149](https://g
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L148)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:148](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L148)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:148](https://g
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L147)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:147](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L147)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:147](https://g
 
 > `optional` **volunteerGroupId**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L152)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:152](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L152)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:152](https://g
 
 > `optional` **volunteerId**: `string`
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L151)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:151](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/ActionItems/interface.ts#L151)

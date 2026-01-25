@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Language** = `object`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L68)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:68](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/UserPortalNavigationBar/types.ts#L68)
 
 Language configuration (from utils/languages)
 
@@ -16,7 +16,7 @@ Language configuration (from utils/languages)
 
 > **code**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L69)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/UserPortalNavigationBar/types.ts#L69)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/P
 
 > **country\_code**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L71)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/UserPortalNavigationBar/types.ts#L71)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/P
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L70)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:70](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/UserPortalNavigationBar/types.ts#L70)

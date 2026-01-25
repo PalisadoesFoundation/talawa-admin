@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CommentInput** = `object`
 
-Defined in: [src/types/Comment/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L14)
+Defined in: [src/types/Comment/type.ts:14](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Comment/type.ts#L14)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/types/Comment/type.ts:14](https://github.com/PalisadoesFoundati
 
 > **text**: `string`
 
-Defined in: [src/types/Comment/type.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L15)
+Defined in: [src/types/Comment/type.ts:15](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Comment/type.ts#L15)

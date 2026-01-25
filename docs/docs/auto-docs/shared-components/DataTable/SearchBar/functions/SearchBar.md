@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **SearchBar**(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/SearchBar.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/SearchBar.tsx#L12)
+Defined in: [src/shared-components/DataTable/SearchBar.tsx:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/shared-components/DataTable/SearchBar.tsx#L12)
 
 A controlled search input with optional clear button.
 

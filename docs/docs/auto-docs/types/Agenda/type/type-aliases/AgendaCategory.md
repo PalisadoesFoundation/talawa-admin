@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AgendaCategory** = `object`
 
-Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L4)
+Defined in: [src/types/Agenda/type.ts:4](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 > **\_id**: `string`
 
-Defined in: [src/types/Agenda/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L5)
+Defined in: [src/types/Agenda/type.ts:5](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Agenda/type.ts:5](https://github.com/PalisadoesFoundation
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L6)
+Defined in: [src/types/Agenda/type.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L6)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation
 
 > **createdBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L7)
+Defined in: [src/types/Agenda/type.ts:7](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L7)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Agenda/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L8)
+Defined in: [src/types/Agenda/type.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Agenda/type.ts:8](https://github.com/PalisadoesFoundation
 
 > **name**: `string`
 
-Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L9)
+Defined in: [src/types/Agenda/type.ts:9](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation
 
 > **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
-Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L10)
+Defined in: [src/types/Agenda/type.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L10)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundatio
 
 > `optional` **updatedAt**: `Date`
 
-Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L11)
+Defined in: [src/types/Agenda/type.ts:11](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L11)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundatio
 
 > `optional` **updatedBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/Agenda/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L12)
+Defined in: [src/types/Agenda/type.ts:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Agenda/type.ts#L12)

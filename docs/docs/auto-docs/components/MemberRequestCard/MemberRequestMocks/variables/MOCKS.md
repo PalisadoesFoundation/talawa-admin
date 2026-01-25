@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `userid?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `acceptMembershipRequest`: \{ `message`: `string`; `success`: `boolean`; \}; `organizations`: `object`[]; `rejectMembershipRequest?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `userid`: `string`; \}; \}; `result`: \{ `data`: \{ `acceptMembershipRequest?`: `undefined`; `organizations`: `object`[]; `rejectMembershipRequest`: \{ `message`: `string`; `success`: `boolean`; \}; \}; \}; \})[]
 
-Defined in: [src/components/MemberRequestCard/MemberRequestMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestMocks.ts#L6)
+Defined in: [src/components/MemberRequestCard/MemberRequestMocks.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/MemberRequestCard/MemberRequestMocks.ts#L6)

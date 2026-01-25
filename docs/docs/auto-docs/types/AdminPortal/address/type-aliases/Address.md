@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Address** = `object`
 
-Defined in: [src/types/AdminPortal/address.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L1)
+Defined in: [src/types/AdminPortal/address.ts:1](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/address.ts:1](https://github.com/PalisadoesFo
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L2)
+Defined in: [src/types/AdminPortal/address.ts:2](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L2)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/address.ts:2](https://github.com/PalisadoesFo
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L3)
+Defined in: [src/types/AdminPortal/address.ts:3](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L3)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/address.ts:3](https://github.com/PalisadoesFo
 
 > `optional` **dependentLocality**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L4)
+Defined in: [src/types/AdminPortal/address.ts:4](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L4)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/address.ts:4](https://github.com/PalisadoesFo
 
 > `optional` **line1**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L5)
+Defined in: [src/types/AdminPortal/address.ts:5](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L5)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/address.ts:5](https://github.com/PalisadoesFo
 
 > `optional` **line2**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L6)
+Defined in: [src/types/AdminPortal/address.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L6)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/address.ts:6](https://github.com/PalisadoesFo
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L7)
+Defined in: [src/types/AdminPortal/address.ts:7](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L7)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/address.ts:7](https://github.com/PalisadoesFo
 
 > `optional` **sortingCode**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L8)
+Defined in: [src/types/AdminPortal/address.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L8)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/AdminPortal/address.ts:8](https://github.com/PalisadoesFo
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/AdminPortal/address.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L9)
+Defined in: [src/types/AdminPortal/address.ts:9](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/AdminPortal/address.ts#L9)

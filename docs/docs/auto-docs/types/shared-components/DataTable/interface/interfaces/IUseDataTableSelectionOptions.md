@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IUseDataTableSelectionOptions\<T\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:677](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L677)
+Defined in: [src/types/shared-components/DataTable/interface.ts:677](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L677)
 
 Options for the useDataTableSelection hook.
 
@@ -24,7 +24,7 @@ The row data type
 
 > `optional` **bulkActions**: readonly [`IBulkAction`](IBulkAction.md)\<`T`\>[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L691)
+Defined in: [src/types/shared-components/DataTable/interface.ts:691](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L691)
 
 Bulk action definitions
 
@@ -34,7 +34,7 @@ Bulk action definitions
 
 > `optional` **initialSelectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:689](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L689)
+Defined in: [src/types/shared-components/DataTable/interface.ts:689](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L689)
 
 Initial selected keys for uncontrolled mode
 
@@ -44,7 +44,7 @@ Initial selected keys for uncontrolled mode
 
 > **keysOnPage**: [`Key`](../type-aliases/Key.md)[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L681)
+Defined in: [src/types/shared-components/DataTable/interface.ts:681](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L681)
 
 Keys of rows on the current page
 
@@ -54,7 +54,7 @@ Keys of rows on the current page
 
 > `optional` **onSelectionChange**: (`next`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:687](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L687)
+Defined in: [src/types/shared-components/DataTable/interface.ts:687](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L687)
 
 Callback when selection changes
 
@@ -74,7 +74,7 @@ Callback when selection changes
 
 > **paginatedData**: `T`[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:679](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L679)
+Defined in: [src/types/shared-components/DataTable/interface.ts:679](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L679)
 
 Current page data
 
@@ -84,7 +84,7 @@ Current page data
 
 > `optional` **selectable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:683](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L683)
+Defined in: [src/types/shared-components/DataTable/interface.ts:683](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L683)
 
 Whether selection is enabled
 
@@ -94,6 +94,6 @@ Whether selection is enabled
 
 > `optional` **selectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:685](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L685)
+Defined in: [src/types/shared-components/DataTable/interface.ts:685](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DataTable/interface.ts#L685)
 
 Controlled selected keys

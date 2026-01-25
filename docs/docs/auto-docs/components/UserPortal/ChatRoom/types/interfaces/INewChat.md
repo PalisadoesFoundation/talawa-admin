@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: INewChat
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L26)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:26](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L26)
 
 Chat Types
 
@@ -37,7 +37,7 @@ const chat: INewChat = {
 
 > `optional` **avatarMimeType**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L30)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:30](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L30)
 
 ***
 
@@ -45,7 +45,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:30](https://github.com/
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L31)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:31](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L31)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:31](https://github.com/
 
 > **createdAt**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L33)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:33](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L33)
 
 ***
 
@@ -61,7 +61,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:33](https://github.com/
 
 > `optional` **creator**: `object`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L40)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:40](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L40)
 
 #### avatarMimeType?
 
@@ -85,7 +85,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:40](https://github.com/
 
 > `optional` **description**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L29)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:29](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L29)
 
 ***
 
@@ -93,7 +93,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:29](https://github.com/
 
 > **id**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L27)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L27)
 
 ***
 
@@ -101,7 +101,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:27](https://github.com/
 
 > **isGroup**: `boolean`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L32)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:32](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L32)
 
 ***
 
@@ -109,7 +109,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:32](https://github.com/
 
 > **members**: `object`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L52)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:52](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L52)
 
 #### edges
 
@@ -121,7 +121,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:52](https://github.com/
 
 > **messages**: `object`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L66)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:66](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L66)
 
 #### edges
 
@@ -153,7 +153,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:66](https://github.com/
 
 > **name**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L28)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:28](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L28)
 
 ***
 
@@ -161,7 +161,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:28](https://github.com/
 
 > `optional` **organization**: `object`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L35)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:35](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L35)
 
 #### countryCode?
 
@@ -181,7 +181,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:35](https://github.com/
 
 > **updatedAt**: `string`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L34)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:34](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L34)
 
 ***
 
@@ -189,7 +189,7 @@ Defined in: [src/components/UserPortal/ChatRoom/types.ts:34](https://github.com/
 
 > `optional` **updater**: `object`
 
-Defined in: [src/components/UserPortal/ChatRoom/types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/types.ts#L46)
+Defined in: [src/components/UserPortal/ChatRoom/types.ts:46](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserPortal/ChatRoom/types.ts#L46)
 
 #### avatarMimeType?
 

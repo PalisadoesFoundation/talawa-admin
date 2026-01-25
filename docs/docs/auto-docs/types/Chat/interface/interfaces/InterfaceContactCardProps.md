@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceContactCardProps
 
-Defined in: [src/types/Chat/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L117)
+Defined in: [src/types/Chat/interface.ts:117](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L117)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Chat/interface.ts:117](https://github.com/PalisadoesFound
 
 > **id**: `string`
 
-Defined in: [src/types/Chat/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L118)
+Defined in: [src/types/Chat/interface.ts:118](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L118)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/interface.ts:118](https://github.com/PalisadoesFound
 
 > **image**: `string`
 
-Defined in: [src/types/Chat/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L120)
+Defined in: [src/types/Chat/interface.ts:120](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L120)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Chat/interface.ts:120](https://github.com/PalisadoesFound
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L123)
+Defined in: [src/types/Chat/interface.ts:123](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L123)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/interface.ts:123](https://github.com/PalisadoesFound
 
 > **lastMessage**: `string`
 
-Defined in: [src/types/Chat/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L125)
+Defined in: [src/types/Chat/interface.ts:125](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L125)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Chat/interface.ts:125](https://github.com/PalisadoesFound
 
 > **selectedContact**: `string`
 
-Defined in: [src/types/Chat/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L121)
+Defined in: [src/types/Chat/interface.ts:121](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L121)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Chat/interface.ts:121](https://github.com/PalisadoesFound
 
 > **setSelectedContact**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Chat/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L122)
+Defined in: [src/types/Chat/interface.ts:122](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L122)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Chat/interface.ts:122](https://github.com/PalisadoesFound
 
 > **title**: `string`
 
-Defined in: [src/types/Chat/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L119)
+Defined in: [src/types/Chat/interface.ts:119](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L119)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Chat/interface.ts:119](https://github.com/PalisadoesFound
 
 > **unseenMessages**: `number`
 
-Defined in: [src/types/Chat/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L124)
+Defined in: [src/types/Chat/interface.ts:124](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Chat/interface.ts#L124)

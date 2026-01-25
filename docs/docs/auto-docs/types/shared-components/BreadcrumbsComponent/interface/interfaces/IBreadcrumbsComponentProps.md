@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IBreadcrumbsComponentProps
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L42)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:42](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BreadcrumbsComponent/interface.ts#L42)
 
 Props for the BreadcrumbsComponent.
 
@@ -14,7 +14,7 @@ Props for the BreadcrumbsComponent.
 
 > `optional` **ariaLabelTranslationKey**: `string`
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L55)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:55](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BreadcrumbsComponent/interface.ts#L55)
 
 Optional aria-label translation key for the navigation landmark.
 
@@ -29,6 +29,6 @@ Optional aria-label translation key for the navigation landmark.
 
 > **items**: [`IBreadcrumbItem`](IBreadcrumbItem.md)[]
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L46)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:46](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BreadcrumbsComponent/interface.ts#L46)
 
 List of breadcrumb items to render.

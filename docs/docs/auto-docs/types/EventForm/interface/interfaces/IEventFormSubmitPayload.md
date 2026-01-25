@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IEventFormSubmitPayload
 
-Defined in: [src/types/EventForm/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L43)
+Defined in: [src/types/EventForm/interface.ts:43](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L43)
 
 Payload interface for event form submission.
 Extends base fields with ISO timestamp strings for API transmission.
@@ -19,7 +19,7 @@ Extends base fields with ISO timestamp strings for API transmission.
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L11)
+Defined in: [src/types/EventForm/interface.ts:11](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L11)
 
 #### Inherited from
 
@@ -31,7 +31,7 @@ Defined in: [src/types/EventForm/interface.ts:11](https://github.com/PalisadoesF
 
 > `optional` **createChat**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L25)
+Defined in: [src/types/EventForm/interface.ts:25](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L25)
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ Defined in: [src/types/EventForm/interface.ts:25](https://github.com/PalisadoesF
 
 > **description**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L9)
+Defined in: [src/types/EventForm/interface.ts:9](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L9)
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ Defined in: [src/types/EventForm/interface.ts:9](https://github.com/PalisadoesFo
 
 > **endAtISO**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L45)
+Defined in: [src/types/EventForm/interface.ts:45](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L45)
 
 ***
 
@@ -63,7 +63,7 @@ Defined in: [src/types/EventForm/interface.ts:45](https://github.com/PalisadoesF
 
 > **endDate**: `Date`
 
-Defined in: [src/types/EventForm/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L47)
+Defined in: [src/types/EventForm/interface.ts:47](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L47)
 
 ***
 
@@ -71,7 +71,7 @@ Defined in: [src/types/EventForm/interface.ts:47](https://github.com/PalisadoesF
 
 > **isInviteOnly**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L21)
+Defined in: [src/types/EventForm/interface.ts:21](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L21)
 
 Determines if the event is accessible only by invitation.
 Mutually exclusive with isPublic.
@@ -86,7 +86,7 @@ Mutually exclusive with isPublic.
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L16)
+Defined in: [src/types/EventForm/interface.ts:16](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L16)
 
 Determines if the event is visible to the entire community.
 Often referred to as "Community Visible" in the UI.
@@ -101,7 +101,7 @@ Often referred to as "Community Visible" in the UI.
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L22)
+Defined in: [src/types/EventForm/interface.ts:22](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L22)
 
 #### Inherited from
 
@@ -113,7 +113,7 @@ Defined in: [src/types/EventForm/interface.ts:22](https://github.com/PalisadoesF
 
 > **location**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L10)
+Defined in: [src/types/EventForm/interface.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L10)
 
 #### Inherited from
 
@@ -125,7 +125,7 @@ Defined in: [src/types/EventForm/interface.ts:10](https://github.com/PalisadoesF
 
 > **name**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L8)
+Defined in: [src/types/EventForm/interface.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L8)
 
 #### Inherited from
 
@@ -137,7 +137,7 @@ Defined in: [src/types/EventForm/interface.ts:8](https://github.com/PalisadoesFo
 
 > **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/EventForm/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L24)
+Defined in: [src/types/EventForm/interface.ts:24](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L24)
 
 #### Inherited from
 
@@ -149,7 +149,7 @@ Defined in: [src/types/EventForm/interface.ts:24](https://github.com/PalisadoesF
 
 > **startAtISO**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L44)
+Defined in: [src/types/EventForm/interface.ts:44](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L44)
 
 ***
 
@@ -157,4 +157,4 @@ Defined in: [src/types/EventForm/interface.ts:44](https://github.com/PalisadoesF
 
 > **startDate**: `Date`
 
-Defined in: [src/types/EventForm/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L46)
+Defined in: [src/types/EventForm/interface.ts:46](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/EventForm/interface.ts#L46)

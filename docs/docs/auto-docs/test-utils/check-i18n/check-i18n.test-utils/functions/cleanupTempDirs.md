@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **cleanupTempDirs**(): `void`
 
-Defined in: [src/test-utils/check-i18n/check-i18n.test-utils.js:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/check-i18n/check-i18n.test-utils.js#L94)
+Defined in: [src/test-utils/check-i18n/check-i18n.test-utils.js:94](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/test-utils/check-i18n/check-i18n.test-utils.js#L94)
 
 ## Returns
 

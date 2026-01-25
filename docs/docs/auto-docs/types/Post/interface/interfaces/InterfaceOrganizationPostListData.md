@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOrganizationPostListData
 
-Defined in: [src/types/Post/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L64)
+Defined in: [src/types/Post/interface.ts:64](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Post/interface.ts#L64)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/Post/interface.ts:64](https://github.com/PalisadoesFounda
 
 > **organization**: [`InterfaceOrganization`](InterfaceOrganization.md)
 
-Defined in: [src/types/Post/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L65)
+Defined in: [src/types/Post/interface.ts:65](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Post/interface.ts#L65)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`Partial`\<[`InterfaceUser`](../../../../types/shared-components/User/interface/interfaces/InterfaceUser.md)\>\>
 
-Defined in: [src/components/UserProfileSettings/UserProfile.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfileSettings/UserProfile.tsx#L51)
+Defined in: [src/components/UserProfileSettings/UserProfile.tsx:51](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/components/UserProfileSettings/UserProfile.tsx#L51)

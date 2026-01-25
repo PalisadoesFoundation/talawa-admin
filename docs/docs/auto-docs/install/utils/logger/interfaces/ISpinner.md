@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: ISpinner
 
-Defined in: [src/install/utils/logger.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L26)
+Defined in: [src/install/utils/logger.ts:26](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/install/utils/logger.ts#L26)
 
 ## Methods
 
@@ -12,7 +12,7 @@ Defined in: [src/install/utils/logger.ts:26](https://github.com/PalisadoesFounda
 
 > **fail**(`message?`): `void`
 
-Defined in: [src/install/utils/logger.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L29)
+Defined in: [src/install/utils/logger.ts:29](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/install/utils/logger.ts#L29)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/install/utils/logger.ts:29](https://github.com/PalisadoesFounda
 
 > **start**(): `void`
 
-Defined in: [src/install/utils/logger.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L27)
+Defined in: [src/install/utils/logger.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/install/utils/logger.ts#L27)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/install/utils/logger.ts:27](https://github.com/PalisadoesFounda
 
 > **stop**(): `void`
 
-Defined in: [src/install/utils/logger.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L30)
+Defined in: [src/install/utils/logger.ts:30](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/install/utils/logger.ts#L30)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [src/install/utils/logger.ts:30](https://github.com/PalisadoesFounda
 
 > **succeed**(`message?`): `void`
 
-Defined in: [src/install/utils/logger.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L28)
+Defined in: [src/install/utils/logger.ts:28](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/install/utils/logger.ts#L28)
 
 #### Parameters
 

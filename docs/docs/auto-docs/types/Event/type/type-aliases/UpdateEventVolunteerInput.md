@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UpdateEventVolunteerInput** = `object`
 
-Defined in: [src/types/Event/type.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L102)
+Defined in: [src/types/Event/type.ts:102](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Event/type.ts#L102)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:102](https://github.com/PalisadoesFoundatio
 
 > `optional` **assignments**: `string`[]
 
-Defined in: [src/types/Event/type.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L103)
+Defined in: [src/types/Event/type.ts:103](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Event/type.ts#L103)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/type.ts:103](https://github.com/PalisadoesFoundatio
 
 > `optional` **hasAccepted**: `boolean`
 
-Defined in: [src/types/Event/type.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L104)
+Defined in: [src/types/Event/type.ts:104](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Event/type.ts#L104)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/Event/type.ts:104](https://github.com/PalisadoesFoundatio
 
 > `optional` **isPublic**: `boolean`
 
-Defined in: [src/types/Event/type.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L105)
+Defined in: [src/types/Event/type.ts:105](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Event/type.ts#L105)

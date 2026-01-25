@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceBulkActionsBarProps
 
-Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BulkActionsBar/interface.ts#L8)
+Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BulkActionsBar/interface.ts#L8)
 
 Props for the BulkActionsBar component.
 
@@ -16,7 +16,7 @@ Used to display a toolbar when rows are selected in a DataTable.
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BulkActionsBar/interface.ts#L12)
+Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BulkActionsBar/interface.ts#L12)
 
 Bulk action buttons to render
 
@@ -26,7 +26,7 @@ Bulk action buttons to render
 
 > **count**: `number`
 
-Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BulkActionsBar/interface.ts#L10)
+Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BulkActionsBar/interface.ts#L10)
 
 Number of selected rows
 
@@ -36,7 +36,7 @@ Number of selected rows
 
 > **onClear**: () => `void`
 
-Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BulkActionsBar/interface.ts#L14)
+Defined in: [src/types/shared-components/BulkActionsBar/interface.ts:14](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/BulkActionsBar/interface.ts#L14)
 
 Callback to clear selection
 

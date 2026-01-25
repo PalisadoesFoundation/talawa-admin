@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceSearchingButtonProps
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L4)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:4](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L4)
 
 Props for SearchingButton component.
 
@@ -14,7 +14,7 @@ Props for SearchingButton component.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L14)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:14](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L14)
 
 Custom class name for the Dropdown
 
@@ -24,7 +24,7 @@ Custom class name for the Dropdown
 
 > **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L10)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L10)
 
 The prefix for data-testid attributes for testing
 
@@ -34,7 +34,7 @@ The prefix for data-testid attributes for testing
 
 > `optional` **dropdownTestId**: `string`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L12)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L12)
 
 The data-testid attribute for the Dropdown
 
@@ -44,7 +44,7 @@ The data-testid attribute for the Dropdown
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L8)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L8)
 
 The text to display in the button
 
@@ -54,7 +54,7 @@ The text to display in the button
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L6)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L6)
 
 The title attribute for the Dropdown
 
@@ -64,6 +64,6 @@ The title attribute for the Dropdown
 
 > `optional` **type**: `"filter"` \| `"sort"`
 
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L16)
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:16](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/SearchingButton/interface.ts#L16)
 
 Type to determine the icon to display: 'sort' or 'filter'

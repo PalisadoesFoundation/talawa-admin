@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceEmailFieldProps
 
-Defined in: [src/types/Auth/EmailField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L10)
+Defined in: [src/types/Auth/EmailField/interface.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L10)
 
 Props for the EmailField component.
 
@@ -19,7 +19,7 @@ Supports optional validator callbacks via the error prop, which accepts string o
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L27)
+Defined in: [src/types/Auth/EmailField/interface.ts:27](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L27)
 
 Error message to display - null or undefined means no error
 
@@ -29,7 +29,7 @@ Error message to display - null or undefined means no error
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L12)
+Defined in: [src/types/Auth/EmailField/interface.ts:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L12)
 
 Optional label text displayed above the input - defaults to "Email"
 
@@ -39,7 +39,7 @@ Optional label text displayed above the input - defaults to "Email"
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L15)
+Defined in: [src/types/Auth/EmailField/interface.ts:15](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L15)
 
 Name attribute for the input field - defaults to "email"
 
@@ -49,7 +49,7 @@ Name attribute for the input field - defaults to "email"
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L21)
+Defined in: [src/types/Auth/EmailField/interface.ts:21](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L21)
 
 Change handler called when input value changes
 
@@ -69,7 +69,7 @@ Change handler called when input value changes
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L24)
+Defined in: [src/types/Auth/EmailField/interface.ts:24](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L24)
 
 Placeholder text for the input - defaults to "name@example.com"
 
@@ -79,7 +79,7 @@ Placeholder text for the input - defaults to "name@example.com"
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L30)
+Defined in: [src/types/Auth/EmailField/interface.ts:30](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L30)
 
 Test ID for testing purposes
 
@@ -89,6 +89,6 @@ Test ID for testing purposes
 
 > **value**: `string`
 
-Defined in: [src/types/Auth/EmailField/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/EmailField/interface.ts#L18)
+Defined in: [src/types/Auth/EmailField/interface.ts:18](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/EmailField/interface.ts#L18)
 
 Current email input value

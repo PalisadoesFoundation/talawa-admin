@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceDateRangePickerProps
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L63)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:63](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L63)
 
 InterfaceDateRangePickerProps
 
@@ -16,7 +16,7 @@ Controlled props for the DateRangePicker component.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L70)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:70](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L70)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:70](https:
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L71)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:71](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L71)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:71](https:
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L67)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:67](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L67)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:67](https:
 
 > `optional` **error**: `boolean`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L68)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:68](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L68)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:68](https:
 
 > `optional` **helperText**: `string`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L69)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:69](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L69)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:69](https:
 
 > **onChange**: (`val`) => `void`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L65)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:65](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L65)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:65](https:
 
 > `optional` **presets**: [`IDateRangePreset`](IDateRangePreset.md)[]
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L66)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:66](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L66)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:66](https:
 
 > `optional` **showPresets**: `boolean`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L72)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:72](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L72)
 
 ***
 
@@ -90,4 +90,4 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:72](https:
 
 > **value**: [`IDateRangeValue`](IDateRangeValue.md)
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L64)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:64](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/DateRangePicker/interface.ts#L64)

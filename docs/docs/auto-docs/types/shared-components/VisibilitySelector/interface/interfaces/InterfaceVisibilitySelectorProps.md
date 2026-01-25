@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceVisibilitySelectorProps
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L6)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:6](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/VisibilitySelector/interface.ts#L6)
 
 Props for the VisibilitySelector component.
 
@@ -14,7 +14,7 @@ Props for the VisibilitySelector component.
 
 > **setVisibility**: (`visibility`) => `void`
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L8)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/VisibilitySelector/interface.ts#L8)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](http
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L9)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/VisibilitySelector/interface.ts#L9)
 
 #### Parameters
 
@@ -50,4 +50,4 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](http
 
 > **visibility**: [`EventVisibility`](../../../../../shared-components/EventForm/utils/visibilityUtils/type-aliases/EventVisibility.md)
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L7)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:7](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/shared-components/VisibilitySelector/interface.ts#L7)

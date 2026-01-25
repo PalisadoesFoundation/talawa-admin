@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **CRUDModalTemplate**: `React.FC`\<[`InterfaceCRUDModalTemplateProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceCRUDModalTemplateProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx#L43)
+Defined in: [src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx:43](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx#L43)
 
 Base CRUD Modal Template Component
 

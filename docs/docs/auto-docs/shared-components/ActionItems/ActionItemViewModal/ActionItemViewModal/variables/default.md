@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `FC`\<[`IViewModalProps`](../interfaces/IViewModalProps.md)\>
 
-Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L43)
+Defined in: [src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx:43](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L43)

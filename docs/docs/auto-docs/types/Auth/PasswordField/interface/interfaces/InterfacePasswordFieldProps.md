@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePasswordFieldProps
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L7)
+Defined in: [src/types/Auth/PasswordField/interface.ts:7](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L7)
 
 Props interface for the PasswordField component.
 Extends basic form field functionality with password visibility toggle features.
@@ -15,7 +15,7 @@ Extends basic form field functionality with password visibility toggle features.
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L13)
+Defined in: [src/types/Auth/PasswordField/interface.ts:13](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L13)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:13](https://github.com/Pa
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L8)
+Defined in: [src/types/Auth/PasswordField/interface.ts:8](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L8)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:8](https://github.com/Pal
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L9)
+Defined in: [src/types/Auth/PasswordField/interface.ts:9](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L9)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:9](https://github.com/Pal
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L11)
+Defined in: [src/types/Auth/PasswordField/interface.ts:11](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L11)
 
 #### Parameters
 
@@ -57,7 +57,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:11](https://github.com/Pa
 
 > `optional` **onToggleVisibility**: () => `void`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L16)
+Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L16)
 
 #### Returns
 
@@ -69,7 +69,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/Pa
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L12)
+Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L12)
 
 ***
 
@@ -77,7 +77,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/Pa
 
 > `optional` **showPassword**: `boolean`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L15)
+Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L15)
 
 ***
 
@@ -85,7 +85,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/Pa
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L14)
+Defined in: [src/types/Auth/PasswordField/interface.ts:14](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L14)
 
 ***
 
@@ -93,4 +93,4 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:14](https://github.com/Pa
 
 > **value**: `string`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L10)
+Defined in: [src/types/Auth/PasswordField/interface.ts:10](https://github.com/BittuBarnwal7479/talawa-admin/blob/7329c220ecd98ce2ec3fc0b9fc39dd1a39bb1df4/src/types/Auth/PasswordField/interface.ts#L10)
