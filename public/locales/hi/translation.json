@@ -2496,7 +2496,8 @@
     "no": "नहीं",
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
-    "numberOfAttendees": "उपस्थित लोगों की संख्या"
+    "numberOfAttendees": "उपस्थित लोगों की संख्या",
+    "viewEventDetails": "इवेंट विवरण देखें"
   },
   "promotedPost": {
     "title": "प्रचारित सामग्री",

@@ -2496,7 +2496,8 @@
     "no": "No",
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes"
+    "numberOfAttendees": "Número de asistentes",
+    "viewEventDetails": "Ver detalles del evento"
   },
   "promotedPost": {
     "title": "Contenido Promocionado",

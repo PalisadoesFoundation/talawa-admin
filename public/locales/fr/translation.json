@@ -2496,7 +2496,8 @@
     "no": "Non",
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
+    "numberOfAttendees": "Nombre de participants",
+    "viewEventDetails": "Voir les détails de l'événement"
   },
   "promotedPost": {
     "title": "Contenu Promu",

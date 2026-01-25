@@ -2496,7 +2496,8 @@
     "no": "否",
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数"
+    "numberOfAttendees": "出席人数",
+    "viewEventDetails": "查看活动详情"
   },
   "promotedPost": {
     "title": "推广内容",

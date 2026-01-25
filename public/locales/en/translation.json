@@ -2495,7 +2495,8 @@
     "no": "No",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees"
+    "numberOfAttendees": "Number of attendees",
+    "viewEventDetails": "View event details"
   },
   "promotedPost": {
     "title": "Promoted Content",
