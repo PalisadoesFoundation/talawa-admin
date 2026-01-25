@@ -8,6 +8,9 @@
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
+  "role": {
+    "member": "成员"
+  },
   "invalidDetailsMessage": "请检查您输入的详细信息。",
   "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {

@@ -8,6 +8,9 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "role": {
+    "member": "सदस्य"
+  },
   "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
   "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
