@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
@@ -22,7 +22,6 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 let mockHandleClose: ReturnType<typeof vi.fn>;
 let mockOnInvitesSent: ReturnType<typeof vi.fn>;
-let user: ReturnType<typeof userEvent.setup>;
 
 let defaultProps: {
   show: boolean;
@@ -74,7 +73,7 @@ const renderComponent = (
   customMocks: MockedResponse[] = mocks as MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks}>
+    <MockedProvider mocks={customMocks} addTypename={false}>
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>
@@ -84,7 +83,6 @@ const renderComponent = (
 
 describe('InviteByEmailModal', () => {
   beforeEach(() => {
-    user = userEvent.setup();
     mockHandleClose = vi.fn();
     mockOnInvitesSent = vi.fn();
     defaultProps = {
@@ -116,29 +114,29 @@ describe('InviteByEmailModal', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('calls handleClose when the header close button is clicked', async () => {
+  it('calls handleClose when the header close button is clicked', () => {
     renderComponent();
-    await user.click(screen.getByLabelText('Close'));
+    fireEvent.click(screen.getByLabelText('Close'));
     expect(mockHandleClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls handleClose when the footer close button is clicked', async () => {
+  it('calls handleClose when the footer close button is clicked', () => {
     renderComponent();
-    await user.click(screen.getByText('Close'));
+    fireEvent.click(screen.getByText('Close'));
     expect(mockHandleClose).toHaveBeenCalledTimes(1);
   });
 
-  it('allows adding and removing recipient input fields', async () => {
+  it('allows adding and removing recipient input fields', () => {
     renderComponent();
     const emailInputs = () => screen.queryAllByLabelText('Email');
     expect(emailInputs()).toHaveLength(1);
     expect(screen.queryByText('Remove')).not.toBeInTheDocument();
 
-    await user.click(screen.getByText('Add recipient'));
+    fireEvent.click(screen.getByText('Add recipient'));
     expect(emailInputs()).toHaveLength(2);
     expect(screen.getAllByText('Remove')).toHaveLength(2);
 
-    await user.click(screen.getAllByText('Remove')[0]);
+    fireEvent.click(screen.getAllByText('Remove')[0]);
     expect(emailInputs()).toHaveLength(1);
     expect(screen.queryByText('Remove')).not.toBeInTheDocument();
   });
@@ -171,7 +169,7 @@ describe('InviteByEmailModal', () => {
   describe('Form Submission', () => {
     it('shows an error toast if no recipients are provided', async () => {
       renderComponent();
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Please provide at least one recipient email',
@@ -184,7 +182,7 @@ describe('InviteByEmailModal', () => {
       const user = userEvent.setup();
       const emailInput = screen.getByLabelText('Email');
       await user.type(emailInput, 'invalid-email');
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -243,7 +241,7 @@ describe('InviteByEmailModal', () => {
       expect(sendButton).not.toBeDisabled();
       expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
 
-      await user.click(sendButton);
+      fireEvent.click(sendButton);
 
       // Wait for loading state to appear AND button to be gone (atomic check)
       await waitFor(() => {
@@ -302,7 +300,7 @@ describe('InviteByEmailModal', () => {
 
       await user.type(screen.getByLabelText('Email'), 'recurring@example.com');
 
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -333,7 +331,7 @@ describe('InviteByEmailModal', () => {
       const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -352,50 +350,46 @@ describe('InviteByEmailModal', () => {
   });
 
   describe('ExpiresInDays Field', () => {
-    it('should accept valid number input', async () => {
+    it('should accept valid number input', () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      await user.clear(expiresInput);
-      await user.type(expiresInput, '14');
+      fireEvent.change(expiresInput, { target: { value: '14' } });
 
       expect(expiresInput.value).toBe('14');
     });
 
-    it('should reset to 7 when input is NaN', async () => {
+    it('should reset to 7 when input is NaN', () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      await user.clear(expiresInput);
-      await user.type(expiresInput, 'abc');
+      fireEvent.change(expiresInput, { target: { value: 'abc' } });
 
       expect(expiresInput.value).toBe('7');
     });
 
-    it('should reset to 7 when input is less than 1', async () => {
+    it('should reset to 7 when input is less than 1', () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      await user.clear(expiresInput);
-      await user.type(expiresInput, '0');
+      fireEvent.change(expiresInput, { target: { value: '0' } });
 
       expect(expiresInput.value).toBe('7');
     });
 
-    it('should reset to 7 when input is negative', async () => {
+    it('should reset to 7 when input is negative', () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      await user.clear(expiresInput);
-      await user.type(expiresInput, '-5');
+      fireEvent.change(expiresInput, { target: { value: '-5' } });
 
       expect(expiresInput.value).toBe('7');
     });
@@ -446,7 +440,7 @@ describe('InviteByEmailModal', () => {
       };
 
       render(
-        <MockedProvider mocks={[successMock]}>
+        <MockedProvider mocks={[successMock]} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <InviteByEmailModal {...minimalProps} />
           </I18nextProvider>
@@ -455,7 +449,7 @@ describe('InviteByEmailModal', () => {
       const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -508,7 +502,7 @@ describe('InviteByEmailModal', () => {
       const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'explicit@example.com');
-      await user.click(screen.getByTestId('invite-submit'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(

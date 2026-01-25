@@ -981,7 +981,7 @@ describe('MemberDetail', () => {
 
     test('sets formState correctly when data.user is returned', async () => {
       render(
-        <MockedProvider mocks={MOCKS1}>
+        <MockedProvider mocks={MOCKS1} addTypename={false}>
           <BrowserRouter>
             <MemberDetail />
           </BrowserRouter>
@@ -1352,7 +1352,7 @@ describe('MemberDetail', () => {
     ];
 
     render(
-      <MockedProvider mocks={MOCK_NO_BIRTHDATE}>
+      <MockedProvider mocks={MOCK_NO_BIRTHDATE} addTypename={false}>
         <BrowserRouter>
           <MemberDetail />
         </BrowserRouter>
