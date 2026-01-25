@@ -353,10 +353,7 @@ describe('LeaveOrganization Component', () => {
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     await userEvent.click(screen.getByText('Continue'));
-    // email input is empty by default, no need to clear or type empty string if we assume it's empty.
-    // However, if we want to simulate user interaction we can clear it.
-    // userEvent.type(screen.getByPlaceholderText(/Enter your email/i), '');
-    // But since invalid logic triggers on click confirm...
+
     const confirmButton = screen.getByRole('button', {
       name: 'confirm-leave-button',
     });
