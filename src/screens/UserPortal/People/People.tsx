@@ -274,17 +274,23 @@ export default function People(): React.JSX.Element {
               </>
             </LoadingState>
           </div>
-          <PaginationList
-            count={
-              pageInfo?.hasNextPage
-                ? (currentPage + 1) * rowsPerPage + 1
-                : currentPage * rowsPerPage + members.length
-            }
-            rowsPerPage={rowsPerPage}
-            page={currentPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <table>
+            <tfoot>
+              <tr>
+                <PaginationList
+                  count={
+                    pageInfo?.hasNextPage
+                      ? (currentPage + 1) * rowsPerPage + 1
+                      : currentPage * rowsPerPage + members.length
+                  }
+                  rowsPerPage={rowsPerPage}
+                  page={currentPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </>
