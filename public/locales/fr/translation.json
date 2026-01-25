@@ -2416,16 +2416,42 @@
     }
   },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "Vérifier l'e-mail",
+    "verifying": "Vérification de votre e-mail...",
+    "success": "E-mail vérifié !",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "error": "Échec de la vérification",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "loginRequired": "Veuillez vous connecter pour vérifier votre e-mail.",
+    "resendButton": "Renvoyer l'e-mail de vérification",
+    "resendSuccess": "L'e-mail de vérification a été renvoyé avec succès.",
+    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
+    "goToLogin": "Aller à la connexion"
+  },
+  "plugins": {
+    "loading": "Chargement du plugin...",
+    "component": "Composant",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "ID du plugin manquant",
+        "description": "Cette route n'a pas d'ID de plugin valide"
+      },
+      "notRegistered": {
+        "title": "Plugin non enregistré",
+        "description": "Veuillez ajouter ce plugin au registre dans {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "Aucun composant trouvé"
+      },
+      "componentNotFound": {
+        "title": "Composant non trouvé",
+        "availableComponents": "Composants disponibles : {{components}}"
+      },
+      "pluginError": {
+        "title": "Erreur du plugin",
+        "failedToLoad": "Échec du chargement du composant"
+      }
+    }
   }
 }
