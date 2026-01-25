@@ -35,16 +35,17 @@
   height: 136px;
 }
 
-.viewPostButton {
-  background-color: #a8c7fa !important;
-  color: black !important;
-  text-transform: none !important;
-  border-radius: 8px !important;
-  padding: 8px 24px !important;
-  font-size: 0.9rem !important;
-  font-weight: 500 !important;
+/* Scoped button styles with parent class for proper specificity */
+.postCardContainer .viewPostButton {
+  background-color: #a8c7fa;
+  color: black;
+  text-transform: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.viewPostButton:hover {
-  background-color: #8bb5e8 !important;
+.postCardContainer .viewPostButton:hover {
+  background-color: #8bb5e8;
 }

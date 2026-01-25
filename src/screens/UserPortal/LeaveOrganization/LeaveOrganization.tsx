@@ -138,7 +138,7 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <output className={styles.loadingContainer} role="status">
+      <output className={styles.loadingContainer}>
         <LoadingState isLoading={orgLoading} variant="spinner">
           <div />
         </LoadingState>
