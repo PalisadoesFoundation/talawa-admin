@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormField } from '../FormField/FormField';
-import type { InterfaceEmailFieldProps } from '../../../types/Auth/EmailField/interface';
+import type { InterfaceEmailFieldProps } from '../../../types/shared-components/Auth/EmailField/interface';
 
 /**
  * Reusable email input field component.
@@ -12,6 +12,16 @@ import type { InterfaceEmailFieldProps } from '../../../types/Auth/EmailField/in
  * - Default label and placeholder from i18n keys (email, emailPlaceholder)
  * - Required field marking
  * - Support for error display via string or null error prop
+ *
+ * @param label - Optional label text displayed above the input
+ * @param name - Name attribute for the input field (defaults to "email")
+ * @param value - Current email input value
+ * @param onChange - Change handler called when the input value changes
+ * @param placeholder - Optional placeholder text for the input
+ * @param error - Error message to display, if any
+ * @param testId - Optional test ID for testing purposes
+ *
+ * @returns A JSX element rendering an email input field
  *
  * @example
  * ```tsx
