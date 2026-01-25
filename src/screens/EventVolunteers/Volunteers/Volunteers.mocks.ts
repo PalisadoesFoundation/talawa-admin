@@ -268,6 +268,8 @@ export const MOCKS = [
         usersByOrganizationId: [
           {
             id: 'userId3',
+            firstName: 'John',
+            lastName: 'Doe',
             name: 'John Doe',
             emailAddress: 'johndoe@example.com',
             role: 'regular',
@@ -277,6 +279,8 @@ export const MOCKS = [
           },
           {
             id: 'userId4',
+            firstName: 'Jane',
+            lastName: 'Smith',
             name: 'Jane Smith',
             emailAddress: 'jane@example.com',
             role: 'regular',
@@ -386,6 +390,8 @@ export const MOCKS_ERROR = [
         usersByOrganizationId: [
           {
             id: 'userId3',
+            firstName: 'John',
+            lastName: 'Doe',
             name: 'John Doe',
             emailAddress: 'johndoe@example.com',
             role: 'regular',

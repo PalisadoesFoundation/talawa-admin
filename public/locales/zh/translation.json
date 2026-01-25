@@ -208,8 +208,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} 条未读",
+    "unreadCount_other": "{{count}} 条未读",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} 头像",
+    "eventLocation": "活动地点",
+    "eventDate": "活动日期",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "发布于：",
+    "author": "作者："
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -2164,7 +2174,21 @@
     "viewGroup": "查看小组",
     "editGroup": "编辑小组",
     "invalidNumber": "无效数字",
-    "viewToggle": "切换视图"
+    "viewToggle": "切换视图",
+    "recurringVolunteerTitle": "为 {{eventName}} 提供志愿服务",
+    "recurringGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "您想为整个系列还是仅为此实例提供志愿服务？",
+    "recurringGroupDescription": "您想为整个系列还是仅为此实例加入“{{groupName}}”？",
+    "volunteerForEntireSeries": "为整个系列提供志愿服务",
+    "volunteerForSeriesDescription": "您将为该周期性系列中的所有活动提供志愿服务",
+    "joinGroupForSeriesDescription": "您将加入此小组以参加该周期性系列中的所有活动",
+    "volunteerForThisInstanceOnly": "仅为此实例提供志愿服务",
+    "volunteerForInstanceDescription": "您仅为 {{date}} 的活动提供志愿服务",
+    "joinGroupForInstanceDescription": "您仅为 {{date}} 的活动加入此小组",
+    "submitRequest": "提交申请",
+    "baseEventRequired": "需要基础事件",
+    "selectVolunteer": "选择志愿者",
+    "volunteerScope": "志愿者范围"
   },
   "userVolunteer": {
     "title": "志愿服务",

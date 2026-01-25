@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
 import type { InterfaceEditModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
-import styles from './CRUDModalTemplate.module.css';
-import globalStyles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -102,7 +100,6 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
         form="crud-edit-form"
         variant="primary"
         disabled={isLoading || submitDisabled}
-        className={globalStyles.addButton}
         data-testid="modal-submit-btn"
       >
         {tCommon('update')}
@@ -123,15 +120,14 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
       data-testid={dataTestId}
       customFooter={customFooter}
     >
-      <Form
+      <form
         id="crud-edit-form"
         ref={formRef}
         onSubmit={handleSubmit}
         onKeyDown={handleKeyDown}
-        className={styles.formContainer}
       >
         {children}
-      </Form>
+      </form>
     </CRUDModalTemplate>
   );
 };
