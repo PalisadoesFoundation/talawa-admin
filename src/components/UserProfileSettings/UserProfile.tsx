@@ -21,7 +21,8 @@
  * ```
  *
  * Dependencies
- * - `react-bootstrap` for Card and Button components.
+ * - `react-bootstrap` for Card component.
+ * - `shared-components/Button/Button` for the Button component.
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
  * - `react-tooltip` for tooltips.
@@ -69,7 +70,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
             <div className={styles.imgContainer}>
               {image && image !== 'null' ? (
-                +(<img src={image} alt={t('profilePicture')} />)
+                <img src={image} alt={t('profilePicture')} />
               ) : (
                 <Avatar
                   name={`${firstName} ${lastName}`}
@@ -101,7 +102,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} +{' '}
+                  {tCommon('joined')}{' '}
                   {createdAt && joinedDate(createdAt, tCommon('unavailable'))}
                 </span>
               </span>

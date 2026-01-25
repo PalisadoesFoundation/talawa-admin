@@ -20,7 +20,7 @@ import translation from '../../../../../public/locales/en/translation.json';
 
 describe('CustomTableCell', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('renders event details correctly', async () => {
     render(

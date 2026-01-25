@@ -63,7 +63,6 @@ describe('EventAttendedCard', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Basic rendering', () => {

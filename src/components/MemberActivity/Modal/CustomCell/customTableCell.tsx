@@ -42,7 +42,6 @@ export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
-    pollInterval: 30000,
   });
 
   if (loading)

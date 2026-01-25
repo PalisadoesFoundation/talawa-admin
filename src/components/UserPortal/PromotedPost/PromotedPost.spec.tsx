@@ -18,6 +18,7 @@ import PromotedPost from './PromotedPost';
  * 3. **Icon display**: Ensures the icon (StarPurple500Icon) is displayed.
  * 4. **Text display**: Checks that the post title is displayed correctly.
  * 5. **Image display**: Verifies the correct image is displayed when the image prop is set.
+ * 6. **No image**: Verifies the image is not rendered when image prop is falsy.
  *
  * GraphQL data is mocked for backend simulation.
  */
@@ -32,13 +33,17 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-let props = {
-  id: '1',
-  image: '',
-  title: 'Test Post',
-};
+describe('Testing PromotedPost Component', () => {
+  let props: { id: string; image: string; title: string };
 
-describe('Testing PromotedPost Test', () => {
+  beforeEach(() => {
+    props = {
+      id: '1',
+      image: '',
+      title: 'Test Post',
+    };
+  });
+
   it('Component should be rendered properly', async () => {
     render(
       <MockedProvider link={link}>
@@ -56,10 +61,7 @@ describe('Testing PromotedPost Test', () => {
   });
 
   it('Component should be rendered properly if prop image is not undefined', async () => {
-    props = {
-      ...props,
-      image: 'promotedPostImage',
-    };
+    props.image = 'promotedPostImage';
 
     render(
       <MockedProvider link={link}>
@@ -75,65 +77,132 @@ describe('Testing PromotedPost Test', () => {
 
     await wait();
   });
-});
 
-it('Component should display the icon correctly', async () => {
-  const { queryByTestId } = render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PromotedPost {...props} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  it('Component should display the icon correctly', async () => {
+    const { queryByTestId } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  await waitFor(() => {
-    const icon = queryByTestId('StarPurple500Icon');
-    expect(icon).toBeInTheDocument();
+    await waitFor(() => {
+      const icon = queryByTestId('star-icon');
+      expect(icon).toBeInTheDocument();
+    });
   });
-});
 
-it('Component should display the text correctly', async () => {
-  const { queryAllByText } = render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PromotedPost {...props} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  it('Component should display the text correctly', async () => {
+    const { queryAllByText } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  await waitFor(() => {
-    const title = queryAllByText('Test Post') as HTMLElement[];
-    expect(title[0]).toBeInTheDocument();
+    await waitFor(() => {
+      const title = queryAllByText('Test Post') as HTMLElement[];
+      expect(title[0]).toBeInTheDocument();
+    });
   });
-});
 
-it('Component should display the image correctly', async () => {
-  props = {
-    ...props,
-    image: 'promotedPostImage',
-  };
-  const { queryByRole } = render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PromotedPost {...props} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  it('Component should display the image correctly when image prop is provided', async () => {
+    props.image = 'promotedPostImage';
 
-  await waitFor(() => {
-    const image = queryByRole('img');
-    expect(image).toHaveAttribute('src', 'promotedPostImage');
+    const { queryByRole } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const image = queryByRole('img');
+      expect(image).toHaveAttribute('src', 'promotedPostImage');
+    });
+  });
+
+  it('Component should not display image when image prop is empty', async () => {
+    props.image = '';
+
+    const { queryByRole } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const image = queryByRole('img');
+      expect(image).not.toBeInTheDocument();
+    });
+  });
+
+  it('Component should not display image when image prop is null', async () => {
+    const propsWithNull = {
+      ...props,
+      image: null as unknown as string,
+    };
+
+    const { queryByRole } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...propsWithNull} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const image = queryByRole('img');
+      expect(image).not.toBeInTheDocument();
+    });
+  });
+
+  it('Component should not display image when image prop is undefined', async () => {
+    const propsWithUndefined = {
+      ...props,
+      image: undefined as unknown as string,
+    };
+
+    const { queryByRole } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PromotedPost {...propsWithUndefined} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const image = queryByRole('img');
+      expect(image).not.toBeInTheDocument();
+    });
   });
 });

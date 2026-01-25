@@ -3,19 +3,17 @@
  * This component is used to display promoted content with a title,
  * optional image, and a header indicating that the content is promoted.
  *
- * @param props - The properties passed to the component:
- * - id: A unique identifier for the promoted post.
- * - image: The URL of the image associated with the promoted post.
- * - title: The title of the promoted post.
+ * `@param` id - A unique identifier for the promoted post.
+ * `@param` image - The URL of the image associated with the promoted post.
+ * `@param` title - The title of the promoted post.
+ * `@returns` A JSX element representing the promoted post card.
  *
- * @returns A JSX element representing the promoted post card.
+ * `@remarks`
+ * The component uses `react-bootstrap` for styling the card layout.
+ * The `StarPurple500Icon` from Material-UI is used to indicate promoted content.
+ * Custom styles are applied using CSS modules from `style/app.module.css`.
  *
- * @remarks
- * - The component uses `react-bootstrap` for styling the card layout.
- * - The `StarPurple500Icon` from Material-UI is used to indicate promoted content.
- * - Custom styles are applied using CSS modules from `style/app.module.css`.
- *
- * @example
+ * `@example`
  * ```tsx
  * <PromotedPost
  *   id="12345"
@@ -23,7 +21,6 @@
  *   title="Exciting Promoted Post"
  * />
  * ```
- *
  */
 import React from 'react';
 import { Card } from 'react-bootstrap';
@@ -33,10 +30,11 @@ import { useTranslation } from 'react-i18next';
 
 import type { InterfacePromotedPostProps } from 'types/UserPortal/PromotedPost/interface';
 
-export default function PromotedPost(
-  props: InterfacePromotedPostProps,
-): JSX.Element {
-  const { title, image } = props;
+export default function PromotedPost({
+  id: _id,
+  title,
+  image,
+}: InterfacePromotedPostProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'promotedPost' });
   return (
     <>
@@ -44,7 +42,7 @@ export default function PromotedPost(
         <Card.Header>
           <div className={`${styles.cardHeaderPromotedPost}`}>
             {/* Icon indicating promoted content */}
-            <StarPurple500Icon />
+            <StarPurple500Icon data-testid="star-icon" />
             {t('title')}
           </div>
         </Card.Header>

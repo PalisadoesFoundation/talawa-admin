@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L36)
+Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L33)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 [`InterfacePromotedPostProps`](../../../../../types/UserPortal/PromotedPost/interface/interfaces/InterfacePromotedPostProps.md)
 

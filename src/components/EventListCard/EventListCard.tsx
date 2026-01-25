@@ -6,7 +6,7 @@
  * for localization and handles navigation based on the presence of an organization ID.
  *
  * @param props - The properties passed to the component.
- * @param title - The title of the event. Defaults to "Dogs Care" if not provided.
+ * @param title - The title of the event. Defaults to the localized dogsCare label if not provided.
  * @param description - The description of the event.
  * @param date - The date of the event.
  * @param location - The location of the event.

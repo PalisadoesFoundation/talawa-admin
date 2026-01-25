@@ -4,7 +4,9 @@
 
 # Interface: InterfacePromotedPostProps
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L1)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L4)
+
+Props for EventAttendedCard items.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/UserPortal/PromotedPost/interface.ts:1](https://github.co
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L2)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L5)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/UserPortal/PromotedPost/interface.ts:2](https://github.co
 
 > **image**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L3)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L6)
 
 ***
 
@@ -28,4 +30,4 @@ Defined in: [src/types/UserPortal/PromotedPost/interface.ts:3](https://github.co
 
 > **title**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L4)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L7)
