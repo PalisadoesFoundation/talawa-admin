@@ -115,7 +115,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             </div>
           </div>
           <div className="mt-4 mb-1 d-flex justify-content-center">
-            {/* TODO: Implement copy-to-clipboard functionality for profile link */}
+            {/* TODO(#<issue-id>): Implement copy-to-clipboard functionality for profile link */}
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>
         </Card.Body>
