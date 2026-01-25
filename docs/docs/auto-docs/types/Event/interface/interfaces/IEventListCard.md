@@ -4,9 +4,10 @@
 
 # Interface: IEventListCard
 
-Defined in: [src/types/Event/interface.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L132)
+Defined in: [src/types/Event/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L133)
 
 Props for EventListCard component.
+
 `@remarks` Extends IEvent and adds optional refetchEvents callback.
 
 ## Extends
@@ -281,7 +282,7 @@ Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFound
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L134)
+Defined in: [src/types/Event/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L135)
 
 Optional callback to refresh the events list after modifications.
 

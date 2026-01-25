@@ -7,7 +7,7 @@
 Defined in: [src/types/UserPortal/PromotedPost/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L7)
 
 Props for PromotedPost component.
-+ * `@property` id - Unique identifier for the promoted post
+`@property` id - Unique identifier for the promoted post
 `@property` image - URL or path to the promotional image (optional)
 `@property` title - Display title for the promoted post
 
