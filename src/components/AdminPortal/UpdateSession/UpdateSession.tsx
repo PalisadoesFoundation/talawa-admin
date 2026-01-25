@@ -27,10 +27,6 @@
  * Dependencies:
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
- *
- * TODO:
- * - Add additional validation for slider input if needed.
- * - Improve error handling for edge cases.
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -92,11 +88,6 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
     }
   }, [data, queryError]);
 
-  /**
-   * Handles changes to the slider value and updates the timeout state.
-   *
-   * @param e - The event triggered by slider movement.
-   */
   /**
    * Handles changes to the slider value and updates the timeout state.
    *

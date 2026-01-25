@@ -277,11 +277,6 @@ const CommunityProfile = (): JSX.Element => {
               />
             </FormFieldGroup>
             <FormFieldGroup label={t('social')} name="social">
-              <div className="mb-3" aria-labelledby="social-label">
-                <legend id="social-label" className="form-label">
-                  {t('social')}
-                </legend>
-              </div>
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
                 <input

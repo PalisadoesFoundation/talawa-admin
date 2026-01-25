@@ -14,6 +14,7 @@ import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { wait } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
 
 /**
  * This file contains unit tests for the `UpdateSession` component.
@@ -58,8 +59,6 @@ const MOCKS = [
     },
   },
 ];
-
-import { wait } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
 
 vi.mock('react-toastify', () => ({
   toast: {
