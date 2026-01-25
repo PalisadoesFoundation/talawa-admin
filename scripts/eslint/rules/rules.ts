@@ -6,9 +6,9 @@ import {
   restrictedImportPaths,
   stripId,
   restrictedImports,
-} from './imports.ts';
-import { securityRestrictions } from './security.ts';
-import { searchInputRestrictions } from './search-input.ts';
+} from './imports.js';
+import { securityRestrictions } from './security.js';
+import { searchInputRestrictions } from './search-input.js';
 
 export {
   restrictedImports,

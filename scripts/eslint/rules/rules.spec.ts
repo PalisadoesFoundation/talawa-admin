@@ -9,7 +9,7 @@ import {
   stripId,
   securityRestrictions,
   searchInputRestrictions,
-} from './rules.ts';
+} from './rules.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);

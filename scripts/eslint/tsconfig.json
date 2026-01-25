@@ -9,9 +9,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true
+    "resolveJsonModule": true
   },
   "include": ["**/*.ts"],
   "exclude": ["dist", "node_modules"]

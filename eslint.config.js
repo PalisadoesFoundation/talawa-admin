@@ -13,7 +13,7 @@ import {
   restrictImportsExcept,
   securityRestrictions,
   searchInputRestrictions,
-} from './scripts/eslint/rules/rules.ts';
+} from './scripts/eslint/dist/rules/rules.js';
 
 export default [
   {
