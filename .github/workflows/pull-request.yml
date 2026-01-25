@@ -478,6 +478,7 @@ jobs:
 
   Check-ESLint-Rules:
     name: Check ESLint Rule Tests
+    needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository

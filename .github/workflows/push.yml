@@ -32,29 +32,20 @@ jobs:
     name: Check ESLint Rule Tests
     needs: [Merge-Conflict-Check]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - uses: pnpm/action-setup@v4
         with:
-          version: 10.4.1
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        id: pnpm-cache
+          run_install: false
+      - uses: actions/setup-node@v4
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+          node-version: '24.x'
+          cache: 'pnpm'
 
+      - name: Prepare dependency store
+        run: pnpm fetch
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Run ESLint rule tests
         env:
