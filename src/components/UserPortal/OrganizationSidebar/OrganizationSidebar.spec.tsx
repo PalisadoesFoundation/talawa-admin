@@ -29,7 +29,7 @@ dayjs.extend(utc);
  * 2. **Component renders properly when events list is not empty**: Tests that the events section is rendered correctly when events are available, and "No Events to show" is not displayed.
  * 3. **Component renders properly when members list is not empty**: Verifies the correct display of members when available, ensuring "No Members to show" is not displayed.
  * 4. **Handles GraphQL errors properly**: Validates that the component properly handles GraphQL query errors by displaying appropriate fallback content ("No Members to show" and "No Events to show") when data fetching fails.
- * 5. **Should show Loading state initially** : Checks that loading indicators are properly displayed while data is being fetched, verifying that "Loading..." text appears in both the members and events sections before data loads.
+ * 5. **Should show Loading state initially** : Checks that loading indicators are properly displayed while data is being fetched, verifying that loading text appears in both the members and events sections before data loads.
  * 6. **Should render Member images properly** : Validates the correct rendering of member profile images, ensuring that default images are shown when no custom image is provided and that custom images are properly displayed when available.
  *
  * Mocked GraphQL queries simulate backend responses for members and events lists.

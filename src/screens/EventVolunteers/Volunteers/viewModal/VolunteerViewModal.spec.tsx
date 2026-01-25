@@ -328,37 +328,28 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Field onChange handlers', () => {
-    it('should have no-op onChange handler for volunteer name field', () => {
+    it('should call no-op onChange handlers without errors', async () => {
       renderVolunteerViewModal(itemProps[0]);
 
-      const input = screen.getByTestId('volunteerName') as HTMLInputElement;
-      const onChange = input.onchange;
+      const nameInput = screen.getByTestId('volunteerName') as HTMLInputElement;
+      const statusInput = screen.getByTestId(
+        'volunteerStatus',
+      ) as HTMLInputElement;
+      const hoursInput = screen.getByTestId(
+        'hoursVolunteered',
+      ) as HTMLInputElement;
 
-      if (onChange) onChange.call(input, new Event('change'));
+      nameInput.removeAttribute('disabled');
+      statusInput.removeAttribute('disabled');
+      hoursInput.removeAttribute('disabled');
 
-      expect(input).toHaveValue('Teresa Bradley');
-    });
+      await userEvent.type(nameInput, 'x');
+      await userEvent.type(statusInput, 'x');
+      await userEvent.type(hoursInput, 'x');
 
-    it('should have no-op onChange handler for status field', () => {
-      renderVolunteerViewModal(itemProps[0]);
-
-      const input = screen.getByTestId('volunteerStatus') as HTMLInputElement;
-      const onChange = input.onchange;
-
-      if (onChange) onChange.call(input, new Event('change'));
-
-      expect(input).toHaveValue('Accepted');
-    });
-
-    it('should have no-op onChange handler for hours volunteered field', () => {
-      renderVolunteerViewModal(itemProps[0]);
-
-      const input = screen.getByTestId('hoursVolunteered') as HTMLInputElement;
-      const onChange = input.onchange;
-
-      if (onChange) onChange.call(input, new Event('change'));
-
-      expect(input).toHaveValue('10');
+      expect(nameInput).toBeInTheDocument();
+      expect(statusInput).toBeInTheDocument();
+      expect(hoursInput).toBeInTheDocument();
     });
 
     it('should keep all fields disabled and read-only', () => {

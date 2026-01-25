@@ -163,6 +163,7 @@
     "requests": "会员申请",
     "communityProfile": "社区资料",
     "notification": "通知",
+    "switchToUserPortal": "切换到用户门户",
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
@@ -384,6 +385,11 @@
       "min60": "60 分钟",
       "update": "更新"
     }
+  },
+  "plugin": {
+    "error": "插件错误",
+    "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
+    "id": "插件：<1>{{pluginId}}</1>"
   },
   "dashboard": {
     "title": "仪表板",
@@ -1416,6 +1422,8 @@
     "menu": "菜单"
   },
   "organizationSidebar": {
+    "loading": "加载中...",
+    "ends": "结束",
     "viewAll": "查看全部",
     "events": "活动",
     "noEvents": "没有可显示的活动",
@@ -1780,6 +1788,10 @@
     "advertisementLoading": "广告加载中..."
   },
   "userChat": {
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "群组",
     "title": "聊天",
     "add": "添加",
     "chat": "聊天",
@@ -2439,5 +2451,31 @@
     "resendSuccess": "验证邮件发送成功!",
     "resendFailed": "发送验证邮件失败。请稍后再试。",
     "goToLogin": "前往登录"
+  },
+  "plugins": {
+    "loading": "正在加载插件...",
+    "component": "组件",
+    "plugin": "插件",
+    "errors": {
+      "missingPluginId": {
+        "title": "缺少插件 ID",
+        "description": "此路由没有有效的插件 ID"
+      },
+      "notRegistered": {
+        "title": "插件未注册",
+        "description": "请将此插件添加到插件注册表中 {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "未找到组件"
+      },
+      "componentNotFound": {
+        "title": "未找到组件",
+        "availableComponents": "可用组件: {{components}}"
+      },
+      "pluginError": {
+        "title": "插件错误",
+        "failedToLoad": "加载组件失败"
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import {
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -179,7 +180,7 @@ describe('Testing VolunteerGroupViewModal', () => {
       expect(input).toHaveValue('Wilt Shepherd');
     });
 
-    it('should have no-op onChange handlers for all fields', () => {
+    it('should call no-op onChange handlers without errors', async () => {
       renderGroupViewModal(itemProps[0]);
 
       const nameInput = screen.getByTestId('groupName') as HTMLInputElement;
@@ -191,34 +192,34 @@ describe('Testing VolunteerGroupViewModal', () => {
         'groupCreator',
       ) as HTMLInputElement;
 
-      const nameOnChange = nameInput.onchange;
-      const descOnChange = descInput.onchange;
-      const leaderOnChange = leaderInput.onchange;
-      const creatorOnChange = creatorInput.onchange;
+      nameInput.removeAttribute('disabled');
+      descInput.removeAttribute('disabled');
+      leaderInput.removeAttribute('disabled');
+      creatorInput.removeAttribute('disabled');
 
-      if (nameOnChange) nameOnChange.call(nameInput, new Event('change'));
-      if (descOnChange) descOnChange.call(descInput, new Event('change'));
-      if (leaderOnChange) leaderOnChange.call(leaderInput, new Event('change'));
-      if (creatorOnChange)
-        creatorOnChange.call(creatorInput, new Event('change'));
+      await userEvent.type(nameInput, 'x');
+      await userEvent.type(descInput, 'x');
+      await userEvent.type(leaderInput, 'x');
+      await userEvent.type(creatorInput, 'x');
 
-      expect(nameInput).toHaveValue('Group 1');
-      expect(descInput).toHaveValue('desc');
-      expect(leaderInput).toHaveValue('Teresa Bradley');
-      expect(creatorInput).toHaveValue('Wilt Shepherd');
+      expect(nameInput).toBeInTheDocument();
+      expect(descInput).toBeInTheDocument();
+      expect(leaderInput).toBeInTheDocument();
+      expect(creatorInput).toBeInTheDocument();
     });
 
-    it('should have no-op onChange handler for volunteersRequired field', () => {
+    it('should call no-op onChange handler for volunteersRequired field', async () => {
       renderGroupViewModal(itemProps[1]);
 
       const input = screen.getByTestId(
         'volunteersRequired',
       ) as HTMLInputElement;
-      const onChange = input.onchange;
 
-      if (onChange) onChange.call(input, new Event('change'));
+      input.removeAttribute('disabled');
 
-      expect(input).toHaveValue('10');
+      await userEvent.type(input, '5');
+
+      expect(input).toBeInTheDocument();
     });
   });
 

@@ -14,7 +14,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell, FaUsers } from 'react-icons/fa';
+import { FaBell, FaExchangeAlt, FaUsers } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
@@ -119,6 +119,17 @@ const LeftDrawer = ({
       portalType="admin"
       footerContent={
         <>
+          <div className={styles.switchPortalWrapper}>
+            <SidebarNavItem
+              to="/user/organizations"
+              icon={<FaExchangeAlt />}
+              label={t('switchToUserPortal')}
+              testId="switchToUserPortalBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              iconType="react-icon"
+            />
+          </div>
           <div
             className={
               hideDrawer ? styles.profileCardHidden : styles.profileCardWrapper
