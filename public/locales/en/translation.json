@@ -1,4 +1,9 @@
 {
+  "plugin": {
+    "error": "Plugin Error",
+    "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
+    "id": "Plugin: <1>{{pluginId}}</1>"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -163,6 +168,7 @@
     "requests": "Membership Requests",
     "communityProfile": "Community Profile",
     "notification": "Notifications",
+    "switchToUserPortal": "Switch to User Portal",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "Users",
@@ -1452,6 +1458,8 @@
     "menu": "menu"
   },
   "organizationSidebar": {
+    "loading": "Loading...",
+    "ends": "Ends",
     "viewAll": "View all",
     "events": "Events",
     "noEvents": "No Events to show",
@@ -1755,6 +1763,10 @@
     "advertisementLoading": "Loading advertisements..."
   },
   "userChat": {
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups",
     "title": "Chats",
     "add": "Add",
     "chat": "Chat",
@@ -2419,5 +2431,31 @@
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
     "goToLogin": "Go to Login"
+  },
+  "plugins": {
+    "loading": "Loading plugin...",
+    "component": "Component",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "Plugin ID Missing",
+        "description": "This route does not have a valid plugin ID"
+      },
+      "notRegistered": {
+        "title": "Plugin Not Registered",
+        "description": "Please add this plugin to the plugin registry in {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "No Components Found"
+      },
+      "componentNotFound": {
+        "title": "Component Not Found",
+        "availableComponents": "Available components: {{components}}"
+      },
+      "pluginError": {
+        "title": "Plugin Error",
+        "failedToLoad": "Failed to load component"
+      }
+    }
   }
 }

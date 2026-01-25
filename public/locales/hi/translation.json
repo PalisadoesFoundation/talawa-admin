@@ -163,6 +163,7 @@
     "requests": "सदस्यता अनुरोध",
     "communityProfile": "समुदाय प्रोफ़ाइल",
     "notification": "सूचनाएं",
+    "switchToUserPortal": "यूज़र पोर्टल पर जाएं",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
@@ -1407,6 +1408,8 @@
     "menu": "मेनू"
   },
   "organizationSidebar": {
+    "loading": "लोड हो रहा है...",
+    "ends": "समाप्त",
     "viewAll": "सभी को देखें",
     "events": "आयोजन",
     "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
@@ -1771,6 +1774,10 @@
     "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
+    "starredMessages": "तारांकित संदेश",
+    "all": "सब",
+    "unread": "अपठित",
+    "groups": "समूह",
     "title": "चैट्स",
     "deleteChat": "चैट हटाएं",
     "add": "जोड़ें",
@@ -2214,6 +2221,11 @@
     "volunteersRequired": "आवश्यक",
     "signedUp": "पंजीकृत"
   },
+  "plugin": {
+    "error": "प्लगइन त्रुटि",
+    "failedToLoad": "घटक लोड करने में विफल: <1>{{componentName}}</1>",
+    "id": "प्लगइन: <1>{{pluginId}}</1>"
+  },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
     "searchPlaceholder": "प्लगइन खोजें...",
@@ -2404,17 +2416,43 @@
       "filledByCount": "{{count}} लोगों ने इस इवेंट के लिए फीडबैक भरा है।"
     }
   },
+  "plugins": {
+    "loading": "प्लगइन लोड हो रहा है...",
+    "component": "कम्पोनेंट",
+    "plugin": "प्लगइन",
+    "errors": {
+      "missingPluginId": {
+        "title": "प्लगइन आईडी गायब है",
+        "description": "इस रूट में मान्य प्लगइन आईडी नहीं है"
+      },
+      "notRegistered": {
+        "title": "प्लगइन पंजीकृत नहीं है",
+        "description": "कृपया इस प्लगइन को रजिस्ट्री में जोड़ें {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "कोई घटक नहीं मिला"
+      },
+      "componentNotFound": {
+        "title": "घटक नहीं मिला",
+        "availableComponents": "उपलब्ध घटक: {{components}}"
+      },
+      "pluginError": {
+        "title": "प्लगइन त्रुटि",
+        "failedToLoad": "घटक लोड करने में विफल"
+      }
+    }
+  },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "ईमेल सत्यापित करें",
+    "verifying": "आपका ईमेल सत्यापित किया जा रहा है...",
+    "success": "ईमेल सत्यापित!",
+    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉगिन कर सकते हैं।",
+    "error": "सत्यापन विफल",
+    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
+    "loginRequired": "कृपया अपना ईमेल सत्यापित करने के लिए लॉगिन करें।",
+    "resendButton": "सत्यापन ईमेल पुनः भेजें",
+    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
+    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
+    "goToLogin": "लॉगिन पर जाएं"
   }
 }

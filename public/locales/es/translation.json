@@ -163,6 +163,7 @@
     "requests": "Solicitudes de Membresía",
     "communityProfile": "Perfil de la Comunidad",
     "notification": "Notificaciones",
+    "switchToUserPortal": "Cambiar al portal de usuario",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menú",
     "users": "usuarios",
@@ -1302,6 +1303,11 @@
     "asYourCountry": "Como su país",
     "actions": "Acciones"
   },
+  "plugin": {
+    "error": "Error del complemento",
+    "failedToLoad": "Error al cargar el componente: <1>{{componentName}}</1>",
+    "id": "Complemento: <1>{{pluginId}}</1>"
+  },
   "userLogin": {
     "login": "Acceso",
     "forgotPassword": "Has olvidado tu contraseña ?",
@@ -1390,6 +1396,8 @@
     "chat": "Chat"
   },
   "organizationSidebar": {
+    "loading": "Cargando...",
+    "ends": "Finaliza",
     "viewAll": "Ver todo",
     "events": "Eventos",
     "members": "Miembros",
@@ -1754,6 +1762,10 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "starredMessages": "Mensajes destacados",
+    "all": "Todos",
+    "unread": "No leídos",
+    "groups": "Grupos",
     "title": "Chats",
     "deleteChat": "Eliminar Chat",
     "add": "Agregar",
@@ -2415,6 +2427,32 @@
     "resendButton": "Resend Verification Email",
     "resendSuccess": "Verification email has been resent successfully.",
     "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "goToLogin": "Ir a iniciar sesión"
+  },
+  "plugins": {
+    "loading": "Cargando complemento...",
+    "component": "Componente",
+    "plugin": "Complemento",
+    "errors": {
+      "missingPluginId": {
+        "title": "Falta ID del complemento",
+        "description": "Esta ruta no tiene un ID de complemento válido"
+      },
+      "notRegistered": {
+        "title": "Complemento no registrado",
+        "description": "Por favor añada este complemento al registro en {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "No se encontraron componentes"
+      },
+      "componentNotFound": {
+        "title": "Componente no encontrado",
+        "availableComponents": "Componentes disponibles: {{components}}"
+      },
+      "pluginError": {
+        "title": "Error del complemento",
+        "failedToLoad": "Error al cargar el componente"
+      }
+    }
   }
 }

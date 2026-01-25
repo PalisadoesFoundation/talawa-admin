@@ -158,6 +158,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
       expect(screen.getByTestId('pluginStoreBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('switchToUserPortalBtn')).toBeInTheDocument();
     });
 
     it('renders users button for all users', () => {

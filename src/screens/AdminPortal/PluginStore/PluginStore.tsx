@@ -5,9 +5,9 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import Button from 'shared-components/Button/Button';
 import styles from './PluginStore.module.css';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
