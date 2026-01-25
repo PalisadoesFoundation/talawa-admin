@@ -46,7 +46,7 @@ export interface InterfaceFormFieldProps {
   /**
    * Whether to use aria-live for dynamic error announcements.
    * When true, error messages are announced to screen readers.
-   * @default true
+   * Defaults to true.
    */
   ariaLive?: boolean;
 }
