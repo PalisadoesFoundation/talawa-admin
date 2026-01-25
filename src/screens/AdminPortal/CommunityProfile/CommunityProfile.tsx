@@ -239,6 +239,8 @@ const CommunityProfile = (): JSX.Element => {
             >
               <input
                 type="text"
+                id="communityName"
+                name="communityName"
                 value={profileVariable.name}
                 onChange={handleOnChange}
                 className={`form-control mb-3 ${styles.inputField}`}
