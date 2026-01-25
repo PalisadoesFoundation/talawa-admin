@@ -10,6 +10,6 @@
 
 .tableContainer {
   height: var(--space-23);
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
 }

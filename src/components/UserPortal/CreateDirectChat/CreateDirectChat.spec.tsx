@@ -66,7 +66,7 @@ const mockUsers = [
       id: 'user-3',
       name: 'Test User 3',
       avatarURL: '',
-      role: 'Member',
+      role: '',
     },
   },
 ];
@@ -283,6 +283,16 @@ describe('CreateDirectChatModal', () => {
 
     expect(searchInput).toHaveValue('');
     expect(screen.queryByLabelText(/clear/i)).not.toBeInTheDocument();
+  });
+
+  test('shows member fallback when role is missing', async () => {
+    renderComponent();
+
+    const userRows = await screen.findAllByTestId('user');
+    const lastRow = userRows[userRows.length - 1];
+
+    expect(lastRow).toHaveTextContent('Test User 3');
+    expect(lastRow).toHaveTextContent('Member');
   });
 
   test('should prevent creating a duplicate chat', async () => {
