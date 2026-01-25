@@ -440,14 +440,15 @@ describe('LoadingState Component', () => {
     });
   });
 
-
   describe('Custom Variant', () => {
     it('should render provided customLoader when loading', () => {
       render(
         <LoadingState
           isLoading={true}
           variant="custom"
-          customLoader={<div data-testid="custom-loader">Custom Loading...</div>}
+          customLoader={
+            <div data-testid="custom-loader">Custom Loading...</div>
+          }
         >
           <div data-testid="test-content">Content</div>
         </LoadingState>,
@@ -549,7 +550,7 @@ describe('LoadingState Component', () => {
           isLoading={true}
           variant="custom"
           customLoader={
-             <>
+            <>
               {[...Array(6)].map((_, index) => (
                 <div key={index} data-testid={`loader-${index}`}>
                   Loading card {index + 1}
@@ -616,5 +617,4 @@ describe('LoadingState Component', () => {
       expect(ariaLabel).toMatch(/loading/i);
     });
   });
-
 });
