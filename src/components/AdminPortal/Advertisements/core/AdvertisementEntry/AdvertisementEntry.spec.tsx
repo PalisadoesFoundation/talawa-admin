@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ApolloProvider } from '@apollo/client';
 import { BrowserRouter } from 'react-router';
 import AdvertisementEntry from './AdvertisementEntry';
@@ -94,8 +95,8 @@ describe('Testing Advertisement Entry Component', () => {
     const statusBadge = screen.getByTestId('advertisement-status');
     expect(statusBadge).toBeInTheDocument();
     expect(statusBadge).toHaveAttribute('aria-label', 'Inactive');
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
-    fireEvent.click(screen.getByTestId('deletebtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
       expect(
@@ -104,7 +105,7 @@ describe('Testing Advertisement Entry Component', () => {
       expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('delete_yes'));
+    await userEvent.click(screen.getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -118,9 +119,14 @@ describe('Testing Advertisement Entry Component', () => {
 
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('deletebtn'));
 
-    fireEvent.click(screen.getByTestId('delete_yes'));
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: { id: '1' },
+      });
+    });
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -174,8 +180,8 @@ describe('Testing Advertisement Entry Component', () => {
     // Mock deletion to reject with a non-Error value (string, number, object, etc.)
     deleteAdByIdMock.mockRejectedValueOnce('Network failure');
 
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
-    fireEvent.click(screen.getByTestId('deletebtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
       expect(
@@ -183,7 +189,7 @@ describe('Testing Advertisement Entry Component', () => {
       ).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('delete_yes'));
+    await userEvent.click(screen.getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -274,7 +280,7 @@ describe('Testing Advertisement Entry Component', () => {
     ).toBeInTheDocument();
   });
 
-  it('should open and close the dropdown when options button is clicked', () => {
+  it('should open and close the dropdown when options button is clicked', async () => {
     const { getByTestId, queryByText, getAllByText } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -312,11 +318,11 @@ describe('Testing Advertisement Entry Component', () => {
 
     expect(queryByText('Edit')).toBeNull();
 
-    fireEvent.click(optionsButton);
+    await userEvent.click(optionsButton);
 
     expect(queryByText('Edit')).toBeInTheDocument();
 
-    fireEvent.click(optionsButton);
+    await userEvent.click(optionsButton);
 
     expect(queryByText('Edit')).toBeNull();
   });
@@ -366,23 +372,22 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     const optionsButton = screen.getByTestId('moreiconbtn');
-    fireEvent.click(optionsButton);
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(optionsButton);
+    await userEvent.click(screen.getByTestId('editBtn'));
+    const nameInput = screen.getByTestId('advertisementNameInput');
 
-    fireEvent.change(screen.getByLabelText('Enter name of Advertisement'), {
-      target: { value: 'Updated Advertisement' },
-    });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Updated Advertisement');
 
-    expect(screen.getByLabelText('Enter name of Advertisement')).toHaveValue(
-      'Updated Advertisement',
+    expect(nameInput).toHaveValue('Updated Advertisement');
+
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'menu',
     );
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('menu');
 
-    fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'menu' },
-    });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('menu');
-
-    fireEvent.click(screen.getByTestId('addonupdate'));
+    await userEvent.click(screen.getByTestId('addonupdate'));
 
     expect(updateAdByIdMock).toHaveBeenCalledWith({
       variables: {
@@ -556,8 +561,10 @@ describe('Testing Advertisement Entry Component', () => {
     expect(getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
-    fireEvent.click(getByTestId('moreiconbtn'));
-    fireEvent.click(getByTestId('deletebtn'));
+    await userEvent.click(getByTestId('moreiconbtn'));
+    await waitFor(async () => {
+      await userEvent.click(getByTestId('deletebtn'));
+    });
 
     await waitFor(() => {
       expect(
@@ -566,7 +573,7 @@ describe('Testing Advertisement Entry Component', () => {
       expect(screen.getByTestId('delete_body')).toBeInTheDocument();
     });
 
-    fireEvent.click(getByTestId('delete_yes'));
+    await userEvent.click(getByTestId('delete_yes'));
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
@@ -580,9 +587,15 @@ describe('Testing Advertisement Entry Component', () => {
 
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
-    fireEvent.click(getByTestId('moreiconbtn'));
+    await userEvent.click(getByTestId('moreiconbtn'));
 
-    fireEvent.click(getByTestId('delete_yes'));
+    await userEvent.click(getByTestId('deletebtn'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: { id: '1' },
+      });
+    });
 
     await waitFor(() => {
       expect(deleteAdByIdMock).toHaveBeenCalledWith({
