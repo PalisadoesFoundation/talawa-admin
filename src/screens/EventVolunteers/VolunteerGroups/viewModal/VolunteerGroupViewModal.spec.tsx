@@ -192,6 +192,11 @@ describe('Testing VolunteerGroupViewModal', () => {
         'groupCreator',
       ) as HTMLInputElement;
 
+      const initialName = nameInput.value;
+      const initialDesc = descInput.value;
+      const initialLeader = leaderInput.value;
+      const initialCreator = creatorInput.value;
+
       nameInput.removeAttribute('disabled');
       descInput.removeAttribute('disabled');
       leaderInput.removeAttribute('disabled');
@@ -202,10 +207,10 @@ describe('Testing VolunteerGroupViewModal', () => {
       await userEvent.type(leaderInput, 'x');
       await userEvent.type(creatorInput, 'x');
 
-      expect(nameInput).toBeInTheDocument();
-      expect(descInput).toBeInTheDocument();
-      expect(leaderInput).toBeInTheDocument();
-      expect(creatorInput).toBeInTheDocument();
+      expect(nameInput.value).toBe(initialName);
+      expect(descInput.value).toBe(initialDesc);
+      expect(leaderInput.value).toBe(initialLeader);
+      expect(creatorInput.value).toBe(initialCreator);
     });
 
     it('should call no-op onChange handler for volunteersRequired field', async () => {
@@ -215,11 +220,13 @@ describe('Testing VolunteerGroupViewModal', () => {
         'volunteersRequired',
       ) as HTMLInputElement;
 
+      const initialValue = input.value;
+
       input.removeAttribute('disabled');
 
       await userEvent.type(input, '5');
 
-      expect(input).toBeInTheDocument();
+      expect(input.value).toBe(initialValue);
     });
   });
 

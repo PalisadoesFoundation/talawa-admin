@@ -339,6 +339,10 @@ describe('Testing VolunteerViewModal', () => {
         'hoursVolunteered',
       ) as HTMLInputElement;
 
+      const initialName = nameInput.value;
+      const initialStatus = statusInput.value;
+      const initialHours = hoursInput.value;
+
       nameInput.removeAttribute('disabled');
       statusInput.removeAttribute('disabled');
       hoursInput.removeAttribute('disabled');
@@ -347,9 +351,9 @@ describe('Testing VolunteerViewModal', () => {
       await userEvent.type(statusInput, 'x');
       await userEvent.type(hoursInput, 'x');
 
-      expect(nameInput).toBeInTheDocument();
-      expect(statusInput).toBeInTheDocument();
-      expect(hoursInput).toBeInTheDocument();
+      expect(nameInput.value).toBe(initialName);
+      expect(statusInput.value).toBe(initialStatus);
+      expect(hoursInput.value).toBe(initialHours);
     });
 
     it('should keep all fields disabled and read-only', () => {
