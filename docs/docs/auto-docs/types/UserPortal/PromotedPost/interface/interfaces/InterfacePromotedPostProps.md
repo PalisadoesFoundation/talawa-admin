@@ -4,9 +4,12 @@
 
 # Interface: InterfacePromotedPostProps
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L4)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L7)
 
 Props for PromotedPost component.
++ * `@property` id - Unique identifier for the promoted post
+`@property` image - URL or path to the promotional image (optional)
+`@property` title - Display title for the promoted post
 
 ## Properties
 
@@ -14,7 +17,7 @@ Props for PromotedPost component.
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L5)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L8)
 
 ***
 
@@ -22,7 +25,7 @@ Defined in: [src/types/UserPortal/PromotedPost/interface.ts:5](https://github.co
 
 > **image**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L6)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L9)
 
 ***
 
@@ -30,4 +33,4 @@ Defined in: [src/types/UserPortal/PromotedPost/interface.ts:6](https://github.co
 
 > **title**: `string`
 
-Defined in: [src/types/UserPortal/PromotedPost/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L7)
+Defined in: [src/types/UserPortal/PromotedPost/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PromotedPost/interface.ts#L10)

@@ -6,4 +6,4 @@
 
 > **InterfaceIOrgList** = [`IOrgList`](../interfaces/IOrgList.md)
 
-Defined in: [src/types/Event/interface.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L296)
+Defined in: [src/types/Event/interface.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L297)
