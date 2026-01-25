@@ -129,4 +129,30 @@ describe('UserProfile Component', () => {
       ),
     ).toBeInTheDocument();
   });
+
+  it('renders "Unavailable" when createdAt is null', () => {
+    const userDetails = {
+      firstName: 'Null',
+      lastName: 'User',
+      email: 'null@example.com',
+      createdAt: null as unknown as Date,
+      image: 'https://example.com/null.jpg',
+    };
+
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+  });
+
+  it('renders "Unavailable" when createdAt is undefined', () => {
+    const userDetails = {
+      firstName: 'Undefined',
+      lastName: 'User',
+      email: 'undefined@example.com',
+      createdAt: undefined as unknown as Date,
+      image: 'https://example.com/undefined.jpg',
+    };
+
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+  });
 });
