@@ -185,29 +185,29 @@ describe('EventAttendedCard', () => {
         ).toBeInTheDocument();
       });
 
-      it('renders link when orgId is missing', () => {
+      it('does not render link when orgId is missing', () => {
         const propsWithoutOrgId = {
           ...mockProps,
           orgId: undefined,
         };
         renderComponent(propsWithoutOrgId);
         const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/admin/event/undefined/event456');
+        const link = within(card).queryByRole('link');
+        expect(link).not.toBeInTheDocument();
       });
 
-      it('renders link when eventId is missing', () => {
+      it('does not render link when eventId is missing', () => {
         const propsWithoutEventId = {
           ...mockProps,
           eventId: undefined,
         };
         renderComponent(propsWithoutEventId);
         const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/admin/event/org123/undefined');
+        const link = within(card).queryByRole('link');
+        expect(link).not.toBeInTheDocument();
       });
 
-      it('renders link when both IDs are missing', () => {
+      it('does not render link when both IDs are missing', () => {
         const propsWithoutIds = {
           ...mockProps,
           orgId: undefined,
@@ -215,11 +215,8 @@ describe('EventAttendedCard', () => {
         };
         renderComponent(propsWithoutIds);
         const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute(
-          'href',
-          '/admin/event/undefined/undefined',
-        );
+        const link = within(card).queryByRole('link');
+        expect(link).not.toBeInTheDocument();
       });
     });
 
