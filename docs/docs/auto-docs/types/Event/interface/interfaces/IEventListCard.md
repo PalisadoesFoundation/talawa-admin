@@ -2,13 +2,17 @@
 
 ***
 
-# Interface: IEvent
+# Interface: IEventListCard
 
-Defined in: [src/types/Event/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L39)
+Defined in: [src/types/Event/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L133)
 
-## Extended by
+Props for EventListCard component.
 
-- [`IEventListCard`](IEventListCard.md)
+`@remarks` Extends IEvent and adds optional refetchEvents callback.
+
+## Extends
+
+- [`IEvent`](IEvent.md)
 
 ## Properties
 
@@ -18,6 +22,10 @@ Defined in: [src/types/Event/interface.ts:39](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L50)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`allDay`](IEvent.md#allday)
+
 ***
 
 ### attendees
@@ -26,6 +34,10 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L63)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`attendees`](IEvent.md#attendees)
+
 ***
 
 ### averageFeedbackScore?
@@ -33,6 +45,10 @@ Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFound
 > `optional` **averageFeedbackScore**: `number`
 
 Defined in: [src/types/Event/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L65)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`averageFeedbackScore`](IEvent.md#averagefeedbackscore)
 
 ***
 
@@ -46,6 +62,10 @@ Defined in: [src/types/Event/interface.ts:69](https://github.com/PalisadoesFound
 
 > **id**: `string`
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`baseEvent`](IEvent.md#baseevent)
+
 ***
 
 ### creator
@@ -53,6 +73,10 @@ Defined in: [src/types/Event/interface.ts:69](https://github.com/PalisadoesFound
 > **creator**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>
 
 Defined in: [src/types/Event/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L64)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`creator`](IEvent.md#creator)
 
 ***
 
@@ -62,6 +86,10 @@ Defined in: [src/types/Event/interface.ts:64](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L45)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`description`](IEvent.md#description)
+
 ***
 
 ### endAt
@@ -69,6 +97,10 @@ Defined in: [src/types/Event/interface.ts:45](https://github.com/PalisadoesFound
 > **endAt**: `string`
 
 Defined in: [src/types/Event/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L47)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`endAt`](IEvent.md#endat)
 
 ***
 
@@ -78,6 +110,10 @@ Defined in: [src/types/Event/interface.ts:47](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L49)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`endTime`](IEvent.md#endtime)
+
 ***
 
 ### feedback?
@@ -85,6 +121,10 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFound
 > `optional` **feedback**: [`Feedback`](../../type/type-aliases/Feedback.md)[]
 
 Defined in: [src/types/Event/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L66)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`feedback`](IEvent.md#feedback)
 
 ***
 
@@ -94,6 +134,10 @@ Defined in: [src/types/Event/interface.ts:66](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L74)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`hasExceptions`](IEvent.md#hasexceptions)
+
 ***
 
 ### id
@@ -101,6 +145,10 @@ Defined in: [src/types/Event/interface.ts:74](https://github.com/PalisadoesFound
 > **id**: `string`
 
 Defined in: [src/types/Event/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L42)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`id`](IEvent.md#id)
 
 ***
 
@@ -113,6 +161,10 @@ Defined in: [src/types/Event/interface.ts:62](https://github.com/PalisadoesFound
 Determines if the event is restricted to invited participants only.
 When true, only invited users can see and access the event.
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`isInviteOnly`](IEvent.md#isinviteonly)
+
 ***
 
 ### isPublic
@@ -124,6 +176,10 @@ Defined in: [src/types/Event/interface.ts:56](https://github.com/PalisadoesFound
 Determines if the event is visible to the entire community.
 Often referred to as "Community Visible" in the UI.
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`isPublic`](IEvent.md#ispublic)
+
 ***
 
 ### isRecurringEventTemplate?
@@ -131,6 +187,10 @@ Often referred to as "Community Visible" in the UI.
 > `optional` **isRecurringEventTemplate**: `boolean`
 
 Defined in: [src/types/Event/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L68)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`isRecurringEventTemplate`](IEvent.md#isrecurringeventtemplate)
 
 ***
 
@@ -140,6 +200,10 @@ Defined in: [src/types/Event/interface.ts:68](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L57)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`isRegisterable`](IEvent.md#isregisterable)
+
 ***
 
 ### key?
@@ -147,6 +211,10 @@ Defined in: [src/types/Event/interface.ts:57](https://github.com/PalisadoesFound
 > `optional` **key**: `string`
 
 Defined in: [src/types/Event/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L41)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`key`](IEvent.md#key)
 
 ***
 
@@ -156,6 +224,10 @@ Defined in: [src/types/Event/interface.ts:41](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L43)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`location`](IEvent.md#location)
+
 ***
 
 ### name
@@ -163,6 +235,10 @@ Defined in: [src/types/Event/interface.ts:43](https://github.com/PalisadoesFound
 > **name**: `string`
 
 Defined in: [src/types/Event/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L44)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`name`](IEvent.md#name)
 
 ***
 
@@ -172,6 +248,10 @@ Defined in: [src/types/Event/interface.ts:44](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L75)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`progressLabel`](IEvent.md#progresslabel)
+
 ***
 
 ### recurrenceDescription?
@@ -179,6 +259,10 @@ Defined in: [src/types/Event/interface.ts:75](https://github.com/PalisadoesFound
 > `optional` **recurrenceDescription**: `string`
 
 Defined in: [src/types/Event/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L77)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`recurrenceDescription`](IEvent.md#recurrencedescription)
 
 ***
 
@@ -188,6 +272,24 @@ Defined in: [src/types/Event/interface.ts:77](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L78)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`recurrenceRule`](IEvent.md#recurrencerule)
+
+***
+
+### refetchEvents()?
+
+> `optional` **refetchEvents**: () => `void`
+
+Defined in: [src/types/Event/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L135)
+
+Optional callback to refresh the events list after modifications.
+
+#### Returns
+
+`void`
+
 ***
 
 ### sequenceNumber?
@@ -195,6 +297,10 @@ Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFound
 > `optional` **sequenceNumber**: `number`
 
 Defined in: [src/types/Event/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L72)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`sequenceNumber`](IEvent.md#sequencenumber)
 
 ***
 
@@ -204,6 +310,10 @@ Defined in: [src/types/Event/interface.ts:72](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L46)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`startAt`](IEvent.md#startat)
+
 ***
 
 ### startTime?
@@ -211,6 +321,10 @@ Defined in: [src/types/Event/interface.ts:46](https://github.com/PalisadoesFound
 > `optional` **startTime**: `string`
 
 Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L48)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`startTime`](IEvent.md#starttime)
 
 ***
 
@@ -220,6 +334,10 @@ Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L73)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`totalCount`](IEvent.md#totalcount)
+
 ***
 
 ### userId?
@@ -228,6 +346,10 @@ Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L51)
 
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`userId`](IEvent.md#userid)
+
 ***
 
 ### userRole?
@@ -235,3 +357,7 @@ Defined in: [src/types/Event/interface.ts:51](https://github.com/PalisadoesFound
 > `optional` **userRole**: `string`
 
 Defined in: [src/types/Event/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L40)
+
+#### Inherited from
+
+[`IEvent`](IEvent.md).[`userRole`](IEvent.md#userrole)

@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../../public/locales/en/translation.json';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
@@ -42,7 +43,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   clearAllItems();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing Event Card In User portal', () => {
@@ -76,6 +77,41 @@ describe('Testing Event Card In User portal', () => {
     recurrenceRule: null,
     isRecurringEventException: false,
   };
+
+  it('shows loading spinner when registration is in flight', async () => {
+    const user = userEvent.setup();
+    const delayedMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            registerForEvent: [{ _id: '123' }],
+          },
+        },
+        delay: 500,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerBtn = screen.getByText('Register');
+    await user.click(registerBtn);
+
+    expect(screen.getByTestId('loadingIcon')).toBeInTheDocument();
+  });
 
   it('When the user is already registered', async () => {
     setItem('userId', '234');
@@ -125,7 +161,7 @@ describe('Testing Event Card In User portal', () => {
           query: REGISTER_EVENT,
           variables: { id: '123' },
         },
-        error: new Error('Failed to register for the event'),
+        error: new Error(translation.userEventCard.failedToRegister),
       },
     ];
 
@@ -147,7 +183,7 @@ describe('Testing Event Card In User portal', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `Failed to register for the event`,
+        translation.userEventCard.failedToRegister,
       );
     });
   });
