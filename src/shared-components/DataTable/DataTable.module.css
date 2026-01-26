@@ -1,194 +1,21 @@
-/* src/shared-components/DataTable/DataTable.module.css */
-
-/* Reusing some classes from global app-fixed for consistency if needed, but defining specific ones here */
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 8px 0 12px;
-}
-
-.searchWrap {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 4px 8px;
-  background: #fff;
-}
-
-.searchInput {
-  border: none;
-  outline: none;
-  min-width: 220px;
-}
-
-.searchInput:focus-visible,
-.searchInput:focus {
-  outline: 2px solid #0d6efd;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-.searchClear {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  padding: 2px 4px;
-  font-size: 0.9rem;
-  color: #555;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.searchClear:hover {
-  color: #000;
-}
-
-/* Base styles for table wrappers to ensure search bar and table align nicely */
 .dataTableWrapper {
-  width: 100%;
-  position: relative;
+  composes: dataTableWrapper from '../../style/app-fixed.module.css';
 }
-
-.tableWrap {
-  width: 100%;
-  overflow-x: auto;
+.dataTableBase {
+  composes: dataTableBase from '../../style/app-fixed.module.css';
 }
-
-/* Ensure these match app-fixed names if we want to override or we can map them in the component */
+.toolbar {
+  composes: toolbar from '../../style/app-fixed.module.css';
+}
 .dataErrorState {
-  padding: 16px;
-  text-align: left;
-  color: #842029;
-  background: #f8d7da;
-  border: 1px solid #f5c2c7;
-  border-radius: 6px;
-  margin-bottom: 1rem;
+  composes: dataErrorState from '../../style/app-fixed.module.css';
 }
-
 .dataErrorDetails {
-  margin-top: 4px;
-  font-family: ui-monospace, Menlo, Consolas, monospace;
-  font-size: 0.875rem;
-  color: #5c1a21;
+  composes: dataErrorDetails from '../../style/app-fixed.module.css';
 }
-
-.loading {
-  padding: 16px;
-  text-align: center;
-}
-
 .dataEmptyState {
-  padding: 16px;
-  text-align: center;
-  color: #555;
-  border: 1px solid #ddd;
-  /* detailed below */
-  border-radius: 6px;
-  background: #f9f9f9;
+  composes: dataEmptyState from '../../style/app-fixed.module.css';
 }
-
-/* Selection column styles */
-.selectCol {
-  width: 42px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-.selectCol input[type='checkbox'] {
-  cursor: pointer;
-  width: 18px;
-  height: 18px;
-}
-
-/* Actions column styles */
-.actionsCol {
-  white-space: nowrap;
-  text-align: right;
-}
-
-.actionsCellContainer {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.actionBtn {
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.15s ease;
-}
-
-.actionBtn:hover:not(:disabled) {
-  background: #f0f0f0;
-}
-
-.actionBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* Bulk actions bar styles */
-.bulkBar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  margin: 0 0 8px;
-  background: #f6f8fa;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-}
-
-.bulkLeft {
-  color: #333;
-  font-size: 0.9rem;
-}
-
-.bulkRight {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-
 .bulkBtn {
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  transition: background-color 0.15s ease;
-}
-
-.bulkBtn:hover:not(:disabled) {
-  background: #f0f0f0;
-}
-
-.bulkBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.bulkClear {
-  border: 1px solid #ddd;
-  background: #fff;
-  padding: 6px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #666;
-}
-
-.bulkClear:hover {
-  background: #f0f0f0;
+  composes: bulkBtn from '../../style/app-fixed.module.css';
 }
