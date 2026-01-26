@@ -28,6 +28,14 @@ export const TEST_ID_PEOPLE_CARD = (id: string): string => `people-card-${id}`;
 export const TEST_ID_PEOPLE_SNO = (id: string): string => `people-sno-${id}`;
 
 /**
+ * Generates the data-testid for the delete event modal.
+ * @param id - The ID of the event.
+ * @returns The formatted data-testid.
+ */
+export const TEST_ID_DELETE_EVENT_MODAL = (id: string): string =>
+  `deleteEventModal${id}`;
+
+/**
  * Generates the route for a user component.
  * @param compId - The component ID.
  * @returns The formatted route.

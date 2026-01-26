@@ -10,6 +10,7 @@ import {
   getDummyDateTime,
   DUMMY_DATE_TIME_PREFIX,
   DATE_FORMAT,
+  TEST_ID_DELETE_EVENT_MODAL,
 } from './common';
 
 afterEach(() => {
@@ -34,6 +35,16 @@ describe('common constants and helpers', () => {
 
     it('should format people sno test id with empty string', () => {
       expect(TEST_ID_PEOPLE_SNO('')).toBe('people-sno-');
+    });
+  });
+
+  describe('TEST_ID_DELETE_EVENT_MODAL', () => {
+    it('should format delete event modal test id with valid id', () => {
+      expect(TEST_ID_DELETE_EVENT_MODAL('abc')).toBe('deleteEventModalabc');
+    });
+
+    it('should format delete event modal test id with empty string', () => {
+      expect(TEST_ID_DELETE_EVENT_MODAL('')).toBe('deleteEventModal');
     });
   });
 
