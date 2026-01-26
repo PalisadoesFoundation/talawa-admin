@@ -6,7 +6,7 @@
 
 > **ComponentType** = `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L32)
+Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L33)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/Pali
 
 > **comp\_id**: `string` \| `null`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L34)
+Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L35)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/Pali
 
 > **component**: `string` \| `null`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L35)
+Defined in: [src/state/reducers/userRoutesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L36)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/Pali
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L33)
+Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L34)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/Pali
 
 > `optional` **subTargets**: `object`[]
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L36)
+Defined in: [src/state/reducers/userRoutesReducer.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L37)
 
 #### comp\_id
 
