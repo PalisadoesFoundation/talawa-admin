@@ -11,16 +11,16 @@ describe('Testing Routes reducer', () => {
     ).toEqual({
       targets: [
         { name: 'My Organizations', url: 'user/organizations' },
-        { name: 'Posts', url: 'user/organization/undefined' },
-        { name: 'Chat', url: 'user/chat/undefined' },
-        { name: 'Events', url: 'user/events/undefined' },
-        { name: 'Volunteer', url: 'user/volunteer/undefined' },
-        { name: 'People', url: 'user/people/undefined' },
-        { name: 'Donate', url: 'user/donate/undefined' },
-        { name: 'Campaigns', url: 'user/campaigns/undefined' },
-        { name: 'My Pledges', url: 'user/pledges/undefined' },
-        { name: 'Transactions', url: 'user/transactions/undefined' },
-        { name: 'Leave Organization', url: 'user/leaveorg/undefined' },
+        { name: 'Posts', url: 'user/organization' },
+        { name: 'Chat', url: 'user/chat' },
+        { name: 'Events', url: 'user/events' },
+        { name: 'Volunteer', url: 'user/volunteer' },
+        { name: 'People', url: 'user/people' },
+        { name: 'Donate', url: 'user/donate' },
+        { name: 'Campaigns', url: 'user/campaigns' },
+        { name: 'My Pledges', url: 'user/pledges' },
+        { name: 'Transactions', url: 'user/transactions' },
+        { name: 'Leave Organization', url: 'user/leaveorg' },
       ],
       components: [
         {
