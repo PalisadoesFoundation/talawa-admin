@@ -1,3 +1,5 @@
+// translation-check-keyPrefix: eventListCard
+import type { TFunction } from 'i18next';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -54,7 +56,7 @@ interface IUpdateEventHandlerProps {
   recurrence: InterfaceRecurrenceRule | null;
   updateOption: 'single' | 'following' | 'entireSeries';
   hasRecurrenceChanged?: boolean; // Add this parameter
-  t: (key: string, options?: object) => string;
+  t: TFunction<'translation'>;
   hideViewModal: () => void;
   setEventUpdateModalIsOpen: (isOpen: boolean) => void;
   refetchEvents?: () => void;
