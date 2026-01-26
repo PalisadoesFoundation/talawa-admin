@@ -1,7 +1,7 @@
 /**
- * Props for UpdateTimeout component.
+ * Props for UpdateSession component.
  */
-export interface InterfaceUpdateTimeoutProps {
+export interface InterfaceUpdateSessionProps {
   /**
    * Callback invoked when the timeout value changes.
    */
