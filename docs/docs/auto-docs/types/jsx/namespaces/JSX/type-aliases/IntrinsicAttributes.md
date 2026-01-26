@@ -4,6 +4,6 @@
 
 # Type Alias: IntrinsicAttributes
 
-> **IntrinsicAttributes** = `ReactJSX.IntrinsicAttributes`
+> **IntrinsicAttributes** = `ReactSource.IntrinsicAttributes`
 
-Defined in: [src/types/jsx.d.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L9)
+Defined in: [src/types/jsx.d.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L12)

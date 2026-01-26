@@ -6,7 +6,7 @@
 
 > **ROUTE\_USER**(`compId`): `string`
 
-Defined in: [src/Constant/common.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L43)
+Defined in: [src/Constant/common.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L61)
 
 Generates the route for a user component.
 

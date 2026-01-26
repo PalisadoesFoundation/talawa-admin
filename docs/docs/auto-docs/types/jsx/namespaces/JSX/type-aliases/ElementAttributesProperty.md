@@ -4,6 +4,6 @@
 
 # Type Alias: ElementAttributesProperty
 
-> **ElementAttributesProperty** = `ReactJSX.ElementAttributesProperty`
+> **ElementAttributesProperty** = `ReactSource.ElementAttributesProperty`
 
-Defined in: [src/types/jsx.d.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L7)
+Defined in: [src/types/jsx.d.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L10)
