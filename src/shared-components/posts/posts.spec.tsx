@@ -16,6 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'test-utils/I18nextProviderMock';
 import dayjs from 'dayjs';
 import userEvent from '@testing-library/user-event';
+import { IDENTIFIER_ID, IDENTIFIER_USER_ID } from 'Constant/common';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockNotificationToast } = vi.hoisted(() => ({
@@ -1528,8 +1529,8 @@ describe('FetchMore Success Coverage', () => {
     it('retrieves userId from "userId" if it exists', async () => {
       const testUserId = 'test-user-from-userId';
       localStorageMocks.getItem.mockImplementation((key?: string) => {
-        if (key === 'userId') return testUserId;
-        if (key === 'id') return 'wrong-id';
+        if (key === IDENTIFIER_USER_ID) return testUserId;
+        if (key === IDENTIFIER_ID) return 'wrong-id';
         return null;
       });
 
@@ -1543,8 +1544,8 @@ describe('FetchMore Success Coverage', () => {
     it('falls back to "id" if "userId" does not exist', async () => {
       const testId = 'test-user-from-id';
       localStorageMocks.getItem.mockImplementation((key?: string) => {
-        if (key === 'userId') return null;
-        if (key === 'id') return testId;
+        if (key === IDENTIFIER_USER_ID) return null;
+        if (key === IDENTIFIER_ID) return testId;
         return null;
       });
 

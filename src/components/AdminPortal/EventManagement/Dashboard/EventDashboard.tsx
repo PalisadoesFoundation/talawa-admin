@@ -29,6 +29,7 @@ import type { JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -129,7 +130,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={t}
+          t={tEventList as unknown as TFunction<'translation', undefined>}
           tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">
