@@ -62,23 +62,14 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
 
   useEffect(() => {
     if (isOpen && !isLoading && formRef.current) {
-      setTimeout(() => {
-        if (!formRef.current) {
-          return;
-        }
-        const activeElement = document.activeElement;
-        if (activeElement && formRef.current.contains(activeElement)) {
-          return;
-        }
-        const firstInput = formRef.current.querySelector<
-          HTMLInputElement | HTMLTextAreaElement
-        >(
-          'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
-        );
-        if (firstInput) {
-          firstInput.focus();
-        }
-      }, 100);
+      const firstInput = formRef.current.querySelector<
+        HTMLInputElement | HTMLTextAreaElement
+      >(
+        'input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled])',
+      );
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 100);
+      }
     }
   }, [isOpen, isLoading]);
 
