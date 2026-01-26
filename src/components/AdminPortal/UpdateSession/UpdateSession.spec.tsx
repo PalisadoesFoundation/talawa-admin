@@ -2,11 +2,11 @@ import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, act, within, waitFor } from '@testing-library/react';
+import { render, screen, within, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import UpdateTimeout from './UpdateSession';
+import UpdateSession from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -14,6 +14,7 @@ import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { wait } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
 
 /**
  * This file contains unit tests for the `UpdateSession` component.
@@ -59,14 +60,6 @@ const MOCKS = [
   },
 ];
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -79,7 +72,7 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-describe('Testing UpdateTimeout Component', () => {
+describe('Testing UpdateSession Component', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
@@ -94,13 +87,13 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     const slider = screen.getByRole('slider');
@@ -118,13 +111,13 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     const slider = screen.getByRole('slider');
@@ -141,7 +134,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
@@ -160,13 +153,13 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
     // Wait for LoadingState to complete - component will be rendered once data loads
     await waitFor(() => {
-      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+      expect(screen.getByText(/Update Session/i)).toBeInTheDocument();
     });
 
     // Now get the slider
@@ -187,7 +180,7 @@ describe('Testing UpdateTimeout Component', () => {
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <UpdateTimeout />
+            <UpdateSession />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -195,9 +188,9 @@ describe('Testing UpdateTimeout Component', () => {
 
     await wait();
 
-    // Use getAllByText to get all elements with "Update Timeout" text
-    const updateTimeoutElements = screen.getAllByText(/Update Timeout/i);
-    expect(updateTimeoutElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    // Use getAllByText to get all elements with "Update Session" text
+    const updateSessionElements = screen.getAllByText(/Update Session/i);
+    expect(updateSessionElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
     expect(screen.getByText(/15 min/i)).toBeInTheDocument();
@@ -225,7 +218,7 @@ describe('Testing UpdateTimeout Component', () => {
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <UpdateTimeout />
+            <UpdateSession />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -277,7 +270,7 @@ describe('Testing UpdateTimeout Component', () => {
       <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <UpdateTimeout />
+            <UpdateSession />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -325,7 +318,7 @@ describe('Testing UpdateTimeout Component', () => {
       <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <UpdateTimeout />
+            <UpdateSession />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -346,7 +339,7 @@ describe('Testing UpdateTimeout Component', () => {
       <MockedProvider mocks={[MOCKS[1]]}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <UpdateTimeout />
+            <UpdateSession />
           </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
@@ -355,9 +348,9 @@ describe('Testing UpdateTimeout Component', () => {
     await wait();
 
     // Assertions to verify the component handles null community object correctly
-    // Use getAllByText to get all elements with "Update Timeout" text
-    const updateTimeoutElements = screen.getAllByText(/Update Timeout/i);
-    expect(updateTimeoutElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    // Use getAllByText to get all elements with "Update Session" text
+    const updateSessionElements = screen.getAllByText(/Update Session/i);
+    expect(updateSessionElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
 
@@ -418,7 +411,7 @@ describe('Testing UpdateTimeout Component', () => {
     const mockOnValueChange = vi.fn();
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
@@ -445,7 +438,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
@@ -485,7 +478,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
 
@@ -524,7 +517,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
 
@@ -562,7 +555,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
 
@@ -601,7 +594,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
 
@@ -640,7 +633,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
     const largeValue = String(Number.MAX_SAFE_INTEGER);
@@ -664,7 +657,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider mocks={MOCKS}>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
+        <UpdateSession onValueChange={mockOnValueChange} />
       </MockedProvider>,
     );
 
@@ -699,7 +692,7 @@ describe('Testing UpdateTimeout Component', () => {
 
     render(
       <MockedProvider mocks={delayedMocks}>
-        <UpdateTimeout />
+        <UpdateSession />
       </MockedProvider>,
     );
 
