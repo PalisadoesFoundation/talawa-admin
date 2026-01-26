@@ -27,7 +27,7 @@ export const getStorageKey = (prefix: string, key: string): string => {
  * @param key - The unique name identifying the value.
  * @returns - The stored value parsed as type T or null.
  */
-export const lsGet = <T>(prefix: string, key: string): T | null => {
+export const getItem = <T>(prefix: string, key: string): T | null => {
   const prefixedKey = getStorageKey(prefix, key);
   const storedData = localStorage.getItem(prefixedKey);
   return storedData ? (JSON.parse(storedData) as T) : null;
@@ -39,7 +39,7 @@ export const lsGet = <T>(prefix: string, key: string): T | null => {
  * @param key - The unique name identifying the value.
  * @param value - The value to be stored (any type that can be serialized).
  */
-export const lsSet = (prefix: string, key: string, value: unknown): void => {
+export const setItem = (prefix: string, key: string, value: unknown): void => {
   const prefixedKey = getStorageKey(prefix, key);
   localStorage.setItem(prefixedKey, JSON.stringify(value));
 };
@@ -49,7 +49,7 @@ export const lsSet = (prefix: string, key: string, value: unknown): void => {
  * @param prefix - Prefix to be added to the key, common for all keys.
  * @param key - The unique name identifying the value.
  */
-export const lsRemove = (prefix: string, key: string): void => {
+export const removeItem = (prefix: string, key: string): void => {
   const prefixedKey = getStorageKey(prefix, key);
   localStorage.removeItem(prefixedKey);
 };
