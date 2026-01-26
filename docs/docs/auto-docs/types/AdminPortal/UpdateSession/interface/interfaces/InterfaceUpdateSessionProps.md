@@ -2,11 +2,11 @@
 
 ***
 
-# Interface: InterfaceUpdateTimeoutProps
+# Interface: InterfaceUpdateSessionProps
 
 Defined in: [src/types/AdminPortal/UpdateSession/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UpdateSession/interface.ts#L4)
 
-Props for UpdateTimeout component.
+Props for UpdateSession component.
 
 ## Properties
 
