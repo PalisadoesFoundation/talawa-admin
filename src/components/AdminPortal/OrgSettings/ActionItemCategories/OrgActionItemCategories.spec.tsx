@@ -67,6 +67,10 @@ const renderActionItemCategories = (
 };
 
 describe('Testing Organisation Action Item Categories', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
@@ -82,7 +86,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Sort the Categories (asc/desc) by createdAt', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -119,7 +122,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Filter the categories by status (All/Disabled)', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -159,7 +161,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Filter the categories by status (Active)', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -186,7 +187,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes Create Category modal', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -206,7 +206,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes Edit Category modal', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
@@ -223,7 +222,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('open and closes View Category modal', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for categories to load
@@ -246,7 +244,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -266,7 +263,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by description', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -287,7 +283,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name and clear the input by backspace', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
@@ -307,7 +302,6 @@ describe('Testing Organisation Action Item Categories', () => {
   });
 
   it('Search categories by name on press of ENTER', async () => {
-    const user = userEvent.setup();
     renderActionItemCategories(link1, 'orgId');
 
     // Wait for LoadingState to complete and categories to render
