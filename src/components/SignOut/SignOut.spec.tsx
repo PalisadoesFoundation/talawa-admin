@@ -104,6 +104,7 @@ describe('SignOut Component', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('calls logout functionality when sign out button is clicked', async () => {

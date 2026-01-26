@@ -66,6 +66,7 @@ describe('EditOrgCustomFieldDropDown Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

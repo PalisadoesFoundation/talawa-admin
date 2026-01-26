@@ -98,6 +98,7 @@ describe('InviteByEmailModal', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
