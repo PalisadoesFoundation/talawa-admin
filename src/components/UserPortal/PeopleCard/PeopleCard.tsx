@@ -36,7 +36,7 @@ import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard'
 import Avatar from 'shared-components/Avatar/Avatar';
 
 import styles from './PeopleCard.module.css';
-import { useTranslation } from 'react-i18next';
+import { TEST_ID_PEOPLE_CARD, TEST_ID_PEOPLE_SNO } from 'Constant/common';
 
 export interface InterfacePeopleCardProps {
   id: string;
@@ -55,19 +55,14 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   role,
   sno,
 }) => {
-  const { t } = useTranslation('common');
-
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={t('peopleCardDataTestId', { id })}
+      dataTestId={TEST_ID_PEOPLE_CARD(id)}
       className={styles.card}
     >
       <div className={styles.row}>
-        <span
-          className={styles.snoBadge}
-          data-testid={t('peopleSnoDataTestId', { id })}
-        >
+        <span className={styles.snoBadge} data-testid={TEST_ID_PEOPLE_SNO(id)}>
           {sno}
         </span>
         {image ? (

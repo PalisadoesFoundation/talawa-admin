@@ -1496,9 +1496,7 @@
     "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
     "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
     "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
-    "sortPost": "Trier le message",
-    "idLabel": "id",
-    "userIdLabel": "userId"
+    "sortPost": "Trier le message"
   },
   "home": {
     "posts": "Des postes",

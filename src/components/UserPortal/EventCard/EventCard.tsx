@@ -55,6 +55,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
+import { getDummyDateTime, IDENTIFIER_USER_ID } from 'Constant/common';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
@@ -65,7 +66,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
 
   // Get user ID from local storage
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem(IDENTIFIER_USER_ID);
 
   // Create a full name for the event creator
   const creatorName = props.creator.name;
@@ -124,9 +125,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
-            {dayjs(
-              tCommon('dummyDateTime', { time: props.startTime }),
-            ).format('h:mm:ss A')}
+            {dayjs(getDummyDateTime(props.startTime)).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
@@ -137,9 +136,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
-            {dayjs(tCommon('dummyDateTime', { time: props.endTime })).format(
-              'h:mm:ss A',
-            )}
+            {dayjs(getDummyDateTime(props.endTime)).format('h:mm:ss A')}
           </b>
         ) : (
           <></>

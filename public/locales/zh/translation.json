@@ -1496,9 +1496,7 @@
     "pinnedPostsLoadError": "加载置顶帖子时出错。请重试。",
     "errorLoadingPosts": "加载帖子时出错。请重试。",
     "loadMorePostsError": "加载更多帖子时出错。请重试。",
-    "sortPost": "排序帖子",
-    "idLabel": "id",
-    "userIdLabel": "userId"
+    "sortPost": "排序帖子"
   },
   "home": {
     "title": "帖子",
