@@ -285,7 +285,8 @@ describe('GroupChatDetails', () => {
     expect(images.length + fallbacks.length).toBeGreaterThan(0);
   });
 
-  it('cancelling editing chat title', async () => { const user = userEvent.setup();
+  it('cancelling editing chat title', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
 
     render(
@@ -330,7 +331,8 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('edit chat title', async () => { const user = userEvent.setup();
+  it('edit chat title', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
 
     render(
@@ -376,7 +378,8 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('add user to group chat using first name', async () => { const user = userEvent.setup();
+  it('add user to group chat using first name', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -424,7 +427,8 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('add user to group chat using last name', async () => { const user = userEvent.setup();
+  it('add user to group chat using last name', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -461,7 +465,8 @@ describe('GroupChatDetails', () => {
     await wait();
   });
 
-  it('clears user search input', async () => { const user = userEvent.setup();
+  it('clears user search input', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -505,7 +510,8 @@ describe('GroupChatDetails', () => {
     });
   });
 
-  it('handling invalid image type', async () => { const user = userEvent.setup();
+  it('handling invalid image type', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     render(
       <I18nextProvider i18n={i18n}>
@@ -541,7 +547,8 @@ describe('GroupChatDetails', () => {
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
   });
 
-  it('changes role and removes member via dropdown actions', async () => { const user = userEvent.setup();
+  it('changes role and removes member via dropdown actions', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
@@ -607,7 +614,8 @@ describe('GroupChatDetails', () => {
     }
   });
 
-  it('shows error toast when role update fails', async () => { const user = userEvent.setup();
+  it('shows error toast when role update fails', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const toastError = vi.spyOn(NotificationToast, 'error');
@@ -668,7 +676,8 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('shows error toast when removing member fails', async () => { const user = userEvent.setup();
+  it('shows error toast when removing member fails', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -729,7 +738,8 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('uploads image and updates chat avatar', async () => { const user = userEvent.setup();
+  it('uploads image and updates chat avatar', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const chatRefetch = vi.fn();
 
@@ -785,7 +795,8 @@ describe('GroupChatDetails', () => {
     await waitFor(() => expect(chatRefetch).toHaveBeenCalled());
   });
 
-  it('deletes chat when current user is administrator and confirms', async () => { const user = userEvent.setup();
+  it('deletes chat when current user is administrator and confirms', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
 
     const adminChat = withSafeChat({
@@ -834,7 +845,8 @@ describe('GroupChatDetails', () => {
     );
   });
 
-  it('show error toast while deleting chat when current user is administrator and confirms', async () => { const user = userEvent.setup();
+  it('show error toast while deleting chat when current user is administrator and confirms', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -888,7 +900,8 @@ describe('GroupChatDetails', () => {
     toastError.mockRestore();
     consoleError.mockRestore();
   });
-  it('shows error toast when title update fails', async () => { const user = userEvent.setup();
+  it('shows error toast when title update fails', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', '2');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -945,7 +958,8 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
-  it('shows error toast when image upload fails', async () => { const user = userEvent.setup();
+  it('shows error toast when image upload fails', async () => {
+    const user = userEvent.setup();
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
@@ -994,7 +1008,8 @@ describe('GroupChatDetails', () => {
   });
 
   describe('LoadingState Behavior', () => {
-    it('should show LoadingState spinner while chat details are loading', async () => { const user = userEvent.setup();
+    it('should show LoadingState spinner while chat details are loading', async () => {
+      const user = userEvent.setup();
       useLocalStorage().setItem('userId', 'user1');
 
       const delayedMocks = mocks.map((mock) => ({
