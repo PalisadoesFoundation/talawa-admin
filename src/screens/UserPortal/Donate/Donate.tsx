@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import { FormControl, InputGroup } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
+import DropdownButton from 'shared-components/DropdownButton/DropdownButton';
 
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
@@ -131,29 +132,19 @@ export default function Donate(): JSX.Element {
           </div>
 
           <InputGroup className={styles.width100}>
-            <Dropdown>
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.dropdown}`}
-                variant="success"
-                data-testid="modeChangeBtn"
-              >
-                <span data-testid="changeCurrencyBtn">
-                  {currencies[selectedCurrency]}
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {currencies.map((currency, index) => (
-                  <Dropdown.Item
-                    key={currency}
-                    data-testid={`currency${index}`}
-                    onClick={() => setSelectedCurrency(index)}
-                  >
-                    {currency}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            <DropdownButton
+              label={currencies[selectedCurrency]}
+              items={currencies.map((currency, index) => ({
+                key: `currency-${index}`,
+                label: currency,
+                onClick: () => setSelectedCurrency(index),
+                dataTestId: `currency${index}`,
+              }))}
+              variant="success"
+              dataTestId="modeChangeBtn"
+              labelTestId="changeCurrencyBtn"
+              className={`${styles.colorPrimary} ${styles.dropdown}`}
+            />
 
             <label htmlFor="donationAmountInput" className="visually-hidden">
               {t('amount')}
