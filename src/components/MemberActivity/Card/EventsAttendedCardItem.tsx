@@ -37,16 +37,8 @@ import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './EventsAttendedCardItem.module.css';
-
-export interface InterfaceCardItem {
-  title: string;
-  time?: string;
-  startdate?: string;
-  creator?: string;
-  location?: string;
-  eventId?: string;
-  orgId?: string;
-}
+import { useTranslation } from 'react-i18next';
+import type { InterfaceCardItem } from 'types/MemberActivity/interface';
 
 const EventAttendedCard = ({
   title,
@@ -55,6 +47,7 @@ const EventAttendedCard = ({
   orgId,
   eventId,
 }: InterfaceCardItem): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const { getItem } = useLocalStorage();
 
   // Check if user is administrator - only administrators can navigate to event details
@@ -87,7 +80,7 @@ const EventAttendedCard = ({
                 <div
                   className={`fs-7 fw-bold ${styles.eventsAttendedCardDateNA}`}
                 >
-                  Date N/A
+                  {t('dateNA')}
                 </div>
               )}
             </div>
@@ -112,12 +105,13 @@ const EventAttendedCard = ({
               </div>
             )}
           </Col>
-          {isAdministrator && (
+          {isAdministrator && orgId && eventId && (
             <Col xs={2} md={1} className="text-end">
               <Link
                 to={`/admin/event/${orgId}/${eventId}`}
                 state={{ id: eventId }}
                 className="text-decoration-none"
+                aria-label={t('viewEventDetails')}
               >
                 <div
                   className={`rounded-circle d-flex align-items-center justify-content-center ${styles.eventsAttendedCardChevron}`}

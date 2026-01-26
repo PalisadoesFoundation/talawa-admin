@@ -301,6 +301,7 @@
   "selectRow": "पंक्ति {{rowKey}} का चयन करें",
   "bulkActions": "सामूहिक क्रियाएं",
   "selected": "चयनित",
+  "unavailable": "अनुपलब्ध",
   "clearSelection": "चयन साफ़ करें",
   "toggleSidebar": "साइडबार टॉगल करें",
   "picture": "{{name}} चित्र"
