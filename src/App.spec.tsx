@@ -52,7 +52,7 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('screens/MemberDetail/MemberDetail', () => ({
+vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
   default: () => <div data-testid="mock-profile-form">Mock Settings</div>,
 }));
 
