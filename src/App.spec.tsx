@@ -100,10 +100,6 @@ vi.mock('screens/Auth/ForgotPassword/ForgotPassword', () => ({
   ),
 }));
 
-vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
-  default: () => <div data-testid="mock-member-detail">Mock Member Detail</div>,
-}));
-
 vi.mock('screens/AdminPortal/OrgContribution/OrgContribution', () => ({
   default: () => (
     <div data-testid="mock-org-contribution">Mock Org Contribution</div>
