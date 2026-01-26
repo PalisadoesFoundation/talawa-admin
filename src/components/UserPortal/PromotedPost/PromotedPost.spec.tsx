@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
@@ -26,14 +26,6 @@ import PromotedPost from './PromotedPost';
 
 const link = new StaticMockLink([], true);
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('Testing PromotedPost Component', () => {
   let props: InterfacePromotedPostProps;
 
@@ -49,57 +41,43 @@ describe('Testing PromotedPost Component', () => {
     vi.clearAllMocks();
   });
 
-  it('Component should be rendered properly', async () => {
-    const { getAllByText } = render(
+  const renderComponent = (newProps?: Partial<InterfacePromotedPostProps>) => {
+    return render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
+              <PromotedPost {...props} {...newProps} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );
+  };
 
-    await wait();
-    const titleElements = getAllByText('Test Post');
-    expect(titleElements.length).toBeGreaterThan(0);
+  it('Component should be rendered properly', async () => {
+    const { getAllByText } = renderComponent();
+
+    await waitFor(() => {
+      const titleElements = getAllByText('Test Post');
+      expect(titleElements.length).toBeGreaterThan(0);
+    });
   });
 
   it('Component should be rendered properly if prop image is not undefined', async () => {
-    props.image = 'promotedPostImage';
+    const { getAllByText, getByRole } = renderComponent({
+      image: 'promotedPostImage',
+    });
 
-    const { getAllByText, getByRole } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const titleElements = getAllByText('Test Post');
-    expect(titleElements.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const titleElements = getAllByText('Test Post');
+      expect(titleElements.length).toBeGreaterThan(0);
+    });
     expect(getByRole('img')).toHaveAttribute('src', 'promotedPostImage');
   });
 
   it('Component should display the icon correctly', async () => {
-    const { queryByTestId } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryByTestId } = renderComponent();
 
     await waitFor(() => {
       const icon = queryByTestId('star-icon');
@@ -108,17 +86,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should display the text correctly', async () => {
-    const { queryAllByText } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryAllByText } = renderComponent();
 
     await waitFor(() => {
       const title = queryAllByText('Test Post');
@@ -127,19 +95,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should display the image correctly when image prop is provided', async () => {
-    props.image = 'promotedPostImage';
-
-    const { queryByRole } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryByRole } = renderComponent({ image: 'promotedPostImage' });
 
     await waitFor(() => {
       const image = queryByRole('img');
@@ -148,19 +104,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should not display image when image prop is empty', async () => {
-    props.image = '';
-
-    const { queryByRole } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryByRole } = renderComponent({ image: '' });
 
     await waitFor(() => {
       const image = queryByRole('img');
@@ -169,22 +113,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should not display image when image prop is null', async () => {
-    const propsWithNull = {
-      ...props,
-      image: null,
-    };
-
-    const { queryByRole } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...propsWithNull} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryByRole } = renderComponent({ image: null });
 
     await waitFor(() => {
       const image = queryByRole('img');
@@ -193,22 +122,7 @@ describe('Testing PromotedPost Component', () => {
   });
 
   it('Component should not display image when image prop is undefined', async () => {
-    const propsWithUndefined = {
-      ...props,
-      image: undefined,
-    };
-
-    const { queryByRole } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PromotedPost {...propsWithUndefined} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { queryByRole } = renderComponent({ image: undefined });
 
     await waitFor(() => {
       const image = queryByRole('img');
