@@ -24,8 +24,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { TFunction } from 'i18next'; // Import the specific type
-import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
@@ -52,18 +50,7 @@ import styles from './EventListCardModals.module.css';
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
-
-interface IEventListCardModalProps {
-  eventListCardProps: IEventListCard;
-  eventModalIsOpen: boolean;
-  hideViewModal: () => void;
-  // Use TFunction to match expected types and avoid $TFunctionBrand errors
-  t: TFunction<'translation', undefined>;
-  tCommon: TFunction<'translation', undefined>;
-}
+import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/interface';
 
 function EventListCardModals({
   eventListCardProps,
@@ -71,7 +58,7 @@ function EventListCardModals({
   hideViewModal,
   t,
   tCommon,
-}: IEventListCardModalProps): JSX.Element {
+}: InterfaceEventListCardModalsProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();

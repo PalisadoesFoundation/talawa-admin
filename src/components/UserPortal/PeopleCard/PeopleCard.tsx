@@ -38,14 +38,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './PeopleCard.module.css';
 import { TEST_ID_PEOPLE_CARD, TEST_ID_PEOPLE_SNO } from 'Constant/common';
 
-export interface InterfacePeopleCardProps {
-  id: string;
-  name: string;
-  image: string;
-  email: string;
-  role: string;
-  sno: string;
-}
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   id,

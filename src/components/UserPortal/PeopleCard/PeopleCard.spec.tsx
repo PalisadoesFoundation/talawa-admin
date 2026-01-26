@@ -5,7 +5,8 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 
-import PeopleCard, { InterfacePeopleCardProps } from './PeopleCard';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
+import PeopleCard from './PeopleCard';
 
 const baseProps: InterfacePeopleCardProps = {
   id: '1',
