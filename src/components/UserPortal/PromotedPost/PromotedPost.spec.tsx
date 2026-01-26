@@ -3,7 +3,7 @@ import { render, waitFor } from '@testing-library/react';
 import { afterEach, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-
+import type { InterfacePromotedPostProps } from 'types/UserPortal/PromotedPost/interface';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -35,7 +35,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing PromotedPost Component', () => {
-  let props: { id: string; image: string; title: string };
+  let props: InterfacePromotedPostProps;
 
   beforeEach(() => {
     props = {
