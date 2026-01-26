@@ -110,7 +110,7 @@ export function DataTableTable<T>({
             </th>
           )}
           {columns.map((col) => {
-            const isSortable = col.meta?.sortable === true;
+            const isSortable = col.meta?.sortable !== false;
             const isActive = activeSortBy === col.id;
             const ariaSort: React.AriaAttributes['aria-sort'] = isActive
               ? activeSortDir === 'asc'

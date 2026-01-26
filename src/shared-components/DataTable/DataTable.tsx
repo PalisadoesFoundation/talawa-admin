@@ -187,10 +187,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // --- Sorting state and logic (must happen before pagination) ---
   // Sorting state (controlled or uncontrolled)
   const sortByArray = sortBy ?? [];
-  const controlledSort =
-    Array.isArray(sortByArray) &&
-    sortByArray.length > 0 &&
-    typeof sortByArray[0]?.columnId === 'string';
+  const controlledSort = Array.isArray(sortBy);
   const [uSortBy, setUSortBy] = React.useState<string | undefined>(
     initialSortBy,
   );
@@ -207,7 +204,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   }
 
   function handleHeaderClick(col: IColumnDef<T>) {
-    if (col.meta?.sortable !== true) return;
+    if (col.meta?.sortable === false) return;
     const willSortBy = col.id;
     const sameColumn = activeSortBy === willSortBy;
     const nextDir = sameColumn ? nextDirection(activeSortDir) : 'asc';
@@ -229,7 +226,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       return filteredRows;
     if (!activeSortBy) return filteredRows;
     const col = columns.find((c) => c.id === activeSortBy);
-    if (!col || col.meta?.sortable !== true) return filteredRows;
+    if (!col || col.meta?.sortable === false) return filteredRows;
     const getVal = (row: T) => getCellValue(row, col.accessor);
     const dirFactor = activeSortDir === 'asc' ? 1 : -1;
     const decorated = filteredRows.map((row, idx) => ({

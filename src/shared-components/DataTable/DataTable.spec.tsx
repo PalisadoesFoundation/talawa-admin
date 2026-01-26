@@ -2070,18 +2070,40 @@ describe('defaultCompare boolean/date branches', () => {
     render(<DataTable<Row> data={rows} columns={columns} />);
     const thBool = screen.getByRole('button', { name: /active/i });
     const thDate = screen.getByRole('button', { name: /date/i });
-    // Keyboard sort boolean
+    // Keyboard sort boolean with Enter
     thBool.focus();
     await userEvent.keyboard('{Enter}');
     expect(thBool).toHaveAttribute('aria-sort', 'ascending');
     await userEvent.keyboard('{Enter}');
     expect(thBool).toHaveAttribute('aria-sort', 'descending');
-    // Keyboard sort date
+    // Keyboard sort boolean with Space
+    thBool.focus();
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Enter
     thDate.focus();
     await userEvent.keyboard('{Enter}');
     expect(thDate).toHaveAttribute('aria-sort', 'ascending');
     await userEvent.keyboard('{Enter}');
     expect(thDate).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Space
+    thDate.focus();
+    await userEvent.keyboard(' ');
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts with Space key', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const thBool = screen.getByRole('button', { name: /active/i });
+    thBool.focus();
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
   });
 
   it('applies initialSortDirection to default sort state', async () => {

@@ -25,7 +25,7 @@ The type of row data this action operates on
 
 > `optional` **confirm**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L177)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L179)
 
 Optional confirmation message to display before executing the action
 
@@ -35,10 +35,18 @@ Optional confirmation message to display before executing the action
 
 > `optional` **disabled**: `boolean` \| (`rows`, `keys`) => `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L175)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L177)
 
 Whether this action is disabled for the current selection.
 Can be a boolean or a function that evaluates the selection.
+
+#### Param
+
+Array of selected rows
+
+#### Param
+
+Array of keys for the selected rows
 
 ***
 
@@ -83,7 +91,7 @@ Array of selected rows
 
 [`Key`](../../types/type-aliases/Key.md)[]
 
-ReadonlySet of keys for the selected rows
+Array of keys for the selected rows
 
 #### Returns
 

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Main interface file for DataTable component types.
  * This file re-exports all types from modular type files for backward compatibility.
  */

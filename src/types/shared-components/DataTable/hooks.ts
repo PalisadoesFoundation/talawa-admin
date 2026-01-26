@@ -164,13 +164,15 @@ export interface IBulkAction<T> {
    * Can be async to support server operations.
    *
    * @param rows - Array of selected rows
-   * @param keys - ReadonlySet of keys for the selected rows
+   * @param keys - Array of keys for the selected rows
    * @returns `void` or `Promise<void>` if async
    */
   onClick: (rows: T[], keys: Key[]) => void | Promise<void>;
   /**
    * Whether this action is disabled for the current selection.
    * Can be a boolean or a function that evaluates the selection.
+   * @param rows - Array of selected rows
+   * @param keys - Array of keys for the selected rows
    */
   disabled?: boolean | ((rows: T[], keys: Key[]) => boolean);
   /** Optional confirmation message to display before executing the action */
