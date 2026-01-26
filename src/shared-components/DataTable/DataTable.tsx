@@ -1,27 +1,73 @@
+/**
+ * DataTable component for displaying typed tabular data with advanced features.
+ *
+ * Provides comprehensive table functionality including sorting, filtering, pagination,
+ * selection, bulk actions, and search capabilities. Supports both client-side and
+ * server-side pagination modes.
+ *
+ * @typeParam T - The type of data for each row
+ *
+ * @example
+ * ```tsx
+ * const columns = [
+ *   { id: 'name', header: 'Name', accessor: 'name' },
+ *   { id: 'email', header: 'Email', accessor: 'email' }
+ * ];
+ * <DataTable
+ *   data={users}
+ *   columns={columns}
+ *   loading={false}
+ *   rowKey="id"
+ * />
+ * ```
+ */
+
 import React from 'react';
-import Table from 'react-bootstrap/Table';
-import type { IDataTableProps } from '../../types/shared-components/DataTable/interface';
+import type {
+  IDataTableProps,
+  IColumnDef,
+  SortDirection,
+} from '../../types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
 import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';
-import { ActionsCell } from './cells/ActionsCell';
 import { BulkActionsBar } from './BulkActionsBar';
 import styles from './DataTable.module.css';
 import { useTranslation } from 'react-i18next';
-import { renderHeader, renderCellValue, getCellValue } from './utils';
+import { getCellValue } from './utils';
 import { useDataTableFiltering } from './hooks/useDataTableFiltering';
 import { useDataTableSelection } from './hooks/useDataTableSelection';
+import { DataTableSkeleton } from './DataTableSkeleton';
+import { DataTableTable } from './DataTableTable';
 
 // translation-check-keyPrefix: common
 
-/**
- * DataTable is a reusable, typed table component for displaying tabular data with loading, empty, and error states.
- *
- * @typeParam T - The type of data for each row.
- * @param props - Table configuration and data.
- * @returns A table with support for loading skeletons, empty state, and error display.
- */
+// DataTable renders typed tabular data with loading, empty, and error states.
 const DEFAULT_SKELETON_ROWS: number = 5;
+
+// Compare values with nulls last, numbers/dates/booleans handled explicitly.
+function defaultCompare(a: unknown, b: unknown): number {
+  // place null/undefined at the end
+  const aNull = a === null || a === undefined;
+  const bNull = b === null || b === undefined;
+  if (aNull && bNull) return 0;
+  if (aNull) return 1;
+  if (bNull) return -1;
+  // numbers
+  if (typeof a === 'number' && typeof b === 'number') return a - b;
+  // dates
+  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
+  // booleans (false < true)
+  if (typeof a === 'boolean' && typeof b === 'boolean')
+    return a === b ? 0 : a ? 1 : -1;
+  // string-ish fallback
+  const as = String(a);
+  const bs = String(b);
+  return as.localeCompare(bs, undefined, {
+    numeric: true,
+    sensitivity: 'base',
+  });
+}
 
 export function DataTable<T>(props: IDataTableProps<T>) {
   const { t: tCommon } = useTranslation('common');
@@ -36,6 +82,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     error,
     renderError,
     ariaLabel,
+    serverSort,
     skeletonRows = DEFAULT_SKELETON_ROWS,
     // Loading optimizations
     loadingOverlay = false,
@@ -64,6 +111,11 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     initialSelectedKeys,
     rowActions = [],
     bulkActions = [],
+    // Sorting props
+    sortBy,
+    initialSortBy,
+    initialSortDirection,
+    onSortChange,
   } = props;
 
   // Pagination state (controlled or uncontrolled)
@@ -79,7 +131,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   }, [isControlled, onPageChange]);
 
-  // Filtering & Search Logic (Extracted to hook)
   const { query, updateGlobalSearch, filteredRows } = useDataTableFiltering({
     data,
     columns,
@@ -94,7 +145,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     onPageReset: handlePageReset,
   });
 
-  // Track warning state for each console.warn to prevent spam independently
   const hasWarnedCurrentPageRef = React.useRef(false);
   const hasWarnedServerPaginationRef = React.useRef(false);
 
@@ -134,7 +184,76 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   };
 
-  // Client-side data slicing and pagination control visibility
+  // --- Sorting state and logic (must happen before pagination) ---
+  // Sorting state (controlled or uncontrolled)
+  const sortByArray = sortBy ?? [];
+  const controlledSort = Array.isArray(sortBy);
+  const [uSortBy, setUSortBy] = React.useState<string | undefined>(
+    initialSortBy,
+  );
+  const [uSortDir, setUSortDir] = React.useState<SortDirection>(
+    initialSortDirection ?? 'asc',
+  );
+  const activeSortBy = controlledSort ? sortByArray[0]?.columnId : uSortBy;
+  const activeSortDir: SortDirection = controlledSort
+    ? (sortByArray[0]?.direction ?? 'asc')
+    : uSortDir;
+
+  function nextDirection(current?: SortDirection): SortDirection {
+    return current === 'asc' ? 'desc' : 'asc';
+  }
+
+  function handleHeaderClick(col: IColumnDef<T>) {
+    if (col.meta?.sortable === false) return;
+    const willSortBy = col.id;
+    const sameColumn = activeSortBy === willSortBy;
+    const nextDir = sameColumn ? nextDirection(activeSortDir) : 'asc';
+    if (!controlledSort) {
+      setUSortBy(willSortBy);
+      setUSortDir(nextDir);
+    }
+    onSortChange?.({
+      sortBy: [{ columnId: willSortBy, direction: nextDir }],
+      sortDirection: nextDir,
+      column: col,
+    });
+  }
+
+  // Compute visible rows: client sort when not serverSort
+  const sortedRows: readonly T[] = React.useMemo(() => {
+    if (serverSort) return filteredRows;
+    if (!Array.isArray(filteredRows) || filteredRows.length === 0)
+      return filteredRows;
+    if (!activeSortBy) return filteredRows;
+    const col = columns.find((c) => c.id === activeSortBy);
+    if (!col || col.meta?.sortable === false) return filteredRows;
+    const getVal = (row: T) => getCellValue(row, col.accessor);
+    const dirFactor = activeSortDir === 'asc' ? 1 : -1;
+    const decorated = filteredRows.map((row, idx) => ({
+      idx,
+      row,
+      val: getVal(row),
+    }));
+    const sortFn = col.meta?.sortFn;
+    const cmp = sortFn
+      ? (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
+          sortFn(a.row, b.row)
+      : (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
+          defaultCompare(a.val, b.val);
+    decorated.sort((a, b) => {
+      // Nulls always last, regardless of sort direction
+      const aNull = a.val === null || a.val === undefined;
+      const bNull = b.val === null || b.val === undefined;
+      if (aNull && bNull) return a.idx - b.idx;
+      if (aNull) return 1;
+      if (bNull) return -1;
+      // Apply dirFactor only to non-null comparisons
+      const base = cmp(a, b);
+      return base !== 0 ? base * dirFactor : a.idx - b.idx;
+    });
+    return decorated.map((d) => d.row);
+  }, [filteredRows, columns, activeSortBy, activeSortDir, serverSort]);
+
   const shouldSliceClientSide = paginationMode === 'client';
   const showPaginationControls =
     paginationMode === 'client' ||
@@ -143,12 +262,12 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
   const endIndex = shouldSliceClientSide
     ? startIndex + pageSize
-    : filteredRows.length;
+    : sortedRows.length;
   const paginatedData = shouldSliceClientSide
-    ? filteredRows.slice(startIndex, endIndex)
-    : filteredRows;
+    ? sortedRows.slice(startIndex, endIndex)
+    : sortedRows;
 
-  const total = totalItems ?? filteredRows.length;
+  const total = totalItems ?? sortedRows.length;
 
   const tableClassNames = tableClassName
     ? `${styles.dataTableBase} ${tableClassName}`
@@ -158,7 +277,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     (row: T, idx: number): string | number => {
       if (typeof rowKey === 'function') {
         return rowKey(row);
-      } else if (rowKey) {
+      }
+      if (rowKey) {
         const value = row[rowKey];
         if (typeof value === 'string' || typeof value === 'number') {
           return value;
@@ -167,14 +287,13 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           return String(value);
         }
         return idx;
-      } else {
-        const rowAsRecord = row as Record<string, unknown>;
-        const idValue = rowAsRecord.id ?? rowAsRecord._id;
-        if (typeof idValue === 'string' || typeof idValue === 'number') {
-          return idValue;
-        }
-        return idx;
       }
+      const rowAsRecord = row as Record<string, unknown>;
+      const idValue = rowAsRecord.id ?? rowAsRecord._id;
+      if (typeof idValue === 'string' || typeof idValue === 'number') {
+        return idValue;
+      }
+      return idx;
     },
     [rowKey],
   );
@@ -184,18 +303,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     [paginatedData, getKey, startIndex],
   );
 
-  // When renderRow is provided, disable selection/actions to prevent column count mismatch
-  const effectiveSelectable = renderRow ? false : selectable;
-  const effectiveRowActions = renderRow ? [] : rowActions;
-
-  // Conditional selection props when renderRow is present
-  const effectiveSelectedKeys = renderRow ? undefined : selectedKeys;
-  const effectiveOnSelectionChange = renderRow ? undefined : onSelectionChange;
-  const effectiveInitialSelectedKeys = renderRow
-    ? undefined
-    : initialSelectedKeys;
-
-  // Selection & Selection-based Actions Logic (Extracted to hook)
+  // Selection logic (must be after paginatedData and keysOnPage)
   const {
     currentSelection,
     selectedCountOnPage,
@@ -205,15 +313,18 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     selectAllOnPage,
     clearSelection,
     runBulkAction,
-  } = useDataTableSelection({
+  } = useDataTableSelection<T>({
     paginatedData,
     keysOnPage,
-    selectable: effectiveSelectable,
-    selectedKeys: effectiveSelectedKeys,
-    onSelectionChange: effectiveOnSelectionChange,
-    initialSelectedKeys: effectiveInitialSelectedKeys,
-    bulkActions,
+    selectable,
+    selectedKeys,
+    onSelectionChange,
+    initialSelectedKeys,
   });
+
+  // When renderRow is provided, disable selection/actions to prevent column count mismatch
+  const effectiveSelectable = renderRow ? false : selectable;
+  const effectiveRowActions = renderRow ? [] : rowActions;
 
   // Header checkbox ref for indeterminate state
   const headerCheckboxRef = React.useRef<HTMLInputElement>(null);
@@ -286,77 +397,16 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 2) Table with skeleton rows when loading (initial load, no data)
   if (loading && (!data || data.length === 0)) {
     return (
-      <div className={styles.dataTableWrapper} data-testid="datatable-loading">
-        <Table
-          striped
-          hover
-          responsive
-          className={tableClassNames}
-          aria-busy="true"
-        >
-          {ariaLabel && (
-            <caption className={styles.visuallyHidden}>{ariaLabel}</caption>
-          )}
-          <thead>
-            <tr>
-              {effectiveSelectable && (
-                <th scope="col" className={styles.selectCol}>
-                  <div className={styles.dataSkeletonCell} aria-hidden="true" />
-                </th>
-              )}
-              {columns.map((col) => (
-                <th key={col.id} scope="col">
-                  {renderHeader(col.header)}
-                </th>
-              ))}
-              {hasRowActions && (
-                <th scope="col" className={styles.actionsCol}>
-                  <div className={styles.dataSkeletonCell} aria-hidden="true" />
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
-              <tr
-                key={`skeleton-row-${rowIdx}`}
-                data-testid={`skeleton-row-${rowIdx}`}
-              >
-                {effectiveSelectable && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-                {columns.map((col) => (
-                  <td key={col.id}>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                ))}
-                {hasRowActions && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
+      <DataTableSkeleton
+        ariaLabel={ariaLabel}
+        columns={columns}
+        effectiveSelectable={effectiveSelectable}
+        hasRowActions={hasRowActions}
+        skeletonRows={skeletonRows}
+        tableClassNames={tableClassNames}
+      />
     );
   }
 
@@ -433,134 +483,31 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         </BulkActionsBar>
       )}
 
-      <Table
-        striped
-        hover
-        responsive
-        className={tableClassNames}
-        data-testid="datatable"
-        aria-busy={loading && loadingOverlay}
-      >
-        {ariaLabel && (
-          <caption className={styles.visuallyHidden}>{ariaLabel}</caption>
-        )}
-        <thead>
-          <tr>
-            {effectiveSelectable && (
-              <th scope="col" className={styles.selectCol}>
-                <input
-                  ref={headerCheckboxRef}
-                  type="checkbox"
-                  aria-label={tCommon('selectAllOnPage')}
-                  aria-checked={
-                    someSelectedOnPage ? 'mixed' : allSelectedOnPage
-                  }
-                  checked={allSelectedOnPage}
-                  onChange={(e) => selectAllOnPage(e.currentTarget.checked)}
-                  data-testid="select-all-checkbox"
-                />
-              </th>
-            )}
-            {columns.map((col) => (
-              <th key={col.id} scope="col">
-                {renderHeader(col.header)}
-              </th>
-            ))}
-            {hasRowActions && (
-              <th scope="col" className={styles.actionsCol}>
-                {tCommon('actions')}
-              </th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {renderRow
-            ? paginatedData.map((row, idx) => (
-                <React.Fragment key={getKey(row, startIndex + idx)}>
-                  {renderRow(row, idx)}
-                </React.Fragment>
-              ))
-            : paginatedData.map((row, idx) => {
-                const rowKeyValue = getKey(row, startIndex + idx);
-                const isRowSelected = currentSelection.has(rowKeyValue);
-                return (
-                  <tr
-                    key={rowKeyValue}
-                    data-testid={`datatable-row-${rowKeyValue}`}
-                    data-selected={isRowSelected}
-                  >
-                    {effectiveSelectable && (
-                      <td className={styles.selectCol}>
-                        <input
-                          type="checkbox"
-                          aria-label={tCommon('selectRow', {
-                            rowKey: String(rowKeyValue),
-                          })}
-                          checked={isRowSelected}
-                          onChange={() => toggleRowSelection(rowKeyValue)}
-                          data-testid={`select-row-${rowKeyValue}`}
-                        />
-                      </td>
-                    )}
-                    {columns.map((col) => {
-                      const val = getCellValue(row, col.accessor);
-                      return (
-                        <td
-                          key={col.id}
-                          data-testid={`datatable-cell-${col.id}`}
-                        >
-                          {col.render
-                            ? col.render(val, row)
-                            : renderCellValue(val)}
-                        </td>
-                      );
-                    })}
-                    {hasRowActions && (
-                      <td className={styles.actionsCol}>
-                        <ActionsCell row={row} actions={effectiveRowActions} />
-                      </td>
-                    )}
-                  </tr>
-                );
-              })}
-
-          {loadingMore &&
-            Array.from({ length: skeletonRows }).map((_, rowIdx) => (
-              <tr
-                key={`skeleton-append-${rowIdx}`}
-                data-testid={`skeleton-append-${rowIdx}`}
-              >
-                {effectiveSelectable && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-                {columns.map((col) => (
-                  <td key={col.id}>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                ))}
-                {hasRowActions && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      <DataTableTable
+        ariaLabel={ariaLabel}
+        ariaBusy={loading && loadingOverlay}
+        tableClassNames={tableClassNames}
+        columns={columns}
+        effectiveSelectable={effectiveSelectable}
+        hasRowActions={hasRowActions}
+        headerCheckboxRef={headerCheckboxRef}
+        someSelectedOnPage={someSelectedOnPage}
+        allSelectedOnPage={allSelectedOnPage}
+        selectAllOnPage={selectAllOnPage}
+        activeSortBy={activeSortBy}
+        activeSortDir={activeSortDir}
+        handleHeaderClick={handleHeaderClick}
+        sortedRows={paginatedData}
+        startIndex={startIndex}
+        getKey={getKey}
+        currentSelection={currentSelection}
+        toggleRowSelection={toggleRowSelection}
+        tCommon={tCommon}
+        renderRow={renderRow}
+        effectiveRowActions={effectiveRowActions}
+        loadingMore={loadingMore}
+        skeletonRows={skeletonRows}
+      />
 
       {showPaginationControls && !loading && (
         <PaginationControls

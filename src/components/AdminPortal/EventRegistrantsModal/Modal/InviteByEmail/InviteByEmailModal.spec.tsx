@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
@@ -82,6 +82,7 @@ const renderComponent = (
 };
 
 describe('InviteByEmailModal', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockHandleClose = vi.fn();
     mockOnInvitesSent = vi.fn();
@@ -92,10 +93,11 @@ describe('InviteByEmailModal', () => {
       isRecurring: false,
       onInvitesSent: mockOnInvitesSent,
     };
-    vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -114,36 +116,35 @@ describe('InviteByEmailModal', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('calls handleClose when the header close button is clicked', () => {
+  it('calls handleClose when the header close button is clicked', async () => {
     renderComponent();
-    fireEvent.click(screen.getByLabelText('Close'));
+    await user.click(screen.getByLabelText('Close'));
     expect(mockHandleClose).toHaveBeenCalledTimes(1);
   });
 
-  it('calls handleClose when the footer close button is clicked', () => {
+  it('calls handleClose when the footer close button is clicked', async () => {
     renderComponent();
-    fireEvent.click(screen.getByText('Close'));
+    await user.click(screen.getByText('Close'));
     expect(mockHandleClose).toHaveBeenCalledTimes(1);
   });
 
-  it('allows adding and removing recipient input fields', () => {
+  it('allows adding and removing recipient input fields', async () => {
     renderComponent();
     const emailInputs = () => screen.queryAllByLabelText('Email');
     expect(emailInputs()).toHaveLength(1);
     expect(screen.queryByText('Remove')).not.toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Add recipient'));
+    await user.click(screen.getByText('Add recipient'));
     expect(emailInputs()).toHaveLength(2);
     expect(screen.getAllByText('Remove')).toHaveLength(2);
 
-    fireEvent.click(screen.getAllByText('Remove')[0]);
+    await user.click(screen.getAllByText('Remove')[0]);
     expect(emailInputs()).toHaveLength(1);
     expect(screen.queryByText('Remove')).not.toBeInTheDocument();
   });
 
   it('updates state correctly with multiple recipients', async () => {
     renderComponent();
-    const user = userEvent.setup();
 
     // Add a second recipient
     await user.click(screen.getByText('Add recipient'));
@@ -169,7 +170,7 @@ describe('InviteByEmailModal', () => {
   describe('Form Submission', () => {
     it('shows an error toast if no recipients are provided', async () => {
       renderComponent();
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Please provide at least one recipient email',
@@ -179,10 +180,9 @@ describe('InviteByEmailModal', () => {
 
     it('shows an error toast for invalid email formats', async () => {
       renderComponent();
-      const user = userEvent.setup();
       const emailInput = screen.getByLabelText('Email');
       await user.type(emailInput, 'invalid-email');
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -229,7 +229,6 @@ describe('InviteByEmailModal', () => {
       };
 
       renderComponent({}, [successMock]);
-      const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
       await user.type(screen.getByLabelText('Name'), 'Test User');
@@ -241,7 +240,7 @@ describe('InviteByEmailModal', () => {
       expect(sendButton).not.toBeDisabled();
       expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
 
-      fireEvent.click(sendButton);
+      await user.click(sendButton);
 
       // Wait for loading state to appear AND button to be gone (atomic check)
       await waitFor(() => {
@@ -296,11 +295,10 @@ describe('InviteByEmailModal', () => {
       };
 
       renderComponent({ isRecurring: true }, [recurringMock]);
-      const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'recurring@example.com');
 
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -328,10 +326,9 @@ describe('InviteByEmailModal', () => {
       };
 
       renderComponent({}, [errorMock]);
-      const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -350,47 +347,50 @@ describe('InviteByEmailModal', () => {
   });
 
   describe('ExpiresInDays Field', () => {
-    it('should accept valid number input', () => {
+    it('should accept valid number input', async () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      fireEvent.change(expiresInput, { target: { value: '14' } });
+      await user.dblClick(expiresInput);
+      await user.paste('14');
 
       expect(expiresInput.value).toBe('14');
     });
 
-    it('should reset to 7 when input is NaN', () => {
+    it('should reset to 7 when input is NaN', async () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      fireEvent.change(expiresInput, { target: { value: 'abc' } });
+      await user.dblClick(expiresInput);
+      await user.paste('abc');
 
       expect(expiresInput.value).toBe('7');
     });
 
-    it('should reset to 7 when input is less than 1', () => {
+    it('should reset to 7 when input is less than 1', async () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      fireEvent.change(expiresInput, { target: { value: '0' } });
+      await user.dblClick(expiresInput);
+      await user.paste('0');
 
       expect(expiresInput.value).toBe('7');
     });
 
-    it('should reset to 7 when input is negative', () => {
+    it('should reset to 7 when input is negative', async () => {
       renderComponent();
       const expiresInput = screen.getByTestId(
         'invite-expires',
       ) as HTMLInputElement;
 
-      fireEvent.change(expiresInput, { target: { value: '-5' } });
-
+      await user.dblClick(expiresInput);
+      await user.paste('-5');
       expect(expiresInput.value).toBe('7');
     });
   });
@@ -446,10 +446,9 @@ describe('InviteByEmailModal', () => {
           </I18nextProvider>
         </MockedProvider>,
       );
-      const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -499,10 +498,9 @@ describe('InviteByEmailModal', () => {
       };
 
       renderComponent(explicitFalseProps, [successMock]);
-      const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'explicit@example.com');
-      fireEvent.click(screen.getByTestId('invite-submit'));
+      await user.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(

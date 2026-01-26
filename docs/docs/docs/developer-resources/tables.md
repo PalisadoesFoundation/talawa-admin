@@ -269,38 +269,39 @@ const byLen = {
 
 ## File Structure and Components
 
-The DataTable package is split into focused modules:
+The DataTable is composed of the following modules:
 
 ```
 src/shared-components/DataTable/
-├── DataTable.tsx                 # Main orchestrator: wiring for loading, error, pagination, sort, search, selection
-├── DataTableTable.tsx            # Presentational <table> renderer (headers, body, selection column)
-├── DataTableSkeleton.tsx         # Skeleton grid for initial loading
-├── LoadingMoreRows.tsx           # Appended skeleton rows for incremental fetchMore
-├── SearchBar.tsx                 # Global search input with debounce + aria labeling
-├── Pagination.tsx                # Client paging controls; server "load more" button
-├── BulkActionsBar.tsx            # Bulk action buttons when rows are selected
-├── cells/ActionsCell.tsx         # Row action buttons
-├── hooks/useTableData.ts         # GraphQL connection → rows + pageInfo + loadingMore
-├── hooks/useDataTableFiltering.ts # Column/global search state manager
-├── hooks/useDataTableSelection.ts # Selection state manager
-├── TableLoader.tsx               # Reusable skeleton grid utility
+├── DataTable.tsx                 # Main component: orchestrates layout, state
+├── DataTableTable.tsx            # Presentational: renders <table> with headers, rows
+├── DataTableSkeleton.tsx         # Skeleton loading state (initial load)
+├── LoadingMoreRows.tsx           # Appended skeleton rows (fetchMore state)
+├── SearchBar.tsx                 # Search input with debouncing
+├── Pagination.tsx                # Pagination controls (client and server modes)
+├── BulkActionsBar.tsx            # Bulk action buttons (when rows selected)
+├── cells/ActionsCell.tsx         # Cell renderer for row action buttons
+├── hooks/useTableData.ts         # Flattens GraphQL connections → rows
+├── hooks/useDataTableFiltering.ts  # Manages search, column filters
+├── hooks/useDataTableSelection.ts  # Manages row selection state
+├── TableLoader.tsx               # Reusable skeleton grid (utility)
+├── types.ts                      # Type definitions for hooks/utilities
 ├── utils.ts                      # Helpers: renderHeader, getCellValue, toSearchableString
-├── types.ts                      # Shared types for hooks/utilities
-├── types/interface.ts            # ColumnDef, IDataTableProps, accessors, actions
-└── *.module.css                  # Per-component CSS that composes centralized styles
+├── [module].module.css           # Per‑component CSS (compose app-fixed)
+└── types/                        # Type aliases and interfaces
+    └── interface.ts              # ColumnDef, DataTableProps, etc.
 ```
 
-Component roles
+### Key internal components
 
-- **DataTable**: Owns orchestration and state wiring; delegates rendering to child components.
-- **DataTableTable**: Pure table markup; handles sortable headers, rows, selection column, and aria-sort.
-- **DataTableSkeleton**: Skeleton grid when `loading=true` with no rows yet.
-- **LoadingMoreRows**: Appends skeleton rows when `loadingMore=true`.
-- **SearchBar**: Debounced search input emitting `onGlobalSearchChange`.
-- **Pagination**: Client page controls and server "load more" CTA with `aria-busy`.
-- **BulkActionsBar / ActionsCell**: Bulk and row-level action surfaces.
-- **Hooks**: `useTableData`, `useDataTableFiltering`, `useDataTableSelection` for data, filter/search, and selection state.
+- **DataTable**: Main orchestrator; manages loading states, pagination, sorting, filtering.
+- **DataTableTable**: Presentational component rendering `<table>` with headers, rows, and selection column.
+- **DataTableSkeleton**: Renders skeleton rows during initial load (loading=true, no data yet).
+- **LoadingMoreRows**: Appends skeleton rows at the end during fetchMore operations (loadingMore=true).
+- **SearchBar**: Global search input with debounce; emits to parent via onGlobalSearchChange.
+- **Pagination**: Pagination controls (prev/next buttons for client mode; "Load more" for server).
+- **BulkActionsBar**: Shows when rows are selected; triggers bulk action callbacks.
+- **ActionsCell**: Renders individual row action buttons.
 
 ## Component: DataTable
 
@@ -553,31 +554,26 @@ Skeleton cells render with:
 - `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
 - Shimmer animation (linear gradient) for visual feedback
 
-CSS organization
+**CSS organization:**
 
-- Centralized theme and shared classes live in `src/style/app-fixed.module.css`.
-- Per-component modules (`DataTableSkeleton.module.css`, `LoadingMoreRows.module.css`, etc.) `compose` from `app-fixed` to satisfy the CSS import policy while keeping styles consistent.
+All DataTable styles are centralized in `src/style/app-fixed.module.css` for theming consistency. Per‑component CSS modules (`DataTable.module.css`, `DataTableSkeleton.module.css`, etc.) compose styles from `app-fixed` to satisfy the import policy checker.
 
-Example per-component module
+Example per-component module:
 
 ```css
 /* src/shared-components/DataTable/DataTableSkeleton.module.css */
 @import 'src/style/app-fixed.module.css';
 
-.skeletonRow {
-  composes: dataSkeletonRow from global;
+.skeleton {
+  composes: dataSkeleton from global;
 }
 
 .skeletonCell {
   composes: dataSkeletonCell from global;
 }
-
-.overlay {
-  composes: dataLoadingOverlay from global;
-}
 ```
 
-Centralized styles in `app-fixed`
+Centralized styles in `app-fixed`:
 
 ```css
 /* src/style/app-fixed.module.css */

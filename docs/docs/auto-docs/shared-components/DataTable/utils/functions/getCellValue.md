@@ -34,7 +34,7 @@ The row data object
 
 ### accessor
 
-[`Accessor`](../../../../types/shared-components/DataTable/interface/type-aliases/Accessor.md)\<`T`, `TValue`\>
+[`Accessor`](../../../../types/shared-components/DataTable/types/type-aliases/Accessor.md)\<`T`, `TValue`\>
 
 Column accessor (property key or function)
 

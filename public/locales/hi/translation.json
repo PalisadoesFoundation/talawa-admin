@@ -810,6 +810,7 @@
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
   "eventListCard": {
+    "dogsCare": "कुत्तों की देखभाल",
     "deleteEvent": "ईवेंट हटाएँ",
     "deleteEventMsg": "क्या आप इस ईवेंट को हटाना चाहते हैं?",
     "deleteRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे हटाना चाहते हैं:",
@@ -1564,8 +1565,10 @@
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
   "settings": {
+    "dummyPicture": "डमी चित्र",
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
+    "profilePicture": "प्रोफ़ाइल चित्र",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",
     "phoneNumber": "फ़ोन नंबर",
@@ -1695,7 +1698,6 @@
     "calendarView": "कैलेंडर दृश्य",
     "allDay": "पूरे दिन",
     "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया.",
-    "eventDetails": "घटना की जानकारी",
     "eventName": "नाम",
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
@@ -1732,12 +1734,14 @@
     "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
+    "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
     "starts": "प्रारंभ होगा",
     "ends": "समाप्त होता है",
     "creator": "निर्माता",
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
-    "register": "पंजीकरण करें"
+    "register": "पंजीकरण करें",
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -2485,6 +2489,19 @@
     "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
     "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
     "goToLogin": "लॉगिन पर जाएं"
+  },
+  "memberActivity": {
+    "dateNA": "दिनांक उपलब्ध नहीं",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
+    "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
+    "numberOfAttendees": "उपस्थित लोगों की संख्या",
+    "viewEventDetails": "इवेंट विवरण देखें"
+  },
+  "promotedPost": {
+    "title": "प्रचारित सामग्री",
+    "promotedContent": "प्रचारित सामग्री: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"
