@@ -17,6 +17,8 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+import type { TFunction } from 'i18next';
+
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
   const original = await vi.importActual('@apollo/client');
@@ -39,7 +41,10 @@ vi.mock('utils/errorHandler', async () => ({
 }));
 
 const mockUseMutation = useMutation as Mock;
-const mockT = (key: string) => key;
+const mockT = ((key: string) => key) as unknown as TFunction<
+  'translation',
+  undefined
+>;
 
 type MockEventListCardProps = InterfaceEvent;
 
