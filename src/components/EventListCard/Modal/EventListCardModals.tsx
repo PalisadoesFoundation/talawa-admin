@@ -60,8 +60,8 @@ interface IEventListCardModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   // Use TFunction to match expected types and avoid $TFunctionBrand errors
-  t: TFunction<"translation", undefined>;
-  tCommon: TFunction<"translation", undefined>;
+  t: TFunction<'translation', undefined>;
+  tCommon: TFunction<'translation', undefined>;
 }
 
 function EventListCardModals({
