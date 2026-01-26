@@ -6,7 +6,7 @@
 
 > **DataTableSkeleton**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L16)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L25)
 
 ## Type Parameters
 

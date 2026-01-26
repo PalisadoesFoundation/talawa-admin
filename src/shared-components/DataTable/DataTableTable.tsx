@@ -1,3 +1,12 @@
+/**
+ * DataTableTable component for rendering the core table structure.
+ *
+ * Handles rendering of table headers with sorting indicators, row data with
+ * selection checkboxes, action cells, and loading states for pagination.
+ *
+ * @typeParam T - The type of data for each row
+ */
+
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import type {

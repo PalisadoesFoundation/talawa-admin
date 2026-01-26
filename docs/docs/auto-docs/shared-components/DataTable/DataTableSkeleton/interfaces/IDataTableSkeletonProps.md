@@ -4,7 +4,7 @@
 
 # Interface: IDataTableSkeletonProps\<T\>
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L7)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L16)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:7](https://gi
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L8)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L17)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:8](https://gi
 
 > **columns**: [`IColumnDef`](../../../../types/shared-components/DataTable/interface/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L9)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L18)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:9](https://gi
 
 > **effectiveSelectable**: `boolean`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L10)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L19)
 
 ***
 
@@ -42,7 +42,7 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:10](https://g
 
 > **hasRowActions**: `boolean`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L11)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L20)
 
 ***
 
@@ -50,7 +50,7 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:11](https://g
 
 > **skeletonRows**: `number`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L12)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L21)
 
 ***
 
@@ -58,4 +58,4 @@ Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:12](https://g
 
 > **tableClassNames**: `string`
 
-Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L13)
+Defined in: [src/shared-components/DataTable/DataTableSkeleton.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableSkeleton.tsx#L22)

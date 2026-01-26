@@ -1,3 +1,12 @@
+/**
+ * LoadingMoreRows component for rendering skeleton rows appended to a table.
+ *
+ * Used in infinite scroll or "load more" pagination scenarios to display
+ * skeleton cells while fetching additional rows.
+ *
+ * @typeParam T - The type of data for each row (used for column definitions)
+ */
+
 import React from 'react';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
 import styles from './LoadingMoreRows.module.css';

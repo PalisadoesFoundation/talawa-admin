@@ -6,7 +6,7 @@
 
 > **LoadingMoreRows**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L12)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L21)
 
 ## Type Parameters
 

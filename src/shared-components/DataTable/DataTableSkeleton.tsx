@@ -1,3 +1,12 @@
+/**
+ * DataTableSkeleton component for displaying a loading skeleton table.
+ *
+ * Renders a table structure with skeleton cells that match the table layout,
+ * providing a visual placeholder while data is loading.
+ *
+ * @typeParam T - The type of data for each row (used for column definitions)
+ */
+
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';

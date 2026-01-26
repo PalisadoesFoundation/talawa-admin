@@ -1,3 +1,27 @@
+/**
+ * DataTable component for displaying typed tabular data with advanced features.
+ *
+ * Provides comprehensive table functionality including sorting, filtering, pagination,
+ * selection, bulk actions, and search capabilities. Supports both client-side and
+ * server-side pagination modes.
+ *
+ * @typeParam T - The type of data for each row
+ *
+ * @example
+ * ```tsx
+ * const columns = [
+ *   { id: 'name', header: 'Name', accessor: 'name' },
+ *   { id: 'email', header: 'Email', accessor: 'email' }
+ * ];
+ * <DataTable
+ *   data={users}
+ *   columns={columns}
+ *   loading={false}
+ *   rowKey="id"
+ * />
+ * ```
+ */
+
 import React from 'react';
 import type {
   IDataTableProps,

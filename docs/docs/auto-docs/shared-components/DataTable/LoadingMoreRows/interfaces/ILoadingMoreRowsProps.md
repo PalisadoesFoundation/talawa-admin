@@ -4,7 +4,7 @@
 
 # Interface: ILoadingMoreRowsProps\<T\>
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L5)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L14)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:5](https://gith
 
 > **columns**: [`IColumnDef`](../../../../types/shared-components/DataTable/interface/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L6)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L15)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:6](https://gith
 
 > **effectiveSelectable**: `boolean`
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L7)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L16)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:7](https://gith
 
 > **hasRowActions**: `boolean`
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L8)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L17)
 
 ***
 
@@ -42,4 +42,4 @@ Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:8](https://gith
 
 > **skeletonRows**: `number`
 
-Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L9)
+Defined in: [src/shared-components/DataTable/LoadingMoreRows.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/LoadingMoreRows.tsx#L18)
