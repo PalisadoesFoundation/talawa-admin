@@ -75,6 +75,7 @@ describe('Testing Organization People List Card', () => {
     id: '1',
   };
 
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     vi.clearAllMocks();
     // Mock window.location
@@ -85,6 +86,7 @@ describe('Testing Organization People List Card', () => {
       },
       writable: true,
     });
+    user = userEvent.setup();
   });
 
   const NULL_DATA_MOCKS = [
@@ -117,7 +119,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await user.click(removeButton);
 
     // Verify that success toast and toggleRemoveModal were not called
     await waitFor(() => {
@@ -156,7 +158,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await user.click(removeButton);
 
     // Wait for mutation to complete
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -186,7 +188,7 @@ describe('Testing Organization People List Card', () => {
 
     // Click remove button
     const removeButton = screen.getByTestId('removeMemberBtn');
-    await userEvent.click(removeButton);
+    await user.click(removeButton);
 
     // Check error handling
     await waitFor(
@@ -210,12 +212,12 @@ describe('Testing Organization People List Card', () => {
 
     // Close via No button
     const noButton = screen.getByRole('button', { name: /no/i });
-    await userEvent.click(noButton);
+    await user.click(noButton);
     expect(props.toggleRemoveModal).toHaveBeenCalled();
 
     // Close via close button
     const closeButton = screen.getByTestId('modalCloseBtn');
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
     expect(props.toggleRemoveModal).toHaveBeenCalled();
   });
 

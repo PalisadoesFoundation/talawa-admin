@@ -72,10 +72,12 @@ const renderEventRegistrants = (
 };
 
 describe('Event Registrants Component - Enhanced Coverage', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    user = userEvent.setup();
   });
 
   // Basic rendering tests
@@ -221,7 +223,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Prevents deletion of checked-in user', async () => {
-    const user = userEvent.setup();
     renderEventRegistrants();
 
     const checkedInButton = await screen.findByRole('button', {
@@ -236,7 +237,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Successfully triggers delete for non-checked-in registrant', async () => {
-    const user = userEvent.setup();
     renderEventRegistrants();
 
     const unregisterButton = await screen.findByRole('button', {
@@ -262,7 +262,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Prevents deletion with NotificationToast error when checked-in user removal attempted programmatically', async () => {
-    const user = userEvent.setup();
     renderEventRegistrants();
 
     const checkedInButton = await screen.findByRole('button', {
@@ -347,7 +346,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Refresh functionality test
   test('Refreshes data after successful deletion', async () => {
-    const user = userEvent.setup();
     renderEventRegistrants();
 
     const unregisterButton = await screen.findByRole('button', {
@@ -369,7 +367,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Error handling test
   test('Handles deletion error gracefully', async () => {
-    const user = userEvent.setup();
     renderEventRegistrants(ERROR_DELETION_MOCKS);
 
     const unregisterButton = await screen.findByRole('button', {

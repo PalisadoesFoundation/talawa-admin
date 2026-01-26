@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -94,9 +94,12 @@ describe('SignOut Component', () => {
     },
   };
 
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     mockNavigate = vi.fn();
     vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -114,7 +117,7 @@ describe('SignOut Component', () => {
     renderWithProviders(<SignOut />, [mockLogoutMutation]);
 
     const signOutButton = screen.getByText('Sign out');
-    fireEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     await waitFor(() => {
       // Verify localStorage was cleared
@@ -149,7 +152,7 @@ describe('SignOut Component', () => {
     renderWithProviders(<SignOut />, [mockErrorLogout]);
 
     const signOutButton = screen.getByText('Sign out');
-    fireEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     await waitFor(() => {
       // Verify error was logged
@@ -209,7 +212,7 @@ describe('SignOut Component', () => {
     renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign out');
-    fireEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
@@ -264,7 +267,7 @@ describe('SignOut Component', () => {
     renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign out');
-    fireEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     await waitFor(() => {
       // Verify error was logged for both attempts
@@ -314,7 +317,7 @@ describe('SignOut Component', () => {
     renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign out');
-    fireEvent.click(signOutButton);
+    await user.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
@@ -367,7 +370,7 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
 
-      await userEvent.keyboard('{Enter}');
+      await user.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(mockClearAllItems).toHaveBeenCalled();
@@ -389,7 +392,7 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
 
-      await userEvent.keyboard(' ');
+      await user.keyboard(' ');
 
       await waitFor(() => {
         expect(mockClearAllItems).toHaveBeenCalled();
@@ -411,9 +414,9 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
 
-      await userEvent.keyboard('{Escape}');
-      await userEvent.keyboard('{Tab}');
-      await userEvent.keyboard('{ArrowDown}');
+      await user.keyboard('{Escape}');
+      await user.keyboard('{Tab}');
+      await user.keyboard('{ArrowDown}');
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -450,7 +453,7 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
 
-      await userEvent.keyboard('{Enter}');
+      await user.keyboard('{Enter}');
 
       await waitFor(() => {
         expect(window.confirm).toHaveBeenCalledWith(
@@ -466,27 +469,34 @@ describe('SignOut Component', () => {
   });
 
   describe('Disabled State and Spam Prevention', () => {
+    const mockLogoutMutation = {
+      request: {
+        query: LOGOUT_MUTATION,
+        variables: {},
+      },
+      result: {
+        data: { logout: { success: true } },
+      },
+      delay: 1000, // 1 second delay
+    };
+
     test('button shows disabled state when logout is in progress', async () => {
       const mockEndSession = vi.fn();
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
       });
-
       renderWithProviders(<SignOut />, [mockLogoutMutation]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
-      // Verify initial state - no disabled class
+      // Verify initial state
       expect(signOutButton).toHaveAttribute('aria-disabled', 'false');
       expect(screen.getByText('Sign out')).toBeInTheDocument();
 
-      // Click the button
-      fireEvent.click(signOutButton);
+      await user.click(signOutButton);
 
-      // Immediately check disabled state via aria-disabled
       expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
-
-      // Check for "Signing out..." text
+      // Wait for changes
       await waitFor(() => {
         expect(screen.getByText('Signing out...')).toBeInTheDocument();
       });
@@ -503,9 +513,11 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Click multiple times rapidly
-      fireEvent.click(signOutButton);
-      fireEvent.click(signOutButton);
-      fireEvent.click(signOutButton);
+      // await act(async () => {
+      await user.click(signOutButton);
+      await user.click(signOutButton);
+      await user.click(signOutButton);
+      // })
 
       await waitFor(() => {
         // Verify logout was only called once
@@ -525,7 +537,7 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Click the button
-      fireEvent.click(signOutButton);
+      await user.click(signOutButton);
 
       // Check that disabled state is set via aria-disabled
       await waitFor(() => {
@@ -548,7 +560,7 @@ describe('SignOut Component', () => {
       expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
 
       // Click the button
-      fireEvent.click(signOutButton);
+      await user.click(signOutButton);
 
       // Verify disabled state is still applied and text remains hidden
       await waitFor(() => {
