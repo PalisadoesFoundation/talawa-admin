@@ -33,7 +33,7 @@ export const TEST_ID_PEOPLE_SNO = (id: string): string => `people-sno-${id}`;
  * @returns The formatted data-testid.
  */
 export const TEST_ID_DELETE_EVENT_MODAL = (id: string): string =>
-  `deleteEventModal${id}`;
+  `deleteEventModal-${id}`;
 
 /**
  * Generates the route for a user component.
@@ -51,7 +51,7 @@ export const ROUTE_USER = (compId: string): string => `user/${compId}`;
 export const ROUTE_USER_ORG = (
   compId: string,
   orgId: string | undefined,
-): string => `user/${compId}/${orgId ?? ''}`;
+): string => (orgId ? `user/${compId}/${orgId}` : `user/${compId}`);
 
 /**
  * Generates the backup environment filename.
