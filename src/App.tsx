@@ -31,7 +31,7 @@ const EventManagement = lazy(
   () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
-  () => import('screens/ForgotPassword/ForgotPassword'),
+  () => import('screens/Auth/ForgotPassword/ForgotPassword'),
 );
 const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
 const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
