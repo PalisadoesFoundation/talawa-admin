@@ -11,6 +11,9 @@ import {
   DUMMY_DATE_TIME_PREFIX,
   DATE_FORMAT,
   TEST_ID_DELETE_EVENT_MODAL,
+  DATE_TIME_SEPARATOR,
+  TEST_ID_UPDATE_EVENT_MODAL,
+  DATE_FORMAT_ISO_DATE,
 } from './common';
 
 afterEach(() => {
@@ -53,8 +56,8 @@ describe('common constants and helpers', () => {
       expect(ROUTE_USER('profile')).toBe('user/profile');
     });
 
-    it('should format user route with empty compId', () => {
-      expect(ROUTE_USER('')).toBe('user/');
+    it('should throw error for empty compId', () => {
+      expect(() => ROUTE_USER('')).toThrow('compId is required');
     });
   });
 
@@ -67,8 +70,8 @@ describe('common constants and helpers', () => {
       expect(ROUTE_USER_ORG('events', undefined)).toBe('user/events');
     });
 
-    it('should handle empty strings for compId and orgId', () => {
-      expect(ROUTE_USER_ORG('', '')).toBe('user/');
+    it('should throw error for empty compId', () => {
+      expect(() => ROUTE_USER_ORG('', 'org123')).toThrow('compId is required');
     });
   });
 
@@ -109,6 +112,24 @@ describe('common constants and helpers', () => {
   describe('DATE_FORMAT', () => {
     it('should be a valid date format string', () => {
       expect(DATE_FORMAT).toBe('YYYY-MM-DDTHH:mm:ssZ');
+    });
+  });
+
+  describe('DATE_TIME_SEPARATOR', () => {
+    it('should be T', () => {
+      expect(DATE_TIME_SEPARATOR).toBe('T');
+    });
+  });
+
+  describe('TEST_ID_UPDATE_EVENT_MODAL', () => {
+    it('should format update event modal test id with valid id', () => {
+      expect(TEST_ID_UPDATE_EVENT_MODAL('123')).toBe('updateEventModal-123');
+    });
+  });
+
+  describe('DATE_FORMAT_ISO_DATE', () => {
+    it('should be a valid date format string', () => {
+      expect(DATE_FORMAT_ISO_DATE).toBe('YYYY-MM-DD');
     });
   });
 });

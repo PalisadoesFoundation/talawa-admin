@@ -78,19 +78,9 @@ export const useLocalStorage = (
   prefix: string = PREFIX,
 ): InterfaceStorageHelper => {
   return {
-    getItem: <T>(key: string) => {
-      const prefixedKey = getStorageKey(prefix, key);
-      const storedData = localStorage.getItem(prefixedKey);
-      return storedData ? (JSON.parse(storedData) as T) : null;
-    },
-    setItem: (key: string, value: unknown) => {
-      const prefixedKey = getStorageKey(prefix, key);
-      localStorage.setItem(prefixedKey, JSON.stringify(value));
-    },
-    removeItem: (key: string) => {
-      const prefixedKey = getStorageKey(prefix, key);
-      localStorage.removeItem(prefixedKey);
-    },
+    getItem: <T>(key: string) => getItem<T>(prefix, key), // i18n-ignore-line
+    setItem: (key: string, value: unknown) => setItem(prefix, key, value),
+    removeItem: (key: string) => removeItem(prefix, key),
     getStorageKey: (key: string) => getStorageKey(prefix, key),
     clearAllItems: () => clearAllItems(prefix),
   };

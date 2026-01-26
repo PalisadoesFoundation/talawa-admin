@@ -16,6 +16,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
 
 interface IEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
@@ -61,8 +62,6 @@ interface IUpdateEventHandlerProps {
   setEventUpdateModalIsOpen: (isOpen: boolean) => void;
   refetchEvents?: () => void;
 }
-
-import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
 
 /**
  * @returns Object containing updateEventHandler.
