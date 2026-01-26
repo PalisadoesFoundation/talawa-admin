@@ -79,33 +79,3 @@ export const IDENTIFIER_ID = 'id';
  */
 export const getDummyDateTime = (time: string): string =>
   `${DUMMY_DATE_TIME_PREFIX}${time}`;
-
-/**
- * Generates the data-testid for the people card.
- * @deprecated Use TEST_ID_PEOPLE_CARD instead.
- */
-export const getPeopleCardDataTestId = TEST_ID_PEOPLE_CARD;
-
-/**
- * Generates the data-testid for the people sno badge.
- * @deprecated Use TEST_ID_PEOPLE_SNO instead.
- */
-export const getPeopleSnoDataTestId = TEST_ID_PEOPLE_SNO;
-
-/**
- * Generates the route for a user component.
- * @deprecated Use ROUTE_USER instead.
- */
-export const getUserRoute = ROUTE_USER;
-
-/**
- * Generates the route for a user component within an organization.
- * @deprecated Use ROUTE_USER_ORG instead.
- */
-export const getUserOrgRoute = ROUTE_USER_ORG;
-
-/**
- * Generates the backup environment filename.
- * @deprecated Use FILE_NAME_TEMPLATE_BACKUP_ENV instead.
- */
-export const getBackupEnvFileName = FILE_NAME_TEMPLATE_BACKUP_ENV;
