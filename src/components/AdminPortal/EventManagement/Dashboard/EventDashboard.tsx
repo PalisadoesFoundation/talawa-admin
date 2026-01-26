@@ -129,7 +129,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={tEventList}
+          t={t}
           tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">

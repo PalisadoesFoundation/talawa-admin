@@ -74,8 +74,6 @@ const mockUseLocalStorage = useLocalStorage as Mock;
 const MockPreviewModal = EventListCardPreviewModal as Mock;
 const MockDeleteModal = EventListCardDeleteModal as Mock;
 
-const mockT = (key: string) => key;
-
 type MockEventListCardProps = InterfaceEvent & {
   refetchEvents?: Mock;
 };
@@ -213,8 +211,8 @@ describe('EventListCardModals', () => {
       eventListCardProps: mockEventListCardProps,
       eventModalIsOpen: true,
       hideViewModal: vi.fn(),
-      t: mockT,
-      tCommon: mockT,
+      t: i18nForTest.t, // Use the actual t function from i18nForTest
+      tCommon: i18nForTest.t, // Use the actual t function from i18nForTest
       ...props,
     };
     return render(
