@@ -170,17 +170,12 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`,
-              )
-              .isValid()
-          ? dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`,
-              )
-              .toISOString()
-          : '';
+        : (() => {
+            const endDateTimeStr = `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`;
+            return dayjs.utc(endDateTimeStr).isValid()
+              ? dayjs.utc(endDateTimeStr).toISOString()
+              : '';
+          })();
 
       // Only include timing changes if they actually changed
       if (newStartAt !== originalStartAt) {
