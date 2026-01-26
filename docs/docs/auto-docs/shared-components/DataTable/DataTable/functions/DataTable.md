@@ -18,7 +18,7 @@ Defined in: [src/shared-components/DataTable/DataTable.tsx:72](https://github.co
 
 ### props
 
-[`IDataTableProps`](../../../../types/shared-components/DataTable/interface/type-aliases/IDataTableProps.md)\<`T`\>
+[`InterfaceDataTableProps`](../../../../types/shared-components/DataTable/props/type-aliases/InterfaceDataTableProps.md)\<`T`\>
 
 ## Returns
 

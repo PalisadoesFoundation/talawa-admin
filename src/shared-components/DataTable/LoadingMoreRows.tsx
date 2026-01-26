@@ -1,29 +1,37 @@
 /**
  * LoadingMoreRows component for rendering skeleton rows appended to a table.
  *
- * Used in infinite scroll or "load more" pagination scenarios to display
- * skeleton cells while fetching additional rows.
+ * Renders table rows containing skeleton cells that match the table layout,
+ * used in infinite scroll or "load more" pagination scenarios to display
+ * a loading state while fetching additional rows from the server or client.
  *
  * @typeParam T - The type of data for each row (used for column definitions)
  */
 
 import React from 'react';
-import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceLoadingMoreRowsProps } from '../../types/shared-components/DataTable/interface';
 import styles from './LoadingMoreRows.module.css';
 
-export interface ILoadingMoreRowsProps<T> {
-  columns: Array<IColumnDef<T>>;
-  effectiveSelectable: boolean;
-  hasRowActions: boolean;
-  skeletonRows: number;
-}
-
+/**
+ * LoadingMoreRows component that displays skeleton rows appended to a table.
+ *
+ * Renders placeholder rows with skeleton cells to indicate data is being loaded,
+ * matching the table structure with optional selection checkboxes and actions columns.
+ * Useful for infinite scroll or "load more" pagination patterns.
+ *
+ * @param props - The component props (InterfaceLoadingMoreRowsProps<T>):
+ *   - columns: Column definitions determining structure
+ *   - effectiveSelectable: Whether to show selection checkbox column
+ *   - hasRowActions: Whether to show actions column
+ *   - skeletonRows: Number of skeleton rows to display
+ * @returns A fragment containing skeleton table rows
+ */
 export function LoadingMoreRows<T>({
   columns,
   effectiveSelectable,
   hasRowActions,
-  skeletonRows,
-}: ILoadingMoreRowsProps<T>) {
+  skeletonRows = 5,
+}: InterfaceLoadingMoreRowsProps<T>) {
   return (
     <>
       {Array.from({ length: skeletonRows }).map((_, rowIdx) => (

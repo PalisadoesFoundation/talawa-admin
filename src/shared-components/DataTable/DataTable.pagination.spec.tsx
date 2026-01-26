@@ -454,14 +454,14 @@ describe('DataTable - Pagination Integration', () => {
           data={mockUsers}
           columns={columns}
           paginationMode="client"
-          pageSize={50}
+          pageSize={10}
           rowKey="id"
         />,
       );
 
-      // With pagination, only 10 rows should render
+      // With pagination, only 10 data rows should render on the first page (10 data rows + 1 header row)
       const paginatedRows = screen.getAllByRole('row');
-      expect(paginatedRows.length).toBe(51); // 10 data rows + 1 header row
+      expect(paginatedRows.length).toBe(11); // 10 data rows + 1 header row
     });
   });
 

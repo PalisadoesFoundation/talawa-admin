@@ -4,9 +4,15 @@
 
 # Function: DataTableTable()
 
-> **DataTableTable**\<`T`\>(`__namedParameters`): `Element`
+> **DataTableTable**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/DataTableTable.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableTable.tsx#L48)
+Defined in: [src/shared-components/DataTable/DataTableTable.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTableTable.tsx#L60)
+
+DataTableTable component for rendering the core table structure.
+
+Renders the HTML table with headers, rows, selection checkboxes, sorting indicators,
+and action cells. Handles user interactions for sorting, row selection, and displays
+loading states during pagination. Includes sorting UI, selection controls, and action cells.
 
 ## Type Parameters
 
@@ -16,10 +22,21 @@ Defined in: [src/shared-components/DataTable/DataTableTable.tsx:48](https://gith
 
 ## Parameters
 
-### \_\_namedParameters
+### props
 
-`IDataTableTableProps`\<`T`\>
+[`InterfaceDataTableTableProps`](../../../../types/shared-components/DataTable/props/interfaces/InterfaceDataTableTableProps.md)\<`T`\>
+
+The component props (InterfaceDataTableTableProps<T>):
+  Table structure (columns, sortedRows, ariaLabel, tableClassNames)
+  Sorting (activeSortBy, activeSortDir, handleHeaderClick)
+  Selection (effectiveSelectable, currentSelection, toggleRowSelection, headerCheckboxRef, selectAllOnPage, someSelectedOnPage, allSelectedOnPage)
+  Rendering (renderRow, getKey, startIndex)
+  Actions (hasRowActions, effectiveRowActions)
+  Loading (loadingMore, skeletonRows, ariaBusy)
+  Utilities (tCommon)
 
 ## Returns
 
 `Element`
+
+The rendered table JSX element with headers, rows, and optional loading indicators

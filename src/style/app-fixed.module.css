@@ -10773,50 +10773,6 @@ form {
   font-size: 0.95rem;
 }
 
-.dataEmptyState {
-  padding: 16px;
-  text-align: center;
-  color: var(--secondText-color);
-  background: var(--empty-state-bg);
-  border: 1px solid var(--empty-state-border-color);
-  border-radius: 6px;
-}
-
-.dataErrorState {
-  padding: 16px;
-  text-align: left;
-  color: var(--errorState-color);
-  background: var(--errorState-bg);
-  border: 1px solid var(--errorState-border);
-  border-radius: 6px;
-}
-
-.visuallyHidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-.tableBodyCell {
-  font-size: 14px;
-}
-
-.tableHeadCell {
-  background-color: var(--table-head-bg, blue);
-  color: var(--table-header-color, black);
-}
-
-.dataErrorDetails {
-  margin-top: 4px;
-  font-size: 0.875rem;
-  opacity: 0.85;
-}
-
 .dataSkeletonCell {
   height: 1em;
   width: 100%;

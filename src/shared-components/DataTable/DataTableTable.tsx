@@ -11,40 +11,52 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import type {
   IColumnDef,
-  IRowAction,
-  SortDirection,
+  InterfaceDataTableTableProps,
 } from '../../types/shared-components/DataTable/interface';
 import { renderHeader, renderCellValue, getCellValue } from './utils';
 import { ActionsCell } from './cells/ActionsCell';
 import styles from './DataTableTable.module.css';
 import { LoadingMoreRows } from './LoadingMoreRows';
 
-interface IDataTableTableProps<T> {
-  ariaLabel?: string;
-  ariaBusy?: boolean;
-  tableClassNames: string;
-  columns: Array<IColumnDef<T>>;
-  effectiveSelectable: boolean;
-  hasRowActions: boolean;
-  headerCheckboxRef: React.RefObject<HTMLInputElement | null>;
-  someSelectedOnPage: boolean;
-  allSelectedOnPage: boolean;
-  selectAllOnPage: (checked: boolean) => void;
-  activeSortBy?: string;
-  activeSortDir: SortDirection;
-  handleHeaderClick: (col: IColumnDef<T>) => void;
-  sortedRows: readonly T[];
-  startIndex: number;
-  getKey: (row: T, idx: number) => string | number;
-  currentSelection: ReadonlySet<string | number>;
-  toggleRowSelection: (key: string | number) => void;
-  tCommon: (key: string, options?: Record<string, unknown>) => string;
-  renderRow?: (row: T, index: number) => React.ReactNode;
-  effectiveRowActions: ReadonlyArray<IRowAction<T>>;
-  loadingMore: boolean;
-  skeletonRows: number;
+/**
+ * Helper function to safely render a cell value using the column's render function
+ * or fallback to the default renderCellValue.
+ *
+ * @param col - Column definition potentially with a custom render function
+ * @param val - The cell value extracted from the row
+ * @param row - The row data for context
+ * @returns Rendered cell content or null
+ */
+function renderCell<T>(
+  col: IColumnDef<T, unknown>,
+  val: unknown,
+  row: T,
+): React.ReactNode {
+  if (col.render) {
+    // The render function is defined with (value: TValue, row: T) => ReactNode
+    // We pass the extracted value and row; TypeScript validates at definition time
+    return col.render(val, row);
+  }
+  return renderCellValue(val);
 }
 
+/**
+ * DataTableTable component for rendering the core table structure.
+ *
+ * Renders the HTML table with headers, rows, selection checkboxes, sorting indicators,
+ * and action cells. Handles user interactions for sorting, row selection, and displays
+ * loading states during pagination. Includes sorting UI, selection controls, and action cells.
+ *
+ * @param props - The component props (InterfaceDataTableTableProps<T>):
+ *   Table structure (columns, sortedRows, ariaLabel, tableClassNames)
+ *   Sorting (activeSortBy, activeSortDir, handleHeaderClick)
+ *   Selection (effectiveSelectable, currentSelection, toggleRowSelection, headerCheckboxRef, selectAllOnPage, someSelectedOnPage, allSelectedOnPage)
+ *   Rendering (renderRow, getKey, startIndex)
+ *   Actions (hasRowActions, effectiveRowActions)
+ *   Loading (loadingMore, skeletonRows, ariaBusy)
+ *   Utilities (tCommon)
+ * @returns The rendered table JSX element with headers, rows, and optional loading indicators
+ */
 export function DataTableTable<T>({
   ariaLabel,
   ariaBusy,
@@ -69,7 +81,7 @@ export function DataTableTable<T>({
   effectiveRowActions,
   loadingMore,
   skeletonRows,
-}: IDataTableTableProps<T>) {
+}: InterfaceDataTableTableProps<T>) {
   return (
     <Table
       striped
@@ -180,9 +192,7 @@ export function DataTableTable<T>({
                     const val = getCellValue(row, col.accessor);
                     return (
                       <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
-                        {col.render
-                          ? col.render(val as never, row)
-                          : renderCellValue(val)}
+                        {renderCell(col, val, row)}
                       </td>
                     );
                   })}

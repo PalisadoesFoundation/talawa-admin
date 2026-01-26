@@ -9,19 +9,26 @@
 
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceDataTableSkeletonProps } from '../../types/shared-components/DataTable/interface';
 import { renderHeader } from './utils';
 import styles from './DataTableSkeleton.module.css';
 
-export interface IDataTableSkeletonProps<T> {
-  ariaLabel?: string;
-  columns: Array<IColumnDef<T>>;
-  effectiveSelectable: boolean;
-  hasRowActions: boolean;
-  skeletonRows: number;
-  tableClassNames: string;
-}
-
+/**
+ * DataTableSkeleton component that displays a loading skeleton matching the table layout.
+ *
+ * Renders a responsive table structure with skeleton cells for each column and row,
+ * including optional selection checkbox and actions columns. The skeleton respects
+ * the column definitions to ensure consistent layout during data loading.
+ *
+ * @param props - The component props (InterfaceDataTableSkeletonProps<T>):
+ *   - ariaLabel: Optional accessible label
+ *   - columns: Column definitions determining structure
+ *   - effectiveSelectable: Whether to show selection checkbox
+ *   - hasRowActions: Whether to show actions column
+ *   - skeletonRows: Number of skeleton rows to display
+ *   - tableClassNames: CSS class names for the table
+ * @returns The rendered skeleton table component
+ */
 export function DataTableSkeleton<T>({
   ariaLabel,
   columns,
@@ -29,7 +36,7 @@ export function DataTableSkeleton<T>({
   hasRowActions,
   skeletonRows,
   tableClassNames,
-}: IDataTableSkeletonProps<T>) {
+}: InterfaceDataTableSkeletonProps<T>) {
   return (
     <div className={styles.dataTableWrapper} data-testid="datatable-loading">
       <Table

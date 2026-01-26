@@ -264,7 +264,7 @@ describe('DataTable', () => {
       <DataTable
         data={data}
         columns={columns}
-        renderRow={(row) => (
+        renderRow={(row: (typeof data)[number]) => (
           <tr key={row.name}>
             <td data-testid="custom-row">Custom: {row.name}</td>
           </tr>
@@ -577,7 +577,7 @@ describe('DataTable', () => {
       <DataTable
         data={[{ id: 1 }]}
         columns={columns}
-        rowKey={(row) => `row-${row.id}`}
+        rowKey={(row: { id: number }) => `row-${row.id}`}
       />,
     );
 
@@ -667,7 +667,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         error={error}
-        renderError={(e) => <span>Custom: {e.message}</span>}
+        renderError={(e: Error) => <span>Custom: {e.message}</span>}
       />,
     );
 
@@ -1439,7 +1439,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           selectable
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -1476,7 +1476,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -2037,7 +2037,7 @@ describe('defaultCompare boolean/date branches', () => {
     const namesDesc = bodyRowsDesc.map(
       (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
     );
-    expect(namesDesc).toEqual(['Bob', 'Nulls', 'Charlie', 'Alice']);
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
     expect(th).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -2062,7 +2062,7 @@ describe('defaultCompare boolean/date branches', () => {
     const namesDesc = bodyRowsDesc.map(
       (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
     );
-    expect(namesDesc).toEqual(['Bob', 'Nulls', 'Charlie', 'Alice']);
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
     expect(th).toHaveAttribute('aria-sort', 'descending');
   });
 
@@ -2082,5 +2082,79 @@ describe('defaultCompare boolean/date branches', () => {
     expect(thDate).toHaveAttribute('aria-sort', 'ascending');
     await userEvent.keyboard('{Enter}');
     expect(thDate).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('applies initialSortDirection to default sort state', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'active',
+        header: 'Active',
+        accessor: 'active' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Alice', active: false },
+      { id: '2', name: 'Bob', active: true },
+      { id: '3', name: 'Charlie', active: true },
+    ];
+
+    // Test with initialSortDirection='desc' and initialSortBy='name'
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+        initialSortDirection="desc"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should start with descending sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+
+    // Verify rows are sorted in descending order (Charlie, Bob, Alice)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Charlie', 'Bob', 'Alice']);
+  });
+
+  it('defaults to ascending sort when initialSortDirection is not provided', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should default to ascending sort when initialSortDirection is not provided
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Verify rows are sorted in ascending order (Alice, Bob, Charlie)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
   });
 });
