@@ -93,7 +93,6 @@ describe('InviteByEmailModal', () => {
       isRecurring: false,
       onInvitesSent: mockOnInvitesSent,
     };
-    vi.clearAllMocks();
     user = userEvent.setup();
   });
 

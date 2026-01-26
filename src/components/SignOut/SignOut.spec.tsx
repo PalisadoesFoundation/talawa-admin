@@ -98,7 +98,6 @@ describe('SignOut Component', () => {
 
   beforeEach(() => {
     mockNavigate = vi.fn();
-    vi.clearAllMocks();
     user = userEvent.setup();
   });
 
@@ -515,7 +514,6 @@ describe('SignOut Component', () => {
     const mockLogoutMutation = {
       request: {
         query: LOGOUT_MUTATION,
-        variables: {},
       },
       result: {
         data: { logout: { success: true } },

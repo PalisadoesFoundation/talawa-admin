@@ -40,7 +40,6 @@ vi.mock('@pdfme/generator', () => ({
 describe('Testing Table Row for CheckIn Table', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
-    vi.clearAllMocks();
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
     user = userEvent.setup();
