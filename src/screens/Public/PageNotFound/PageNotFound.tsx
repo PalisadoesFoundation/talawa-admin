@@ -29,7 +29,7 @@ const PageNotFound = (): JSX.Element => {
     <section className={styles.pageNotFound}>
       <div className="container text-center">
         <div className="brand">
-          <img src={Logo} alt="Logo" className="img-fluid" />
+          <img src={Logo} alt={t('logoAlt')} className="img-fluid" />
         </div>
         {/* Display the 404 error code */}
         <h1 className={styles.head}>

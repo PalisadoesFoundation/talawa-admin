@@ -1,12 +1,6 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  cleanup,
-} from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SecuredRouteForUser from './SecuredRouteForUser';
@@ -21,7 +15,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('screens/PageNotFound/PageNotFound', () => ({
+vi.mock('screens/Public/PageNotFound/PageNotFound', () => ({
   default: () => <div data-testid="page-not-found">Page Not Found</div>,
 }));
 
@@ -80,6 +74,7 @@ const renderWithRouter = (initialEntry = '/user/organizations') => {
 
 describe('SecuredRouteForUser', () => {
   const originalLocation = window.location;
+  const originalScrollTo = window.scrollTo;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -89,6 +84,11 @@ describe('SecuredRouteForUser', () => {
       configurable: true,
       writable: true,
       value: { href: '' },
+    });
+    Object.defineProperty(window, 'scrollTo', {
+      configurable: true,
+      writable: true,
+      value: vi.fn(),
     });
   });
 
@@ -101,6 +101,11 @@ describe('SecuredRouteForUser', () => {
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
+    });
+    Object.defineProperty(window, 'scrollTo', {
+      configurable: true,
+      writable: true,
+      value: originalScrollTo,
     });
   });
 
@@ -155,35 +160,26 @@ describe('SecuredRouteForUser', () => {
   });
 
   describe('User Activity Tracking', () => {
-    it('updates lastActive on mousemove event', () => {
+    it('updates lastActive on mousemove event', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
-
-      act(() => {
-        fireEvent.mouseMove(document);
-      });
+      document.dispatchEvent(new Event('mousemove'));
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('updates lastActive on keydown event', () => {
+    it('updates lastActive on keydown event', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
-
-      act(() => {
-        fireEvent.keyDown(document, { key: 'a' });
-      });
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('updates lastActive on click event', () => {
+    it('updates lastActive on click event', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
-
-      act(() => {
-        fireEvent.click(document);
-      });
+      document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
@@ -192,9 +188,7 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
-      act(() => {
-        fireEvent.scroll(document);
-      });
+      window.scrollTo();
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
@@ -237,9 +231,7 @@ describe('SecuredRouteForUser', () => {
       renderWithRouter();
 
       // Advance past inactivity check interval (1 min) + timeout (15 min)
-      act(() => {
-        vi.advanceTimersByTime(16 * 60 * 1000);
-      });
+      vi.advanceTimersByTime(16 * 60 * 1000);
 
       expect(NotificationToast.warning).toHaveBeenCalledWith('sessionExpired');
       expect(mockStorage['Talawa-admin_IsLoggedIn']).toBe('FALSE');
@@ -256,36 +248,24 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
-      act(() => {
-        vi.advanceTimersByTime(16 * 60 * 1000);
-      });
+      vi.advanceTimersByTime(16 * 60 * 1000);
 
       // Wait for the 1 second delay before redirect
-      act(() => {
-        vi.advanceTimersByTime(1000);
-      });
+      vi.advanceTimersByTime(1000);
 
       expect(window.location.href).toBe('/');
     });
 
-    it('resets inactivity timer on user activity', () => {
+    it('resets inactivity timer on user activity', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // Advance time but not past timeout
-      act(() => {
-        vi.advanceTimersByTime(10 * 60 * 1000);
-      });
-
-      // Simulate user activity
-      act(() => {
-        fireEvent.mouseMove(document);
-      });
+      vi.advanceTimersByTime(10 * 60 * 1000);
+      document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
 
       // Advance another 10 minutes (would be 20 total without activity reset)
-      act(() => {
-        vi.advanceTimersByTime(10 * 60 * 1000);
-      });
+      vi.advanceTimersByTime(10 * 60 * 1000);
 
       // Should still be logged in because activity reset the timer
       expect(NotificationToast.warning).not.toHaveBeenCalled();
@@ -296,9 +276,7 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'FALSE';
       renderWithRouter();
 
-      act(() => {
-        vi.advanceTimersByTime(20 * 60 * 1000);
-      });
+      vi.advanceTimersByTime(20 * 60 * 1000);
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();
     });
@@ -362,43 +340,32 @@ describe('SecuredRouteForUser', () => {
       expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
     });
 
-    it('handles multiple activity events in quick succession', () => {
+    it('handles multiple activity events in quick succession', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+      document.dispatchEvent(new Event('mousemove'));
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
-      act(() => {
-        fireEvent.mouseMove(document);
-        fireEvent.keyDown(document, { key: 'Enter' });
-        fireEvent.click(document);
-        fireEvent.scroll(document);
-      });
+      window.scrollTo();
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('properly checks inactivity at each interval', () => {
+    it('properly checks inactivity at each interval', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // First interval check (1 min) - should not logout
-      act(() => {
-        vi.advanceTimersByTime(1 * 60 * 1000);
-      });
-      expect(NotificationToast.warning).not.toHaveBeenCalled();
+      vi.advanceTimersByTime(1 * 60 * 1000);
 
-      // Activity to reset timer
-      act(() => {
-        fireEvent.click(document);
-      });
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
+      document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
       // Multiple interval checks without exceeding timeout
       for (let i = 0; i < 10; i++) {
-        act(() => {
-          vi.advanceTimersByTime(1 * 60 * 1000);
-        });
-        act(() => {
-          fireEvent.mouseMove(document);
-        });
+        vi.advanceTimersByTime(1 * 60 * 1000);
+        document.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
       }
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();
@@ -414,18 +381,14 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
     });
 
-    it('remains logged in with continuous activity before timeout', () => {
+    it('remains logged in with continuous activity before timeout', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // Simulate activity every 5 minutes for 30 minutes
       for (let i = 0; i < 6; i++) {
-        act(() => {
-          vi.advanceTimersByTime(5 * 60 * 1000);
-        });
-        act(() => {
-          fireEvent.keyDown(document, { key: 'Space' });
-        });
+        vi.advanceTimersByTime(5 * 60 * 1000);
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
       }
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();

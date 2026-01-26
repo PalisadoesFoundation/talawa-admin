@@ -279,6 +279,14 @@ export const MOCKS = [
         },
       },
     },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      const data = (variables?.data ?? {}) as Record<string, unknown>;
+      return (
+        data.eventId === 'baseEventId' &&
+        data.name === 'Test Group' &&
+        data.leaderId === 'userId'
+      );
+    },
   },
   // Mock for recurring event instance scope
   {

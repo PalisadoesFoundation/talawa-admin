@@ -94,7 +94,7 @@ vi.mock('screens/AdminPortal/EventManagement/EventManagement', () => ({
   ),
 }));
 
-vi.mock('screens/ForgotPassword/ForgotPassword', () => ({
+vi.mock('screens/Auth/ForgotPassword/ForgotPassword', () => ({
   default: () => (
     <div data-testid="mock-forgot-password">Mock Forgot Password</div>
   ),
