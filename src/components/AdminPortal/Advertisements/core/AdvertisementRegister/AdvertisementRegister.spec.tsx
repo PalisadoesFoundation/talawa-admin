@@ -226,9 +226,8 @@ describe('Testing Advertisement Register Component', () => {
       dateConstants.create.endBeforeStartISO.split('T')[0],
     );
 
-    await waitFor(async () => {
-      await userEvent.click(getByText(translations.register));
-    });
+    const registerButton = await screen.findByText(translations.register);
+    await userEvent.click(registerButton);
     expect(toastErrorSpy).toHaveBeenCalledWith(
       'End Date should be greater than Start Date',
     );
@@ -319,9 +318,8 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    await waitFor(async () => {
-      await userEvent.click(screen.getByTestId('editBtn'));
-    });
+    const editBtn = await screen.findByTestId('editBtn');
+    await userEvent.click(editBtn);
     expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
     await userEvent.clear(getByTestId('advertisementNameInput'));
     await userEvent.type(

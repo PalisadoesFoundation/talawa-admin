@@ -562,10 +562,8 @@ describe('Testing Advertisement Entry Component', () => {
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
     await userEvent.click(getByTestId('moreiconbtn'));
-    await waitFor(() => {
-      expect(getByTestId('deletebtn')).toBeInTheDocument();
-    });
-    await userEvent.click(getByTestId('deletebtn'));
+    const deleteBtn = await screen.findByTestId('deletebtn');
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(
