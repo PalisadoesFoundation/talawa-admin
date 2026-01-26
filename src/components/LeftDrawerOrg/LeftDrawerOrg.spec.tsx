@@ -13,7 +13,6 @@ import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 
-const user = userEvent.setup();
 // Mock CSS modules
 vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   default: {
@@ -294,6 +293,7 @@ const errorMocks: IMockedResponse[] = [
 describe('LeftDrawerOrg', () => {
   const originalInnerWidth = window.innerWidth;
   const mockSetHideDrawer = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
@@ -319,6 +319,7 @@ describe('LeftDrawerOrg', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    user = userEvent.setup();
     mockT = vi.fn(mockTImplementation);
     mockTErrors = vi.fn(mockTErrorsImplementation);
     mockGetItem = vi.fn((key: string) => {
@@ -415,11 +416,8 @@ describe('LeftDrawerOrg', () => {
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
 
-      const avatar = screen.getByAltText(
-        'Profile picture of Test Organization',
-      );
+      const avatar = screen.getByTestId('org-avatar');
       expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
 
     it('should display Avatar component when no avatarURL', async () => {

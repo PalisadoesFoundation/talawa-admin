@@ -95,6 +95,7 @@ const SidebarOrgSection = ({
               fallbackName={data.organization.name}
               size="medium"
               crossOrigin="anonymous"
+              dataTestId="org-avatar"
             />
           </div>
           <div className={styles.ProfileRightContainer}>

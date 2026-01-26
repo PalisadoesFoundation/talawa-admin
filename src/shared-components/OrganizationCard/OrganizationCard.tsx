@@ -44,7 +44,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { InterfaceOrganizationCardPropsPG } from 'types/OrganizationCard/interface';
 import { ApolloError, useMutation } from '@apollo/client';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
@@ -56,10 +56,6 @@ import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQuerie
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-
-export interface InterfaceOrganizationCardPropsPG {
-  data: InterfaceOrganizationCardProps;
-}
 
 function OrganizationCard({
   data,
