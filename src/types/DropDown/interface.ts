@@ -9,8 +9,9 @@ export interface InterfaceDropDownProps {
  * Props for DynamicDropDown change-handling variant.
  * @typeParam T - Form state shape.
  */
-export interface InterfaceChangeDropDownProps<T>
-  extends InterfaceDropDownProps {
+export interface InterfaceChangeDropDownProps<
+  T,
+> extends InterfaceDropDownProps {
   /** State setter for the form. */
   setFormState: React.Dispatch<React.SetStateAction<T>>;
   /** Current form state. */
