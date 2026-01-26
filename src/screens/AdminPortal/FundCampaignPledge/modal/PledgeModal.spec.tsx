@@ -610,11 +610,13 @@ describe('PledgeModal', () => {
     renderPledgeModal(mockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
-    await user.clear(amountInput);
-    await user.type(amountInput, '200');
+    await act(async () => {
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
+    });
 
     await waitFor(() => {
-      expect(parseInt((amountInput as HTMLInputElement).value)).toBe(200);
+      expect((amountInput as HTMLInputElement).value).toBe('200');
     });
 
     await user.click(screen.getByTestId('modal-submit-btn'));
