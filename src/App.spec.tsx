@@ -52,7 +52,7 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('screens/MemberDetail/MemberDetail', () => ({
+vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
   default: () => <div data-testid="mock-profile-form">Mock Settings</div>,
 }));
 
@@ -98,10 +98,6 @@ vi.mock('screens/Auth/ForgotPassword/ForgotPassword', () => ({
   default: () => (
     <div data-testid="mock-forgot-password">Mock Forgot Password</div>
   ),
-}));
-
-vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
-  default: () => <div data-testid="mock-member-detail">Mock Member Detail</div>,
 }));
 
 vi.mock('screens/AdminPortal/OrgContribution/OrgContribution', () => ({
