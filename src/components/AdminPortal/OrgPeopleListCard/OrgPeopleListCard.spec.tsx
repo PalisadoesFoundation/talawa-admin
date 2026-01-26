@@ -68,6 +68,7 @@ const ERROR_MOCKS = [
 
 describe('Testing Organization People List Card', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const props = {

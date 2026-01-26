@@ -73,11 +73,13 @@ const renderEventRegistrants = (
 
 describe('Event Registrants Component - Enhanced Coverage', () => {
   let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
-    user = userEvent.setup();
   });
 
   // Basic rendering tests

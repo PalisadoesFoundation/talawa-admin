@@ -513,11 +513,9 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Click multiple times rapidly
-      // await act(async () => {
       await user.click(signOutButton);
       await user.click(signOutButton);
       await user.click(signOutButton);
-      // })
 
       await waitFor(() => {
         // Verify logout was only called once

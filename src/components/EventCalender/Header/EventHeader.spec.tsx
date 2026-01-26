@@ -20,6 +20,7 @@ describe('EventHeader Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks(); // Restores all spies including consoleSpy
   });
 

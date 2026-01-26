@@ -38,15 +38,15 @@ vi.mock('@pdfme/generator', () => ({
  */
 
 describe('Testing Table Row for CheckIn Table', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     vi.clearAllMocks();
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
     user = userEvent.setup();
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {

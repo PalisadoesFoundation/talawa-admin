@@ -156,7 +156,7 @@ describe('AddOnSpotAttendee Component', () => {
     await user.selectOptions(genderSelect, 'Male');
     expect(genderSelect).toHaveValue('Male');
 
-    await user.click(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).not.toHaveBeenCalled(); // Ensure success toast is not shown
