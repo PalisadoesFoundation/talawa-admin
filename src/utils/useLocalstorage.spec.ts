@@ -2,9 +2,9 @@
 
 import {
   getStorageKey,
-  getItem,
-  setItem,
-  removeItem,
+  lsGet,
+  lsSet,
+  lsRemove,
   clearAllItems,
   useLocalStorage,
 } from './useLocalstorage';
@@ -32,7 +32,7 @@ describe('Storage Helper Functions', () => {
     const value = 'data';
     localStorage.setItem('TestPrefix_testKey', JSON.stringify(value));
 
-    const retrievedValue = getItem(prefix, key);
+    const retrievedValue = lsGet(prefix, key);
 
     expect(retrievedValue).toEqual(value);
   });
@@ -41,7 +41,7 @@ describe('Storage Helper Functions', () => {
     const key = 'nonExistentKey';
     const prefix = 'TestPrefix';
 
-    const retrievedValue = getItem(prefix, key);
+    const retrievedValue = lsGet(prefix, key);
 
     expect(retrievedValue).toBeNull();
   });
@@ -51,7 +51,7 @@ describe('Storage Helper Functions', () => {
     const prefix = 'TestPrefix';
     const value = { some: 'data' };
 
-    setItem(prefix, key, value);
+    lsSet(prefix, key, value);
 
     const storedData = localStorage.getItem('TestPrefix_testKey');
     const parsedData = storedData ? JSON.parse(storedData) : null;
@@ -65,7 +65,7 @@ describe('Storage Helper Functions', () => {
     const value = 'data';
     localStorage.setItem('TestPrefix_testKey', value);
 
-    removeItem(prefix, key);
+    lsRemove(prefix, key);
 
     const retrievedValue = localStorage.getItem('TestPrefix_testKey');
     expect(retrievedValue).toBeNull();

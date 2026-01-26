@@ -1,16 +1,21 @@
-import type { JSX as ReactJSX } from 'react';
+import type {
+  JSX as ReactSource,
+  IntrinsicClassAttributes as ReactICAttr,
+} from 'react';
 
 declare global {
   namespace JSX {
-    type Element = ReactJSX.Element;
-    type ElementClass = ReactJSX.ElementClass;
-    type ElementAttributesProperty = ReactJSX.ElementAttributesProperty;
-    type ElementChildrenAttribute = ReactJSX.ElementChildrenAttribute;
-    type IntrinsicAttributes = ReactJSX.IntrinsicAttributes;
-    type IntrinsicClassAttributes<T> = ReactJSX.IntrinsicClassAttributes<T>;
-    type IntrinsicElements = ReactJSX.IntrinsicElements;
+    type Element = ReactSource.Element;
+    type ElementClass = ReactSource.ElementClass;
+    type ElementAttributesProperty = ReactSource.ElementAttributesProperty;
+    type ElementChildrenAttribute = ReactSource.ElementChildrenAttribute;
+    type IntrinsicAttributes = ReactSource.IntrinsicAttributes;
+    // prettier-ignore
+    type IntrinsicClassAttributes<T> =
+      ReactICAttr<T>;
+    type IntrinsicElements = ReactSource.IntrinsicElements;
     type LibraryManagedAttributes<TComponent, TProps> =
-      ReactJSX.LibraryManagedAttributes<TComponent, TProps>;
+      ReactSource.LibraryManagedAttributes<TComponent, TProps>;
   }
 }
 
