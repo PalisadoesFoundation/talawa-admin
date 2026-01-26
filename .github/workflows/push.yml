@@ -36,6 +36,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
         with:
+          version: 10.4.1
           run_install: false
       - uses: actions/setup-node@v4
         with:
@@ -50,7 +51,7 @@ jobs:
       - name: Run route prefix check
         env:
           CI: true
-        run: pnpm exec tsx scripts/githooks/check-route-prefix.ts --scan-entire-repo
+        run: npm run check-route-prefix -- --scan-entire-repo
 
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -59,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

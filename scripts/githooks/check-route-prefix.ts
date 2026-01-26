@@ -240,12 +240,92 @@ const collectViolations = (file: string, code: string): Violation[] => {
     });
   };
 
+  const routeComponentAliases = new Set(DEFAULT_ROUTE_COMPONENTS);
+  const navComponentAliases = new Set(DEFAULT_NAV_COMPONENTS);
+  const navigateFunctionAliases = new Set(DEFAULT_NAVIGATE_FUNCTIONS);
+
+  const trackAliasFromName = (localName: string, sourceName: string) => {
+    if (routeComponentAliases.has(sourceName)) {
+      routeComponentAliases.add(localName);
+    }
+    if (navComponentAliases.has(sourceName)) {
+      navComponentAliases.add(localName);
+    }
+    if (navigateFunctionAliases.has(sourceName)) {
+      navigateFunctionAliases.add(localName);
+    }
+  };
+
+  const resolveAliasSource = (
+    expression: TSESTree.Expression,
+  ): string | null => {
+    const resolved = unwrapExpression(expression);
+    if (resolved.type === AST_NODE_TYPES.Identifier) {
+      return resolved.name;
+    }
+    if (
+      resolved.type === AST_NODE_TYPES.MemberExpression &&
+      resolved.property.type === AST_NODE_TYPES.Identifier
+    ) {
+      return resolved.property.name;
+    }
+    return null;
+  };
+
+  const resolvePatternIdentifier = (node: TSESTree.Pattern): string | null => {
+    if (node.type === AST_NODE_TYPES.Identifier) {
+      return node.name;
+    }
+    if (
+      node.type === AST_NODE_TYPES.AssignmentPattern &&
+      node.left.type === AST_NODE_TYPES.Identifier
+    ) {
+      return node.left.name;
+    }
+    return null;
+  };
+
   const visit = (node: TSESTree.Node) => {
+    if (node.type === AST_NODE_TYPES.ImportDeclaration) {
+      node.specifiers.forEach((specifier) => {
+        if (
+          specifier.type === AST_NODE_TYPES.ImportSpecifier &&
+          specifier.imported.type === AST_NODE_TYPES.Identifier
+        ) {
+          trackAliasFromName(specifier.local.name, specifier.imported.name);
+        }
+      });
+    }
+
+    if (node.type === AST_NODE_TYPES.VariableDeclarator) {
+      const init = node.init && unwrapExpression(node.init);
+      if (node.id.type === AST_NODE_TYPES.Identifier && init) {
+        const sourceName = resolveAliasSource(init);
+        if (sourceName) {
+          trackAliasFromName(node.id.name, sourceName);
+        }
+      }
+      if (node.id.type === AST_NODE_TYPES.ObjectPattern) {
+        node.id.properties.forEach((property) => {
+          if (property.type !== AST_NODE_TYPES.Property) {
+            return;
+          }
+          if (property.key.type !== AST_NODE_TYPES.Identifier) {
+            return;
+          }
+          const aliasName = resolvePatternIdentifier(property.value);
+          if (aliasName) {
+            trackAliasFromName(aliasName, property.key.name);
+          }
+        });
+      }
+    }
+
     if (node.type === AST_NODE_TYPES.JSXOpeningElement) {
       const elementName = getJsxName(node.name);
       if (elementName) {
-        const isRouteComponent = DEFAULT_ROUTE_COMPONENTS.includes(elementName);
-        const isNavComponent = DEFAULT_NAV_COMPONENTS.includes(elementName);
+        const isRouteComponent = routeComponentAliases.has(elementName);
+        const isNavComponent = navComponentAliases.has(elementName);
         if (isRouteComponent || isNavComponent) {
           const targetAttributeName = isRouteComponent ? 'path' : 'to';
           const targetAttribute = node.attributes.find(
@@ -269,7 +349,7 @@ const collectViolations = (file: string, code: string): Violation[] => {
       const callee = node.callee;
       const isNavigateCall =
         callee.type === AST_NODE_TYPES.Identifier &&
-        DEFAULT_NAVIGATE_FUNCTIONS.includes(callee.name);
+        navigateFunctionAliases.has(callee.name);
       const isLocationNavigation = isLocationCall(
         callee,
         DEFAULT_LOCATION_METHODS,
