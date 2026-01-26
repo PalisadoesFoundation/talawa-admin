@@ -82,6 +82,7 @@ describe('Testing Advertisement Register Component', () => {
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   test('AdvertismentRegister component loads correctly in register mode', async () => {
