@@ -1,0 +1,9 @@
+.searchWrap {
+  composes: searchWrap from '../../style/app-fixed.module.css';
+}
+.searchInput {
+  composes: searchInput from '../../style/app-fixed.module.css';
+}
+.searchClear {
+  composes: searchClear from '../../style/app-fixed.module.css';
+}

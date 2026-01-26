@@ -22,7 +22,7 @@ The type of the row data
 
 ### actions
 
-> **actions**: readonly [`IRowAction`](../../../DataTable/interface/interfaces/IRowAction.md)\<`T`\>[]
+> **actions**: readonly [`IRowAction`](../../../DataTable/hooks/interfaces/IRowAction.md)\<`T`\>[]
 
 Defined in: [src/types/shared-components/ActionsCell/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionsCell/interface.ts#L13)
 

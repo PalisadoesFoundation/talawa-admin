@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUser
 
-Defined in: [src/types/shared-components/User/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L3)
+Defined in: [src/types/shared-components/User/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L6)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/shared-components/User/interface.ts:3](https://github.com
 
 > `optional` **address**: [`Address`](../../type/type-aliases/Address.md)
 
-Defined in: [src/types/shared-components/User/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L5)
+Defined in: [src/types/shared-components/User/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/User/interface.ts:5](https://github.com
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L16)
+Defined in: [src/types/shared-components/User/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L19)
 
 ***
 
@@ -28,15 +28,15 @@ Defined in: [src/types/shared-components/User/interface.ts:16](https://github.co
 
 > `optional` **birthDate**: `Date`
 
-Defined in: [src/types/shared-components/User/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L6)
+Defined in: [src/types/shared-components/User/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L9)
 
 ***
 
-### createdAt
+### createdAt?
 
-> **createdAt**: `Date`
+> `optional` **createdAt**: `string` \| `Date`
 
-Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L7)
+Defined in: [src/types/shared-components/User/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L10)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com
 
 > **email**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L8)
+Defined in: [src/types/shared-components/User/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L11)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/User/interface.ts:8](https://github.com
 
 > **firstName**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L9)
+Defined in: [src/types/shared-components/User/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L12)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/User/interface.ts:9](https://github.com
 
 > `optional` **gender**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L11)
+Defined in: [src/types/shared-components/User/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L14)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/User/interface.ts:11](https://github.co
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L4)
+Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L7)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/shared-components/User/interface.ts:4](https://github.com
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L12)
+Defined in: [src/types/shared-components/User/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L15)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/shared-components/User/interface.ts:12](https://github.co
 
 > **lastName**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L10)
+Defined in: [src/types/shared-components/User/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L13)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/shared-components/User/interface.ts:10](https://github.co
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L15)
+Defined in: [src/types/shared-components/User/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L18)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/shared-components/User/interface.ts:15](https://github.co
 
 > `optional` **updatedAt**: `Date`
 
-Defined in: [src/types/shared-components/User/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L13)
+Defined in: [src/types/shared-components/User/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L16)
 
 ***
 
@@ -108,4 +108,4 @@ Defined in: [src/types/shared-components/User/interface.ts:13](https://github.co
 
 > `optional` **userType**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L14)
+Defined in: [src/types/shared-components/User/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L17)
