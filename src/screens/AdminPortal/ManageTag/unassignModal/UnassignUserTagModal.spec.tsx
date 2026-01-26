@@ -173,10 +173,6 @@ describe('UnassignUserTagModal Component', () => {
 
     promise.catch(() => {});
 
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
     render(
       <UnassignUserTagModal
         {...defaultProps}
@@ -199,11 +195,8 @@ describe('UnassignUserTagModal Component', () => {
       expect(confirmButton).not.toBeDisabled();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'unassignUserTagError',
     );
-
-    consoleErrorSpy.mockRestore();
   });
 });

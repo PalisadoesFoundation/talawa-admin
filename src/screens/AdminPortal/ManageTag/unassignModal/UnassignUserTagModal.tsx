@@ -44,8 +44,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
     setIsSubmitting(true);
     try {
       await handleUnassignUserTag();
-    } catch (error) {
-      console.error(error);
+    } catch {
       NotificationToast.error(t('unassignUserTagError'));
     } finally {
       setIsSubmitting(false);

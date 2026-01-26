@@ -43,8 +43,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
     setIsSubmitting(true);
     try {
       await handleRemoveUserTag();
-    } catch (error) {
-      console.error(error);
+    } catch {
       NotificationToast.error(t('removeUserTagError'));
     } finally {
       setIsSubmitting(false);

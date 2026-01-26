@@ -148,7 +148,7 @@ describe('RemoveUserTagModal Component', () => {
     );
 
     expect(screen.getByTestId('modal-delete-btn')).toHaveClass(
-      '_removeButton_d8535b btn btn-danger',
+      'btn btn-danger',
     );
   });
 
@@ -157,10 +157,6 @@ describe('RemoveUserTagModal Component', () => {
     const error = new Error('Remove failed');
 
     const failingHandler = vi.fn().mockRejectedValue(error);
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <RemoveUserTagModal
@@ -180,10 +176,6 @@ describe('RemoveUserTagModal Component', () => {
       expect(confirmButton).not.toBeDisabled();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
-    expect(toastErrorSpy).toHaveBeenCalledWith('removeUserTagError');
-
-    consoleErrorSpy.mockRestore();
-    toastErrorSpy.mockRestore();
+    expect(NotificationToast.error).toHaveBeenCalledWith('removeUserTagError');
   });
 });

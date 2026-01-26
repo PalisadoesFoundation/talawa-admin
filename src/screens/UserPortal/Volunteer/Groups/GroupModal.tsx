@@ -196,7 +196,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        console.error(error);
         NotificationToast.error((error as Error).message);
       } finally {
         setIsSubmitting(false);
