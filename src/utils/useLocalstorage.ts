@@ -78,7 +78,8 @@ export const useLocalStorage = (
   prefix: string = PREFIX,
 ): InterfaceStorageHelper => {
   return {
-    getItem: <T>(key: string) => getItem<T>(prefix, key), // i18n-ignore-line
+    // i18n-ignore-next-line
+    getItem: <T>(key: string) => getItem<T>(prefix, key),
     setItem: (key: string, value: unknown) => setItem(prefix, key, value),
     removeItem: (key: string) => removeItem(prefix, key),
     getStorageKey: (key: string) => getStorageKey(prefix, key),
