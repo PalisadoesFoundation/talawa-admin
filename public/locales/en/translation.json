@@ -378,6 +378,7 @@
       "currentTimeout": "Current Timeout:",
       "noTimeoutSet": "No timeout set",
       "minutes": " {{count}} minutes",
+      "updateSession": "Update Session",
       "updateTimeout": "Update Timeout",
       "min15": "15 min",
       "min30": "30 min",
@@ -797,6 +798,7 @@
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
   },
   "eventListCard": {
+    "dogsCare": "Dogs Care",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
@@ -1551,6 +1553,7 @@
     "postImagePreview": "Post Image Preview"
   },
   "settings": {
+    "dummyPicture": "dummy picture",
     "eventAttended": "Events Attended",
     "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
@@ -1564,6 +1567,7 @@
     "state": "City/State",
     "country": "Country",
     "resetChanges": "Reset Changes",
+    "profilePicture": "profile picture",
     "profileDetails": "Profile Details",
     "deleteUserMessage": "By clicking on Delete User button your user will be permanently deleted along with its events, tags and all related data.",
     "copyLink": "Copy Profile Link",
@@ -1680,7 +1684,6 @@
     "calendarView": "Calendar View",
     "allDay": "All Day",
     "eventCreated": "Event created and posted successfully.",
-    "eventDetails": "Event Details",
     "eventName": "Name",
     "enterName": "Enter Name",
     "enterDescription": "Enter Description",
@@ -1719,12 +1722,14 @@
     "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
+    "failedToRegister": "Failed to register for the event",
     "starts": "Starts",
     "ends": "Ends",
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "location": "location",
-    "register": "register"
+    "register": "register",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -2484,6 +2489,19 @@
         "failedToLoad": "Failed to load component"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/A",
+    "yes": "Yes",
+    "no": "No",
+    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
+    "eventNotFound": "Event not found or has been deleted",
+    "numberOfAttendees": "Number of attendees",
+    "viewEventDetails": "View event details"
+  },
+  "promotedPost": {
+    "title": "Promoted Content",
+    "promotedContent": "Promoted content: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

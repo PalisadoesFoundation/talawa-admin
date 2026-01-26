@@ -95,12 +95,12 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         if (data) {
           setIsRegistered(true);
           NotificationToast.success(
-            `Successfully registered for ${props.name}`,
+            t('registeredSuccessfully', { eventName: props.name }),
           );
         }
       } catch (error) {
-        NotificationToast.error(`Failed to register for the event`);
-        NotificationToast.error(error as string);
+        NotificationToast.error(t('failedToRegister'));
+        console.error('Failed to register for event:', error);
       }
     }
   };
@@ -149,7 +149,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
 
       <div className={`d-flex flex-row ${styles.eventActions}`}>
         {loading ? (
-          <HourglassBottomIcon fontSize="small" />
+          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
         ) : isRegistered ? (
           <Button size="sm" disabled>
             {t('alreadyRegistered')}
