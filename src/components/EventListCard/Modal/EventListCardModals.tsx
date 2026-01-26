@@ -28,6 +28,7 @@ import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/interface';
 import {
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -49,8 +50,6 @@ import styles from './EventListCardModals.module.css';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-
-import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/interface';
 
 function EventListCardModals({
   eventListCardProps,

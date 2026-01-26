@@ -16,7 +16,6 @@ export interface InterfaceEventListCard extends InterfaceEvent {
  * @param t - Translation function scoped to 'translation' namespace.
  * @param tCommon - Translation function for common strings.
  */
-
 export interface InterfaceEventListCardModalsProps {
   eventListCardProps: InterfaceEventListCard;
   eventModalIsOpen: boolean;

@@ -2,7 +2,7 @@
  * Helper interface for managing localStorage operations.
  */
 interface InterfaceStorageHelper {
-  getItem: <T>(key: string) => T | null | string;
+  getItem: <T>(key: string) => T | null;
   setItem: (key: string, value: unknown) => void;
   removeItem: (key: string) => void;
   getStorageKey: (key: string) => string;
@@ -73,7 +73,11 @@ export const clearAllItems = (prefix: string): void => {
     localStorage.removeItem(allPrefixedKeys[i]);
   }
 };
-
+/**
+ * Factory function that returns localStorage helper methods with a common prefix.
+ * @param prefix - Prefix to be added to all keys, defaults to 'Talawa-admin'.
+ * @returns InterfaceStorageHelper with getItem, setItem, removeItem, getStorageKey, and clearAllItems methods.
+ */
 export const useLocalStorage = (
   prefix: string = PREFIX,
 ): InterfaceStorageHelper => {
