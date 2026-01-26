@@ -171,7 +171,7 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('updates lastActive on keydown event', async () => {
+    it('updates lastActive on keydown event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
@@ -261,7 +261,7 @@ describe('SecuredRouteForUser', () => {
       expect(window.location.href).toBe('/');
     });
 
-    it('resets inactivity timer on user activity', async () => {
+    it('resets inactivity timer on user activity', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
@@ -345,7 +345,7 @@ describe('SecuredRouteForUser', () => {
       expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
     });
 
-    it('handles multiple activity events in quick succession', async () => {
+    it('handles multiple activity events in quick succession', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
       document.dispatchEvent(new Event('mousemove'));
