@@ -4,45 +4,13 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @component
- * @param {ISidebarNavItemProps} props - The props for the component
- * @param {string} props.to - Navigation target URL
- * @param {React.ReactNode} props.icon - Icon component or element
- * @param {string} props.label - Display label for the navigation item
- * @param {string} props.testId - Test ID for testing purposes
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {() => void} [props.onClick] - Optional click handler
- * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
- * @param {'react-icon' | 'svg'} [props.iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
- *
- * @returns {React.ReactElement} The rendered SidebarNavItem component
- *
- * @example
- * ```tsx
- * // With SVG icon (default)
- * <SidebarNavItem
- *   to="/dashboard"
- *   icon={<DashboardIcon />}
- *   label="Dashboard"
- *   testId="dashboardBtn"
- *   hideDrawer={false}
- * />
- *
- * // With react-icon
- * <SidebarNavItem
- *   to="/notifications"
- *   icon={<FaBell />}
- *   label="Notifications"
- *   testId="notificationsBtn"
- *   hideDrawer={false}
- *   iconType="react-icon"
- * />
- * ```
+ * @param props - The props for the component
+ * @returns The rendered SidebarNavItem component
  */
 
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarNavItem.module.css';
 import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
 
 const SidebarNavItem = ({
@@ -72,7 +40,7 @@ const SidebarNavItem = ({
           {
             style: {
               fontSize: 25,
-              color: isActive ? '#000000' : 'var(--bs-secondary)',
+              color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
             },
           },
         );
@@ -104,21 +72,23 @@ const SidebarNavItem = ({
     <NavLink
       to={to}
       onClick={onClick}
-      className={({ isActive }) =>
-        useSimpleButton
+      className={({ isActive }) => {
+        const baseClass = useSimpleButton
           ? isActive
             ? styles.leftDrawerActiveButton
             : styles.leftDrawerInactiveButton
           : isActive
             ? styles.sidebarBtnActive
-            : styles.sidebarBtn
-      }
+            : styles.sidebarBtn;
+        return useSimpleButton
+          ? `${baseClass} ${styles.sidebarSimpleButtonHeight}`
+          : baseClass;
+      }}
       data-testid={testId}
       data-cy={dataCy}
-      style={useSimpleButton ? { height: '40px' } : undefined}
     >
       {({ isActive }) => (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <div className={styles.sidebarFlexAlignCenter}>
           <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
           {!hideDrawer && label}
         </div>
