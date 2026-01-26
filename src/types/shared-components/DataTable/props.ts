@@ -21,16 +21,8 @@ export interface InterfaceBaseDataTableProps<T> {
   rows?: T[];
   /** Set of row keys to display; if provided, only these rows are shown */
   keysToShowRows?: ReadonlySet<Key>;
-  /** Bootstrap size variant: 'sm' for small or 'lg' for large */
-  size?: 'sm' | 'lg';
-  /** Whether to hide the header row */
-  noHeader?: boolean;
   /** Key or property name or function to extract unique identifier for each row */
   rowKey?: keyof T | ((row: T) => Key);
-  /** CSS class to apply to the table element */
-  className?: string;
-  /** Whether to apply striped styling to rows */
-  striped?: boolean;
   /** Whether columns are sortable (default: true) */
   sortable?: boolean;
   /** Current sort state specifying column and direction */
@@ -208,14 +200,6 @@ export interface InterfaceDataTableTableProps<T> {
   columns: Array<IColumnDef<T, unknown>>;
   /** Set of row keys to display; if provided, only these rows are shown */
   keysToShowRows?: ReadonlySet<Key>;
-  /** Bootstrap size variant: 'sm' for small or 'lg' for large */
-  size?: 'sm' | 'lg';
-  /** Whether to hide the header row */
-  noHeader?: boolean;
-  /** CSS class to apply to the table element */
-  className?: string;
-  /** Whether to apply striped styling to rows */
-  striped?: boolean;
   /** Whether columns are sortable (default: true) */
   sortable?: boolean;
   /** Current sort state specifying column and direction */

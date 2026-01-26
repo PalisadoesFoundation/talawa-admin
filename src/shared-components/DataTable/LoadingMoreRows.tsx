@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import type { InterfaceLoadingMoreRowsProps } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceLoadingMoreRowsProps } from 'types/shared-components/DataTable/interface';
 import styles from './LoadingMoreRows.module.css';
 
 /**

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLoadingMoreRowsProps\<T\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L312)
+Defined in: [src/types/shared-components/DataTable/props.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L296)
 
 Props for the LoadingMoreRows component.
 
@@ -25,7 +25,7 @@ The type of data for each row in the table
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L314)
+Defined in: [src/types/shared-components/DataTable/props.ts:298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L298)
 
 Array of column definitions to match row structure
 
@@ -35,7 +35,7 @@ Array of column definitions to match row structure
 
 > `optional` **columnsCount**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:322](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L322)
+Defined in: [src/types/shared-components/DataTable/props.ts:306](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L306)
 
 Number of columns in the table (for colspan)
 
@@ -45,7 +45,7 @@ Number of columns in the table (for colspan)
 
 > `optional` **effectiveSelectable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L316)
+Defined in: [src/types/shared-components/DataTable/props.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L300)
 
 Whether to show selection checkbox column
 
@@ -55,7 +55,7 @@ Whether to show selection checkbox column
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L326)
+Defined in: [src/types/shared-components/DataTable/props.ts:310](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L310)
 
 Error from the most recent load attempt
 
@@ -65,7 +65,7 @@ Error from the most recent load attempt
 
 > `optional` **hasRowActions**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L318)
+Defined in: [src/types/shared-components/DataTable/props.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L302)
 
 Whether to show actions column
 
@@ -75,7 +75,7 @@ Whether to show actions column
 
 > `optional` **loading**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L324)
+Defined in: [src/types/shared-components/DataTable/props.ts:308](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L308)
 
 Whether more rows are currently loading
 
@@ -85,7 +85,7 @@ Whether more rows are currently loading
 
 > `optional` **retry**: () => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L328)
+Defined in: [src/types/shared-components/DataTable/props.ts:312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L312)
 
 Callback to retry loading after an error
 
@@ -99,6 +99,6 @@ Callback to retry loading after an error
 
 > `optional` **skeletonRows**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L320)
+Defined in: [src/types/shared-components/DataTable/props.ts:304](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L304)
 
 Number of skeleton rows to display

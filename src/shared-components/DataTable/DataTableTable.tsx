@@ -12,7 +12,7 @@ import Table from 'react-bootstrap/Table';
 import type {
   IColumnDef,
   InterfaceDataTableTableProps,
-} from '../../types/shared-components/DataTable/interface';
+} from 'types/shared-components/DataTable/interface';
 import { renderHeader, renderCellValue, getCellValue } from './utils';
 import { ActionsCell } from './cells/ActionsCell';
 import styles from './DataTableTable.module.css';

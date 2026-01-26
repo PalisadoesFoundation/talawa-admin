@@ -9,7 +9,7 @@
 
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import type { InterfaceDataTableSkeletonProps } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceDataTableSkeletonProps } from 'types/shared-components/DataTable/interface';
 import { renderHeader } from './utils';
 import styles from './DataTableSkeleton.module.css';
 

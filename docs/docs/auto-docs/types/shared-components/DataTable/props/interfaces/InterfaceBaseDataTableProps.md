@@ -21,16 +21,6 @@ The type of data for each row in the table
 
 ## Properties
 
-### className?
-
-> `optional` **className**: `string`
-
-Defined in: [src/types/shared-components/DataTable/props.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L31)
-
-CSS class to apply to the table element
-
-***
-
 ### columns
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
@@ -51,21 +41,11 @@ Set of row keys to display; if provided, only these rows are shown
 
 ***
 
-### noHeader?
-
-> `optional` **noHeader**: `boolean`
-
-Defined in: [src/types/shared-components/DataTable/props.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L27)
-
-Whether to hide the header row
-
-***
-
 ### onSortChange()?
 
 > `optional` **onSortChange**: (`event`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L39)
+Defined in: [src/types/shared-components/DataTable/props.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L31)
 
 Callback fired when sort state changes
 
@@ -85,7 +65,7 @@ Callback fired when sort state changes
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => [`Key`](../../types/type-aliases/Key.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L29)
+Defined in: [src/types/shared-components/DataTable/props.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L25)
 
 Key or property name or function to extract unique identifier for each row
 
@@ -101,21 +81,11 @@ Array of row data to display in the table
 
 ***
 
-### size?
-
-> `optional` **size**: `"sm"` \| `"lg"`
-
-Defined in: [src/types/shared-components/DataTable/props.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L25)
-
-Bootstrap size variant: 'sm' for small or 'lg' for large
-
-***
-
 ### sortable?
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L35)
+Defined in: [src/types/shared-components/DataTable/props.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L27)
 
 Whether columns are sortable (default: true)
 
@@ -125,16 +95,6 @@ Whether columns are sortable (default: true)
 
 > `optional` **sortState**: [`ISortState`](../../types/interfaces/ISortState.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L37)
+Defined in: [src/types/shared-components/DataTable/props.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L29)
 
 Current sort state specifying column and direction
-
-***
-
-### striped?
-
-> `optional` **striped**: `boolean`
-
-Defined in: [src/types/shared-components/DataTable/props.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L33)
-
-Whether to apply striped styling to rows

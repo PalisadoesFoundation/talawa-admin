@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSearchBarProps
 
-Defined in: [src/types/shared-components/DataTable/props.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L77)
+Defined in: [src/types/shared-components/DataTable/props.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L69)
 
 Props for a searchable input/search bar component.
 
@@ -17,7 +17,7 @@ change callbacks, debouncing, and accessibility attributes.
 
 > `optional` **aria**: `object`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L91)
+Defined in: [src/types/shared-components/DataTable/props.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L83)
 
 ARIA accessibility attributes for the search input
 
@@ -39,7 +39,7 @@ ARIA labelledBy for linking to external labels
 
 > `optional` **aria-label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L87)
+Defined in: [src/types/shared-components/DataTable/props.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L79)
 
 ARIA label for the search input
 
@@ -49,7 +49,7 @@ ARIA label for the search input
 
 > `optional` **clear-aria-label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L89)
+Defined in: [src/types/shared-components/DataTable/props.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L81)
 
 ARIA label for the clear button
 
@@ -59,7 +59,7 @@ ARIA label for the clear button
 
 > `optional` **debounceDelay**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L98)
+Defined in: [src/types/shared-components/DataTable/props.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L90)
 
 Milliseconds to debounce search input changes
 
@@ -69,7 +69,7 @@ Milliseconds to debounce search input changes
 
 > **onChange**: (`q`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L81)
+Defined in: [src/types/shared-components/DataTable/props.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L73)
 
 Callback fired when search value changes
 
@@ -89,7 +89,7 @@ Callback fired when search value changes
 
 > `optional` **onClear**: () => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L83)
+Defined in: [src/types/shared-components/DataTable/props.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L75)
 
 Callback fired when search is cleared
 
@@ -103,7 +103,7 @@ Callback fired when search is cleared
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L85)
+Defined in: [src/types/shared-components/DataTable/props.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L77)
 
 Placeholder text to display in the search input
 
@@ -113,6 +113,6 @@ Placeholder text to display in the search input
 
 > `optional` **value**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L79)
+Defined in: [src/types/shared-components/DataTable/props.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L71)
 
 Current search input value
