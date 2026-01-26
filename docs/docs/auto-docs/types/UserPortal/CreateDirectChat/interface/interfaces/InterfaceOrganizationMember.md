@@ -4,7 +4,9 @@
 
 # Interface: InterfaceOrganizationMember
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L4)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L7)
+
+Represents an organization member for direct chat creation
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:4](https://githu
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L7)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L13)
+
+The URL of the organization member's avatar
 
 ***
 
@@ -20,7 +24,9 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:7](https://githu
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L5)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L9)
+
+The ID of the organization member
 
 ***
 
@@ -28,7 +34,9 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:5](https://githu
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L6)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L11)
+
+The name of the organization member
 
 ***
 
@@ -36,4 +44,6 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:6](https://githu
 
 > **role**: `string`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L8)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L15)
+
+The role of the organization member
