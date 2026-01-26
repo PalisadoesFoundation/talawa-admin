@@ -6,13 +6,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -128,12 +123,11 @@ describe('Testing ItemDeleteModal', () => {
   });
 
   it('should successfully Delete Action Item', async () => {
+    const user = userEvent.setup();
     renderItemDeleteModal(successLink, testItemProps);
-    expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
 
-    await act(() => {
-      fireEvent.click(screen.getByTestId('deleteyesbtn'));
-    });
+    await act(() => user.click(screen.getByTestId('modal-delete-btn')));
 
     await waitFor(() => {
       expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
@@ -145,9 +139,10 @@ describe('Testing ItemDeleteModal', () => {
   });
 
   it('should fail to Delete Action Item', async () => {
+    const user = userEvent.setup();
     renderItemDeleteModal(errorLink, testItemProps);
-    expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
+    await user.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -207,7 +202,8 @@ describe('Testing ItemDeleteModal', () => {
       expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
     });
 
-    it('should allow switching between series and instance options', () => {
+    it('should allow switching between series and instance options', async () => {
+      const user = userEvent.setup();
       const propsWithRecurring: IItemDeleteModalProps = {
         ...testItemProps,
         actionItem: {
@@ -228,17 +224,18 @@ describe('Testing ItemDeleteModal', () => {
       expect(instanceRadio).not.toBeChecked();
 
       // Click instance radio
-      fireEvent.click(instanceRadio);
+      await user.click(instanceRadio);
       expect(seriesRadio).not.toBeChecked();
       expect(instanceRadio).toBeChecked();
 
       // Click series radio again
-      fireEvent.click(seriesRadio);
+      await user.click(seriesRadio);
       expect(seriesRadio).toBeChecked();
       expect(instanceRadio).not.toBeChecked();
     });
 
     it('should use DELETE_ACTION_ITEM_MUTATION when applyTo is series', async () => {
+      const user = userEvent.setup();
       const propsWithRecurring: IItemDeleteModalProps = {
         ...testItemProps,
         actionItem: {
@@ -256,9 +253,7 @@ describe('Testing ItemDeleteModal', () => {
       expect(seriesRadio).toBeChecked();
 
       // Click delete button
-      await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
-      });
+      await act(() => user.click(screen.getByTestId('modal-delete-btn')));
 
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
@@ -270,6 +265,7 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     it('should use DELETE_ACTION_FOR_INSTANCE when applyTo is instance', async () => {
+      const user = userEvent.setup();
       const propsWithRecurring: IItemDeleteModalProps = {
         ...testItemProps,
         actionItem: {
@@ -284,13 +280,11 @@ describe('Testing ItemDeleteModal', () => {
 
       // Switch to instance
       const instanceRadio = screen.getByTestId('deleteApplyToInstance');
-      fireEvent.click(instanceRadio);
+      await user.click(instanceRadio);
       expect(instanceRadio).toBeChecked();
 
       // Click delete button
-      await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
-      });
+      await act(() => user.click(screen.getByTestId('modal-delete-btn')));
 
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
@@ -302,6 +296,7 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     it('should use DELETE_ACTION_ITEM_MUTATION for non-recurring events', async () => {
+      const user = userEvent.setup();
       const propsNonRecurring: IItemDeleteModalProps = {
         ...testItemProps,
         eventId: 'event123',
@@ -314,9 +309,7 @@ describe('Testing ItemDeleteModal', () => {
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
 
       // Click delete button
-      await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
-      });
+      await act(() => user.click(screen.getByTestId('modal-delete-btn')));
 
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
@@ -328,6 +321,7 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     it('should use DELETE_ACTION_ITEM_MUTATION when eventId is not provided', async () => {
+      const user = userEvent.setup();
       const propsWithoutEventId: IItemDeleteModalProps = {
         ...testItemProps,
         eventId: undefined,
@@ -340,9 +334,7 @@ describe('Testing ItemDeleteModal', () => {
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
 
       // Click delete button
-      await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
-      });
+      await act(() => user.click(screen.getByTestId('modal-delete-btn')));
 
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
@@ -354,6 +346,7 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     it('should handle error when deleting instance fails', async () => {
+      const user = userEvent.setup();
       const propsWithRecurring: IItemDeleteModalProps = {
         ...testItemProps,
         actionItem: {
@@ -366,12 +359,10 @@ describe('Testing ItemDeleteModal', () => {
 
       renderItemDeleteModal(errorLink, propsWithRecurring);
 
-      // Switch to instance
       const instanceRadio = screen.getByTestId('deleteApplyToInstance');
-      fireEvent.click(instanceRadio);
+      await user.click(instanceRadio);
 
-      // Click delete button
-      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      await user.click(screen.getByTestId('modal-delete-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(

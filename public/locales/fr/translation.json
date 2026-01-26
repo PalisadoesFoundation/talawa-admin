@@ -970,7 +970,8 @@
     "pledged": "Promis",
     "donated": "Donné",
     "campaignNotActive": "La campagne n'est pas actuellement active",
-    "close": "Fermer"
+    "close": "Fermer",
+    "pledgeCreateFailed": "Échec de la création de la promesse"
   },
   "createPostModal": {
     "title": "Des postes",
