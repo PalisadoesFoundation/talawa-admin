@@ -38,7 +38,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card } from 'react-bootstrap';
-import Button from 'shared-components/Button';
+import Button from 'shared-components/Button/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
@@ -62,7 +62,8 @@ import {
 import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import UpdateSession from '../../../components/UpdateSession/UpdateSession';
+import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -260,55 +261,61 @@ const CommunityProfile = (): JSX.Element => {
               className={`mb-3 ${styles.inputField}`}
               labelClassName={styles.formLabel}
             />
-            <div className="mb-3">
-              <label htmlFor="logo" className={styles.formLabel}>
-                {t('logo')}
-              </label>
+
+            <FormFieldGroup label={t('logo')} name="logo" required>
               <input
+>>>>>>> upstream/develop
+                type="file"
+                id="logo"
+                name="logo"
                 accept="image/*"
+                className={`form-control mb-3 ${styles.inputField}`}
+                data-testid="fileInput"
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const file = e.target.files?.[0];
+                  const base64file = file && (await convertToBase64(file));
+                  setProfileVariable((prev) => ({
+                    ...prev,
+                    logo: base64file ?? '',
+                  }));
+                }}
                 multiple={false}
                 type="file"
                 id="logo"
                 name="logo"
+                accept="image/*"
+                className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
-                onChange={async (
-                  e: React.ChangeEvent<HTMLInputElement>,
-                ): Promise<void> => {
-                  setProfileVariable((prevInput) => ({
-                    ...prevInput,
-                    logo: '',
-                  }));
-                  const target = e.target as HTMLInputElement;
-                  const file = target.files?.[0];
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const file = e.target.files?.[0];
                   const base64file = file && (await convertToBase64(file));
-                  setProfileVariable({
-                    ...profileVariable,
+                  setProfileVariable((prev) => ({
+                    ...prev,
                     logo: base64file ?? '',
-                  });
+                  }));
                 }}
-                className={`form-control mb-0 ${styles.inputField}`}
                 autoComplete="off"
                 required
               />
-            </div>
-            <div className="mb-3">
-              <h4 className={styles.formLabel}>{t('social')}</h4>
-              {/* Social media inputs */}
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="facebook"
-                  name="facebookURL"
-                  data-testid="facebook"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.facebookURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+            </FormFieldGroup>
+            <FormFieldGroup label={t('social')} name="social">
+              <div id="social">
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="facebook"
+                    name="facebookURL"
+                    data-testid="facebook"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.facebookURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
                 <input
@@ -324,14 +331,15 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={XLogo} alt={`X ${t('logo')}`} />
                 <input
                   aria-label={`${t('social')} ${t('url')}`}
                   type="url"
-                  id="X"
+                  id="x"
                   name="xURL"
-                  data-testid="X"
+                  data-testid="x"
                   className={`form-control mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.xURL}
                   onChange={handleOnChange}
@@ -339,6 +347,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
                 <input
@@ -354,6 +363,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={GithubLogo} alt={`Github ${t('logo')}`} />
                 <input
@@ -369,6 +379,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
                 <input
@@ -384,6 +395,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
                 <input
@@ -399,6 +411,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
+
               <div className="mb-3 d-flex align-items-center gap-3">
                 <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
                 <input
@@ -414,7 +427,7 @@ const CommunityProfile = (): JSX.Element => {
                   autoComplete="off"
                 />
               </div>
-            </div>
+            </FormFieldGroup>
             <div
               className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >

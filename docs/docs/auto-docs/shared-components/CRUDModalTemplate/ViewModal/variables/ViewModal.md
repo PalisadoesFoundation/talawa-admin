@@ -6,7 +6,7 @@
 
 > `const` **ViewModal**: `React.FC`\<[`InterfaceViewModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L57)
+Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L56)
 
 ViewModal Component
 

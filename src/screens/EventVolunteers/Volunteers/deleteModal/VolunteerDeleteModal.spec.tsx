@@ -1,3 +1,4 @@
+import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import {
@@ -20,20 +21,16 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-dayjs.extend(utc);
 
 /**
  * Mock implementation of the `NotificationToast` module.
- * Mocks the `NotificationToast` object with `success` and `error` methods to allow testing
+ * Mocks the `success` and `error` methods to allow testing
  * without triggering actual toast notifications.
  */
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -104,53 +101,6 @@ const itemProps: InterfaceVolunteerDeleteModalProps[] = [
   },
 ];
 
-let recurringItemProps: InterfaceVolunteerDeleteModalProps;
-let recurringItemPropsHide: ReturnType<typeof vi.fn>;
-let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  recurringItemPropsHide = vi.fn();
-  recurringItemPropsRefetch = vi.fn();
-  recurringItemProps = {
-    ...itemProps[0],
-    isOpen: true,
-    isRecurring: true,
-    eventId: 'recurringEventId1',
-    hide: recurringItemPropsHide,
-    refetchVolunteers: recurringItemPropsRefetch,
-    volunteer: {
-      ...itemProps[0].volunteer,
-    },
-  };
-});
-
-afterEach(() => {
-  vi.restoreAllMocks();
-});
-
-const mockDeleteForInstance = [
-  {
-    request: {
-      query: DELETE_VOLUNTEER_FOR_INSTANCE,
-      variables: {
-        input: {
-          volunteerId: itemProps[0].volunteer.id,
-          recurringEventInstanceId: 'recurringEventId1',
-        },
-      },
-    },
-    result: {
-      data: {
-        deleteEventVolunteerForInstance: {
-          id: itemProps[0].volunteer.id,
-        },
-      },
-    },
-  },
-];
-const linkInstanceDelete = new StaticMockLink(mockDeleteForInstance);
-
 const renderVolunteerDeleteModal = (
   link: ApolloLink,
   props: InterfaceVolunteerDeleteModalProps,
@@ -171,13 +121,17 @@ const renderVolunteerDeleteModal = (
 };
 
 describe('Testing Volunteer Delete Modal', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('Delete Volunteer', async () => {
     renderVolunteerDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
 
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    expect(yesBtn).toBeInTheDocument();
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    expect(deleteBtn).toBeInTheDocument();
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(itemProps[0].refetchVolunteers).toHaveBeenCalled();
@@ -188,13 +142,16 @@ describe('Testing Volunteer Delete Modal', () => {
     });
   });
 
-  it('Close Delete Modal', async () => {
+  test.each([
+    { testId: 'modal-cancel-btn', description: 'cancel button' },
+    { testId: 'modalCloseBtn', description: 'close button' },
+  ])('Close Delete Modal using $description', async ({ testId }) => {
     renderVolunteerDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
 
-    const noBtn = screen.getByTestId('deletenobtn');
-    expect(noBtn).toBeInTheDocument();
-    await userEvent.click(noBtn);
+    const btn = screen.getByTestId(testId);
+    expect(btn).toBeInTheDocument();
+    await userEvent.click(btn);
 
     await waitFor(() => {
       expect(itemProps[0].hide).toHaveBeenCalled();
@@ -205,41 +162,109 @@ describe('Testing Volunteer Delete Modal', () => {
     renderVolunteerDeleteModal(link2, itemProps[0]);
     expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
 
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    expect(yesBtn).toBeInTheDocument();
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    expect(deleteBtn).toBeInTheDocument();
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
-  it('Delete Volunteer for a recurring event instance only', async () => {
-    renderVolunteerDeleteModal(linkInstanceDelete, recurringItemProps);
+  it('Displays radio buttons for template volunteers', async () => {
+    renderVolunteerDeleteModal(link1, itemProps[0]);
+    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
 
-    // Click "instance" radio to cover its onChange handler
+    // Check if radio buttons are displayed for template volunteers
+    expect(screen.getByText(t.applyTo)).toBeInTheDocument();
+    expect(screen.getByTestId('deleteApplyToSeries')).toBeInTheDocument();
+    expect(screen.getByTestId('deleteApplyToInstance')).toBeInTheDocument();
+
+    // Check if "entire series" is checked by default
+    expect(screen.getByTestId('deleteApplyToSeries')).toBeChecked();
+    expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
+  });
+
+  it('Changes selection between radio buttons', async () => {
+    renderVolunteerDeleteModal(link1, itemProps[0]);
+    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+
+    // Initially, "entire series" should be checked
+    expect(screen.getByTestId('deleteApplyToSeries')).toBeChecked();
+    expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
+
+    // Click "this event only" radio button
     const instanceRadio = screen.getByTestId('deleteApplyToInstance');
     await userEvent.click(instanceRadio);
-    expect(instanceRadio).toBeChecked();
 
-    // Click "series" radio to cover its onChange handler
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteApplyToInstance')).toBeChecked();
+      expect(screen.getByTestId('deleteApplyToSeries')).not.toBeChecked();
+    });
+
+    // Click "entire series" radio button
     const seriesRadio = screen.getByTestId('deleteApplyToSeries');
     await userEvent.click(seriesRadio);
-    expect(seriesRadio).toBeChecked();
 
-    // Set state back to "instance" for the delete action
-    await userEvent.click(instanceRadio);
-    expect(instanceRadio).toBeChecked();
-
-    // Find and click the delete button
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    expect(yesBtn).toBeInTheDocument();
-    await userEvent.click(yesBtn);
-
-    // Assert the results
     await waitFor(() => {
-      expect(recurringItemProps.refetchVolunteers).toHaveBeenCalled();
-      expect(recurringItemProps.hide).toHaveBeenCalled();
+      expect(screen.getByTestId('deleteApplyToSeries')).toBeChecked();
+      expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
+    });
+  });
+
+  it('Deletes volunteer for specific instance when isRecurring and applyTo is instance', async () => {
+    const recurringVolunteerProps: InterfaceVolunteerDeleteModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      refetchVolunteers: vi.fn(),
+      isRecurring: true,
+      eventId: 'recurringEventId1',
+      volunteer: {
+        ...itemProps[0].volunteer,
+      },
+    };
+
+    const MOCK_DELETE_FOR_INSTANCE = [
+      {
+        request: {
+          query: DELETE_VOLUNTEER_FOR_INSTANCE,
+          variables: {
+            input: {
+              volunteerId: itemProps[0].volunteer.id,
+              recurringEventInstanceId: 'recurringEventId1',
+            },
+          },
+        },
+        result: {
+          data: {
+            deleteEventVolunteerForInstance: {
+              id: itemProps[0].volunteer.id,
+            },
+          },
+        },
+      },
+    ];
+
+    const linkForInstance = new StaticMockLink(MOCK_DELETE_FOR_INSTANCE);
+    renderVolunteerDeleteModal(linkForInstance, recurringVolunteerProps);
+
+    expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+
+    // Select "this event only"
+    const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+    await userEvent.click(instanceRadio);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteApplyToInstance')).toBeChecked();
+    });
+
+    // Click delete
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    await userEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(recurringVolunteerProps.refetchVolunteers).toHaveBeenCalled();
+      expect(recurringVolunteerProps.hide).toHaveBeenCalled();
       expect(NotificationToast.success).toHaveBeenCalledWith(
         t.volunteerRemoved,
       );
@@ -247,14 +272,25 @@ describe('Testing Volunteer Delete Modal', () => {
   });
 
   it('Delete Volunteer for a recurring event instance -> Error', async () => {
+    const recurringVolunteerProps: InterfaceVolunteerDeleteModalProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      refetchVolunteers: vi.fn(),
+      isRecurring: true,
+      eventId: 'recurringEventId1',
+      volunteer: {
+        ...itemProps[0].volunteer,
+      },
+    };
+
     const mockDeleteForInstanceError = [
       {
         request: {
           query: DELETE_VOLUNTEER_FOR_INSTANCE,
           variables: {
             input: {
-              volunteerId: recurringItemProps.volunteer.id,
-              recurringEventInstanceId: recurringItemProps.eventId,
+              volunteerId: recurringVolunteerProps.volunteer.id,
+              recurringEventInstanceId: recurringVolunteerProps.eventId,
             },
           },
         },
@@ -265,13 +301,16 @@ describe('Testing Volunteer Delete Modal', () => {
       mockDeleteForInstanceError,
     );
 
-    renderVolunteerDeleteModal(linkInstanceDeleteError, recurringItemProps);
+    renderVolunteerDeleteModal(
+      linkInstanceDeleteError,
+      recurringVolunteerProps,
+    );
 
     const instanceRadio = screen.getByTestId('deleteApplyToInstance');
     await userEvent.click(instanceRadio);
 
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -279,4 +318,42 @@ describe('Testing Volunteer Delete Modal', () => {
       );
     });
   });
+
+  test.each([
+    {
+      description: 'non-template volunteers',
+      isTemplate: false,
+      isInstanceException: false,
+    },
+    {
+      description: 'instance exception volunteers',
+      isTemplate: true,
+      isInstanceException: true,
+    },
+  ])(
+    'Hides radio buttons for $description',
+    async ({ isTemplate, isInstanceException }) => {
+      const props: InterfaceVolunteerDeleteModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        refetchVolunteers: vi.fn(),
+        volunteer: {
+          ...itemProps[0].volunteer,
+          isTemplate,
+          isInstanceException,
+        },
+      };
+
+      renderVolunteerDeleteModal(link1, props);
+      expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+
+      expect(screen.queryByText(t.applyTo)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('deleteApplyToSeries'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('deleteApplyToInstance'),
+      ).not.toBeInTheDocument();
+    },
+  );
 });

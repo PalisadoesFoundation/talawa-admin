@@ -1,44 +1,12 @@
 /**
- * VolunteerViewModal Component
+ * Modal that displays detailed volunteer information in read-only mode.
  *
- * This component renders a modal to display detailed information about a volunteer.
- * It includes the volunteer's name, avatar, status, and hours volunteered.
- * The modal is styled using custom CSS classes and leverages
- * Material-UI and React-Bootstrap components for UI elements.
- *
- * @param isOpen - Determines whether the modal is visible.
- * @param hide - Function to close the modal.
- * @param volunteer - The volunteer's information.
- *
- * @returns JSX.Element - The rendered modal component.
- *
- * @remarks
- * - The modal displays the volunteer's name and avatar. If an avatar is not available,
- *   a fallback avatar is shown using the `Avatar` component.
- * - The volunteer's status is displayed with an icon indicating whether they have
- *   accepted or are pending.
- * - The number of hours volunteered by the volunteer is also displayed.
- *
- * dependencies
- * - `react-bootstrap` for modal and form components.
- * - `@mui/material` for Material-UI components like `TextField`.
- * - `react-i18next` for internationalization.
- * - `Avatar` component for rendering fallback avatars.
- *
- * @example
- * ```tsx
- * <VolunteerViewModal
- *   isOpen={true}
- *   hide={() => console.log('Modal closed')}
- *   volunteer={{
- *     user: { name: 'John Doe', avatarURL: '', id: '123' },
- *     hasAccepted: true,
- *     hoursVolunteered: 10,
- *   }}
- * />
- * ```
+ * component VolunteerViewModal
+ * @param props - Component props from InterfaceVolunteerViewModal
+ * @returns JSX.Element
  */
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
+import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -52,8 +20,8 @@ import {
   TableRow,
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import type { InterfaceVolunteerViewModalProps } from 'types/AdminPortal/VolunteerViewModal/interface';
 
@@ -102,14 +70,11 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
   const statusConfig = getStatusConfig(volunteerStatus);
 
   return (
-    <BaseModal
-      className={styles.volunteerViewModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={
-        <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
-      }
-      dataTestId="volunteerViewModal"
+    <ViewModal
+      open={isOpen}
+      title={t('volunteerDetails')}
+      onClose={hide}
+      data-testid="volunteerViewModal"
     >
       <div className={styles.modalForm}>
         {/* Volunteer Name & Avatar */}
@@ -118,31 +83,30 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
             name="volunteer"
             label={t('volunteer')}
             value={user.name}
+            onChange={() => {}}
             disabled
-            data-testid="volunteerName"
             startAdornment={
-              <>
-                {user.avatarURL ? (
-                  <img
-                    src={user.avatarURL}
-                    alt={t('volunteer')}
-                    data-testid="volunteer_image"
-                    className={styles.tableImage}
+              user.avatarURL ? (
+                <img
+                  src={user.avatarURL}
+                  alt={t('volunteer')}
+                  data-testid="volunteer_image"
+                  className={styles.tableImage}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${user.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImage}
+                    dataTestId="volunteer_avatar"
+                    name={user.name}
+                    alt={user.name}
                   />
-                ) : (
-                  <div className={styles.avatarContainer}>
-                    <Avatar
-                      key={`${user.id}-avatar`}
-                      containerStyle={styles.imageContainer}
-                      avatarStyle={styles.tableImage}
-                      dataTestId="volunteer_avatar"
-                      name={user.name}
-                      alt={user.name}
-                    />
-                  </div>
-                )}
-              </>
+                </div>
+              )
             }
+            data-testid="volunteerName"
           />
         </div>
         {/* Status and hours volunteered */}
@@ -151,28 +115,35 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
             name="status"
             label={t('status')}
             value={statusConfig.label}
+            onChange={() => {}}
             disabled
-            data-testid="volunteerStatus"
             startAdornment={statusConfig.icon}
+            className={statusConfig.className}
+            data-testid="volunteerStatus"
           />
 
           <FormTextField
             name="hoursVolunteered"
             label={t('hoursVolunteered')}
-            value={hoursVolunteered?.toString() ?? '-'}
+            value={hoursVolunteered !== null ? String(hoursVolunteered) : '-'}
+            onChange={() => {}}
             disabled
+            className={styles.hoursField}
             data-testid="hoursVolunteered"
           />
         </div>
         {/* Table for Associated Volunteer Groups */}
         {groups && groups.length > 0 && (
           <div>
-            <label className={styles.groupsLabel}>{t('volunteerGroups')}</label>
+            <span id="volunteer-groups-label" className={styles.groupsLabel}>
+              {t('volunteerGroups')}
+            </span>
 
             <TableContainer
               component={Paper}
               variant="outlined"
               className={styles.modalTable}
+              aria-labelledby="volunteer-groups-label"
             >
               <Table aria-label={t('groupTable')}>
                 <TableHead>
@@ -211,7 +182,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
           </div>
         )}
       </div>
-    </BaseModal>
+    </ViewModal>
   );
 };
 

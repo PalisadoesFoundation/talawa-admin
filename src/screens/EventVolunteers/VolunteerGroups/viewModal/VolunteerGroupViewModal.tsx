@@ -34,7 +34,8 @@
  * />
  * ```
  */
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
+import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -48,7 +49,7 @@ import {
   TableRow,
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import type { InterfaceVolunteerGroupViewModalProps } from 'types/AdminPortal/VolunteerGroupViewModal/interface';
 
@@ -62,35 +63,32 @@ const VolunteerGroupViewModal: React.FC<
     group;
 
   return (
-    <BaseModal
-      className={styles.volunteerGroupViewModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={<p className={styles.titlemodal}>{t('groupDetails')}</p>}
-      dataTestId="volunteerGroupViewModal"
+    <ViewModal
+      open={isOpen}
+      title={t('groupDetails')}
+      onClose={hide}
+      data-testid="volunteerGroupViewModal"
     >
-      <div className="p-3">
+      <div>
         {/* Group name & Volunteers Required */}
-        <div className="d-flex gap-3 mb-3">
-          <div className="flex-grow-1">
-            <FormTextField
-              name="name"
-              label={tCommon('name')}
-              value={name}
-              disabled
-              data-testid="groupName"
-            />
-          </div>
+        <div className={styles.formGroup}>
+          <FormTextField
+            name="name"
+            label={tCommon('name')}
+            value={name}
+            onChange={() => {}}
+            disabled
+            data-testid="groupName"
+          />
           {volunteersRequired !== null && volunteersRequired !== undefined && (
-            <div className="flex-grow-1">
-              <FormTextField
-                name="volunteersRequired"
-                label={tCommon('volunteersRequired')}
-                value={volunteersRequired.toString()}
-                disabled
-                data-testid="volunteersRequired"
-              />
-            </div>
+            <FormTextField
+              name="volunteersRequired"
+              label={tCommon('volunteersRequired')}
+              value={String(volunteersRequired)}
+              onChange={() => {}}
+              disabled
+              data-testid="volunteersRequired"
+            />
           )}
         </div>
         {/* Input field to enter the group description */}
@@ -100,86 +98,79 @@ const VolunteerGroupViewModal: React.FC<
               name="description"
               label={tCommon('description')}
               value={description}
+              onChange={() => {}}
               disabled
-              as="textarea"
-              rows={2}
               data-testid="groupDescription"
             />
           </div>
         )}
-        <div className="mb-3 d-flex gap-3">
-          <div className="flex-grow-1">
-            <FormTextField
-              name="leader"
-              label={t('leader')}
-              value={leader.name}
-              disabled
-              data-testid="leaderField"
-              startAdornment={
-                <>
-                  {leader.avatarURL ? (
-                    <img
-                      src={leader.avatarURL}
-                      alt={leader.name}
-                      data-testid="leader_image"
-                      className={styles.tableImages}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={`${leader.id}-avatar`}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.tableImages}
-                        dataTestId="leader_avatar"
-                        name={leader.name}
-                        alt={leader.name}
-                      />
-                    </div>
-                  )}
-                </>
-              }
-            />
-          </div>
+        <div className={styles.formGroup}>
+          <FormTextField
+            name="leader"
+            label={t('leader')}
+            value={leader.name}
+            onChange={() => {}}
+            disabled
+            startAdornment={
+              leader.avatarURL ? (
+                <img
+                  src={leader.avatarURL}
+                  alt={leader.name}
+                  data-testid="leader_image"
+                  className={styles.tableImages}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${leader.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImages}
+                    dataTestId="leader_avatar"
+                    name={leader.name}
+                    alt={leader.name}
+                  />
+                </div>
+              )
+            }
+            data-testid="groupLeader"
+          />
 
-          <div className="flex-grow-1">
-            <FormTextField
-              name="creator"
-              label={t('creator')}
-              value={creator.name}
-              disabled
-              data-testid="creatorField"
-              startAdornment={
-                <>
-                  {creator.avatarURL ? (
-                    <img
-                      src={creator.avatarURL}
-                      alt={creator.name}
-                      data-testid="creator_image"
-                      className={styles.tableImages}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={`${creator.id}-avatar`}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.tableImages}
-                        dataTestId="creator_avatar"
-                        name={creator.name}
-                        alt={creator.name}
-                      />
-                    </div>
-                  )}
-                </>
-              }
-            />
-          </div>
+          <FormTextField
+            name="creator"
+            label={t('creator')}
+            value={creator.name}
+            onChange={() => {}}
+            disabled
+            startAdornment={
+              creator.avatarURL ? (
+                <img
+                  src={creator.avatarURL}
+                  alt={creator.name}
+                  data-testid="creator_image"
+                  className={styles.tableImages}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${creator.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImages}
+                    dataTestId="creator_avatar"
+                    name={creator.name}
+                    alt={creator.name}
+                  />
+                </div>
+              )
+            }
+            data-testid="groupCreator"
+          />
         </div>
         {/* Table for Associated Volunteers */}
         {volunteers && volunteers.length > 0 && (
-          <div>
-            <h5 className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}>
+          <div role="region" aria-labelledby="volunteers-heading">
+            <h3 id="volunteers-heading" className={styles.volunteersLabel}>
               {t('volunteers')}
-            </h5>
+            </h3>
 
             <TableContainer
               component={Paper}
@@ -220,7 +211,7 @@ const VolunteerGroupViewModal: React.FC<
           </div>
         )}
       </div>
-    </BaseModal>
+    </ViewModal>
   );
 };
 export default VolunteerGroupViewModal;

@@ -8,6 +8,9 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "role": {
+    "member": "सदस्य"
+  },
   "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
   "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
@@ -205,8 +208,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} अपठित",
+    "unreadCount_other": "{{count}} अपठित",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} अवतार",
+    "eventLocation": "कार्यक्रम स्थान",
+    "eventDate": "कार्यक्रम तिथि",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "प्रकाशित:",
+    "author": "लेखक:"
   },
   "orgList": {
     "title": "तालावा संगठन",
@@ -368,7 +381,8 @@
       "currentTimeout": "वर्तमान समय समाप्ति:",
       "noTimeoutSet": "कोई समय समाप्ति सेट नहीं है",
       "minutes": " {{count}} मिनट",
-      "updateTimeout": "समय समाप्ति अपडेट करें",
+      "updateSession": "सत्र अपडेट करें",
+      "updateTimeout": "समय सीमा अपडेट करें",
       "min15": "15 मिनट",
       "min30": "30 मिनट",
       "min45": "45 मिनट",
@@ -790,7 +804,7 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "event": "कार्यक्रम",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
@@ -1126,8 +1140,9 @@
     "title": "404 नहीं मिला",
     "talawaAdmin": "तलावा प्रशासन",
     "talawaUser": "तलावा उपयोगकर्ता",
-    "notFoundMsg": "उफ़! ",
-    "backToHome": "घर वापिस जा रहा हूँ"
+    "notFoundMsg": "oops! आपके द्वारा अनुरोधित पृष्ठ नहीं मिला!",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएँ",
+    "logoAlt": "प्रतीक चिन्ह"
   },
   "orgContribution": {
     "title": "तलावा योगदान",
@@ -1443,7 +1458,9 @@
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
-    "moreOptions": "अधिक विकल्प"
+    "moreOptions": "अधिक विकल्प",
+    "scrollLeft": "बायें स्क्रॉल करें",
+    "scrollRight": "दायें स्क्रॉल करें"
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
@@ -1539,9 +1556,9 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
-    "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
-    "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
-    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "checkedIn": "चेक इन किया गया",
     "unregister": "पंजीकरण रद्द करें",
@@ -2083,7 +2100,8 @@
     "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
     "continue": "जारी रखें",
     "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
-    "organizationNotFound": "संगठन नहीं मिला"
+    "organizationNotFound": "संगठन नहीं मिला",
+    "confirmLeaveButton": "छोड़ने की पुष्टि करें"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
@@ -2157,7 +2175,21 @@
     "viewGroup": "समूह देखें",
     "editGroup": "समूह संपादित करें",
     "invalidNumber": "अमान्य संख्या",
-    "viewToggle": "दृश्य टॉगल"
+    "viewToggle": "दृश्य टॉगल",
+    "recurringVolunteerTitle": "{{eventName}} के लिए स्वयंसेवक बनें",
+    "recurringGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "recurringVolunteerDescription": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवक बनना चाहेंगे या केवल इस बार के लिए?",
+    "recurringGroupDescription": "क्या आप पूरी श्रृंखला के लिए या केवल इस बार के लिए \"{{groupName}}\" में शामिल होना चाहेंगे?",
+    "volunteerForEntireSeries": "पूरी श्रृंखला के लिए स्वयंसेवक बनें",
+    "volunteerForSeriesDescription": "आप इस आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForSeriesDescription": "आप आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए इस समूह में शामिल होंगे",
+    "volunteerForThisInstanceOnly": "केवल इस बार के लिए स्वयंसेवक बनें",
+    "volunteerForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए इस समूह में शामिल होंगे",
+    "submitRequest": "अनुरोध सबमिट करें",
+    "baseEventRequired": "आधार ईवेंट आवश्यक है",
+    "selectVolunteer": "स्वयंसेवक चुनें",
+    "volunteerScope": "स्वयंसेवक कार्यक्षेत्र"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2454,5 +2486,8 @@
     "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
     "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
     "goToLogin": "लॉगिन पर जाएं"
+  },
+  "csv": {
+    "demographics": "{{category}} जनसांख्यिकी"
   }
 }

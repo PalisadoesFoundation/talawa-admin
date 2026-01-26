@@ -8,6 +8,9 @@
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
+  "role": {
+    "member": "成员"
+  },
   "invalidDetailsMessage": "请检查您输入的详细信息。",
   "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
@@ -205,8 +208,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} 条未读",
+    "unreadCount_other": "{{count}} 条未读",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} 头像",
+    "eventLocation": "活动地点",
+    "eventDate": "活动日期",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "发布于：",
+    "author": "作者："
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -368,7 +381,8 @@
       "currentTimeout": "当前超时：",
       "noTimeoutSet": "未设置超时",
       "minutes": " {{count}} 分钟",
-      "updateTimeout": "更新超时",
+      "updateSession": "更新会话",
+      "updateTimeout": "更新时间限制",
       "min15": "15 分钟",
       "min30": "30 分钟",
       "min45": "45 分钟",
@@ -1131,8 +1145,9 @@
     "title": "404 未找到",
     "talawaAdmin": "塔拉瓦管理员",
     "talawaUser": "塔拉瓦用户",
-    "notFoundMsg": "哎呀！",
-    "backToHome": "返回首页"
+    "notFoundMsg": "哎呀！您请求的页面未找到！",
+    "backToHome": "回到首页",
+    "logoAlt": "徽标"
   },
   "orgContribution": {
     "title": "塔拉瓦 贡献",
@@ -1448,7 +1463,9 @@
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
     "unexpectedError": "发生了意外错误。请重试。",
-    "moreOptions": "更多选择"
+    "moreOptions": "更多选择",
+    "scrollLeft": "向左滚动",
+    "scrollRight": "向右滚动"
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
@@ -2088,7 +2105,8 @@
     "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
     "continue": "继续",
     "missingRequiredInfo": "无法处理请求：缺少必需信息。",
-    "organizationNotFound": "未找到组织"
+    "organizationNotFound": "未找到组织",
+    "confirmLeaveButton": "确认离开"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
@@ -2162,7 +2180,21 @@
     "viewGroup": "查看小组",
     "editGroup": "编辑小组",
     "invalidNumber": "无效数字",
-    "viewToggle": "切换视图"
+    "viewToggle": "切换视图",
+    "recurringVolunteerTitle": "为 {{eventName}} 提供志愿服务",
+    "recurringGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "您想为整个系列还是仅为此实例提供志愿服务？",
+    "recurringGroupDescription": "您想为整个系列还是仅为此实例加入“{{groupName}}”？",
+    "volunteerForEntireSeries": "为整个系列提供志愿服务",
+    "volunteerForSeriesDescription": "您将为该周期性系列中的所有活动提供志愿服务",
+    "joinGroupForSeriesDescription": "您将加入此小组以参加该周期性系列中的所有活动",
+    "volunteerForThisInstanceOnly": "仅为此实例提供志愿服务",
+    "volunteerForInstanceDescription": "您仅为 {{date}} 的活动提供志愿服务",
+    "joinGroupForInstanceDescription": "您仅为 {{date}} 的活动加入此小组",
+    "submitRequest": "提交申请",
+    "baseEventRequired": "需要基础事件",
+    "selectVolunteer": "选择志愿者",
+    "volunteerScope": "志愿者范围"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2454,5 +2486,8 @@
         "failedToLoad": "加载组件失败"
       }
     }
+  },
+  "csv": {
+    "demographics": "{{category}} 人口统计"
   }
 }
