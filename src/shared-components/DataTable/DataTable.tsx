@@ -184,6 +184,79 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   };
 
+  // --- Sorting state and logic (must happen before pagination) ---
+  // Sorting state (controlled or uncontrolled)
+  const sortByArray = sortBy ?? [];
+  const controlledSort =
+    Array.isArray(sortByArray) &&
+    sortByArray.length > 0 &&
+    typeof sortByArray[0]?.columnId === 'string';
+  const [uSortBy, setUSortBy] = React.useState<string | undefined>(
+    initialSortBy,
+  );
+  const [uSortDir, setUSortDir] = React.useState<SortDirection>(
+    initialSortDirection ?? 'asc',
+  );
+  const activeSortBy = controlledSort ? sortByArray[0]?.columnId : uSortBy;
+  const activeSortDir: SortDirection = controlledSort
+    ? (sortByArray[0]?.direction ?? 'asc')
+    : uSortDir;
+
+  function nextDirection(current?: SortDirection): SortDirection {
+    return current === 'asc' ? 'desc' : 'asc';
+  }
+
+  function handleHeaderClick(col: IColumnDef<T>) {
+    if (col.meta?.sortable !== true) return;
+    const willSortBy = col.id;
+    const sameColumn = activeSortBy === willSortBy;
+    const nextDir = sameColumn ? nextDirection(activeSortDir) : 'asc';
+    if (!controlledSort) {
+      setUSortBy(willSortBy);
+      setUSortDir(nextDir);
+    }
+    onSortChange?.({
+      sortBy: [{ columnId: willSortBy, direction: nextDir }],
+      sortDirection: nextDir,
+      column: col,
+    });
+  }
+
+  // Compute visible rows: client sort when not serverSort
+  const sortedRows: readonly T[] = React.useMemo(() => {
+    if (serverSort) return filteredRows;
+    if (!Array.isArray(filteredRows) || filteredRows.length === 0)
+      return filteredRows;
+    if (!activeSortBy) return filteredRows;
+    const col = columns.find((c) => c.id === activeSortBy);
+    if (!col || col.meta?.sortable !== true) return filteredRows;
+    const getVal = (row: T) => getCellValue(row, col.accessor);
+    const dirFactor = activeSortDir === 'asc' ? 1 : -1;
+    const decorated = filteredRows.map((row, idx) => ({
+      idx,
+      row,
+      val: getVal(row),
+    }));
+    const sortFn = col.meta?.sortFn;
+    const cmp = sortFn
+      ? (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
+          sortFn(a.row, b.row)
+      : (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
+          defaultCompare(a.val, b.val);
+    decorated.sort((a, b) => {
+      // Nulls always last, regardless of sort direction
+      const aNull = a.val === null || a.val === undefined;
+      const bNull = b.val === null || b.val === undefined;
+      if (aNull && bNull) return a.idx - b.idx;
+      if (aNull) return 1;
+      if (bNull) return -1;
+      // Apply dirFactor only to non-null comparisons
+      const base = cmp(a, b);
+      return base !== 0 ? base * dirFactor : a.idx - b.idx;
+    });
+    return decorated.map((d) => d.row);
+  }, [filteredRows, columns, activeSortBy, activeSortDir, serverSort]);
+
   const shouldSliceClientSide = paginationMode === 'client';
   const showPaginationControls =
     paginationMode === 'client' ||
@@ -192,12 +265,12 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
   const endIndex = shouldSliceClientSide
     ? startIndex + pageSize
-    : filteredRows.length;
+    : sortedRows.length;
   const paginatedData = shouldSliceClientSide
-    ? filteredRows.slice(startIndex, endIndex)
-    : filteredRows;
+    ? sortedRows.slice(startIndex, endIndex)
+    : sortedRows;
 
-  const total = totalItems ?? filteredRows.length;
+  const total = totalItems ?? sortedRows.length;
 
   const tableClassNames = tableClassName
     ? `${styles.dataTableBase} ${tableClassName}`
@@ -255,79 +328,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // When renderRow is provided, disable selection/actions to prevent column count mismatch
   const effectiveSelectable = renderRow ? false : selectable;
   const effectiveRowActions = renderRow ? [] : rowActions;
-
-  // --- Sorting state and logic (must be after paginatedData and columns are defined) ---
-  // Sorting state (controlled or uncontrolled)
-  const sortByArray = sortBy ?? [];
-  const controlledSort =
-    Array.isArray(sortByArray) &&
-    sortByArray.length > 0 &&
-    typeof sortByArray[0]?.columnId === 'string';
-  const [uSortBy, setUSortBy] = React.useState<string | undefined>(
-    initialSortBy,
-  );
-  const [uSortDir, setUSortDir] = React.useState<SortDirection>(
-    initialSortDirection ?? 'asc',
-  );
-  const activeSortBy = controlledSort ? sortByArray[0]?.columnId : uSortBy;
-  const activeSortDir: SortDirection = controlledSort
-    ? sortByArray[0]?.direction
-    : uSortDir;
-
-  function nextDirection(current?: SortDirection): SortDirection {
-    return current === 'asc' ? 'desc' : 'asc';
-  }
-
-  function handleHeaderClick(col: IColumnDef<T>) {
-    if (col.meta?.sortable !== true) return;
-    const willSortBy = col.id;
-    const sameColumn = activeSortBy === willSortBy;
-    const nextDir = sameColumn ? nextDirection(activeSortDir) : 'asc';
-    if (!controlledSort) {
-      setUSortBy(willSortBy);
-      setUSortDir(nextDir);
-    }
-    onSortChange?.({
-      sortBy: [{ columnId: willSortBy, direction: nextDir }],
-      sortDirection: nextDir,
-      column: col,
-    });
-  }
-
-  // Compute visible rows: client sort when not serverSort
-  const sortedRows: readonly T[] = React.useMemo(() => {
-    if (serverSort) return paginatedData;
-    if (!Array.isArray(filteredRows) || filteredRows.length === 0)
-      return filteredRows;
-    if (!activeSortBy) return filteredRows;
-    const col = columns.find((c) => c.id === activeSortBy);
-    if (!col || col.meta?.sortable !== true) return filteredRows;
-    const getVal = (row: T) => getCellValue(row, col.accessor);
-    const dirFactor = activeSortDir === 'asc' ? 1 : -1;
-    const decorated = filteredRows.map((row, idx) => ({
-      idx,
-      row,
-      val: getVal(row),
-    }));
-    const sortFn = col.meta?.sortFn;
-    const cmp = sortFn
-      ? (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
-          sortFn(a.row, b.row)
-      : (a: (typeof decorated)[number], b: (typeof decorated)[number]) =>
-          defaultCompare(a.val, b.val);
-    decorated.sort((a, b) => {
-      const base = cmp(a, b);
-      return base !== 0 ? base * dirFactor : a.idx - b.idx;
-    });
-    return decorated.map((d) => d.row);
-  }, [
-    filteredRows,
-    columns,
-    activeSortBy,
-    activeSortDir,
-    serverSort,
-    paginatedData,
-  ]);
 
   // Header checkbox ref for indeterminate state
   const headerCheckboxRef = React.useRef<HTMLInputElement>(null);
@@ -500,7 +500,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         activeSortBy={activeSortBy}
         activeSortDir={activeSortDir}
         handleHeaderClick={handleHeaderClick}
-        sortedRows={sortedRows}
+        sortedRows={paginatedData}
         startIndex={startIndex}
         getKey={getKey}
         currentSelection={currentSelection}

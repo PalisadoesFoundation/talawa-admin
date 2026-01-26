@@ -74,7 +74,7 @@ Receives a new immutable set of selected keys.
 
 ### paginatedData
 
-> **paginatedData**: `T`[]
+> **paginatedData**: readonly `T`[]
 
 Defined in: [src/types/shared-components/DataTable/hooks.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L190)
 
