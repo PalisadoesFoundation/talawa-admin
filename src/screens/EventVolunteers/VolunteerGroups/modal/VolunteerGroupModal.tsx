@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,

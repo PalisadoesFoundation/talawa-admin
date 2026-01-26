@@ -202,6 +202,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
                 {params.InputProps.startAdornment}
                 <input
                   {...params.inputProps}
+                  id="members"
                   className="form-control"
                   data-testid="membersInput"
                 />
