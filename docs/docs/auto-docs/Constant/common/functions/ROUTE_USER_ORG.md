@@ -6,7 +6,7 @@
 
 > **ROUTE\_USER\_ORG**(`compId`, `orgId`): `string`
 
-Defined in: [src/Constant/common.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L69)
+Defined in: [src/Constant/common.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L76)
 
 Generates the route for a user component within an organization.
 
@@ -29,3 +29,7 @@ The organization ID.
 `string`
 
 The formatted route.
+
+## Throws
+
+Error If compId is missing or empty.
