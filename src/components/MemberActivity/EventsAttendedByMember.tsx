@@ -43,11 +43,15 @@ function EventsAttendedByMember({
 
   if (error)
     return (
-      <div data-testid="error" className={styles.errorState}>
+      <div
+        data-testid="error"
+        className={styles.errorState}
+        role="alert"
+        aria-live="polite"
+      >
         <p>{t('unableToLoadEventDetails')}</p>
       </div>
     );
-
   // Support both legacy and current schema fields from EVENT_DETAILS
   const eventData = events?.event;
   const { organization, id, _id, startAt, startDate, name, title, location } =
