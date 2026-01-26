@@ -78,7 +78,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
         <>
           <Button
             type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`btn ${styles.addButton}`}
             onClick={toggleDeleteModal}
             data-testid="eventDeleteModalCloseBtn"
           >
@@ -86,7 +86,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           </Button>
           <Button
             type="button"
-            className={`btn ${styles.addButton}`}
+            className={`btn btn-danger ${styles.removeButton}`}
             onClick={handleDelete}
             data-testid="deleteEventBtn"
           >

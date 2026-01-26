@@ -31,12 +31,3 @@
   border-color: var(--removeButton-border-hover);
   color: var(--removeButton-color-hover);
 }
-
-/* Modal text spacing */
-.modalMessage {
-  margin-bottom: 1rem;
-}
-
-.radioOption {
-  margin-bottom: 0.5rem;
-}

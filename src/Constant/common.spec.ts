@@ -40,11 +40,11 @@ describe('common constants and helpers', () => {
 
   describe('TEST_ID_DELETE_EVENT_MODAL', () => {
     it('should format delete event modal test id with valid id', () => {
-      expect(TEST_ID_DELETE_EVENT_MODAL('abc')).toBe('deleteEventModalabc');
+      expect(TEST_ID_DELETE_EVENT_MODAL('abc')).toBe('deleteEventModal-abc');
     });
 
     it('should format delete event modal test id with empty string', () => {
-      expect(TEST_ID_DELETE_EVENT_MODAL('')).toBe('deleteEventModal');
+      expect(TEST_ID_DELETE_EVENT_MODAL('')).toBe('deleteEventModal-');
     });
   });
 
@@ -64,11 +64,11 @@ describe('common constants and helpers', () => {
     });
 
     it('should format user org route with valid compId and undefined orgId', () => {
-      expect(ROUTE_USER_ORG('events', undefined)).toBe('user/events/');
+      expect(ROUTE_USER_ORG('events', undefined)).toBe('user/events');
     });
 
     it('should handle empty strings for compId and orgId', () => {
-      expect(ROUTE_USER_ORG('', '')).toBe('user//');
+      expect(ROUTE_USER_ORG('', '')).toBe('user/');
     });
   });
 
@@ -105,6 +105,7 @@ describe('common constants and helpers', () => {
       expect(getDummyDateTime('')).toBe(DUMMY_DATE_TIME_PREFIX);
     });
   });
+
   describe('DATE_FORMAT', () => {
     it('should be a valid date format string', () => {
       expect(DATE_FORMAT).toBe('YYYY-MM-DDTHH:mm:ssZ');
