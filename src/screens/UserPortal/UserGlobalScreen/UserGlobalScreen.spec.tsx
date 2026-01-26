@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import UserGlobalScreen from './UserGlobalScreen';
 
@@ -142,32 +143,35 @@ describe('UserGlobalScreen', () => {
       expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
     });
 
-    it('should toggle to open menu button when close button is clicked', () => {
+    it('should toggle to open menu button when close button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();
       expect(screen.queryByTestId('closeMenu')).not.toBeInTheDocument();
     });
 
-    it('should toggle back to close menu button when open button is clicked', () => {
+    it('should toggle back to close menu button when open button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // First click to show open button
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Then click open button to show close button again
       const openButton = screen.getByTestId('openMenu');
-      fireEvent.click(openButton);
+      await user.click(openButton);
 
       expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
       expect(screen.queryByTestId('openMenu')).not.toBeInTheDocument();
     });
 
-    it('should pass correct hideDrawer state to UserSidebar', () => {
+    it('should pass correct hideDrawer state to UserSidebar', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Initially hideDrawer should be false (first render)
@@ -175,19 +179,20 @@ describe('UserGlobalScreen', () => {
 
       // Click to hide drawer
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Now hideDrawer should be true - check within the sidebar
       const sidebar = screen.getByTestId('user-sidebar');
       expect(sidebar.textContent).toContain('true');
     });
 
-    it('should allow UserSidebar to toggle drawer state', () => {
+    it('should allow UserSidebar to toggle drawer state', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Click the mock sidebar toggle button
       const sidebarToggle = screen.getByText('Mock Sidebar Toggle');
-      fireEvent.click(sidebarToggle);
+      await user.click(sidebarToggle);
 
       // State should change
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();
@@ -331,40 +336,43 @@ describe('UserGlobalScreen', () => {
       expect(mainContainer).toHaveClass('pageContainer');
     });
 
-    it('should apply expand class when drawer is hidden', () => {
+    it('should apply expand class when drawer is hidden', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Hide the drawer
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
       expect(mainContainer).toHaveClass('pageContainer', 'expand');
     });
 
-    it('should apply contract class when drawer is shown', () => {
+    it('should apply contract class when drawer is shown', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Hide drawer first
       const closeButton = screen.getByTestId('closeMenu');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       // Then show drawer again
       const openButton = screen.getByTestId('openMenu');
-      fireEvent.click(openButton);
+      await user.click(openButton);
 
       const mainContainer = screen.getByTestId('mainpageright');
       expect(mainContainer).toHaveClass('pageContainer', 'contract');
     });
 
-    it('should apply correct button classes', () => {
+    it('should apply correct button classes', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
       expect(closeButton).toHaveClass('collapseSidebarButton');
 
       // Toggle to open button
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       const openButton = screen.getByTestId('openMenu');
       expect(openButton).toHaveClass('opendrawer');
@@ -398,15 +406,16 @@ describe('UserGlobalScreen', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should handle rapid successive button clicks', () => {
+    it('should handle rapid successive button clicks', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const closeButton = screen.getByTestId('closeMenu');
 
       // Rapid clicks
-      fireEvent.click(closeButton);
-      fireEvent.click(screen.getByTestId('openMenu'));
-      fireEvent.click(screen.getByTestId('closeMenu'));
+      await user.click(closeButton);
+      await user.click(screen.getByTestId('openMenu'));
+      await user.click(screen.getByTestId('closeMenu'));
 
       // Should end up with open menu button
       expect(screen.getByTestId('openMenu')).toBeInTheDocument();

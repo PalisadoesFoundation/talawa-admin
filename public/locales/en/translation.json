@@ -970,7 +970,8 @@
     "pledged": "Pledged",
     "donated": "Donated",
     "campaignNotActive": "Campaign is not currently active",
-    "close": "Close"
+    "close": "Close",
+    "pledgeCreateFailed": "Failed to create pledge"
   },
   "createPostModal": {
     "title": "Posts",

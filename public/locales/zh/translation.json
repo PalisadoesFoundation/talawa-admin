@@ -970,7 +970,8 @@
     "pledged": "已承诺",
     "donated": "已捐赠",
     "campaignNotActive": "活动当前未激活",
-    "close": "关闭"
+    "close": "关闭",
+    "pledgeCreateFailed": "创建承诺失败"
   },
   "createPostModal": {
     "title": "帖子",
