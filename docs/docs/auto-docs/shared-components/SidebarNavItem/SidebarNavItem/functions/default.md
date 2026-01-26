@@ -12,7 +12,7 @@ Defined in: [src/shared-components/SidebarNavItem/SidebarNavItem.tsx:16](https:/
 
 ### \_\_namedParameters
 
-[`ISidebarNavItemProps`](../../../../types/SidebarNavItem/interface/interfaces/ISidebarNavItemProps.md)
+[`ISidebarNavItemProps`](../../../../types/shared-components/SidebarNavItem/interface/interfaces/ISidebarNavItemProps.md)
 
 ## Returns
 

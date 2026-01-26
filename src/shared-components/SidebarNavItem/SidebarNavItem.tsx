@@ -11,7 +11,7 @@
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
 import styles from './SidebarNavItem.module.css';
-import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
+import type { ISidebarNavItemProps } from 'types/shared-components/SidebarNavItem/interface';
 
 const SidebarNavItem = ({
   to,
