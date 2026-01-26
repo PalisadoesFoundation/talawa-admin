@@ -13,7 +13,6 @@
 }
 
 .addButton:disabled {
-  margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
 }
