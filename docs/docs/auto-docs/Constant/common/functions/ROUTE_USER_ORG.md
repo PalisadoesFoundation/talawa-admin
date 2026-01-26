@@ -6,7 +6,7 @@
 
 > **ROUTE\_USER\_ORG**(`compId`, `orgId`): `string`
 
-Defined in: [src/Constant/common.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L51)
+Defined in: [src/Constant/common.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L69)
 
 Generates the route for a user component within an organization.
 

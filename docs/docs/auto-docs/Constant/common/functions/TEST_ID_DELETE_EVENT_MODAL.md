@@ -6,7 +6,7 @@
 
 > **TEST\_ID\_DELETE\_EVENT\_MODAL**(`id`): `string`
 
-Defined in: [src/Constant/common.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L35)
+Defined in: [src/Constant/common.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L40)
 
 Generates the data-testid for the delete event modal.
 

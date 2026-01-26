@@ -6,7 +6,7 @@
 
 > **getDummyDateTime**(`time`): `string`
 
-Defined in: [src/Constant/common.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L80)
+Defined in: [src/Constant/common.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L98)
 
 Generates a dummy date time for dayjs parsing.
 
