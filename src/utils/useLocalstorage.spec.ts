@@ -8,7 +8,7 @@ import {
   clearAllItems,
   useLocalStorage,
 } from './useLocalstorage';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('Storage Helper Functions', () => {
   beforeEach(() => {
