@@ -36,7 +36,7 @@ import React, { useState } from 'react';
 import { Button } from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCardDeleteModal.module.css';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
