@@ -53,7 +53,7 @@ import styles from './EventManagement.module.css';
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
-import EventAgendaItems from 'components/AdminPortal/EventManagement/EventAgendaItems/EventAgendaItems';
+import EventAgendaFolder from 'components/AdminPortal/EventManagement/EventAgendaFolder/EventAgendaFolder';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
@@ -142,7 +142,7 @@ const EventManagement = (): JSX.Element => {
       icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
         <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
-          <EventAgendaItems eventId={eventId} />
+          <EventAgendaFolder eventId={eventId} />
         </div>
       ),
     },

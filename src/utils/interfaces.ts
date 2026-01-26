@@ -1662,13 +1662,12 @@ export interface InterfaceQueryMembershipRequestsListItem {
  * Defines the structure for agenda item category information.
  */
 export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
+  id: string;
   name: string;
   description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
+  creator: {
+    id: string;
+    name: string;
   };
 }
 
@@ -1676,42 +1675,95 @@ export interface InterfaceAgendaItemCategoryInfo {
  * Defines the structure for a list of agenda item categories by organization.
  */
 export interface InterfaceAgendaItemCategoryList {
-  agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
+  agendaCategoriesByEventId: InterfaceAgendaItemCategoryInfo[];
 }
 
 /**
  * Defines the structure for agenda item information.
  */
 export interface InterfaceAgendaItemInfo {
-  _id: string;
-  title: string;
+  id: string;
+  name: string;
   description: string;
   duration: string;
-  attachments: string[];
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  urls: string[];
-  users: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  }[];
   sequence: number;
-  categories: {
-    _id: string;
+  type?: string;
+  category: {
+    id: string;
     name: string;
+    description: string;
+  };
+  // attachments: {
+  //   mimeType: string;
+  //   fileHash: string;
+  //   objectName: string;
+  // }[];
+  creator: {
+    id: string;
+    name: string;
+  };
+  url: {
+    id: string;
+    url: string;
   }[];
-  organization: {
-    _id: string;
+  folder: {
+    id: string;
+    name: string;
+  } | null;
+  // organization: {
+  //   _id: string;
+  //   name: string;
+  // };
+  event: {
+    id: string;
     name: string;
   };
-  relatedEvent: {
-    _id: string;
-    title: string;
+}
+
+export interface InterfaceAgendaFolderInfo {
+  id: string;
+  name: string;
+  description?: string;
+  sequence: number;
+  key?: string;
+  isDefaultFolder?: boolean;
+  items: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        description: string;
+        duration: string;
+        sequence: number;
+        attachment?: string[];
+        category: {
+          id: string;
+          name: string;
+          description: string;
+        };
+        creator: {
+          id: string;
+          name: string;
+        };
+        url: {
+          id: string;
+          url: string;
+        }[];
+        folder: {
+          id: string;
+          name: string;
+        } | null;
+        event: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
   };
+}
+
+export interface InterfaceAgendaFolderList {
+  agendaFoldersByEventId: InterfaceAgendaFolderInfo[];
 }
 
 /**
