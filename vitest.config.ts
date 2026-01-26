@@ -5,7 +5,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
-const isRoutePrefixSuite = process.env.VITEST_SUITE === 'route-prefix';
 const isSharded = !!process.env.SHARD_INDEX || !!process.env.SHARD_COUNT;
 const cpuCount = cpus().length;
 
@@ -26,12 +25,9 @@ const baseTestInclude = [
 const eslintTestInclude = [
   'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}',
 ];
-const routePrefixTestInclude = [
-  'scripts/eslint/rules/enforce-route-prefix.spec.ts',
-];
-const testInclude = isRoutePrefixSuite
-  ? routePrefixTestInclude
-  : [...baseTestInclude, ...(isSharded ? [] : eslintTestInclude)];
+const testInclude = isSharded
+  ? baseTestInclude
+  : [...baseTestInclude, ...eslintTestInclude];
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],

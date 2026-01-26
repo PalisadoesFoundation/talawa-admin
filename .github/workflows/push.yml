@@ -29,7 +29,7 @@ jobs:
         uses: olivernybroe/action-conflict-finder@v4.1
 
   Check-Route-Prefix:
-    name: Check Route Prefix Rule Tests
+    name: Check Route Prefix
     needs: [Merge-Conflict-Check]
     runs-on: ubuntu-latest
     steps:
@@ -47,13 +47,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Run route prefix rule tests
+      - name: Run route prefix check
         env:
-          NODE_OPTIONS: '--max-old-space-size=4096 --disable-warning=ExperimentalWarning'
           CI: true
-        run: |
-          chmod +x scripts/githooks/check-route-prefix.sh
-          ./scripts/githooks/check-route-prefix.sh
+        run: pnpm exec tsx scripts/githooks/check-route-prefix.ts --scan-entire-repo
 
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}

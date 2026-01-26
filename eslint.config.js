@@ -8,19 +8,12 @@ import react from 'eslint-plugin-react';
 import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
-import enforceRoutePrefix from './scripts/eslint/rules/enforce-route-prefix.ts';
 import {
   restrictedImportPaths,
   restrictImportsExcept,
   securityRestrictions,
   searchInputRestrictions,
 } from './scripts/eslint/rules/rules.ts';
-
-const routePrefixPlugin = {
-  rules: {
-    'enforce-route-prefix': enforceRoutePrefix,
-  },
-};
 
 export default [
   {
@@ -78,7 +71,6 @@ export default [
       import: imports,
       prettier,
       tsdoc,
-      'route-prefix': routePrefixPlugin,
     },
     settings: {
       react: {
@@ -156,14 +148,6 @@ export default [
         'error',
         ...securityRestrictions,
         ...searchInputRestrictions,
-      ],
-      'route-prefix/enforce-route-prefix': [
-        'error',
-        {
-          allowedPrefixes: ['/admin', '/user', '/auth'],
-          allowedExact: ['/', '/register', '/forgotPassword', '/verify-email'],
-          allowedPatterns: ['^/event/invitation(?:/|$)'],
-        },
       ],
       /**
        * Enforce usage of standardized DataGridWrapper component
@@ -435,7 +419,6 @@ export default [
       'vitest-isolation': vitestIsolation,
     },
     rules: {
-      'route-prefix/enforce-route-prefix': 'off',
       'vitest-isolation/require-aftereach-cleanup': 'error',
       'no-restricted-syntax': [
         'error',
