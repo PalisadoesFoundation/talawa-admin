@@ -62,6 +62,10 @@ interface IUpdateEventHandlerProps {
   refetchEvents?: () => void;
 }
 
+/**
+ * Creates handlers for updating events from EventListCard modal edits.
+ * `@returns` Object containing updateEventHandler.
+ */
 export const useUpdateEventHandler = () => {
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [updateSingleRecurringEventInstance] = useMutation(

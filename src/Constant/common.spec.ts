@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import {
   TEST_ID_PEOPLE_CARD,
   TEST_ID_PEOPLE_SNO,
@@ -10,6 +10,10 @@ import {
   getDummyDateTime,
   DUMMY_DATE_TIME_PREFIX,
 } from './common';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('common constants and helpers', () => {
   describe('TEST_ID_PEOPLE_CARD', () => {

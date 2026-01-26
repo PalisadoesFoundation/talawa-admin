@@ -6,7 +6,6 @@
  * For standalone events, shows simple confirmation.
  * For recurring instances, shows three deletion options.
  *
- * @param  props - The props for the component.
  * @param eventListCardProps - The properties of the event to be deleted.
  * @param eventDeleteModalIsOpen - Determines if the modal is open.
  * @param toggleDeleteModal - Function to toggle the modal visibility.
@@ -107,6 +106,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('single')}
             label={t('deleteThisInstance')}
             className="mb-2"
+            data-testid="delete-single-radio"
           />
           <FormCheckField
             type="radio"
@@ -117,6 +117,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('following')}
             label={t('deleteThisAndFollowing')}
             className="mb-2"
+            data-testid="delete-following-radio"
           />
           <FormCheckField
             type="radio"
@@ -127,6 +128,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('all')}
             label={t('deleteAllEvents')}
             className="mb-2"
+            data-testid="delete-all-radio"
           />
         </div>
       ) : (
