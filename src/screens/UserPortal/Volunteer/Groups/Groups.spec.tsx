@@ -77,7 +77,7 @@ vi.mock('./GroupModal', () => ({
 }));
 
 vi.mock(
-  'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal',
+  'screens/AdminPortal/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal',
   () => ({
     default: ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) =>
       isOpen ? (
