@@ -1,49 +1,59 @@
 import type { ChangeEvent } from 'react';
+import { InterfaceAgendaFolderInfo } from 'utils/interfaces';
 
 export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
+  id: string;
   name: string;
   description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
+  creator: {
+    id: string;
+    name: string;
   };
+}
+
+export interface InterfaceAttachment {
+  mimeType: string;
+  fileHash: string;
+  objectName: string;
+  previewUrl?: string;
 }
 
 export interface InterfaceCreateFormStateType {
-  agendaItemCategoryIds: string[];
+  id: string;
+  folderId: string | null;
   title: string;
   description: string;
   duration: string;
-  attachments: string[];
+  attachments: InterfaceAttachment[];
   urls: string[];
+  creator: {
+    name: string;
+  };
+  categoryId: string;
 }
 
 export interface InterfaceFormStateType {
-  agendaItemCategoryIds: string[];
-  agendaItemCategoryNames: string[];
-  title: string;
+  id: string;
+  name: string;
   description: string;
   duration: string;
+  category: string;
   attachments: string[];
-  urls: string[];
-  createdBy: {
-    firstName: string;
-    lastName: string;
-  };
+  url: string[];
+  folder?: string;
 }
 
 export interface InterfaceAgendaItemsCreateModalProps {
   agendaItemCreateModalIsOpen: boolean;
-  hideCreateModal: () => void;
-  formState: InterfaceCreateFormStateType;
-  setFormState: (
+  hideItemCreateModal: () => void;
+  agendaItemFormState: InterfaceCreateFormStateType;
+  setAgendaItemFormState: (
     state: React.SetStateAction<InterfaceCreateFormStateType>,
   ) => void;
   createAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
+  agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
 }
 
 export interface InterfaceAgendaItemsPreviewModalProps {
@@ -57,18 +67,29 @@ export interface InterfaceAgendaItemsPreviewModalProps {
 
 export interface InterfaceAgendaItemsUpdateModalProps {
   agendaItemUpdateModalIsOpen: boolean;
-  hideUpdateModal: () => void;
-  formState: InterfaceFormStateType;
-  setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
+  hideUpdateItemModal: () => void;
+  itemFormState: InterfaceFormStateType;
+  setItemFormState: (
+    state: React.SetStateAction<InterfaceFormStateType>,
+  ) => void;
   updateAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
+  agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
 }
 
 export interface InterfaceAgendaItemsDeleteModalProps {
   agendaItemDeleteModalIsOpen: boolean;
-  toggleDeleteModal: () => void;
+  toggleDeleteItemModal: () => void;
   deleteAgendaItemHandler: () => Promise<void>;
+  t: (key: string) => string;
+  tCommon: (key: string) => string;
+}
+
+export interface InterfaceAgendaFolderDeleteModalProps {
+  agendaFolderDeleteModalIsOpen: boolean;
+  toggleDeleteModal: () => void;
+  deleteAgendaFolderHandler: () => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }

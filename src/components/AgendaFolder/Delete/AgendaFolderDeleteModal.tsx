@@ -2,50 +2,49 @@ import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
+import type { InterfaceAgendaFolderDeleteModalProps } from 'types/Agenda/interface';
 const AgendaFolderDeleteModal: React.FC<
-  InterfaceAgendaItemsDeleteModalProps
+  InterfaceAgendaFolderDeleteModalProps
 > = ({
-  agendaItemDeleteModalIsOpen,
-  toggleDeleteItemModal,
-  deleteAgendaItemHandler,
+  agendaFolderDeleteModalIsOpen,
+  toggleDeleteModal,
+  deleteAgendaFolderHandler,
   t,
   tCommon,
 }) => {
   return (
     <BaseModal
       size="sm"
-      title={t('deleteAgendaItem')}
+      dataTestId={`deleteAgendaFolderModal`}
       className={styles.agendaItemModal}
-      show={agendaItemDeleteModalIsOpen}
-      onHide={toggleDeleteItemModal}
+      show={agendaFolderDeleteModalIsOpen}
+      onHide={toggleDeleteModal}
       backdrop="static"
       keyboard={false}
-      dataTestId="deleteAgendaItemModal"
+      title={t('deleteAgendaFolder')}
       headerClassName="bg-primary text-white"
       footer={
         <>
           <Button
             type="button"
             className="btn btn-danger"
-            data-dismiss="modal"
-            onClick={toggleDeleteItemModal}
-            data-testid="deleteAgendaItemCloseBtn"
+            onClick={toggleDeleteModal}
+            data-testid="deleteAgendaFolderCloseBtn"
           >
             {tCommon('no')}
           </Button>
           <Button
             type="button"
             className="btn btn-success"
-            onClick={deleteAgendaItemHandler}
-            data-testid="deleteAgendaItemBtn"
+            onClick={deleteAgendaFolderHandler}
+            data-testid="deleteAgendaFolderBtn"
           >
             {tCommon('yes')}
           </Button>
         </>
       }
     >
-      <p>{t('deleteAgendaItemMsg')}</p>
+      <p>{t('deleteAgendaFolderMsg')}</p>
     </BaseModal>
   );
 };
