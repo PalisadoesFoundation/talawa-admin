@@ -4,15 +4,15 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L44)
+Defined in: [src/components/UserPortal/PromotedPost/PromotedPost.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PromotedPost/PromotedPost.tsx#L33)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-`InterfacePostCardProps`
+[`InterfacePromotedPostProps`](../../../../../types/UserPortal/PromotedPost/interface/interfaces/InterfacePromotedPostProps.md)
 
 ## Returns
 

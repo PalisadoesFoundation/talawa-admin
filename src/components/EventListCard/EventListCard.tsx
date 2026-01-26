@@ -5,12 +5,7 @@
  * to interact with it by opening a modal for more information. It uses translations
  * for localization and handles navigation based on the presence of an organization ID.
  *
- * @param props - The properties passed to the component.
- * @param title - The title of the event. Defaults to "Dogs Care" if not provided.
- * @param description - The description of the event.
- * @param date - The date of the event.
- * @param location - The location of the event.
- * @param refetchEvents - Optional callback function to refetch events.
+ * @param props - EventListCard props (see IEventListCard). If `props.name` is missing, the header falls back to the localized `t('dogsCare')` label.
  *
  * @returns A JSX element representing the event card and its associated modal.
  *
@@ -20,10 +15,11 @@
  *
  * @example
  * ```tsx
- * <EventListCard
- *   title="Community Meetup"
+ *  <EventListCard
+ *   name="Community Meetup"
  *   description="A meetup for the local community."
- *   date=dayjs().subtract(1, 'year').month(9).date(15).format('YYYY-MM-DD')
+ *   startAt={dayjs().subtract(1, 'year').month(9).date(15).toISOString()}
+ *   endAt={dayjs().subtract(1, 'year').month(9).date(15).add(2, 'hours').toISOString()}
  *   location="Community Hall"
  *   refetchEvents={fetchEvents}
  * />
@@ -32,18 +28,16 @@
  */
 import React, { useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCard.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { IEventListCard } from 'types/Event/interface';
 /**
  * Props for the EventListCard component.
  */
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
 
-function eventListCard(props: IEventListCard): JSX.Element {
+function EventListCard(props: IEventListCard): JSX.Element {
+  const { name } = props;
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
@@ -81,7 +75,7 @@ function eventListCard(props: IEventListCard): JSX.Element {
       >
         <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
-            {props.name ? <>{props.name}</> : <>Dogs Care</>}
+            {name ? <>{name}</> : <>{t('dogsCare')}</>}
           </h2>
         </div>
       </div>
@@ -97,4 +91,4 @@ function eventListCard(props: IEventListCard): JSX.Element {
   );
 }
 
-export default eventListCard;
+export default EventListCard;

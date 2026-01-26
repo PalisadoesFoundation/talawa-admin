@@ -798,6 +798,7 @@
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
+    "dogsCare": "Soins des Chiens",
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
     "deleteRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le supprimer :",
@@ -1570,8 +1571,10 @@
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "settings": {
+    "dummyPicture": "image factice",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
+    "profilePicture": "photo de profil",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",
@@ -1701,7 +1704,6 @@
     "calendarView": "Vue du calendrier",
     "allDay": "Toute la journée",
     "eventCreated": "Événement créé et publié avec succès.",
-    "eventDetails": "Détails de l'évènement",
     "eventName": "Nom",
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
@@ -1738,12 +1740,14 @@
     "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
+    "failedToRegister": "Échec de l'inscription à l'événement",
     "starts": "Départs",
     "ends": "Prend fin",
     "creator": "Créateur",
     "alreadyRegistered": "Déjà enregistré",
     "location": "Lieu",
-    "register": "Inscription"
+    "register": "S'inscrire",
+    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}"
   },
   "advertisement": {
     "title": "Annonces",
@@ -2486,6 +2490,19 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/D",
+    "yes": "Oui",
+    "no": "Non",
+    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
+    "eventNotFound": "Événement introuvable ou supprimé",
+    "numberOfAttendees": "Nombre de participants",
+    "viewEventDetails": "Voir les détails de l'événement"
+  },
+  "promotedPost": {
+    "title": "Contenu Promu",
+    "promotedContent": "Contenu promu : {{title}}"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

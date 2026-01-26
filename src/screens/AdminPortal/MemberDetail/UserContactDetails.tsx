@@ -44,7 +44,7 @@ import {
   AdapterDayjs,
   LocalizationProvider,
 } from 'shared-components/DateRangePicker';
-import { sanitizeInput } from '../../utils/SanitizeInput';
+import { sanitizeInput } from '../../../utils/SanitizeInput';
 import {
   countryOptions,
   educationGradeEnum,
