@@ -300,3 +300,51 @@ export interface InterfaceRecurringEventProps {
    */
   onApplyToChange?: (value: 'series' | 'instance') => void;
 }
+
+/**
+ * Return type for useModalState hook
+ */
+export interface InterfaceUseModalStateReturn {
+  /** Whether the modal is currently open */
+  isOpen: boolean;
+  /** Opens the modal */
+  open: () => void;
+  /** Closes the modal */
+  close: () => void;
+  /** Toggles the modal open/close state */
+  toggle: () => void;
+}
+
+/**
+ * Return type for useFormModal hook
+ */
+export interface InterfaceUseFormModalReturn<
+  T,
+> extends InterfaceUseModalStateReturn {
+  /** Form data being edited */
+  formData: T | null;
+  /** Sets the form data and opens the modal */
+  openWithData: (data: T) => void;
+  /** Resets form data and closes the modal */
+  reset: () => void;
+  /** Whether the form is currently submitting */
+  isSubmitting: boolean;
+  /** Sets the submitting state */
+  setIsSubmitting: (value: boolean) => void;
+}
+
+/**
+ * Return type for useMutationModal hook
+ */
+export interface InterfaceUseMutationModalReturn<
+  TData,
+  TResult = unknown,
+  // i18n-ignore-next-line
+> extends InterfaceUseFormModalReturn<TData> {
+  /** Executes the mutation with current form data */
+  execute: (data?: TData) => Promise<TResult | undefined>;
+  /** Error from the last mutation attempt */
+  error: Error | null;
+  /** Clears the error state */
+  clearError: () => void;
+}

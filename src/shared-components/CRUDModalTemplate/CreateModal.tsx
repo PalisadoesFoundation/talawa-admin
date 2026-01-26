@@ -1,10 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
 import type { InterfaceCreateModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
-import styles from './CRUDModalTemplate.module.css';
-import globalStyles from 'style/app-fixed.module.css';
 
 /**
  * CreateModal Component
@@ -78,9 +76,14 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLFormElement>) => {
-    if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
-      formRef.current?.requestSubmit();
+    if (event.key === 'Enter') {
+      const target = event.target as HTMLElement;
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        formRef.current?.requestSubmit();
+      } else if (target.tagName !== 'TEXTAREA') {
+        event.preventDefault();
+      }
     }
   };
 
@@ -99,7 +102,6 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
         form="crud-create-form"
         variant="primary"
         disabled={loading || submitDisabled}
-        className={globalStyles.addButton}
         data-testid="modal-submit-btn"
       >
         {tCommon('create')}
@@ -120,15 +122,14 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
       data-testid={dataTestId}
       customFooter={customFooter}
     >
-      <Form
+      <form
         id="crud-create-form"
         ref={formRef}
         onSubmit={handleSubmit}
         onKeyDown={handleKeyDown}
-        className={styles.formContainer}
       >
         {children}
-      </Form>
+      </form>
     </CRUDModalTemplate>
   );
 };

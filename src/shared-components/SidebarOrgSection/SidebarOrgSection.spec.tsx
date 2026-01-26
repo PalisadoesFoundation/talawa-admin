@@ -31,8 +31,12 @@ vi.mock('react-i18next', async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, options?: { entity?: string }) =>
-        options?.entity ? `Error loading ${options.entity}` : key,
+      t: (key: string, options?: { entity?: string; name?: string }) => {
+        if (options?.entity) return `Error loading ${options.entity}`;
+        if (key === 'picture' && options?.name)
+          return `${options.name} Picture`;
+        return key;
+      },
     }),
   };
 });

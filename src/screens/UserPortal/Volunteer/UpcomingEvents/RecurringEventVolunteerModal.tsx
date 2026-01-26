@@ -1,29 +1,16 @@
 /**
- * RecurringEventVolunteerModal - Modal for choosing recurring event volunteer scope
+ * Modal for choosing recurring event volunteer scope.
  *
- * Allows users to choose whether to volunteer for an entire event series or just a specific instance.
- * Adapts messaging based on individual volunteering vs joining a volunteer group.
+ * component RecurringEventVolunteerModal
+ * @param props - Component props from InterfaceRecurringEventVolunteerModalProps.
+ * @returns JSX.Element.
  */
 import React, { useState } from 'react';
-import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from './RecurringEventVolunteerModal.module.css';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceRecurringEventVolunteerModalProps } from 'types/UserPortal/RecurringEventVolunteerModal/interface';
+import styles from './RecurringEventVolunteerModal.module.css';
 
-/**
- * RecurringEventVolunteerModal component
- *
- * @param show - Whether the modal is visible.
- * @param onHide - Callback to close the modal.
- * @param eventName - Name of the event.
- * @param eventDate - Date of the current event instance.
- * @param onSelectSeries - Handler for entire-series selection.
- * @param onSelectInstance - Handler for single-instance selection.
- * @param isForGroup - Whether joining a volunteer group.
- * @param groupName - Name of the volunteer group (if applicable).
- * @returns JSX.Element
- */
 const RecurringEventVolunteerModal: React.FC<
   InterfaceRecurringEventVolunteerModalProps
 > = ({
@@ -36,9 +23,8 @@ const RecurringEventVolunteerModal: React.FC<
   isForGroup = false,
   groupName,
 }) => {
-  const { t, i18n } = useTranslation('translation', {
-    keyPrefix: 'recurringEventVolunteerModal',
-  });
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+
   const [selectedOption, setSelectedOption] = useState<'series' | 'instance'>(
     'series',
   );
@@ -46,7 +32,7 @@ const RecurringEventVolunteerModal: React.FC<
   /**
    * Handles form submission by calling the appropriate callback based on user selection
    */
-  const handleSubmit = () => {
+  const handleSubmit = (): void => {
     if (selectedOption === 'series') {
       onSelectSeries();
     } else {
@@ -54,98 +40,76 @@ const RecurringEventVolunteerModal: React.FC<
     }
   };
 
-  const dateObj = new Date(eventDate);
-  const formattedDate = !isNaN(dateObj.getTime())
-    ? new Intl.DateTimeFormat(i18n.language, {
-        dateStyle: 'medium',
-      }).format(dateObj)
-    : eventDate;
-  const hasGroup = isForGroup && Boolean(groupName);
-  const groupLabel = groupName ?? '';
-  const title = hasGroup
-    ? t('joinGroupTitle', { groupName: groupLabel, eventName })
-    : t('volunteerTitle', { eventName });
+  const formattedDate = new Date(eventDate).toLocaleDateString();
 
-  const footer = (
-    <>
-      <Button variant="secondary" onClick={onHide}>
-        {t('cancel')}
-      </Button>
-      <Button
-        variant="primary"
-        onClick={handleSubmit}
-        data-testid="submitVolunteerBtn"
-      >
-        {t('submitRequest')}
-      </Button>
-    </>
-  );
+  const title = isForGroup
+    ? t('recurringGroupTitle', { groupName, eventName })
+    : t('recurringVolunteerTitle', { eventName });
+
+  const description = isForGroup
+    ? t('recurringGroupDescription', { groupName })
+    : t('recurringVolunteerDescription');
+
+  const seriesLabel = t('volunteerForEntireSeries');
+  const seriesDescription = isForGroup
+    ? t('joinGroupForSeriesDescription')
+    : t('volunteerForSeriesDescription');
+
+  const instanceLabel = t('volunteerForThisInstanceOnly');
+  const instanceDescription = isForGroup
+    ? t('joinGroupForInstanceDescription', { date: formattedDate })
+    : t('volunteerForInstanceDescription', { date: formattedDate });
 
   return (
-    <BaseModal
-      show={show}
-      onHide={onHide}
+    <CRUDModalTemplate
+      open={show}
       title={title}
-      footer={footer}
-      centered
-      dataTestId="recurringEventModal"
+      onClose={onHide}
+      onPrimary={handleSubmit}
+      primaryText={t('submitRequest')}
+      data-testid="recurringEventModal"
     >
-      <p id="volunteerScopePrompt" className="mb-4">
-        {hasGroup
-          ? t('joinGroupQuestion', { groupName: groupLabel })
-          : t('volunteerQuestion')}
-      </p>
+      <p className="mb-4">{description}</p>
 
-      <div
-        className={styles.radioGroup}
-        role="radiogroup"
-        aria-labelledby="volunteerScopePrompt"
-      >
-        <div className={`${styles.radioOption} mb-3`}>
-          <label htmlFor="seriesOption" className={styles.radioLabel}>
+      <fieldset className={styles.radioFieldset}>
+        <legend className={styles.radioLegend}>{t('volunteerScope')}</legend>
+        <div className={styles.radioGroup}>
+          <div className={styles.radioOption}>
             <input
               type="radio"
               name="volunteerScope"
               id="seriesOption"
+              value="series"
               checked={selectedOption === 'series'}
               onChange={() => setSelectedOption('series')}
-              className={styles.radioInput}
               data-testid="volunteerForSeriesOption"
             />
-            <div className={styles.radioContent}>
-              <strong>{t('volunteerForSeries')}</strong>
-              <div className="small text-muted">
-                {hasGroup
-                  ? t('joinGroupForSeries')
-                  : t('volunteerForSeriesDesc')}
-              </div>
-            </div>
-          </label>
-        </div>
+            <label htmlFor="seriesOption" className={styles.radioLabel}>
+              <strong>{seriesLabel}</strong>
+              <div className={styles.radioDescription}>{seriesDescription}</div>
+            </label>
+          </div>
 
-        <div className={styles.radioOption}>
-          <label htmlFor="instanceOption" className={styles.radioLabel}>
+          <div className={styles.radioOption}>
             <input
               type="radio"
               name="volunteerScope"
               id="instanceOption"
+              value="instance"
               checked={selectedOption === 'instance'}
               onChange={() => setSelectedOption('instance')}
-              className={styles.radioInput}
               data-testid="volunteerForInstanceOption"
             />
-            <div className={styles.radioContent}>
-              <strong>{t('volunteerForInstance')}</strong>
-              <div className="small text-muted">
-                {hasGroup
-                  ? t('joinGroupForInstance', { date: formattedDate })
-                  : t('volunteerForInstanceDesc', { date: formattedDate })}
+            <label htmlFor="instanceOption" className={styles.radioLabel}>
+              <strong>{instanceLabel}</strong>
+              <div className={styles.radioDescription}>
+                {instanceDescription}
               </div>
-            </div>
-          </label>
+            </label>
+          </div>
         </div>
-      </div>
-    </BaseModal>
+      </fieldset>
+    </CRUDModalTemplate>
   );
 };
 

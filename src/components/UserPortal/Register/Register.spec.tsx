@@ -11,7 +11,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Register from './Register';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 
 /**
@@ -83,12 +83,15 @@ const ERROR_MOCKS = [
 // Static Mock Link
 const link = new StaticMockLink(MOCKS, true);
 
-// Mock toast
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast helper
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
   },
 }));
 
@@ -108,6 +111,7 @@ describe('Testing Register Component [User Portal]', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
   it('Component should be rendered properly', async () => {
     render(
       <MockedProvider link={link}>
@@ -122,6 +126,50 @@ describe('Testing Register Component [User Portal]', () => {
     );
 
     await waitForAsync();
+  });
+
+  it('Should render all form fields and allow value changes', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Register {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitForAsync();
+
+    const firstNameInput = screen.getByTestId('firstNameInput');
+    const lastNameInput = screen.getByTestId('lastNameInput');
+    const emailInput = screen.getByTestId('emailInput');
+    const passwordInput = screen.getByTestId('passwordInput');
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+    const registerButton = screen.getByTestId('registerBtn');
+
+    expect(firstNameInput).toBeInTheDocument();
+    expect(lastNameInput).toBeInTheDocument();
+    expect(emailInput).toBeInTheDocument();
+    expect(passwordInput).toBeInTheDocument();
+    expect(confirmPasswordInput).toBeInTheDocument();
+    expect(registerButton).toBeEnabled();
+
+    await user.type(firstNameInput, 'Jane');
+    await user.type(lastNameInput, 'Smith');
+    await user.type(emailInput, 'jane.smith@example.com');
+    await user.type(passwordInput, 'StrongPass123');
+    await user.type(confirmPasswordInput, 'StrongPass123');
+
+    expect(firstNameInput).toHaveValue('Jane');
+    expect(lastNameInput).toHaveValue('Smith');
+    expect(emailInput).toHaveValue('jane.smith@example.com');
+    expect(passwordInput).toHaveValue('StrongPass123');
+    expect(confirmPasswordInput).toHaveValue('StrongPass123');
   });
 
   it('Expect the mode to be changed to Login', async () => {
@@ -161,9 +209,8 @@ describe('Testing Register Component [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
-      expect.any(Object),
     );
   });
 
@@ -185,9 +232,8 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
-      expect.any(Object),
     );
   });
 
@@ -213,9 +259,8 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
-      expect.any(Object),
     );
   });
 
@@ -245,9 +290,8 @@ describe('Testing Register Component [User Portal]', () => {
     );
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
-      expect.any(Object),
     );
   });
 
@@ -281,9 +325,8 @@ describe('Testing Register Component [User Portal]', () => {
     );
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
-      expect.any(Object),
     );
   });
 
@@ -319,14 +362,22 @@ describe('Testing Register Component [User Portal]', () => {
       screen.getByTestId('lastNameInput'),
       formData.lastName,
     );
-    await userEvent.click(screen.getByTestId('registerBtn'));
+    const registerButton = screen.getByTestId('registerBtn');
+
+    expect(registerButton).toBeEnabled();
+
+    await userEvent.click(registerButton);
 
     await waitForAsync();
 
-    expect(toast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
-      expect.any(Object),
     );
+    expect(screen.getByTestId('firstNameInput')).toHaveValue('');
+    expect(screen.getByTestId('lastNameInput')).toHaveValue('');
+    expect(screen.getByTestId('emailInput')).toHaveValue('');
+    expect(screen.getByTestId('passwordInput')).toHaveValue('');
+    expect(screen.getByTestId('confirmPasswordInput')).toHaveValue('');
   });
 
   // Error Test Case
@@ -359,9 +410,8 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Assert that toast.error is called with the error message
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'GraphQL error occurred',
-      expect.any(Object),
     );
   });
 });

@@ -656,7 +656,7 @@ describe('UserSidebar', () => {
       expect(toggleBtn).toBeInTheDocument();
       expect(toggleBtn).toHaveAttribute('type', 'button');
       // The aria-label is on the toggle button itself
-      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
+      expect(toggleBtn).toHaveAttribute('aria-label', 'toggleSidebar');
     });
 
     it('should toggle drawer when toggle button is clicked', async () => {

@@ -2090,29 +2090,6 @@ form label,
   margin-right: 8px;
 }
 
-/* -- AdvertisementRegister.tsx -- */
-
-.previewAdvertisementRegister {
-  display: flex;
-  position: relative;
-  width: 100%;
-  margin-top: 10px;
-  overflow: hidden;
-  justify-content: center;
-  border: 1px solid var(--previewAdvertisementRegister-border);
-}
-
-.previewAdvertisementRegister img {
-  width: 400px;
-  height: auto;
-  object-fit: cover;
-}
-
-.previewAdvertisementRegister video {
-  width: 400px;
-  height: auto;
-}
-
 .closeButtonAdvertisementRegister {
   top: 0px;
   right: 0px;
