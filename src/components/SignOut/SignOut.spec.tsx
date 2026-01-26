@@ -401,7 +401,7 @@ describe('SignOut Component', () => {
       });
     });
 
-    test('sign out button ignores other key presses', async () => {
+    test('sign out button ignores Escape key press', async () => {
       const mockEndSession = vi.fn();
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
@@ -415,14 +415,56 @@ describe('SignOut Component', () => {
       signOutButton.focus();
 
       await user.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(mockClearAllItems).not.toHaveBeenCalled();
+        expect(mockEndSession).not.toHaveBeenCalled();
+        expect(mockNavigate).not.toHaveBeenCalled();
+      });
+    });
+
+    test('sign out button ignores Tab key press', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      const { mockClearAllItems } = createMock();
+
+      renderWithProviders(<SignOut />, [mockLogoutMutation]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
       await user.keyboard('{Tab}');
+
+      await waitFor(() => {
+        expect(mockClearAllItems).not.toHaveBeenCalled();
+        expect(mockEndSession).not.toHaveBeenCalled();
+        expect(mockNavigate).not.toHaveBeenCalled();
+      });
+    });
+
+    test('sign out button ignores ArrowDown key press', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      const { mockClearAllItems } = createMock();
+
+      renderWithProviders(<SignOut />, [mockLogoutMutation]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+      signOutButton.focus();
+
       await user.keyboard('{ArrowDown}');
 
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      expect(mockClearAllItems).not.toHaveBeenCalled();
-      expect(mockEndSession).not.toHaveBeenCalled();
-      expect(mockNavigate).not.toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockClearAllItems).not.toHaveBeenCalled();
+        expect(mockEndSession).not.toHaveBeenCalled();
+        expect(mockNavigate).not.toHaveBeenCalled();
+      });
     });
 
     test('sign out button keyboard navigation with Enter key handles errors', async () => {
