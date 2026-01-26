@@ -47,7 +47,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from './People.module.css';
@@ -274,17 +274,23 @@ export default function People(): React.JSX.Element {
               </>
             </LoadingState>
           </div>
-          <PaginationList
-            count={
-              pageInfo?.hasNextPage
-                ? (currentPage + 1) * rowsPerPage + 1
-                : currentPage * rowsPerPage + members.length
-            }
-            rowsPerPage={rowsPerPage}
-            page={currentPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <table>
+            <tfoot>
+              <tr>
+                <PaginationList
+                  count={
+                    pageInfo?.hasNextPage
+                      ? (currentPage + 1) * rowsPerPage + 1
+                      : currentPage * rowsPerPage + members.length
+                  }
+                  rowsPerPage={rowsPerPage}
+                  page={currentPage}
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </>

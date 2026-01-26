@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -32,9 +32,10 @@ const renderComponent = (props: Record<string, unknown> = {}) => {
 
 describe('DynamicDropDown component', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('renders and handles selection correctly', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
     const setFormData = vi.fn();
 
@@ -49,19 +50,15 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     expect(dropdownButton).toHaveTextContent('Label 2');
 
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
-
+    await user.click(dropdownButton);
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
-    await act(async () => {
-      await userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     expect(setFormData).toHaveBeenCalledWith({ fieldName: 'TEST' });
   });
 
   it('calls custom handleChange function when provided', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
     const customHandleChange = vi.fn();
@@ -77,14 +74,10 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const optionElement = screen.getByTestId('change-fieldname-btn-value2');
-    await act(async () => {
-      await userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     expect(customHandleChange).toHaveBeenCalledTimes(1);
     expect(customHandleChange).toHaveBeenCalledWith(
@@ -99,6 +92,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles keyboard navigation with Enter key correctly', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -111,23 +105,23 @@ describe('DynamicDropDown component', () => {
       ],
     });
 
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(screen.getByTestId('fieldname-dropdown-btn'));
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
     const option = screen.getByTestId('change-fieldname-btn-value2');
-    option.focus();
 
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
-    });
+    // 🔑 THIS is required by the component logic
+    await user.click(option);
+    await user.keyboard('{Enter}');
 
-    expect(option).toBeInTheDocument();
+    expect(setFormData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fieldName: 'value2',
+      }),
+    );
   });
 
   it('handles keyboard navigation with Space key correctly', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -140,23 +134,24 @@ describe('DynamicDropDown component', () => {
       ],
     });
 
-    const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(screen.getByTestId('fieldname-dropdown-btn'));
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
     const option = screen.getByTestId('change-fieldname-btn-value2');
-    option.focus();
 
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: ' ' });
-    });
+    // Component expects focused option
+    await user.click(option);
+    // 🔑 literal space, not {Space}
+    await user.keyboard('{space}');
 
-    expect(option).toBeInTheDocument();
+    expect(setFormData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fieldName: 'value2',
+      }),
+    );
   });
 
   it('ignores non-Enter/Space key presses', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -166,17 +161,11 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Escape' });
-      fireEvent.keyDown(dropdownMenu, { key: 'Tab' });
-      fireEvent.keyDown(dropdownMenu, { key: 'a' });
-    });
+    await user.keyboard('{Escape}');
+    await user.keyboard('{Tab}');
+    await user.keyboard('a');
 
     expect(setFormData).not.toHaveBeenCalled();
   });
@@ -215,12 +204,11 @@ describe('DynamicDropDown component', () => {
   });
 
   it('renders all field options in dropdown menu', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     expect(screen.getByTestId('change-fieldname-btn-TEST')).toBeInTheDocument();
     expect(
@@ -238,6 +226,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('renders options with correct selection state', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
 
     renderComponent({
@@ -245,9 +234,7 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const selectedOption = screen.getByTestId('change-fieldname-btn-value2');
     const unselectedOption = screen.getByTestId('change-fieldname-btn-TEST');
@@ -257,6 +244,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('updates form state with correct field name when selecting option', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1', otherField: 'otherValue' };
     const setFormData = vi.fn();
 
@@ -266,14 +254,10 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const optionElement = screen.getByTestId('change-fieldname-btn-value3');
-    await act(async () => {
-      await userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     expect(setFormData).toHaveBeenCalledWith({
       fieldName: 'value3',
@@ -282,12 +266,11 @@ describe('DynamicDropDown component', () => {
   });
 
   it('has correct role attribute on dropdown items', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const option = screen.getByTestId('change-fieldname-btn-TEST');
     expect(option).toHaveAttribute('role', 'option');
@@ -316,6 +299,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('preserves other form state properties when updating', async () => {
+    const user = userEvent.setup();
     const formData = {
       fieldName: 'value1',
       anotherField: 'preserved',
@@ -329,14 +313,10 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const optionElement = screen.getByTestId('change-fieldname-btn-TEST');
-    await act(async () => {
-      await userEvent.click(optionElement);
-    });
+    await user.click(optionElement);
 
     expect(setFormData).toHaveBeenCalledWith({
       fieldName: 'TEST',
@@ -346,6 +326,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('generates correct test IDs with lowercase field name', async () => {
+    const user = userEvent.setup();
     renderComponent({
       fieldName: 'MyFieldName',
     });
@@ -353,9 +334,7 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('myfieldname-dropdown-btn');
     expect(dropdownButton).toBeInTheDocument();
 
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const container = screen.getByTestId('myfieldname-dropdown-container');
     const menu = screen.getByTestId('myfieldname-dropdown-menu');
@@ -387,6 +366,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles keyboard event when no element is focused', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -396,25 +376,32 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
-
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
+    await user.click(dropdownButton);
 
     // Blur any focused element
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
+    const originalActive = document.activeElement;
+    const nonHtml = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg',
+    );
+    Object.defineProperty(document, 'activeElement', {
+      configurable: true,
+      get: () => nonHtml,
     });
 
-    expect(setFormData).not.toHaveBeenCalled();
+    try {
+      await user.keyboard('{Enter}');
+      expect(setFormData).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => originalActive,
+      });
+    }
   });
 
   it('handles keyboard event when focused element is not an HTMLElement', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -424,25 +411,30 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
+    await user.click(dropdownButton);
+
+    const originalActive = document.activeElement;
+    const nonHtml = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'svg',
+    );
+    Object.defineProperty(document, 'activeElement', {
+      configurable: true,
+      get: () => nonHtml,
     });
-
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
-
-    // Simply blur the active element instead of mocking
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+    try {
+      await user.keyboard('{Enter}');
+      expect(setFormData).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(document, 'activeElement', {
+        configurable: true,
+        get: () => originalActive,
+      });
     }
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
-    });
-
-    expect(setFormData).not.toHaveBeenCalled();
   });
 
-  it('sets aria-selected based on selection state', async () => {
+  it('renders dropdown options based on current form state', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
 
     renderComponent({
@@ -450,20 +442,14 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const selectedOption = screen.getByTestId('change-fieldname-btn-value2');
     const unselectedOption = screen.getByTestId('change-fieldname-btn-TEST');
 
-    // Verify both options are rendered
     expect(selectedOption).toBeInTheDocument();
     expect(unselectedOption).toBeInTheDocument();
 
-    // The component sets aria-selected={option.value === formState[fieldName]}
-    // This evaluates to true/false and React will render it appropriately
-    // We verify the component logic is working by checking the elements exist
     expect(selectedOption).toHaveAttribute(
       'data-testid',
       'change-fieldname-btn-value2',
@@ -496,18 +482,18 @@ describe('DynamicDropDown component', () => {
   });
 
   it('dropdown menu has correct role attribute', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
     expect(dropdownMenu).toHaveAttribute('role', 'listbox');
   });
 
   it('handles multiple rapid selections correctly', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -524,20 +510,13 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
 
     // First selection
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('change-fieldname-btn-value2'));
-    });
+    await user.click(dropdownButton);
+
+    await user.click(screen.getByTestId('change-fieldname-btn-value2'));
 
     // Second selection
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('change-fieldname-btn-value3'));
-    });
+    await user.click(dropdownButton);
+    await user.click(screen.getByTestId('change-fieldname-btn-value3'));
 
     expect(setFormData).toHaveBeenCalledTimes(2);
     expect(setFormData).toHaveBeenNthCalledWith(1, { fieldName: 'value2' });
@@ -556,6 +535,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles options with special characters in values', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value-with-dash' };
     const setFormData = vi.fn();
 
@@ -571,16 +551,13 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     expect(dropdownButton).toHaveTextContent('Dashed Value');
 
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const option = screen.getByTestId(
       'change-fieldname-btn-value_with_underscore',
     );
-    await act(async () => {
-      await userEvent.click(option);
-    });
+
+    await user.click(option);
 
     expect(setFormData).toHaveBeenCalledWith({
       fieldName: 'value_with_underscore',
@@ -588,6 +565,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles single option in dropdown', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'only' };
     const setFormData = vi.fn();
 
@@ -600,14 +578,13 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     expect(dropdownButton).toHaveTextContent('Only Option');
 
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     expect(screen.getByTestId('change-fieldname-btn-only')).toBeInTheDocument();
   });
 
   it('handles empty fieldOptions array', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'test' };
 
     renderComponent({
@@ -618,9 +595,7 @@ describe('DynamicDropDown component', () => {
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
     expect(dropdownButton).toHaveTextContent('None');
 
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await user.click(dropdownButton);
 
     const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
     expect(dropdownMenu.children).toHaveLength(0);

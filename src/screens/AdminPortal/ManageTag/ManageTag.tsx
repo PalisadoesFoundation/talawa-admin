@@ -58,7 +58,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
 import { Col } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -283,7 +283,7 @@ function ManageTag(): JSX.Element {
     try {
       await removeUserTag({ variables: { id: currentTagId } });
 
-      navigate(`/orgtags/${orgId}`);
+      navigate(`/admin/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
       NotificationToast.success({
         key: 'tagRemovalSuccess',
@@ -321,10 +321,10 @@ function ManageTag(): JSX.Element {
   ];
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
@@ -383,7 +383,7 @@ function ManageTag(): JSX.Element {
         return (
           <div>
             <Link
-              to={`/member/${orgId}`}
+              to={`/admin/member/${orgId}/${params.row?._id}`}
               state={{ id: params.row?._id }}
               data-testid="viewProfileBtn"
             >
@@ -480,7 +480,7 @@ function ManageTag(): JSX.Element {
                     <IconComponent name="Tag" />
                   </div>
                   <div
-                    onClick={() => navigate(`/orgtags/${orgId}`)}
+                    onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
                     data-text={t('tags')}

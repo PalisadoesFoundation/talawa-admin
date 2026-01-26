@@ -19,31 +19,23 @@
  * @remarks
  * - The component uses `dayjs` for date formatting.
  * - Icons for location and date are imported as React components.
- * - Styling is applied using CSS modules from `app-fixed.module.css`.
+ * - Styling is applied using CSS modules from `CardItem.module.css`.
  */
 import React, { useState, useEffect } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItem.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
-
-export interface InterfaceCardItem {
-  type: 'Event' | 'Post' | 'MembershipRequest';
-  title: string;
-  time?: string;
-  startdate?: string;
-  enddate?: string;
-  creator?: { id: string | number; name: string };
-  location?: string;
-  image?: string;
-}
+import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
+import { useTranslation } from 'react-i18next';
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { creator, type, title, startdate, enddate, time, location, image } =
     props;
   const [imgOk, setImgOk] = useState(true);
+  const { t: tCommon } = useTranslation('common');
 
   // Reset imgOk when image prop changes to allow retrying with new URL
   useEffect(() => {
@@ -60,7 +52,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             {image && imgOk ? (
               <img
                 src={image}
-                alt={`${title} avatar`}
+                alt={`${title} ${tCommon('avatar')}`}
                 crossOrigin="anonymous"
                 className={styles.CardItemImage}
                 loading="lazy"
@@ -114,7 +106,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             {location && (
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
-                  title="Event Location"
+                  title={tCommon('location')}
                   stroke="var(--bs-primary)"
                   width={22}
                   height={22}
@@ -126,7 +118,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
               <span className={`${styles.time} fst-normal fw-semibold`}>
                 {type === 'Event' && (
                   <DateIcon
-                    title="Event Date"
+                    title={tCommon('eventDate')}
                     fill="var(--bs-gray-600)"
                     width={20}
                     height={20}

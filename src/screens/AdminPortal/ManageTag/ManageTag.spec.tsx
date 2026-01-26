@@ -120,24 +120,24 @@ vi.mock('components/AdminPortal/TagActions/TagActions', async () => {
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId"
+                path="/admin/orgtags/:orgId"
                 element={<div data-testid="organizationTagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="/orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
               <Route
-                path="/member/:orgId"
+                path="/admin/member/:orgId/:userId"
                 element={<div data-testid="memberProfileScreen"></div>}
               />
             </Routes>
@@ -1199,10 +1199,12 @@ describe('Manage Tag Page', () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+        <MemoryRouter
+          initialEntries={['/admin/orgtags/org-123/manageTag/tag-123']}
+        >
           <Routes>
             <Route
-              path="/orgtags/:orgId/manageTag/:tagId"
+              path="/admin/orgtags/:orgId/manageTag/:tagId"
               element={<ManageTag />}
             />
           </Routes>
@@ -1281,12 +1283,14 @@ describe('Manage Tag Page', () => {
       ];
       render(
         <MockedProvider mocks={loadingMocks}>
-          <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+          <MemoryRouter
+            initialEntries={['/admin/orgtags/org-123/manageTag/tag-123']}
+          >
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
-                    path="/orgtags/:orgId/manageTag/:tagId"
+                    path="/admin/orgtags/:orgId/manageTag/:tagId"
                     element={<ManageTag />}
                   />
                 </Routes>

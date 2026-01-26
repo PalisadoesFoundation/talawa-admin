@@ -2,13 +2,8 @@ import React from 'react';
 import { describe, test, expect, vi, it } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -92,6 +87,20 @@ describe('Testing Advertisement Component', () => {
     mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
+    Object.defineProperty(window, 'innerHeight', {
+      value: 1000,
+      writable: true,
+    });
+
+    Object.defineProperty(window, 'scrollY', {
+      value: 1000,
+      writable: true,
+    });
+
+    Object.defineProperty(document.body, 'offsetHeight', {
+      value: 1500,
+      writable: true,
+    });
   });
   afterEach(() => {
     vi.restoreAllMocks();
@@ -137,7 +146,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     const activeTab = screen.getByRole('tab', { name: /Active Campaigns/i });
-    fireEvent.click(activeTab);
+    await userEvent.click(activeTab);
 
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       /Active Campaigns/i,
@@ -146,7 +155,7 @@ describe('Testing Advertisement Component', () => {
     const archivedTab = screen.getByRole('tab', {
       name: /Completed Campaigns/i,
     });
-    fireEvent.click(archivedTab);
+    await userEvent.click(archivedTab);
 
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       /Completed Campaigns/i,
@@ -183,7 +192,7 @@ describe('Testing Advertisement Component', () => {
     );
     expect(screen.getByTestId('media')).toBeInTheDocument();
     expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
   });
@@ -218,7 +227,7 @@ describe('Testing Advertisement Component', () => {
     );
     expect(screen.getByTestId('media')).toBeInTheDocument();
     expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
   });
@@ -251,25 +260,24 @@ describe('Testing Advertisement Component', () => {
       screen.queryByText('Cookie shop infinite 1'),
     ).not.toBeInTheDocument();
 
-    await act(() => {
+    await act(async () => {
       const tab = screen.getByText('Completed Campaigns');
-      fireEvent.click(tab);
+      await userEvent.click(tab);
       expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
         'Completed Campaigns',
       );
     });
 
-    await act(() => {
-      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    window.dispatchEvent(new Event('scroll'));
+    await waitFor(() => {
+      expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     });
-
-    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
   });
 
   it('loads more active advertisements on scroll', async () => {
@@ -300,9 +308,9 @@ describe('Testing Advertisement Component', () => {
       screen.queryByText('Cookie shop infinite 1'),
     ).not.toBeInTheDocument();
 
-    await act(() => {
+    await act(async () => {
       const tab = screen.getByText('Active Campaigns');
-      fireEvent.click(tab);
+      await userEvent.click(tab);
     });
 
     await wait();
@@ -310,19 +318,17 @@ describe('Testing Advertisement Component', () => {
       'Active Campaigns',
     );
 
-    await act(() => {
-      fireEvent.scroll(window, { target: { scrollY: 500 } });
+    window.dispatchEvent(new Event('scroll'));
+
+    await waitFor(() => {
+      expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
+      expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
     });
-
-    await wait();
-
-    expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 3')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 4')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 5')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
-    expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
   });
 
   it('search button renders correctly with placeholder', async () => {
@@ -370,11 +376,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'Cookie shop 6' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.clear(screen.getByTestId('searchname'));
+    await userEvent.type(screen.getByTestId('searchname'), 'Cookie shop 6');
+    await userEvent.click(screen.getByTestId('searchButton'));
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -406,10 +410,12 @@ describe('Testing Advertisement Component', () => {
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'this is an active advertisement 6' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.clear(screen.getByTestId('searchname'));
+    await userEvent.type(
+      screen.getByTestId('searchname'),
+      'this is an active advertisement 6',
+    );
+    await userEvent.click(screen.getByTestId('searchButton'));
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -440,11 +446,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'Cookie shop 6' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.clear(screen.getByTestId('searchname'));
+    await userEvent.type(screen.getByTestId('searchname'), 'Cookie shop 6');
+    await userEvent.click(screen.getByTestId('searchButton'));
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -475,11 +479,12 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'this is a completed advertisement 6' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.clear(screen.getByTestId('searchname'));
+    await userEvent.type(
+      screen.getByTestId('searchname'),
+      'this is a completed advertisement 6',
+    );
+    await userEvent.click(screen.getByTestId('searchButton'));
 
     await wait();
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
@@ -510,11 +515,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'BandhanSearchedIt' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
+    await userEvent.clear(screen.getByTestId('searchname'));
+    await userEvent.type(screen.getByTestId('searchname'), 'BandhanSearchedIt');
+    await userEvent.click(screen.getByTestId('searchButton'));
     expect(
       screen.getAllByText('Ads not present for this campaign.'),
     ).toHaveLength(2); // both completed and active tab
@@ -546,42 +549,42 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'banner' },
-      });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.create.startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.create.endAtISO.split('T')[0] },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByTestId('advertisementEndDate')).toHaveValue(
       dateConstants.create.endAtISO.split('T')[0],
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     await waitFor(() => {
@@ -630,36 +633,39 @@ describe('Testing Advertisement Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'banner' },
-      });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.create.startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.create.endAtISO.split('T')[0] },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).not.toHaveValue();
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    expect(screen.getByTestId('advertisementNameInput')).not.toHaveValue();
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByTestId('advertisementEndDate')).toHaveValue(
       dateConstants.create.endAtISO.split('T')[0],
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -691,43 +697,41 @@ describe('Testing Advertisement Component', () => {
       screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
-    });
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'banner' },
-      });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.create.startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.create.endBeforeStartISO.split('T')[0] },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endBeforeStartISO.split('T')[0],
+    );
+
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByTestId('advertisementEndDate')).toHaveValue(
       dateConstants.create.endBeforeStartISO.split('T')[0],
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -759,43 +763,41 @@ describe('Testing Advertisement Component', () => {
       screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
-    });
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'banner' },
-      });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.create.startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.create.endAtISO.split('T')[0] },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByTestId('advertisementEndDate')).toHaveValue(
       dateConstants.create.endAtISO.split('T')[0],
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -835,29 +837,30 @@ describe('Testing Advertisement Component', () => {
     );
     expect(screen.getByTestId('media')).toBeInTheDocument();
     expect(screen.getByTestId('moreiconbtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const descriptionField = screen.getByLabelText(
-      'Enter description of Advertisement (optional)',
+    const descriptionField = screen.getByTestId(
+      'advertisementDescriptionInput',
     );
-    fireEvent.change(descriptionField, {
-      target: { value: 'This is an updated advertisement' },
-    });
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.update.startAtISO.split('T')[0] },
-      });
 
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.update.endAtISO.split('T')[0] },
-      });
-    });
+    await userEvent.clear(descriptionField);
+    await userEvent.type(descriptionField, 'This is an updated advertisement');
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('addonupdate'));
-    });
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
+      dateConstants.update.startAtISO.split('T')[0],
+    );
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.update.endAtISO.split('T')[0],
+    );
+
+    await userEvent.click(screen.getByTestId('addonupdate'));
 
     await waitFor(() => {
       const mockCall = updateMock.mock.calls[0][0];
@@ -894,13 +897,13 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
     expect(screen.getByTestId('addonupdate')).toBeInTheDocument();
     expect(screen.getByTestId('addonclose')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('addonclose'));
+    await userEvent.click(screen.getByTestId('addonclose'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('addonupdate')).not.toBeInTheDocument();
@@ -928,23 +931,27 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    await userEvent.click(screen.getByTestId('moreiconbtn'));
 
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
+
+    const startDateInput = screen.getByTestId('advertisementStartDate');
+    const endDateInput = screen.getByTestId('advertisementEndDate');
+
+    await userEvent.clear(startDateInput);
+    await userEvent.type(
+      startDateInput,
+      dateConstants.update.startAtISO.split('T')[0],
+    );
+
+    await userEvent.clear(endDateInput);
+    await userEvent.type(
+      endDateInput,
+      dateConstants.update.endBeforeStartISO.split('T')[0],
+    );
 
     await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.update.startAtISO.split('T')[0] },
-      });
-    });
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.update.endBeforeStartISO.split('T')[0] },
-      });
-    });
-
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('addonupdate'));
+      await userEvent.click(screen.getByTestId('addonupdate'));
     });
 
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -973,18 +980,17 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
-    fireEvent.click(getByTestId('moreiconbtn'));
+    await userEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
-    fireEvent.click(getByTestId('deletebtn'));
+    await userEvent.click(getByTestId('deletebtn'));
     await waitFor(() => {
       expect(
         screen.getByText(translations.deleteAdvertisement),
       ).toBeInTheDocument();
       expect(getByTestId('delete_body')).toBeInTheDocument();
     });
-    await act(() => {
-      fireEvent.click(getByTestId('delete_no'));
-    });
+
+    await userEvent.click(getByTestId('delete_no'));
 
     await wait();
     expect(
@@ -1015,18 +1021,16 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
-    fireEvent.click(getByTestId('moreiconbtn'));
+    await userEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
-    fireEvent.click(getByTestId('deletebtn'));
+    await userEvent.click(getByTestId('deletebtn'));
     await waitFor(() => {
       expect(
         screen.getByText(translations.deleteAdvertisement),
       ).toBeInTheDocument();
       expect(getByTestId('delete_body')).toBeInTheDocument();
     });
-    await act(() => {
-      fireEvent.click(getByTestId('delete_yes'));
-    });
+    await userEvent.click(getByTestId('delete_yes'));
     await waitFor(() => {
       expect(toastSuccessSpy).toHaveBeenCalledWith(
         'Advertisement deleted successfully.',
@@ -1153,14 +1157,16 @@ describe('Testing Advertisement Component', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Test Ad' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Test Ad',
+    );
 
-    fireEvent.click(screen.getByTestId('addonclose'));
+    await userEvent.click(screen.getByTestId('addonclose'));
 
     await waitFor(() => {
       expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();

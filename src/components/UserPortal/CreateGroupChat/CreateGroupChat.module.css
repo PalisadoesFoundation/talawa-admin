@@ -1,0 +1,84 @@
+.modalContent {
+  width: var(--space-25);
+}
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.chatImage {
+  height: var(--logo-md);
+  border-radius: var(--radius-full);
+  width: var(--logo-md);
+}
+
+.editImgBtn {
+  padding: var(--space-1) var(--space-2) var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--color-gray-400);
+  outline: none;
+  position: relative;
+  top: calc(-1 * var(--space-9));
+  left: var(--space-9);
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  padding-inline-end: var(--space-8);
+  width: var(--space-24);
+}
+
+.input:active {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.input:focus {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border-color: var(--color-gray-200);
+}
+
+.tableContainer {
+  height: var(--space-23);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorPrimary {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  --bs-btn-active-bg: var(--color-blue-200);
+  cursor: pointer;
+}
+
+.colorPrimary:hover,
+.colorPrimary:focus,
+.colorPrimary:active {
+  background-color: var(--color-blue-200);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  color: var(--color-gray-700);
+}

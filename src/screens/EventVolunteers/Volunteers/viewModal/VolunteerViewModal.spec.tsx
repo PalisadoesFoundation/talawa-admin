@@ -1,7 +1,11 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -9,7 +13,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 
 const t = {
@@ -121,9 +125,11 @@ const renderVolunteerViewModal = (
     <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <VolunteerViewModal {...props} />
-          </I18nextProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <I18nextProvider i18n={i18n}>
+              <VolunteerViewModal {...props} />
+            </I18nextProvider>
+          </LocalizationProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -131,10 +137,6 @@ const renderVolunteerViewModal = (
 };
 
 describe('Testing VolunteerViewModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -156,13 +158,26 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Modal Functionality', () => {
-    it('should call hide function when close button is clicked', () => {
+    it('should call hide function when close button is clicked', async () => {
+      const user = userEvent.setup();
       const hideMock = vi.fn();
       const props = { ...itemProps[0], hide: hideMock };
       renderVolunteerViewModal(props);
 
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
+
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call hide function when footer close button is clicked', async () => {
+      const user = userEvent.setup();
+      const hideMock = vi.fn();
+      const props = { ...itemProps[0], hide: hideMock };
+      renderVolunteerViewModal(props);
+
+      const closeButton = screen.getByTestId('modal-close-btn');
+      await user.click(closeButton);
 
       expect(hideMock).toHaveBeenCalledTimes(1);
     });
@@ -309,6 +324,56 @@ describe('Testing VolunteerViewModal', () => {
       expect(rows[1]).toHaveTextContent('1');
       // Second group row should show 2 members (row index 2)
       expect(rows[2]).toHaveTextContent('2');
+    });
+  });
+
+  describe('Field onChange handlers', () => {
+    it('should call no-op onChange handlers without errors', async () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const nameInput = screen.getByTestId('volunteerName') as HTMLInputElement;
+      const statusInput = screen.getByTestId(
+        'volunteerStatus',
+      ) as HTMLInputElement;
+      const hoursInput = screen.getByTestId(
+        'hoursVolunteered',
+      ) as HTMLInputElement;
+
+      const initialName = nameInput.value;
+      const initialStatus = statusInput.value;
+      const initialHours = hoursInput.value;
+
+      nameInput.removeAttribute('disabled');
+      statusInput.removeAttribute('disabled');
+      hoursInput.removeAttribute('disabled');
+
+      await userEvent.type(nameInput, 'x');
+      await userEvent.type(statusInput, 'x');
+      await userEvent.type(hoursInput, 'x');
+
+      expect(nameInput.value).toBe(initialName);
+      expect(statusInput.value).toBe(initialStatus);
+      expect(hoursInput.value).toBe(initialHours);
+    });
+
+    it('should keep all fields disabled and read-only', () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const nameInput = screen.getByTestId('volunteerName') as HTMLInputElement;
+      const statusInput = screen.getByTestId(
+        'volunteerStatus',
+      ) as HTMLInputElement;
+      const hoursInput = screen.getByTestId(
+        'hoursVolunteered',
+      ) as HTMLInputElement;
+
+      expect(nameInput).toBeDisabled();
+      expect(statusInput).toBeDisabled();
+      expect(hoursInput).toBeDisabled();
+
+      expect(nameInput).toHaveValue('Teresa Bradley');
+      expect(statusInput).toHaveValue('Accepted');
+      expect(hoursInput).toHaveValue('10');
     });
   });
 });

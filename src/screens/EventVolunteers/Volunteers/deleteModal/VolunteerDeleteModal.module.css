@@ -19,3 +19,26 @@
   justify-content: center;
   align-items: center;
 }
+
+.radioFieldset {
+  border: 0;
+  padding: 0;
+}
+
+.radioLegend {
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-normal);
+}
+
+.radioGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

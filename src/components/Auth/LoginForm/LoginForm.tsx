@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { Form, Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import { EmailField } from '../EmailField/EmailField';
+import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import type {
@@ -17,6 +17,13 @@ import type {
  * This component handles the login form UI and submission logic, delegating
  * authentication to the SIGNIN_QUERY GraphQL query. It supports both admin
  * and user login modes via the isAdmin prop.
+ *
+ * @param isAdmin - Whether the login form is rendered for an admin user
+ * @param onSuccess - Callback invoked with the authentication token on successful login
+ * @param onError - Callback invoked when the login request fails
+ * @param testId - Optional test ID used for querying the component in tests
+ *
+ * @returns A JSX element rendering the login form
  *
  * @example
  * ```tsx
@@ -95,11 +102,10 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   };
 
   return (
-    <Form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
+    <form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
       <h3 data-testid={`${testId}-heading`}>
         {isAdmin ? t('adminLogin') : t('userLogin')}
       </h3>
-
       <EmailField
         value={formData.email}
         onChange={handleEmailChange}
@@ -122,7 +128,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       >
         {loading ? t('loading') : tCommon('login')}
       </Button>
-    </Form>
+    </form>
   );
 };
 

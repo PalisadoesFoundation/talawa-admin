@@ -12,14 +12,19 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
+import { FaExchangeAlt } from 'react-icons/fa';
+import { useQuery } from '@apollo/client';
 
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
+import useLocalStorage from 'utils/useLocalstorage';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import styles from './UserSidebarOrg.module.css';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -35,6 +40,16 @@ const UserSidebarOrg = ({
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+  const { getItem } = useLocalStorage();
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'cache-first',
+  });
+  const roleFromAuth = currentUserData?.user?.role ?? null;
+  const storedRole = getItem<string>('role');
+  const resolvedRole = (roleFromAuth ?? storedRole ?? '').toLowerCase();
+  const allowedRoles = ['administrator', 'admin', 'superadmin'];
+  const canSwitchToAdmin =
+    resolvedRole.length > 0 && allowedRoles.includes(resolvedRole);
 
   const [showDropdown, setShowDropdown] = React.useState(false);
 
@@ -129,6 +144,20 @@ const UserSidebarOrg = ({
       headerContent={headerContent}
       footerContent={
         <>
+          {canSwitchToAdmin && (
+            <div className={styles.switchPortalWrapper}>
+              <SidebarNavItem
+                to="/admin/orglist"
+                icon={<FaExchangeAlt />}
+                label={tCommon('switchToAdminPortal')}
+                testId="switchToAdminPortalBtn"
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                useSimpleButton={true}
+                iconType="react-icon"
+              />
+            </div>
+          )}
           {!hideDrawer && (
             <div>
               <ProfileCard portal="user" />

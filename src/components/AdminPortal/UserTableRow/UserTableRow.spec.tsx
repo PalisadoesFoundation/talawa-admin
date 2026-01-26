@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -36,7 +36,7 @@ describe('UserTableRow', () => {
           user={user}
           isDataGrid
           showJoinedDate
-          linkPath={`/member/${user.id}`}
+          linkPath={`/admin/member/${user.id}`}
           actions={[]}
           testIdPrefix="spec"
         />
@@ -235,7 +235,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
@@ -243,7 +243,7 @@ describe('UserTableRow', () => {
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
     expect(nameLink).toBeInTheDocument();
-    expect(nameLink).toHaveAttribute('href', '/member/u1');
+    expect(nameLink).toHaveAttribute('href', '/admin/member/u1');
   });
 
   it('renders disabled action button', () => {
@@ -344,7 +344,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           onRowClick={onRowClick}
           isDataGrid
           testIdPrefix="spec"
@@ -563,7 +563,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
@@ -625,7 +625,7 @@ describe('UserTableRow', () => {
     expect(gridCell).toBeInTheDocument();
   });
 
-  it('prevents default on keyboard events', () => {
+  it('prevents default on keyboard events', async () => {
     const onRowClick = vi.fn();
 
     render(
@@ -642,15 +642,16 @@ describe('UserTableRow', () => {
     const gridCell = screen.getByTestId('spec-gridcell-u1');
 
     // Test Enter key
-    fireEvent.keyDown(gridCell, { key: 'Enter' });
+    gridCell.focus();
+    await userEvent.keyboard('{Enter}');
     expect(onRowClick).toHaveBeenCalledWith(user);
 
     // Test Space key
-    fireEvent.keyDown(gridCell, { key: ' ' });
+    await userEvent.keyboard(' ');
     expect(onRowClick).toHaveBeenCalledTimes(2);
   });
 
-  it('handles keyboard events without onRowClick handler', () => {
+  it('handles keyboard events without onRowClick handler', async () => {
     render(
       <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
@@ -660,13 +661,14 @@ describe('UserTableRow', () => {
     const gridCell = screen.getByTestId('spec-gridcell-u1');
 
     // Should not throw error when onRowClick is undefined
-    fireEvent.keyDown(gridCell, { key: 'Enter' });
-    fireEvent.keyDown(gridCell, { key: ' ' });
+    gridCell.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard(' ');
 
     expect(gridCell).toBeInTheDocument();
   });
 
-  it('handles keyboard events on table row without onRowClick', () => {
+  it('handles keyboard events on table row without onRowClick', async () => {
     render(
       <RouterWrapper>
         <table>
@@ -680,8 +682,9 @@ describe('UserTableRow', () => {
     const tableRow = screen.getByTestId('spec-tr-u1');
 
     // Should not throw error when onRowClick is undefined
-    fireEvent.keyDown(tableRow, { key: 'Enter' });
-    fireEvent.keyDown(tableRow, { key: ' ' });
+    tableRow.focus();
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard(' ');
 
     expect(tableRow).toBeInTheDocument();
   });
@@ -722,7 +725,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           compact={true}
           isDataGrid
           testIdPrefix="spec"
@@ -731,6 +734,6 @@ describe('UserTableRow', () => {
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
     expect(nameLink).toBeInTheDocument();
-    expect(nameLink).toHaveAttribute('href', '/member/u1');
+    expect(nameLink).toHaveAttribute('href', '/admin/member/u1');
   });
 });

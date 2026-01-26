@@ -13,13 +13,8 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -174,16 +169,16 @@ afterEach(() => {
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgvenues/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route
-                path="/orgvenues/:orgId"
+                path="/admin/orgvenues/:orgId"
                 element={<OrganizationVenues />}
               />
               <Route
-                path="/orglist"
+                path="/admin/orglist"
                 element={<div data-testid="paramsError">paramsError</div>}
               />
             </Routes>
@@ -195,16 +190,19 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationVenue with missing orgId', () => {
-  test('Redirect to /orglist when orgId is falsy/undefined', async () => {
+  test('Redirect to /admin/orglist when orgId is falsy/undefined', async () => {
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgvenues/']}>
+        <MemoryRouter initialEntries={['/admin/orgvenues/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgvenues/" element={<OrganizationVenues />} />
                 <Route
-                  path="/orglist"
+                  path="/admin/orgvenues/"
+                  element={<OrganizationVenues />}
+                />
+                <Route
+                  path="/admin/orglist"
                   element={<div data-testid="paramsError"></div>}
                 />
               </Routes>
@@ -230,11 +228,8 @@ describe('Organisation Venues', () => {
     expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
 
     const searchInput = screen.getByTestId('searchInput');
-    await act(async () => {
-      fireEvent.change(searchInput, {
-        target: { value: 'Updated Venue 1' },
-      });
-    });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Updated Venue 1');
 
     // Wait for debounced search to complete and verify filtering
     await waitFor(
@@ -254,15 +249,12 @@ describe('Organisation Venues', () => {
     expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
     expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('searchByButton'));
-    fireEvent.click(screen.getByTestId('desc'));
+    await userEvent.click(screen.getByTestId('searchByButton'));
+    await userEvent.click(screen.getByTestId('desc'));
 
     const searchInput = screen.getByTestId('searchInput');
-    await act(async () => {
-      fireEvent.change(searchInput, {
-        target: { value: 'Updated description for venue 1' },
-      });
-    });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Updated description for venue 1');
 
     // Wait for debounced search to complete and verify filtering
     await waitFor(
@@ -280,8 +272,8 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('sortVenues'));
-    fireEvent.click(screen.getByTestId('lowest'));
+    await userEvent.click(screen.getByTestId('sortVenues'));
+    await userEvent.click(screen.getByTestId('lowest'));
     await waitFor(() => {
       // Since sorting might not be working with current query structure,
       // just verify the list is rendered
@@ -295,8 +287,8 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('sortVenues'));
-    fireEvent.click(screen.getByTestId('highest'));
+    await userEvent.click(screen.getByTestId('sortVenues'));
+    await userEvent.click(screen.getByTestId('highest'));
     await waitFor(() => {
       // Since sorting might not be working with current query structure,
       // just verify the list is rendered
@@ -356,7 +348,7 @@ describe('Organisation Venues', () => {
     // Wait for venues to load before interacting
     await screen.findByTestId('venue-item-venue1');
 
-    fireEvent.click(screen.getByTestId('updateVenueBtn-venue1'));
+    await userEvent.click(screen.getByTestId('updateVenueBtn-venue1'));
     await waitFor(() => {
       expect(screen.getByTestId('venueForm')).toBeInTheDocument();
     });
@@ -368,7 +360,7 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('createVenueBtn'));
+    await userEvent.click(screen.getByTestId('createVenueBtn'));
     await waitFor(() => {
       expect(screen.getByTestId('venueForm')).toBeInTheDocument();
     });
@@ -384,7 +376,7 @@ describe('Organisation Venues', () => {
 
     // Click delete button and wait for mutation
     await act(async () => {
-      fireEvent.click(deleteButton);
+      await userEvent.click(deleteButton);
     });
 
     // Wait for mutation to complete and refetch
@@ -501,7 +493,7 @@ describe('Organisation Venues Error Handling', () => {
       expect(screen.getByTestId('deleteVenueBtn-venue1')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
+    await userEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
 
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(

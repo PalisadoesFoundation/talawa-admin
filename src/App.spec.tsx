@@ -45,15 +45,27 @@ vi.mock('./plugin/registry', () => ({
 
 vi.mock('./plugin', () => ({
   usePluginRoutes: vi.fn(() => []),
+  usePluginDrawerItems: vi.fn(() => []),
   PluginRouteRenderer: vi.fn(({ route, fallback }) => (
     <div data-testid={`plugin-route-${route.pluginId}`}>{fallback}</div>
   )),
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('shared-components/ProfileForm/ProfileForm', () => ({
+vi.mock('screens/MemberDetail/MemberDetail', () => ({
   default: () => <div data-testid="mock-profile-form">Mock Settings</div>,
 }));
+
+vi.mock('screens/UserPortal/UserScreen/UserScreen', async () => {
+  const { Outlet } = await import('react-router');
+  return {
+    default: () => (
+      <div data-testid="mock-user-screen">
+        <Outlet />
+      </div>
+    ),
+  };
+});
 
 // Mock all lazy loaded components
 vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
@@ -82,7 +94,7 @@ vi.mock('screens/AdminPortal/EventManagement/EventManagement', () => ({
   ),
 }));
 
-vi.mock('screens/ForgotPassword/ForgotPassword', () => ({
+vi.mock('screens/Auth/ForgotPassword/ForgotPassword', () => ({
   default: () => (
     <div data-testid="mock-forgot-password">Mock Forgot Password</div>
   ),
@@ -393,7 +405,7 @@ describe('Testing the App Component', () => {
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
-    renderApp(link, '/orglist');
+    renderApp(link, '/admin/orglist');
 
     await wait();
 

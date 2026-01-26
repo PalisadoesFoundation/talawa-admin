@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -41,10 +41,10 @@ describe('SecuredRoute', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     // Clean up any timers or event listeners
     vi.clearAllTimers();
     vi.useRealTimers();
-    vi.restoreAllMocks();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
@@ -58,10 +58,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -76,10 +76,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'regular');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -98,33 +98,33 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
       );
 
       // Simulate mouse movement - this should update the lastActive timestamp
-      fireEvent(document, new Event('mousemove'));
+      document.dispatchEvent(new Event('mousemove'));
 
       // We can't directly test the lastActive variable since it's module-scoped,
       // but we can verify the event listener is attached by checking if the event fires
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should prevent timeout when user activity occurs within timeout window', () => {
+    it('should prevent timeout when user activity occurs within timeout window', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
       setItem('token', 'test-token');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -134,7 +134,7 @@ describe('SecuredRoute', () => {
       vi.advanceTimersByTime(14 * 60 * 1000);
 
       // Simulate user activity
-      fireEvent(document, new Event('mousemove'));
+      document.dispatchEvent(new Event('mousemove'));
 
       // Advance past original timeout point
       vi.advanceTimersByTime(2 * 60 * 1000);
@@ -159,10 +159,10 @@ describe('SecuredRoute', () => {
       setItem('id', 'admin-123');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,

@@ -8,6 +8,9 @@
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
+  "role": {
+    "member": "Membre"
+  },
   "invalidDetailsMessage": "Veuillez vérifier les détails saisis.",
   "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour.",
   "leaderboard": {
@@ -163,6 +166,7 @@
     "requests": "Demandes d'Adhésion",
     "communityProfile": "Profil de la Communauté",
     "notification": "Notifications",
+    "switchToUserPortal": "Passer au portail utilisateur",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "utilisateurs",
@@ -192,13 +196,35 @@
     "logout": "Déconnexion",
     "close": "Fermer"
   },
+  "plugin": {
+    "error": "Erreur de plugin",
+    "failedToLoad": "Échec du chargement du composant : <1>{{componentName}}</1>",
+    "id": "Plugin : <1>{{pluginId}}</1>"
+  },
   "notification": {
     "title": "Notifications",
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
     "markAsRead": "Marquer comme lues",
-    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount_one": "{{count}} non lu",
+    "unreadCount_other": "{{count}} non lus",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "Avatar de {{title}}",
+    "eventLocation": "Lieu de l'événement",
+    "eventDate": "Date de l'événement",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Publié le :",
+    "author": "Auteur :"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -260,7 +286,11 @@
   },
   "paginationList": {
     "rowsPerPage": "lignes par page",
-    "all": "Tous"
+    "all": "Tous",
+    "firstPage": "première page",
+    "previousPage": "page précédente",
+    "nextPage": "page suivante",
+    "lastPage": "dernière page"
   },
   "requests": {
     "profile": "Profil",
@@ -350,7 +380,20 @@
     "social": "Liens vers les réseaux sociaux",
     "url": "Entrer l'URL",
     "profileChangedMsg": "Les détails du profil ont été mis à jour avec succès.",
-    "resetData": "Réinitialisez avec succès les détails du profil."
+    "resetData": "Réinitialisez avec succès les détails du profil.",
+    "sessionTimeout": {
+      "title": "Délai d'expiration de la session",
+      "currentTimeout": "Délai actuel :",
+      "noTimeoutSet": "Aucun délai défini",
+      "minutes": " {{count}} minutes",
+      "updateSession": "Mettre à jour la session",
+      "updateTimeout": "Mettre à jour le délai",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Mettre à jour"
+    }
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -359,8 +402,8 @@
     "statistics": "Statistiques",
     "posts": "Des postes",
     "events": "Événements",
-    "blockedUsers": "Utilisateurs bloqués",
     "venues": "Lieux",
+    "blockedUsers": "Utilisateurs bloqués",
     "viewAll": "Voir tout",
     "upcomingEvents": "évènements à venir",
     "noUpcomingEvents": "Aucun événement à venir",
@@ -596,7 +639,12 @@
     "done": "Fait",
     "createChat": "Créer une discussion",
     "viewType": "Type de Vue",
-    "search": "rechercher"
+    "search": "rechercher",
+    "Events": "Événements",
+    "Workshops": "Ateliers",
+    "selectMonth": "Sélectionner le mois",
+    "selectDay": "Sélectionner le jour",
+    "selectYear": "Sélectionner l’année"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1079,8 +1127,9 @@
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
     "talawaUser": "Utilisateur Talawa",
-    "notFoundMsg": "Oops! ",
-    "backToHome": "De retour à la maison"
+    "notFoundMsg": "Oups ! La page que vous avez demandée est introuvable !",
+    "backToHome": "Retour à l'accueil",
+    "logoAlt": "Logo"
   },
   "statusBadge": {
     "completed": "Terminé",
@@ -1378,6 +1427,8 @@
     "menu": "Menu"
   },
   "organizationSidebar": {
+    "loading": "Chargement...",
+    "ends": "Se termine",
     "viewAll": "Voir tout",
     "events": "Événements",
     "noEvents": "Aucun événement à afficher",
@@ -1411,7 +1462,9 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "plus d'options"
+    "moreOptions": "Plus d'options",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite"
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
@@ -1742,6 +1795,10 @@
     "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
+    "starredMessages": "Messages favoris",
+    "all": "Tous",
+    "unread": "Non lus",
+    "groups": "Groupes",
     "title": "Discussions",
     "deleteChat": "Supprimer le Chat",
     "add": "Ajouter",
@@ -1794,9 +1851,12 @@
     "loadingImage": "Chargement de l'image...",
     "imageNotAvailable": "Image non disponible",
     "attachment": "pièce jointe",
+    "members": "membres",
     "reply": "Répondre",
     "edit": "Modifier",
     "delete": "Supprimer",
+    "noMessages": "Aucun message pour le moment",
+    "you": "Vous",
     "errorBoundary": {
       "title": "Quelque chose s'est mal passé",
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
@@ -2044,7 +2104,8 @@
     "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
     "continue": "Continuer",
     "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
-    "organizationNotFound": "Organisation non trouvée"
+    "organizationNotFound": "Organisation non trouvée",
+    "confirmLeaveButton": "Confirmer le départ"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2118,7 +2179,21 @@
     "viewGroup": "Voir le groupe de bénévoles",
     "editGroup": "Modifier le groupe de bénévoles",
     "invalidNumber": "Nombre invalide",
-    "viewToggle": "Basculer la vue"
+    "viewToggle": "Basculer la vue",
+    "recurringVolunteerTitle": "Être bénévole pour {{eventName}}",
+    "recurringGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "Souhaitez-vous être bénévole pour toute la série ou seulement pour cette occurrence ?",
+    "recurringGroupDescription": "Souhaitez-vous rejoindre \"{{groupName}}\" pour toute la série ou seulement pour cette occurrence ?",
+    "volunteerForEntireSeries": "Être bénévole pour toute la série",
+    "volunteerForSeriesDescription": "Vous serez bénévole pour tous les événements de cette série récurrente",
+    "joinGroupForSeriesDescription": "Vous rejoindrez ce groupe pour tous les événements de la série récurrente",
+    "volunteerForThisInstanceOnly": "Être bénévole pour cette occurrence uniquement",
+    "volunteerForInstanceDescription": "Vous serez bénévole uniquement pour l'événement du {{date}}",
+    "joinGroupForInstanceDescription": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
+    "submitRequest": "Envoyer la demande",
+    "baseEventRequired": "Événement de base requis",
+    "selectVolunteer": "Sélectionner un bénévole",
+    "volunteerScope": "Portée du bénévole"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2244,6 +2319,10 @@
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",
+    "notFoundOrDisabledDescription": "Le plugin auquel vous essayez d'accéder est introuvable ou désactivé. Veuillez contacter l'administrateur de votre organisation pour plus d'informations."
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",
     "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
@@ -2287,7 +2366,15 @@
     "talawaBranding": "Image de marque Talawa",
     "view": "Voir",
     "changeLanguage": "Changer de langue",
-    "userNotFoundError": "Utilisateur introuvable"
+    "userNotFoundError": "Utilisateur introuvable",
+    "selectAllOnPage": "Sélectionner toutes les lignes de cette page",
+    "actions": "Actions",
+    "bulkActions": "Actions groupées",
+    "selected": "sélectionné(s)",
+    "clear": "Effacer",
+    "clearSelection": "Effacer la sélection",
+    "loading": "Chargement...",
+    "selectRow": "Sélectionner la ligne {{rowKey}}"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2361,16 +2448,45 @@
     }
   },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "Vérifier l'e-mail",
+    "verifying": "Vérification de votre e-mail...",
+    "success": "E-mail vérifié !",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "error": "Échec de la vérification",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "loginRequired": "Veuillez vous connecter pour vérifier votre e-mail.",
+    "resendButton": "Renvoyer l'e-mail de vérification",
+    "resendSuccess": "L'e-mail de vérification a été renvoyé avec succès.",
+    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
+    "goToLogin": "Aller à la connexion"
+  },
+  "plugins": {
+    "loading": "Chargement du plugin...",
+    "component": "Composant",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "ID du plugin manquant",
+        "description": "Cette route n'a pas d'ID de plugin valide"
+      },
+      "notRegistered": {
+        "title": "Plugin non enregistré",
+        "description": "Veuillez ajouter ce plugin au registre dans {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "Aucun composant trouvé"
+      },
+      "componentNotFound": {
+        "title": "Composant non trouvé",
+        "availableComponents": "Composants disponibles : {{components}}"
+      },
+      "pluginError": {
+        "title": "Erreur du plugin",
+        "failedToLoad": "Échec du chargement du composant"
+      }
+    }
+  },
+  "csv": {
+    "demographics": "Démographie de {{category}}"
   }
 }

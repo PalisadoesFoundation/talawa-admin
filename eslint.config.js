@@ -8,173 +8,12 @@ import react from 'eslint-plugin-react';
 import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
-
-/**
- * Central registry for restricted imports used by the base rule and overrides.
- * Add new restrictions here, then allow them in specific folders via IDs.
- * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
- */
-const restrictedImports = [
-  {
-    id: 'mui-data-grid',
-    name: '@mui/x-data-grid',
-    message:
-      'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
-  },
-  {
-    id: 'mui-data-grid-pro',
-    name: '@mui/x-data-grid-pro',
-    message:
-      'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
-  },
-  {
-    id: 'rb-spinner',
-    name: 'react-bootstrap',
-    importNames: ['Spinner'],
-    message:
-      'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
-  },
-  {
-    id: 'rb-modal',
-    name: 'react-bootstrap',
-    importNames: ['Modal'],
-    message:
-      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
-  },
-  {
-    id: 'rb-modal-path',
-    name: 'react-bootstrap/Modal',
-    message:
-      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
-  },
-
-  {
-    id: 'rb-form',
-    name: 'react-bootstrap',
-    importNames: ['Form'],
-    message:
-      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
-  },
-  {
-    id: 'rb-form-path',
-    name: 'react-bootstrap/Form',
-    message:
-      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
-  },
-  {
-    id: 'mui-date-pickers',
-    name: '@mui/x-date-pickers',
-    message:
-      'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead.',
-  },
-  {
-    id: 'rb-table',
-    name: 'react-bootstrap',
-    importNames: ['Table'],
-    message:
-      'Do not import Table directly. Use the shared DataTable component instead.',
-  },
-  {
-    id: 'rb-table-path',
-    name: 'react-bootstrap/Table',
-    message:
-      'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
-  },
-  {
-    id: 'rb-button',
-    name: 'react-bootstrap',
-    importNames: ['Button'],
-    message:
-      'Direct imports of Button from react-bootstrap are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
-  },
-  {
-    id: 'rb-button-path',
-    name: 'react-bootstrap/Button',
-    message:
-      'Direct imports of react-bootstrap/Button are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
-  },
-  {
-    id: 'react-toastify',
-    name: 'react-toastify',
-    message:
-      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
-  },
-  {
-    id: 'dicebear-core',
-    name: '@dicebear/core',
-    message:
-      'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
-  },
-  {
-    name: '@testing-library/react',
-    importNames: ['fireEvent'],
-    message:
-      'Tests in this file use fireEvent for user interactions; our test standards require using userEvent from @testing-library/user-event for interaction fidelity and test reliability.',
-  },
-  {
-    name: '@mui/material',
-    importNames: ['Chip'],
-    message:
-      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
-  },
-  {
-    name: '@mui/material/Chip',
-    message:
-      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
-  },
-  {
-    name: '@mui/material',
-    importNames: ['TextField'],
-    message:
-      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
-  },
-  {
-    name: '@mui/material/TextField',
-    message:
-      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
-  },
-  {
-    name: '@mui/material',
-    importNames: ['FormControl'],
-    message:
-      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
-  },
-  {
-    name: '@mui/material/FormControl',
-    message:
-      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
-  },
-  {
-    name: '@mui/material',
-    importNames: ['Button'],
-    message:
-      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
-  },
-  {
-    name: '@mui/material/Button',
-    message:
-      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
-  },
-];
-
-const stripId = (entry) => {
-  const { id, ...rule } = entry;
-  void id;
-  return rule;
-};
-
-const restrictedImportPaths = restrictedImports.map(stripId);
-
-const restrictImportsExcept = (allowedIds = []) => ({
-  'no-restricted-imports': [
-    'error',
-    {
-      paths: restrictedImports
-        .filter(({ id }) => !allowedIds.includes(id))
-        .map(stripId),
-    },
-  ],
-});
+import {
+  restrictedImportPaths,
+  restrictImportsExcept,
+  securityRestrictions,
+  searchInputRestrictions,
+} from './scripts/eslint/rules/rules.ts';
 
 export default [
   {
@@ -307,30 +146,8 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-restricted-syntax': [
         'error',
-        // Prevent insecure token handling in authorization headers
-        // See docs/docs/docs/developer-resources/security.md for details on these rules
-        // Note: No current violations exist. This rule is retained to prevent future regressions.
-        // Prohibited: { authorization: localStorage.getItem('token') }
-        // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
-        {
-          selector:
-            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
-          message:
-            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
-        },
-        // Prevent using deprecated REVOKE_REFRESH_TOKEN mutation
-        {
-          selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
-          message:
-            'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
-        },
-        // Prevent passing refreshToken as a variable to mutations
-        {
-          selector:
-            "Property[key.name='variables'] Property[key.name='refreshToken']",
-          message:
-            'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
-        },
+        ...securityRestrictions,
+        ...searchInputRestrictions,
       ],
       /**
        * Enforce usage of standardized DataGridWrapper component
@@ -380,16 +197,18 @@ export default [
     rules: restrictImportsExcept(['rb-spinner']),
   },
   /**
-   * Exemption: FormFieldGroup component files
+   * Exemption: FormFieldGroup and FormField component files
    *
-   * FormFieldGroup files need direct react-bootstrap Form access for wrapper implementation.
-   * These files are the only ones allowed to import Form directly from react-bootstrap.
+   * FormFieldGroup and FormField files need direct react-bootstrap Form access for wrapper implementation.
++  * These files are the only ones allowed to import Form directly from react-bootstrap.
    * Allowed ID: rb-form, rb-form-path.
    */
   {
     files: [
       'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/shared-components/Auth/FormField/**/*.{ts,tsx}',
       'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/types/shared-components/Auth/FormField/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['rb-form', 'rb-form-path']),
   },
@@ -417,8 +236,8 @@ export default [
    */
   {
     files: [
-      'src/components/NotificationToast/**/*.{ts,tsx}',
-      'src/types/NotificationToast/**/*.{ts,tsx}',
+      'src/shared-components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/shared-components/NotificationToast/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['react-toastify']),
   },
@@ -503,6 +322,21 @@ export default [
       'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['dicebear-core']),
+  },
+  /**
+   * Exemption: SearchBar, SearchFilterBar, and DataTable components
+   * These components implement search functionality and need to use search inputs directly.
+   * Security restrictions still apply, but search input restrictions are disabled.
+   */
+  {
+    files: [
+      'src/shared-components/SearchFilterBar/SearchFilterBar.tsx',
+      'src/shared-components/DataTable/SearchBar.tsx',
+      'src/shared-components/SearchBar/SearchBar.tsx',
+    ],
+    rules: {
+      'no-restricted-syntax': ['error', ...securityRestrictions],
+    },
   },
   // Cypress-specific configuration
   {

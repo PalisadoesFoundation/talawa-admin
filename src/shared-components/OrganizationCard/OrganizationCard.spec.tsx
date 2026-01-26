@@ -47,7 +47,6 @@ vi.mock('react-i18next', () => ({
         'users.membershipStatus.member': 'Membership status: Member',
         'users.membershipStatus.pending': 'Membership status: Pending',
         'users.membershipStatus.notMember': 'Membership status: Not a member',
-        'profileAvatar.altText': 'Test Org',
       };
 
       return translations[key] || key;
@@ -60,12 +59,23 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="mock-avatar">{name}</div>
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string | null;
+    fallbackName?: string;
+    dataTestId?: string;
+  }) => (
+    <div
+      data-testid={dataTestId ?? 'profile-avatar'}
+      data-image-url={imageUrl ?? ''}
+      data-fallback-name={fallbackName ?? ''}
+    />
   ),
 }));
-
 vi.mock('shared-components/TruncatedText/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
@@ -146,9 +156,11 @@ describe('OrganizationCard', () => {
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
-    const img = screen.getByAltText('Test Org');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'http://example.com/avatar.png');
+    const avatar = screen.getByTestId('emptyContainerForImage');
+    expect(avatar).toHaveAttribute(
+      'data-image-url',
+      'http://example.com/avatar.png',
+    );
   });
 
   it('renders Avatar component when avatarURL is missing', () => {
@@ -158,7 +170,9 @@ describe('OrganizationCard', () => {
         <OrganizationCard data={dataWithoutAvatar} />
       </MockedProvider>,
     );
-    expect(screen.getByTestId('mock-avatar')).toBeInTheDocument();
+    const avatar = screen.getByTestId('emptyContainerForImage');
+    expect(avatar).toHaveAttribute('data-image-url', '');
+    expect(avatar).toHaveAttribute('data-fallback-name', 'Test Org');
     expect(
       screen.getByRole('heading', { name: 'Test Org' }),
     ).toBeInTheDocument();
@@ -201,7 +215,7 @@ describe('OrganizationCard', () => {
     expect(button).toHaveTextContent('Manage');
 
     await userEvent.click(button);
-    expect(mockNavigate).toHaveBeenCalledWith('/orgdash/123');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/orgdash/123');
   });
 
   it('renders "Visit" button and navigates correctly for joined user', async () => {

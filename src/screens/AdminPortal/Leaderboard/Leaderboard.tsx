@@ -181,7 +181,7 @@ function Leaderboard(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
         const handleNavigation = () => {
-          navigate(`/member/${orgId}`, { state: { id: _id } });
+          navigate(`/admin/member/${orgId}/${_id}`, { state: { id: _id } });
         };
         return (
           <div
