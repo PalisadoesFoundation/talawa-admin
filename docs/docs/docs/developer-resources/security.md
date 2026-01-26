@@ -100,4 +100,5 @@ If you encounter these linting errors in existing code:
 2.  **Logout:** Replace `revokeRefreshToken` mutation calls with `logout` mutation calls. Ensure you handle the loading and error states appropriate for `LOGOUT_MUTATION`.
 3.  **Variables:** Remove `refreshToken` from the `variables` object in your GraphQL mutation calls.
 
-For any questions, please reach out to the maintainers or consult the [ESLint configuration](../../../../eslint.config.js).
+For any questions, please reach out to the maintainers or consult the ESLint configuration
+in `eslint.config.js` and the modular configs under `scripts/eslint/config/`.
