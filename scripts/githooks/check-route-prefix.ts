@@ -195,10 +195,15 @@ const getFiles = (): string[] => {
     .split('\n')
     .map((file) => file.trim())
     .filter(Boolean)
+    .filter((file) => !file.includes('__tests__'))
     .filter(
       (file) =>
         (file.endsWith('.ts') || file.endsWith('.tsx')) &&
-        !file.endsWith('.d.ts'),
+        !file.endsWith('.d.ts') &&
+        !file.endsWith('.spec.ts') &&
+        !file.endsWith('.spec.tsx') &&
+        !file.endsWith('.test.ts') &&
+        !file.endsWith('.test.tsx'),
     );
 };
 
@@ -211,10 +216,11 @@ type Violation = {
 
 const collectViolations = (file: string, code: string): Violation[] => {
   const violations: Violation[] = [];
+  const isTsx = file.endsWith('.tsx');
   const ast = parse(code, {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    ecmaFeatures: { jsx: true },
+    ecmaFeatures: { jsx: isTsx },
     loc: true,
   });
 
