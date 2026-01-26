@@ -96,6 +96,7 @@ describe('Testing Advertisement Entry Component', () => {
     expect(statusBadge).toBeInTheDocument();
     expect(statusBadge).toHaveAttribute('aria-label', 'Inactive');
     await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await screen.findByTestId('deletebtn');
     await userEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
