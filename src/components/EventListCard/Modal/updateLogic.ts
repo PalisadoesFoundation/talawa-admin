@@ -62,8 +62,9 @@ interface IUpdateEventHandlerProps {
   refetchEvents?: () => void;
 }
 
+import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
+
 /**
- * Creates handlers for updating events from EventListCard modal edits.
  * @returns Object containing updateEventHandler.
  */
 export const useUpdateEventHandler = () => {
@@ -159,7 +160,7 @@ export const useUpdateEventHandler = () => {
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : (() => {
-            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
+            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.startTime}`;
             return dayjs.utc(dateTimeStr).isValid()
               ? dayjs.utc(dateTimeStr).toISOString()
               : '';

@@ -9,6 +9,11 @@
 export const DATE_FORMAT = 'YYYY-MM-DDTHH:mm:ssZ';
 
 /**
+ * Separator for ISO date time strings.
+ */
+export const DATE_TIME_SEPARATOR = 'T';
+
+/**
  * Prefix for dummy date time for dayjs parsing.
  */
 export const DUMMY_DATE_TIME_PREFIX = '2015-03-04T';
@@ -34,6 +39,19 @@ export const TEST_ID_PEOPLE_SNO = (id: string): string => `people-sno-${id}`;
  */
 export const TEST_ID_DELETE_EVENT_MODAL = (id: string): string =>
   `deleteEventModal-${id}`;
+
+/**
+ * Generates the data-testid for the update event modal.
+ * @param id - The ID of the event.
+ * @returns The formatted data-testid.
+ */
+export const TEST_ID_UPDATE_EVENT_MODAL = (id: string): string =>
+  `updateEventModal-${id}`;
+
+/**
+ * Date format for ISO date string (YYYY-MM-DD).
+ */
+export const DATE_FORMAT_ISO_DATE = 'YYYY-MM-DD';
 
 /**
  * Generates the route for a user component.

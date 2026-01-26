@@ -1,5 +1,6 @@
+import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
+
 /**
- * Component: EventListCardModals
  *
  * This component manages the modals for event list cards, including preview and delete modals.
  * It handles event updates, deletions, and user registration for events.
@@ -13,7 +14,7 @@
  * @returns JSX.Element - The rendered modals for event list card actions.
  *
  * @remarks
- * - Manages state for event properties such as all-day, public, and registrable flags.
+ * - Manages state for event properties such as all - day, public, and registrable flags.
  * - Provides functionality to register for events and navigate to the event dashboard.
  * - Uses Apollo Client mutations for updating and deleting events.
  *
@@ -443,7 +444,7 @@ function EventListCardModals({
 
       <BaseModal
         size="lg"
-        dataTestId={`updateEventModal${eventListCardProps.id}`}
+        dataTestId={TEST_ID_UPDATE_EVENT_MODAL(eventListCardProps.id)}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
