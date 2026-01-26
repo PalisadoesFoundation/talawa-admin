@@ -20,7 +20,7 @@ import styles from './DataTableSkeleton.module.css';
  * including optional selection checkbox and actions columns. The skeleton respects
  * the column definitions to ensure consistent layout during data loading.
  *
- * @param props - The component props (InterfaceDataTableSkeletonProps<T>):
+ * @param props - The component props (`InterfaceDataTableSkeletonProps<T>`):
  *   - ariaLabel: Optional accessible label
  *   - columns: Column definitions determining structure
  *   - effectiveSelectable: Whether to show selection checkbox

@@ -26,7 +26,7 @@ the column definitions to ensure consistent layout during data loading.
 
 [`InterfaceDataTableSkeletonProps`](../../../../types/shared-components/DataTable/props/interfaces/InterfaceDataTableSkeletonProps.md)\<`T`\>
 
-The component props (InterfaceDataTableSkeletonProps<T>):
+The component props (`InterfaceDataTableSkeletonProps<T>`):
   - ariaLabel: Optional accessible label
   - columns: Column definitions determining structure
   - effectiveSelectable: Whether to show selection checkbox

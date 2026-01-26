@@ -26,7 +26,7 @@ Useful for infinite scroll or "load more" pagination patterns.
 
 [`InterfaceLoadingMoreRowsProps`](../../../../types/shared-components/DataTable/props/interfaces/InterfaceLoadingMoreRowsProps.md)\<`T`\>
 
-The component props (InterfaceLoadingMoreRowsProps<T>):
+The component props (`InterfaceLoadingMoreRowsProps<T>`):
   - columns: Column definitions determining structure
   - effectiveSelectable: Whether to show selection checkbox column
   - hasRowActions: Whether to show actions column

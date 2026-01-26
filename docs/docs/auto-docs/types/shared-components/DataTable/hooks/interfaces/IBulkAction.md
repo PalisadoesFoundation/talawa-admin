@@ -89,4 +89,4 @@ ReadonlySet of keys for the selected rows
 
 `void` \| `Promise`\<`void`\>
 
-void or Promise<void> if async
+`void` or `Promise<void>` if async

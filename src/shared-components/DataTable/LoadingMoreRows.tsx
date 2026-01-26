@@ -19,7 +19,7 @@ import styles from './LoadingMoreRows.module.css';
  * matching the table structure with optional selection checkboxes and actions columns.
  * Useful for infinite scroll or "load more" pagination patterns.
  *
- * @param props - The component props (InterfaceLoadingMoreRowsProps<T>):
+ * @param props - The component props (`InterfaceLoadingMoreRowsProps<T>`):
  *   - columns: Column definitions determining structure
  *   - effectiveSelectable: Whether to show selection checkbox column
  *   - hasRowActions: Whether to show actions column

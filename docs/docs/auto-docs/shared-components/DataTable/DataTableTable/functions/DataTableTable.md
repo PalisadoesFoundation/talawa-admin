@@ -26,7 +26,7 @@ loading states during pagination. Includes sorting UI, selection controls, and a
 
 [`InterfaceDataTableTableProps`](../../../../types/shared-components/DataTable/props/interfaces/InterfaceDataTableTableProps.md)\<`T`\>
 
-The component props (InterfaceDataTableTableProps<T>):
+The component props (`InterfaceDataTableTableProps<T>`):
   Table structure (columns, sortedRows, ariaLabel, tableClassNames)
   Sorting (activeSortBy, activeSortDir, handleHeaderClick)
   Selection (effectiveSelectable, currentSelection, toggleRowSelection, headerCheckboxRef, selectAllOnPage, someSelectedOnPage, allSelectedOnPage)

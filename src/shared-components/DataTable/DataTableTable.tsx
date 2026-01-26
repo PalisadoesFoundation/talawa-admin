@@ -47,7 +47,7 @@ function renderCell<T>(
  * and action cells. Handles user interactions for sorting, row selection, and displays
  * loading states during pagination. Includes sorting UI, selection controls, and action cells.
  *
- * @param props - The component props (InterfaceDataTableTableProps<T>):
+ * @param props - The component props (`InterfaceDataTableTableProps<T>`):
  *   Table structure (columns, sortedRows, ariaLabel, tableClassNames)
  *   Sorting (activeSortBy, activeSortDir, handleHeaderClick)
  *   Selection (effectiveSelectable, currentSelection, toggleRowSelection, headerCheckboxRef, selectAllOnPage, someSelectedOnPage, allSelectedOnPage)

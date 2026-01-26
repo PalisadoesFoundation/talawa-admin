@@ -165,7 +165,7 @@ export interface IBulkAction<T> {
    *
    * @param rows - Array of selected rows
    * @param keys - ReadonlySet of keys for the selected rows
-   * @returns void or Promise<void> if async
+   * @returns `void` or `Promise<void>` if async
    */
   onClick: (rows: T[], keys: Key[]) => void | Promise<void>;
   /**
