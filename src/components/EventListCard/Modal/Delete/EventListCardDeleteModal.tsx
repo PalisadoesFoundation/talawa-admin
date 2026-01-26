@@ -38,6 +38,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventListCardDeleteModal.module.css';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
+import { TEST_ID_DELETE_EVENT_MODAL } from 'Constant/common';
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
@@ -72,7 +73,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       keyboard={false}
       centered
       title={t('deleteEvent')}
-      dataTestId={`deleteEventModal${eventListCardProps.id}`}
+      dataTestId={TEST_ID_DELETE_EVENT_MODAL(eventListCardProps.id)}
       footer={
         <>
           <Button
