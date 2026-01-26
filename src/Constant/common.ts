@@ -56,20 +56,32 @@ export const DATE_FORMAT_ISO_DATE = 'YYYY-MM-DD';
 /**
  * Generates the route for a user component.
  * @param compId - The component ID.
+ * @throws Error If compId is missing or empty.
  * @returns The formatted route.
  */
-export const ROUTE_USER = (compId: string): string => `user/${compId}`;
+export const ROUTE_USER = (compId: string): string => {
+  if (!compId) {
+    throw new Error('compId is required for ROUTE_USER');
+  }
+  return `user/${compId}`;
+};
 
 /**
  * Generates the route for a user component within an organization.
  * @param compId - The component ID.
  * @param orgId - The organization ID.
+ * @throws Error If compId is missing or empty.
  * @returns The formatted route.
  */
 export const ROUTE_USER_ORG = (
   compId: string,
   orgId: string | undefined,
-): string => (orgId ? `user/${compId}/${orgId}` : `user/${compId}`);
+): string => {
+  if (!compId) {
+    throw new Error('compId is required for ROUTE_USER_ORG');
+  }
+  return orgId ? `user/${compId}/${orgId}` : `user/${compId}`;
+};
 
 /**
  * Generates the backup environment filename.
@@ -91,7 +103,12 @@ export const IDENTIFIER_ID = 'id';
 
 /**
  * Generates a dummy date time for dayjs parsing.
- * @deprecated Use DUMMY_DATE_TIME_PREFIX instead.
+ * @deprecated Use DUMMY_DATE_TIME_PREFIX directly in new code.
+ * This function will be removed in v4.0.0.
+ *
+ * Migration:
+ * Replace `getDummyDateTime(time)` with `${DUMMY_DATE_TIME_PREFIX}${time}`
+ *
  * @param time - The time string (HH:mm:ss).
  * @returns The formatted ISO-like string.
  */
