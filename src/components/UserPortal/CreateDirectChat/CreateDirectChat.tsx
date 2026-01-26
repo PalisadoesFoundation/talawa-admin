@@ -53,21 +53,10 @@ import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-
-interface InterfaceOrganizationMember {
-  id: string;
-  name: string;
-  avatarURL?: string;
-  role: string;
-}
-interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  chats: GroupChat[];
-}
+import {
+  InterfaceCreateDirectChatProps,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/CreateDirectChat/interface';
 
 const { getItem } = useLocalStorage();
 
