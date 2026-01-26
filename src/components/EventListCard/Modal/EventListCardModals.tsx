@@ -23,6 +23,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import type { TFunction } from 'i18next'; // Import the specific type
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -58,8 +59,9 @@ interface IEventListCardModalProps {
   eventListCardProps: IEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
+  // Use TFunction to match expected types and avoid $TFunctionBrand errors
+  t: TFunction<"translation", undefined>;
+  tCommon: TFunction<"translation", undefined>;
 }
 
 function EventListCardModals({
@@ -430,7 +432,6 @@ function EventListCardModals({
         setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
       />
 
-      {/* delete modal */}
       <EventListCardDeleteModal
         eventListCardProps={eventListCardProps}
         eventDeleteModalIsOpen={eventDeleteModalIsOpen}
@@ -440,10 +441,8 @@ function EventListCardModals({
         deleteEventHandler={deleteEventHandler}
       />
 
-      {/* update modal */}
       <BaseModal
         size="lg"
-        // i18n-ignore-next-line
         dataTestId={`updateEventModal${eventListCardProps.id}`}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
@@ -478,7 +477,7 @@ function EventListCardModals({
                   eventEndDate,
                   recurrence,
                   updateOption,
-                  hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
+                  hasRecurrenceChanged: hasRecurrenceChanged(),
                   t,
                   hideViewModal,
                   setEventUpdateModalIsOpen,
@@ -495,7 +494,6 @@ function EventListCardModals({
         <div>
           <p>{t('updateRecurringEventMsg')}</p>
           <div>
-            {/* Only show "update this instance" option if recurrence rule hasn't changed */}
             {availableUpdateOptions.single && (
               <FormCheckField
                 type="radio"
@@ -520,7 +518,6 @@ function EventListCardModals({
                 className="mb-2"
               />
             )}
-            {/* Show "update entire series" option only when only name/description changed */}
             {availableUpdateOptions.entireSeries && (
               <FormCheckField
                 type="radio"
