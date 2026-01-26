@@ -6,6 +6,12 @@
 
 Defined in: [src/types/EventListCard/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L8)
 
+Event list card props extending InterfaceEvent.
+
+## Remarks
+
+refetchEvents is optional and triggers a refresh when provided.
+
 ## Extends
 
 - [`InterfaceEvent`](../../../Event/interface/type-aliases/InterfaceEvent.md)

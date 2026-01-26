@@ -4,9 +4,29 @@
 
 # Interface: InterfaceEventListCardModalsProps
 
-Defined in: [src/types/EventListCard/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L15)
+Defined in: [src/types/EventListCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L20)
 
 Props for EventListCardModals component.
+
+## Param
+
+The event card properties including event details.
+
+## Param
+
+Whether the modal is currently visible.
+
+## Param
+
+Callback to close the modal.
+
+## Param
+
+Translation function scoped to 'translation' namespace.
+
+## Param
+
+Translation function for common strings.
 
 ## Properties
 
@@ -14,7 +34,7 @@ Props for EventListCardModals component.
 
 > **eventListCardProps**: [`InterfaceEventListCard`](InterfaceEventListCard.md)
 
-Defined in: [src/types/EventListCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L16)
+Defined in: [src/types/EventListCard/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L21)
 
 ***
 
@@ -22,7 +42,7 @@ Defined in: [src/types/EventListCard/interface.ts:16](https://github.com/Palisad
 
 > **eventModalIsOpen**: `boolean`
 
-Defined in: [src/types/EventListCard/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L17)
+Defined in: [src/types/EventListCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L22)
 
 ***
 
@@ -30,7 +50,7 @@ Defined in: [src/types/EventListCard/interface.ts:17](https://github.com/Palisad
 
 > **hideViewModal**: () => `void`
 
-Defined in: [src/types/EventListCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L18)
+Defined in: [src/types/EventListCard/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L23)
 
 #### Returns
 
@@ -42,7 +62,7 @@ Defined in: [src/types/EventListCard/interface.ts:18](https://github.com/Palisad
 
 > **t**: `TFunction`\<`"translation"`, `undefined`\>
 
-Defined in: [src/types/EventListCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L20)
+Defined in: [src/types/EventListCard/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L25)
 
 ***
 
@@ -50,4 +70,4 @@ Defined in: [src/types/EventListCard/interface.ts:20](https://github.com/Palisad
 
 > **tCommon**: `TFunction`\<`"translation"`, `undefined`\>
 
-Defined in: [src/types/EventListCard/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L21)
+Defined in: [src/types/EventListCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L26)
