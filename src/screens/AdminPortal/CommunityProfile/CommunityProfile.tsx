@@ -232,15 +232,11 @@ const CommunityProfile = (): JSX.Element => {
         <Card.Body>
           <div className="mb-3">{t('communityProfileInfo')}</div>
           <form onSubmit={handleOnSubmit}>
-            <FormFieldGroup
-              label={t('communityName')}
-              name="communityName"
-              required
-            >
+            <FormFieldGroup label={t('communityName')} name="name" required>
               <input
                 type="text"
-                id="communityName"
-                name="communityName"
+                id="name"
+                name="name"
                 value={profileVariable.name}
                 onChange={handleOnChange}
                 className={`form-control mb-3 ${styles.inputField}`}
@@ -273,10 +269,10 @@ const CommunityProfile = (): JSX.Element => {
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
                   const base64file = file && (await convertToBase64(file));
-                  setProfileVariable({
-                    ...profileVariable,
+                  setProfileVariable((prev) => ({
+                    ...prev,
                     logo: base64file ?? '',
-                  });
+                  }));
                 }}
               />
             </FormFieldGroup>
