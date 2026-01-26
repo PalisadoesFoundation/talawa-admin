@@ -6,7 +6,7 @@
  * @returns JSX.Element
  */
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

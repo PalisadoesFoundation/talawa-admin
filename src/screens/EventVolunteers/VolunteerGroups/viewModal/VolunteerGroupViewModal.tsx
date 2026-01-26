@@ -35,7 +35,7 @@
  * ```
  */
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
-import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
+
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

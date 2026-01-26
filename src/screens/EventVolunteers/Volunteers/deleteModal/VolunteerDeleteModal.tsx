@@ -14,7 +14,7 @@ import {
   useMutationModal,
 } from 'shared-components/CRUDModalTemplate';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
