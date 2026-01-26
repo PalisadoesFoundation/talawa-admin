@@ -28,8 +28,8 @@ jobs:
       - name: Merge conflict finder
         uses: olivernybroe/action-conflict-finder@v4.1
 
-  Check-ESLint-Rules:
-    name: Check ESLint Rule Tests
+  Check-Route-Prefix:
+    name: Check Route Prefix Rule Tests
     needs: [Merge-Conflict-Check]
     runs-on: ubuntu-latest
     steps:
@@ -47,18 +47,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Run ESLint rule tests
+      - name: Run route prefix rule tests
         env:
           NODE_OPTIONS: '--max-old-space-size=4096 --disable-warning=ExperimentalWarning'
           CI: true
         run: |
-          chmod +x scripts/githooks/check-eslint-rules.sh
-          ./scripts/githooks/check-eslint-rules.sh
+          chmod +x scripts/githooks/check-route-prefix.sh
+          ./scripts/githooks/check-route-prefix.sh
 
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Test and Calculate Code Coverage
-    needs: [Merge-Conflict-Check, Check-ESLint-Rules]
+    needs: [Merge-Conflict-Check, Check-Route-Prefix]
     runs-on: ubuntu-latest
     strategy:
       matrix:

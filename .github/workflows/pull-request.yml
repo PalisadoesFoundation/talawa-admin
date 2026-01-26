@@ -465,7 +465,7 @@ jobs:
         Code-Quality-Checks,
         Check-AutoDocs,
         Check-Disable-Statements,
-        Check-ESLint-Rules,
+        Check-Route-Prefix,
         Check-Mock-Isolation,
         CSS-Policy-Check,
         MinIO-Compliance-Check,
@@ -476,8 +476,8 @@ jobs:
       - name: This job intentionally does nothing
         run: echo "This job intentionally does nothing"
 
-  Check-ESLint-Rules:
-    name: Check ESLint Rule Tests
+  Check-Route-Prefix:
+    name: Check Route Prefix Rule Tests
     needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     steps:
@@ -503,13 +503,13 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile --prefer-offline
 
-      - name: Run ESLint rule tests
+      - name: Run route prefix rule tests
         env:
           NODE_OPTIONS: '--max-old-space-size=4096 --disable-warning=ExperimentalWarning'
           CI: true
         run: |
-          chmod +x scripts/githooks/check-eslint-rules.sh
-          ./scripts/githooks/check-eslint-rules.sh
+          chmod +x scripts/githooks/check-route-prefix.sh
+          ./scripts/githooks/check-route-prefix.sh
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
