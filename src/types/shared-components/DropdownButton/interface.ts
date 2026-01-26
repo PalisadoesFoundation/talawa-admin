@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ButtonSize } from 'shared-components/Button';
+import type { ButtonSize } from 'shared-components/Button';
 import { DropdownButtonVariant } from './DropdownButtonVariant/interface';
 import { DropdownItem } from './DropdownItem/interface';
 /**

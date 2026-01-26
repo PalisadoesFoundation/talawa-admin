@@ -146,4 +146,29 @@ describe('DropdownButton', () => {
     const dropdownMenu = toggle.nextElementSibling as HTMLElement;
     expect(dropdownMenu).not.toHaveClass('dropdown-menu-end');
   });
+
+  it('does not call onClick handler when a disabled item is clicked', async () => {
+    const mockOnClick = vi.fn();
+    const testProps: InterfaceDropdownButtonProps = {
+      ...baseProps,
+      items: [
+        { key: '1', label: 'Item 1', onClick: mockOnClick, disabled: true },
+      ],
+    };
+
+    render(<DropdownButton {...testProps} />);
+
+    const toggle = screen.getByTestId('dropdown-button');
+    await user.click(toggle);
+
+    const disabledItem = screen.getByRole('button', { name: 'Item 1' });
+    await user.click(disabledItem);
+
+    expect(mockOnClick).not.toHaveBeenCalled();
+  });
+
+  it('applies labelTestId to label span', () => {
+    render(<DropdownButton {...baseProps} labelTestId="my-label" />);
+    expect(screen.getByTestId('my-label')).toHaveTextContent('Menu');
+  });
 });

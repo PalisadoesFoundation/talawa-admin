@@ -1,3 +1,19 @@
+/**
+ * Shared dropdown button with consistent styling and menu rendering.
+ * Wraps react-bootstrap Dropdown with the shared Button component.
+ *
+ * `@param` props - Component props from InterfaceDropdownButtonProps
+ * `@returns` JSX.Element - A styled dropdown with configurable items
+ *
+ * `@example`
+ * ```tsx
+ * <DropdownButton
+ *   label="Options"
+ *   items={[{ key: '1', label: 'Edit', onClick: handleEdit }]}
+ *   variant="primary"
+ * />
+ * ```
+ */
 import { Dropdown } from 'react-bootstrap';
 import Button from '../Button';
 import styles from './DropdownButton.module.css';

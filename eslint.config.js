@@ -200,7 +200,7 @@ export default [
    * Exemption: FormFieldGroup and FormField component files
    *
    * FormFieldGroup and FormField files need direct react-bootstrap Form access for wrapper implementation.
-+  * These files are the only ones allowed to import Form directly from react-bootstrap.
+   * These wrapper files are allowed to import Form directly from react-bootstrap.
    * Allowed ID: rb-form, rb-form-path.
    */
   {

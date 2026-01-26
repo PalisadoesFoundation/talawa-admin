@@ -1,7 +1,3 @@
-:root {
-  --picker-icon-space: 40px;
-}
-
 .fullWidth {
   composes: fullWidth from '../common/css/SharedPicker.module.css';
 }

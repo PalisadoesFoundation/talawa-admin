@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/shared-components/DropdownButton/DropdownButton.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DropdownButton/DropdownButton.tsx#L19)
+Defined in: [src/shared-components/DropdownButton/DropdownButton.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DropdownButton/DropdownButton.tsx#L35)
 
 Shared dropdown button with consistent styling and menu rendering.
 
