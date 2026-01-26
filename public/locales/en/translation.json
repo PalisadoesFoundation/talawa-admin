@@ -1540,7 +1540,9 @@
     "pinnedPostsLoadError": "Error loading pinned posts",
     "errorLoadingPosts": "Error loading posts",
     "loadMorePostsError": "Error loading more posts",
-    "sortPost": "Sort Post"
+    "sortPost": "Sort Post",
+    "idLabel": "id",
+    "userIdLabel": "userId"
   },
   "home": {
     "posts": "Posts",

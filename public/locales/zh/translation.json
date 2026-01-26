@@ -834,7 +834,7 @@
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
-    "noChangesToUpdate": "No changes to update",
+    "noChangesToUpdate": "没有要更新的更改",
     "thisInstance": "本实例",
     "thisAndFollowingInstances": "本实例及后续实例",
     "allInstances": "所有实例",
@@ -856,7 +856,7 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "invalidDate": "Invalid Date",
+    "invalidDate": "日期无效",
     "createChat": "创建聊天",
     "isRegisterable": "可注册",
     "creator": "创建者",
@@ -1496,7 +1496,9 @@
     "pinnedPostsLoadError": "加载置顶帖子时出错。请重试。",
     "errorLoadingPosts": "加载帖子时出错。请重试。",
     "loadMorePostsError": "加载更多帖子时出错。请重试。",
-    "sortPost": "排序帖子"
+    "sortPost": "排序帖子",
+    "idLabel": "id",
+    "userIdLabel": "userId"
   },
   "home": {
     "title": "帖子",

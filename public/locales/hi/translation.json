@@ -846,7 +846,7 @@
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
-    "noChangesToUpdate": "No changes to update",
+    "noChangesToUpdate": "अपडेट करने के लिए कोई बदलाव नहीं",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",
     "allInstances": "सभी उदाहरण",
@@ -868,7 +868,7 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
-    "invalidDate": "Invalid Date",
+    "invalidDate": "अमान्य तिथि",
     "createChat": "चैट बनाएं",
     "isRegisterable": "पंजीकरणीय है",
     "creator": "निर्माता",
@@ -1491,7 +1491,9 @@
     "pinnedPostsLoadError": "पिन किए गए पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "errorLoadingPosts": "पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "loadMorePostsError": "अधिक पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
-    "sortPost": "पोस्ट क्रमबद्ध करें"
+    "sortPost": "पोस्ट क्रमबद्ध करें",
+    "idLabel": "id",
+    "userIdLabel": "userId"
   },
   "home": {
     "title": "पदों",

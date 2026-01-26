@@ -1479,7 +1479,9 @@
     "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
     "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
     "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
-    "sortPost": "Ordenar Publicaciones"
+    "sortPost": "Ordenar Publicaciones",
+    "idLabel": "id",
+    "userIdLabel": "userId"
   },
   "home": {
     "posts": "Publicaciones",

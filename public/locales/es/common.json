@@ -315,4 +315,3 @@
   "userOrgRoute": "user/{{compId}}/{{orgId}}",
   "peopleSnoDataTestId": "people-sno-{{id}}"
 }
-```
