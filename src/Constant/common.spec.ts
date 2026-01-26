@@ -9,6 +9,7 @@ import {
   IDENTIFIER_ID,
   getDummyDateTime,
   DUMMY_DATE_TIME_PREFIX,
+  DATE_FORMAT,
 } from './common';
 
 afterEach(() => {
@@ -91,6 +92,11 @@ describe('common constants and helpers', () => {
 
     it('should handle empty time string', () => {
       expect(getDummyDateTime('')).toBe(DUMMY_DATE_TIME_PREFIX);
+    });
+  });
+  describe('DATE_FORMAT', () => {
+    it('should be a valid date format string', () => {
+      expect(DATE_FORMAT).toBe('YYYY-MM-DDTHH:mm:ssZ');
     });
   });
 });
