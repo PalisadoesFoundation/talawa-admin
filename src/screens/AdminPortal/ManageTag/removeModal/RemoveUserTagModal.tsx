@@ -19,7 +19,7 @@
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 
