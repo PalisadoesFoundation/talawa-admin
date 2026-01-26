@@ -11,11 +11,7 @@
     "src/**/*.spec.{ts,tsx,js}",
     "docs/src/**/*.test.{ts,tsx,js}",
     "docs/src/**/*.spec.{ts,tsx,js}",
-    "src/types/Event/interface.ts",
-    "src/test-utils/**",
-    "src/shared-components/BreadcrumbsComponent/**",
-    "src/shared-components/DateRangePicker/index.ts",
-    "src/types/shared-components/DateRangePicker/index.ts"
+    "src/test-utils/**"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
