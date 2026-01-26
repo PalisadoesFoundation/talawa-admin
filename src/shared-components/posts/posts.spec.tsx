@@ -38,7 +38,7 @@ const routerMocks = vi.hoisted(() => ({
 
 // Hoisted localStorage mock
 const localStorageMocks = vi.hoisted(() => ({
-  getItem: vi.fn((): string | null => 'user-123'),
+  getItem: vi.fn((_key?: string): string | null => 'user-123'),
 }));
 
 vi.mock('react-router', async () => {
@@ -550,6 +550,7 @@ describe('PostsPage Component', () => {
   beforeEach(() => {
     nextId = 1;
     vi.clearAllMocks();
+    localStorageMocks.getItem.mockReturnValue('user-123');
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -1487,12 +1488,90 @@ describe('FetchMore Success Coverage', () => {
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
+
+  describe('UserId Fallback Logic', () => {
+    const orgId = '123';
+
+    const createOrgPostMock = (userId: string | null): MockedResponse => ({
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: orgId },
+          userId: userId,
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: orgId,
+            name: 'Test Organization',
+            postsCount: 0,
+            posts: {
+              edges: [],
+              totalCount: 0,
+              pageInfo: {
+                startCursor: null,
+                endCursor: null,
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    it('retrieves userId from "userId" if it exists', async () => {
+      const testUserId = 'test-user-from-userId';
+      localStorageMocks.getItem.mockImplementation((key?: string) => {
+        if (key === 'userId') return testUserId;
+        if (key === 'id') return 'wrong-id';
+        return null;
+      });
+
+      renderComponent([createOrgPostMock(testUserId), emptyPinnedPostsMock]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+      });
+    });
+
+    it('falls back to "id" if "userId" does not exist', async () => {
+      const testId = 'test-user-from-id';
+      localStorageMocks.getItem.mockImplementation((key?: string) => {
+        if (key === 'userId') return null;
+        if (key === 'id') return testId;
+        return null;
+      });
+
+      renderComponent([createOrgPostMock(testId), emptyPinnedPostsMock]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+      });
+    });
+
+    it('returns null when both "userId" and "id" are absent', async () => {
+      localStorageMocks.getItem.mockImplementation(() => null);
+
+      renderComponent([createOrgPostMock(null), emptyPinnedPostsMock]);
+
+      await waitFor(() => {
+        expect(screen.getByText('No posts available.')).toBeInTheDocument();
+      });
+    });
+  });
 });
 
 describe('LoadingState Wrapper', () => {
   beforeEach(() => {
     nextId = 1;
     vi.clearAllMocks();
+    localStorageMocks.getItem.mockReturnValue('user-123');
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 

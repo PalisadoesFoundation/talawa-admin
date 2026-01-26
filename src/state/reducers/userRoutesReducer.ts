@@ -1,5 +1,5 @@
-import i18n from 'utils/i18n';
 import type { InterfaceAction } from 'state/helpers/Action';
+import { ROUTE_USER, ROUTE_USER_ORG } from 'Constant/common';
 
 export type TargetsType = {
   name: string;
@@ -21,7 +21,7 @@ const reducer = (
   switch (action.type) {
     case 'UPDATE_TARGETS': {
       return Object.assign({}, state, {
-        targets: [...generateRoutes(i18n.t as any, components, action.payload as string)],
+        targets: [...generateRoutes(components, action.payload as string)],
       });
     }
     default: {
@@ -74,7 +74,6 @@ const components: ComponentType[] = [
 ];
 
 const generateRoutes = (
-  t: (key: string, options?: object) => string,
   comps: ComponentType[],
   currentOrg?: string,
 ): TargetsType[] => {
@@ -84,22 +83,19 @@ const generateRoutes = (
       const entry: TargetsType =
         comp.comp_id === 'organizations'
           ? {
-            name: comp.name,
-            url: t('userRoute', { compId: comp.comp_id }),
-          }
+              name: comp.name,
+              url: ROUTE_USER(comp.comp_id as string),
+            }
           : {
-            name: comp.name,
-            url: t('userOrgRoute', {
-              compId: comp.comp_id,
-              orgId: currentOrg,
-            }),
-          };
+              name: comp.name,
+              url: ROUTE_USER_ORG(comp.comp_id as string, currentOrg),
+            };
       return entry;
     });
 };
 
 const INITIAL_USER_STATE = {
-  targets: generateRoutes(i18n.t as any, components),
+  targets: generateRoutes(components),
   components,
 };
 

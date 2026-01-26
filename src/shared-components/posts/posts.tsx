@@ -69,6 +69,7 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
 import { formatPostForCard } from './helperFunctions';
+import { IDENTIFIER_ID, IDENTIFIER_USER_ID } from 'Constant/common';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -87,7 +88,9 @@ export default function PostsPage() {
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
   const userId =
-    getItem<string>(t('userIdLabel')) ?? getItem<string>(t('idLabel')) ?? null;
+    getItem<string>(IDENTIFIER_USER_ID) ??
+    getItem<string>(IDENTIFIER_ID) ??
+    null;
   const [showPostViewModal, setShowPostViewModal] = useState(false);
   const [searchParams] = useSearchParams();
 
