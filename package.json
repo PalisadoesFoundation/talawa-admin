@@ -72,6 +72,7 @@
     "test": "cross-env TZ=UTC vitest run",
     "test:watch": "cross-env TZ=UTC vitest --ui",
     "test:coverage": "cross-env TZ=UTC vitest run --coverage",
+    "check-route-prefix": "tsx scripts/githooks/check-route-prefix.ts",
     "test:shard": "cross-env TZ=UTC node scripts/run-shard.js",
     "test:shard:coverage": "cross-env TZ=UTC node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
