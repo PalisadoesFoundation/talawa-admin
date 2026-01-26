@@ -412,7 +412,7 @@ export default function PostsPage() {
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
                 <Box sx={{ py: 4 }}>
-                  <Typography color="text.secondary">
+                  <Typography className="text-secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
                 </Box>
@@ -439,7 +439,7 @@ export default function PostsPage() {
                   endMessage={
                     postsToDisplay.length > 0 && (
                       <Box sx={{ py: 2 }}>
-                        <Typography color="text.secondary">
+                        <Typography className="text-secondary">
                           {t('noMorePosts')}
                         </Typography>
                       </Box>
@@ -465,7 +465,7 @@ export default function PostsPage() {
                 !orgPostListLoading &&
                 !isFiltering && (
                   <Box sx={{ py: 4 }}>
-                    <Typography color="text.secondary">
+                    <Typography className="text-secondary">
                       {t('noPosts')}
                     </Typography>
                   </Box>

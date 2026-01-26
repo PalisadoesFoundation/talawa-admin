@@ -78,7 +78,7 @@ const generateRoutes = (
   currentOrg?: string,
 ): TargetsType[] => {
   return comps
-    .filter((comp) => comp.name && comp.name !== '')
+    .filter((comp) => comp.name && comp.name !== '' && comp.comp_id)
     .map((comp) => {
       const entry: TargetsType =
         comp.comp_id === 'organizations'

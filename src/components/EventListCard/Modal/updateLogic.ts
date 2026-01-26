@@ -64,6 +64,7 @@ interface IUpdateEventHandlerProps {
 }
 
 /**
+ * Creates the update handler for EventListCard modal edits.
  * @returns Object containing updateEventHandler.
  */
 export const useUpdateEventHandler = () => {
@@ -171,12 +172,12 @@ export const useUpdateEventHandler = () => {
           : ''
         : dayjs
               .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+                `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`,
               )
               .isValid()
           ? dayjs
               .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+                `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`,
               )
               .toISOString()
           : '';
