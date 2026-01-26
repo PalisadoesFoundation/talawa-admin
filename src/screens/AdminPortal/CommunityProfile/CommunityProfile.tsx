@@ -264,22 +264,6 @@ const CommunityProfile = (): JSX.Element => {
 
             <FormFieldGroup label={t('logo')} name="logo" required>
               <input
->>>>>>> upstream/develop
-                type="file"
-                id="logo"
-                name="logo"
-                accept="image/*"
-                className={`form-control mb-3 ${styles.inputField}`}
-                data-testid="fileInput"
-                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-                  const file = e.target.files?.[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setProfileVariable((prev) => ({
-                    ...prev,
-                    logo: base64file ?? '',
-                  }));
-                }}
-                multiple={false}
                 type="file"
                 id="logo"
                 name="logo"
@@ -316,116 +300,117 @@ const CommunityProfile = (): JSX.Element => {
                   />
                 </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="instagram"
-                  name="instagramURL"
-                  data-testid="instagram"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.instagramURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="instagram"
+                    name="instagramURL"
+                    data-testid="instagram"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.instagramURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={XLogo} alt={`X ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="x"
-                  name="xURL"
-                  data-testid="x"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.xURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={XLogo} alt={`X ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="x"
+                    name="xURL"
+                    data-testid="x"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.xURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="linkedIn"
-                  name="linkedInURL"
-                  data-testid="linkedIn"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.linkedInURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="linkedIn"
+                    name="linkedInURL"
+                    data-testid="linkedIn"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.linkedInURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={GithubLogo} alt={`Github ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="github"
-                  name="githubURL"
-                  data-testid="github"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.githubURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={GithubLogo} alt={`Github ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="github"
+                    name="githubURL"
+                    data-testid="github"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.githubURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="youtube"
-                  name="youtubeURL"
-                  data-testid="youtube"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.youtubeURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="youtube"
+                    name="youtubeURL"
+                    data-testid="youtube"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.youtubeURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="reddit"
-                  name="redditURL"
-                  data-testid="reddit"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.redditURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="reddit"
+                    name="redditURL"
+                    data-testid="reddit"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.redditURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
 
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
-                <input
-                  aria-label={`${t('social')} ${t('url')}`}
-                  type="url"
-                  id="slack"
-                  name="slackURL"
-                  data-testid="slack"
-                  className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                  value={profileVariable.slackURL}
-                  onChange={handleOnChange}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="slack"
+                    name="slackURL"
+                    data-testid="slack"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.slackURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
               </div>
             </FormFieldGroup>
             <div
