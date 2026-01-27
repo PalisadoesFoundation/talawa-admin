@@ -33,6 +33,40 @@ export const MOCKS = [
                   endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  fundingRaised: 0,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1half',
+                  name: 'Campaign Half',
+                  startAt: dayjs.utc().add(1, 'month').toISOString(),
+                  endAt: dayjs.utc().add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 50,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1full',
+                  name: 'Campaign Full',
+                  startAt: dayjs.utc().add(1, 'month').toISOString(),
+                  endAt: dayjs.utc().add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 100,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1over',
+                  name: 'Campaign Over',
+                  startAt: dayjs.utc().add(1, 'month').toISOString(),
+                  endAt: dayjs.utc().add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 150,
                 },
               },
               {
@@ -43,6 +77,7 @@ export const MOCKS = [
                   endAt: dayjs.utc().add(11, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  fundingRaised: 0,
                 },
               },
             ],
