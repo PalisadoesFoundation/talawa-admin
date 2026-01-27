@@ -52,9 +52,9 @@ import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaFolderList,
 } from 'types/Agenda/interface';
-import AgendaFolderContainer from 'components/AgendaFolder/AgendaFolderContainer';
-import AgendaFolderCreateModal from 'components/AgendaFolder/Create/AgendaFolderCreateModal';
-import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
+import AgendaFolderContainer from 'components/AdminPortal/AgendaFolder/AgendaFolderContainer';
+import AgendaFolderCreateModal from 'components/AdminPortal/AgendaFolder/Create/AgendaFolderCreateModal';
+import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
