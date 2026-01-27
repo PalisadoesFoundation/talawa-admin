@@ -121,6 +121,7 @@ describe('Testing Advertisement Entry Component', () => {
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
     await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await screen.findByTestId('deletebtn');
     await userEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
@@ -182,6 +183,7 @@ describe('Testing Advertisement Entry Component', () => {
     deleteAdByIdMock.mockRejectedValueOnce('Network failure');
 
     await userEvent.click(screen.getByTestId('moreiconbtn'));
+    await screen.findByTestId('deletebtn');
     await userEvent.click(screen.getByTestId('deletebtn'));
 
     await waitFor(() => {
@@ -320,8 +322,8 @@ describe('Testing Advertisement Entry Component', () => {
     expect(queryByText('Edit')).toBeNull();
 
     await userEvent.click(optionsButton);
-
-    expect(queryByText('Edit')).toBeInTheDocument();
+    await screen.findByText('Edit');
+    expect(screen.getByText('Edit')).toBeInTheDocument();
 
     await userEvent.click(optionsButton);
 
@@ -374,6 +376,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     const optionsButton = screen.getByTestId('moreiconbtn');
     await userEvent.click(optionsButton);
+    await screen.findByTestId('editBtn');
     await userEvent.click(screen.getByTestId('editBtn'));
     const nameInput = screen.getByTestId('advertisementNameInput');
 
@@ -588,7 +591,7 @@ describe('Testing Advertisement Entry Component', () => {
     deleteAdByIdMock.mockRejectedValueOnce(new Error('Deletion Failed'));
 
     await userEvent.click(getByTestId('moreiconbtn'));
-
+    await screen.findByTestId('deletebtn');
     await userEvent.click(getByTestId('deletebtn'));
 
     await waitFor(() => {
