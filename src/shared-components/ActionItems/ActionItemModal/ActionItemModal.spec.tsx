@@ -1042,25 +1042,21 @@ describe('ActionItemModal', () => {
 
     it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
       const user = userEvent.setup();
+
       await act(async () => {
         renderModal({ editMode: true, actionItem: mockCompletedActionItem });
       });
+
       await screen.findByTestId('actionItemModal');
 
       const postNotesInput = (await screen.findByLabelText(
         'postCompletionNotes',
       )) as HTMLInputElement;
+
       expect(postNotesInput.value).toBe('Completed notes');
 
-      // Clear and type new value to trigger onChange
-      postNotesInput.focus();
       await user.clear(postNotesInput);
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'N');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'e');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'w');
+      await user.type(postNotesInput, 'New');
 
       await waitFor(() => {
         expect(postNotesInput.value).toBe('New');
@@ -1103,11 +1099,12 @@ describe('ActionItemModal', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for the volunteer group select wrapper
       const groupSelect = await screen.findByTestId('volunteerGroupSelect');
       expect(groupSelect).toBeInTheDocument();
 
-      // Verify the combobox is accessible
-      const groupInput = within(groupSelect).getByRole('combobox');
+      // Scope the combobox lookup to THIS autocomplete only
+      const groupInput = await within(groupSelect).findByRole('combobox');
       expect(groupInput).toBeInTheDocument();
     });
   });

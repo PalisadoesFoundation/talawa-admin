@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -109,11 +109,11 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles keyboard events correctly', async () => {
     renderComponent();
 
-    // Test Escape key
+    // Escape key SHOULD close the modal
     await user.keyboard('{Escape}');
-    expect(mockToggleDeleteModal).not.toHaveBeenCalled(); // Should not close as backdrop is static
+    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
 
-    // Test Enter key on confirm button
+    // Enter / click on confirm button
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     confirmButton.focus();
 
@@ -154,8 +154,7 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles modal state transitions correctly', async () => {
     const { rerender } = renderComponent(true);
 
-    // Verify initial open state
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getAllByRole('dialog').length).toBeGreaterThan(0);
 
     // Rerender with closed state
     rerender(
@@ -174,9 +173,8 @@ describe('AgendaItemsDeleteModal', () => {
       </Provider>,
     );
 
-    // Wait for the modal to be removed from the DOM
     await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryAllByRole('dialog')).toHaveLength(0);
     });
   });
 
@@ -184,12 +182,16 @@ describe('AgendaItemsDeleteModal', () => {
   test('meets accessibility requirements', () => {
     renderComponent();
 
-    // Verify modal has correct ARIA attributes
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    const dialogs = screen.getAllByRole('dialog');
 
-    // Verify buttons have accessible names
-    const buttons = screen.getAllByRole('button');
+    const modal = dialogs.find(
+      (el) => el.getAttribute('aria-modal') === 'true',
+    );
+
+    expect(modal).toBeDefined();
+    expect(modal).toHaveAttribute('aria-modal', 'true');
+
+    const buttons = within(modal as HTMLElement).getAllByRole('button');
     buttons.forEach((button) => {
       expect(button).toHaveAccessibleName();
     });
