@@ -14,7 +14,7 @@ import i18n from 'utils/i18nForTest';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import type { InterfaceVolunteerGroupViewModal } from 'types/shared-components/VolunteerGroupViewModal/interface';
+import type { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
 
 const t = {
   ...JSON.parse(
@@ -26,7 +26,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceVolunteerGroupViewModal[] = [
+const itemProps: InterfaceVolunteerGroupViewModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -98,7 +98,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
 ];
 
 const renderGroupViewModal = (
-  props: InterfaceVolunteerGroupViewModal,
+  props: InterfaceVolunteerGroupViewModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider>

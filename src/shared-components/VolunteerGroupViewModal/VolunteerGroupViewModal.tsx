@@ -49,13 +49,11 @@ import {
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { InterfaceVolunteerGroupViewModal } from 'types/shared-components/VolunteerGroupViewModal/interface';
+import { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
 
-const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
-  isOpen,
-  hide,
-  group,
-}) => {
+const VolunteerGroupViewModal: React.FC<
+  InterfaceVolunteerGroupViewModalProps
+> = ({ isOpen, hide, group }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
