@@ -518,23 +518,40 @@ describe('Testing VolunteerGroupModal', () => {
     const leaderSelect = await screen.findByTestId('leaderSelect');
     expect(leaderSelect).toBeInTheDocument();
     const leaderInput = within(leaderSelect).getByRole('combobox');
-
-    await userEvent.click(leaderInput);
-    const memberOption = await screen.findByText('Harve Lance');
+    const openButton = within(leaderSelect).getByRole('button', {
+      name: /open/i,
+    });
+    await userEvent.click(openButton);
+    const memberOption = await screen.findByRole(
+      'option',
+      {
+        name: 'Harve Lance',
+      },
+      { timeout: 3000 },
+    );
     await userEvent.click(memberOption);
 
     await waitFor(() => {
       expect(leaderInput).toHaveValue('Harve Lance');
     });
 
-    // Clear the input by focusing, clearing text, and pressing Escape
-    // This triggers the Autocomplete's onChange with null
+    // Clear the input - this triggers the Autocomplete's onChange with null
     await userEvent.clear(leaderInput);
-    await userEvent.keyboard('{Escape}');
 
     await waitFor(() => {
       expect(leaderInput).toHaveValue('');
     });
+
+    // Now verify that the previously selected leader is available in volunteers dropdown
+    const volunteerSelect = await screen.findByTestId('volunteerSelect');
+    const volunteerInput = within(volunteerSelect).getByRole('combobox');
+    await userEvent.click(volunteerInput);
+
+    // This should now work - Harve Lance should be available in volunteers
+    const harveLanceOption = await screen.findByRole('option', {
+      name: 'Harve Lance',
+    });
+    expect(harveLanceOption).toBeInTheDocument();
   });
 
   describe('Recurring Events', () => {
