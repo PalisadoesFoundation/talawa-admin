@@ -217,7 +217,7 @@ export const MOCKS_UNDEFINED_INVITE_ONLY = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          isInviteOnly: null,
+          isInviteOnly: undefined,
           startAt: dayjs.utc().add(10, 'days').toISOString(),
           endAt: dayjs.utc().add(11, 'days').toISOString(),
           creator,

@@ -109,11 +109,15 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   );
 };
 
+const mockEventListCardModals = vi.fn(() => (
+  <div data-testid="event-list-card-modals" />
+));
+
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
-      default: () => <div data-testid="event-list-card-modals" />,
+      default: mockEventListCardModals,
     }));
   });
 
@@ -451,10 +455,17 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockUndefinedInviteOnly);
     await wait();
 
-    // Verification happens implicitly if it doesn't crash, but ideally we'd check prop passed to child
-    // Since we mock the child EventListCardModals, we can't easily check the prop value without inspecting the mock calls.
-    // However, if we simply ensure it renders, it covers the branch `isInviteOnly: eventData.event.isInviteOnly ?? false`
     expect(getByTestId('event-details')).toBeInTheDocument();
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    // Verify that the component was called with isInviteOnly defaulted to false inside eventListCardProps
+    expect(mockEventListCardModals).toHaveBeenCalledWith(
+      expect.objectContaining({
+        eventListCardProps: expect.objectContaining({
+          isInviteOnly: false,
+        }),
+      }),
+      expect.anything(),
+    );
   });
 
   it('Should handle empty date strings by defaulting to 08:00', async () => {
