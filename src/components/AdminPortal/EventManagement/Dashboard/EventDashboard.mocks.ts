@@ -201,3 +201,71 @@ export const MOCKS_INVALID_DATETIME = [
     },
   },
 ];
+
+export const MOCKS_UNDEFINED_INVITE_ONLY = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          id: 'event123',
+          name: 'Test Event',
+          description: 'Test Description',
+          startAt: dayjs.utc().add(10, 'days').toISOString(),
+          endAt: dayjs.utc().add(11, 'days').toISOString(),
+          startTime: '09:00:00',
+          endTime: '17:00:00',
+          allDay: false,
+          location: 'India',
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: null,
+          attendees: [],
+          creator: {
+            _id: 'creator1',
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_EMPTY_DATE_STRINGS = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          id: 'event123',
+          name: 'Test Event',
+          description: 'Test Description',
+          startAt: '', // Empty string
+          endAt: '', // Empty string
+          startTime: '09:00:00',
+          endTime: '17:00:00',
+          allDay: false,
+          location: 'India',
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          attendees: [],
+          creator: {
+            _id: 'creator1',
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+      },
+    },
+  },
+];
