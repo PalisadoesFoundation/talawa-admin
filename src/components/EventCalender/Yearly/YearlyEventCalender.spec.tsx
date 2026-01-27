@@ -44,6 +44,7 @@ function getToggleButtonForDate(
 async function clickExpandForDate(
   container: HTMLElement,
   date: Date,
+  user: ReturnType<typeof userEvent.setup>,
 ): Promise<HTMLButtonElement> {
   const btn = await waitFor(() => {
     const found = getToggleButtonForDate(container, date);
@@ -55,7 +56,7 @@ async function clickExpandForDate(
 
     return found as HTMLButtonElement;
   });
-  await userEvent.click(btn);
+  await user.click(btn);
   return btn;
 }
 
@@ -563,7 +564,7 @@ describe('Calendar Component', () => {
     });
 
     const start = new Date(today.getFullYear(), 0, 15);
-    await clickExpandForDate(container, start);
+    await clickExpandForDate(container, start, user);
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
@@ -1403,13 +1404,21 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
+    const btnA = await clickExpandForDate(
+      container,
+      new Date(eventA.startAt),
+      user,
+    );
     expect(btnA).toBeTruthy();
     await waitFor(() =>
       expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
-    const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
+    const btnB = await clickExpandForDate(
+      container,
+      new Date(eventB.startAt),
+      user,
+    );
     expect(btnB).toBeTruthy();
     await waitFor(() =>
       expect(screen.getByText('Event B')).toBeInTheDocument(),
@@ -1456,7 +1465,7 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const expandBtn = await clickExpandForDate(container, specialDate);
+    const expandBtn = await clickExpandForDate(container, specialDate, user);
     expect(expandBtn).toBeTruthy();
 
     await waitFor(() =>

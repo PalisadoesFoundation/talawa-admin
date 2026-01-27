@@ -626,15 +626,22 @@ describe('EventRegistrantsModal', () => {
       'Choose the user that you want to add',
     );
 
-    await user.clear(input);
     await user.type(input, 'NonexistentUser');
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'].forEach(async (key) => {
-      const keyPress = key.length === 1 ? key : `{${key}}`;
-      await user.type(addOnspotLink, keyPress);
+    // Focus on link first
+    addOnspotLink.focus();
+
+    // Keys that should NOT open the modal
+    const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
+
+    for (const key in ignoredKeys) {
+      await user.keyboard(key);
 
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
-    });
+
+      // Ensure link is still focused for next key press
+      addOnspotLink.focus();
+    }
   });
 });

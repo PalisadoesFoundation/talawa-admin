@@ -479,7 +479,10 @@ describe('CreateGroupChat', () => {
     );
 
     // Verify description is cleared
-    expect(groupDescriptionInput).toHaveValue('');
+    const freshGroupDescriptionInput = screen.getByTestId(
+      'groupDescriptionInput',
+    );
+    expect(freshGroupDescriptionInput).toHaveValue('');
   });
 
   test('should clear selectedImage and description when modal is cancelled', async () => {
@@ -530,7 +533,10 @@ describe('CreateGroupChat', () => {
     );
 
     // Verify description is cleared
-    expect(groupDescriptionInput).toHaveValue('');
+    const freshGroupDescriptionInput = screen.getByTestId(
+      'groupDescriptionInput',
+    );
+    expect(freshGroupDescriptionInput).toHaveValue('');
   });
 
   test('should allow searching for users', async () => {
