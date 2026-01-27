@@ -41,6 +41,11 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
+// Using `any` in the generic constraint is necessary here to allow debounceInput
+// to accept functions with any parameter types (e.g., `(value: string) => void`).
+// This is a controlled use of `any` that maintains type safety for callers while
+// providing the flexibility needed for a general-purpose debounce wrapper.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function debounceInput<T extends (...args: any[]) => any>(
   fn: T,
   wait = 300,

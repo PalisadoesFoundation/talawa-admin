@@ -1,57 +1,4 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-
-// Hoisted mocks for debounce behaviour
-const debounceMocks = vi.hoisted(() => {
-  const cancel = vi.fn();
-  const flush = vi.fn();
-  const debounced = Object.assign(vi.fn(), { cancel, flush });
-  return { cancel, flush, debounced };
-});
-
-// Mock the performance util to return our debounced function
-vi.mock('utils/performance', async () => {
-  const actual = await vi.importActual<any>('utils/performance');
-  return { ...actual, debounceInput: () => debounceMocks.debounced };
-});
-
-// Mock react-router's useParams to provide orgId used by the component
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return { ...actual, useParams: () => ({ orgId: 'org-1' }) };
-});
-
-// Mock Apollo useQuery so component can render without provider
-vi.mock('@apollo/client', () => ({
-  useQuery: vi.fn(() => ({
-    data: { event: { actionItems: { edges: [] }, recurrenceRule: null, baseEvent: null } },
-    loading: false,
-    error: null,
-    refetch: vi.fn(),
-  })),
-}));
-
-import EventActionItems from './EventActionItems';
-
-describe('EventActionItems', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('calls debouncedSearch.cancel on unmount', () => {
-    const { unmount } = render(<EventActionItems eventId="1" />);
-
-    unmount();
-
-    expect(debounceMocks.cancel).toHaveBeenCalled();
-  });
-});
-import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import {
   LocalizationProvider,
@@ -72,6 +19,20 @@ dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+
+// Hoisted mocks for debounce behaviour
+const debounceMocks = vi.hoisted(() => {
+  const cancel = vi.fn();
+  const flush = vi.fn();
+  const debounced = Object.assign(vi.fn(), { cancel, flush });
+  return { cancel, flush, debounced };
+});
+
+// Mock the performance util to return our debounced function
+vi.mock('utils/performance', async () => {
+  const actual = await vi.importActual('utils/performance');
+  return { ...actual, debounceInput: () => debounceMocks.debounced };
+});
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -437,6 +398,14 @@ describe('EventActionItems', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+  });
+
+  it('calls debouncedSearch.cancel on unmount', () => {
+    const { unmount } = renderEventActionItems();
+
+    unmount();
+
+    expect(debounceMocks.cancel).toHaveBeenCalled();
   });
 
   describe('Component Rendering', () => {
