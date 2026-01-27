@@ -953,7 +953,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteersRequiredInput = screen.getByTestId(
         'volunteersRequiredInput',
       );
-      await user.clear(volunteersRequiredInput);
+      // await user.clear(volunteersRequiredInput); // Redundant for fresh render and may cause issues
       await user.type(volunteersRequiredInput, '5');
       await waitFor(() => {
         expect(volunteersRequiredInput).toHaveValue(5);
