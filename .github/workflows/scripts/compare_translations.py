@@ -99,7 +99,7 @@ def compare_translations(
             if missing_vars:
                 errors.append(
                     f"Missing interpolation variables in key '{key}' in '{other_file}': "
-                    f"{', '.join('{{{{' + var + '}}}}' for var in missing_vars)}"
+                    f"{', '.join('{{' + var + '}}' for var in missing_vars)}"
                 )
             if extra_vars:
                 errors.append(
