@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as apolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
@@ -343,10 +343,13 @@ describe('Testing Agenda Items Components', () => {
     createMutationMock(1, { onCall }),
   ];
 
-  const selectAgendaCategory = async (categoryId = 'agendaItemCategory1') => {
+  const selectAgendaCategory = async (categoryName = 'Category 1') => {
     const categorySelect = screen.getByTestId('categorySelect');
-    // Use selectOptions for native HTML select element with category._id as value
-    await userEvent.selectOptions(categorySelect, categoryId);
+    await userEvent.click(within(categorySelect).getByRole('combobox'));
+    const categoryOption = await screen.findByRole('option', {
+      name: categoryName,
+    });
+    await userEvent.click(categoryOption);
   };
 
   const renderEventAgendaItems = ({
