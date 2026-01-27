@@ -791,6 +791,8 @@
     "deleteItem": "Delete Item",
     "deleteFolder": "Delete Folder",
     "itemPreview": "Item Preview",
+    "fileUploadFailed": "File upload failed",
+    "invalidFileType": "Invalid File Type",
     "title": "Title",
     "enterTitle": "Enter Title",
     "sequence": "Sequence",

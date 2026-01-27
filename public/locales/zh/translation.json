@@ -791,6 +791,8 @@
     "itemPreview": "项目预览",
     "agendaItemDetails": "议程项目详细信息",
     "updateAgendaItem": "更新议程项目",
+    "fileUploadFailed": "文件上传失败",
+    "invalidFileType": "无效的文件类型",
     "title": "标题",
     "enterTitle": "输入标题",
     "sequence": "顺序",

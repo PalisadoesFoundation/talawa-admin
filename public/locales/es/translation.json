@@ -786,6 +786,8 @@
     "itemPreview": "Vista previa del elemento",
     "agendaItemDetails": "Detalles del punto del orden del día",
     "updateAgendaItem": "Actualizar punto del orden del día",
+    "fileUploadFailed": "La carga del archivo falló",
+    "invalidFileType": "Tipo de archivo no válido",
     "title": "Título",
     "enterTitle": "Ingresar título",
     "sequence": "Secuencia",
