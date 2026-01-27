@@ -7,10 +7,8 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import AgendaItemsPreviewModal from './AgendaItemsPreviewModal';
 import { describe, test, expect, vi } from 'vitest';

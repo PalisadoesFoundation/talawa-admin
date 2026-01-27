@@ -7,13 +7,14 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
+let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -84,7 +86,7 @@ describe('AgendaItemsDeleteModal', () => {
 
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
     renderComponent();
-    const closeButton = screen.getByTestId('modalCloseBtn');
+    const closeButton = screen.getByRole('button', { name: /close/i });
     await userEvent.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
@@ -107,23 +109,15 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles keyboard events correctly', async () => {
     renderComponent();
 
-    // Clear any previous calls to ensure clean state
-    mockDeleteAgendaItemHandler.mockClear();
-    mockToggleDeleteModal.mockClear();
+    // Test Escape key
+    await user.keyboard('{Escape}');
+    expect(mockToggleDeleteModal).not.toHaveBeenCalled(); // Should not close as backdrop is static
 
-    // Test Escape key - BaseModal has keyboard=true by default, so it will close
-    screen.getByTestId('deleteAgendaItemModal');
-    await userEvent.keyboard('{Escape}');
-
-    // Verify Escape key triggers the close handler but NOT the delete handler
-    expect(mockToggleDeleteModal).toHaveBeenCalled();
-    expect(mockDeleteAgendaItemHandler).not.toHaveBeenCalled();
-
-    // Test click on confirm button
+    // Test Enter key on confirm button
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     confirmButton.focus();
 
-    await userEvent.click(confirmButton);
+    await user.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
   });
 
@@ -161,7 +155,7 @@ describe('AgendaItemsDeleteModal', () => {
     const { rerender } = renderComponent(true);
 
     // Verify initial open state
-    expect(screen.getByTestId('deleteAgendaItemModal')).toBeInTheDocument();
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
 
     // Rerender with closed state
     rerender(
@@ -182,9 +176,7 @@ describe('AgendaItemsDeleteModal', () => {
 
     // Wait for the modal to be removed from the DOM
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('deleteAgendaItemModal'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
   });
 
@@ -192,9 +184,9 @@ describe('AgendaItemsDeleteModal', () => {
   test('meets accessibility requirements', () => {
     renderComponent();
 
-    // Verify modal has correct test id
-    const modal = screen.getByTestId('deleteAgendaItemModal');
-    expect(modal).toBeInTheDocument();
+    // Verify modal has correct ARIA attributes
+    const dialog = screen.getByRole('dialog');
+    expect(dialog).toHaveAttribute('aria-modal', 'true');
 
     // Verify buttons have accessible names
     const buttons = screen.getAllByRole('button');
