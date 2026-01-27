@@ -767,9 +767,12 @@
     "description": "描述",
     "enterDescription": "输入描述",
     "category": "议程类别",
+    "selectCategory": "选择类别",
     "attachments": "附件",
     "attachmentLimit": "添加任何图像文件或视频文件，最大 10MB",
     "fileSizeExceedsLimit": "文件大小超过 10MB 的限制",
+    "fileUploadError": "上传文件失败。请重试。",
+    "deleteAttachment": "删除附件",
     "urls": "网址",
     "url": "添加链接到网址",
     "enterUrl": "https://example.com",
@@ -2436,10 +2439,6 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
-    "averageRating": {
-      "title": "平均评论分数",
-      "rated": "评分 {{score}} / 5"
-    },
     "title": "活動統計",
     "reviews": {
       "title": "評論",
