@@ -125,6 +125,10 @@ describe('common constants and helpers', () => {
     it('should format update event modal test id with valid id', () => {
       expect(TEST_ID_UPDATE_EVENT_MODAL('123')).toBe('updateEventModal-123');
     });
+
+    it('should format update event modal test id with empty string', () => {
+      expect(TEST_ID_UPDATE_EVENT_MODAL('')).toBe('updateEventModal-');
+    });
   });
 
   describe('DATE_FORMAT_ISO_DATE', () => {
