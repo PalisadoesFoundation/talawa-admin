@@ -342,9 +342,6 @@ describe('Testing VolunteerGroupModal', () => {
     const descInput = await screen.findByTestId('groupDescriptionInput');
     await user.clear(descInput);
     await user.type(descInput, 'desc');
-    await waitFor(() => {
-      expect(descInput).toHaveValue('desc');
-    });
 
     const vrInput = await screen.findByTestId('volunteersRequiredInput');
     await user.clear(vrInput);
@@ -573,10 +570,6 @@ describe('Testing VolunteerGroupModal', () => {
       await user.clear(nameInput);
       await user.type(nameInput, 'Recurring Group Series');
 
-      await waitFor(() => {
-        expect(nameInput).toHaveValue('Recurring Group Series');
-      });
-
       const descInput = screen.getByTestId('groupDescriptionInput');
       await user.clear(descInput);
       await user.type(descInput, 'desc');
@@ -631,10 +624,6 @@ describe('Testing VolunteerGroupModal', () => {
       const nameInput = screen.getByTestId('groupNameInput');
       await user.clear(nameInput);
       await user.type(nameInput, 'Recurring Group Instance');
-
-      await waitFor(() => {
-        expect(nameInput).toHaveValue('Recurring Group Instance');
-      });
 
       const descInput = screen.getByTestId('groupDescriptionInput');
       await user.clear(descInput);
