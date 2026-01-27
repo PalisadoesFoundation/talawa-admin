@@ -381,10 +381,17 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             });
           } else {
             const parsed = parseInt(value);
-            if (!isNaN(parsed) && parsed > 0) {
+            if (!isNaN(parsed)) {
+              if (parsed > 0) {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: parsed,
+                });
+              }
+            } else {
               setFormState({
                 ...formState,
-                volunteersRequired: parsed,
+                volunteersRequired: null,
               });
             }
           }
