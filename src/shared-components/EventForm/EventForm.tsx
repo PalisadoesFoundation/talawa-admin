@@ -8,8 +8,10 @@ import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import FormCheck from 'react-bootstrap/FormCheck';
+import FormControl from 'react-bootstrap/FormControl';
+import { Button } from 'shared-components/Button';
+import styles from './EventForm.module.css';
 import type {
   IEventFormProps,
   IEventFormSubmitPayload,
@@ -50,6 +52,9 @@ const EventForm: React.FC<IEventFormProps> = ({
   submitting = false,
   showRecurrenceToggle = false,
   showCancelButton = false,
+  readOnly = false,
+  footerActions,
+  hideSubmitButton = false,
 }) => {
   const [formState, setFormState] = useState<IEventFormValues>(initialValues);
   // Default to INVITE_ONLY for new events (no ID/name usually implies new, or explicit logic)
@@ -191,6 +196,17 @@ const EventForm: React.FC<IEventFormProps> = ({
         .minute(parseInt(endTimeParts[1]))
         .second(parseInt(endTimeParts[2]) || 0)
         .toISOString();
+
+      // Ensure endAt is strictly greater than startAt
+      // If valid duration is 0 (e.g. same start/end time), add 1 minute to end time
+      if (
+        dayjs(endAtISO).isSame(dayjs(startAtISO)) ||
+        dayjs(endAtISO).isBefore(dayjs(startAtISO))
+      ) {
+        const adjustedEnd = dayjs(startAtISO).add(1, 'minute');
+        endAtISO = adjustedEnd.toISOString();
+        // We don't update formState here to avoid UI jumping, just payload
+      }
     }
 
     if (recurrenceEnabled && formState.recurrenceRule) {
@@ -250,10 +266,10 @@ const EventForm: React.FC<IEventFormProps> = ({
   };
 
   return (
-    <>
-      <Form onSubmit={handleSubmit}>
+    <div className={styles.eventFormContainer}>
+      <form onSubmit={handleSubmit} noValidate className="w-100">
         <label htmlFor="eventTitle">{t('eventName')}</label>
-        <Form.Control
+        <FormControl
           type="text"
           id="eventTitle"
           placeholder={t('enterName')}
@@ -267,9 +283,10 @@ const EventForm: React.FC<IEventFormProps> = ({
           data-testid="eventTitleInput"
           data-cy="eventTitleInput"
           aria-label={t('eventName')}
+          disabled={readOnly}
         />
         <label htmlFor="eventDescription">{tCommon('description')}</label>
-        <Form.Control
+        <FormControl
           as="textarea"
           id="eventDescription"
           placeholder={t('enterDescription')}
@@ -283,9 +300,10 @@ const EventForm: React.FC<IEventFormProps> = ({
           data-testid="eventDescriptionInput"
           data-cy="eventDescriptionInput"
           aria-label={tCommon('description')}
+          disabled={readOnly}
         />
         <label htmlFor="eventLocation">{tCommon('location')}</label>
-        <Form.Control
+        <FormControl
           type="text"
           id="eventLocation"
           placeholder={tCommon('enterLocation')}
@@ -299,6 +317,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           data-testid="eventLocationInput"
           data-cy="eventLocationInput"
           aria-label={tCommon('location')}
+          disabled={readOnly}
         />
         <div className={styles.datedivEvents}>
           <div>
@@ -324,6 +343,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                   'aria-label': tCommon('startDate'),
                 },
               }}
+              disabled={readOnly}
             />
           </div>
           <div>
@@ -346,6 +366,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                   'aria-label': tCommon('endDate'),
                 },
               }}
+              disabled={readOnly}
             />
           </div>
         </div>
@@ -377,7 +398,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                   });
                 }
               }}
-              disabled={formState.allDay}
+              disabled={formState.allDay || readOnly}
               slotProps={{
                 textField: {
                   'aria-label': tCommon('startTime'),
@@ -401,7 +422,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 }
               }}
               minTime={timeToDayJs(formState.startTime)}
-              disabled={formState.allDay}
+              disabled={formState.allDay || readOnly}
               slotProps={{
                 textField: {
                   'aria-label': tCommon('endTime'),
@@ -412,38 +433,42 @@ const EventForm: React.FC<IEventFormProps> = ({
         </div>
         <div className={styles.checkboxdivEvents}>
           <div className={styles.dispflexEvents}>
-            <label htmlFor="allday">{t('allDay')}?</label>
-            <Form.Switch
+            <label htmlFor="allday">{t('allDay')}</label>
+            <FormCheck
               className={`me-4 ${styles.switch}`}
               id="allday"
-              type="checkbox"
+              type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
               onChange={toggleAllDay}
+              label=""
               aria-label={t('allDay')}
+              disabled={readOnly}
             />
           </div>
           {showRecurrenceToggle && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="recurring">{t('recurring')}:</label>
-              <Form.Switch
+              <label htmlFor="recurring">{t('recurring')}</label>
+              <FormCheck
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
-                type="checkbox"
+                type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
                 onChange={toggleRecurrence}
+                label=""
                 aria-label={t('recurring')}
+                disabled={readOnly}
               />
             </div>
           )}
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="registrable">{t('registerable')}?</label>
-              <Form.Switch
+              <label htmlFor="registrable">{t('registerable')}</label>
+              <FormCheck
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
-                type="checkbox"
+                type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
                 onChange={(): void =>
@@ -452,17 +477,19 @@ const EventForm: React.FC<IEventFormProps> = ({
                     isRegisterable: !prev.isRegisterable,
                   }))
                 }
+                label=""
                 aria-label={t('registerable')}
+                disabled={readOnly}
               />
             </div>
           )}
           {showCreateChat && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="createChat">{t('createChat')}?</label>
-              <Form.Switch
+              <label htmlFor="createChat">{t('createChat')}</label>
+              <FormCheck
                 className={`me-4 ${styles.switch}`}
                 id="chat"
-                type="checkbox"
+                type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}
                 onChange={(): void =>
@@ -471,7 +498,9 @@ const EventForm: React.FC<IEventFormProps> = ({
                     createChat: !prev.createChat,
                   }))
                 }
+                label=""
                 aria-label={t('createChat')}
+                disabled={readOnly}
               />
             </div>
           )}
@@ -481,6 +510,7 @@ const EventForm: React.FC<IEventFormProps> = ({
             visibility={visibility}
             setVisibility={setVisibility}
             tCommon={tCommon}
+            disabled={readOnly}
           />
         )}
 
@@ -492,28 +522,34 @@ const EventForm: React.FC<IEventFormProps> = ({
             onToggle={setRecurrenceDropdownOpen}
             onSelect={handleRecurrenceSelect}
             t={t}
+            disabled={readOnly}
           />
         )}
-        <Button
-          type="submit"
-          className={styles.addButton}
-          value="createevent"
-          data-testid="createEventBtn"
-          data-cy="createEventBtn"
-          disabled={submitting}
-        >
-          {submitLabel}
-        </Button>
-        {showCancelButton && (
-          <Button
-            variant="secondary"
-            onClick={onCancel}
-            data-testid="eventFormCancelBtn"
-          >
-            {tCommon('cancel')}
-          </Button>
-        )}
-      </Form>
+        <div className={styles.footerContainer}>
+          {!readOnly && !hideSubmitButton && (
+            <Button
+              type="submit"
+              className={styles.addButton}
+              value="createevent"
+              data-testid="createEventBtn"
+              data-cy="createEventBtn"
+              disabled={submitting}
+            >
+              {submitLabel}
+            </Button>
+          )}
+          {footerActions}
+          {showCancelButton && (
+            <Button
+              variant="secondary"
+              onClick={onCancel}
+              data-testid="eventFormCancelBtn"
+            >
+              {tCommon('cancel')}
+            </Button>
+          )}
+        </div>
+      </form>
 
       {recurrenceEnabled && formState.recurrenceRule && (
         <CustomRecurrenceModal
@@ -549,7 +585,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           startDate={formState.startDate}
         />
       )}
-    </>
+    </div>
   );
 };
 

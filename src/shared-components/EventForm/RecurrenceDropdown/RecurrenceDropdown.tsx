@@ -5,7 +5,7 @@
 // translation-check-keyPrefix: organizationEvents
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './RecurrenceDropdown.module.css';
 import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/RecurrenceDropdown/interface';
 
 /**
@@ -20,6 +20,7 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   onToggle,
   onSelect,
   t,
+  disabled = false,
 }) => {
   return (
     <Dropdown show={isOpen} onToggle={onToggle}>
@@ -29,6 +30,7 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
         data-testid="recurrenceDropdown"
         className={`${styles.dropdown}`}
         aria-label={t('recurring')}
+        disabled={disabled}
       >
         {currentLabel}
       </Dropdown.Toggle>

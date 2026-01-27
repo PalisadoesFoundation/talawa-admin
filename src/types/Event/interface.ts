@@ -1,8 +1,9 @@
 import type { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
-import type { Dispatch, SetStateAction } from 'react';
+
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 
 import type { User, Feedback } from 'types/Event/type';
+import type { IEventFormSubmitPayload } from 'types/EventForm/interface';
 
 export enum UserRole {
   ADMINISTRATOR = 'ADMINISTRATOR',
@@ -155,39 +156,9 @@ export interface IPreviewEventModalProps {
   tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
-  eventStartDate: Date;
-  eventEndDate: Date;
-  setEventStartDate: Dispatch<SetStateAction<Date>>;
-  setEventEndDate: Dispatch<SetStateAction<Date>>;
-  alldaychecked: boolean;
-  setAllDayChecked: Dispatch<SetStateAction<boolean>>;
-  publicchecked: boolean;
-  setPublicChecked: Dispatch<SetStateAction<boolean>>;
-  registrablechecked: boolean;
-  setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
-  inviteOnlyChecked: boolean;
-  setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
-  formState: {
-    name: string;
-    eventdescrip: string;
-    location: string;
-    startTime: string;
-    endTime: string;
-  };
-  setFormState: (state: {
-    name: string;
-    eventdescrip: string;
-    location: string;
-    startTime: string;
-    endTime: string;
-  }) => void;
   registerEventHandler: () => Promise<void>;
-  handleEventUpdate: () => Promise<void>;
+  onFormSubmit: (payload: IEventFormSubmitPayload) => Promise<void>;
   openEventDashboard: () => void;
-  recurrence: InterfaceRecurrenceRule | null;
-  setRecurrence: Dispatch<SetStateAction<InterfaceRecurrenceRule | null>>;
-  customRecurrenceModalIsOpen: boolean;
-  setCustomRecurrenceModalIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IUpdateEventModalProps {

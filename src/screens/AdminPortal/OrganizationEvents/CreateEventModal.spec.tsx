@@ -1,11 +1,6 @@
 ﻿import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -219,6 +214,29 @@ vi.mock('@apollo/client', () => ({
   useMutation: vi.fn(),
 }));
 
+vi.mock('shared-components/BaseModal/BaseModal', () => ({
+  default: ({
+    children,
+    onHide,
+    title,
+    show,
+  }: {
+    children: React.ReactNode;
+    onHide: () => void;
+    title: string;
+    show: boolean;
+  }) =>
+    show ? (
+      <div data-testid="base-modal-mock">
+        <h1>{title}</h1>
+        <button data-testid="modalCloseBtn" onClick={onHide} type="button">
+          Close
+        </button>
+        {children}
+      </div>
+    ) : null,
+}));
+
 import CreateEventModal from './CreateEventModal';
 import { errorHandler } from 'utils/errorHandler';
 import {
@@ -271,7 +289,7 @@ describe('CreateEventModal', () => {
     expect(screen.getByTestId('eventLocationInput')).toBeInTheDocument();
   });
 
-  it('does not render when isOpen is false', () => {
+  it('does not render when isOpen is false', async () => {
     render(
       <CreateEventModal
         isOpen={false}
@@ -284,7 +302,8 @@ describe('CreateEventModal', () => {
     expect(screen.queryByText(/eventDetails/i)).not.toBeInTheDocument();
   });
 
-  it('calls onClose when close button is clicked', () => {
+  it('calls onClose when close button is clicked', async () => {
+    const user = userEvent.setup();
     const onClose = vi.fn();
     render(
       <CreateEventModal
@@ -295,13 +314,14 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const closeBtn = screen.getByTestId('createEventModalCloseBtn');
-    fireEvent.click(closeBtn);
+    const closeButton = screen.getByTestId('modalCloseBtn');
+    await user.click(closeButton);
 
     expect(onClose).toHaveBeenCalled();
   });
 
   it('does not call create mutation on empty submit', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -312,7 +332,7 @@ describe('CreateEventModal', () => {
     );
 
     const createBtn = screen.getByTestId('createEventBtn');
-    fireEvent.click(createBtn);
+    await user.click(createBtn);
 
     await waitFor(() => {
       expect(mockCreate).not.toHaveBeenCalled();
@@ -320,6 +340,7 @@ describe('CreateEventModal', () => {
   });
 
   it('submits form with valid data and calls onEventCreated', async () => {
+    const user = userEvent.setup();
     const onEventCreated = vi.fn();
     const onClose = vi.fn();
     render(
@@ -335,12 +356,15 @@ describe('CreateEventModal', () => {
     const descInput = screen.getByTestId('eventDescriptionInput');
     const locationInput = screen.getByTestId('eventLocationInput');
 
-    fireEvent.change(titleInput, { target: { value: 'My Event' } });
-    fireEvent.change(descInput, { target: { value: 'Event description' } });
-    fireEvent.change(locationInput, { target: { value: 'Somewhere' } });
+    await user.clear(titleInput);
+    await user.type(titleInput, 'My Event');
+    await user.clear(descInput);
+    await user.type(descInput, 'Event description');
+    await user.clear(locationInput);
+    await user.type(locationInput, 'Somewhere');
 
     const createBtn = screen.getByTestId('createEventBtn');
-    fireEvent.click(createBtn);
+    await user.click(createBtn);
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalledWith(
@@ -360,7 +384,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('toggles all-day checkbox and shows/hides time pickers', () => {
+  it('toggles all-day checkbox and shows/hides time pickers', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -376,13 +401,14 @@ describe('CreateEventModal', () => {
 
     // Toggle all-day off
     const alldayCheck = screen.getByTestId('allDayEventCheck');
-    fireEvent.click(alldayCheck);
+    await user.click(alldayCheck);
 
     // Now verify all-day is unchecked (time pickers are rendered but can't be queried by testID)
     expect(screen.queryByTestId('allDayEventCheck')).not.toBeChecked();
   });
 
-  it('toggles event visibility options', () => {
+  it('toggles event visibility options', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -402,25 +428,26 @@ describe('CreateEventModal', () => {
     expect(orgRadio).not.toBeChecked();
 
     // Toggle to organization visibility
-    fireEvent.click(orgRadio);
+    await user.click(orgRadio);
     expect(orgRadio).toBeChecked();
     expect(inviteRadio).not.toBeChecked();
     expect(publicRadio).not.toBeChecked();
 
     // Toggle to public visibility
-    fireEvent.click(publicRadio);
+    await user.click(publicRadio);
     expect(publicRadio).toBeChecked();
     expect(orgRadio).not.toBeChecked();
     expect(inviteRadio).not.toBeChecked();
 
     // Toggle back to invite only
-    fireEvent.click(inviteRadio);
+    await user.click(inviteRadio);
     expect(inviteRadio).toBeChecked();
     expect(publicRadio).not.toBeChecked();
     expect(orgRadio).not.toBeChecked();
   });
 
-  it('toggles registrable checkbox', () => {
+  it('toggles registrable checkbox', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -433,11 +460,12 @@ describe('CreateEventModal', () => {
     const registrableCheck = screen.getByTestId('registerableEventCheck');
     expect(registrableCheck).not.toBeChecked();
 
-    fireEvent.click(registrableCheck);
+    await user.click(registrableCheck);
     expect(registrableCheck).toBeChecked();
   });
 
   it('handles error when mutation fails', async () => {
+    const user = userEvent.setup();
     mockCreate.mockRejectedValueOnce(new Error('Network error'));
 
     render(
@@ -449,17 +477,14 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockErrorHandler).toHaveBeenCalledWith(
@@ -470,6 +495,7 @@ describe('CreateEventModal', () => {
   });
 
   it('submits form with recurrence when recurrence is set', async () => {
+    const user = userEvent.setup();
     const onEventCreated = vi.fn();
     render(
       <CreateEventModal
@@ -481,28 +507,25 @@ describe('CreateEventModal', () => {
     );
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     // Select a recurrence option by clicking dropdown
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     // Click on "Daily" option (index 1)
     const dailyOption = screen.getByTestId('recurrenceOption-1');
-    fireEvent.click(dailyOption);
+    await user.click(dailyOption);
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -512,6 +535,7 @@ describe('CreateEventModal', () => {
   });
 
   it('prevents submission when recurrence validation fails', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -522,23 +546,20 @@ describe('CreateEventModal', () => {
     );
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     // Select a recurrence option
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1'));
 
     // Mock validation to fail AFTER recurrence is set
     mockValidateRecurrenceInput.mockReturnValue({
@@ -546,7 +567,7 @@ describe('CreateEventModal', () => {
       errors: ['Invalid recurrence rule'],
     });
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       // Validation should be called and return invalid
@@ -559,7 +580,8 @@ describe('CreateEventModal', () => {
     expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
   });
 
-  it('opens custom recurrence modal when Custom option is selected', () => {
+  it('opens custom recurrence modal when Custom option is selected', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -570,23 +592,24 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
-    act(() => {
+    await act(async () => {
       const dropdown = screen.getByTestId('recurrenceDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
     });
 
-    act(() => {
+    await act(async () => {
       // Click on "Custom..." option (index 6)
       const customOption = screen.getByTestId('recurrenceOption-6');
-      fireEvent.click(customOption);
+      await user.click(customOption);
     });
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
 
   it('submits form with time when all-day is unchecked', async () => {
+    const user = userEvent.setup();
     const onEventCreated = vi.fn();
     render(
       <CreateEventModal
@@ -598,20 +621,17 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -623,7 +643,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('updates start and end dates', () => {
+  it('updates start and end dates', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -639,14 +660,17 @@ describe('CreateEventModal', () => {
     const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
     const futureEnd = dayjs().add(11, 'days').format('YYYY-MM-DD');
 
-    fireEvent.change(startDateInput, { target: { value: futureStart } });
-    fireEvent.change(endDateInput, { target: { value: futureEnd } });
+    await user.clear(startDateInput);
+    await user.type(startDateInput, futureStart);
+    await user.clear(endDateInput);
+    await user.type(endDateInput, futureEnd);
 
     expect(startDateInput).toHaveValue(futureStart);
     expect(endDateInput).toHaveValue(futureEnd);
   });
 
   it('updates time when all-day is unchecked', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -657,7 +681,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Note: TimePicker components don't have testIDs, so we skip direct testing
     // The functionality is covered by integration tests
@@ -666,7 +690,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('resets form when modal is closed and reopened', () => {
+  it('resets form when modal is closed and reopened', async () => {
+    const user = userEvent.setup();
     const { rerender } = render(
       <CreateEventModal
         isOpen={true}
@@ -677,15 +702,16 @@ describe('CreateEventModal', () => {
     );
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Test Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Test Description' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Test Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Test Description',
+    );
 
     // Close modal
-    fireEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     // Reopen modal
     rerender(
@@ -702,7 +728,7 @@ describe('CreateEventModal', () => {
     expect(screen.getByTestId('eventDescriptionInput')).toHaveValue('');
   });
 
-  it('disables create button when loading', () => {
+  it('disables create button when loading', async () => {
     mockUseMutation.mockReturnValue([mockCreate, { loading: true }]);
 
     render(
@@ -719,6 +745,7 @@ describe('CreateEventModal', () => {
   });
 
   it('validates required fields before submission', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -729,11 +756,10 @@ describe('CreateEventModal', () => {
     );
 
     // Fill only title, leave others empty
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       // Should not call create mutation if required fields are empty
@@ -741,7 +767,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('handles recurrence dropdown toggle', () => {
+  it('handles recurrence dropdown toggle', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -752,13 +779,13 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Open dropdown
-    act(() => {
-      fireEvent.click(dropdown);
+    await act(async () => {
+      await user.click(dropdown);
     });
 
     // Verify dropdown options are visible
@@ -767,6 +794,7 @@ describe('CreateEventModal', () => {
   });
 
   it('selects different recurrence options correctly', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -777,26 +805,23 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Select "Does not repeat"
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('recurrenceOption-0'));
-    });
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-0'));
 
     // Select "Daily"
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('recurrenceOption-1'));
-    });
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1'));
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
 
   it('handles whitespace-only input as invalid', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -807,17 +832,14 @@ describe('CreateEventModal', () => {
     );
 
     // Fill with whitespace only
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: '   ' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: '   ' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: '   ' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), '   ');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), '   ');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), '   ');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       // Should not call mutation with whitespace-only fields
@@ -826,6 +848,7 @@ describe('CreateEventModal', () => {
   });
 
   it('submits with all boolean flags correctly', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -836,22 +859,19 @@ describe('CreateEventModal', () => {
     );
 
     // Toggle all checkboxes
-    fireEvent.click(screen.getByTestId('allDayEventCheck')); // Turn off
-    fireEvent.click(screen.getByTestId('visibilityOrgRadio')); // Change to org visibility
-    fireEvent.click(screen.getByTestId('registerableEventCheck')); // Turn on
+    await user.click(screen.getByTestId('allDayEventCheck')); // Turn off
+    await user.click(screen.getByTestId('visibilityOrgRadio')); // Change to org visibility
+    await user.click(screen.getByTestId('registerableEventCheck')); // Turn on
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -873,6 +893,7 @@ describe('CreateEventModal', () => {
 
   // Date/Time Constraint Tests
   it('auto-adjusts endDate when startDate is changed to after endDate', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -891,19 +912,22 @@ describe('CreateEventModal', () => {
     const evenLaterDate = baseDate.add(15, 'days').format('YYYY-MM-DD');
 
     // First set startDate to an early date to establish a baseline
-    fireEvent.change(startDateInput, { target: { value: earlyDate } });
+    await user.clear(startDateInput);
+    await user.type(startDateInput, earlyDate);
     await waitFor(() => {
       expect(startDateInput).toHaveValue(earlyDate);
     });
 
     // Set endDate to a date after startDate
-    fireEvent.change(endDateInput, { target: { value: laterDate } });
+    await user.clear(endDateInput);
+    await user.type(endDateInput, laterDate);
     await waitFor(() => {
       expect(endDateInput).toHaveValue(laterDate);
     });
 
     // Now set startDate to a date AFTER the endDate - this should trigger auto-adjust
-    fireEvent.change(startDateInput, { target: { value: evenLaterDate } });
+    await user.clear(startDateInput);
+    await user.type(startDateInput, evenLaterDate);
 
     // Verify startDate was set
     await waitFor(() => {
@@ -917,7 +941,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('auto-adjusts endTime when startTime is changed to after endTime', () => {
+  it('auto-adjusts endTime when startTime is changed to after endTime', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -928,14 +953,15 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Note: TimePicker components don't have testIDs
     // This test is skipped as it requires DOM inspection which is not reliable
     expect(screen.queryByTestId('allDayEventCheck')).not.toBeChecked();
   });
 
-  it('respects minTime constraint on endTime picker', () => {
+  it('respects minTime constraint on endTime picker', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -946,7 +972,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Note: TimePicker components don't have testIDs
     // This test is skipped as direct time input testing is not feasible
@@ -955,6 +981,7 @@ describe('CreateEventModal', () => {
 
   // Recurrence Handling Tests
   it('returns "Custom" label when recurrence does not match predefined options', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -965,13 +992,13 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     // Click on a predefined option first
-    fireEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
+    await user.click(screen.getByTestId('recurrenceOption-2')); // Weekly
 
     // Now manually create a custom rule that doesn't match any option
     mockCreateDefaultRecurrenceRule.mockReturnValue({
@@ -981,8 +1008,8 @@ describe('CreateEventModal', () => {
     });
 
     // Open custom modal to set custom rule
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-6')); // Custom
 
     // Wait for modal to open and close it to apply the custom rule
     await waitFor(() => {
@@ -1000,6 +1027,7 @@ describe('CreateEventModal', () => {
   });
 
   it('opens custom recurrence modal with existing recurrence', async () => {
+    const user = userEvent.setup();
     // Set up a recurrence first
     mockCreateDefaultRecurrenceRule.mockReturnValue({
       frequency: 'WEEKLY',
@@ -1016,17 +1044,17 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Set a predefined recurrence first
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1')); // Daily
 
     // Now open custom modal - recurrence already exists
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-6')); // Custom
 
     // Wait for modal to open
     await waitFor(() => {
@@ -1041,7 +1069,8 @@ describe('CreateEventModal', () => {
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
 
-  it('displays dynamically generated recurrence option labels correctly', () => {
+  it('displays dynamically generated recurrence option labels correctly', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1052,11 +1081,11 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    act(() => {
-      fireEvent.click(dropdown);
+    await act(async () => {
+      await user.click(dropdown);
     });
 
     // Verify the dynamically generated labels based on current date
@@ -1081,7 +1110,8 @@ describe('CreateEventModal', () => {
   });
 
   // Edge Case Tests
-  it('handles null endDate correctly', () => {
+  it('handles null endDate correctly', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1094,13 +1124,14 @@ describe('CreateEventModal', () => {
     const endDateInput = screen.getByTestId('eventEndAt');
 
     // Clear the endDate to simulate null
-    fireEvent.change(endDateInput, { target: { value: '' } });
+    await user.clear(endDateInput);
 
     // Verify component handles empty/null date gracefully
     expect(endDateInput).toHaveValue('');
   });
 
-  it('verifies endDate DatePicker minDate constraint', () => {
+  it('verifies endDate DatePicker minDate constraint', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1117,10 +1148,12 @@ describe('CreateEventModal', () => {
     const futureEnd = dayjs().add(5, 'days').format('YYYY-MM-DD');
 
     // Set startDate
-    fireEvent.change(startDateInput, { target: { value: futureStart } });
+    await user.clear(startDateInput);
+    await user.type(startDateInput, futureStart);
 
     // Attempt to set endDate before startDate
-    fireEvent.change(endDateInput, { target: { value: futureEnd } });
+    await user.clear(endDateInput);
+    await user.type(endDateInput, futureEnd);
 
     // The mock DatePicker doesn't enforce minDate constraint, it just accepts the value
     // The actual component would handle this, but for testing we verify the value was set
@@ -1129,6 +1162,7 @@ describe('CreateEventModal', () => {
   });
 
   it('validates form with mixed whitespace - title valid but others whitespace', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1139,17 +1173,11 @@ describe('CreateEventModal', () => {
     );
 
     // Fill title with valid content, others with whitespace
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Valid Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: '   ' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: '   ' },
-    });
+    await user.type(screen.getByTestId('eventTitleInput'), 'Valid Event');
+    await user.type(screen.getByTestId('eventDescriptionInput'), '   ');
+    await user.type(screen.getByTestId('eventLocationInput'), '   ');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       // Should not call mutation
@@ -1158,6 +1186,7 @@ describe('CreateEventModal', () => {
   });
 
   it('handles non-Error exception in catch block', async () => {
+    const user = userEvent.setup();
     // Mock the mutation to throw a non-Error object
     mockCreate.mockRejectedValueOnce('String error');
 
@@ -1171,26 +1200,24 @@ describe('CreateEventModal', () => {
     );
 
     // Fill form with valid data
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
-      // Non-Error exceptions should not trigger errorHandler
-      expect(mockErrorHandler).not.toHaveBeenCalled();
+      // Non-Error exceptions should still trigger errorHandler to display generic error
+      expect(mockErrorHandler).toHaveBeenCalled();
     });
   });
 
   it('handles mutation response without expected data structure', async () => {
+    const user = userEvent.setup();
     // Mock mutation to return undefined data
     mockCreate.mockResolvedValueOnce({ data: undefined } as unknown as {
       data: { createEvent: { id: string } };
@@ -1206,17 +1233,14 @@ describe('CreateEventModal', () => {
     );
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -1225,7 +1249,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('verifies loading indicator prevents double submission', () => {
+  it('verifies loading indicator prevents double submission', async () => {
+    const user = userEvent.setup();
     mockUseMutation.mockReturnValue([mockCreate, { loading: true }]);
 
     render(
@@ -1243,13 +1268,14 @@ describe('CreateEventModal', () => {
     expect(createBtn).toBeDisabled();
 
     // Try to click (should not work)
-    fireEvent.click(createBtn);
+    await user.click(createBtn);
 
     // Should not call mutation since button is disabled
     expect(mockCreate).not.toHaveBeenCalled();
   });
 
   it('verifies time parsing in mutation payload for all-day false', async () => {
+    const user = userEvent.setup();
     const onEventCreated = vi.fn();
     render(
       <CreateEventModal
@@ -1261,22 +1287,19 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Note: TimePicker components don't have testIDs, skipping time input tests
 
     // Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Desc' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Loc' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(screen.getByTestId('eventLocationInput'), 'Loc');
 
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -1294,7 +1317,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('tests helper functions - getDayName and getMonthName via recurrence options', () => {
+  it('tests helper functions - getDayName and getMonthName via recurrence options', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1305,10 +1329,10 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     // The recurrence options should include day and month names
     // This tests getDayName and getMonthName helper functions
@@ -1320,6 +1344,7 @@ describe('CreateEventModal', () => {
   });
 
   it('tests complex multi-step workflow', async () => {
+    const user = userEvent.setup();
     const onEventCreated = vi.fn();
     render(
       <CreateEventModal
@@ -1334,41 +1359,42 @@ describe('CreateEventModal', () => {
     const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
     const futureEnd = dayjs().add(11, 'days').format('YYYY-MM-DD');
 
-    fireEvent.change(screen.getByTestId('eventStartAt'), {
-      target: { value: futureStart },
-    });
-    fireEvent.change(screen.getByTestId('eventEndAt'), {
-      target: { value: futureEnd },
-    });
+    await user.clear(screen.getByTestId('eventStartAt'));
+    await user.type(screen.getByTestId('eventStartAt'), futureStart);
+    await user.clear(screen.getByTestId('eventEndAt'));
+    await user.type(screen.getByTestId('eventEndAt'), futureEnd);
 
     // Step 2: Toggle all-day off
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Step 3: Skip time changes (TimePicker has no testIDs)
     // Time functionality is tested through integration
 
     // Step 4: Enable recurring and select recurrence
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-2')); // Weekly
 
     // Step 5: Toggle visibility to organization
-    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
+    await user.click(screen.getByTestId('visibilityOrgRadio'));
 
     // Step 6: Fill form
-    fireEvent.change(screen.getByTestId('eventTitleInput'), {
-      target: { value: 'Complex Event' },
-    });
-    fireEvent.change(screen.getByTestId('eventDescriptionInput'), {
-      target: { value: 'Complex Description' },
-    });
-    fireEvent.change(screen.getByTestId('eventLocationInput'), {
-      target: { value: 'Complex Location' },
-    });
+    await user.clear(screen.getByTestId('eventTitleInput'));
+    await user.type(screen.getByTestId('eventTitleInput'), 'Complex Event');
+    await user.clear(screen.getByTestId('eventDescriptionInput'));
+    await user.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Complex Description',
+    );
+    await user.clear(screen.getByTestId('eventLocationInput'));
+    await user.type(
+      screen.getByTestId('eventLocationInput'),
+      'Complex Location',
+    );
 
     // Step 7: Submit
-    fireEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
       expect(mockCreate).toHaveBeenCalled();
@@ -1378,7 +1404,8 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('tests timeToDayJs helper function indirectly through time changes', () => {
+  it('tests timeToDayJs helper function indirectly through time changes', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1389,7 +1416,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    await user.click(screen.getByTestId('allDayEventCheck'));
 
     // Note: TimePicker components don't have testIDs
     // timeToDayJs conversion is tested through integration
@@ -1397,6 +1424,7 @@ describe('CreateEventModal', () => {
   });
 
   it('tests hideCustomRecurrenceModal function', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1407,17 +1435,17 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Set a recurrence to enable CustomRecurrenceModal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1')); // Daily
 
     // Open custom modal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-6')); // Custom
 
     // Verify custom modal button is rendered (wait for state update)
     await waitFor(() => {
@@ -1427,7 +1455,7 @@ describe('CreateEventModal', () => {
 
     // Click the close button to invoke hideCustomRecurrenceModal
     const closeButton = screen.getByTestId('closeCustomModal');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     // After closing, the custom modal should no longer be visible
     await waitFor(() => {
@@ -1436,6 +1464,7 @@ describe('CreateEventModal', () => {
   });
 
   it('tests function-based recurrence state updates', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1446,17 +1475,17 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Set recurrence to enable CustomRecurrenceModal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1')); // Daily
 
     // Open custom modal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-6')); // Custom
 
     // Verify update button is rendered (wait for state update)
     await waitFor(() => {
@@ -1466,7 +1495,7 @@ describe('CreateEventModal', () => {
 
     const updateButton = screen.getByTestId('updateRecurrenceFunc');
     // Click the button to trigger function-based state update
-    fireEvent.click(updateButton);
+    await user.click(updateButton);
 
     // The function-based setter should have been called, which updates internal state
     // We can verify this by checking that the component is still functional
@@ -1474,6 +1503,7 @@ describe('CreateEventModal', () => {
   });
 
   it('tests conditional rendering of CustomRecurrenceModal', async () => {
+    const user = userEvent.setup();
     render(
       <CreateEventModal
         isOpen={true}
@@ -1484,7 +1514,7 @@ describe('CreateEventModal', () => {
     );
 
     // Enable recurring event checkbox first
-    fireEvent.click(screen.getByTestId('recurringEventCheck'));
+    await user.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
@@ -1494,8 +1524,8 @@ describe('CreateEventModal', () => {
     ).not.toBeInTheDocument();
 
     // Set a recurrence first (required before opening custom modal)
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1')); // Daily
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-1')); // Daily
 
     // Custom modal still not visible until we select "Custom"
     expect(
@@ -1503,8 +1533,8 @@ describe('CreateEventModal', () => {
     ).not.toBeInTheDocument();
 
     // Now open custom modal - recurrence exists so modal can render
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6')); // Custom
+    await user.click(dropdown);
+    await user.click(screen.getByTestId('recurrenceOption-6')); // Custom
 
     // Now the custom modal should be visible
     expect(
@@ -1520,7 +1550,7 @@ describe('CreateEventModal', () => {
       vi.useRealTimers();
     });
 
-    it('sets default start date to today 00:00 UTC (standard case)', () => {
+    it('sets default start date to today 00:00 UTC (standard case)', async () => {
       // Mock time using current year/month/day to maintain test robustness
       const now = dayjs();
       const mockDate = new Date(
@@ -1545,7 +1575,7 @@ describe('CreateEventModal', () => {
       expect(endDateInput).toHaveValue(now.format('YYYY-MM-DD'));
     });
 
-    it('sets default start date to today (no month crossing)', () => {
+    it('sets default start date to today (no month crossing)', async () => {
       // Mock time: Last day of a month
       const oct31 = dayjs.utc().year(2023).month(9).date(31).hour(23);
       const mockDate = oct31.toDate();
@@ -1565,7 +1595,7 @@ describe('CreateEventModal', () => {
       expect(startDateInput).toHaveValue(oct31.format('YYYY-MM-DD'));
     });
 
-    it('sets default start date to today (no year crossing)', () => {
+    it('sets default start date to today (no year crossing)', async () => {
       // Mock time: Last day of the year
       const dec31 = dayjs.utc().year(2023).month(11).date(31).hour(10);
       const mockDate = dec31.toDate();
@@ -1585,7 +1615,7 @@ describe('CreateEventModal', () => {
       expect(startDateInput).toHaveValue(dec31.format('YYYY-MM-DD'));
     });
 
-    it('calculates Today UTC correctly even if local time is different day', () => {
+    it('calculates Today UTC correctly even if local time is different day', async () => {
       // Intention: Simulate a case where "Now UTC" is Day X, but "Now Local" might be Day X-1 or X+1.
       // Since we use Date.UTC logic in the component, the local timezone shouldn't matter for the "Today UTC" calculation result.
 

@@ -18,6 +18,14 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 ***
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L13)
+
+***
+
 ### isOpen
 
 > **isOpen**: `boolean`

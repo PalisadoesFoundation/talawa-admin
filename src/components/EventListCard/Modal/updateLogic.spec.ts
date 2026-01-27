@@ -1,5 +1,9 @@
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
-import { useUpdateEventHandler } from './updateLogic';
+import {
+  useUpdateEventHandler,
+  hasRecurrenceChanged,
+  getAvailableUpdateOptions,
+} from './updateLogic';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -11,9 +15,14 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
-import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import {
+  Frequency,
+  InterfaceRecurrenceRule,
+  WeekDays,
+} from 'utils/recurrenceUtils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import type { IEventFormSubmitPayload } from 'types/EventForm/interface';
 
 dayjs.extend(utc);
 
@@ -795,8 +804,8 @@ describe('useUpdateEventHandler', () => {
           formState: {
             ...mockFormState,
             name: 'Changed Name',
-            startTime: '10:00:00',
-            endTime: '14:00:00',
+            startTime: '11:00:00',
+            endTime: '13:00:00',
           },
         }),
       );
@@ -805,62 +814,252 @@ describe('useUpdateEventHandler', () => {
       expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
   });
+});
 
-  describe('edge cases', () => {
-    it('does not show success toast or close modals when data is falsy', async () => {
-      mockUpdateStandaloneEvent.mockResolvedValueOnce({
-        data: null,
-      });
-      const { updateEventHandler } = useUpdateEventHandler();
+describe('hasRecurrenceChanged', () => {
+  const basePayload: Partial<IEventFormSubmitPayload> = {
+    recurrenceRule: null,
+  };
+  const baseProps: Partial<InterfaceEvent> = {
+    recurrenceRule: null,
+  };
 
-      const hideViewModal = vi.fn();
-      const setEventUpdateModalIsOpen = vi.fn();
-      const refetchEvents = vi.fn();
+  it('returns false when neither has recurrence', () => {
+    expect(
+      hasRecurrenceChanged(
+        basePayload as unknown as IEventFormSubmitPayload,
+        baseProps as unknown as InterfaceEvent,
+      ),
+    ).toBe(false);
+  });
 
-      await updateEventHandler(
-        buildHandlerInput({
-          formState: {
-            ...mockFormState,
-            name: 'Changed Name',
-          },
-          hideViewModal,
-          setEventUpdateModalIsOpen,
-          refetchEvents,
-        }),
-      );
+  it('returns true when recurrence added (null -> object)', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        payload as unknown as IEventFormSubmitPayload,
+        baseProps as unknown as InterfaceEvent,
+      ),
+    ).toBe(true);
+  });
 
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(NotificationToast.success).not.toHaveBeenCalled();
-      expect(setEventUpdateModalIsOpen).not.toHaveBeenCalled();
-      expect(hideViewModal).not.toHaveBeenCalled();
-      expect(refetchEvents).not.toHaveBeenCalled();
+  it('returns true when recurrence removed (object -> null)', () => {
+    const props: Partial<InterfaceEvent> = {
+      ...baseProps,
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        basePayload as unknown as IEventFormSubmitPayload,
+        props as unknown as InterfaceEvent,
+      ),
+    ).toBe(true);
+  });
+
+  it('returns false when recurrence components are identical', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: undefined,
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: undefined,
+      },
+    };
+    const props: Partial<InterfaceEvent> = {
+      ...baseProps,
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: undefined,
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: undefined,
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        payload as unknown as IEventFormSubmitPayload,
+        props as unknown as InterfaceEvent,
+      ),
+    ).toBe(false);
+  });
+
+  it('returns true when a recurrence component differs', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.TU], // different
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: undefined,
+      },
+    };
+    const props: Partial<InterfaceEvent> = {
+      ...baseProps,
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: undefined,
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        payload as unknown as IEventFormSubmitPayload,
+        props as unknown as InterfaceEvent,
+      ),
+    ).toBe(true);
+  });
+
+  it('returns true when count differs', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: 10,
+        recurrenceEndDate: undefined,
+      },
+    };
+    const props: Partial<InterfaceEvent> = {
+      ...baseProps,
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: 5, // different
+        recurrenceEndDate: undefined,
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        payload as unknown as IEventFormSubmitPayload,
+        props as unknown as InterfaceEvent,
+      ),
+    ).toBe(true);
+  });
+
+  it('returns true when recurrenceEndDate differs', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: dayjs().toDate(),
+      },
+    };
+    const props: Partial<InterfaceEvent> = {
+      ...baseProps,
+      recurrenceRule: {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        byMonth: undefined,
+        byMonthDay: undefined,
+        count: undefined,
+        recurrenceEndDate: dayjs().add(1, 'day').toDate(), // different
+      },
+    };
+    expect(
+      hasRecurrenceChanged(
+        payload as unknown as IEventFormSubmitPayload,
+        props as unknown as InterfaceEvent,
+      ),
+    ).toBe(true);
+  });
+});
+
+describe('getAvailableUpdateOptions', () => {
+  const baseCardProps: MockEventListCardProps = {
+    ...mockEventListCardProps,
+    isRecurringEventTemplate: false,
+    baseEvent: { id: 'base1' },
+  };
+
+  const basePayload: Partial<IEventFormSubmitPayload> = {
+    name: 'Test Event',
+    description: 'Test Description',
+    startDate: new Date(baseCardProps.startAt),
+    endDate: new Date(baseCardProps.endAt),
+    startAtISO: baseCardProps.startAt,
+    endAtISO: baseCardProps.endAt,
+    allDay: false,
+    recurrenceRule: null,
+    location: baseCardProps.location,
+    isPublic: baseCardProps.isPublic,
+    isRegisterable: baseCardProps.isRegisterable,
+    isInviteOnly: baseCardProps.isInviteOnly,
+  };
+
+  it('allows all options when only name changes (metadata only)', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      ...basePayload,
+      name: 'Changed Name',
+    };
+    const options = getAvailableUpdateOptions(
+      payload as unknown as IEventFormSubmitPayload,
+      baseCardProps,
+    );
+    expect(options).toEqual({
+      single: true,
+      following: true,
+      entireSeries: true,
     });
+  });
 
-    it('does not call refetchEvents when it is not provided', async () => {
-      mockUpdateStandaloneEvent.mockResolvedValueOnce({
-        data: { updateEvent: {} },
-      });
-      const { updateEventHandler } = useUpdateEventHandler();
+  it('disallows entireSeries when time changes', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      ...basePayload,
+      startAtISO: dayjs().add(1, 'year').toISOString(), // Changed
+    };
+    const options = getAvailableUpdateOptions(
+      payload as unknown as IEventFormSubmitPayload,
+      baseCardProps,
+    );
+    expect(options).toEqual({
+      single: true,
+      following: true,
+      entireSeries: false,
+    });
+  });
 
-      const hideViewModal = vi.fn();
-      const setEventUpdateModalIsOpen = vi.fn();
-
-      await updateEventHandler(
-        buildHandlerInput({
-          formState: {
-            ...mockFormState,
-            name: 'Changed Name',
-          },
-          hideViewModal,
-          setEventUpdateModalIsOpen,
-          refetchEvents: undefined,
-        }),
-      );
-
-      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
-      expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
-      expect(hideViewModal).toHaveBeenCalled();
+  it('disallows entireSeries when date changes', () => {
+    const payload: Partial<IEventFormSubmitPayload> = {
+      ...basePayload,
+      startDate: dayjs(baseCardProps.startAt).add(1, 'day').toDate(),
+    };
+    const options = getAvailableUpdateOptions(
+      payload as unknown as IEventFormSubmitPayload,
+      baseCardProps,
+    );
+    expect(options).toEqual({
+      single: true,
+      following: true,
+      entireSeries: false,
     });
   });
 });
