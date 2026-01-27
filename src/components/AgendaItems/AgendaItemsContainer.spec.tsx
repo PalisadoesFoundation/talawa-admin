@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import {
   LocalizationProvider,
   AdapterDayjs,
-} from 'shared-components/DatePicker';
+} from 'shared-components/DateRangePicker';
 import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
@@ -35,6 +35,7 @@ const callOnDragEnd = (result: DropResult): void => {
     capturedOnDragEnd(result);
   }
 };
+
 // Mock @hello-pangea/dnd to capture onDragEnd callback
 vi.mock('@hello-pangea/dnd', () => ({
   DragDropContext: ({
@@ -97,14 +98,16 @@ const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
 const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
-// Use vi.hoisted() to create mock that survives vi.mock hoisting
-const mockToast = vi.hoisted(() => ({
+const mockNotificationToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
 }));
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockToast,
+  NotificationToast: mockNotificationToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -211,13 +214,15 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('modalCloseBtn'),
+        screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
+      expect(
+        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
+      ).not.toBeInTheDocument(),
     );
   });
 
@@ -316,13 +321,15 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('modalCloseBtn'),
+        screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
+      expect(
+        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
+      ).not.toBeInTheDocument(),
     );
   });
 
@@ -367,13 +374,11 @@ describe('Testing Agenda Items components', () => {
     });
     await user.click(screen.getByTestId('updateAgendaItemBtn'));
 
-    await user.click(screen.getByTestId('updateAgendaItemBtn'));
-
-    // Note: Success toast assertion commented out - mock setup requires complex mutation
-    // verification that's difficult with StaticMockLink
-    // await waitFor(() => {
-    //   expect(NotificationToast.success).toHaveBeenCalled();
-    // });
+    await waitFor(() => {
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+        translations.agendaItemUpdated,
+      );
+    });
   });
 
   test('toasts error on unsuccessful updation', async () => {
@@ -401,12 +406,13 @@ describe('Testing Agenda Items components', () => {
     });
     await user.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
-    const titleInput = screen.getByTestId('titleInput');
-    const descriptionInput = screen.getByTestId('descriptionInput');
-    await userEvent.clear(titleInput);
-    await userEvent.clear(descriptionInput);
-    await userEvent.type(titleInput, formData.title);
-    await userEvent.type(descriptionInput, formData.description);
+    const titleInput = screen.getByLabelText(translations.title);
+    const descriptionInput = screen.getByLabelText(translations.description);
+
+    await user.clear(titleInput);
+    await user.clear(descriptionInput);
+    await user.type(titleInput, formData.title);
+    await user.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
@@ -414,7 +420,7 @@ describe('Testing Agenda Items components', () => {
     await user.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -465,7 +471,7 @@ describe('Testing Agenda Items components', () => {
     await user.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
       );
     });
@@ -515,7 +521,7 @@ describe('Testing Agenda Items components', () => {
     await user.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -783,7 +789,7 @@ describe('Testing Agenda Items components', () => {
 
     // Should toast an error
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -853,71 +859,5 @@ describe('Testing Agenda Items components', () => {
     await waitFor(() => {
       expect(mockRefetch).toHaveBeenCalled();
     });
-  });
-
-  test('filters out invalid JSON attachments during update submission', () => {
-    // This test verifies the filtering logic at lines 149-158 in AgendaItemsContainer.tsx
-    // The component uses this pattern to parse and filter attachments before mutation:
-    // - Line 150: filter empty strings with .filter((att) => att.trim() !== '')
-    // - Lines 152-156: try/catch JSON.parse returning null for invalid JSON
-    // - Line 158: filter(Boolean) to remove nulls
-
-    // Valid JSON metadata objects
-    const validAttachment1 = {
-      objectName: 'agenda-items/valid1.jpg',
-      mimeType: 'image/jpeg',
-      name: 'valid1.jpg',
-      fileHash: 'abc123',
-    };
-    const validAttachment2 = {
-      objectName: 'agenda-items/valid2.pdf',
-      mimeType: 'application/pdf',
-      name: 'valid2.pdf',
-      fileHash: 'def456',
-    };
-
-    // Test attachments array with mixed valid/invalid content
-    const testAttachments = [
-      JSON.stringify(validAttachment1), // Valid JSON - should be KEPT
-      'invalid-json{not-parseable', // Invalid JSON - should be FILTERED OUT
-      '', // Empty string - should be FILTERED OUT
-      JSON.stringify(validAttachment2), // Valid JSON - should be KEPT
-      '   ', // Whitespace only - should be FILTERED OUT
-      'not valid json at all', // Invalid JSON - should be FILTERED OUT
-      JSON.stringify({ objectName: 'third.png', mimeType: 'image/png' }), // Valid
-    ];
-
-    // Apply the same filtering logic as AgendaItemsContainer.tsx lines 149-158
-    const parsedAttachments = testAttachments
-      .filter((att) => att.trim() !== '') // Line 150: filter empty/whitespace strings
-      .map((att) => {
-        try {
-          return JSON.parse(att); // Lines 152-153: try to parse JSON
-        } catch {
-          return null; // Lines 154-156: return null for invalid JSON
-        }
-      })
-      .filter(Boolean); // Line 158: remove nulls (invalid JSON results)
-
-    // Verify the filtering produces only the valid parsed objects
-    expect(parsedAttachments).toHaveLength(3);
-
-    // Verify first valid attachment is correctly parsed
-    expect(parsedAttachments[0]).toEqual(validAttachment1);
-
-    // Verify second valid attachment is correctly parsed
-    expect(parsedAttachments[1]).toEqual(validAttachment2);
-
-    // Verify third valid attachment is correctly parsed
-    expect(parsedAttachments[2]).toEqual({
-      objectName: 'third.png',
-      mimeType: 'image/png',
-    });
-
-    // Verify no null values remain (catch block returns null, filter(Boolean) removes them)
-    expect(parsedAttachments.every((a) => a !== null)).toBe(true);
-
-    // Verify all remaining items are objects (parsed JSON), not strings
-    expect(parsedAttachments.every((a) => typeof a === 'object')).toBe(true);
   });
 });

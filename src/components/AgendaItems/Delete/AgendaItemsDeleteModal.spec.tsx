@@ -7,13 +7,14 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
+let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -22,6 +23,7 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
+    user = userEvent.setup();
   });
 
   afterEach(() => {

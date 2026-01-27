@@ -28,7 +28,6 @@
  * />
  * ```
  */
-// translation-check-keyPrefix: agendaItems
 import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button';
@@ -47,7 +46,10 @@ const AgendaItemsDeleteModal: React.FC<
   tCommon,
 }) => {
   return (
-    <BaseModal
+    <Modal
+      size="sm"
+      id={`deleteAgendaItemModal`}
+      className={styles.agendaItemModal}
       show={agendaItemDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       size="sm"
