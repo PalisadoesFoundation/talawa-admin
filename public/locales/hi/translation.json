@@ -768,7 +768,8 @@
     "agendaCategoryUpdated": "एजेंडा श्रेणी सफलतापूर्वक अपडेट की गई",
     "agendaCategoryDeleted": "एजेंडा श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
-    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
+    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?",
+    "errorLoadingOrganizationData": "संगठन डेटा लोड करते समय एक त्रुटि हुई"
   },
   "agendaItems": {
     "agendaItemDetails": "एजेंडा आइटम विवरण",

@@ -756,7 +756,8 @@
     "agendaCategoryUpdated": "Agenda Category updated successfully",
     "agendaCategoryDeleted": "Agenda Category deleted successfully",
     "deleteAgendaCategory": "Delete Agenda Category",
-    "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?"
+    "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?",
+    "errorLoadingOrganizationData": "Error occurred while loading Organization Data"
   },
   "agendaItems": {
     "agendaItemDetails": "Agenda Item Details",
