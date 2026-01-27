@@ -765,7 +765,7 @@
     "deleteAgendaCategory": "Delete Agenda Category",
     "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?"
   },
-  "agendaItems": {
+  "agendaSection": {
     "agendaFolderUpdated": "Agenda Folder updated successfully",
     "agendaFolderDeleted": "Agenda Folder deleted successfully",
     "deleteAgendaFolder": "Delete Agenda Folder",
