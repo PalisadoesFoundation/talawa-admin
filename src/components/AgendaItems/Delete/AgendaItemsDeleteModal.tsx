@@ -3,6 +3,8 @@ import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
+
+// translation-check-keyPrefix: agendaSection
 const AgendaItemDeleteModal: React.FC<InterfaceAgendaItemsDeleteModalProps> = ({
   agendaItemDeleteModalIsOpen,
   toggleDeleteItemModal,

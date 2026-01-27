@@ -32,6 +32,7 @@ import type {
   InterfaceAgendaItemsUpdateModalProps,
 } from 'types/Agenda/interface';
 
+// translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({

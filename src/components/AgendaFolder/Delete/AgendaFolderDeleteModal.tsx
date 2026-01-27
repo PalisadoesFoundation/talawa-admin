@@ -12,6 +12,7 @@ import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaFolderDeleteModalProps } from 'types/Agenda/interface';
 
+// translation-check-keyPrefix: agendaSection
 const AgendaFolderDeleteModal: React.FC<
   InterfaceAgendaFolderDeleteModalProps
 > = ({

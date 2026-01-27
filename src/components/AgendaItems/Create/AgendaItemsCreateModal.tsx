@@ -30,6 +30,7 @@ import type {
   InterfaceAttachment,
 } from 'types/Agenda/interface';
 
+// translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({

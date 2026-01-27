@@ -13,6 +13,7 @@ import { FaLink } from 'react-icons/fa';
 import { BaseModal } from 'shared-components/BaseModal';
 import { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
 
+// translation-check-keyPrefix: agendaSection
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({

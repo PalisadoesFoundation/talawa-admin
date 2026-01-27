@@ -4,6 +4,7 @@ import styles from 'style/app-fixed.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { InterfaceAgendaFolderCreateModalProps } from 'types/Agenda/interface';
 
+// translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
 > = ({
