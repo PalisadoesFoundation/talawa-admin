@@ -1,42 +1,5 @@
-/**
- * AgendaItemsCreateModal.module.css
- * Component-specific styles for AgendaItemsCreateModal
- */
-
 .AgendaItemsModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: var(--sidebar-offset, 13vw);
-}
-
-@media (max-width: 768px) {
-  .AgendaItemsModal {
-    margin: 10vh auto;
-    max-width: 90%;
-  }
-
-  .titlemodalAgendaItems {
-    width: 90%;
-  }
-
-  .greenregbtnAgendaItems {
-    width: 90%;
-  }
-}
-
-@media (max-width: 576px) {
-  .AgendaItemsModal {
-    margin: 5vh auto;
-    max-width: 95%;
-  }
-
-  .titlemodalAgendaItems {
-    width: 100%;
-  }
-
-  .greenregbtnAgendaItems {
-    width: 100%;
-  }
+  /* Modal container styles */
 }
 
 .titlemodalAgendaItems {
@@ -49,21 +12,8 @@
   width: 65%;
 }
 
-.modalHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
-}
-
 .noOutline input {
   outline: none;
-}
-
-.noOutline input:focus-visible,
-.noOutline textarea:focus-visible {
-  outline: 2px solid var(--focus-ring, #1b6ef3);
-  outline-offset: 2px;
 }
 
 .noOutline input:disabled {
@@ -75,11 +25,8 @@
   opacity: 1;
 }
 
-/* Increased specificity to override Bootstrap without !important */
-.noOutline.noOutline:is(:hover, :focus, :active, .show) {
-  outline: none;
-  box-shadow: none;
-  border: none;
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none !important;
 }
 
 .urlListItem {
@@ -142,6 +89,7 @@
 }
 
 .greenregbtnAgendaItems {
+  margin: 1rem 0 0;
   margin-top: 15px;
   border: 1px solid var(--regBtnAgendaItems-border);
   box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow);
@@ -159,7 +107,22 @@
     box-shadow 0.2s;
 }
 
-.greenregbtnAgendaItems:focus-visible {
-  outline: 2px solid var(--regBtnAgendaItems-border);
-  outline-offset: 2px;
+@media (max-width: 768px) {
+  .titlemodalAgendaItems {
+    width: 90%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .titlemodalAgendaItems {
+    width: 100%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 100%;
+  }
 }
