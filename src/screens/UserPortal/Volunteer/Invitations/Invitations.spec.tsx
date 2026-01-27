@@ -8,7 +8,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -494,7 +494,9 @@ const renderInvitations = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Invitations Screen', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    user = userEvent.setup();
     setItem('userId', 'userId');
   });
 
@@ -558,10 +560,10 @@ describe('Testing Invitations Screen', () => {
 
     // Sort by createdAt_ASC
     sortBtn = screen.getByTestId('sort');
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const createdAtASC = await screen.findByTestId('createdAt_ASC');
     expect(createdAtASC).toBeInTheDocument();
-    fireEvent.click(createdAtASC);
+    await user.click(createdAtASC);
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -583,11 +585,11 @@ describe('Testing Invitations Screen', () => {
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
 
-    fireEvent.click(filter);
+    await user.click(filter);
     const filterAll = await screen.findByTestId('all');
     expect(filterAll).toBeInTheDocument();
 
-    fireEvent.click(filterAll);
+    await user.click(filterAll);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('inviteSubject').length).toBeGreaterThan(0);
@@ -606,11 +608,11 @@ describe('Testing Invitations Screen', () => {
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
 
-    fireEvent.click(filter);
+    await user.click(filter);
     const filterGroup = await screen.findByTestId('group');
     expect(filterGroup).toBeInTheDocument();
 
-    fireEvent.click(filterGroup);
+    await user.click(filterGroup);
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -637,11 +639,11 @@ describe('Testing Invitations Screen', () => {
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
 
-    fireEvent.click(filter);
+    await user.click(filter);
     const filterIndividual = await screen.findByTestId('individual');
     expect(filterIndividual).toBeInTheDocument();
 
-    fireEvent.click(filterIndividual);
+    await user.click(filterIndividual);
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -664,9 +666,9 @@ describe('Testing Invitations Screen', () => {
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
     // Search by name on press of search button
-    await userEvent.type(searchInput, '1');
+    await user.type(searchInput, '1');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -707,7 +709,7 @@ describe('Testing Invitations Screen', () => {
     expect(acceptBtn.length).toBeGreaterThan(0);
 
     // Accept Request
-    await userEvent.click(acceptBtn[0]);
+    await user.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
@@ -728,7 +730,7 @@ describe('Testing Invitations Screen', () => {
     expect(rejectBtn.length).toBeGreaterThan(0);
 
     // Reject Request
-    await userEvent.click(rejectBtn[0]);
+    await user.click(rejectBtn[0]);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
@@ -748,7 +750,7 @@ describe('Testing Invitations Screen', () => {
     expect(acceptBtn.length).toBeGreaterThan(0);
 
     // Accept Request
-    await userEvent.click(acceptBtn[0]);
+    await user.click(acceptBtn[0]);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
@@ -874,7 +876,7 @@ describe('Testing Invitations Screen', () => {
       expect(statusBadgesBefore.length).toBeGreaterThan(0);
 
       // Accept Request
-      await userEvent.click(acceptBtn[0]);
+      await user.click(acceptBtn[0]);
 
       await waitFor(() => {
         expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
@@ -901,7 +903,7 @@ describe('Testing Invitations Screen', () => {
       expect(statusBadgesBefore.length).toBeGreaterThan(0);
 
       // Reject Request
-      await userEvent.click(rejectBtn[0]);
+      await user.click(rejectBtn[0]);
 
       await waitFor(() => {
         expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(

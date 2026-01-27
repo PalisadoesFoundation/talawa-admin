@@ -6,13 +6,13 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L43)
+Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L34)
 
 ## Parameters
 
 ### props
 
-[`InterfaceCardItem`](../interfaces/InterfaceCardItem.md)
+[`InterfaceCardItem`](../../../../../types/AdminPortal/OrganizationDashCards/CardItem/interface/interfaces/InterfaceCardItem.md)
 
 ## Returns
 

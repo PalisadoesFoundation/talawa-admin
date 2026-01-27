@@ -102,6 +102,7 @@ files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" -
             has_cleanup=true
           fi
         elif echo "$aftereach_blocks" | grep -q "vi\.resetAllMocks"; then
+          # shellcheck disable=SC2034
           cleanup_method="resetAllMocks"
           # resetAllMocks is discouraged - emit warning but don't fail
           >&2 echo "WARNING: $file uses vi.resetAllMocks() - consider vi.clearAllMocks() or vi.restoreAllMocks() instead"

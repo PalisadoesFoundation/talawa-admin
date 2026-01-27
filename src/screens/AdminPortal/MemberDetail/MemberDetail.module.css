@@ -1,0 +1,23 @@
+.peopleTabComponent {
+  background: #fff;
+  padding-top: 1rem;
+  border-radius: 20px;
+  margin: 1rem;
+}
+
+.peopleTabNavbarButtonHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-left: 4rem;
+  margin-top: 2rem;
+}
+
+.peopleTabComponentSection {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 3rem;
+}

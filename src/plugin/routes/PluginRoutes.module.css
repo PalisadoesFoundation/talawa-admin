@@ -1,0 +1,26 @@
+.errorContainer {
+  padding: 40px;
+  text-align: center;
+  background-color: #f8f9fa;
+  /* Consider var(--bg-header) or similar if available */
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin: 20px;
+}
+
+.errorTitle {
+  color: #dc3545;
+  /* var(--errorState-color) or similar */
+  margin-bottom: 16px;
+}
+
+.errorText {
+  color: #6c757d;
+  /* var(--secondText-color) */
+  margin-bottom: 8px;
+}
+
+.errorDescription {
+  color: #6c757d;
+  font-size: 14px;
+}

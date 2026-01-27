@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,
@@ -6,16 +5,11 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
 import styles from './VolunteerGroupModal.module.css';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import Autocomplete from '@mui/material/Autocomplete';
-import Button from 'shared-components/Button';
-import FormCheck from 'react-bootstrap/FormCheck';
-import FormGroup from 'react-bootstrap/FormGroup';
-import FormLabel from 'react-bootstrap/FormLabel';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { Autocomplete } from '@mui/material';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -24,7 +18,11 @@ import {
   UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { errorHandler } from 'utils/errorHandler';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import {
+  CreateModal,
+  EditModal,
+  useMutationModal,
+} from 'shared-components/CRUDModalTemplate';
 
 export interface InterfaceVolunteerGroupModal {
   isOpen: boolean;
@@ -101,9 +99,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
 
-  const updateGroupHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
-      e.preventDefault();
+  const { isSubmitting: isUpdating, execute: executeUpdate } = useMutationModal<
+    Record<string, never>
+  >(
+    async () => {
+      if (!group?.id) {
+        throw new Error('Group ID is required for update');
+      }
 
       const updatedFields: {
         [key: string]: number | string | undefined | null;
@@ -118,58 +120,61 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       if (volunteersRequired !== group?.volunteersRequired) {
         updatedFields.volunteersRequired = volunteersRequired;
       }
-      try {
-        await updateVolunteerGroup({
-          variables: {
-            id: group?.id,
-            data: { ...updatedFields, eventId },
-          },
-        });
+
+      await updateVolunteerGroup({
+        variables: {
+          id: group.id,
+          data: { ...updatedFields, eventId },
+        },
+      });
+    },
+    {
+      onSuccess: () => {
         NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
-      } catch (error: unknown) {
+      },
+      onError: (error) => {
         errorHandler(t, error);
-      }
+      },
     },
-    [formState, group],
   );
 
-  // Function to create a new volunteer group
-  const createGroupHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
-      try {
-        e.preventDefault();
+  const { isSubmitting: isCreating, execute: executeCreate } = useMutationModal<
+    Record<string, never>
+  >(
+    async () => {
+      if (isRecurring && !baseEvent) {
+        NotificationToast.error(t('baseEventRequired'));
+        throw new Error('Base event is required for recurring events');
+      }
 
-        // Template-First Hierarchy: Use scope-based approach
-        const mutationData: InterfaceCreateVolunteerGroupData = {
-          eventId: isRecurring
-            ? baseEvent?.id // Always use baseEvent for recurring events (templates stored in base)
-            : eventId, // Use eventId for non-recurring events
-          leaderId: leader?.id,
-          name,
-          description,
-          volunteersRequired,
-          volunteerUserIds: volunteerUsers.map((user) => user.id),
-        };
+      const mutationData: InterfaceCreateVolunteerGroupData = {
+        eventId: isRecurring && baseEvent ? baseEvent.id : eventId,
+        leaderId: leader?.id,
+        name,
+        description,
+        volunteersRequired,
+        volunteerUserIds: volunteerUsers.map((user) => user.id),
+      };
 
-        // Add Template-First recurring event logic
-        if (isRecurring) {
-          if (applyTo === 'series') {
-            mutationData.scope = 'ENTIRE_SERIES';
-            // No recurringEventInstanceId needed - template appears on all instances
-          } else {
-            mutationData.scope = 'THIS_INSTANCE_ONLY';
-            mutationData.recurringEventInstanceId = eventId; // Current instance ID
-          }
+      if (isRecurring) {
+        if (applyTo === 'series') {
+          mutationData.scope = 'ENTIRE_SERIES';
+        } else {
+          mutationData.scope = 'THIS_INSTANCE_ONLY';
+          mutationData.recurringEventInstanceId = eventId;
         }
+      }
 
-        await createVolunteerGroup({
-          variables: {
-            data: mutationData,
-          },
-        });
-
+      await createVolunteerGroup({
+        variables: {
+          data: mutationData,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
         NotificationToast.success(t('volunteerGroupCreated'));
         refetchGroups();
         setFormState({
@@ -179,220 +184,224 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           volunteerUsers: [],
           volunteersRequired: null,
         });
-        setApplyTo('series'); // Reset to default
+        setApplyTo('series');
         hide();
-      } catch (error: unknown) {
+      },
+      onError: (error) => {
         errorHandler(t, error);
-      }
+      },
     },
-    [formState, eventId, isRecurring, applyTo, baseEvent],
   );
 
-  return (
-    <BaseModal
-      className={styles.groupModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={
-        <p className={styles.titlemodal}>
-          {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
-        </p>
-      }
-    >
-      <form
-        onSubmit={mode === 'edit' ? updateGroupHandler : createGroupHandler}
-        className="p-3"
-      >
-        {/* Radio buttons for recurring events - only show in create mode */}
-        {isRecurring && mode === 'create' ? (
-          <FormGroup className="mb-3">
-            <FormLabel>{t('applyTo')}</FormLabel>
-            <FormCheck
-              type="radio"
-              label={t('entireSeries')}
-              name="applyTo"
-              id="applyToSeries"
-              checked={applyTo === 'series'}
-              onChange={() => setApplyTo('series')}
-            />
-            <FormCheck
-              type="radio"
-              label={t('thisEventOnly')}
-              name="applyTo"
-              id="applyToInstance"
-              checked={applyTo === 'instance'}
-              onChange={() => setApplyTo('instance')}
-            />
-          </FormGroup>
-        ) : null}
+  const updateGroupHandler = async (): Promise<void> => {
+    if (!group?.id) {
+      NotificationToast.error(tCommon('errorOccured'));
+      return;
+    }
+    await executeUpdate({});
+  };
 
-        {/* Input field to enter the group name */}
-        <div className="mb-3">
-          <FormTextField
-            name="groupName"
-            label={tCommon('name')}
-            required
-            className={styles.noOutline}
-            value={name}
-            onChange={(value) => setFormState({ ...formState, name: value })}
-          />
-        </div>
-        {/* Input field to enter the group description */}
-        <div className="mb-3">
-          <FormTextField
-            name="groupDescription"
-            label={tCommon('description')}
-            as="textarea"
-            rows={3}
-            className={styles.noOutline}
-            value={description ?? ''}
-            onChange={(value) =>
-              setFormState({ ...formState, description: value })
+  const createGroupHandler = async (): Promise<void> => {
+    await executeCreate({});
+  };
+
+  const isSubmitDisabled =
+    mode === 'edit'
+      ? isUpdating || !group?.id
+      : isCreating || (isRecurring && !baseEvent);
+
+  const formContent = (
+    <>
+      {isRecurring && mode === 'create' ? (
+        <fieldset className={`mb-3 ${styles.radioFieldset}`}>
+          <legend className={styles.radioLegend}>{t('applyTo')}</legend>
+          <div className={styles.radioGroup}>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToSeries"
+                value="series"
+                checked={applyTo === 'series'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setApplyTo('series');
+                  }
+                }}
+              />
+              <label htmlFor="applyToSeries">{t('entireSeries')}</label>
+            </div>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToInstance"
+                value="instance"
+                checked={applyTo === 'instance'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setApplyTo('instance');
+                  }
+                }}
+              />
+              <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
+            </div>
+          </div>
+        </fieldset>
+      ) : null}
+
+      <FormTextField
+        name="name"
+        label={tCommon('name')}
+        required
+        value={name}
+        onChange={(value) => setFormState({ ...formState, name: value })}
+        data-testid="groupNameInput"
+      />
+
+      <FormTextField
+        name="description"
+        label={tCommon('description')}
+        value={description ?? ''}
+        onChange={(value) => setFormState({ ...formState, description: value })}
+        data-testid="groupDescriptionInput"
+      />
+
+      <div className="d-flex mb-3 w-100">
+        <Autocomplete
+          className={`${styles.noOutline} w-100`}
+          limitTags={2}
+          data-testid="leaderSelect"
+          options={members}
+          value={leader}
+          disabled={mode === 'edit'}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          filterSelectedOptions={true}
+          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
+          aria-label={t('leader')}
+          onChange={(_, newLeader): void => {
+            if (newLeader) {
+              setFormState({
+                ...formState,
+                leader: newLeader,
+                volunteerUsers: [...volunteerUsers, newLeader],
+              });
+            } else {
+              setFormState({
+                ...formState,
+                leader: null,
+                volunteerUsers: volunteerUsers.filter(
+                  (user) => user.id !== leader?.id,
+                ),
+              });
             }
-          />
-        </div>
-        {/* A dropdown to select leader for volunteer group */}
-        <div className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            name="leaderSelect"
-            label={t('leader')}
-            required
-            touched={false}
-          >
-            <Autocomplete
-              className={`${styles.noOutline} w-100`}
-              limitTags={2}
-              data-testid="leaderSelect"
-              options={members}
-              value={leader}
-              disabled={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                member.name
-              }
-              onChange={(_, newLeader): void => {
-                if (newLeader) {
-                  setFormState({
-                    ...formState,
-                    leader: newLeader,
-                    volunteerUsers: [...volunteerUsers, newLeader],
-                  });
-                } else {
-                  setFormState({
-                    ...formState,
-                    leader: null,
-                    volunteerUsers: volunteerUsers.filter(
-                      (user) => user.id !== leader?.id,
-                    ),
-                  });
-                }
-              }}
-              renderInput={(params) => (
-                <div ref={params.InputProps.ref} className="w-100">
-                  <div className="d-flex align-items-center gap-2">
-                    {params.InputProps.startAdornment}
-                    <input
-                      {...params.inputProps}
-                      id="leaderSelect"
-                      className={`form-control ${styles.noOutline}`}
-                      placeholder={t('leader')}
-                      aria-label={t('leader')}
-                    />
-                    {params.InputProps.endAdornment}
-                  </div>
-                </div>
-              )}
-            />
-          </FormFieldGroup>
-        </div>
+          }}
+          renderInput={(params) => (
+            <div ref={params.InputProps.ref} className="position-relative">
+              <label htmlFor="leader-input" className="form-label">
+                {t('leader')} <span aria-label={tCommon('required')}>*</span>
+              </label>
+              <input
+                {...params.inputProps}
+                id="leader-input"
+                className="form-control"
+                placeholder={`${t('leader')} *`}
+              />
+            </div>
+          )}
+        />
+      </div>
 
-        {/* A Multi-select dropdown to select more than one volunteer */}
-        <div className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            name="volunteerSelect"
-            label={t('volunteers')}
-            required
-            touched={false}
-          >
-            <Autocomplete
-              multiple
-              className={`${styles.noOutline} w-100`}
-              limitTags={2}
-              data-testid="volunteerSelect"
-              options={members}
-              value={volunteerUsers}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                member.name
-              }
-              disabled={mode === 'edit'}
-              onChange={(_, newUsers): void => {
-                setFormState({
-                  ...formState,
-                  volunteerUsers: newUsers,
-                });
-              }}
-              renderInput={(params) => (
-                <div ref={params.InputProps.ref} className="w-100">
-                  <div className="d-flex align-items-center gap-2">
-                    {params.InputProps.startAdornment}
-                    <input
-                      {...params.inputProps}
-                      id="volunteerSelect"
-                      className={`form-control ${styles.noOutline}`}
-                      placeholder={t('volunteers')}
-                      aria-label={t('volunteers')}
-                    />
-                    {params.InputProps.endAdornment}
-                  </div>
-                </div>
-              )}
-            />
-          </FormFieldGroup>
-        </div>
-        <div className="mb-3">
-          <FormTextField
-            name="volunteersRequired"
-            label={t('volunteersRequired')}
-            type="number"
-            className={styles.noOutline}
-            value={volunteersRequired?.toString() ?? ''}
-            onChange={(value) => {
-              const trimmedValue = value.trim();
-              if (trimmedValue === '') {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: null,
-                });
-                return;
-              }
+      <div className="d-flex mb-3 w-100">
+        <Autocomplete
+          multiple
+          className={`${styles.noOutline} w-100`}
+          limitTags={2}
+          data-testid="volunteerSelect"
+          options={members}
+          value={volunteerUsers}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
+          filterSelectedOptions={true}
+          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
+          disabled={mode === 'edit'}
+          aria-label={t('volunteers')}
+          onChange={(_, newUsers): void => {
+            setFormState({
+              ...formState,
+              volunteerUsers: newUsers,
+            });
+          }}
+          renderInput={(params) => (
+            <div ref={params.InputProps.ref} className="position-relative">
+              <label htmlFor="volunteers-input" className="form-label">
+                {t('volunteers')}
+                <span aria-label={tCommon('required')}>*</span>
+              </label>
+              <input
+                {...params.inputProps}
+                id="volunteers-input"
+                className="form-control"
+                placeholder={`${t('volunteers')} *`}
+              />
+            </div>
+          )}
+        />
+      </div>
 
-              const parsed = parseInt(trimmedValue, 10);
-
-              if (Number.isNaN(parsed) || parsed <= 0) {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: null,
-                });
-                return;
-              }
-
+      <FormTextField
+        name="volunteersRequired"
+        label={t('volunteersRequired')}
+        type="number"
+        value={volunteersRequired !== null ? String(volunteersRequired) : ''}
+        onChange={(value) => {
+          if (value === '') {
+            setFormState({
+              ...formState,
+              volunteersRequired: null,
+            });
+          } else {
+            const parsed = parseInt(value);
+            if (!isNaN(parsed) && parsed > 0) {
               setFormState({
                 ...formState,
                 volunteersRequired: parsed,
               });
-            }}
-          />
-        </div>
+            }
+          }
+        }}
+        data-testid="volunteersRequiredInput"
+      />
+    </>
+  );
 
-        {/* Button to submit the volunteer group form */}
-        <Button type="submit" className={styles.regBtn} data-testid="submitBtn">
-          {t(mode === 'edit' ? 'updateGroup' : 'createGroup')}
-        </Button>
-      </form>
-    </BaseModal>
+  if (mode === 'edit') {
+    return (
+      <EditModal
+        open={isOpen}
+        title={t('updateGroup')}
+        onClose={hide}
+        onSubmit={updateGroupHandler}
+        loading={isUpdating}
+        submitDisabled={isSubmitDisabled}
+        data-testid="volunteerGroupModal"
+      >
+        {formContent}
+      </EditModal>
+    );
+  }
+
+  return (
+    <CreateModal
+      open={isOpen}
+      title={t('createGroup')}
+      onClose={hide}
+      onSubmit={createGroupHandler}
+      loading={isCreating}
+      submitDisabled={isSubmitDisabled}
+      data-testid="volunteerGroupModal"
+    >
+      {formContent}
+    </CreateModal>
   );
 };
 export default VolunteerGroupModal;

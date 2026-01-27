@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,6 +19,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { errorHandler } from 'utils/errorHandler';
 import type { GroupChat } from 'types/Chat/type';
+import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -65,7 +66,7 @@ const mockUsers = [
       id: 'user-3',
       name: 'Test User 3',
       avatarURL: '',
-      role: 'Member',
+      role: '',
     },
   },
 ];
@@ -221,6 +222,7 @@ describe('CreateDirectChatModal', () => {
   };
 
   test('should render users and allow creating a new direct chat', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     const userRows = await screen.findAllByTestId('user');
@@ -230,7 +232,7 @@ describe('CreateDirectChatModal', () => {
     expect(screen.queryByText('Current User')).not.toBeInTheDocument();
 
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
+    await user.click(addButtons[0]);
 
     await waitFor(() => {
       expect(chatsListRefetch).toHaveBeenCalled();
@@ -239,24 +241,62 @@ describe('CreateDirectChatModal', () => {
   });
 
   test('should allow searching for a user', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
     await screen.findAllByTestId('user');
 
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
-    fireEvent.change(searchInput, { target: { value: 'Test User 2' } });
-    fireEvent.click(searchButton);
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
 
-    await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
     expect(screen.queryByText('Test User 3')).not.toBeInTheDocument();
   });
 
+  test('should clear the search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await screen.findAllByTestId('user');
+
+    const searchInput = screen.getByTestId('searchUser');
+    const searchButton = screen.getByTestId('submitBtn');
+
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
+
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
+      expect(userRows.length).toBe(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
+    expect(screen.queryByLabelText(/clear/i)).not.toBeInTheDocument();
+  });
+
+  test('shows member fallback when role is missing', async () => {
+    renderComponent();
+
+    const userRows = await screen.findAllByTestId('user');
+    const lastRow = userRows[userRows.length - 1];
+
+    expect(lastRow).toHaveTextContent('Test User 3');
+    expect(lastRow).toHaveTextContent('Member');
+  });
+
   test('should prevent creating a duplicate chat', async () => {
+    const user = userEvent.setup();
     const existingChats: GroupChat[] = [
       {
         _id: 'existing-chat-1',
@@ -293,7 +333,7 @@ describe('CreateDirectChatModal', () => {
     expect(userRows[0]).toHaveTextContent('Test User 2');
 
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
+    await user.click(addButtons[0]);
 
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(

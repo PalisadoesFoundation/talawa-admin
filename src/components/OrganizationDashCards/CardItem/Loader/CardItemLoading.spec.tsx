@@ -1,7 +1,7 @@
 import CardItemLoading from './CardItemLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItemLoading.module.css';
 describe('Test the CardItemLoading component', () => {
   test('Should render the component', () => {
     render(<CardItemLoading />);

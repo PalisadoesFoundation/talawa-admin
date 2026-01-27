@@ -1,0 +1,61 @@
+.cardsEventListCard {
+  background-color: var(--cardsEventListCard-bg);
+  border: 0.5px solid var(--cardsEventListCard-border);
+  box-shadow: 0px 4px 4px var(--cardsEventListCard-box-shadow);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 90px;
+  cursor: pointer;
+  padding: 10px;
+  transition: transform 0.2s;
+}
+
+.cardsEventListCard:hover {
+  transform: scale(1.02);
+}
+
+.cardsEventListCard > p {
+  font-size: 14px;
+  margin-top: 0px;
+  margin-bottom: 7px;
+}
+
+.cardsEventListCard a {
+  color: var(--cardsEventListCard-a-color);
+  font-weight: 600;
+}
+
+.cardsEventListCard a:hover {
+  color: var(--cardsEventListCard-a-color-hover);
+}
+
+.cardsEventListCard:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}
+
+.cardsEventListCard:first-child:nth-last-child(even) {
+  grid-column: auto / span 1;
+}
+
+.dispflexEventListCard {
+  display: flex;
+  cursor: pointer;
+  justify-content: space-between;
+  margin: 10px 5px 5px 0px;
+}
+
+.dispflexEventListCard > input {
+  width: 20%;
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+.eventtitle {
+  margin-bottom: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 1.1rem;
+  color: var(--cardsEventListCard-h2-color);
+}

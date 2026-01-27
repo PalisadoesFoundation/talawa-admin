@@ -196,13 +196,13 @@ function OrganizationDashboard(): JSX.Element {
 
   // const currentDate = dayjs().toISOString();
 
-  // const leaderboardLink = `/leaderboard/${orgId}`;
-  // const peopleLink = `/orgpeople/${orgId}`;
-  const postsLink = `/orgpost/${orgId}`;
-  const eventsLink = `/orgevents/${orgId}`;
-  const venuesLink = `/orgvenues/${orgId}`;
-  const blockUserLink = `/blockuser/${orgId}`;
-  const requestLink = `/requests/${orgId}`;
+  // const leaderboardLink = `/admin/leaderboard/${orgId}`;
+  // const peopleLink = `/admin/orgpeople/${orgId}`;
+  const postsLink = `/admin/orgpost/${orgId}`;
+  const eventsLink = `/admin/orgevents/${orgId}`;
+  const venuesLink = `/admin/orgvenues/${orgId}`;
+  const blockUserLink = `/admin/blockuser/${orgId}`;
+  const requestLink = `/admin/requests/${orgId}`;
 
   /**
    * Query to fetch vvolunteer rankings.

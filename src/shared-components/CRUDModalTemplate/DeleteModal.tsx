@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
 import type { InterfaceDeleteModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
-import styles from './CRUDModalTemplate.module.css';
-import globalStyles from 'style/app-fixed.module.css';
 
 /**
  * DeleteModal Component
@@ -86,7 +84,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
   };
 
   const customFooter = (
-    <div className={styles.footerButtons}>
+    <div>
       <Button
         variant="secondary"
         onClick={onClose}
@@ -99,7 +97,6 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
         variant="danger"
         onClick={handleDelete}
         disabled={loading}
-        className={globalStyles.removeButton}
         data-testid="modal-delete-btn"
       >
         {tCommon('delete')}
@@ -121,7 +118,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
       customFooter={customFooter}
     >
       {showWarning && (
-        <div className={styles.deleteWarningIcon}>
+        <div>
           <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
         </div>
       )}
@@ -129,16 +126,14 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
       {children ? (
         children
       ) : (
-        <p className={styles.deleteMessage}>
+        <p>
           {entityName
             ? tCommon('deleteEntityConfirmation', { entityName })
             : tCommon('deleteConfirmation')}
         </p>
       )}
 
-      {recurringEventContent && (
-        <div className={styles.recurringOptions}>{recurringEventContent}</div>
-      )}
+      {recurringEventContent && <div>{recurringEventContent}</div>}
     </CRUDModalTemplate>
   );
 };

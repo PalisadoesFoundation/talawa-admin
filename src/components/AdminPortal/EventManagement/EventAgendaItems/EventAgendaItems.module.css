@@ -1,0 +1,26 @@
+.container {
+  composes: container from '../../../../style/app-fixed.module.css';
+}
+
+.message {
+  composes: message from '../../../../style/app-fixed.module.css';
+}
+
+.errorIcon {
+  composes: errorIcon from '../../../../style/app-fixed.module.css';
+}
+
+.eventAgendaItemContainer {
+}
+
+.eventAgendaItemContainer h2 {
+  margin: 0.6rem 0;
+}
+
+.btnsContainer {
+  composes: btnsContainer from '../../../../style/app-fixed.module.css';
+}
+
+.createAgendaItemButton {
+  composes: createAgendaItemButton from '../../../../style/app-fixed.module.css';
+}

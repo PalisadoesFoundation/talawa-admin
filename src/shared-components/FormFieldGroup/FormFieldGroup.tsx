@@ -46,7 +46,7 @@ export const FormFieldGroup: React.FC<
 
   return (
     <Form.Group controlId={name}>
-      <Form.Label htmlFor={name} className={hideLabel ? 'visually-hidden' : ''}>
+      <Form.Label className={hideLabel ? 'visually-hidden' : ''}>
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}
       </Form.Label>

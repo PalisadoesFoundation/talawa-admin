@@ -131,7 +131,7 @@ describe('DataTable types', () => {
       rowKey: 'id',
       emptyMessage: 'No users',
       error: null,
-      renderError: (e) => React.createElement('span', null, e.message),
+      renderError: (e: Error) => React.createElement('span', null, e.message),
     };
     expect(props.data[0].name).toBe('Ada Lovelace');
     expect(props.columns[1].id).toBe('email');

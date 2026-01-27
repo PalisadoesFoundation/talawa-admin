@@ -55,6 +55,8 @@
   "talawaAdminPortal": "Portail d'administration Talawa",
   "adminPortal": "Portail d'administration",
   "userPortal": "Portail utilisateur",
+  "switchToUserPortal": "Passer au portail utilisateur",
+  "switchToAdminPortal": "Passer au portail administrateur",
   "address": "Adresse",
   "location": "Emplacement",
   "enterLocation": "Entrez l'emplacement",
@@ -290,6 +292,7 @@
   "linkCopied": "Lien copié dans le presse-papiers",
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
   "share": "Partager",
+  "failedToLoadUserData": "Échec du chargement des données utilisateur",
   "userNotFound": "Utilisateur non trouvé",
   "avatarProcessingError": "Erreur lors du traitement de l'avatar, veuillez vérifier votre image.",
   "viewEventStatistics": "Voir les statistiques de l'événement",
@@ -298,5 +301,8 @@
   "selectRow": "Sélectionner la ligne {{rowKey}}",
   "bulkActions": "Actions en masse",
   "selected": "sélectionnés",
-  "clearSelection": "Effacer la sélection"
+  "unavailable": "Indisponible",
+  "clearSelection": "Effacer la sélection",
+  "toggleSidebar": "Basculer la barre latérale",
+  "picture": "Photo de {{name}}"
 }

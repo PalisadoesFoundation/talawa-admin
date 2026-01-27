@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/MemberActivity/EventsAttendedByMember.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/EventsAttendedByMember.tsx#L35)
+Defined in: [src/components/MemberActivity/EventsAttendedByMember.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/EventsAttendedByMember.tsx#L32)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`InterfaceEventsAttendedByMember`
+[`InterfaceEventsAttendedByMemberProps`](../../../../types/MemberActivity/interface/interfaces/InterfaceEventsAttendedByMemberProps.md)
 
 ## Returns
 
