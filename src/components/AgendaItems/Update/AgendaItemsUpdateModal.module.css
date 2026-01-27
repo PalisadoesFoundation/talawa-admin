@@ -1,16 +1,16 @@
 /**
- * AgendaItemsCreateModal.module.css
- * Component-specific styles for AgendaItemsCreateModal
+ * AgendaItemsUpdateModal.module.css
+ * Component-specific styles for AgendaItemsUpdateModal
  */
 
-.AgendaItemsModal {
+.AgendaItemModal {
   max-width: 80vw;
   margin-top: 2vh;
   margin-left: var(--sidebar-offset, 13vw);
 }
 
 @media (max-width: 768px) {
-  .AgendaItemsModal {
+  .AgendaItemModal {
     margin: 10vh auto;
     max-width: 90%;
   }
@@ -25,7 +25,7 @@
 }
 
 @media (max-width: 576px) {
-  .AgendaItemsModal {
+  .AgendaItemModal {
     margin: 5vh auto;
     max-width: 95%;
   }
@@ -40,12 +40,13 @@
 }
 
 .titlemodalAgendaItems {
-  color: var(--titlemodalAgendaItems-color);
+  color: var(--titlemodalAgendaItems-color, var(--bs-body-color, #212529));
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
+  border-bottom: 3px solid
+    var(--titlemodalAgendaItems-border, var(--bs-border-color, #dee2e6));
   width: 65%;
 }
 
@@ -53,7 +54,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
+  border-bottom: 3px solid
+    var(--titlemodalAgendaItems-border, var(--bs-border-color, #dee2e6));
 }
 
 .noOutline input {
@@ -67,11 +69,11 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--noOutline-input-disables) !important;
+  -webkit-text-fill-color: var(--noOutline-input-disables, #6b7280) !important;
 }
 
 .noOutline textarea:disabled {
-  color: var(--noOutline-textarea-disables) !important;
+  color: var(--noOutline-textarea-disables, #6b7280) !important;
   opacity: 1;
 }
 
@@ -136,21 +138,21 @@
   transform: scale(1.2);
   cursor: pointer;
   border: none;
-  color: var(--closeButtonFile-color);
+  color: var(--closeButtonFile-color, var(--bs-danger, #dc3545));
   font-weight: 600;
   font-size: 16px;
 }
 
 .greenregbtnAgendaItems {
   margin-top: 15px;
-  border: 1px solid var(--regBtnAgendaItems-border);
-  box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow);
+  border: 1px solid var(--regBtnAgendaItems-border, var(--bs-success, #198754));
+  box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow, rgba(0, 0, 0, 0.1));
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--regBtnAgendaItems-bg);
+  background-color: var(--regBtnAgendaItems-bg, var(--bs-success, #198754));
   width: 100%;
   font-size: 16px;
-  color: var(--regBtnAgendaItems-color);
+  color: var(--regBtnAgendaItems-color, #fff);
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -160,6 +162,6 @@
 }
 
 .greenregbtnAgendaItems:focus-visible {
-  outline: 2px solid var(--regBtnAgendaItems-border);
+  outline: 2px solid var(--regBtnAgendaItems-border, var(--bs-success, #198754));
   outline-offset: 2px;
 }
