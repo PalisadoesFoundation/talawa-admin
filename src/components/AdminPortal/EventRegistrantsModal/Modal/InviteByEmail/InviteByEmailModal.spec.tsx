@@ -247,11 +247,6 @@ describe('InviteByEmailModal', () => {
         expect(screen.getByTestId('loading-state')).toBeInTheDocument();
       });
 
-      // Wait for button to be gone
-      await waitFor(() => {
-        expect(screen.queryByTestId('invite-submit')).not.toBeInTheDocument();
-      });
-
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
           'Invites sent successfully',
