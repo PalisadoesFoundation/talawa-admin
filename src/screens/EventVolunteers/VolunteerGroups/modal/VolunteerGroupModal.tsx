@@ -13,7 +13,6 @@ import { Autocomplete } from '@mui/material';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   CREATE_VOLUNTEER_GROUP,
@@ -48,7 +47,6 @@ export interface InterfaceVolunteerGroupModal {
  *
  * @returns A modal that handles create and edit flows for volunteer groups.
  */
-
 const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   isOpen,
   hide,
@@ -93,13 +91,21 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       description: group?.description ?? '',
       leader: group?.leader ?? null,
       volunteerUsers:
-        group?.volunteers.map((volunteer) => volunteer.user) ?? [],
+        group?.volunteers?.map((volunteer) => volunteer.user) ?? [],
       volunteersRequired: group?.volunteersRequired ?? null,
     });
   }, [group]);
 
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
+
+  // Filter out the leader from available volunteers
+  const availableVolunteers = useMemo(() => {
+    if (!leader) return members;
+    return members.filter(
+      (member: InterfaceUserInfoPG) => member.id !== leader.id,
+    );
+  }, [members, leader]);
 
   const { isSubmitting: isUpdating, execute: executeUpdate } = useMutationModal<
     Record<string, never>
@@ -151,13 +157,22 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         throw new Error('Base event is required for recurring events');
       }
 
+      // Get unique volunteer IDs, ensuring leader is included first
+      const volunteerIds = volunteerUsers.map((user) => user.id);
+      const leaderIdToAdd = leader?.id;
+
+      // Create final list with leader FIRST, then volunteers (excluding duplicate leader)
+      const uniqueVolunteerIds = leaderIdToAdd
+        ? [leaderIdToAdd, ...volunteerIds.filter((id) => id !== leaderIdToAdd)]
+        : volunteerIds;
+
       const mutationData: InterfaceCreateVolunteerGroupData = {
         eventId: isRecurring && baseEvent ? baseEvent.id : eventId,
         leaderId: leader?.id,
         name,
         description,
         volunteersRequired,
-        volunteerUserIds: volunteerUsers.map((user) => user.id),
+        volunteerUserIds: uniqueVolunteerIds,
       };
 
       if (isRecurring) {
@@ -286,29 +301,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             isOptionEqualToValue={(option, value) => option.id === value.id}
             filterSelectedOptions={true}
             getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              member.name
+              getMemberLabel(member)
             }
             onChange={(_, newLeader): void => {
-              if (newLeader) {
-                const leaderExists = volunteerUsers.some(
-                  (user) => user.id === newLeader.id,
-                );
-                setFormState({
-                  ...formState,
-                  leader: newLeader,
-                  volunteerUsers: leaderExists
-                    ? volunteerUsers
-                    : [...volunteerUsers, newLeader],
-                });
-              } else {
-                setFormState({
-                  ...formState,
-                  leader: null,
-                  volunteerUsers: volunteerUsers.filter(
-                    (user) => user.id !== leader?.id,
-                  ),
-                });
-              }
+              setFormState({
+                ...formState,
+                leader: newLeader,
+              });
             }}
             renderInput={(params) => (
               <div ref={params.InputProps.ref} className="w-100">
@@ -335,11 +334,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           className={`${styles.noOutline} w-100`}
           limitTags={2}
           data-testid="volunteerSelect"
-          options={members}
+          options={availableVolunteers}
           value={volunteerUsers}
           isOptionEqualToValue={areOptionsEqual}
           filterSelectedOptions={true}
-          getOptionLabel={getMemberLabel}
+          getOptionLabel={(member: InterfaceUserInfoPG): string =>
+            getMemberLabel(member)
+          }
           disabled={mode === 'edit'}
           aria-label={t('volunteers')}
           onChange={(_, newUsers): void => {
@@ -381,13 +382,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             });
           } else {
             const parsed = parseInt(value);
-            if (!isNaN(parsed)) {
-              if (parsed > 0) {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: parsed,
-                });
-              }
+            if (!isNaN(parsed) && parsed > 0) {
+              setFormState({
+                ...formState,
+                volunteersRequired: parsed,
+              });
             } else {
               setFormState({
                 ...formState,
@@ -431,4 +430,5 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     </CreateModal>
   );
 };
+
 export default VolunteerGroupModal;

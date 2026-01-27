@@ -48,7 +48,6 @@ import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { FormSelectField } from 'shared-components/FormFieldGroup/FormSelectField';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { getMemberLabel } from 'utils/autocompleteHelpers';
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -104,17 +103,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       setPledgers(members);
     }
   }, [memberData]);
-
-  const [inputValue, setInputValue] = useState('');
-
-  useEffect(() => {
-    if (formState.pledgeUsers.length > 0) {
-      setInputValue(getMemberLabel(formState.pledgeUsers[0]));
-    } else if (inputValue && formState.pledgeUsers.length === 0) {
-      // Clear input value when pledge users are cleared
-      setInputValue('');
-    }
-  }, [formState.pledgeUsers]);
 
   const isAmountValid = formState.pledgeAmount > 0;
 

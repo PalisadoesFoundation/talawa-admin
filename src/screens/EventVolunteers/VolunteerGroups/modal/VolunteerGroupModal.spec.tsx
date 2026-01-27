@@ -573,6 +573,10 @@ describe('Testing VolunteerGroupModal', () => {
       await user.clear(nameInput);
       await user.type(nameInput, 'Recurring Group Series');
 
+      await waitFor(() => {
+        expect(nameInput).toHaveValue('Recurring Group Series');
+      });
+
       const descInput = screen.getByTestId('groupDescriptionInput');
       await user.clear(descInput);
       await user.type(descInput, 'desc');
@@ -627,6 +631,10 @@ describe('Testing VolunteerGroupModal', () => {
       const nameInput = screen.getByTestId('groupNameInput');
       await user.clear(nameInput);
       await user.type(nameInput, 'Recurring Group Instance');
+
+      await waitFor(() => {
+        expect(nameInput).toHaveValue('Recurring Group Instance');
+      });
 
       const descInput = screen.getByTestId('groupDescriptionInput');
       await user.clear(descInput);
@@ -943,8 +951,7 @@ describe('Testing VolunteerGroupModal', () => {
       });
 
       await user.click(leaderInputField);
-      const selectedChip = screen.getByText('Harve Lance');
-      expect(selectedChip).toBeInTheDocument();
+      expect(leaderInputField).toHaveValue('Harve Lance');
     });
 
     it('should handle clearing volunteersRequired field', async () => {
