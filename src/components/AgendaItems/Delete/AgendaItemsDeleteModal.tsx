@@ -3,9 +3,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
-const AgendaFolderDeleteModal: React.FC<
-  InterfaceAgendaItemsDeleteModalProps
-> = ({
+const AgendaItemDeleteModal: React.FC<InterfaceAgendaItemsDeleteModalProps> = ({
   agendaItemDeleteModalIsOpen,
   toggleDeleteItemModal,
   deleteAgendaItemHandler,
@@ -50,4 +48,4 @@ const AgendaFolderDeleteModal: React.FC<
   );
 };
 
-export default AgendaFolderDeleteModal;
+export default AgendaItemDeleteModal;

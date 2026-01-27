@@ -51,7 +51,7 @@ import {
 import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaFolderList,
-} from 'utils/interfaces';
+} from 'types/Agenda/interface';
 import AgendaFolderContainer from 'components/AgendaFolder/AgendaFolderContainer';
 import AgendaFolderCreateModal from 'components/AgendaFolder/Create/AgendaFolderCreateModal';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
@@ -60,7 +60,7 @@ import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { InterfaceCreateFormStateType } from 'types/Agenda/interface';
 
-function EventAgendaItems(props: { eventId: string }): JSX.Element {
+function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
   const { orgId } = useParams();
 
@@ -154,7 +154,11 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       (folder) => folder.id === agendaItemFormState.folderId,
     );
     const folderItems = selectedFolder?.items?.edges ?? [];
-    const nextSequence = folderItems.length + 1;
+    const maxSequence = folderItems.reduce(
+      (max, edge) => Math.max(max, edge.node.sequence ?? 0),
+      0,
+    );
+    const nextSequence = maxSequence + 1;
     try {
       await createAgendaItem({
         variables: {
@@ -228,7 +232,11 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     )
       ? agendaFolderData?.agendaFoldersByEventId
       : [];
-    const nextSequence = agendaFolders.length + 1;
+    const maxSequence = agendaFolders.reduce(
+      (max, folder) => Math.max(max, folder.sequence ?? 0),
+      0,
+    );
+    const nextSequence = maxSequence + 1;
     try {
       await createAgendaFolder({
         variables: {
@@ -290,16 +298,16 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
   };
 
   // Show error message if there is an error loading data
-  if (agendaFolderError) {
+  if (agendaFolderError || agendaCategoryError) {
     const errorMessage =
-      (agendaFolderError as Error).message ||
+      (agendaFolderError as Error | undefined)?.message ||
       agendaCategoryError?.message ||
       'Unknown error';
 
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
             {agendaFolderError ? 'Agenda Folders' : 'Agenda Items'} Data
@@ -381,4 +389,4 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
   );
 }
 
-export default EventAgendaItems;
+export default EventAgendaFolder;

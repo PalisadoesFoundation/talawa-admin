@@ -332,9 +332,14 @@ const AgendaItemsCreateModal: React.FC<
                   />
                 </video>
               ) : (
-                <img src={attachment.previewUrl} alt="Attachment preview" />
+                <img
+                  src={attachment.previewUrl}
+                  alt={t('attachmentPreviewAlt')}
+                />
               )}
               <button
+                type="button"
+                aria-label={t('removeAttachment')}
                 className={styles.closeButtonFile}
                 onClick={(e) => {
                   e.preventDefault();

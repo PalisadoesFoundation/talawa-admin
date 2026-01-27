@@ -1,11 +1,16 @@
 /**
- * AgendaItemsUpdateModal Component
+ * Renders the modal used to update agenda items.
  *
- * This component renders a modal for updating agenda items.
- * Core logic is unchanged — only refactored to comply with shared
- * BaseModal and form abstractions.
+ * `@param` agendaItemUpdateModalIsOpen - Whether the modal is open.
+ * `@param` hideUpdateItemModal - Handler to close the modal.
+ * `@param` itemFormState - Current agenda item form state.
+ * `@param` setItemFormState - Setter for agenda item form state.
+ * `@param` updateAgendaItemHandler - Submit handler.
+ * `@param` t - i18n translation function.
+ * `@param` agendaItemCategories - Available agenda item categories.
+ * `@param` agendaFolderData - Available agenda folders.
+ * `@returns` JSX.Element
  */
-
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Autocomplete } from '@mui/material';
@@ -22,8 +27,10 @@ import {
 import convertToBase64 from 'utils/convertToBase64';
 import styles from '../../../style/app-fixed.module.css';
 
-import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
+import type {
+  InterfaceAgendaItemCategoryInfo,
+  InterfaceAgendaItemsUpdateModalProps,
+} from 'types/Agenda/interface';
 
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
@@ -250,6 +257,7 @@ const AgendaItemsUpdateModal: React.FC<
                 data-testid="deleteUrl"
                 className={styles.deleteButtonAgendaItems}
                 onClick={() => handleRemoveUrl(url)}
+                aria-label={t('removeUrl')}
               >
                 <FaTrash />
               </Button>
@@ -279,10 +287,12 @@ const AgendaItemsUpdateModal: React.FC<
                     <source src={attachment} type="video/mp4" />
                   </video>
                 ) : (
-                  <img src={attachment} alt="Attachment preview" />
+                  <img src={attachment} alt={t('attachmentPreviewAlt')} />
                 )}
                 <button
+                  type="button"
                   className={styles.closeButtonFile}
+                  aria-label={t('removeAttachment')}
                   onClick={(e) => {
                     e.preventDefault();
                     handleRemoveAttachment(attachment);

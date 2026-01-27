@@ -1,26 +1,8 @@
 import React from 'react';
 import Button from 'shared-components/Button/Button';
-import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-
-interface InterfaceFormStateType {
-  id: string;
-  name: string;
-  description: string;
-  creator: {
-    name: string;
-  };
-}
-
-interface InterfaceAgendaFolderCreateModalProps {
-  agendaFolderCreateModalIsOpen: boolean;
-  hideCreateModal: () => void;
-  formState: InterfaceFormStateType;
-  setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
-  createAgendaFolderHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-}
+import { InterfaceAgendaFolderCreateModalProps } from 'types/Agenda/interface';
 
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps

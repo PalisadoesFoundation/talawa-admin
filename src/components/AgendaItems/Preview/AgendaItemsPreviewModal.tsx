@@ -11,32 +11,7 @@ import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import { BaseModal } from 'shared-components/BaseModal';
-
-interface InterfaceFormStateType {
-  id: string;
-  name: string;
-  description: string;
-  duration: string;
-  attachment?: string[];
-  creator: {
-    id: string;
-    name: string;
-  };
-  category: {
-    name: string;
-    description: string;
-  };
-  url: string[];
-}
-
-export interface InterfaceAgendaItemsPreviewModalProps {
-  agendaItemPreviewModalIsOpen: boolean;
-  hidePreviewModal: () => void;
-  showUpdateItemModal: () => void;
-  toggleDeleteItemModal: () => void;
-  formState: InterfaceFormStateType;
-  t: (key: string) => string;
-}
+import { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
 
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
@@ -71,7 +46,7 @@ const AgendaItemsPreviewModal: React.FC<
           </a>
         ) : (
           <a href={attachment} target="_blank" rel="noopener noreferrer">
-            <img src={attachment} alt="Attachment preview" />
+            <img src={attachment} alt={t('attachmentPreviewAlt')} />
           </a>
         )}
       </div>
@@ -144,6 +119,7 @@ const AgendaItemsPreviewModal: React.FC<
             onClick={showUpdateItemModal}
             className={styles.icon}
             data-testid="previewAgendaItemModalUpdateBtn"
+            aria-label={t('editItem')}
           >
             <i className="fas fa-edit" />
           </Button>
@@ -154,6 +130,7 @@ const AgendaItemsPreviewModal: React.FC<
             className={styles.icon}
             data-testid="previewAgendaItemModalDeleteBtn"
             variant="danger"
+            aria-label={t('deleteItem')}
           >
             <i className="fas fa-trash" />
           </Button>
