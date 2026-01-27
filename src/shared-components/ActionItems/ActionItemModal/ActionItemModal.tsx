@@ -131,14 +131,6 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const [applyTo, setApplyTo] = useState<ApplyToType>('instance');
 
-  const handleAssignmentTypeChange = useCallback(
-    (type: AssignmentType): void => {
-      hasUserChangedAssignment.current = true;
-      setAssignmentType(type);
-    },
-    [],
-  );
-
   const renderAutocompleteInput = (
     params: AutocompleteRenderInputParams,
     label: string,
@@ -266,6 +258,20 @@ const ItemModal: FC<IItemModalProps> = ({
     orgActionItemsRefetch?.();
   };
 
+  const isSubmitDisabled = !categoryId || (!volunteerId && !volunteerGroupId);
+
+  const handleFormKeyDown = (
+    event: React.KeyboardEvent<HTMLFormElement>,
+  ): void => {
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault();
+      if (isSubmitDisabled) return;
+      event.currentTarget.dispatchEvent(
+        new Event('submit', { bubbles: true, cancelable: true }),
+      );
+    }
+  };
+
   const handleFormChange = useCallback(
     (
       field: keyof IFormStateType,
@@ -285,6 +291,25 @@ const ItemModal: FC<IItemModalProps> = ({
     handleFormChange('volunteerGroupId', '');
     setSelectedVolunteerGroup(null);
   }, [handleFormChange]);
+
+  const handleAssignmentTypeChange = useCallback(
+    (type: AssignmentType): void => {
+      hasUserChangedAssignment.current = true;
+      if (type === 'volunteer' && assignmentType !== 'volunteer') {
+        handleClearVolunteerGroup();
+      }
+      if (type === 'volunteerGroup' && assignmentType !== 'volunteerGroup') {
+        handleClearVolunteer();
+      }
+      setAssignmentType(type);
+    },
+    [
+      assignmentType,
+      handleClearVolunteer,
+      handleClearVolunteerGroup,
+      setAssignmentType,
+    ],
+  );
 
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -536,7 +561,11 @@ const ItemModal: FC<IItemModalProps> = ({
       title={editMode ? t('updateActionItem') : t('createActionItem')}
       dataTestId="actionItemModal"
     >
-      <form onSubmit={getSubmitHandler()} className="p-2">
+      <form
+        onSubmit={getSubmitHandler()}
+        onKeyDown={handleFormKeyDown}
+        className="p-2"
+      >
         {isRecurring && !editMode && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
@@ -685,8 +714,9 @@ const ItemModal: FC<IItemModalProps> = ({
         <Button
           type="submit"
           className={styles.addButton}
-          data-testid="submitBtn"
+          data-testid="modal-submit-btn"
           data-cy="submitBtn"
+          disabled={isSubmitDisabled}
         >
           {editMode ? t('updateActionItem') : t('createActionItem')}
         </Button>
