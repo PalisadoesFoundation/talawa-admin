@@ -762,9 +762,12 @@
     "description": "Descripción",
     "enterDescription": "Ingresar descripción",
     "category": "Categoría del orden del día",
+    "selectCategory": "Select Category",
     "attachments": "Archivos adjuntos",
     "attachmentLimit": "Agregar cualquier archivo de imagen o video hasta 10MB",
     "fileSizeExceedsLimit": "El tamaño del archivo excede el límite de 10MB",
+    "fileUploadError": "Error al cargar el archivo. Por favor, inténtelo de nuevo.",
+    "deleteAttachment": "Eliminar adjunto",
     "urls": "URLs",
     "url": "Agregar enlace a URL",
     "enterUrl": "https://example.com",
@@ -2436,10 +2439,6 @@
     "noEventsAttended": "No hay eventos asistidos"
   },
   "eventStats": {
-    "averageRating": {
-      "title": "Puntuación Media de Reseñas",
-      "rated": "Valoración {{score}} / 5"
-    },
     "title": "Estadísticas del evento",
     "reviews": {
       "title": "Reseñas",

@@ -28,6 +28,7 @@
  * />
  * ```
  */
+// translation-check-keyPrefix: agendaItems
 import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button';
