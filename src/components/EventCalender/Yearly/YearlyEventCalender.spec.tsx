@@ -177,7 +177,13 @@ const renderWithRouterAndPath = (
 };
 
 describe('Calendar Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const mockRefetchEvents = vi.fn();
@@ -314,12 +320,12 @@ describe('Calendar Component', () => {
 
     const currentYear = new Date().getFullYear();
 
-    await userEvent.click(getByTestId('prevYear'));
+    await user.click(getByTestId('prevYear'));
     await waitFor(() => {
       expect(getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    await userEvent.click(getByTestId('nextYear'));
+    await user.click(getByTestId('nextYear'));
     await waitFor(() => {
       expect(getByText(String(currentYear))).toBeInTheDocument();
     });
@@ -434,7 +440,7 @@ describe('Calendar Component', () => {
 
     const expandButton = container.querySelector('.btn__more');
     if (expandButton) {
-      await userEvent.click(expandButton);
+      await user.click(expandButton);
       await waitFor(() => {
         expect(screen.getByText('No Event Available!')).toBeInTheDocument();
       });
@@ -481,7 +487,7 @@ describe('Calendar Component', () => {
 
     let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
-      await userEvent.click(button);
+      await user.click(button);
       // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
@@ -566,11 +572,11 @@ describe('Calendar Component', () => {
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
-    await userEvent.click(getByTestId('prevYear'));
-    await userEvent.click(getByTestId('prevYear'));
+    await user.click(getByTestId('prevYear'));
+    await user.click(getByTestId('prevYear'));
 
-    await userEvent.click(getByTestId('nextYear'));
-    await userEvent.click(getByTestId('nextYear'));
+    await user.click(getByTestId('nextYear'));
+    await user.click(getByTestId('nextYear'));
 
     const currentYear = new Date().getFullYear();
     expect(getByText(String(currentYear))).toBeInTheDocument();
@@ -740,7 +746,7 @@ describe('Calendar Component', () => {
     );
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
-      await userEvent.click(noEventsButton);
+      await user.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -766,7 +772,7 @@ describe('Calendar Component', () => {
     expect(noEventsButton).toBeInTheDocument();
 
     if (noEventsButton) {
-      await userEvent.click(noEventsButton);
+      await user.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -894,7 +900,7 @@ describe('Calendar Component', () => {
 
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
-      await userEvent.click(button);
+      await user.click(button);
 
       // Wait for potential event list to appear
       await waitFor(
@@ -982,7 +988,7 @@ describe('Calendar Component', () => {
 
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
-      await userEvent.click(button);
+      await user.click(button);
 
       // Wait for potential event list to appear
       await waitFor(
@@ -1236,21 +1242,21 @@ describe('Calendar Component', () => {
     const nextButton = getByTestId('nextYear');
 
     // Test navigation to previous year
-    await userEvent.click(prevButton);
+    await user.click(prevButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
     // Test navigation to next year (back to current)
-    await userEvent.click(nextButton);
+    await user.click(nextButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear))).toBeInTheDocument();
     });
 
     // Test navigation to future year
-    await userEvent.click(nextButton);
+    await user.click(nextButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
@@ -1328,7 +1334,7 @@ describe('Calendar Component', () => {
     );
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
-      await userEvent.click(noEventsButton);
+      await user.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -1354,7 +1360,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await userEvent.click(noEventsBtn);
+      await user.click(noEventsBtn);
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );
@@ -1490,7 +1496,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await userEvent.click(noEventsBtn);
+      await user.click(noEventsBtn);
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );
