@@ -5,7 +5,9 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { describe, it, expect } from 'vitest';
+import translation from '../../../public/locales/en/translation.json';
+import common from '../../../public/locales/en/common.json';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -21,6 +23,9 @@ const renderWithProviders = (ui: React.ReactElement) =>
   );
 
 describe('UserProfile Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('renders with complete user data and shows truncated name and email', () => {
     const userDetails = {
       firstName: 'Christopher',
@@ -61,7 +66,7 @@ describe('UserProfile Component', () => {
     const { getByAltText } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByAltText('dummy picture')).toBeInTheDocument();
+    expect(getByAltText(translation.settings.dummyPicture)).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
     const userDetails = {
@@ -103,7 +108,7 @@ describe('UserProfile Component', () => {
     };
 
     const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-    expect(getByText('Joined Unavailable')).toBeInTheDocument();
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
   });
   it('handles createdAt passed as a string and formats it correctly', () => {
     const userDetails = {
@@ -114,15 +119,37 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/clara.jpg',
     };
 
-    const castedUser = userDetails as unknown as Parameters<
-      typeof UserProfile
-    >[0];
-
-    const { getByText } = renderWithProviders(<UserProfile {...castedUser} />);
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
     expect(
       getByText(
         `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
       ),
     ).toBeInTheDocument();
+  });
+
+  it('renders "Unavailable" when createdAt is null', () => {
+    const userDetails = {
+      firstName: 'Null',
+      lastName: 'User',
+      email: 'null@example.com',
+      createdAt: null,
+      image: 'https://example.com/null.jpg',
+    };
+
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
+  });
+
+  it('renders "Unavailable" when createdAt is undefined', () => {
+    const userDetails = {
+      firstName: 'Undefined',
+      lastName: 'User',
+      email: 'undefined@example.com',
+      createdAt: undefined,
+      image: 'https://example.com/undefined.jpg',
+    };
+
+    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    expect(getByText(`Joined ${common.unavailable}`)).toBeInTheDocument();
   });
 });

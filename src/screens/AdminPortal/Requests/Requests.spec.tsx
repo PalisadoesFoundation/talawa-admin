@@ -1039,7 +1039,6 @@ describe('Testing Requests screen', () => {
     await wait(100);
 
     await userEvent.clear(searchInput);
-    fireEvent.change(searchInput, { target: { value: '' } });
     await wait(200);
 
     expect(screen.getByRole('grid')).toBeInTheDocument();

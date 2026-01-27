@@ -13,7 +13,7 @@ export class ActionItemPage {
   private readonly createCompletionBtn = '[data-testid="createBtn"]';
   private readonly completionBtnSeries = '[data-cy="markCompletionForSeries"]';
   private readonly deleteItemBtn = '[data-testid^="deleteItemBtn"]';
-  private readonly deleteYesBtn = '[data-testid="deleteyesbtn"]';
+  private readonly deleteYesBtn = '[data-testid="modal-delete-btn"]';
   private readonly modalCloseBtn = '[data-testid="modalCloseBtn"]';
   private readonly notesInput = '[data-cy="preCompletionNotes"]';
 

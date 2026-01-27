@@ -14,7 +14,7 @@ Renders the header of a column.
 
 ### header
 
-[`HeaderRender`](../../../../types/shared-components/DataTable/interface/type-aliases/HeaderRender.md)
+[`HeaderRender`](../../../../types/shared-components/DataTable/types/type-aliases/HeaderRender.md)
 
 Header value or render function.
 

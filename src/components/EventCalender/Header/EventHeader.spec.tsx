@@ -1,22 +1,26 @@
-import React, { act } from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import EventHeader from './EventHeader';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
   let handleChangeView: ReturnType<typeof vi.fn>;
   let showInviteModal: ReturnType<typeof vi.fn>;
+  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
     handleChangeView = vi.fn();
     showInviteModal = vi.fn();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks(); // Restores all spies including consoleSpy
   });
 
@@ -64,11 +68,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Month View'));
-    });
+    await user.click(getByTestId('Month View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.MONTH);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -85,11 +87,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Day'));
-    });
+    await user.click(getByTestId('Day'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -106,11 +106,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Year View'));
-    });
+    await user.click(getByTestId('Year View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.YEAR);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -127,11 +125,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('eventType'));
+    await user.click(getByTestId('eventType'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Events'));
-    });
+    await user.click(getByTestId('Events'));
 
     expect(handleChangeView).not.toHaveBeenCalled();
   });
@@ -147,16 +143,14 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('eventType'));
+    await user.click(getByTestId('eventType'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('Workshops'));
-    });
+    await user.click(getByTestId('Workshops'));
 
     expect(handleChangeView).not.toHaveBeenCalled();
   });
 
-  it('calls showInviteModal when create event button is clicked', () => {
+  it('calls showInviteModal when create event button is clicked', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -167,11 +161,11 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
     expect(showInviteModal).toHaveBeenCalledTimes(1);
   });
 
-  it('calls showInviteModal multiple times when clicked repeatedly', () => {
+  it('calls showInviteModal multiple times when clicked repeatedly', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -182,12 +176,12 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    fireEvent.click(getByTestId('createEventModalBtn'));
-    fireEvent.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
     expect(showInviteModal).toHaveBeenCalledTimes(2);
   });
 
-  it('updates the search input value when changed', () => {
+  it('updates the search input value when changed', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -199,12 +193,13 @@ describe('EventHeader Component', () => {
     );
 
     const input = getByTestId('searchEvent') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: 'test event' } });
+    await user.clear(input);
+    await user.type(input, 'test event');
 
     expect(input.value).toBe('test event');
   });
 
-  it('allows search to be performed', () => {
+  it('allows search to be performed', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -218,13 +213,14 @@ describe('EventHeader Component', () => {
     const input = getByTestId('searchEvent') as HTMLInputElement;
     const searchButton = getByTestId('searchButton');
 
-    fireEvent.change(input, { target: { value: 'conference' } });
-    fireEvent.click(searchButton);
+    await user.clear(input);
+    await user.type(input, 'conference');
+    await user.click(searchButton);
 
     expect(input.value).toBe('conference');
   });
 
-  it('allows search with no input', () => {
+  it('allows search with no input', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -236,7 +232,7 @@ describe('EventHeader Component', () => {
     );
 
     const searchButton = getByTestId('searchButton');
-    fireEvent.click(searchButton);
+    await user.click(searchButton);
 
     expect(searchButton).toBeInTheDocument();
   });
@@ -296,18 +292,14 @@ describe('EventHeader Component', () => {
     );
 
     // Change view type
-    fireEvent.click(getByTestId('selectViewType'));
-    await act(async () => {
-      fireEvent.click(getByTestId('Day'));
-    });
+    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('Day'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
 
     // Change event type
-    fireEvent.click(getByTestId('eventType'));
-    await act(async () => {
-      fireEvent.click(getByTestId('Events'));
-    });
+    await user.click(getByTestId('eventType'));
+    await user.click(getByTestId('Events'));
 
     expect(handleChangeView).toHaveBeenCalledTimes(1); // Only called once from view type change
   });
@@ -324,14 +316,14 @@ describe('EventHeader Component', () => {
     );
 
     // Rapid clicks on create button
-    fireEvent.click(getByTestId('createEventModalBtn'));
-    fireEvent.click(getByTestId('createEventModalBtn'));
-    fireEvent.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
+    await user.click(getByTestId('createEventModalBtn'));
 
     expect(showInviteModal).toHaveBeenCalledTimes(3);
   });
 
-  it('search input accepts special characters', () => {
+  it('search input accepts special characters', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -343,12 +335,13 @@ describe('EventHeader Component', () => {
     );
 
     const input = getByTestId('searchEvent') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: '@#$%^&*()' } });
+    await user.clear(input);
+    await user.type(input, '@#$%^&*()');
 
     expect(input.value).toBe('@#$%^&*()');
   });
 
-  it('search input handles long strings', () => {
+  it('search input handles long strings', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -361,7 +354,8 @@ describe('EventHeader Component', () => {
 
     const longString = 'a'.repeat(100);
     const input = getByTestId('searchEvent') as HTMLInputElement;
-    fireEvent.change(input, { target: { value: longString } });
+    await user.clear(input);
+    await user.type(input, longString);
 
     expect(input.value).toBe(longString);
   });

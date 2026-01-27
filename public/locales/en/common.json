@@ -301,5 +301,8 @@
   "selectRow": "Select row {{rowKey}}",
   "bulkActions": "Bulk actions",
   "selected": "selected",
-  "clearSelection": "Clear selection"
+  "unavailable": "Unavailable",
+  "clearSelection": "Clear selection",
+  "toggleSidebar": "Toggle sidebar",
+  "picture": "{{name}} Picture"
 }

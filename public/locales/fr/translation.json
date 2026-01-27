@@ -8,6 +8,9 @@
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
+  "role": {
+    "member": "Membre"
+  },
   "invalidDetailsMessage": "Veuillez vérifier les détails saisis.",
   "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour.",
   "leaderboard": {
@@ -210,8 +213,18 @@
     "noNewNotifications": "No new notifications.",
     "openNotificationsMenu": "Open notifications menu",
     "unread": "Unread",
+    "unreadCount_one": "{{count}} non lu",
+    "unreadCount_other": "{{count}} non lus",
     "unreadCount": "{{count}} unread notifications",
     "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "Avatar de {{title}}",
+    "eventLocation": "Lieu de l'événement",
+    "eventDate": "Date de l'événement",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Publié le :",
+    "author": "Auteur :"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -373,6 +386,7 @@
       "currentTimeout": "Délai actuel :",
       "noTimeoutSet": "Aucun délai défini",
       "minutes": " {{count}} minutes",
+      "updateSession": "Mettre à jour la session",
       "updateTimeout": "Mettre à jour le délai",
       "min15": "15 min",
       "min30": "30 min",
@@ -784,6 +798,7 @@
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
+    "dogsCare": "Soins des Chiens",
     "deleteEvent": "Supprimer l'événement",
     "deleteEventMsg": "Voulez-vous supprimer cet événement ?",
     "deleteRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le supprimer :",
@@ -955,7 +970,8 @@
     "pledged": "Promis",
     "donated": "Donné",
     "campaignNotActive": "La campagne n'est pas actuellement active",
-    "close": "Fermer"
+    "close": "Fermer",
+    "pledgeCreateFailed": "Échec de la création de la promesse"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -1113,8 +1129,9 @@
     "title": "404 introuvable",
     "talawaAdmin": "Administrateur Talawa",
     "talawaUser": "Utilisateur Talawa",
-    "notFoundMsg": "Oops! ",
-    "backToHome": "De retour à la maison"
+    "notFoundMsg": "Oups ! La page que vous avez demandée est introuvable !",
+    "backToHome": "Retour à l'accueil",
+    "logoAlt": "Logo"
   },
   "statusBadge": {
     "completed": "Terminé",
@@ -1447,7 +1464,9 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "plus d'options"
+    "moreOptions": "Plus d'options",
+    "scrollLeft": "Défiler vers la gauche",
+    "scrollRight": "Défiler vers la droite"
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
@@ -1552,8 +1571,10 @@
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "settings": {
+    "dummyPicture": "image factice",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
+    "profilePicture": "photo de profil",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",
@@ -1683,7 +1704,6 @@
     "calendarView": "Vue du calendrier",
     "allDay": "Toute la journée",
     "eventCreated": "Événement créé et publié avec succès.",
-    "eventDetails": "Détails de l'évènement",
     "eventName": "Nom",
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
@@ -1720,12 +1740,14 @@
     "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
+    "failedToRegister": "Échec de l'inscription à l'événement",
     "starts": "Départs",
     "ends": "Prend fin",
     "creator": "Créateur",
     "alreadyRegistered": "Déjà enregistré",
     "location": "Lieu",
-    "register": "Inscription"
+    "register": "S'inscrire",
+    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}"
   },
   "advertisement": {
     "title": "Annonces",
@@ -2087,7 +2109,8 @@
     "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
     "continue": "Continuer",
     "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
-    "organizationNotFound": "Organisation non trouvée"
+    "organizationNotFound": "Organisation non trouvée",
+    "confirmLeaveButton": "Confirmer le départ"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2161,7 +2184,21 @@
     "viewGroup": "Voir le groupe de bénévoles",
     "editGroup": "Modifier le groupe de bénévoles",
     "invalidNumber": "Nombre invalide",
-    "viewToggle": "Basculer la vue"
+    "viewToggle": "Basculer la vue",
+    "recurringVolunteerTitle": "Être bénévole pour {{eventName}}",
+    "recurringGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "Souhaitez-vous être bénévole pour toute la série ou seulement pour cette occurrence ?",
+    "recurringGroupDescription": "Souhaitez-vous rejoindre \"{{groupName}}\" pour toute la série ou seulement pour cette occurrence ?",
+    "volunteerForEntireSeries": "Être bénévole pour toute la série",
+    "volunteerForSeriesDescription": "Vous serez bénévole pour tous les événements de cette série récurrente",
+    "joinGroupForSeriesDescription": "Vous rejoindrez ce groupe pour tous les événements de la série récurrente",
+    "volunteerForThisInstanceOnly": "Être bénévole pour cette occurrence uniquement",
+    "volunteerForInstanceDescription": "Vous serez bénévole uniquement pour l'événement du {{date}}",
+    "joinGroupForInstanceDescription": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
+    "submitRequest": "Envoyer la demande",
+    "baseEventRequired": "Événement de base requis",
+    "selectVolunteer": "Sélectionner un bénévole",
+    "volunteerScope": "Portée du bénévole"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2453,5 +2490,21 @@
         "failedToLoad": "Échec du chargement du composant"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/D",
+    "yes": "Oui",
+    "no": "Non",
+    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
+    "eventNotFound": "Événement introuvable ou supprimé",
+    "numberOfAttendees": "Nombre de participants",
+    "viewEventDetails": "Voir les détails de l'événement"
+  },
+  "promotedPost": {
+    "title": "Contenu Promu",
+    "promotedContent": "Contenu promu : {{title}}"
+  },
+  "csv": {
+    "demographics": "Démographie de {{category}}"
   }
 }

@@ -6,14 +6,14 @@ import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import LoginPage from 'screens/LoginPage/LoginPage';
+import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -31,9 +31,11 @@ const EventManagement = lazy(
   () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
-  () => import('screens/ForgotPassword/ForgotPassword'),
+  () => import('screens/Auth/ForgotPassword/ForgotPassword'),
 );
-const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
+const MemberDetail = lazy(
+  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+);
 const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),

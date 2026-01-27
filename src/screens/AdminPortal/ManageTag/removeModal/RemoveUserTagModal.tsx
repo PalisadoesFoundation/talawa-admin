@@ -6,7 +6,7 @@
  * @param props - Component props defined by InterfaceRemoveUserTagModalProps.
  *
  * @remarks
- * - Uses translation functions for localized button labels and messages.
+ * - Uses DeleteModal template from CRUDModalTemplate for consistent UI and behavior.
  * - Disables the submit button while the removal request is in flight.
  *
  * @example
@@ -19,11 +19,9 @@
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
-import { Button } from 'shared-components/Button';
-import styles from './RemoveUserTagModal.module.css';
-import { BaseModal } from 'shared-components/BaseModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
@@ -37,7 +35,6 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
   handleRemoveUserTag,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
-  const { t: tCommon } = useTranslation('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onConfirmRemove = async (): Promise<void> => {
@@ -46,47 +43,25 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
     setIsSubmitting(true);
     try {
       await handleRemoveUserTag();
-    } catch (error) {
-      console.error(error);
+    } catch {
       NotificationToast.error(t('removeUserTagError'));
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
-    <BaseModal
-      show={removeUserTagModalIsOpen}
-      onHide={toggleRemoveUserTagModal}
-      size="sm"
-      backdrop="static"
-      keyboard={false}
+    <DeleteModal
+      open={removeUserTagModalIsOpen}
+      onClose={toggleRemoveUserTagModal}
       title={t('removeUserTag')}
-      headerClassName={`${styles.modalHeader} text-white`}
-      dataTestId="remove-user-tag-modal"
-      footer={
-        <>
-          <Button
-            type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={toggleRemoveUserTagModal}
-            data-testid="removeUserTagModalCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={onConfirmRemove}
-            disabled={isSubmitting}
-            data-testid="removeUserTagSubmitBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </>
-      }
+      onDelete={onConfirmRemove}
+      loading={isSubmitting}
+      size="sm"
+      data-testid="remove-user-tag-modal"
     >
       <p>{t('removeUserTagMessage')}</p>
-    </BaseModal>
+    </DeleteModal>
   );
 };
 

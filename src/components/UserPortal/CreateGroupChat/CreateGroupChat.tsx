@@ -43,9 +43,10 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
-import { Button, Form } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './CreateGroupChat.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -247,39 +248,51 @@ export default function CreateGroupChat({
             <FiEdit />
           </button>
         </div>
-        <Form>
-          <Form.Group className="mb-3" controlId="groupTitleInput">
-            <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('groupName', { defaultValue: 'Group name' })}
-              autoComplete="off"
+        <form>
+          <div className="mb-3">
+            <FormFieldGroup
+              name="groupTitleInput"
+              label={t('title', { defaultValue: 'Title' })}
               required
-              data-testid="groupTitleInput"
-              value={title}
-              onChange={(e): void => {
-                setTitle(e.target.value);
-              }}
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="groupDescriptionInput">
-            <Form.Label>
-              {tCommon('description', { defaultValue: 'Description' })}
-            </Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('groupDescription', {
-                defaultValue: 'Group Description',
-              })}
-              autoComplete="off"
+            >
+              <input
+                id="groupTitleInput"
+                type="text"
+                className="form-control"
+                placeholder={t('groupName', { defaultValue: 'Group name' })}
+                autoComplete="off"
+                required
+                data-testid="groupTitleInput"
+                value={title}
+                onChange={(e): void => {
+                  setTitle(e.target.value);
+                }}
+              />
+            </FormFieldGroup>
+          </div>
+          <div className="mb-3">
+            <FormFieldGroup
+              name="groupDescriptionInput"
+              label={tCommon('description', { defaultValue: 'Description' })}
               required
-              data-testid="groupDescriptionInput"
-              value={description}
-              onChange={(e): void => {
-                setDescription(e.target.value);
-              }}
-            />
-          </Form.Group>
+            >
+              <input
+                id="groupDescriptionInput"
+                type="text"
+                className="form-control"
+                placeholder={t('groupDescription', {
+                  defaultValue: 'Group Description',
+                })}
+                autoComplete="off"
+                required
+                data-testid="groupDescriptionInput"
+                value={description}
+                onChange={(e): void => {
+                  setDescription(e.target.value);
+                }}
+              />
+            </FormFieldGroup>
+          </div>
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
@@ -288,7 +301,7 @@ export default function CreateGroupChat({
           >
             {t('next', { defaultValue: 'Next' })}
           </Button>
-        </Form>
+        </form>
       </BaseModal>
       <BaseModal
         show={addUserModalisOpen}

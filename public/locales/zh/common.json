@@ -301,5 +301,8 @@
   "selectRow": "选择行 {{rowKey}}",
   "bulkActions": "批量操作",
   "selected": "已选择",
-  "clearSelection": "清除选择"
+  "unavailable": "不可用",
+  "clearSelection": "清除选择",
+  "toggleSidebar": "切换侧边栏",
+  "picture": "{{name}} 图片"
 }
