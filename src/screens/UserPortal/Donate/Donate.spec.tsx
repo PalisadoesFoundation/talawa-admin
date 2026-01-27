@@ -120,7 +120,7 @@ vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
   ),
 }));
 
-vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
+vi.mock('shared-components/PaginationList/PaginationList', () => ({
   default: ({
     rowsPerPage,
     page,

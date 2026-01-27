@@ -1,0 +1,12 @@
+.dropdownToggle {
+  margin-bottom: 0;
+  display: flex;
+  background-image: url(/public/images/svg/angleDown.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: var(--tablerow-bg-color) !important;
+  border: none;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  color: var(--eventManagement-button-text);
+}

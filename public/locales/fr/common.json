@@ -55,6 +55,8 @@
   "talawaAdminPortal": "Portail d'administration Talawa",
   "adminPortal": "Portail d'administration",
   "userPortal": "Portail utilisateur",
+  "switchToUserPortal": "Passer au portail utilisateur",
+  "switchToAdminPortal": "Passer au portail administrateur",
   "address": "Adresse",
   "location": "Emplacement",
   "enterLocation": "Entrez l'emplacement",
@@ -299,5 +301,8 @@
   "selectRow": "Sélectionner la ligne {{rowKey}}",
   "bulkActions": "Actions en masse",
   "selected": "sélectionnés",
-  "clearSelection": "Effacer la sélection"
+  "unavailable": "Indisponible",
+  "clearSelection": "Effacer la sélection",
+  "toggleSidebar": "Basculer la barre latérale",
+  "picture": "Photo de {{name}}"
 }

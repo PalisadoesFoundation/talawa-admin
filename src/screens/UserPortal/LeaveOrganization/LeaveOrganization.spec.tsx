@@ -1,6 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -260,7 +261,7 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     expect(screen.queryByText(/An error occurred!/i)).not.toBeInTheDocument();
   });
 
@@ -278,20 +279,18 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
         screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, {
-      target: { value: 'test@example.com' },
-    });
+    await userEvent.type(emailInput, 'test@example.com');
     // Press a non-Enter key - should not trigger verification
-    fireEvent.keyDown(emailInput, { key: 'Tab', code: 'Tab' });
+    await userEvent.tab();
     // Verify the modal is still open and no navigation happened
     expect(
       screen.getByPlaceholderText(/Enter your email/i),
@@ -310,7 +309,7 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
         screen.getByText(/Are you sure you want to leave/i),
@@ -319,12 +318,10 @@ describe('LeaveOrganization Component', () => {
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, {
-      target: { value: 'test@example.com' },
-    });
-    fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
+    await userEvent.type(emailInput, 'test@example.com');
+    await userEvent.type(emailInput, '{enter}');
     await waitFor(() => {
       expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
@@ -346,7 +343,7 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
         screen.getByText(/Are you sure you want to leave/i),
@@ -355,14 +352,12 @@ describe('LeaveOrganization Component', () => {
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-      target: { value: '' },
-    });
+    await userEvent.click(screen.getByText('Continue'));
+
     const confirmButton = screen.getByRole('button', {
       name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(
         screen.getByText(
@@ -383,7 +378,7 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
         screen.getByText(/Are you sure you want to leave/i),
@@ -392,14 +387,15 @@ describe('LeaveOrganization Component', () => {
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
-    fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
-      target: { value: 'different@example.com' },
-    });
+    await userEvent.click(screen.getByText('Continue'));
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter your email/i),
+      'different@example.com',
+    );
     const confirmButton = screen.getByRole('button', {
       name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
     await waitFor(() => {
       expect(
         screen.getByText(
@@ -420,7 +416,7 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     await waitFor(() =>
       expect(
         screen.getByText(/Are you sure you want to leave/i),
@@ -429,11 +425,11 @@ describe('LeaveOrganization Component', () => {
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
     const closeButton = screen.getByRole('button', { name: /Back/i });
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(
-      screen.queryByText(/Are you sure you want to leave/i),
+      screen.queryByText(/are you sure you want to leave/i),
     ).toBeInTheDocument();
   });
 
@@ -448,9 +444,9 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     const closeButton = screen.getByRole('button', { name: /Cancel/i });
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(screen.queryByText(/Leave Organization/i)).toBeInTheDocument();
   });
 
@@ -465,10 +461,10 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: /Leave Organization/i,
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
     const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
-    fireEvent.keyDown(modal, { key: 'Escape', code: 'Escape' });
+    await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('leave-organization-modal')).toBeNull(); // Modal should no longer be present
     });
@@ -515,20 +511,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = screen.getByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
       name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify network error message is displayed
     await waitFor(() => {
@@ -572,20 +568,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = screen.getByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
       name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify GraphQL error message is displayed
     await waitFor(() => {
@@ -636,20 +632,20 @@ describe('LeaveOrganization Component', () => {
     const leaveButton = await screen.findByRole('button', {
       name: 'Leave Organization',
     });
-    fireEvent.click(leaveButton);
+    await userEvent.click(leaveButton);
 
     // Continue to verification step
-    fireEvent.click(screen.getByText('Continue'));
+    await userEvent.click(screen.getByText('Continue'));
 
     // Enter correct email and submit
     const emailInput = screen.getByPlaceholderText(/Enter your email/i);
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await userEvent.type(emailInput, 'test@example.com');
 
-    // Use aria-label to find the confirm button
+    // Use the button text to find the confirm button
     const confirmButton = screen.getByRole('button', {
       name: /confirm/i,
     });
-    fireEvent.click(confirmButton);
+    await userEvent.click(confirmButton);
 
     // Verify error message is displayed
     await waitFor(() => {

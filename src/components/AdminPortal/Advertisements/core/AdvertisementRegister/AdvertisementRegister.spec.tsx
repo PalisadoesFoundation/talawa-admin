@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { ApolloProvider } from '@apollo/client';
 import AdvertisementRegister from './AdvertisementRegister';
 import { Provider } from 'react-redux';
@@ -144,13 +144,13 @@ describe('Testing Advertisement Register Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     await waitFor(() => {
@@ -165,7 +165,7 @@ describe('Testing Advertisement Register Component', () => {
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
-    const { getByText, queryByText, getByLabelText } = render(
+    const { getByText, queryByText, getByTestId } = render(
       <MockedProvider>
         <Provider store={store}>
           <router.BrowserRouter>
@@ -182,49 +182,51 @@ describe('Testing Advertisement Register Component', () => {
 
     expect(getByText(translations.createAdvertisement)).toBeInTheDocument();
 
-    fireEvent.click(getByText(translations.createAdvertisement));
+    await userEvent.click(getByText(translations.createAdvertisement));
     expect(queryByText(translations.addNew)).toBeInTheDocument();
 
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Ad1' },
-    });
-    expect(getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    await userEvent.clear(getByTestId('advertisementNameInput'));
+    await userEvent.type(getByTestId('advertisementNameInput'), 'Ad1');
+
+    expect(getByTestId('advertisementNameInput')).toHaveValue('Ad1');
 
     const mediaFile = new File(['media content'], 'test.png', {
       type: 'image/png',
     });
 
-    const mediaInput = getByLabelText(translations.Rmedia);
-    fireEvent.change(mediaInput, {
-      target: {
-        files: [mediaFile],
-      },
-    });
+    const mediaInput = getByTestId('advertisementMedia');
+    await userEvent.upload(mediaInput, mediaFile);
 
     const mediaPreview = await screen.findByTestId('mediaPreview');
     expect(mediaPreview).toBeInTheDocument();
 
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'banner' },
-    });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
+    await userEvent.selectOptions(
+      getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
+    expect(getByTestId('advertisementTypeSelect')).toHaveValue('banner');
 
-    fireEvent.change(getByLabelText(translations.RstartDate), {
-      target: { value: dateConstants.create.startAtISO.split('T')[0] },
-    });
-    expect(getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      getByTestId('advertisementStartDate'),
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(getByTestId('advertisementStartDate')).toHaveValue(
       dateConstants.create.startAtISO.split('T')[0],
     );
 
-    fireEvent.change(getByLabelText(translations.RendDate), {
-      target: { value: dateConstants.create.endBeforeStartISO.split('T')[0] },
-    });
-    expect(getByLabelText(translations.RendDate)).toHaveValue(
+    await userEvent.clear(getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      getByTestId('advertisementEndDate'),
       dateConstants.create.endBeforeStartISO.split('T')[0],
     );
 
-    await waitFor(() => {
-      fireEvent.click(getByText(translations.register));
+    expect(getByTestId('advertisementEndDate')).toHaveValue(
+      dateConstants.create.endBeforeStartISO.split('T')[0],
+    );
+
+    await waitFor(async () => {
+      await userEvent.click(getByText(translations.register));
     });
     expect(toastErrorSpy).toHaveBeenCalledWith(
       'End Date should be greater than Start Date',
@@ -280,11 +282,11 @@ describe('Testing Advertisement Register Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-    fireEvent.click(getByText(translations.createAdvertisement));
+    await userEvent.click(getByText(translations.createAdvertisement));
     await waitFor(() => {
       expect(queryByText(translations.addNew)).toBeInTheDocument();
     });
-    fireEvent.click(getByText(translations.close));
+    await userEvent.click(getByText(translations.close));
     await waitFor(() => {
       expect(queryByText(translations.close)).not.toBeInTheDocument();
     });
@@ -293,7 +295,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
     const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
-    const { getByText, getByLabelText, queryByText } = render(
+    const { getByText, queryByText, getByTestId } = render(
       <MockedProvider mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <router.BrowserRouter>
@@ -316,41 +318,48 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      fireEvent.click(screen.getByTestId('editBtn'));
+    await waitFor(async () => {
+      await userEvent.click(screen.getByTestId('editBtn'));
     });
     expect(queryByText(translations.editAdvertisement)).toBeInTheDocument();
-    fireEvent.change(getByLabelText(translations.Rname), {
-      target: { value: 'Test Advertisement' },
-    });
-    expect(getByLabelText(translations.Rname)).toHaveValue(
+    await userEvent.clear(getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      getByTestId('advertisementNameInput'),
       'Test Advertisement',
     );
 
-    fireEvent.change(getByLabelText(translations.Rtype), {
-      target: { value: 'banner' },
-    });
-    expect(getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(getByTestId('advertisementNameInput')).toHaveValue(
+      'Test Advertisement',
+    );
 
-    expect(getByLabelText(translations.RstartDate)).toBeInTheDocument();
+    await userEvent.selectOptions(
+      getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-      target: { value: dateConstants.update.startAtISO.split('T')[0] },
-    });
+    expect(getByTestId('advertisementTypeSelect')).toHaveValue('banner');
 
-    expect(getByLabelText(translations.RstartDate)).toHaveValue(
+    expect(getByTestId('advertisementStartDate')).toBeInTheDocument();
+    await userEvent.clear(getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.update.startAtISO.split('T')[0],
     );
 
-    fireEvent.change(screen.getByLabelText(translations.RendDate), {
-      target: { value: dateConstants.update.endBeforeStartISO.split('T')[0] },
-    });
-
-    expect(getByLabelText(translations.RendDate)).toHaveValue(
+    expect(getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.update.startAtISO.split('T')[0],
+    );
+    await userEvent.clear(getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
       dateConstants.update.endBeforeStartISO.split('T')[0],
     );
 
-    fireEvent.click(getByText(translations.saveChanges));
+    expect(getByTestId('advertisementEndDate')).toHaveValue(
+      dateConstants.update.endBeforeStartISO.split('T')[0],
+    );
+
+    await userEvent.click(getByText(translations.saveChanges));
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
         'End Date should be greater than Start Date',
@@ -380,7 +389,7 @@ describe('Testing Advertisement Register Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
     await screen.findByText(translations.addNew);
 
     const mediaFile = new File(['video content'], 'test.mp4', {
@@ -393,7 +402,7 @@ describe('Testing Advertisement Register Component', () => {
     expect(mediaPreview).toBeInTheDocument();
 
     const closeButton = await screen.findByTestId('closePreview');
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(mediaPreview).not.toBeInTheDocument();
   });
 
@@ -423,46 +432,48 @@ describe('Testing Advertisement Register Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rtype), {
-        target: { value: 'banner' },
-      });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.Rdesc), {
-        target: { value: 'this is a banner' },
-      });
+    await userEvent.clear(screen.getByTestId('advertisementDescriptionInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementDescriptionInput'),
+      'this is a banner',
+    );
 
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.create.startAtISO.split('T')[0] },
-      });
-
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.create.endAtISO.split('T')[0] },
-      });
-    });
-
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
       dateConstants.create.startAtISO.split('T')[0],
     );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
+
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
+
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementStartDate')).toHaveValue(
+      dateConstants.create.startAtISO.split('T')[0],
+    );
+    expect(screen.getByTestId('advertisementEndDate')).toHaveValue(
       dateConstants.create.endAtISO.split('T')[0],
     );
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     await waitFor(() => {
@@ -681,27 +692,27 @@ describe('Testing Advertisement Register Component', () => {
     await wait();
 
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const descriptionField = screen.getByLabelText(
-      'Enter description of Advertisement (optional)',
+    const descriptionField = screen.getByTestId(
+      'advertisementDescriptionInput',
     );
-    fireEvent.change(descriptionField, {
-      target: { value: 'This is an updated advertisement' },
-    });
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-        target: { value: dateConstants.update.startAtISO.split('T')[0] },
-      });
+    await userEvent.clear(descriptionField);
+    await userEvent.type(descriptionField, 'This is an updated advertisement');
 
-      fireEvent.change(screen.getByLabelText(translations.RendDate), {
-        target: { value: dateConstants.update.endAtISO.split('T')[0] },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
+      dateConstants.update.startAtISO.split('T')[0],
+    );
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('addonupdate'));
-    });
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.update.endAtISO.split('T')[0],
+    );
+
+    await userEvent.click(screen.getByTestId('addonupdate'));
 
     await waitFor(() => {
       const mockCall = updateMock.mock.calls[0][0];
@@ -746,22 +757,18 @@ describe('Testing Advertisement Register Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     const mediaInput = screen.getByTestId('advertisementMedia');
@@ -796,22 +803,19 @@ describe('Testing Advertisement Register Component', () => {
     ).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.createAdvertisement));
+      await userEvent.click(screen.getByText(translations.createAdvertisement));
     });
 
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.change(screen.getByLabelText(translations.Rname), {
-        target: { value: 'Ad1' },
-      });
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(screen.getByTestId('advertisementNameInput'), 'Ad1');
 
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('Ad1');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
 
     await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
+      await userEvent.click(screen.getByText(translations.register));
     });
 
     const mediaInput = screen.getByTestId('advertisementMedia');
@@ -840,7 +844,7 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     const invalidFile = new File(['content'], 'test.pdf', {
       type: 'image/pdf',
@@ -874,15 +878,11 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: '' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
 
-    await act(async () => {
-      fireEvent.click(screen.getByText(translations.register));
-    });
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -914,7 +914,7 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
     const mediaPreview = await screen.queryByTestId('mediaPreview');
     expect(mediaPreview).not.toBeInTheDocument();
@@ -960,12 +960,13 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const endDateField = screen.getByLabelText(translations.RendDate);
-    fireEvent.change(endDateField, { target: { value: newEndDate } });
+    const endDateField = screen.getByTestId('advertisementEndDate');
+    await userEvent.clear(endDateField);
+    await userEvent.type(endDateField, newEndDate);
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       const mockCall = updateMock.mock.calls[0][0];
@@ -1006,18 +1007,22 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Menu Ad' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Menu Ad',
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'menu' },
-    });
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('menu');
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'menu',
+    );
 
-    fireEvent.click(screen.getByText(translations.register));
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('menu');
+
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalledWith(
@@ -1054,13 +1059,15 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'New Ad' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'New Ad',
+    );
 
-    fireEvent.click(screen.getByText(translations.register));
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
@@ -1098,12 +1105,12 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const nameField = screen.getByLabelText(translations.Rname);
-    fireEvent.change(nameField, { target: { value: 'Updated Ad' } });
+    const nameField = screen.getByTestId('advertisementNameInput');
+    await userEvent.type(nameField, 'Updated Ad');
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalled();
@@ -1153,12 +1160,13 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const startDateField = screen.getByLabelText(translations.RstartDate);
-    fireEvent.change(startDateField, { target: { value: newStartDate } });
+    const startDateField = screen.getByTestId('advertisementStartDate');
+    await userEvent.clear(startDateField);
+    await userEvent.type(startDateField, newStartDate);
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       const mockCall = updateMock.mock.calls[0][0];
@@ -1204,17 +1212,18 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    const nameField = screen.getByLabelText(translations.Rname);
-    fireEvent.change(nameField, { target: { value: 'Updated Name' } });
+    const nameField = screen.getByTestId('advertisementNameInput');
+    await userEvent.clear(nameField);
+    await userEvent.type(nameField, 'Updated Name');
     expect(nameField).toHaveValue('Updated Name');
 
-    const typeField = screen.getByLabelText(translations.Rtype);
-    fireEvent.change(typeField, { target: { value: 'menu' } });
+    const typeField = screen.getByTestId('advertisementTypeSelect');
+    await userEvent.selectOptions(typeField, 'menu');
     expect(typeField).toHaveValue('menu');
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalledWith(
@@ -1250,7 +1259,7 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     const mediaInput = screen.getByTestId('advertisementMedia');
 
@@ -1311,10 +1320,10 @@ describe('Testing Advertisement Register Component', () => {
       </ApolloProvider>,
     );
 
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
     const mediaInput = screen.getByTestId('advertisementMedia');
-    fireEvent.change(mediaInput, { target: { files: null } });
+    await userEvent.upload(mediaInput, []);
 
     expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
   });
@@ -1342,13 +1351,14 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Test Ad' },
-    });
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Test Ad',
+    );
 
-    fireEvent.click(screen.getByText(translations.register));
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
@@ -1388,25 +1398,32 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Test Ad' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Test Ad',
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.Rtype), {
-      target: { value: 'banner' },
-    });
+    await userEvent.selectOptions(
+      screen.getByTestId('advertisementTypeSelect'),
+      'banner',
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-      target: { value: dateConstants.create.startAtISO.split('T')[0] },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
+      dateConstants.create.startAtISO.split('T')[0],
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.RendDate), {
-      target: { value: dateConstants.create.endAtISO.split('T')[0] },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
 
-    fireEvent.click(screen.getByText(translations.register));
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
@@ -1444,21 +1461,27 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByText(translations.createAdvertisement));
+    await userEvent.click(screen.getByText(translations.createAdvertisement));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Test Ad' },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementNameInput'));
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Test Ad',
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
-      target: { value: dateConstants.create.startAtISO.split('T')[0] },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementStartDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementStartDate'),
+      dateConstants.create.startAtISO.split('T')[0],
+    );
 
-    fireEvent.change(screen.getByLabelText(translations.RendDate), {
-      target: { value: dateConstants.create.endAtISO.split('T')[0] },
-    });
+    await userEvent.clear(screen.getByTestId('advertisementEndDate'));
+    await userEvent.type(
+      screen.getByTestId('advertisementEndDate'),
+      dateConstants.create.endAtISO.split('T')[0],
+    );
 
-    fireEvent.click(screen.getByText(translations.register));
+    await userEvent.click(screen.getByText(translations.register));
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
@@ -1496,13 +1519,14 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Updated Ad' },
-    });
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Updated Ad',
+    );
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalled();
@@ -1538,13 +1562,14 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    fireEvent.change(screen.getByLabelText(translations.Rname), {
-      target: { value: 'Updated Ad' },
-    });
+    await userEvent.type(
+      screen.getByTestId('advertisementNameInput'),
+      'Updated Ad',
+    );
 
-    fireEvent.click(screen.getByText(translations.saveChanges));
+    await userEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
       expect(updateMock).toHaveBeenCalled();
@@ -1576,11 +1601,11 @@ describe('Testing Advertisement Register Component', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId('editBtn'));
+    await userEvent.click(screen.getByTestId('editBtn'));
 
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('');
-    expect(screen.getByLabelText(translations.Rdesc)).toHaveValue('');
+    expect(screen.getByTestId('advertisementTypeSelect')).toHaveValue('banner');
+    expect(screen.getByTestId('advertisementNameInput')).toHaveValue('');
+    expect(screen.getByTestId('advertisementDescriptionInput')).toHaveValue('');
   });
 
   vi.useRealTimers();

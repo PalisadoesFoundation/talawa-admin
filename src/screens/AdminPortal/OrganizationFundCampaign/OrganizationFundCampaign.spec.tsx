@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -53,7 +53,7 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
     return (
       <nav data-testid="breadcrumbs">
         {items.map((item, index) => {
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? item.to?.includes('/campaigns')
               ? 'campaignsLink'
               : 'fundsLink'
@@ -88,21 +88,21 @@ const translations = JSON.parse(
 const renderFundCampaign = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgfundcampaign/orgId/fundId']}>
+      <MemoryRouter initialEntries={['/admin/orgfundcampaign/orgId/fundId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
+                  path="/admin/orgfundcampaign/:orgId/:fundId"
                   element={<OrganizationFundCampaign />}
                 />
                 <Route
-                  path="/fundCampaignPledge/orgId/campaignId1"
+                  path="/admin/fundCampaignPledge/orgId/campaignId1"
                   element={<div data-testid="pledgeScreen"></div>}
                 />
                 <Route
-                  path="/orgfunds/orgId"
+                  path="/admin/orgfunds/orgId"
                   element={<div data-testid="fundScreen"></div>}
                 />
                 <Route
@@ -146,13 +146,13 @@ describe('FundCampaigns Screen', () => {
     mockRouteParams('', '');
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/orgfundcampaign/']}>
+        <MemoryRouter initialEntries={['/admin/orgfundcampaign/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18nForTest}>
                 <Routes>
                   <Route
-                    path="/orgfundcampaign/"
+                    path="/admin/orgfundcampaign/"
                     element={<OrganizationFundCampaign />}
                   />
                   <Route
@@ -214,14 +214,14 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Search the Campaigns list by Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
 
     // SearchBar now uses onChange instead of searchBtn
-    fireEvent.change(searchField, {
-      target: { value: '2' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();
@@ -307,12 +307,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on Campaign Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const campaignName = await screen.findAllByTestId('campaignName');
     expect(campaignName[0]).toBeInTheDocument();
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -320,6 +321,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on View Pledge (via row click)', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -327,7 +329,7 @@ describe('FundCampaigns Screen', () => {
     expect(campaignName[0]).toBeInTheDocument();
 
     // Row click navigates to pledge screen
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -341,8 +343,8 @@ describe('FundCampaigns Screen', () => {
     const fundBreadcrumb = await screen.findByTestId('fundsLink');
     expect(fundBreadcrumb).toBeInTheDocument();
     // Verify the breadcrumb link has the correct href to the funds page
-    expect(fundBreadcrumb).toHaveAttribute('href', '/orgfunds/orgId');
-    expect(fundBreadcrumb).toHaveAttribute('data-to', '/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('href', '/admin/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('data-to', '/admin/orgfunds/orgId');
   });
 
   it('should sort campaigns by start date when clicking start date column header', async () => {
@@ -418,15 +420,15 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should display no results empty state when search yields no matches', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term that doesn't match any campaign
-    fireEvent.change(searchField, {
-      target: { value: 'NonExistentCampaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'NonExistentCampaign');
 
     // Assert EmptyState is rendered
     const emptyState = await screen.findByTestId('campaigns-search-empty');
@@ -446,15 +448,15 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should clear search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term
-    fireEvent.change(searchField, {
-      target: { value: 'Campaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'Campaign');
 
     await waitFor(() => {
       expect(searchField).toHaveValue('Campaign');
@@ -462,7 +464,7 @@ describe('FundCampaigns Screen', () => {
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     await waitFor(() => {
       expect(searchField).toHaveValue('');

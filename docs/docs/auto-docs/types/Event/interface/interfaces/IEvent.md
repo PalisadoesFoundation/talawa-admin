@@ -6,6 +6,10 @@
 
 Defined in: [src/types/Event/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L39)
 
+## Extended by
+
+- [`IEventListCard`](IEventListCard.md)
+
 ## Properties
 
 ### allDay

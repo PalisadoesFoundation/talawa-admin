@@ -134,6 +134,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const formData = {

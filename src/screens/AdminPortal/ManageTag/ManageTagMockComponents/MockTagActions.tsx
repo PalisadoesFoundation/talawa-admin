@@ -26,7 +26,7 @@
  * `/src/screens/AdminPortal/ManageTag/ManageTagMockComponents/MockTagActions.tsx`
  */
 import React from 'react';
-import type { InterfaceTagActionsProps } from 'components/AdminPortal/TagActions/TagActions';
+import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 import { useTranslation } from 'react-i18next';
 
 const MockTagActions: React.FC<InterfaceTagActionsProps> = ({

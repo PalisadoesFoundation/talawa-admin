@@ -265,7 +265,7 @@ import { Edit, Delete } from '@mui/icons-material';
   rows={users}
   columns={columns}
   onRowClick={(row) => {
-    navigate(`/users/${row.id}`);
+    navigate(`/admin/users/${row.id}`);
   }}
 />
 ```
@@ -323,7 +323,7 @@ export const UsersScreen = () => {
         defaultPageSize: 25,
         pageSizeOptions: [10, 25, 50, 100],
       }}
-      onRowClick={(row) => navigate(`/users/${row.id}`)}
+      onRowClick={(row) => navigate(`/admin/users/${row.id}`)}
       emptyStateMessage="No users found"
     />
   );
@@ -709,7 +709,8 @@ This helps developers quickly identify and fix configuration errors during devel
 ## Linter Enforcement
 
 Direct usage of `@mui/x-data-grid` and `@mui/x-data-grid-pro` is enforced via ESLint
-(`no-restricted-imports`) in `eslint.config.js`.
+(`no-restricted-imports`) in `eslint.config.js`, with wrapper exemptions managed in
+`scripts/eslint/config/exemptions.ts`.
 
 Only the `DataGridWrapper` and its associated type definitions are allowed to import
 these packages directly. All other usage must go through the standardized wrapper.

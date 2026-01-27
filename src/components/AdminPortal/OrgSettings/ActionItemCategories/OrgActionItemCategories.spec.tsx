@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -67,6 +67,10 @@ const renderActionItemCategories = (
 };
 
 describe('Testing Organisation Action Item Categories', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
@@ -93,11 +97,11 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by createdAt_DESC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     await waitFor(() => {
       expect(screen.getByTestId('createdAt_DESC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('createdAt_DESC'));
+    await user.click(screen.getByTestId('createdAt_DESC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
         'Category 1',
@@ -105,11 +109,11 @@ describe('Testing Organisation Action Item Categories', () => {
     });
 
     // Sort by createdAt_ASC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     await waitFor(() => {
       expect(screen.getByTestId('createdAt_ASC')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('createdAt_ASC'));
+    await user.click(screen.getByTestId('createdAt_ASC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('categoryName')[0]).toHaveTextContent(
         'Category 2',
@@ -129,11 +133,11 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
     await waitFor(() => {
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('all'));
+    await user.click(screen.getByTestId('all'));
 
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -141,11 +145,11 @@ describe('Testing Organisation Action Item Categories', () => {
     });
 
     // Filter by Disabled
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
     await waitFor(() => {
       expect(screen.getByTestId('disabled')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('disabled'));
+    await user.click(screen.getByTestId('disabled'));
     await waitFor(() => {
       expect(screen.queryByText('Category 1')).toBeNull();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -167,11 +171,11 @@ describe('Testing Organisation Action Item Categories', () => {
     const filterBtn = screen.getByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
     await waitFor(() => {
       expect(screen.getByTestId('active')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('active'));
+    await user.click(screen.getByTestId('active'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -192,10 +196,10 @@ describe('Testing Organisation Action Item Categories', () => {
 
     const addCategoryBtn = screen.getByTestId('createActionItemCategoryBtn');
     expect(addCategoryBtn).toBeInTheDocument();
-    await userEvent.click(addCategoryBtn);
+    await user.click(addCategoryBtn);
 
     await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -206,12 +210,12 @@ describe('Testing Organisation Action Item Categories', () => {
 
     const editCategoryBtn = await screen.findByTestId('editCategoryBtn1');
     await waitFor(() => expect(editCategoryBtn).toBeInTheDocument());
-    await userEvent.click(editCategoryBtn);
+    await user.click(editCategoryBtn);
 
     await waitFor(() =>
       expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -225,7 +229,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(viewCategoryBtn).toBeInTheDocument();
 
     // Open view modal
-    await userEvent.click(viewCategoryBtn);
+    await user.click(viewCategoryBtn);
 
     // Check modal is open by looking for the modal content
     await waitFor(() =>
@@ -233,7 +237,7 @@ describe('Testing Organisation Action Item Categories', () => {
     );
 
     // Close the view modal
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -250,8 +254,8 @@ describe('Testing Organisation Action Item Categories', () => {
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    await userEvent.type(searchInput, 'Category 1');
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.type(searchInput, 'Category 1');
+    await user.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -270,8 +274,8 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Search by description - "Test description" matches Category 1's description
-    await userEvent.type(searchInput, 'Test description');
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.type(searchInput, 'Test description');
+    await user.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
@@ -290,7 +294,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Clear the search input by backspace
-    await userEvent.type(searchInput, 'A{backspace}');
+    await user.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -309,7 +313,7 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Simulate typing and pressing ENTER
-    await userEvent.type(searchInput, 'Category 1{enter}');
+    await user.type(searchInput, 'Category 1{enter}');
 
     // Wait for the filtering to complete
     await waitFor(() => {

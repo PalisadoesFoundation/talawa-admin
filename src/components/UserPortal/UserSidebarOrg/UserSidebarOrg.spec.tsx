@@ -9,7 +9,7 @@ import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { CURRENT_USER, ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
@@ -95,7 +95,24 @@ const props: InterfaceUserSidebarOrgProps = {
   setHideDrawer: vi.fn(),
 };
 
+const createCurrentUserMock = (role: string) => ({
+  request: {
+    query: CURRENT_USER,
+  },
+  result: {
+    data: {
+      user: {
+        role,
+      },
+    },
+  },
+});
+
+const CURRENT_USER_REGULAR_MOCK = createCurrentUserMock('regular');
+const CURRENT_USER_ADMIN_MOCK = createCurrentUserMock('administrator');
+
 const MOCKS = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -161,6 +178,7 @@ const MOCKS = [
 ];
 
 const MOCKS_WITH_IMAGE = [
+  CURRENT_USER_REGULAR_MOCK,
   {
     request: {
       query: ORGANIZATIONS_LIST,
@@ -226,19 +244,7 @@ const MOCKS_WITH_IMAGE = [
   },
 ];
 
-// const MOCKS_EMPTY = [
-//   {
-//     request: {
-//       query: ORGANIZATIONS_LIST,
-//       variables: { id: '123' },
-//     },
-//     result: {
-//       data: {
-//         organizations: [],
-//       },
-//     },
-//   },
-// ];
+const MOCKS_ADMIN = [CURRENT_USER_ADMIN_MOCK, ...MOCKS.slice(1)];
 
 const defaultScreens = [
   'People',
@@ -287,6 +293,7 @@ afterEach(() => {
 
 const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
+const linkAdmin = new StaticMockLink(MOCKS_ADMIN, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
 describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
@@ -367,13 +374,18 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
-    resizeWindow(800);
-    expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
+    const previousWidth = window.innerWidth;
+    try {
+      resizeWindow(800);
+      expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopleBtn = screen.getAllByTestId(/People/i)[0];
-    await userEvent.click(peopleBtn);
-    await wait();
-    expect(window.location.pathname).toContain('user/people/123');
+      const peopleBtn = screen.getAllByTestId(/People/i)[0];
+      await userEvent.click(peopleBtn);
+      await wait();
+      expect(window.location.pathname).toContain('user/people/123');
+    } finally {
+      resizeWindow(previousWidth);
+    }
   });
 
   it('Testing when image is present for Organization', async () => {
@@ -394,28 +406,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     );
     await wait();
   });
-
-  // it('Testing when Organization does not exists', async () => {
-  //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
-  //   setItem('FirstName', 'John');
-  //   setItem('LastName', 'Doe');
-  //   render(
-  //     <MockedProvider link={linkEmpty}>
-  //       <BrowserRouter>
-  //         <Provider store={store}>
-  //           <I18nextProvider i18n={i18nForTest}>
-  //             <UserSidebarOrg {...props} hideDrawer={null} />
-  //           </I18nextProvider>
-  //         </Provider>
-  //       </BrowserRouter>
-  //     </MockedProvider>,
-  //   );
-  //   await wait();
-  //   expect(
-  //     screen.getByText(/Error Occured while loading the Organization/i),
-  //   ).toBeInTheDocument();
-  // });
 
   it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
@@ -925,5 +915,22 @@ describe('Dropdown State Management', () => {
     expect(
       screen.getByRole('button', { name: /Dropdown Menu/i }),
     ).toBeInTheDocument();
+  });
+
+  it('shows switch to admin portal button for admin users', () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider link={linkAdmin}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserSidebarOrg {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
   });
 });

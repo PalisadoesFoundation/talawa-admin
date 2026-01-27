@@ -41,7 +41,7 @@ import {
   CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
 import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

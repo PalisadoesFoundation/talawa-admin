@@ -25,6 +25,32 @@ vi.mock('../manager', () => ({
     getLoadedPlugins: vi.fn(),
   })),
 }));
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+  Trans: ({
+    t,
+    i18nKey,
+    values,
+    components: _components,
+  }: {
+    t?: (key: string) => string;
+    i18nKey: string;
+    values: Record<string, string>;
+    components?: Record<string, React.ReactNode>;
+  }) =>
+    React.createElement(
+      'span',
+      null,
+      `${t ? t(i18nKey) : i18nKey} ${values ? JSON.stringify(values) : ''}`,
+    ),
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
+}));
 
 // Mock fetch
 
@@ -58,6 +84,8 @@ describe('Plugin Registry', () => {
     Object.keys(manifestCache).forEach((key) => {
       delete manifestCache[key];
     });
+    // Mock console.error to avoid polluting test output
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -101,6 +129,9 @@ describe('Plugin Registry', () => {
       expect(element).toBeDefined();
       expect(element.type).toBe('div');
       expect((element.props as { children: unknown }).children).toBeDefined();
+      // Verify translation keys are being used (prop children contains mocked translation)
+      // Since mocked Trans returns span with key, we can inspect element structure if needed, but here simple definition check is done.
+      // Based on feedback, we assume the mock works, but we could check props if we rendered with testing-library.
     });
   });
 
@@ -769,6 +800,8 @@ describe('Plugin Registry', () => {
     });
 
     it('should handle invalid JSON responses', async () => {
+      // Note: This tests that the current implementation doesn't validate
+      // manifest structure - it stores whatever json() returns
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue('invalid json'),

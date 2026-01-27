@@ -178,7 +178,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Palisa
 
 ### type?
 
-> `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
+> `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"url"` \| `"tel"`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L17)
 

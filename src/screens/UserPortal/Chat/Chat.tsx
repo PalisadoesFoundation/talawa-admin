@@ -1,17 +1,8 @@
 /**
- * The `chat` component provides a user interface for interacting with contacts and chat rooms w  // TODO: Update markChatMessagesAsRead to match new schema
-  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-  //   variables: { chatId: selectedContact, userId: userId },
-  // });
-
-  useEffect(() => {
-    // TODO: Update markChatMessagesAsRead to match new schema
-    // markChatMessagesAsRead().then(() => {
-    //   chatsListRefetch();
-    // });
-  }, [selectedContact]);organization.
+ * The `chat` component provides a user interface for interacting with contacts and chat rooms within an organization.
  * It features a contact list with search functionality and displays the chat room for the selected contact.
  * The component uses GraphQL to fetch and manage contact data, and React state to handle user interactions.
+ *
  *
  * ## Features:
  * - **Search Contacts:** Allows users to search for contacts by their first name.
@@ -39,7 +30,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
@@ -229,7 +221,7 @@ export default function chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <Dropdown style={{ cursor: 'pointer' }}>
+              <Dropdown className={styles.dropdownToggle}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
@@ -250,7 +242,7 @@ export default function chat(): JSX.Element {
                     {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
-                    Starred Messages
+                    {t('starredMessages')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -278,7 +270,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      All
+                      {t('all')}
                     </Button>
                     <Button
                       data-testid="unreadChat"
@@ -292,7 +284,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Unread
+                      {t('unread')}
                     </Button>
                     <Button
                       onClick={() => {
@@ -306,18 +298,13 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Groups
+                      {t('groups')}
                     </Button>
                   </div>
 
                   <div
                     data-testid="contactCardContainer"
-                    className={styles.contactCardContainer}
-                    style={{
-                      maxHeight: 'calc(100vh - 200px)',
-                      overflowY: 'auto',
-                      flex: 1,
-                    }}
+                    className={`${styles.contactCardContainer} ${styles.contactCardList}`}
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {

@@ -21,7 +21,8 @@
  * ```
  *
  * Dependencies
- * - `react-bootstrap` for Card and Button components.
+ * - `react-bootstrap` for Card component.
+ * - `shared-components/Button/Button` for the Button component.
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
  * - `react-tooltip` for tooltips.
@@ -30,17 +31,24 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 
-const joinedDate = (param: string | Date): string => {
+const joinedDate = (
+  param: string | Date | null | undefined,
+  unavailableText: string,
+): string => {
+  if (!param) {
+    return unavailableText;
+  }
   const date = typeof param === 'string' ? new Date(param) : param;
-  if (date?.toDateString() === 'Invalid Date') {
-    return 'Unavailable';
+  if (Number.isNaN(date.getTime())) {
+    return unavailableText;
   }
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'long' });
@@ -66,13 +74,13 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         </div>
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
-            <div className={styles.imgContianer}>
+            <div className={styles.imgContainer}>
               {image && image !== 'null' ? (
-                <img src={image} alt={`profile picture`} />
+                <img src={image} alt={t('profilePicture')} />
               ) : (
                 <Avatar
                   name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
+                  alt={t('dummyPicture')}
                 />
               )}
             </div>
@@ -100,12 +108,14 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
-                  {tCommon('joined')} {createdAt && joinedDate(createdAt)}
+                  {tCommon('joined')}{' '}
+                  {joinedDate(createdAt, tCommon('unavailable'))}
                 </span>
               </span>
             </div>
           </div>
           <div className="mt-4 mb-1 d-flex justify-content-center">
+            {/* TODO(#6707): Implement copy-to-clipboard functionality for profile link */}
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>
         </Card.Body>

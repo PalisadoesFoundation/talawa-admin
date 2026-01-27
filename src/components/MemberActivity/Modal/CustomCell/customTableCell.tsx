@@ -28,16 +28,20 @@ import { useQuery } from '@apollo/client';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './customTableCell.module.css';
 import { Link } from 'react-router';
+import type { InterfaceCustomTableCellProps } from 'types/MemberActivity/interface';
+import { useTranslation } from 'react-i18next';
 
-export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
+export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
+  eventId,
+}) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
     variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
     nextFetchPolicy: 'cache-and-network',
-    pollInterval: 30000,
   });
 
   if (loading)
@@ -52,7 +56,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     return (
       <TableRow data-testid="error-state">
         <TableCell colSpan={4} align="center">
-          {`Unable to load event details. Please try again later.`}
+          {t('unableToLoadEventDetails')}
         </TableCell>
       </TableRow>
     );
@@ -62,7 +66,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     return (
       <TableRow data-testid="no-event-state">
         <TableCell colSpan={4} align="center">
-          Event not found or has been deleted
+          {t('eventNotFound')}
         </TableCell>
       </TableRow>
     );
@@ -72,7 +76,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     <TableRow className="my-6" data-testid="custom-row">
       <TableCell align="left">
         <Link
-          to={`/event/${event.organization.id}/${event.id}`}
+          to={`/admin/event/${event.organization.id}/${event.id}`}
           className={styles.membername}
         >
           {event.name}
@@ -87,10 +91,12 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
         })}
       </TableCell>
       <TableCell align="left">
-        {event.isRecurringEventTemplate ? 'Yes' : 'No'}
+        {event.isRecurringEventTemplate ? t('yes') : t('no')}
       </TableCell>
       <TableCell align="left">
-        <span title="Number of attendees">{event.attendees?.length ?? 0}</span>
+        <span title={t('numberOfAttendees')}>
+          {event.attendees?.length ?? 0}
+        </span>
       </TableCell>
     </TableRow>
   );

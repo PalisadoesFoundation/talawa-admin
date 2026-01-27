@@ -8,6 +8,9 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "role": {
+    "member": "सदस्य"
+  },
   "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
   "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
@@ -163,6 +166,7 @@
     "requests": "सदस्यता अनुरोध",
     "communityProfile": "समुदाय प्रोफ़ाइल",
     "notification": "सूचनाएं",
+    "switchToUserPortal": "यूज़र पोर्टल पर जाएं",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
@@ -199,15 +203,23 @@
     "next": "अगला",
     "markAsRead": "पढ़ा हुआ चिह्नित करें",
     "markAsReadAriaLabel": "सूचना '{{title}}' को पढ़ा हुआ चिह्नित करें",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
     "unreadCount_one": "{{count}} अपठित",
     "unreadCount_other": "{{count}} अपठित",
-    "unreadCount": "{{count}} अपठित",
-    "loading": "लोड हो रहा है...",
-    "errorFetching": "सूचनाएं प्राप्त करते समय त्रुटि",
-    "unread": "अपठित",
-    "noNewNotifications": "कोई नई सूचना नहीं",
-    "viewAllNotifications": "सभी सूचनाएं देखें",
-    "openNotificationsMenu": "सूचना मेनू खोलें"
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} अवतार",
+    "eventLocation": "कार्यक्रम स्थान",
+    "eventDate": "कार्यक्रम तिथि",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "प्रकाशित:",
+    "author": "लेखक:"
   },
   "orgList": {
     "title": "तालावा संगठन",
@@ -269,7 +281,11 @@
   },
   "paginationList": {
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
-    "all": "सभी"
+    "all": "सभी",
+    "firstPage": "पहला पृष्ठ",
+    "previousPage": "पिछला पृष्ठ",
+    "nextPage": "अगला पृष्ठ",
+    "lastPage": "अंतिम पृष्ठ"
   },
   "requests": {
     "profile": "प्रोफ़ाइल",
@@ -359,15 +375,20 @@
     "social": "सोशल मीडिया लिंक",
     "url": "यूआरएल दर्ज करें",
     "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया।",
-    "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।"
-  },
-  "cardItem": {
-    "avatar": "{{title}} अवतार",
-    "eventLocation": "इवेंट स्थान",
-    "eventDate": "इवेंट तिथि",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "पर पोस्ट किया गया:",
-    "author": "लेखक:"
+    "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।",
+    "sessionTimeout": {
+      "title": "लॉगिन सत्र समय समाप्ति",
+      "currentTimeout": "वर्तमान समय समाप्ति:",
+      "noTimeoutSet": "कोई समय समाप्ति सेट नहीं है",
+      "minutes": " {{count}} मिनट",
+      "updateSession": "सत्र अपडेट करें",
+      "updateTimeout": "समय सीमा अपडेट करें",
+      "min15": "15 मिनट",
+      "min30": "30 मिनट",
+      "min45": "45 मिनट",
+      "min60": "60 मिनट",
+      "update": "अपडेट"
+    }
   },
   "dashboard": {
     "title": "डैशबोर्ड",
@@ -630,7 +651,12 @@
     "done": "पूर्ण",
     "createChat": "चैट बनाएं",
     "viewType": "दृश्य प्रकार",
-    "search": "खोज"
+    "search": "खोज",
+    "Events": "कार्यक्रम",
+    "Workshops": "कार्यशालाएँ",
+    "selectMonth": "महीना चुनें",
+    "selectDay": "दिन चुनें",
+    "selectYear": "वर्ष चुनें"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -781,12 +807,13 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "event": "कार्यक्रम",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
   "eventListCard": {
+    "dogsCare": "कुत्तों की देखभाल",
     "deleteEvent": "ईवेंट हटाएँ",
     "deleteEventMsg": "क्या आप इस ईवेंट को हटाना चाहते हैं?",
     "deleteRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे हटाना चाहते हैं:",
@@ -958,7 +985,8 @@
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया",
     "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "pledgeCreateFailed": "प्रतिज्ञा बनाने में विफल"
   },
   "createPostModal": {
     "title": "पदों",
@@ -1116,8 +1144,9 @@
     "title": "404 नहीं मिला",
     "talawaAdmin": "तलावा प्रशासन",
     "talawaUser": "तलावा उपयोगकर्ता",
-    "notFoundMsg": "उफ़! ",
-    "backToHome": "घर वापिस जा रहा हूँ"
+    "notFoundMsg": "oops! आपके द्वारा अनुरोधित पृष्ठ नहीं मिला!",
+    "backToHome": "मुख्य पृष्ठ पर वापस जाएँ",
+    "logoAlt": "प्रतीक चिन्ह"
   },
   "orgContribution": {
     "title": "तलावा योगदान",
@@ -1398,6 +1427,8 @@
     "menu": "मेनू"
   },
   "organizationSidebar": {
+    "loading": "लोड हो रहा है...",
+    "ends": "समाप्त",
     "viewAll": "सभी को देखें",
     "events": "आयोजन",
     "noEvents": "दिखाने के लिए कोई ईवेंट नहीं",
@@ -1431,7 +1462,9 @@
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
-    "moreOptions": "अधिक विकल्प"
+    "moreOptions": "अधिक विकल्प",
+    "scrollLeft": "बायें स्क्रॉल करें",
+    "scrollRight": "दायें स्क्रॉल करें"
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
@@ -1527,17 +1560,19 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
-    "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
-    "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
-    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "checkedIn": "चेक इन किया गया",
     "unregister": "पंजीकरण रद्द करें",
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
   "settings": {
+    "dummyPicture": "डमी चित्र",
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
+    "profilePicture": "प्रोफ़ाइल चित्र",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",
     "phoneNumber": "फ़ोन नंबर",
@@ -1667,7 +1702,6 @@
     "calendarView": "कैलेंडर दृश्य",
     "allDay": "पूरे दिन",
     "eventCreated": "ईवेंट सफलतापूर्वक बनाया और पोस्ट किया गया.",
-    "eventDetails": "घटना की जानकारी",
     "eventName": "नाम",
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
@@ -1704,12 +1738,14 @@
     "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
+    "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
     "starts": "प्रारंभ होगा",
     "ends": "समाप्त होता है",
     "creator": "निर्माता",
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
-    "register": "पंजीकरण करें"
+    "register": "पंजीकरण करें",
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -1762,6 +1798,10 @@
     "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
+    "starredMessages": "तारांकित संदेश",
+    "all": "सब",
+    "unread": "अपठित",
+    "groups": "समूह",
     "title": "चैट्स",
     "deleteChat": "चैट हटाएं",
     "add": "जोड़ें",
@@ -2067,7 +2107,8 @@
     "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
     "continue": "जारी रखें",
     "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
-    "organizationNotFound": "संगठन नहीं मिला"
+    "organizationNotFound": "संगठन नहीं मिला",
+    "confirmLeaveButton": "छोड़ने की पुष्टि करें"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
@@ -2141,7 +2182,21 @@
     "viewGroup": "समूह देखें",
     "editGroup": "समूह संपादित करें",
     "invalidNumber": "अमान्य संख्या",
-    "viewToggle": "दृश्य टॉगल"
+    "viewToggle": "दृश्य टॉगल",
+    "recurringVolunteerTitle": "{{eventName}} के लिए स्वयंसेवक बनें",
+    "recurringGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "recurringVolunteerDescription": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवक बनना चाहेंगे या केवल इस बार के लिए?",
+    "recurringGroupDescription": "क्या आप पूरी श्रृंखला के लिए या केवल इस बार के लिए \"{{groupName}}\" में शामिल होना चाहेंगे?",
+    "volunteerForEntireSeries": "पूरी श्रृंखला के लिए स्वयंसेवक बनें",
+    "volunteerForSeriesDescription": "आप इस आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForSeriesDescription": "आप आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए इस समूह में शामिल होंगे",
+    "volunteerForThisInstanceOnly": "केवल इस बार के लिए स्वयंसेवक बनें",
+    "volunteerForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए इस समूह में शामिल होंगे",
+    "submitRequest": "अनुरोध सबमिट करें",
+    "baseEventRequired": "आधार ईवेंट आवश्यक है",
+    "selectVolunteer": "स्वयंसेवक चुनें",
+    "volunteerScope": "स्वयंसेवक कार्यक्षेत्र"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2205,6 +2260,11 @@
     "volunteersRequired": "आवश्यक",
     "signedUp": "पंजीकृत"
   },
+  "plugin": {
+    "error": "प्लगइन त्रुटि",
+    "failedToLoad": "घटक लोड करने में विफल: <1>{{componentName}}</1>",
+    "id": "प्लगइन: <1>{{pluginId}}</1>"
+  },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
     "searchPlaceholder": "प्लगइन खोजें...",
@@ -2266,6 +2326,10 @@
     "screenshotCounter": "{{current}} में से {{total}}",
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",
+    "notFoundOrDisabledDescription": "यह प्लगइन या तो मौजूद नहीं है या वर्तमान में अक्षम है। कृपया सुनिश्चित करें कि प्लगइन सही ढंग से स्थापित और सक्रिय है।"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",
@@ -2387,17 +2451,59 @@
       "filledByCount": "{{count}} लोगों ने इस इवेंट के लिए फीडबैक भरा है।"
     }
   },
+  "plugins": {
+    "loading": "प्लगइन लोड हो रहा है...",
+    "component": "कम्पोनेंट",
+    "plugin": "प्लगइन",
+    "errors": {
+      "missingPluginId": {
+        "title": "प्लगइन आईडी गायब है",
+        "description": "इस रूट में मान्य प्लगइन आईडी नहीं है"
+      },
+      "notRegistered": {
+        "title": "प्लगइन पंजीकृत नहीं है",
+        "description": "कृपया इस प्लगइन को रजिस्ट्री में जोड़ें {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "कोई घटक नहीं मिला"
+      },
+      "componentNotFound": {
+        "title": "घटक नहीं मिला",
+        "availableComponents": "उपलब्ध घटक: {{components}}"
+      },
+      "pluginError": {
+        "title": "प्लगइन त्रुटि",
+        "failedToLoad": "घटक लोड करने में विफल"
+      }
+    }
+  },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "ईमेल सत्यापित करें",
+    "verifying": "आपका ईमेल सत्यापित किया जा रहा है...",
+    "success": "ईमेल सत्यापित!",
+    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉगिन कर सकते हैं।",
+    "error": "सत्यापन विफल",
+    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
+    "loginRequired": "कृपया अपना ईमेल सत्यापित करने के लिए लॉगिन करें।",
+    "resendButton": "सत्यापन ईमेल पुनः भेजें",
+    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
+    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
+    "goToLogin": "लॉगिन पर जाएं"
+  },
+  "memberActivity": {
+    "dateNA": "दिनांक उपलब्ध नहीं",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
+    "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
+    "numberOfAttendees": "उपस्थित लोगों की संख्या",
+    "viewEventDetails": "इवेंट विवरण देखें"
+  },
+  "promotedPost": {
+    "title": "प्रचारित सामग्री",
+    "promotedContent": "प्रचारित सामग्री: {{title}}"
+  },
+  "csv": {
+    "demographics": "{{category}} जनसांख्यिकी"
   }
 }

@@ -818,8 +818,10 @@ describe('Testing GroupModal', () => {
     await user.clear(nameInput);
     nameInput.blur();
 
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeDisabled();
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
   });
 
   it('should show validation error for invalid volunteers required on blur', async () => {
@@ -842,9 +844,12 @@ describe('Testing GroupModal', () => {
     await user.clear(nameInput);
     nameInput.blur(); // Trigger error
 
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeDisabled();
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
 
+    const submitBtn = screen.getByTestId('submitBtn');
     await user.click(submitBtn); // Should not fire
     expect(NotificationToast.success).not.toHaveBeenCalled();
   });
@@ -857,9 +862,12 @@ describe('Testing GroupModal', () => {
       await user.clear(nameInput);
       nameInput.blur();
 
-      const submitBtn = screen.getByTestId('submitBtn');
-      expect(submitBtn).toBeDisabled();
+      await waitFor(() => {
+        const submitBtn = screen.getByTestId('submitBtn');
+        expect(submitBtn).toBeDisabled();
+      });
 
+      const submitBtn = screen.getByTestId('submitBtn');
       await user.click(submitBtn);
 
       await waitFor(() => {
@@ -899,8 +907,10 @@ describe('Testing GroupModal', () => {
 
       nameInput.blur();
 
-      const submitBtn = screen.getByTestId('submitBtn');
-      expect(submitBtn).toBeDisabled();
+      await waitFor(() => {
+        const submitBtn = screen.getByTestId('submitBtn');
+        expect(submitBtn).toBeDisabled();
+      });
     });
 
     it('should set touched state for volunteersRequired on blur', async () => {
@@ -1176,7 +1186,7 @@ describe('Testing GroupModal', () => {
     vrInput.blur();
 
     // Submit the FORM directly (button is disabled so we bypass it)
-    const form = screen.getByTestId('pledgeForm');
+    const form = screen.getByTestId('groupForm');
 
     const submitEvent = new Event('submit', {
       bubbles: true,

@@ -12,7 +12,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -71,12 +71,15 @@ const t = {
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/:orgId/:eventId" element={<Requests />} />
+                <Route
+                  path="/admin/event/:orgId/:eventId"
+                  element={<Requests />}
+                />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -102,11 +105,11 @@ describe('Testing Requests Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
+        <MemoryRouter initialEntries={['/admin/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/" element={<Requests />} />
+                <Route path="/admin/event/" element={<Requests />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -128,6 +131,7 @@ describe('Testing Requests Screen', () => {
   });
 
   it('Check Sorting Functionality', async () => {
+    const user = userEvent.setup();
     renderRequests(link1);
 
     await waitFor(() => {
@@ -138,10 +142,10 @@ describe('Testing Requests Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by createdAt_DESC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const createdAtDESC = await screen.findByTestId('createdAt_DESC');
     expect(createdAtDESC).toBeInTheDocument();
-    fireEvent.click(createdAtDESC);
+    await user.click(createdAtDESC);
 
     let volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
@@ -149,10 +153,10 @@ describe('Testing Requests Screen', () => {
     // Sort by createdAt_ASC
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const createdAtASC = await screen.findByTestId('createdAt_ASC');
     expect(createdAtASC).toBeInTheDocument();
-    fireEvent.click(createdAtASC);
+    await user.click(createdAtASC);
 
     volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('John Doe');
@@ -269,6 +273,7 @@ describe('Testing Requests Screen', () => {
   });
 
   it('should filter requests by individual type', async () => {
+    const user = userEvent.setup();
     renderRequests(link5);
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -280,11 +285,11 @@ describe('Testing Requests Screen', () => {
 
     // Click filter button
     const filterBtn = await screen.findByTestId('filter');
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
 
     // Select individual filter
     const individualFilter = await screen.findByTestId('individual');
-    fireEvent.click(individualFilter);
+    await user.click(individualFilter);
 
     await waitFor(() => {
       // Should only show individual requests (2 requests without group)
@@ -296,6 +301,7 @@ describe('Testing Requests Screen', () => {
   });
 
   it('should filter requests by group type', async () => {
+    const user = userEvent.setup();
     renderRequests(link5);
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -307,11 +313,11 @@ describe('Testing Requests Screen', () => {
 
     // Click filter button
     const filterBtn = await screen.findByTestId('filter');
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
 
     // Select group filter
     const groupFilter = await screen.findByTestId('group');
-    fireEvent.click(groupFilter);
+    await user.click(groupFilter);
 
     await waitFor(() => {
       // Should only show group requests (1 request with group)
@@ -322,6 +328,7 @@ describe('Testing Requests Screen', () => {
   });
 
   it('should show all requests when filter is set to all', async () => {
+    const user = userEvent.setup();
     renderRequests(link5);
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -329,11 +336,11 @@ describe('Testing Requests Screen', () => {
 
     // Click filter button
     const filterBtn = await screen.findByTestId('filter');
-    fireEvent.click(filterBtn);
+    await user.click(filterBtn);
 
     // First set to individual filter
     const individualFilter = await screen.findByTestId('individual');
-    fireEvent.click(individualFilter);
+    await user.click(individualFilter);
 
     await waitFor(() => {
       const filteredNames = screen.getAllByTestId('volunteerName');
@@ -342,11 +349,11 @@ describe('Testing Requests Screen', () => {
 
     // Now click filter button again
     const filterBtnAgain = await screen.findByTestId('filter');
-    fireEvent.click(filterBtnAgain);
+    await user.click(filterBtnAgain);
 
     // Select 'all' filter to show all requests again
     const allFilter = await screen.findByTestId('all');
-    fireEvent.click(allFilter);
+    await user.click(allFilter);
 
     await waitFor(() => {
       // Should show all requests again (2 individual + 1 group = 3)

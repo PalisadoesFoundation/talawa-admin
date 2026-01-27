@@ -26,7 +26,7 @@ The row data type used in the DataTable
 
 ### options
 
-[`IUseDataTableFilteringOptions`](../../../../../types/shared-components/DataTable/interface/interfaces/IUseDataTableFilteringOptions.md)\<`T`\>
+[`IUseDataTableFilteringOptions`](../../../../../types/shared-components/DataTable/hooks/interfaces/IUseDataTableFilteringOptions.md)\<`T`\>
 
 Configuration options for filtering behavior including:
   - `data` - Array of row data to filter

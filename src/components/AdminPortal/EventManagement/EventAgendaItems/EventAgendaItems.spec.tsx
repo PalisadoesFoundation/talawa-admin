@@ -5,7 +5,8 @@ import * as apolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
+import * as reactRouter from 'react-router';
 import i18n from 'utils/i18nForTest';
 import {
   LocalizationProvider,
@@ -74,6 +75,7 @@ describe('Testing Agenda Items Components', () => {
     mocks?: MockedResponse[];
     withLocalization?: boolean;
     eventId?: string;
+    orgId?: string;
   }
 
   const formData = {
@@ -352,6 +354,7 @@ describe('Testing Agenda Items Components', () => {
     mocks,
     withLocalization = false,
     eventId = '123',
+    orgId = formData.organizationId,
   }: InterfaceRenderOptions): ReturnType<typeof render> => {
     const providerProps = link
       ? { link }
@@ -359,22 +362,27 @@ describe('Testing Agenda Items Components', () => {
           mocks: mocks ?? createDefaultMocks(),
         };
 
+    const routes = (
+      <Routes>
+        <Route
+          path="/admin/event/:orgId/:eventId"
+          element={<EventAgendaItems eventId={eventId} />}
+        />
+      </Routes>
+    );
+
     const content = (
       <MockedProvider {...providerProps}>
         <Provider store={store}>
-          <BrowserRouter>
+          <MemoryRouter initialEntries={[`/admin/event/${orgId}/${eventId}`]}>
             {withLocalization ? (
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <I18nextProvider i18n={i18n}>
-                  {<EventAgendaItems eventId={eventId} />}
-                </I18nextProvider>
+                <I18nextProvider i18n={i18n}>{routes}</I18nextProvider>
               </LocalizationProvider>
             ) : (
-              <I18nextProvider i18n={i18n}>
-                {<EventAgendaItems eventId={eventId} />}
-              </I18nextProvider>
+              <I18nextProvider i18n={i18n}>{routes}</I18nextProvider>
             )}
-          </BrowserRouter>
+          </MemoryRouter>
         </Provider>
       </MockedProvider>
     );
@@ -387,7 +395,7 @@ describe('Testing Agenda Items Components', () => {
       configurable: true,
       value: {
         reload: vi.fn(),
-        href: 'https://localhost:4321/event/111/123',
+        href: 'https://localhost:4321/admin/event/111/123',
       },
     });
   });
@@ -402,6 +410,27 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(getByText(translations.createAgendaItem)).toBeInTheDocument();
     });
+  });
+
+  it('renders fallback when orgId is missing', () => {
+    const useParamsSpy = vi
+      .spyOn(reactRouter, 'useParams')
+      .mockReturnValue({ orgId: undefined });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    renderEventAgendaItems({});
+
+    expect(
+      screen.getByText(translations.errorLoadingAgendaCategories),
+    ).toBeInTheDocument();
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'EventAgendaItems: missing orgId in route params.',
+    );
+
+    useParamsSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 
   it('render error component on unsuccessful agenda item query', async () => {

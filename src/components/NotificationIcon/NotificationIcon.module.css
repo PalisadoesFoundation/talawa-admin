@@ -77,6 +77,15 @@
   outline: none !important;
 }
 
+.iconContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.bellIcon {
+  color: var(--primaryText-color, #3b3b3b);
+}
+
 .unreadBadge {
   position: absolute;
   top: -6px;
@@ -94,13 +103,4 @@
   line-height: 1;
   box-shadow: 0 0 0 2px var(--colorWhite, #fff);
   /* Simulated outline */
-}
-
-.iconContainer {
-  position: relative;
-  display: inline-block;
-}
-
-.bellIcon {
-  color: var(--primaryText-color, #3b3b3b);
 }
