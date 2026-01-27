@@ -566,18 +566,18 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Verify modal opens with correct title
     await waitFor(() => {
-      const modalTitle = screen.getByTestId('createPledgeTitle');
-      expect(modalTitle).toBeInTheDocument();
-      expect(modalTitle).toHaveTextContent(translations.createPledge);
+      expect(screen.getByText(translations.createPledge)).toBeInTheDocument();
     });
 
     // Close modal
-    const closeBtn = screen.getByTestId('pledgeModalCloseBtn');
+    const closeBtn = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeBtn);
 
     // Verify modal is closed
     await waitFor(() => {
-      expect(screen.queryByTestId('createPledgeTitle')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(translations.createPledge),
+      ).not.toBeInTheDocument();
     });
 
     // Reset time mock
@@ -603,7 +603,7 @@ describe('Testing Campaign Pledge Screen', () => {
     });
 
     // Close the modal
-    const closeButton = screen.getByTestId('pledgeModalCloseBtn');
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeButton);
 
     // Verify modal is closed

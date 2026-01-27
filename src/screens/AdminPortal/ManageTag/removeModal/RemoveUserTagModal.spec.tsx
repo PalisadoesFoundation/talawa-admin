@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
@@ -12,7 +13,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -46,10 +47,8 @@ describe('RemoveUserTagModal Component', () => {
     expect(screen.getByTestId('remove-user-tag-modal')).toBeInTheDocument();
     expect(screen.getByText('removeUserTag')).toBeInTheDocument();
     expect(screen.getByText('removeUserTagMessage')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('removeUserTagModalCloseBtn'),
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('removeUserTagSubmitBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
   });
 
   it('does not render the modal when closed', () => {
@@ -62,20 +61,22 @@ describe('RemoveUserTagModal Component', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('calls toggleRemoveUserTagModal when No button is clicked', () => {
+  it('calls toggleRemoveUserTagModal when No button is clicked', async () => {
+    const user = userEvent.setup();
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    const cancelButton = screen.getByTestId('removeUserTagModalCloseBtn');
-    fireEvent.click(cancelButton);
+    const cancelButton = screen.getByTestId('modal-cancel-btn');
+    await user.click(cancelButton);
 
     expect(defaultProps.toggleRemoveUserTagModal).toHaveBeenCalledTimes(1);
   });
 
   it('calls handleRemoveUserTag when Yes button is clicked', async () => {
+    const user = userEvent.setup();
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
-    fireEvent.click(confirmButton);
+    const confirmButton = screen.getByTestId('modal-delete-btn');
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(defaultProps.handleRemoveUserTag).toHaveBeenCalledTimes(1);
@@ -83,6 +84,7 @@ describe('RemoveUserTagModal Component', () => {
   });
 
   it('disables the submit button while submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
     const pendingPromise = new Promise<void>((resolve) => {
       resolvePromise = resolve;
@@ -95,9 +97,9 @@ describe('RemoveUserTagModal Component', () => {
 
     render(<RemoveUserTagModal {...propsWithPendingSubmit} />);
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(confirmButton).toBeDisabled();
 
@@ -111,6 +113,7 @@ describe('RemoveUserTagModal Component', () => {
   });
 
   it('prevents multiple submissions while already submitting', async () => {
+    const user = userEvent.setup();
     let resolvePromise: (() => void) | undefined;
     const pendingPromise = new Promise<void>((resolve) => {
       resolvePromise = resolve;
@@ -125,10 +128,10 @@ describe('RemoveUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
-    fireEvent.click(confirmButton);
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(confirmButton);
 
     expect(handleRemoveUserTag).toHaveBeenCalledTimes(1);
 
@@ -140,22 +143,20 @@ describe('RemoveUserTagModal Component', () => {
   it('applies correct CSS classes to buttons', () => {
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    expect(screen.getByTestId('removeUserTagModalCloseBtn')).toHaveClass(
-      'removeButton-class',
+    expect(screen.getByTestId('modal-cancel-btn')).toHaveClass(
+      'btn btn-secondary',
     );
 
-    expect(screen.getByTestId('removeUserTagSubmitBtn')).toHaveClass(
-      'addButton-class',
+    expect(screen.getByTestId('modal-delete-btn')).toHaveClass(
+      'btn btn-danger',
     );
   });
+
   it('handles error when handleRemoveUserTag rejects', async () => {
+    const user = userEvent.setup();
     const error = new Error('Remove failed');
 
     const failingHandler = vi.fn().mockRejectedValue(error);
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <RemoveUserTagModal
@@ -164,8 +165,8 @@ describe('RemoveUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
-    fireEvent.click(confirmButton);
+    const confirmButton = screen.getByTestId('modal-delete-btn');
+    await user.click(confirmButton);
 
     await waitFor(() => {
       expect(failingHandler).toHaveBeenCalledTimes(1);
@@ -175,10 +176,6 @@ describe('RemoveUserTagModal Component', () => {
       expect(confirmButton).not.toBeDisabled();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
-    expect(toastErrorSpy).toHaveBeenCalledWith('removeUserTagError');
-
-    consoleErrorSpy.mockRestore();
-    toastErrorSpy.mockRestore();
+    expect(NotificationToast.error).toHaveBeenCalledWith('removeUserTagError');
   });
 });

@@ -793,6 +793,7 @@
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
+    "dogsCare": "Cuidado de Perros",
     "location": "Lugar del evento",
     "deleteEvent": "Eliminar evento",
     "deleteEventMsg": "¿Quieres eliminar este evento?",
@@ -965,7 +966,8 @@
     "pledged": "Comprometido",
     "donated": "Donado",
     "campaignNotActive": "La campaña no está actualmente activa",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "pledgeCreateFailed": "Error al crear el compromiso"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1553,9 +1555,11 @@
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
   "settings": {
+    "dummyPicture": "imagen ficticia",
     "settings": "Ajustes",
-    "eventAttended": "Événements Assistés",
+    "eventAttended": "Eventos asistidos",
     "noeventsAttended": "No hay eventos asistidos",
+    "profilePicture": "foto de perfil",
     "profileSettings": "Configuración de perfil",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",
@@ -1687,7 +1691,6 @@
     "calendarView": "Vista de calendario",
     "allDay": "Todo el dia",
     "eventCreated": "Evento creado y publicado exitosamente.",
-    "eventDetails": "Detalles del evento",
     "eventName": "Nombre",
     "enterName": "Introducir nombre",
     "eventDescription": "Descripción",
@@ -1721,12 +1724,14 @@
     "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
+    "failedToRegister": "Error al registrarse para el evento",
     "location": "Ubicación",
     "starts": "Empieza",
     "ends": "Termina",
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
-    "register": "Registro"
+    "register": "Registro",
+    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}"
   },
   "advertisement": {
     "title": "Anuncios",
@@ -2486,6 +2491,19 @@
         "failedToLoad": "Error al cargar el componente"
       }
     }
+  },
+  "memberActivity": {
+    "dateNA": "Fecha N/A",
+    "yes": "Sí",
+    "no": "No",
+    "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
+    "eventNotFound": "Evento no encontrado o ha sido eliminado",
+    "numberOfAttendees": "Número de asistentes",
+    "viewEventDetails": "Ver detalles del evento"
+  },
+  "promotedPost": {
+    "title": "Contenido Promocionado",
+    "promotedContent": "Contenido promocionado: {{title}}"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"

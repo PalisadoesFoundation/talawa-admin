@@ -346,7 +346,7 @@ const BlockUser = (): JSX.Element => {
               <DataTable
                 data={tableRows}
                 columns={tableColumns}
-                rowKey={(row) => row.user.id}
+                rowKey={(row: (typeof tableRows)[number]) => row.user.id}
                 tableClassName={styles.custom_table}
               />
             </div>

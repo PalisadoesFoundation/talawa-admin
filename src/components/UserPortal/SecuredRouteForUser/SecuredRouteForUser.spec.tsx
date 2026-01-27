@@ -4,6 +4,7 @@ import { render, screen, cleanup } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SecuredRouteForUser from './SecuredRouteForUser';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { warning: vi.fn() },
@@ -160,15 +161,17 @@ describe('SecuredRouteForUser', () => {
   });
 
   describe('User Activity Tracking', () => {
-    it('updates lastActive on mousemove event', async () => {
+    it('updates lastActive on mousemove event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Global mousemove listener
       document.dispatchEvent(new Event('mousemove'));
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('updates lastActive on keydown event', async () => {
+    it('updates lastActive on keydown event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'a' }));
@@ -176,9 +179,11 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('updates lastActive on click event', async () => {
+    it('updates lastActive on click event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Global activity event
       document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
@@ -256,7 +261,7 @@ describe('SecuredRouteForUser', () => {
       expect(window.location.href).toBe('/');
     });
 
-    it('resets inactivity timer on user activity', async () => {
+    it('resets inactivity timer on user activity', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
@@ -340,7 +345,7 @@ describe('SecuredRouteForUser', () => {
       expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
     });
 
-    it('handles multiple activity events in quick succession', async () => {
+    it('handles multiple activity events in quick succession', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
       document.dispatchEvent(new Event('mousemove'));
@@ -352,14 +357,19 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
-    it('properly checks inactivity at each interval', async () => {
-      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      renderWithRouter();
+    it('properly checks inactivity at each interval', () => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date());
 
-      // First interval check (1 min) - should not logout
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      const { unmount } = renderWithRouter();
+
+      // First interval check (1 min)
       vi.advanceTimersByTime(1 * 60 * 1000);
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();
+
+      // User activity
       document.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
       // Multiple interval checks without exceeding timeout
@@ -369,6 +379,11 @@ describe('SecuredRouteForUser', () => {
       }
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();
+
+      // cleanup
+      unmount();
+      vi.clearAllTimers();
+      vi.useRealTimers();
     });
 
     it('handles AdminFor being a string value', () => {
@@ -382,14 +397,15 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('remains logged in with continuous activity before timeout', async () => {
+      vi.useRealTimers();
+
+      const user = userEvent.setup();
+
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
-      // Simulate activity every 5 minutes for 30 minutes
-      for (let i = 0; i < 6; i++) {
-        vi.advanceTimersByTime(5 * 60 * 1000);
-        document.dispatchEvent(new KeyboardEvent('keydown', { key: ' ' }));
-      }
+      await user.keyboard(' ');
+      await user.keyboard(' ');
 
       expect(NotificationToast.warning).not.toHaveBeenCalled();
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();

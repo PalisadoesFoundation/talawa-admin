@@ -301,6 +301,7 @@
   "selectRow": "Seleccionar fila {{rowKey}}",
   "bulkActions": "Acciones masivas",
   "selected": "seleccionados",
+  "unavailable": "No disponible",
   "clearSelection": "Limpiar selección",
   "toggleSidebar": "Alternar barra lateral",
   "picture": "Imagen de {{name}}"

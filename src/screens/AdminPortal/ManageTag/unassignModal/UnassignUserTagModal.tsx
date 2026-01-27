@@ -6,7 +6,7 @@
  * @param props - Component props defined by InterfaceUnassignUserTagModalProps.
  *
  * @remarks
- * - Uses translation functions for localized labels and messages.
+ * - Uses DeleteModal template from CRUDModalTemplate for consistent UI and behavior.
  * - Disables the submit button while the unassign request is in flight.
  * - Uses accessible labels for the confirmation buttons.
  *
@@ -20,11 +20,9 @@
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
-import { Button } from 'shared-components/Button';
-import styles from './UnassignUserTagModal.module.css';
-import { BaseModal } from 'shared-components/BaseModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 
 export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
@@ -38,7 +36,6 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
   handleUnassignUserTag,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
-  const { t: tCommon } = useTranslation('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onConfirmUnassign = async (): Promise<void> => {
@@ -47,49 +44,25 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
     setIsSubmitting(true);
     try {
       await handleUnassignUserTag();
-    } catch (error) {
-      console.error(error);
+    } catch {
       NotificationToast.error(t('unassignUserTagError'));
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
-    <BaseModal
-      show={unassignUserTagModalIsOpen}
-      onHide={toggleUnassignUserTagModal}
-      size="sm"
-      backdrop="static"
-      keyboard={false}
+    <DeleteModal
+      open={unassignUserTagModalIsOpen}
+      onClose={toggleUnassignUserTagModal}
       title={t('unassignUserTag')}
-      headerClassName={`${styles.modalHeader} text-white`}
-      dataTestId="unassign-user-tag-modal"
-      footer={
-        <>
-          <Button
-            type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={toggleUnassignUserTagModal}
-            data-testid="unassignTagModalCloseBtn"
-            aria-label={tCommon('no')}
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={onConfirmUnassign}
-            disabled={isSubmitting}
-            data-testid="unassignTagModalSubmitBtn"
-            aria-label={tCommon('yes')}
-          >
-            {tCommon('yes')}
-          </Button>
-        </>
-      }
+      onDelete={onConfirmUnassign}
+      loading={isSubmitting}
+      size="sm"
+      data-testid="unassign-user-tag-modal"
     >
       <div>{t('unassignUserTagMessage')}</div>
-    </BaseModal>
+    </DeleteModal>
   );
 };
 

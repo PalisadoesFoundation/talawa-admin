@@ -1,16 +1,18 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import type { InterfaceDeletePledgeModal } from './PledgeDeleteModal';
 import PledgeDeleteModal from './PledgeDeleteModal';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -19,6 +21,7 @@ import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -106,7 +109,8 @@ describe('PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
     expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(pledgeProps.refetchPledge).toHaveBeenCalled();
@@ -121,7 +125,8 @@ describe('PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link2, pledgeProps);
     expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    const user = userEvent.setup();
+    await user.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(

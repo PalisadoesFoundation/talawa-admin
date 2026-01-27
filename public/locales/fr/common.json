@@ -301,6 +301,7 @@
   "selectRow": "Sélectionner la ligne {{rowKey}}",
   "bulkActions": "Actions en masse",
   "selected": "sélectionnés",
+  "unavailable": "Indisponible",
   "clearSelection": "Effacer la sélection",
   "toggleSidebar": "Basculer la barre latérale",
   "picture": "Photo de {{name}}"
