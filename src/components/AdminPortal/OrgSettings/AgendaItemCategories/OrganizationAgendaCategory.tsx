@@ -31,7 +31,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
@@ -42,7 +42,7 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationAgendaCategory.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

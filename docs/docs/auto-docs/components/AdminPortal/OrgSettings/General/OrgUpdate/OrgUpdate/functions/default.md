@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L45)
+Defined in: [src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L47)
 
 Component for updating organization details.
 

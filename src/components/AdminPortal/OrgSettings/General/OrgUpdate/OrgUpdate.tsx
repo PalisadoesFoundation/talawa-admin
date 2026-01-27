@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -10,9 +10,13 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Col, Form, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import {
+  FormFieldGroup,
+  FormTextField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrgUpdate.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
@@ -229,95 +233,107 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <LoadingState isLoading={loading} variant="spinner">
       <div id="orgupdate">
         <form className={styles.ss}>
-          <Form.Label className={styles.orgUpdateFormLables}>
-            {tCommon('name')}
-          </Form.Label>
-          <Form.Control
-            className={styles.textFields}
-            placeholder={t('enterNameOrganization')}
-            autoComplete="off"
-            required
-            value={formState.orgName}
-            onChange={(e): void => {
-              setFormState({ ...formState, orgName: e.target.value });
-            }}
-          />
-          <Form.Label className={styles.orgUpdateFormLables}>
-            {tCommon('description')}
-          </Form.Label>
-          <Form.Control
-            as="textarea"
-            className={styles.descriptionTextField}
-            placeholder={t('enterOrganizationDescription')}
-            autoComplete="off"
-            required
-            value={formState.orgDescrip}
-            onChange={(e): void => {
-              setFormState({ ...formState, orgDescrip: e.target.value });
-            }}
-          />
+          <FormFieldGroup name="orgName" label={tCommon('name')} required>
+            <FormTextField
+              name="orgName"
+              label={tCommon('name')}
+              placeholder={t('enterNameOrganization')}
+              autoComplete="off"
+              value={formState.orgName}
+              onChange={(value: string) => {
+                setFormState({ ...formState, orgName: value });
+              }}
+            />
+          </FormFieldGroup>
 
-          <Form.Label className={styles.orgUpdateFormLables}>
-            {tCommon('Location')}
-          </Form.Label>
-          <Form.Control
-            className={styles.textFields}
-            placeholder={tCommon('Enter Organization location')}
-            autoComplete="off"
+          <FormFieldGroup
+            name="orgDescrip"
+            label={tCommon('description')}
             required
-            value={formState.address.line1}
-            onChange={(e): void => {
-              handleInputChange('line1', e.target.value);
-            }}
-          />
-          <Form.Label htmlFor="orgphoto" className={styles.orgUpdateFormLables}>
-            {tCommon('displayImage')}:
-          </Form.Label>
-          <Form.Control
-            ref={fileInputRef}
-            className={styles.customFileInput}
-            accept="image/*"
-            placeholder={tCommon('displayImage')}
-            name="photo"
-            type="file"
-            multiple={false}
-            onChange={async (e: React.ChangeEvent): Promise<void> => {
-              const target = e.target as HTMLInputElement;
-              const file = target.files && target.files[0];
-              if (file)
+          >
+            <FormTextField
+              name="orgDescrip"
+              label={tCommon('description')}
+              as="textarea"
+              className={styles.descriptionTextField}
+              placeholder={t('enterOrganizationDescription')}
+              autoComplete="off"
+              value={formState.orgDescrip}
+              onChange={(value: string) => {
+                setFormState({ ...formState, orgDescrip: value });
+              }}
+            />
+          </FormFieldGroup>
+
+          <FormFieldGroup
+            name="address.line1"
+            label={tCommon('Location')}
+            required
+          >
+            <FormTextField
+              name="address.line1"
+              label={tCommon('Location')}
+              placeholder={tCommon('Enter Organization location')}
+              autoComplete="off"
+              className={styles.textFields}
+              value={formState.address.line1}
+              onChange={(value: string) => {
+                handleInputChange('line1', value);
+              }}
+            />
+          </FormFieldGroup>
+          <FormFieldGroup name="photo" label={tCommon('displayImage')}>
+            <input
+              ref={fileInputRef}
+              className={styles.customFileInput}
+              accept="image/*"
+              name="photo"
+              type="file"
+              data-testid="organisationImage"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const file = e.target.files?.[0];
+                if (!file) return;
+
                 setFormState({
                   ...formState,
                   avatar: file,
                 });
-            }}
-            data-testid="organisationImage"
-          />
+              }}
+            />
+          </FormFieldGroup>
+
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label className="me-3 mb-0 fw-normal text-black">
-                {t('isPublic')}:
-              </Form.Label>
-              <Form.Switch
-                className="custom-switch"
-                placeholder={t('userRegistrationRequired')}
-                checked={!userRegistrationRequiredChecked}
-                onChange={(): void =>
-                  setuserRegistrationRequiredChecked(
-                    !userRegistrationRequiredChecked,
-                  )
-                }
-              />
+              <FormFieldGroup
+                name="isPublic"
+                label={`${t('isPublic')}:`}
+                inline
+              >
+                <input
+                  type="checkbox"
+                  className="custom-switch"
+                  checked={!userRegistrationRequiredChecked}
+                  onChange={() =>
+                    setuserRegistrationRequiredChecked(
+                      !userRegistrationRequiredChecked,
+                    )
+                  }
+                />
+              </FormFieldGroup>
             </Col>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <Form.Label className="me-3 mb-0 fw-normal text-black">
-                {t('isVisibleInSearch')}:
-              </Form.Label>
-              <Form.Switch
-                className="custom-switch"
-                placeholder={t('isVisibleInSearch')}
-                checked={visiblechecked}
-                onChange={(): void => setVisibleChecked(!visiblechecked)}
-              />
+              <FormFieldGroup
+                name="isVisibleInSearch"
+                label={`${t('isVisibleInSearch')}:`}
+                inline
+              >
+                <input
+                  type="checkbox"
+                  className="custom-switch"
+                  checked={visiblechecked}
+                  onChange={() => setVisibleChecked(!visiblechecked)}
+                />
+              </FormFieldGroup>
             </Col>
           </Row>
 
