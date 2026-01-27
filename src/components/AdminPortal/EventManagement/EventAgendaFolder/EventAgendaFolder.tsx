@@ -64,7 +64,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
   const { orgId } = useParams();
 
-  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
   // State to manage the create agenda item modal visibility
   const [agendaFolderCreateModalIsOpen, setAgendaFolderCreateModalIsOpen] =
