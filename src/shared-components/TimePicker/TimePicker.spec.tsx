@@ -196,7 +196,6 @@ describe('TimePicker', () => {
     expect(input).toBeDisabled();
     expect(input).toBeRequired();
   });
-
   // Invalid input handling
   it('handles invalid user input gracefully', async () => {
     const user = userEvent.setup();
