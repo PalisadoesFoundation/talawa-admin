@@ -790,12 +790,12 @@
     "agendaItemCreated": "Agenda Item created successfully",
     "agendaItemUpdated": "Agenda Item updated successfully",
     "agendaItemDeleted": "Agenda Item deleted successfully",
-    "deleteAgendaItem": "Delete Agenda Item",
-    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
-    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
+    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data",
+    "deleteAgendaItem": "Delete Agenda Item",
+    "deleteAgendaItemMsg": "Are you sure you want to delete this agenda item?"
   },
   "eventListCard": {
     "dogsCare": "Dogs Care",

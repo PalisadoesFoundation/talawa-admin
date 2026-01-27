@@ -13,9 +13,9 @@
  * @returns - A modal dialog with options to confirm or cancel the deletion of an agenda item.
  *
  * @remarks
- * - The modal uses `react-bootstrap` for styling and functionality.
+ * - The modal uses BaseModal from shared-components for styling and functionality.
  * - The `t` and `tCommon` props are used for internationalization (i18n).
- * - The modal is styled using a CSS module (`app-fixed.module.css`).
+ * - The modal is styled using a CSS module (AgendaItemsDeleteModal.module.css).
  *
  * @example
  * ```tsx
@@ -33,6 +33,9 @@ import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button';
 import styles from './AgendaItemsDeleteModal.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
+
+// translation-check-keyPrefix: agendaItems
+
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
 > = ({
@@ -54,7 +57,7 @@ const AgendaItemsDeleteModal: React.FC<
         <>
           <Button
             type="button"
-            className="btn btn-danger"
+            variant="danger"
             onClick={toggleDeleteModal}
             data-testid="deleteAgendaItemCloseBtn"
           >
@@ -62,7 +65,7 @@ const AgendaItemsDeleteModal: React.FC<
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            variant="success"
             onClick={deleteAgendaItemHandler}
             data-testid="deleteAgendaItemBtn"
           >
