@@ -1976,7 +1976,6 @@ describe('DataTable', () => {
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
   });
 });
-
 describe('defaultCompare boolean/date branches', () => {
   type Row = {
     id: string;
