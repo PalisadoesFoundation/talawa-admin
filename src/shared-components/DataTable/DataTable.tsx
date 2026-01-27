@@ -4,6 +4,7 @@ import type { IDataTableProps } from '../../types/shared-components/DataTable/in
 import { PaginationControls } from './Pagination';
 import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';
+import { LoadingMoreRows } from './LoadingMoreRows';
 import { ActionsCell } from './cells/ActionsCell';
 import { BulkActionsBar } from './BulkActionsBar';
 import styles from './DataTable.module.css';
@@ -524,41 +525,14 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 );
               })}
 
-          {loadingMore &&
-            Array.from({ length: skeletonRows }).map((_, rowIdx) => (
-              <tr
-                key={`skeleton-append-${rowIdx}`}
-                data-testid={`skeleton-append-${rowIdx}`}
-              >
-                {effectiveSelectable && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-                {columns.map((col) => (
-                  <td key={col.id}>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                ))}
-                {hasRowActions && (
-                  <td>
-                    <div
-                      className={styles.dataSkeletonCell}
-                      data-testid="data-skeleton-cell"
-                      aria-hidden="true"
-                    />
-                  </td>
-                )}
-              </tr>
-            ))}
+          {loadingMore && (
+            <LoadingMoreRows
+              columns={columns}
+              skeletonRows={skeletonRows}
+              effectiveSelectable={effectiveSelectable}
+              hasRowActions={hasRowActions}
+            />
+          )}
         </tbody>
       </Table>
 
