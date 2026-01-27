@@ -41,11 +41,7 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-// Allow `any` here so debounce wrappers accept handlers with concrete parameter
-// types (e.g. `(value: string) => void`). This is a small, contained exception
-// to the `no-explicit-any` rule and keeps usage ergonomics for callers.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function debounceInput<T extends (...args: any[]) => any>(
+export function debounceInput<T extends (...args: never[]) => unknown>(
   fn: T,
   wait = 300,
   options?: InterfaceDebounceInputOptions,

@@ -9,6 +9,7 @@ describe('performance utilities', () => {
   afterEach(() => {
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('debounce basic: calls only once after wait', () => {
@@ -75,6 +76,66 @@ describe('performance utilities', () => {
     vi.advanceTimersByTime(99);
     expect(fn).toHaveBeenCalledTimes(0);
     vi.advanceTimersByTime(1);
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('debounceInput: cancel() prevents pending invocation', () => {
+    const fn = vi.fn();
+    const d = debounceInput(fn, 100);
+
+    d('a');
+    // cancel the pending invocation
+    d.cancel();
+
+    vi.advanceTimersByTime(200);
+    expect(fn).toHaveBeenCalledTimes(0);
+  });
+
+  it('debounceInput: flush() immediately invokes pending function', () => {
+    const fn = vi.fn();
+    const d = debounceInput(fn, 100);
+
+    d('b');
+    expect(fn).toHaveBeenCalledTimes(0);
+
+    d.flush();
+    expect(fn).toHaveBeenCalledTimes(1);
+
+    // ensure no duplicate trailing call after wait
+    vi.advanceTimersByTime(200);
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('debounceInput: respects leading option', () => {
+    const fn = vi.fn();
+    const d = debounceInput(fn, 100, { leading: true, trailing: false });
+
+    d('first');
+    // leading should invoke immediately
+    expect(fn).toHaveBeenCalledTimes(1);
+
+    // subsequent calls within wait should not produce trailing calls
+    d('second');
+    vi.advanceTimersByTime(100);
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
+  it('debounceInput: respects maxWait option', () => {
+    const fn = vi.fn();
+    const d = debounceInput(fn, 50, { maxWait: 100 });
+
+    // continuous calls that keep resetting the wait
+    d('a');
+    vi.advanceTimersByTime(30);
+    d('b');
+    vi.advanceTimersByTime(30);
+    d('c');
+
+    // total elapsed since first call is 60ms; not yet at maxWait
+    expect(fn).toHaveBeenCalledTimes(0);
+
+    // advance to reach maxWait (100ms from first call)
+    vi.advanceTimersByTime(40);
     expect(fn).toHaveBeenCalledTimes(1);
   });
 });
