@@ -41,11 +41,11 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-export function debounceInput<T extends (...args: never[]) => unknown>(
+export function debounceInput<T extends (...args: any[]) => any>(
   fn: T,
   wait = 300,
   options?: InterfaceDebounceInputOptions,
-): T & { cancel: () => void; flush: () => void } {
+): T & { cancel: () => void; flush: () => ReturnType<T> | undefined } {
   const opts = {
     leading: false,
     trailing: true,
@@ -59,7 +59,7 @@ export function debounceInput<T extends (...args: never[]) => unknown>(
     opts,
   ) as unknown as T & {
     cancel: () => void;
-    flush: () => void;
+    flush: () => ReturnType<T> | undefined;
   };
 }
 
