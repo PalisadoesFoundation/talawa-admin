@@ -212,7 +212,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.endDate} data-testid="end-date">
-                  {eventData.event.endAt ? formatDate(eventData.event.endAt) : ''}{' '}
+                  {eventData.event.endAt
+                    ? formatDate(eventData.event.endAt)
+                    : ''}{' '}
                 </span>
               </p>
             </div>

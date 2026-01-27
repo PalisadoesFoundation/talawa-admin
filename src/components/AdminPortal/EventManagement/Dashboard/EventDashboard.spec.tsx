@@ -470,7 +470,7 @@ it('Should handle empty date strings by defaulting to 08:00', async () => {
   // formatDate might return "Invalid Date" or similar if empty string is passed depending on util
   // We just check that it doesn't crash and maybe check time if rendered
 
-  // The component renders: 
+  // The component renders:
   // {!eventData.event.allDay && eventData.event.startAt ? formatTimeFromDateTime(...) : ''}
   // If startAt is empty string "", then it is falsy, so it renders '' (empty string)
   // So we invoke formatTimeFromDateTime ONLY via logic branches or if we change the condition.
@@ -487,4 +487,3 @@ it('Should handle empty date strings by defaulting to 08:00', async () => {
 
   expect(getByTestId('event-details')).toBeInTheDocument();
 });
-
