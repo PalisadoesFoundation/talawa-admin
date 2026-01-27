@@ -391,7 +391,7 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Posted on:",
     "author": "Author:"
   },
@@ -778,7 +778,7 @@
     "removeUrl": "Remove Url",
     "removeAttachment": "Remove Attachment",
     "itemSequenceUpdateSuccessMsg": "Item sequence updated successfully",
-    "sectionSequenceUpdateSuccessMsg":"Section sequence updated successfully",
+    "sectionSequenceUpdateSuccessMsg": "Section sequence updated successfully",
     "editFolder": "Edit Folder",
     "editItem": "Edit Item",
     "deleteItem": "Delete Item",
