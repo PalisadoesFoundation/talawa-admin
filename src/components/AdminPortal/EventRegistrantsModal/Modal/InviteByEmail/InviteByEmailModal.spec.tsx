@@ -242,9 +242,13 @@ describe('InviteByEmailModal', () => {
 
       await user.click(sendButton);
 
-      // Wait for loading state to appear AND button to be gone (atomic check)
+      // Wait for loading state to appear
       await waitFor(() => {
         expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+      });
+
+      // Wait for button to be gone
+      await waitFor(() => {
         expect(screen.queryByTestId('invite-submit')).not.toBeInTheDocument();
       });
 
