@@ -2179,4 +2179,39 @@ describe('defaultCompare boolean/date branches', () => {
     const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
     expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
   });
+
+  it('does not apply aria-sort to non-active or non-sortable headers', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: 'status' as const,
+        meta: { sortable: false },
+      },
+    ];
+
+    const rows = [
+      { id: '1', name: 'Alice', status: 'A' },
+      { id: '2', name: 'Bob', status: 'B' },
+    ];
+
+    render(<DataTable<(typeof rows)[0]> data={rows} columns={columns} />);
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    const statusHeader = screen.getByRole('columnheader', { name: /status/i });
+
+    // Sortable but inactive column has no aria-sort
+    expect(nameHeader).not.toHaveAttribute('aria-sort');
+    await userEvent.click(nameHeader);
+
+    // Active sortable column gets aria-sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+    expect(statusHeader).not.toHaveAttribute('aria-sort');
+  });
 });

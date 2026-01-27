@@ -190,7 +190,7 @@ export interface IBulkAction<T> {
 export interface IUseDataTableSelectionOptions<T> {
   /** Array of rows currently shown on the page */
   paginatedData: readonly T[];
-  /** ReadonlyArray of keys for rows on the current page */
+  /** Array of keys for rows on the current page */
   keysOnPage: Key[];
   /** Whether row selection is enabled for this table */
   selectable?: boolean;
