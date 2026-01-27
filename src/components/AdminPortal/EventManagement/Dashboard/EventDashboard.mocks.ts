@@ -4,6 +4,33 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+const creator = {
+  id: 'creator1',
+  name: 'John Doe',
+  emailAddress: 'john.doe@example.com',
+};
+
+const updater = {
+  id: 'updater1',
+  name: 'Updater Person',
+  emailAddress: 'updater@example.com',
+};
+
+const organization = {
+  id: 'org1',
+  name: 'Test Org',
+};
+
+const baseEventFields = {
+  createdAt: '2023-01-01T00:00:00.000Z',
+  updatedAt: '2023-01-02T00:00:00.000Z',
+  isRecurringEventTemplate: false,
+  baseEvent: null,
+  recurrenceRule: null,
+  updater,
+  organization,
+};
+
 export const MOCKS_WITH_TIME = [
   {
     request: {
@@ -13,10 +40,14 @@ export const MOCKS_WITH_TIME = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
+          location: 'India',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
           startAt: dayjs
             .utc()
             .add(10, 'days')
@@ -31,19 +62,8 @@ export const MOCKS_WITH_TIME = [
             .minute(0)
             .second(0)
             .toISOString(),
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
-          location: 'India',
-          isPublic: true,
-          isRegisterable: true,
-          isInviteOnly: false,
-          attendees: [{ _id: 'user1' }, { _id: 'user2' }],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          creator,
+          ...baseEventFields,
         },
       },
     },
@@ -59,25 +79,18 @@ export const MOCKS_WITHOUT_TIME = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
-          endAt: dayjs.utc().add(11, 'days').startOf('day').toISOString(),
-          startTime: null,
-          endTime: null,
-          allDay: true,
           location: 'India',
+          allDay: true,
           isPublic: true,
           isRegisterable: true,
           isInviteOnly: false,
-          attendees: [{ _id: 'user1' }, { _id: 'user2' }],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
+          endAt: dayjs.utc().add(11, 'days').startOf('day').toISOString(),
+          creator,
+          ...baseEventFields,
         },
       },
     },
@@ -119,10 +132,14 @@ export const MOCKS_NO_LOCATION = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: '',
+          location: null,
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
           startAt: dayjs
             .utc()
             .add(10, 'days')
@@ -137,19 +154,8 @@ export const MOCKS_NO_LOCATION = [
             .minute(0)
             .second(0)
             .toISOString(),
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
-          location: null,
-          isPublic: true,
-          isRegisterable: true,
-          isInviteOnly: false,
-          attendees: [],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          creator,
+          ...baseEventFields,
         },
       },
     },
@@ -165,10 +171,14 @@ export const MOCKS_INVALID_DATETIME = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
+          location: 'India',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
           startAt: dayjs
             .utc()
             .add(10, 'days')
@@ -183,19 +193,8 @@ export const MOCKS_INVALID_DATETIME = [
             .minute(0)
             .second(0)
             .toISOString(),
-          startTime: '09:00:00', // Changed from null to valid time
-          endTime: '17:00:00', // Changed from null to valid time
-          allDay: false,
-          location: 'India',
-          isPublic: true,
-          isRegisterable: true,
-          isInviteOnly: false,
-          attendees: [],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          creator,
+          ...baseEventFields,
         },
       },
     },
@@ -211,25 +210,18 @@ export const MOCKS_UNDEFINED_INVITE_ONLY = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: dayjs.utc().add(10, 'days').toISOString(),
-          endAt: dayjs.utc().add(11, 'days').toISOString(),
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
           location: 'India',
+          allDay: false,
           isPublic: true,
           isRegisterable: true,
           isInviteOnly: null,
-          attendees: [],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          startAt: dayjs.utc().add(10, 'days').toISOString(),
+          endAt: dayjs.utc().add(11, 'days').toISOString(),
+          creator,
+          ...baseEventFields,
         },
       },
     },
@@ -245,25 +237,18 @@ export const MOCKS_EMPTY_DATE_STRINGS = [
     result: {
       data: {
         event: {
-          _id: 'event123',
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: '', // Empty string
-          endAt: '', // Empty string
-          startTime: '09:00:00',
-          endTime: '17:00:00',
-          allDay: false,
           location: 'India',
+          allDay: false,
           isPublic: true,
           isRegisterable: true,
           isInviteOnly: false,
-          attendees: [],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
+          startAt: '',
+          endAt: '',
+          creator,
+          ...baseEventFields,
         },
       },
     },
