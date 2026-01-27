@@ -8,6 +8,7 @@ import type { TFunction } from 'i18next';
 export interface InterfaceEventListCard extends InterfaceEvent {
   refetchEvents?: () => void;
 }
+
 /**
  * Props for EventListCardModals component.
  * @param eventListCardProps - The event card properties including event details.

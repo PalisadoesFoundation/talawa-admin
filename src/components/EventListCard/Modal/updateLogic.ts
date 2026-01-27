@@ -57,7 +57,7 @@ interface IUpdateEventHandlerProps {
   recurrence: InterfaceRecurrenceRule | null;
   updateOption: 'single' | 'following' | 'entireSeries';
   hasRecurrenceChanged?: boolean; // Add this parameter
-  t: TFunction<'translation'>;
+  t: TFunction<'translation', undefined>;
   hideViewModal: () => void;
   setEventUpdateModalIsOpen: (isOpen: boolean) => void;
   refetchEvents?: () => void;

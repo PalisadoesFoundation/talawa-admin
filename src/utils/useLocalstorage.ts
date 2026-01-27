@@ -30,7 +30,13 @@ export const getStorageKey = (prefix: string, key: string): string => {
 export const getItem = <T>(prefix: string, key: string): T | null => {
   const prefixedKey = getStorageKey(prefix, key);
   const storedData = localStorage.getItem(prefixedKey);
-  return storedData ? (JSON.parse(storedData) as T) : null;
+  if (!storedData) return null;
+  try {
+    return JSON.parse(storedData) as T;
+  } catch {
+    console.error(`Failed to parse localStorage key: ${prefixedKey}`);
+    return null;
+  }
 };
 
 /**

@@ -1,5 +1,3 @@
-import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
-
 /**
  *
  * This component manages the modals for event list cards, including preview and delete modals.
@@ -20,6 +18,7 @@ import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
  *
  */
 // translation-check-keyPrefix: eventListCard
+import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
@@ -491,6 +490,7 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('single')}
                 label={t('updateThisInstance')}
                 className="mb-2"
+                data-testid="update-single-radio"
               />
             )}
             {availableUpdateOptions.following && (
@@ -503,6 +503,7 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('following')}
                 label={t('updateThisAndFollowing')}
                 className="mb-2"
+                data-testid="update-following-radio"
               />
             )}
             {availableUpdateOptions.entireSeries && (
@@ -515,6 +516,7 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('entireSeries')}
                 label={t('updateEntireSeries')}
                 className="mb-2"
+                data-testid="update-entire-series-radio"
               />
             )}
           </div>
