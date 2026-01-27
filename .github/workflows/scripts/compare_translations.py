@@ -84,11 +84,27 @@ def compare_translations(
 
     # Extract and match interpolation vars (ex: {{name}})
     def _extract_interpolation_vars(text):
-        """Extract interpolation variables like {{variable}} from text."""
+        """Extract interpolation variables like {{variable}} from text.
+
+        Args:
+            text (str): The text to extract variables from.
+
+        Returns:
+            set: A set of variable names found in the text.
+        """
         return set(re.findall(r"\{\{(\w+)\}\}", text))
 
     def _check_interpolation_match(default_val, other_val, key):
-        """Check if interpolation variables match between translations."""
+        """Check if interpolation variables match between translations.
+
+        Args:
+            default_val (str): The default translation value.
+            other_val (str): The other translation value.
+            key (str): The translation key being checked.
+
+        Returns:
+            None: Modifies the errors list in outer scope.
+        """
         default_vars = _extract_interpolation_vars(default_val)
         other_vars = _extract_interpolation_vars(other_val)
 
