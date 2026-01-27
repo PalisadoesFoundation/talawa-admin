@@ -14,7 +14,6 @@ let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
-let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -23,12 +22,10 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
-    user = userEvent.setup();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   const renderComponent = (
@@ -111,17 +108,19 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
-  test('handles keyboard events correctly', async () => {
+  test('closes modal when Escape key is pressed', async () => {
     renderComponent();
-
-    // Escape key SHOULD close the modal
+    const user = userEvent.setup();
     await user.keyboard('{Escape}');
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+  });
 
-    // Click on confirm button
+  test('confirm button is accessible via keyboard', async () => {
+    renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-
-    await user.click(confirmButton);
+    const user = userEvent.setup();
+    confirmButton.focus();
+    await user.keyboard('{Enter}');
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
   });
 
