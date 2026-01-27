@@ -80,7 +80,7 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 #### result.data.event.isInviteOnly
 
-> **isInviteOnly**: `any` = `null`
+> **isInviteOnly**: `any` = `undefined`
 
 #### result.data.event.isPublic
 
