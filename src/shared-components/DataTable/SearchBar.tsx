@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './DataTable.module.css';
+import styles from './SearchBar.module.css';
 
 import type { InterfaceSearchBarProps } from '../../types/shared-components/DataTable/interface';
 

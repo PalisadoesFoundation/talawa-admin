@@ -46,6 +46,18 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 ***
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`disabled`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#disabled)
+
+***
+
 ### error?
 
 > `optional` **error**: `string`
@@ -91,6 +103,18 @@ Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/Palisa
 #### Inherited from
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`inline`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#inline)
+
+***
+
+### inputId?
+
+> `optional` **inputId**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`inputId`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#inputid)
 
 ***
 

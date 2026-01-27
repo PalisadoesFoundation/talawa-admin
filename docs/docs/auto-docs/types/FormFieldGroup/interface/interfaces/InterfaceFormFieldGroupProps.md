@@ -32,6 +32,14 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 ***
 
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
+
+***
+
 ### error?
 
 > `optional` **error**: `string`
@@ -61,6 +69,14 @@ Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/Palisa
 > `optional` **inline**: `boolean`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+
+***
+
+### inputId?
+
+> `optional` **inputId**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
 
 ***
 

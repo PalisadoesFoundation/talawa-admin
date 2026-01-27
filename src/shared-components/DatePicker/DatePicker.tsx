@@ -107,6 +107,8 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
         error={showError ? error : undefined}
         helpText={helpText}
         className={className}
+        disabled={disabled}
+        inputId={inputId}
       >
         <MuiDatePicker
           format={format}

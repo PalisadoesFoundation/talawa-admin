@@ -81,7 +81,12 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={className}>
-        <FormFieldGroup label={label || ''} name="time-picker">
+        <FormFieldGroup
+          label={label || ''}
+          name="time-picker"
+          disabled={disabled}
+          inputId={dataTestId || 'time-picker'}
+        >
           <MuiTimePicker
             value={value === undefined ? null : value}
             onChange={onChange}

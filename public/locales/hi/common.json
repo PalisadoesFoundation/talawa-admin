@@ -55,6 +55,8 @@
   "talawaAdminPortal": "Talawa एडमिन पोर्टल",
   "adminPortal": "एडमिन पोर्टल",
   "userPortal": "यूज़र पोर्टल",
+  "switchToUserPortal": "यूज़र पोर्टल पर जाएं",
+  "switchToAdminPortal": "एडमिन पोर्टल पर जाएं",
   "address": "पता",
   "location": "स्थान",
   "enterLocation": "स्थान दर्ज करें",
@@ -299,5 +301,8 @@
   "selectRow": "पंक्ति {{rowKey}} का चयन करें",
   "bulkActions": "सामूहिक क्रियाएं",
   "selected": "चयनित",
-  "clearSelection": "चयन साफ़ करें"
+  "unavailable": "अनुपलब्ध",
+  "clearSelection": "चयन साफ़ करें",
+  "toggleSidebar": "साइडबार टॉगल करें",
+  "picture": "{{name}} चित्र"
 }

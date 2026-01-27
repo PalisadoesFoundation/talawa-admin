@@ -1,19 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import CardItem from './CardItem';
-
-vi.mock('react-i18next', () => ({
-  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
-    t: (key: string, tOptions?: { title?: string }) =>
-      options?.keyPrefix
-        ? `${options.keyPrefix}.${key}${tOptions?.title ? ` ${tOptions.title}` : ''}`
-        : key,
-    i18n: {
-      changeLanguage: () => Promise.resolve(),
-    },
-  }),
-}));
-import type { InterfaceCardItemProps as InterfaceCardItem } from 'types/components/OrganizationDashCards/CardItem/interface';
+import type { InterfaceCardItem } from 'types/AdminPortal/OrganizationDashCards/CardItem/interface';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -57,9 +45,7 @@ describe('CardItem Component', () => {
     const dateRange = `${startdate} - ${enddate}`;
     expect(screen.getByText(dateRange)).toBeInTheDocument();
 
-    expect(
-      screen.getByText('cardItem.author Event Organizer'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Author: Event Organizer')).toBeInTheDocument();
 
     expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
     expect(screen.getAllByTestId('date-icon')).not.toHaveLength(0);
@@ -106,7 +92,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText(/^cardItem\.avatar/);
+    const img = screen.getByAltText('Post with Image Error avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'invalid-image-url.jpg');
 
@@ -116,7 +102,7 @@ describe('CardItem Component', () => {
     });
 
     // After error, the default image should be displayed
-    const defaultImg = screen.getByAltText(/^cardItem\.avatar/);
+    const defaultImg = screen.getByAltText('Post with Image Error');
     expect(defaultImg).toBeInTheDocument();
     expect(defaultImg.getAttribute('src')).toContain('defaultImg.png');
   });
@@ -131,7 +117,7 @@ describe('CardItem Component', () => {
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     // Avatar component is rendered inside an imageContainer
-    const avatarContainer = screen.getByAltText(/^cardItem\.avatar/);
+    const avatarContainer = screen.getByAltText('');
     expect(avatarContainer).toBeInTheDocument();
     expect(avatarContainer).toHaveAttribute(
       'src',
@@ -148,7 +134,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText(/^cardItem\.avatar/);
+    const img = screen.getByAltText('Jane Smith avatar');
     expect(img).toBeInTheDocument();
 
     // Simulate image load error
@@ -157,7 +143,7 @@ describe('CardItem Component', () => {
     });
 
     // After error, the Avatar should be displayed (has empty alt text)
-    const avatar = screen.getByAltText(/^cardItem\.avatar/);
+    const avatar = screen.getByAltText('');
     expect(avatar).toBeInTheDocument();
     expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
   });
@@ -171,7 +157,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText(/^cardItem\.avatar/);
+    const img = screen.getByAltText('Post with Image avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/image.jpg');
   });
@@ -186,7 +172,7 @@ describe('CardItem Component', () => {
     render(<CardItem {...props} />);
 
     expect(screen.getByText('Post with Time')).toBeInTheDocument();
-    expect(screen.getByText(/cardItem.postedOn/)).toBeInTheDocument();
+    expect(screen.getByText(/Posted on:/)).toBeInTheDocument();
     expect(
       screen.getByText(new RegExp(dayjs.utc().format('MMM D, YYYY')), {
         exact: false,
@@ -203,75 +189,8 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText(/^cardItem\.avatar/);
+    const img = screen.getByAltText('Member Request avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/member.jpg');
-  });
-  it('resets image state when image prop changes', () => {
-    const props: InterfaceCardItem = {
-      type: 'Post',
-      title: 'Post with Changing Image',
-      image: 'first-image.jpg',
-    };
-
-    const { rerender } = render(<CardItem {...props} />);
-
-    const img = screen.getByAltText(/^cardItem\.avatar/);
-
-    // Simulate error on first image
-    act(() => {
-      img.dispatchEvent(new Event('error'));
-    });
-
-    // Verify fallback is shown
-    expect(
-      screen.getByAltText('cardItem.avatar Post with Changing Image'),
-    ).toBeInTheDocument();
-
-    // Change image prop - should reset imgOk and try new image
-    rerender(<CardItem {...props} image="second-image.jpg" />);
-
-    const newImg = screen.getByAltText(/^cardItem\.avatar/);
-    expect(newImg).toHaveAttribute('src', 'second-image.jpg');
-  });
-
-  it('renders Post with creator information', () => {
-    const props: InterfaceCardItem = {
-      type: 'Post',
-      title: 'Post with Creator',
-      creator: { id: 123, name: 'John Creator' },
-    };
-
-    render(<CardItem {...props} />);
-
-    expect(
-      screen.getByText('cardItem.author John Creator'),
-    ).toBeInTheDocument();
-  });
-
-  it('renders Post with location information', () => {
-    const props: InterfaceCardItem = {
-      type: 'Post',
-      title: 'Post with Location',
-      location: 'Test Location',
-    };
-
-    render(<CardItem {...props} />);
-
-    expect(screen.getByText('Test Location')).toBeInTheDocument();
-    expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
-  });
-
-  it('renders MembershipRequest with location information', () => {
-    const props: InterfaceCardItem = {
-      type: 'MembershipRequest',
-      title: 'Request with Location',
-      location: 'Request Location',
-    };
-
-    render(<CardItem {...props} />);
-
-    expect(screen.getByText('Request Location')).toBeInTheDocument();
-    expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
   });
 });

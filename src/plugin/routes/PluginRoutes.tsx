@@ -7,25 +7,28 @@
 
 import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { usePluginRoutes } from '../hooks';
+import styles from './PluginRoutes.module.css';
 import type { IRouteExtension } from '../types';
 
-interface IPluginRoutesProps {
-  userPermissions?: string[];
-  isAdmin?: boolean;
-  fallback?: React.ReactElement;
-}
+import type { InterfacePluginRoutesProps } from '../../types/shared-components/PluginRoutes/interface';
 
 /**
- * Component that renders plugin routes dynamically
+ * Component that renders plugin routes dynamically.
+ *
+ * @param props - InterfacePluginRoutesProps
+ * @returns JSX.Element
  */
-const PluginRoutes: React.FC<IPluginRoutesProps> = ({
+const PluginRoutes: React.FC<InterfacePluginRoutesProps> = ({
   userPermissions = [],
   isAdmin = false,
-  fallback = <div>Loading plugin...</div>,
+  fallback,
 }) => {
+  const { t } = useTranslation();
   const routes = usePluginRoutes(userPermissions, isAdmin);
   const safeRoutes = Array.isArray(routes) ? routes : [];
+  const loadingFallback = fallback ?? <div>{t('plugins.loading')}</div>;
 
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
@@ -50,27 +53,22 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
           return {
             default: () => (
               <div
-                style={{
-                  padding: '40px',
-                  textAlign: 'center',
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #dee2e6',
-                  borderRadius: '8px',
-                  margin: '20px',
-                }}
+                className={styles.errorContainer}
+                role="alert"
+                aria-live="polite"
+                aria-atomic="true"
               >
-                <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-                  Plugin Error
+                <h3 className={styles.errorTitle}>
+                  {t('plugins.errors.pluginError.title')}
                 </h3>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Failed to load component: <strong>{route.component}</strong>
+                <p className={styles.errorText}>
+                  {t('plugins.errors.pluginError.failedToLoad')}:{' '}
+                  <strong>{route.component}</strong>
                 </p>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Plugin: <strong>{route.pluginId}</strong>
+                <p className={styles.errorText}>
+                  {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
                 </p>
-                <p style={{ color: '#6c757d', fontSize: '14px' }}>
-                  {error.message}
-                </p>
+                <p className={styles.errorDescription}>{error.message}</p>
               </div>
             ),
           };
@@ -82,7 +80,7 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
         key={`${route.pluginId}-${route.path}`}
         path={route.path}
         element={
-          <Suspense fallback={fallback}>
+          <Suspense fallback={loadingFallback}>
             <PluginComponent />
           </Suspense>
         }

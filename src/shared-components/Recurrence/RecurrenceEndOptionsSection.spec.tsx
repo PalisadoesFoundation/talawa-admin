@@ -296,6 +296,7 @@ describe('RecurrenceEndOptionsSection', () => {
           <RecurrenceEndOptionsSection
             {...defaultProps}
             onCountChange={onCountChange}
+            selectedRecurrenceEndOption="after"
           />
         </>,
       );
@@ -603,8 +604,9 @@ describe('RecurrenceEndOptionsSection', () => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
       });
 
-      // Verify the state update function
-      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+      // Verify the state update function - get the LAST call (after all typing)
+      const lastCallIdx = setRecurrenceRuleState.mock.calls.length - 1;
+      const callArg = setRecurrenceRuleState.mock.calls[lastCallIdx][0];
       if (typeof callArg === 'function') {
         const prevState = defaultRecurrenceRule;
         const newState = callArg(prevState);

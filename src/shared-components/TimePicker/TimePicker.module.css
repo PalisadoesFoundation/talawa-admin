@@ -6,3 +6,8 @@
 .fullWidth {
   width: 100%;
 }
+
+/* Support for padded input when adornments present */
+.paddedInput {
+  padding-right: var(--picker-icon-space);
+}

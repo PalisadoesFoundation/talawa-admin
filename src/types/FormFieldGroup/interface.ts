@@ -12,6 +12,8 @@ export interface InterfaceFormFieldGroupProps {
   inline?: boolean;
   hideLabel?: boolean;
   className?: string;
+  disabled?: boolean;
+  inputId?: string;
 }
 
 export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {

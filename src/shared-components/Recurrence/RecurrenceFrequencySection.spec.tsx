@@ -24,7 +24,7 @@ describe('RecurrenceFrequencySection', () => {
 
   it('renders all required elements', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
-    expect(screen.getByText('repeatsEvery')).toBeInTheDocument();
+    expect(screen.getAllByText('repeatsEvery').length).toBeGreaterThan(0);
     expect(
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();

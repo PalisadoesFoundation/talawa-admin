@@ -24,7 +24,7 @@ The row data type
 
 ### options
 
-[`IUseDataTableSelectionOptions`](../../../../../types/shared-components/DataTable/interface/interfaces/IUseDataTableSelectionOptions.md)\<`T`\>
+[`IUseDataTableSelectionOptions`](../../../../../types/shared-components/DataTable/hooks/interfaces/IUseDataTableSelectionOptions.md)\<`T`\>
 
 Configuration options for selection behavior
 
@@ -48,7 +48,7 @@ Object containing selection state and mutation helpers
 
 ### currentSelection
 
-> **currentSelection**: `Set`\<[`Key`](../../../../../types/shared-components/DataTable/interface/type-aliases/Key.md)\>
+> **currentSelection**: `Set`\<[`Key`](../../../../../types/shared-components/DataTable/types/type-aliases/Key.md)\>
 
 ### runBulkAction()
 
@@ -58,7 +58,7 @@ Object containing selection state and mutation helpers
 
 ##### action
 
-[`IBulkAction`](../../../../../types/shared-components/DataTable/interface/interfaces/IBulkAction.md)\<`T`\>
+[`IBulkAction`](../../../../../types/shared-components/DataTable/hooks/interfaces/IBulkAction.md)\<`T`\>
 
 #### Returns
 
@@ -94,7 +94,7 @@ Object containing selection state and mutation helpers
 
 ##### key
 
-[`Key`](../../../../../types/shared-components/DataTable/interface/type-aliases/Key.md)
+[`Key`](../../../../../types/shared-components/DataTable/types/type-aliases/Key.md)
 
 #### Returns
 
