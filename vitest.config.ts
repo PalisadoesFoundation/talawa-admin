@@ -94,6 +94,7 @@ export default defineConfig({
         '.github/**', // Exclude GitHub workflows and scripts
         'scripts/!(eslint)/**', // Exclude scripts except eslint folder
         'scripts/*.{js,ts}',     // Exclude individual files in scripts root
+        'scripts/eslint/config/**', // Exclude ESLint config modules from coverage
         'config/**', // Exclude configuration files
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],
