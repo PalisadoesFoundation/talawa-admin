@@ -1247,7 +1247,8 @@
     "enterOrganizationDescription": "Entrez la description de l'organisation",
     "userRegistrationRequired": "Inscription utilisateur requise",
     "nameDescriptionRequired": "Le nom et la description sont requis",
-    "updateFailed": "Échec de la mise à jour de l'organisation"
+    "updateFailed": "Échec de la mise à jour de l'organisation",
+    "errorLoadingOrganizationData": "Une erreur s’est produite lors du chargement des données de l’organisation"
   },
   "public": {
     "invitation": {

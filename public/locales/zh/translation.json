@@ -1247,7 +1247,8 @@
     "enterOrganizationDescription": "输入组织描述",
     "userRegistrationRequired": "需要用户注册",
     "nameDescriptionRequired": "名称和描述为必填项",
-    "updateFailed": "更新组织失败"
+    "updateFailed": "更新组织失败",
+    "errorLoadingOrganizationData": "加载组织数据时发生错误"
   },
   "public": {
     "invitation": {

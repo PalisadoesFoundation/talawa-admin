@@ -1,8 +1,6 @@
 /**
  * Component for managing and displaying agenda item categories for an organization.
  *
- *
- * @param props - The props for the component.
  * @param orgId - The ID of the organization.
  *
  * @remarks
@@ -51,7 +49,7 @@ interface InterfaceAgendaCategoryProps {
   orgId: string;
 }
 
-const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
+const OrganiZationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
 }) => {
   const { t } = useTranslation('translation', {
@@ -128,14 +126,14 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
    * Toggles the visibility of the create agenda item category modal.
    */
   const showCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
+    setAgendaCategoryCreateModalIsOpen(true);
   };
 
   /**
    * Hides the create agenda item category modal.
    */
   const hideCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
+    setAgendaCategoryCreateModalIsOpen(false);
   };
 
   if (agendaCategoryError) {
@@ -146,9 +144,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
             className={`${styles.errorIcon} MuiSvgIcon-fontSizeLarge`}
           />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {agendaCategoryError && 'Agenda Categories'}
-            Data
+            {t('errorLoadingAgendaCategories')}
             <br />
             {agendaCategoryError && (agendaCategoryError as Error).message}
           </h6>
@@ -206,4 +202,4 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   );
 };
 
-export default organizationAgendaCategory;
+export default OrganiZationAgendaCategory;

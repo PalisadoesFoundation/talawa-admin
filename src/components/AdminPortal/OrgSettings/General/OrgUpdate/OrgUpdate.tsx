@@ -18,10 +18,10 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgUpdate.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
-
-interface InterfaceOrgUpdateProps {
-  orgId: string;
-}
+import {
+  InterfaceOrgUpdateProps,
+  InterfaceOrganization,
+} from 'types/AdminPortal/OrgUpdate/interface';
 
 interface InterfaceMutationUpdateOrganizationInput {
   id: string;
@@ -90,20 +90,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
   const { t } = useTranslation('translation', { keyPrefix: 'orgUpdate' });
   const { t: tCommon } = useTranslation('common');
-
-  interface InterfaceOrganization {
-    id: string;
-    name: string;
-    description: string;
-    addressLine1: string;
-    addressLine2: string;
-    city: string;
-    state: string;
-    postalCode: string;
-    countryCode: string;
-    avatarURL: string | null;
-    isUserRegistrationRequired: boolean | null;
-  }
 
   const {
     data,
@@ -221,7 +207,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       <div className={styles.message}>
         <WarningAmberRounded fontSize="large" className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
-          Error occured while loading Organization Data
+          {t('errorLoadingOrganizationData')}
           <br />
           {`${error.message}`}
         </h6>
@@ -337,7 +323,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
           </Row>
 
-          <div className="w-fulld-flex justify-content-between mt-4 ">
+          <div className="w-full d-flex justify-content-between mt-4 ">
             <Row>
               <Col sm={6}>
                 <Button

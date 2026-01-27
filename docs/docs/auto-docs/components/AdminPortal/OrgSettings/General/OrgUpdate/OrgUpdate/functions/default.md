@@ -18,7 +18,7 @@ fetch and update data.
 
 ### props
 
-`InterfaceOrgUpdateProps`
+[`InterfaceOrgUpdateProps`](../../../../../../../types/AdminPortal/OrgUpdate/interface/interfaces/InterfaceOrgUpdateProps.md)
 
 Component props containing the organization ID.
 
