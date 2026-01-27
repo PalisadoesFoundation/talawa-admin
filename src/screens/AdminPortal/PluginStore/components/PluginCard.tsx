@@ -2,10 +2,10 @@
  * Individual plugin card component for the plugin store
  */
 import React from 'react';
-import { Button } from '@mui/material';
+import Button from 'shared-components/Button';
 import type { IPluginMeta } from 'plugin';
 import { useTranslation } from 'react-i18next';
-import styles from './PluginList.module.css';
+import styles from './PluginCard.module.css';
 
 interface IPluginCardProps {
   plugin: IPluginMeta;
@@ -51,10 +51,10 @@ export default function PluginCard({ plugin, onManage }: IPluginCardProps) {
       {/* Manage Button */}
       <div className={styles.pluginActions}>
         <Button
-          variant="contained"
-          color="primary"
+          variant="primary"
+          fullWidth
           onClick={() => onManage(plugin)}
-          className="w-100 mb-2"
+          className={styles.pluginButton}
           data-testid={`plugin-action-btn-${plugin.id}`}
         >
           {t('manage')}

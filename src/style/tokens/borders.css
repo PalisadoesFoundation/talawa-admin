@@ -32,4 +32,6 @@
   --shadow-spread-none: 0;
   --shadow-spread-xs: 1px;
   --shadow-spread-sm: 3px;
+
+  --style-solid: solid;
 }

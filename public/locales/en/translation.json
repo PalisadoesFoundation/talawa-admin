@@ -2313,7 +2313,9 @@
     "addPluginToRegistry": "Please add this plugin to the plugin registry in",
     "noComponentsFound": "No Components Found",
     "componentNotFound": "Component Not Found",
-    "availableComponents": "Available components:"
+    "availableComponents": "Available components:",
+    "pluginError": "Plugin Error",
+    "pluginLoadFailed": "Failed to load component"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

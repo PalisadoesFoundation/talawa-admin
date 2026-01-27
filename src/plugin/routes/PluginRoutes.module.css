@@ -1,26 +1,25 @@
 .errorContainer {
-  padding: 40px;
+  padding: var(--space-9);
+  margin: var(--space-6);
   text-align: center;
-  background-color: #f8f9fa;
-  /* Consider var(--bg-header) or similar if available */
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  margin: 20px;
+  background-color: var(--color-gray-50);
+  border-width: var(--border-1);
+  border-style: var(--style-solid);
+  border-color: var(--color-gray-150);
+  border-radius: var(--radius-md);
 }
 
 .errorTitle {
-  color: #dc3545;
-  /* var(--errorState-color) or similar */
-  margin-bottom: 16px;
+  color: var(--color-red-600);
+  margin-bottom: var(--space-5);
 }
 
 .errorText {
-  color: #6c757d;
-  /* var(--secondText-color) */
-  margin-bottom: 8px;
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-3);
 }
 
-.errorDescription {
-  color: #6c757d;
-  font-size: 14px;
+.errorDetail {
+  color: var(--color-gray-600);
+  font-size: var(--space-4-5);
 }

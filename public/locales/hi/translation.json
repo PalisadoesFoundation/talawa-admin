@@ -2325,14 +2325,14 @@
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
     "loadingPlugin": "प्लगइन लोड हो रहा है...",
     "pluginIdMissing": "प्लगइन आईडी अनुपस्थित है",
-
     "invalidPluginRoute": "इस रूट में वैध प्लगइन आईडी नहीं है",
     "pluginNotRegistered": "प्लगइन पंजीकृत नहीं है",
-
     "addPluginToRegistry": "कृपया इस प्लगइन को प्लगइन रजिस्ट्री में जोड़ें",
     "noComponentsFound": "कोई घटक नहीं मिला",
     "componentNotFound": "घटक नहीं मिला",
-    "availableComponents": "उपलब्ध घटक:"
+    "availableComponents": "उपलब्ध घटक:",
+    "pluginLoadFailed": "घटक लोड करने में विफल",
+    "pluginError": "प्लगइन त्रुटि"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",

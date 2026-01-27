@@ -5,12 +5,3 @@
   padding: 0;
   margin: 0;
 }
-
-.cursorPointer {
-  cursor: pointer;
-}
-
-.subtagsScrollableDiv {
-  max-height: 300px;
-  overflow: auto;
-}

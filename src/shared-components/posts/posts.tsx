@@ -372,7 +372,7 @@ export default function PostsPage() {
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
-                className={`${styles.createButton} mb-2`}
+                className={styles.createButton}
               >
                 <Add />
                 {t('createPost')}

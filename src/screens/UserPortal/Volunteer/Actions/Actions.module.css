@@ -10,6 +10,12 @@
   margin: var(--space-0-5);
 }
 
+.errorHeading {
+  font-weight: 700;
+  color: var(--bs-danger);
+  text-align: center;
+}
+
 .imageContainer {
   width: var(--space-11);
   height: var(--space-11);
@@ -25,10 +31,19 @@
   border-radius: var(--radius-full);
 }
 
+.assigneeName {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
 .tableImage {
   object-fit: cover;
   margin-right: var(--space-2);
   width: var(--space-10);
   height: var(--space-10);
   border-radius: var(--radius-full);
+}
+
+.avatarSpan {
+  margin-inline-start: var(--space-3);
 }
