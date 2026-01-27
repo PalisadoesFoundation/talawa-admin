@@ -101,7 +101,6 @@ describe('Testing User Campaigns Screen', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('should render the User Campaigns screen', async () => {
