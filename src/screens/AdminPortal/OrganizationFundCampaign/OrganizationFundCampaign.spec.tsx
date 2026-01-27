@@ -6,7 +6,6 @@ import {
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -215,14 +214,14 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Search the Campaigns list by Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
 
     // SearchBar now uses onChange instead of searchBtn
-    fireEvent.change(searchField, {
-      target: { value: '2' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();
@@ -308,12 +307,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on Campaign Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const campaignName = await screen.findAllByTestId('campaignName');
     expect(campaignName[0]).toBeInTheDocument();
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -321,6 +321,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on View Pledge (via row click)', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -328,7 +329,7 @@ describe('FundCampaigns Screen', () => {
     expect(campaignName[0]).toBeInTheDocument();
 
     // Row click navigates to pledge screen
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -419,15 +420,15 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should display no results empty state when search yields no matches', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term that doesn't match any campaign
-    fireEvent.change(searchField, {
-      target: { value: 'NonExistentCampaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'NonExistentCampaign');
 
     // Assert EmptyState is rendered
     const emptyState = await screen.findByTestId('campaigns-search-empty');
@@ -447,15 +448,15 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should clear search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term
-    fireEvent.change(searchField, {
-      target: { value: 'Campaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'Campaign');
 
     await waitFor(() => {
       expect(searchField).toHaveValue('Campaign');
@@ -463,7 +464,7 @@ describe('FundCampaigns Screen', () => {
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     await waitFor(() => {
       expect(searchField).toHaveValue('');

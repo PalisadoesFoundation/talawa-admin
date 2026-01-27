@@ -35,9 +35,10 @@ jobs:
           ref: main
           path: .github-central
 
-      - name: Install pnpm
+      - name: Install pnpm@10.4.1
         uses: pnpm/action-setup@v4
         with:
+          version: 10.4.1
           run_install: false
 
       - name: Set up Node.js
@@ -465,6 +466,7 @@ jobs:
         Code-Quality-Checks,
         Check-AutoDocs,
         Check-Disable-Statements,
+        Check-Route-Prefix,
         Check-Mock-Isolation,
         CSS-Policy-Check,
         MinIO-Compliance-Check,
@@ -474,6 +476,38 @@ jobs:
     steps:
       - name: This job intentionally does nothing
         run: echo "This job intentionally does nothing"
+
+  Check-Route-Prefix:
+    name: Check Route Prefix
+    needs: [Code-Quality-Checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run route prefix check script
+        env:
+          CI: true
+        run: npm run check-route-prefix -- --scan-entire-repo
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
