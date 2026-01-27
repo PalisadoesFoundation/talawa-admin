@@ -398,12 +398,14 @@ const Calendar: React.FC<
 
     return days.map((date, index) => {
       const today = new Date();
+      const isOutsideMonth = date.getMonth() !== currentMonth;
+      const isWeekend = date.getDay() === 0 || date.getDay() === 6;
       const className = [
-        date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
+        isWeekend && !isOutsideMonth ? styles.day_weekends : '',
         date.toLocaleDateString() === today.toLocaleDateString()
           ? styles.day__today
           : '',
-        date.getMonth() !== currentMonth ? styles.day__outside : '',
+        isOutsideMonth ? styles.day__outside : '',
         selectedDate?.getTime() === date.getTime() ? styles.day__selected : '',
         styles.day,
       ].join(' ');
@@ -468,8 +470,18 @@ const Calendar: React.FC<
           data-testid="day"
           data-has-events={allEventsList?.length > 0}
         >
-          {date.getDate()}
-          {date.getMonth() !== currentMonth ? null : (
+          <span
+            className={`${styles.day_number} ${isOutsideMonth ? styles.day_number_outside : ''}`}
+          >
+            {date.getDate()}
+            {isOutsideMonth && (index === 0 || date.getDate() === 1) && (
+              <span className={styles.day_month}>
+                {' '}
+                {months[date.getMonth()]}
+              </span>
+            )}
+          </span>
+          {isOutsideMonth ? null : (
             <div
               className={expanded === index ? styles.expand_list_container : ''}
             >
@@ -526,6 +538,14 @@ const Calendar: React.FC<
                   <ChevronLeft />
                 </Button>
 
+                <div
+                  className={styles.calendar__header_month}
+                  data-testid="current-date"
+                >
+                  {viewType === ViewType.DAY ? `${currentDate} ` : ''}
+                  {currentYear} <span>{months[currentMonth]}</span>
+                </div>
+
                 <Button
                   variant="outlined"
                   className={styles.buttonEventCalendar}
@@ -536,24 +556,19 @@ const Calendar: React.FC<
                 >
                   <ChevronRight />
                 </Button>
-                <div
-                  className={styles.calendar__header_month}
-                  data-testid="current-date"
-                >
-                  {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                  {currentYear} {months[currentMonth]}
-                </div>
               </div>
             </div>
-            <div>
-              <Button
-                className={styles.editButton}
-                onClick={handleTodayButton}
-                data-testid="today"
-              >
-                {t('today')}
-              </Button>
-            </div>
+            {viewType !== ViewType.MONTH && (
+              <div>
+                <Button
+                  className={styles.editButton}
+                  onClick={handleTodayButton}
+                  data-testid="today"
+                >
+                  {t('today')}
+                </Button>
+              </div>
+            )}
           </div>
         )}
         <div>
@@ -567,6 +582,52 @@ const Calendar: React.FC<
                 ))}
               </div>
               <div className={styles.calendar__days}>{renderDays()}</div>
+
+              {/* Info Cards: Holidays and Events Legend */}
+              <div className={styles.calendar_infocards}>
+                <div
+                  className={styles.holidays_card}
+                  role="region"
+                  aria-label={t('holidays')}
+                >
+                  <h3 className={styles.card_title}>{t('holidays')}</h3>
+                  <ul className={styles.card_list}>
+                    {filteredHolidays.map((holiday, index) => (
+                      <li className={styles.card_list_item} key={index}>
+                        <span className={styles.holiday_date}>
+                          {months[parseInt(holiday.date.slice(0, 2), 10) - 1]}{' '}
+                          {holiday.date.slice(3)}
+                        </span>
+                        <span className={styles.holiday_name}>
+                          {holiday.name}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div
+                  className={styles.events_card}
+                  role="region"
+                  aria-label={t('events')}
+                >
+                  <h3 className={styles.card_title}>{t('events')}</h3>
+                  <div className={styles.legend}>
+                    <div className={styles.eventsLegend}>
+                      <span className={styles.organizationIndicator}></span>
+                      <span className={styles.legendText}>
+                        {t('eventsCreatedByOrganization')}
+                      </span>
+                    </div>
+                    <div className={styles.list_container_holidays}>
+                      <span className={styles.holidayIndicator}></span>
+                      <span className={styles.holidayText}>
+                        {t('holidays')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </>
           ) : viewType === ViewType.YEAR ? (
             <YearlyEventCalender

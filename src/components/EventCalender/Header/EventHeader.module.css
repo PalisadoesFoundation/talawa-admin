@@ -2,7 +2,7 @@
   width: 100%;
   border-radius: 10px;
   padding: 5px;
-  padding-right: 0.8rem;
+  padding-right: var(--space-6);
 }
 
 .calendar__header {
@@ -38,5 +38,16 @@
   border: 1px solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: 48px;
+  padding: 0 var(--space-5);
+}
+
+.addButtonIcon {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
 }

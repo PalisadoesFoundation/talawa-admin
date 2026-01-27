@@ -193,7 +193,7 @@
 }
 
 .holidayIndicator {
-  background-color: var(--holidayIndicator-bg);
+  background-color: var(--holidayCard-bg);
 }
 
 .holidayText {
@@ -202,8 +202,22 @@
   color: var(--holidayText-color);
 }
 
-.day_weekends {
-  background-color: var(--dayWeekends-bg);
+.day_number {
+  display: block;
+  text-align: left;
+  padding: var(--space-2) 0 0 var(--space-3);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.day_number_outside {
+  color: var(--color-gray-300) !important;
+}
+
+.day_month {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: #9ca3af;
 }
 
 .day__today {
@@ -215,12 +229,12 @@
 
 .day__outside {
   background-color: var(--dayOutside-bg);
-  color: var(--dayOutside-color);
+  color: #9ca3af;
 }
 
 .day__selected {
   background-color: var(--daySelected-bg);
-  color: var(--daySelected-color);
+  color: var(--daySelected-color) !important;
 }
 
 .day {
@@ -234,6 +248,10 @@
   font-weight: var(--font-weight-semibold);
   height: 9rem;
   position: relative;
+}
+
+.day_weekends {
+  background-color: var(--holidayCard-bg) !important;
 }
 
 .day__events {
@@ -267,10 +285,11 @@
 
 .calendar {
   font-family: var(--font-family-sans, 'Outfit', sans-serif);
-  padding: var(--space-6);
+  padding: var(--space-10);
   background-color: var(--calendar-bg);
   min-height: 80vh;
-  margin-right: 0.8rem;
+  margin-right: var(--space-6);
+  border-radius: var(--space-3);
 }
 
 .calendar__header {
@@ -301,11 +320,16 @@
 }
 
 .calendar__header_month {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--calendarHeaderMonth-color);
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
   margin-left: var(--space-3);
-  margin-right: var(--space-5);
+  margin-right: var(--space-3);
+  color: #9ca3af;
+}
+
+.calendar__header_month span {
+  font-weight: var(--font-weight-regular);
+  color: black;
 }
 
 .editButton {
