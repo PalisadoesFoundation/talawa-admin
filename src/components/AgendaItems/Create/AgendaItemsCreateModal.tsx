@@ -1,5 +1,4 @@
 /**
-// translation-check-keyPrefix: agendaItems
  * AgendaItemsCreateModal Component
  *
  * This component renders a modal for creating agenda items. It includes
@@ -7,14 +6,22 @@
  * categories, URLs, and attachments. The modal also provides functionality
  * for validating URLs, managing attachments, and submitting the form.
  *
- * See InterfaceAgendaItemsCreateModalProps for props documentation.
+ * @param props - The props for the component containing:
+ *   - `agendaItemCreateModalIsOpen`: Determines if the modal is open
+ *   - `hideCreateModal`: Function to close the modal
+ *   - `formState`: The current state of the form
+ *   - `setFormState`: Function to update the form state
+ *   - `createAgendaItemHandler`: Function to handle form submission
+ *   - `t`: Translation function for localization
+ *   - `agendaItemCategories`: List of available agenda item categories
  *
- * @returns The rendered modal component.
+ * @returns The rendered modal component
  *
  * @remarks
- * - The component uses `react-bootstrap` for form styling.
- * - Attachments are uploaded via MinIO presigned URLs.
- * - URLs are validated using a regular expression before being added.
+ * - The component uses `react-bootstrap` for modal and form styling
+ * - `@mui/material` is used for the Autocomplete component
+ * - Attachments are converted to base64 format before being added to the form state
+ * - URLs are validated using a regular expression before being added
  *
  * @example
  * ```tsx
@@ -30,20 +37,17 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
+import { Button } from 'shared-components/Button';
 import { Row, Col } from 'react-bootstrap';
-import Button from 'shared-components/Button/Button';
-import {
-  FormTextField,
-  FormSelectField,
-  FormFieldGroup,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { Autocomplete } from '@mui/material';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './AgendaItemsCreateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import { useMinioUpload } from 'utils/MinioUpload';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
 // translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
@@ -58,127 +62,96 @@ const AgendaItemsCreateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
-  const [previewUrls, setPreviewUrls] = useState<
-    { url: string; mimeType: string }[]
-  >([]);
-
-  const { uploadFileToMinio } = useMinioUpload();
 
   useEffect(() => {
+    // Ensure URLs and attachments do not have empty or invalid entries
     setFormState((prevState) => ({
       ...prevState,
       urls: prevState.urls.filter((url) => url.trim() !== ''),
-      attachments: prevState.attachments.filter(
-        (attachment) => attachment !== '',
-      ),
+      attachments: prevState.attachments.filter((att) => att !== ''),
     }));
   }, []);
 
-  useEffect(() => {
-    const generatePreviews = async () => {
-      const urls = await Promise.all(
-        formState.attachments.map(async (attachment) => {
-          // Attachments are strings - either URLs or JSON metadata
-          try {
-            // Try to parse as JSON (for new MinIO uploads)
-            const parsed = JSON.parse(attachment);
-            // If it's a MinIO object, create a URL from object name
-            if (parsed.objectName) {
-              return { url: attachment, mimeType: 'image/*' };
-            }
-          } catch {
-            // Not JSON, treat as a URL
-          }
-          try {
-            const response = await fetch(attachment, {
-              method: 'HEAD',
-              mode: 'cors',
-            });
-            const mimeType = response.headers.get('content-type') || '';
-            return { url: attachment, mimeType };
-          } catch {
-            const ext = attachment.split('.').pop()?.toLowerCase() || '';
-            const mimeType = ext.startsWith('mp') ? `video/${ext}` : 'image/*';
-            return { url: attachment, mimeType };
-          }
-        }),
-      );
-      setPreviewUrls(urls);
-    };
-    generatePreviews();
-    return () => {
-      previewUrls.forEach((preview) => {
-        if (preview.url.startsWith('blob:')) {
-          URL.revokeObjectURL(preview.url);
-        }
-      });
-    };
-  }, [formState.attachments]);
+  /**
+   * Validates if a given URL is in a correct format.
+   *
+   * @param url - URL string to validate.
+   * @returns True if the URL is valid, false otherwise.
+   */
+  const isValidUrl = (url: string): boolean => {
+    // Regular expression for basic URL validation
+    const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
+    return urlRegex.test(url);
+  };
 
+  /**
+   * Handles adding a new URL to the form state.
+   *
+   * Checks if the URL is valid before adding it.
+   */
   const handleAddUrl = (): void => {
-    const urlPattern = /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}(\/[^\s]*)?$/i;
-    if (newUrl.trim() !== '' && urlPattern.test(newUrl.trim())) {
-      setFormState({ ...formState, urls: [...formState.urls, newUrl.trim()] });
+    if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
+      setFormState({
+        ...formState,
+        urls: [...formState.urls.filter((url) => url.trim() !== ''), newUrl],
+      });
       setNewUrl('');
     } else {
       NotificationToast.error(t('invalidUrl'));
     }
   };
 
+  /**
+   * Handles removing a URL from the form state.
+   *
+   * @param url - URL to remove.
+   */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
       ...formState,
-      urls: formState.urls.filter((u) => u !== url),
+      urls: formState.urls.filter((item) => item !== url),
     });
   };
 
+  /**
+   * Handles file selection and converts files to base64 before updating the form state.
+   *
+   * @param e - File input change event.
+   */
   const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const files = event.target.files;
-    /* istanbul ignore else -- @preserve */
-    if (files) {
-      const fileArray = Array.from(files);
-      const validFiles = fileArray.filter((file) => {
-        if (file.size > 10 * 1024 * 1024) {
-          NotificationToast.error(`${file.name} ${t('fileSizeExceedsLimit')}`);
-          return false;
-        }
-        return true;
+    const target = e.target as HTMLInputElement;
+    if (target.files) {
+      const files = Array.from(target.files);
+      let totalSize = 0;
+      files.forEach((file) => {
+        totalSize += file.size;
       });
-
-      // Upload files to MinIO and store file metadata
-      const uploadedFiles: string[] = [];
-
-      for (const file of validFiles) {
-        try {
-          const result = await uploadFileToMinio(file, 'agendaItem');
-          if (result) {
-            // Enrich with mimeType and name from File object
-            const metadata = {
-              ...result,
-              mimeType: file.type || 'application/octet-stream',
-              name: file.name,
-            };
-            uploadedFiles.push(JSON.stringify(metadata));
-          }
-        } catch {
-          NotificationToast.error(`${t('fileUploadError')}: ${file.name}`);
-        }
+      if (totalSize > 10 * 1024 * 1024) {
+        NotificationToast.error(t('fileSizeExceedsLimit'));
+        return;
       }
-
-      setFormState((prev) => ({
-        ...prev,
-        attachments: [...prev.attachments, ...uploadedFiles],
-      }));
+      const base64Files = await Promise.all(
+        files.map(async (file) => await convertToBase64(file)),
+      );
+      setFormState({
+        ...formState,
+        attachments: [...formState.attachments, ...base64Files],
+      });
     }
   };
 
-  const handleRemoveAttachment = (index: number): void => {
-    setFormState((prevState) => ({
-      ...prevState,
-      attachments: prevState.attachments.filter((_, i) => i !== index),
-    }));
+  /**
+   * Handles removing an attachment from the form state.
+   *
+   * @param attachment - Attachment to remove.
+   */
+  const handleRemoveAttachment = (attachment: string): void => {
+    setFormState({
+      ...formState,
+      attachments: formState.attachments.filter((item) => item !== attachment),
+    });
   };
 
   return (
@@ -186,67 +159,84 @@ const AgendaItemsCreateModal: React.FC<
       className={styles.AgendaItemsModal}
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
-      title={t('agendaItemDetails')}
-      headerClassName={styles.modalHeader}
-      showCloseButton={true}
-      closeButtonVariant="danger"
-      dataTestId="createAgendaItemModal"
+      headerContent={
+        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
+      }
     >
       <form onSubmit={createAgendaItemHandler}>
-        <FormSelectField
-          name="categorySelect"
-          label={t('category')}
-          value={formState.agendaItemCategoryIds[0] || ''}
-          onChange={(value: string) => {
-            setFormState({
-              ...formState,
-              agendaItemCategoryIds: value ? [value] : [],
-            });
-          }}
-          data-testid="categorySelect"
-        >
-          <option value="">{t('selectCategory')}</option>
-          {(agendaItemCategories || []).map(
-            (category: InterfaceAgendaItemCategoryInfo) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ),
-          )}
-        </FormSelectField>
-
+        <div className="d-flex mb-3 w-100">
+          <Autocomplete
+            multiple
+            className={`${styles.noOutline} w-100`}
+            limitTags={2}
+            data-testid="categorySelect"
+            options={agendaItemCategories || []}
+            value={
+              agendaItemCategories?.filter((category) =>
+                formState.agendaItemCategoryIds.includes(category._id),
+              ) || []
+            }
+            filterSelectedOptions={true}
+            getOptionLabel={(
+              category: InterfaceAgendaItemCategoryInfo,
+            ): string => category.name}
+            onChange={(_, newCategories): void => {
+              setFormState({
+                ...formState,
+                agendaItemCategoryIds: newCategories.map(
+                  (category) => category._id,
+                ),
+              });
+            }}
+            renderInput={(params) => (
+              <FormFieldGroup name="category" label={t('category')}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    placeholder={t('category')}
+                  />
+                </div>
+              </FormFieldGroup>
+            )}
+          />
+        </div>
         <Row className="mb-3">
           <Col>
-            <FormTextField
-              name="title"
-              label={t('title')}
-              placeholder={t('enterTitle')}
-              value={formState.title}
-              onChange={(value: string) =>
-                setFormState({ ...formState, title: value })
-              }
-              required
-              data-testid="titleInput"
-            />
+            <FormFieldGroup name="title" label={t('title')}>
+              <input
+                className="form-control"
+                id="title"
+                type="text"
+                placeholder={t('enterTitle')}
+                value={formState.title}
+                required
+                onChange={(e) =>
+                  setFormState({ ...formState, title: e.target.value })
+                }
+              />
+            </FormFieldGroup>
           </Col>
           <Col>
-            <FormTextField
-              name="duration"
-              label={t('duration')}
-              placeholder={t('enterDuration')}
-              value={formState.duration}
-              onChange={(value: string) =>
-                setFormState({ ...formState, duration: value })
-              }
-              required
-              data-testid="durationInput"
-            />
+            <FormFieldGroup name="duration" label={t('duration')}>
+              <input
+                className="form-control"
+                id="duration"
+                type="text"
+                placeholder={t('enterDuration')}
+                value={formState.duration}
+                required
+                onChange={(e) =>
+                  setFormState({ ...formState, duration: e.target.value })
+                }
+              />
+            </FormFieldGroup>
           </Col>
         </Row>
-
         <FormFieldGroup name="description" label={t('description')}>
           <textarea
             className="form-control"
+            id="description"
             rows={1}
             placeholder={t('enterDescription')}
             value={formState.description}
@@ -254,15 +244,15 @@ const AgendaItemsCreateModal: React.FC<
             onChange={(e) =>
               setFormState({ ...formState, description: e.target.value })
             }
-            data-testid="descriptionInput"
           />
         </FormFieldGroup>
 
-        <FormFieldGroup name="url" label={t('url')}>
+        <div className="mb-3">
+          <label className="form-label">{t('url')}</label>
           <div className="d-flex">
             <input
-              type="text"
               className="form-control"
+              type="text"
               placeholder={t('enterUrl')}
               id="basic-url"
               data-testid="urlInput"
@@ -291,14 +281,11 @@ const AgendaItemsCreateModal: React.FC<
               </Button>
             </li>
           ))}
-        </FormFieldGroup>
-
-        <FormFieldGroup
-          name="attachments"
-          label={t('attachments')}
-          helpText={t('attachmentLimit')}
-        >
+        </div>
+        <div className="mb-3">
+          <label className="form-label">{t('attachments')}</label>
           <input
+            className="form-control"
             accept="image/*, video/*"
             data-testid="attachment"
             name="attachment"
@@ -306,15 +293,14 @@ const AgendaItemsCreateModal: React.FC<
             id="attachment"
             multiple={true}
             onChange={handleFileChange}
-            className="form-control"
           />
-        </FormFieldGroup>
-
-        {previewUrls.length > 0 && (
+          <small className="form-text">{t('attachmentLimit')}</small>
+        </div>
+        {formState.attachments && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {previewUrls.map((preview, index) => (
+            {formState.attachments.map((attachment, index) => (
               <div key={index} className={styles.attachmentPreview}>
-                {preview.mimeType.startsWith('video/') ? (
+                {attachment.includes('video') ? (
                   <video
                     muted
                     autoPlay={true}
@@ -322,18 +308,16 @@ const AgendaItemsCreateModal: React.FC<
                     playsInline
                     crossOrigin="anonymous"
                   >
-                    <source src={preview.url} type={preview.mimeType} />
+                    <source src={attachment} type="video/mp4" />
                   </video>
                 ) : (
-                  <img src={preview.url} alt={t('attachmentPreview')} />
+                  <img src={attachment} alt={t('attachmentPreview')} />
                 )}
                 <button
-                  type="button"
-                  aria-label={t('deleteAttachment')}
                   className={styles.closeButtonFile}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleRemoveAttachment(index);
+                    handleRemoveAttachment(attachment);
                   }}
                   data-testid="deleteAttachment"
                 >
@@ -343,7 +327,6 @@ const AgendaItemsCreateModal: React.FC<
             ))}
           </div>
         )}
-
         <Button
           type="submit"
           className={styles.greenregbtnAgendaItems}
