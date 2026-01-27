@@ -14,6 +14,10 @@ import {
   DATE_TIME_SEPARATOR,
   TEST_ID_UPDATE_EVENT_MODAL,
   DATE_FORMAT_ISO_DATE,
+  TEST_ID_PEOPLE_IMAGE,
+  TEST_ID_PEOPLE_NAME,
+  TEST_ID_PEOPLE_EMAIL,
+  TEST_ID_PEOPLE_ROLE,
 } from './common';
 
 afterEach(() => {
@@ -38,6 +42,30 @@ describe('common constants and helpers', () => {
 
     it('should format people sno test id with empty string', () => {
       expect(TEST_ID_PEOPLE_SNO('')).toBe('people-sno-');
+    });
+  });
+
+  describe('TEST_ID_PEOPLE_IMAGE', () => {
+    it('should format people image test id with valid id', () => {
+      expect(TEST_ID_PEOPLE_IMAGE('123')).toBe('people-123-image');
+    });
+  });
+
+  describe('TEST_ID_PEOPLE_NAME', () => {
+    it('should format people name test id with valid id', () => {
+      expect(TEST_ID_PEOPLE_NAME('123')).toBe('people-name-123');
+    });
+  });
+
+  describe('TEST_ID_PEOPLE_EMAIL', () => {
+    it('should format people email test id with valid id', () => {
+      expect(TEST_ID_PEOPLE_EMAIL('123')).toBe('people-email-123');
+    });
+  });
+
+  describe('TEST_ID_PEOPLE_ROLE', () => {
+    it('should format people role test id with valid id', () => {
+      expect(TEST_ID_PEOPLE_ROLE('123')).toBe('people-role-123');
     });
   });
 

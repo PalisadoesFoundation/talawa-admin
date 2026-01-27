@@ -114,3 +114,10 @@ export const IDENTIFIER_ID = 'id';
  */
 export const getDummyDateTime = (time: string): string =>
   `${DUMMY_DATE_TIME_PREFIX}${time}`;
+
+export const TEST_ID_PEOPLE_IMAGE = (id: string): string =>
+  `people-${id}-image`;
+export const TEST_ID_PEOPLE_NAME = (id: string): string => `people-name-${id}`;
+export const TEST_ID_PEOPLE_EMAIL = (id: string): string =>
+  `people-email-${id}`;
+export const TEST_ID_PEOPLE_ROLE = (id: string): string => `people-role-${id}`;
