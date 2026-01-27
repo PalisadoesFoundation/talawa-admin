@@ -53,7 +53,7 @@ import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import {
+import type {
   InterfaceCreateDirectChatProps,
   InterfaceOrganizationMember,
 } from 'types/UserPortal/CreateDirectChat/interface';
