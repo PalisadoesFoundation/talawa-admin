@@ -49,11 +49,17 @@ describe('common constants and helpers', () => {
     it('should format people image test id with valid id', () => {
       expect(TEST_ID_PEOPLE_IMAGE('123')).toBe('people-123-image');
     });
+    it('should format people image test id with empty string', () => {
+      expect(TEST_ID_PEOPLE_IMAGE('')).toBe('people--image');
+    });
   });
 
   describe('TEST_ID_PEOPLE_NAME', () => {
     it('should format people name test id with valid id', () => {
       expect(TEST_ID_PEOPLE_NAME('123')).toBe('people-name-123');
+    });
+    it('should format people name test id with empty string', () => {
+      expect(TEST_ID_PEOPLE_NAME('')).toBe('people-name-');
     });
   });
 
@@ -61,11 +67,17 @@ describe('common constants and helpers', () => {
     it('should format people email test id with valid id', () => {
       expect(TEST_ID_PEOPLE_EMAIL('123')).toBe('people-email-123');
     });
+    it('should format people email test id with empty string', () => {
+      expect(TEST_ID_PEOPLE_EMAIL('')).toBe('people-email-');
+    });
   });
 
   describe('TEST_ID_PEOPLE_ROLE', () => {
     it('should format people role test id with valid id', () => {
       expect(TEST_ID_PEOPLE_ROLE('123')).toBe('people-role-123');
+    });
+    it('should format people role test id with empty string', () => {
+      expect(TEST_ID_PEOPLE_ROLE('')).toBe('people-role-');
     });
   });
 
