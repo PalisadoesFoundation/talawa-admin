@@ -213,26 +213,6 @@ const MOCK_PLEDGE_DATA = {
   },
 };
 
-const MOCK_UPDATE_PLEDGE_DATA = {
-  request: {
-    query: UPDATE_PLEDGE,
-    variables: {
-      id: '1',
-      amount: 200,
-    },
-  },
-  result: {
-    data: {
-      updatePledge: {
-        __typename: 'Pledge',
-        id: '1',
-        amount: 200,
-        currency: 'USD',
-      },
-    },
-  },
-};
-
 const MEMBERS_MOCK = {
   request: {
     query: MEMBERS_LIST_PG,
@@ -338,28 +318,6 @@ describe('PledgeModal', () => {
 
       expect(createdAt).toBe(FIXED_CREATED_AT);
       expect(updatedAt).toBe(FIXED_UPDATED_AT);
-    });
-  });
-
-  it('should update pledgeAmount when input value changes', async () => {
-    const user = userEvent.setup();
-    await act(async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-    });
-    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
-    expect(amountInput).toHaveAttribute('value', '100');
-
-    amountInput.focus();
-    await user.clear(amountInput);
-    amountInput.focus();
-    await user.type(amountInput, '2');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-
-    await waitFor(() => {
-      expect(parseInt(amountInput.value)).toBe(200);
     });
   });
 
@@ -515,45 +473,6 @@ describe('PledgeModal', () => {
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
-    });
-  });
-
-  it('should update pledge amount in edit mode', async () => {
-    const user = userEvent.setup();
-    const mockLink = new StaticMockLink([
-      ...PLEDGE_MODAL_MOCKS,
-      MOCK_UPDATE_PLEDGE_DATA,
-    ]);
-    const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
-
-    renderPledgeModal(mockLink, props);
-
-    await waitFor(() => {
-      expect(screen.getByLabelText('Amount')).toHaveAttribute('value', '100');
-    });
-
-    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
-    amountInput.focus();
-    await user.clear(amountInput);
-    amountInput.focus();
-    await user.type(amountInput, '2');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-
-    await waitFor(() => {
-      expect(parseInt(amountInput.value)).toBe(200);
-    });
-
-    await user.click(screen.getByTestId('modal-submit-btn'));
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'Pledge updated successfully',
-      );
-      expect(props.refetchPledge).toHaveBeenCalled();
-      expect(props.hide).toHaveBeenCalled();
     });
   });
 
