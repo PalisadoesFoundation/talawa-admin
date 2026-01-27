@@ -35,7 +35,6 @@
  * ```
  */
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
-import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,12 +49,7 @@ import {
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-
-export interface InterfaceVolunteerGroupViewModal {
-  isOpen: boolean;
-  hide: () => void;
-  group: InterfaceVolunteerGroupInfo;
-}
+import { InterfaceVolunteerGroupViewModal } from 'types/shared-components/VolunteerGroupViewModal/interface';
 
 const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
   isOpen,

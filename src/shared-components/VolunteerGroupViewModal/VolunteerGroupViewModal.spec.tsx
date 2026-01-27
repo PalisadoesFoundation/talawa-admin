@@ -11,10 +11,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
-import type { InterfaceVolunteerGroupViewModal } from './VolunteerGroupViewModal';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import type { InterfaceVolunteerGroupViewModal } from 'types/shared-components/VolunteerGroupViewModal/interface';
 
 const t = {
   ...JSON.parse(
