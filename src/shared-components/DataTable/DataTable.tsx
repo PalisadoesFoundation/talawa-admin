@@ -27,7 +27,7 @@ import type {
   IDataTableProps,
   IColumnDef,
   SortDirection,
-} from '../../types/shared-components/DataTable/interface';
+} from 'types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
 import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';

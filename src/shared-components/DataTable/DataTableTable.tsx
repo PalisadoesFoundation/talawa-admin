@@ -116,7 +116,7 @@ export function DataTableTable<T>({
               ? activeSortDir === 'asc'
                 ? 'ascending'
                 : 'descending'
-              : 'none';
+              : undefined;
             return (
               <th
                 key={col.id}
