@@ -26,7 +26,7 @@
  * ```
  *
  */
-import React, { type FC, type FormEvent, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -38,13 +38,13 @@ import {
   COMPLETE_ACTION_ITEM_FOR_INSTANCE,
   MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
 } from 'types/shared-components/ActionItems/interface';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 export interface IItemUpdateStatusModalProps {
@@ -73,6 +73,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   const [postCompletionNotes, setPostCompletionNotes] = useState<string>(
     actionItem.postCompletionNotes ?? '',
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
    * Mutation to update an action item.
@@ -107,13 +108,10 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
 
   /**
    * Handles the form submission for updating an action item.
-   *
-   * @param e - The form submission event.
    */
-  const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
-    e.preventDefault();
-
+  const updateActionItemHandler = async (): Promise<void> => {
     try {
+      setIsSubmitting(true);
       if (isCompleted) {
         // Mark as pending
         const input: IMarkActionItemAsPendingInput = {
@@ -156,6 +154,8 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -166,10 +166,10 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           key: 'postCompletionNotesRequired',
           namespace: 'translation',
         });
-
         return;
       }
 
+      setIsSubmitting(true);
       await completeActionForInstance({
         variables: {
           input: {
@@ -191,11 +191,14 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const markActionAsPendingForInstanceHandler = async (): Promise<void> => {
     try {
+      setIsSubmitting(true);
       await markActionAsPendingForInstance({
         variables: {
           input: {
@@ -216,6 +219,8 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -223,108 +228,124 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
     setPostCompletionNotes(actionItem.postCompletionNotes ?? '');
   }, [actionItem]);
 
-  return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
-      title={t('actionItemStatus')}
-      showCloseButton
-    >
-      <form onSubmit={updateActionItemHandler} className="p-2">
-        <div className="mb-2 d-flex align-items-center gap-2">
-          <StatusBadge
-            variant={isCompleted ? 'completed' : 'pending'}
-            size="md"
-            dataTestId="update-status-badge"
-            ariaLabel={isCompleted ? tCommon('completed') : tCommon('pending')}
-          />
-        </div>
-        {!isCompleted ? (
-          <FormFieldGroup
-            name="postCompletionNotes"
-            label={t('postCompletionNotes')}
-            required
-          >
-            <textarea
-              id="postCompletionNotes"
-              data-cy="postCompletionNotes"
-              className="form-control"
-              value={postCompletionNotes}
-              onChange={(e) => setPostCompletionNotes(e.target.value)}
-              rows={4}
-              required
-            />
-          </FormFieldGroup>
-        ) : (
-          <p>{t('updateStatusMsg')}</p>
-        )}
-
-        {isCompleted ? (
+  const renderFooter = () => {
+    if (isCompleted) {
+      if (actionItem.isTemplate) {
+        return (
           <>
-            {actionItem.isTemplate ? (
-              <div className="d-flex gap-3 justify-content-end">
-                <Button
-                  onClick={markActionAsPendingForInstanceHandler}
-                  className={styles.addButton}
-                >
-                  {t('pendingForInstance')}
-                </Button>
-                {/* Only show 'pending for series' if this action item is not showing instance exception data */}
-                {!actionItem.isInstanceException && (
-                  <Button type="submit" className={styles.addButton}>
-                    {t('pendingForSeries')}
-                  </Button>
-                )}
-              </div>
-            ) : (
-              <div className="d-flex gap-3 justify-content-end">
-                <Button
-                  type="submit"
-                  className={styles.addButton}
-                  data-testid="yesBtn"
-                >
-                  {tCommon('yes')}
-                </Button>
-                <Button
-                  className={`btn btn-danger ${styles.removeButton}`}
-                  onClick={hide}
-                >
-                  {tCommon('no')}
-                </Button>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {actionItem.isTemplate ? (
-              <div className="d-flex gap-3 justify-content-end">
-                <Button
-                  onClick={completeActionForInstanceHandler}
-                  className={styles.addButton}
-                >
-                  {t('completeForInstance')}
-                </Button>
-                {/* Only show 'complete for series' if this action item is not showing instance exception data */}
-                {!actionItem.isInstanceException && (
-                  <Button type="submit" className={styles.addButton}>
-                    {t('completeForSeries')}
-                  </Button>
-                )}
-              </div>
-            ) : (
+            <Button
+              onClick={markActionAsPendingForInstanceHandler}
+              className={styles.addButton}
+              disabled={isSubmitting}
+            >
+              {t('pendingForInstance')}
+            </Button>
+            {!actionItem.isInstanceException && (
               <Button
-                type="submit"
-                className={`${styles.addButton}`}
-                data-testid="createBtn"
-                data-cy="markCompletionForSeries"
+                onClick={updateActionItemHandler}
+                className={styles.addButton}
+                disabled={isSubmitting}
               >
-                {t('markCompletion')}
+                {t('pendingForSeries')}
               </Button>
             )}
           </>
-        )}
-      </form>
-    </BaseModal>
+        );
+      }
+      return (
+        <>
+          <Button
+            onClick={updateActionItemHandler}
+            className={styles.addButton}
+            data-testid="yesBtn"
+            disabled={isSubmitting}
+          >
+            {tCommon('yes')}
+          </Button>
+          <Button
+            className={`btn btn-danger ${styles.removeButton}`}
+            onClick={hide}
+            disabled={isSubmitting}
+          >
+            {tCommon('no')}
+          </Button>
+        </>
+      );
+    }
+
+    if (actionItem.isTemplate) {
+      return (
+        <>
+          <Button
+            onClick={completeActionForInstanceHandler}
+            className={styles.addButton}
+            disabled={isSubmitting}
+          >
+            {t('completeForInstance')}
+          </Button>
+          {!actionItem.isInstanceException && (
+            <Button
+              onClick={updateActionItemHandler}
+              className={styles.addButton}
+              disabled={isSubmitting}
+            >
+              {t('completeForSeries')}
+            </Button>
+          )}
+        </>
+      );
+    }
+
+    return (
+      <Button
+        onClick={updateActionItemHandler}
+        className={styles.addButton}
+        data-testid="createBtn"
+        data-cy="markCompletionForSeries"
+        disabled={isSubmitting}
+      >
+        {t('markCompletion')}
+      </Button>
+    );
+  };
+
+  return (
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
+      title={t('actionItemStatus')}
+      loading={isSubmitting}
+      customFooter={renderFooter()}
+      data-testid="updateStatusModal"
+    >
+      <div className="mb-2 d-flex align-items-center gap-2">
+        <StatusBadge
+          variant={isCompleted ? 'completed' : 'pending'}
+          size="md"
+          dataTestId="update-status-badge"
+          ariaLabel={isCompleted ? tCommon('completed') : tCommon('pending')}
+        />
+      </div>
+      {!isCompleted ? (
+        <FormFieldGroup
+          name="postCompletionNotes"
+          label={t('postCompletionNotes')}
+          required
+        >
+          <textarea
+            id="postCompletionNotes"
+            data-cy="postCompletionNotes"
+            className="form-control"
+            value={postCompletionNotes}
+            onChange={(e) => setPostCompletionNotes(e.target.value)}
+            rows={4}
+            required
+          />
+        </FormFieldGroup>
+      ) : (
+        <p>{t('updateStatusMsg')}</p>
+      )}
+    </CRUDModalTemplate>
   );
 };
 

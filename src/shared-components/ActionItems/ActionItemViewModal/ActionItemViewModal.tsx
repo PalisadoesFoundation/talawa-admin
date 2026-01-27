@@ -6,7 +6,7 @@
  * @returns A React functional component rendering the action item details modal.
  *
  * @remarks
- * Uses `BaseModal` from `shared-components` for the modal structure.
+ * Uses `ViewModal` from `shared-components/CRUDModalTemplate` for the modal structure.
  * Integrates with Apollo Client's `useQuery` for fetching related data.
  * Supports internationalization with `react-i18next`.
  * @example
@@ -32,7 +32,7 @@ import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
-import { BaseModal } from 'shared-components/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 
 export interface IViewModalProps {
   isOpen: boolean;
@@ -122,15 +122,14 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   };
 
   return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
+    <ViewModal
+      open={isOpen}
+      onClose={hide}
       title={t('actionItemDetails')}
       size="lg"
-      showCloseButton
+      data-testid="actionItemViewModal"
     >
       <div className="p-3">
-        {' '}
         <div className="d-flex mb-3 w-100">
           <FormFieldGroup
             name="category"
@@ -274,7 +273,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           </FormFieldGroup>
         )}
       </div>
-    </BaseModal>
+    </ViewModal>
   );
 };
 

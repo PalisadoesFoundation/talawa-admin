@@ -2283,7 +2283,7 @@ describe('Testing Events Screen [User Portal]', () => {
       'events-date-range-end-input',
     ) as HTMLInputElement;
 
-    // Manually trigger change to avoid fireEvent restricted import
+    // Manually trigger change event to simulate user input for date fields
     const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
       window.HTMLInputElement.prototype,
       'value',

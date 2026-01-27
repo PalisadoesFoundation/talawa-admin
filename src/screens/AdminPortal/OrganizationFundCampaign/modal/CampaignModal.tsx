@@ -3,8 +3,8 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { BaseModal } from 'shared-components/BaseModal';
+import { Button } from 'shared-components/Button';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import styles from './CampaignModal.module.css';
 
@@ -17,13 +17,9 @@ import {
 } from 'GraphQl/Mutations/CampaignMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+  FormTextField,
+  FormSelectField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { IDateRangeValue, InterfaceCampaignModal } from './types';
 
 export type { InterfaceCampaignModal };
@@ -243,26 +239,14 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   };
 
   return (
-    <BaseModal
+    <CRUDModalTemplate
       className={styles.campaignModal}
-      show={isOpen}
-      onHide={hide}
-      dataTestId="campaignModal"
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center">
-          <p className={styles.titlemodal}>
-            {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.closeButton}
-            data-testid="campaignCloseBtn"
-          >
-            <i className="fa fa-times" />
-          </Button>
-        </div>
-      }
+      open={isOpen}
+      onClose={hide}
+      data-testid="campaignModal"
+      title={t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
+      showFooter={false}
+      loading={isSubmitting}
     >
       <form
         onSubmitCapture={
@@ -271,35 +255,24 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         className="p-3"
       >
         <div className="d-flex mb-3 w-100">
-          <FormFieldGroup
+          <FormTextField
             name="campaignName"
             label={t('campaignName')}
             required
             error={isNameInvalid ? tCommon('required') : undefined}
             touched={touched.campaignName}
-          >
-            <FormControl fullWidth>
-              <TextField
-                variant="outlined"
-                className={`${styles.noOutline} w-100`}
-                value={campaignName}
-                error={isNameInvalid}
-                inputProps={{
-                  id: 'campaignName',
-                  'aria-label': t('campaignName'),
-                }}
-                onBlur={() =>
-                  setTouched((prev) => ({ ...prev, campaignName: true }))
-                }
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    campaignName: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
-          </FormFieldGroup>
+            value={campaignName}
+            data-testid="campaignNameInput"
+            onBlur={() =>
+              setTouched((prev) => ({ ...prev, campaignName: true }))
+            }
+            onChange={(value) =>
+              setFormState({
+                ...formState,
+                campaignName: value,
+              })
+            }
+          />
         </div>
 
         <div className="d-flex gap-4 mx-auto mb-3">
@@ -353,48 +326,48 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         </div>
 
         <div className="d-flex gap-4 mb-4">
-          <FormControl fullWidth>
-            <InputLabel id="campaign-currency-label">
-              {t('currency')}
-            </InputLabel>
-            <Select
-              labelId="campaign-currency-label"
-              id="campaign-currency"
-              value={campaignCurrency}
-              label={t('currency')}
-              data-testid="currencySelect"
-              onChange={(e) =>
+          <FormSelectField
+            name="campaign-currency"
+            label={t('currency')}
+            value={campaignCurrency}
+            data-testid="currencySelect"
+            onChange={(value) =>
+              setFormState({
+                ...formState,
+                campaignCurrency: value,
+              })
+            }
+          >
+            {currencyOptions.map((currency) => (
+              <option key={currency.label} value={currency.value}>
+                {currency.label} ({currencySymbols[currency.value]})
+              </option>
+            ))}
+          </FormSelectField>
+
+          <FormTextField
+            name="fundingGoal"
+            label={t('fundingGoal')}
+            type="number"
+            value={String(campaignGoal)}
+            data-testid="fundingGoalInput"
+            onChange={(value) => {
+              if (value === '') {
                 setFormState({
                   ...formState,
-                  campaignCurrency: e.target.value,
-                })
-              }
-            >
-              {currencyOptions.map((currency) => (
-                <MenuItem key={currency.label} value={currency.value}>
-                  {currency.label} ({currencySymbols[currency.value]})
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl fullWidth>
-            <TextField
-              label={t('fundingGoal')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={String(campaignGoal)}
-              onChange={(e) => {
-                const val = Number(e.target.value);
-                if (val > 0) {
+                  campaignGoal: 0,
+                });
+              } else {
+                const parsed = parseInt(value);
+                if (!isNaN(parsed)) {
                   setFormState({
                     ...formState,
-                    campaignGoal: val,
+                    campaignGoal: Math.max(0, parsed),
                   });
                 }
-              }}
-            />
-          </FormControl>
+              }
+            }}
+          />
         </div>
 
         <Button
@@ -406,7 +379,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
         </Button>
       </form>
-    </BaseModal>
+    </CRUDModalTemplate>
   );
 };
 

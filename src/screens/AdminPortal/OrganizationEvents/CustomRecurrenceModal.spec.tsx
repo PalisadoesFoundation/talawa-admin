@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -42,10 +42,18 @@ vi.mock('shared-components/DatePicker', () => ({
       type="text"
       aria-label={slotProps?.textField?.inputProps?.['aria-label']}
       max={slotProps?.textField?.inputProps?.max}
-      value={value ? value.format('MM/DD/YYYY') : ''}
+      defaultValue={value ? value.format('MM/DD/YYYY') : ''}
       onChange={(e) => {
         const val = e.target.value;
-        onChange?.(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);
+        if (!val) {
+          onChange?.(null);
+          return;
+        }
+        // Only trigger onChange for valid complete dates (MM/DD/YYYY format)
+        const parsed = dayjs(val, 'MM/DD/YYYY', true);
+        if (parsed.isValid()) {
+          onChange?.(parsed);
+        }
       }}
     />
   ),
@@ -102,7 +110,7 @@ describe('CustomRecurrenceModal', () => {
 
     expect(screen.getByText('customRecurrence')).toBeInTheDocument();
     expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('customRecurrenceSubmitBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-primary-btn')).toBeInTheDocument();
   });
 
   test('does not render when closed', () => {
@@ -249,7 +257,7 @@ describe('CustomRecurrenceModal', () => {
       setCustomRecurrenceModalIsOpen: setModalOpen,
     });
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
@@ -319,7 +327,7 @@ describe('CustomRecurrenceModal', () => {
     const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
 
     // Double-click should select all text
-    fireEvent.doubleClick(intervalInput);
+    await userEvent.dblClick(intervalInput);
 
     // This tests the onDoubleClick handler exists
     expect(intervalInput).toBeInTheDocument();
@@ -345,10 +353,11 @@ describe('CustomRecurrenceModal', () => {
 
     const intervalInput = screen.getByTestId('customRecurrenceIntervalInput');
 
-    // Try to press invalid keys
-    fireEvent.keyDown(intervalInput, { key: 'e' });
-    fireEvent.keyDown(intervalInput, { key: 'E' });
-    fireEvent.keyDown(intervalInput, { key: '+' });
+    // Focus the input first, then try to press invalid keys
+    await userEvent.click(intervalInput);
+    await userEvent.keyboard('e');
+    await userEvent.keyboard('E');
+    await userEvent.keyboard('+');
 
     // These should be prevented
     expect(intervalInput).toBeInTheDocument();
@@ -426,7 +435,7 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify the never end condition logic (lines 299-304)
@@ -484,10 +493,11 @@ describe('CustomRecurrenceModal', () => {
     const countInput = screen.getByTestId('customRecurrenceCountInput');
 
     // Test key restrictions (lines 554-562)
-    fireEvent.keyDown(countInput, { key: '-' });
-    fireEvent.keyDown(countInput, { key: '+' });
-    fireEvent.keyDown(countInput, { key: 'e' });
-    fireEvent.keyDown(countInput, { key: 'E' });
+    await userEvent.click(countInput);
+    await userEvent.keyboard('-');
+    await userEvent.keyboard('+');
+    await userEvent.keyboard('e');
+    await userEvent.keyboard('E');
 
     // Verify input still has original value (restricted keys were prevented)
     expect(countInput).toHaveValue(5);
@@ -510,7 +520,7 @@ describe('CustomRecurrenceModal', () => {
     const countInput = screen.getByTestId('customRecurrenceCountInput');
 
     // Test double-click selection (lines 551-553)
-    fireEvent.doubleClick(countInput);
+    await userEvent.dblClick(countInput);
 
     // Verify the input exists and double-click handler doesn't break anything
     expect(countInput).toBeInTheDocument();
@@ -585,7 +595,7 @@ describe('CustomRecurrenceModal', () => {
     const afterOption = screen.getByTestId('after');
     await userEvent.click(afterOption);
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify the endsAfter logic (lines 316-329)
@@ -625,7 +635,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.clear(countInput);
     await userEvent.type(countInput, '0'); // Invalid count
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify early return behavior (lines 319-322)
@@ -660,7 +670,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.clear(countInput);
     await userEvent.type(countInput, '15'); // String input
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify string parsing logic (lines 317-318)
@@ -753,7 +763,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.clear(intervalInput);
     // Don't type anything, leaving it empty
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify invalid interval handling (lines 292-295)
@@ -784,7 +794,7 @@ describe('CustomRecurrenceModal', () => {
     const onOption = screen.getByTestId('on');
     await userEvent.click(onOption);
 
-    const submitButton = screen.getByTestId('customRecurrenceSubmitBtn');
+    const submitButton = screen.getByTestId('modal-primary-btn');
     await userEvent.click(submitButton);
 
     // Verify the "ends on" logic (lines 305-315)
@@ -1134,6 +1144,7 @@ describe('CustomRecurrenceModal', () => {
 
   test('Testing setRecurrenceRuleState callback for DatePicker onChange (lines 533-538)', async () => {
     const mockSetRecurrenceRuleState = vi.fn();
+    const user = userEvent.setup();
 
     renderComponent({
       ...mockProps,
@@ -1150,7 +1161,7 @@ describe('CustomRecurrenceModal', () => {
 
     // First click the 'on' option to enable and show the date picker
     const onOption = screen.getByTestId('on');
-    await userEvent.click(onOption);
+    await user.click(onOption);
 
     mockSetRecurrenceRuleState.mockClear();
 
@@ -1159,18 +1170,11 @@ describe('CustomRecurrenceModal', () => {
     expect(dateInput).toBeInTheDocument();
 
     // Trigger the DatePicker onChange by changing the input value
-    const nextMonth = dayjs.utc().add(1, 'month').format('MM/DD/YYYY');
-    fireEvent.change(dateInput, { target: { value: nextMonth } });
+    const expectedDate = dayjs.utc().add(1, 'month');
+    const nextMonth = expectedDate.format('MM/DD/YYYY');
+    await user.clear(dateInput);
+    await user.type(dateInput, nextMonth);
 
-    // Wait for the state update
-    await waitFor(() => {
-      expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
-        expect.any(Function),
-      );
-    });
-
-    // Test the callback function that was passed to setRecurrenceRuleState
-    const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
     const prevState = {
       ...mockProps.recurrenceRuleState,
       never: false,
@@ -1178,9 +1182,50 @@ describe('CustomRecurrenceModal', () => {
       endDate: undefined,
     };
 
+    // Helper to check if a date matches expected year, month, and day
+    const isCorrectDate = (date: Date): boolean => {
+      return (
+        date instanceof Date &&
+        !isNaN(date.getTime()) &&
+        date.getUTCFullYear() === expectedDate.year() &&
+        date.getUTCMonth() === expectedDate.month() &&
+        date.getUTCDate() === expectedDate.date()
+      );
+    };
+
+    // Wait for the state update with the correct date (matching year, month, day)
+    await waitFor(() => {
+      const calls = mockSetRecurrenceRuleState.mock.calls;
+      // Find a call where the update function produces the correct endDate
+      const hasCorrectDateCall = calls.some((call) => {
+        if (typeof call[0] === 'function') {
+          const result = call[0](prevState);
+          return result.endDate && isCorrectDate(result.endDate);
+        }
+        return false;
+      });
+      expect(hasCorrectDateCall).toBe(true);
+    });
+
+    // Test the callback function that was passed to setRecurrenceRuleState
+    // Find the call that produces the correct date (matching year, month, day)
+    const calls = mockSetRecurrenceRuleState.mock.calls;
+
+    // Find the callback that produces the correct endDate
+    let updateFunction;
+    for (let i = calls.length - 1; i >= 0; i--) {
+      if (typeof calls[i][0] === 'function') {
+        const result = calls[i][0](prevState);
+        if (result.endDate && isCorrectDate(result.endDate)) {
+          updateFunction = calls[i][0];
+          break;
+        }
+      }
+    }
+
+    expect(updateFunction).toBeDefined();
     const newState = updateFunction(prevState);
 
-    const expectedDate = dayjs.utc(nextMonth);
     // Verify the callback produces the correct state transformation (lines 533-538)
     expect(newState.never).toBe(false);
     expect(newState.count).toBeUndefined();

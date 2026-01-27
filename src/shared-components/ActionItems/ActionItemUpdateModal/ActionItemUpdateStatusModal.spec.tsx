@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import {
@@ -6,7 +5,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -20,10 +20,10 @@ dayjs.extend(utc);
 import ItemUpdateStatusModal, {
   type IItemUpdateStatusModalProps,
 } from './ActionItemUpdateStatusModal';
-import { vi, it, describe, afterEach } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { vi, it, describe, afterEach, expect, beforeEach } from 'vitest';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -236,21 +236,19 @@ describe('Testing ItemUpdateStatusModal', () => {
   it('Update Status of Completed ActionItem', async () => {
     renderItemUpdateStatusModal(link1, itemProps[0]);
 
-    // Check if the modal shows up with the right title
-    expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    });
 
-    // Check if we have the text asking if user wants to mark item as pending
     expect(
       screen.getByText(
         /Are you sure you want to mark this action item as pending/i,
       ),
     ).toBeInTheDocument();
 
-    // Find the Yes button and click it
     const yesBtn = screen.getByTestId('yesBtn');
-    fireEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
-    // Wait for the mutation to complete and check if the refetch and hide functions are called
     await waitFor(() => {
       expect(itemProps[0].actionItemsRefetch).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
@@ -260,18 +258,17 @@ describe('Testing ItemUpdateStatusModal', () => {
   it('Update Status of Pending ActionItem', async () => {
     renderItemUpdateStatusModal(link1, itemProps[1]);
 
-    // Check if the modal shows up with the right title
-    expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    });
 
-    // Find the completion notes input and change its value
     const notesInput = screen.getByLabelText(/completion notes/i);
-    fireEvent.change(notesInput, { target: { value: 'Cmp Notes 1' } });
+    await userEvent.clear(notesInput);
+    await userEvent.type(notesInput, 'Cmp Notes 1');
 
-    // Find the Mark Completion button and click it
     const createBtn = screen.getByTestId('createBtn');
-    fireEvent.click(createBtn);
+    await userEvent.click(createBtn);
 
-    // Wait for the mutation to complete and check if the refetch and hide functions are called
     await waitFor(() => {
       expect(itemProps[1].actionItemsRefetch).toHaveBeenCalled();
       expect(itemProps[1].hide).toHaveBeenCalled();
@@ -281,14 +278,13 @@ describe('Testing ItemUpdateStatusModal', () => {
   it('should fail to Update status of Action Item', async () => {
     renderItemUpdateStatusModal(link2, itemProps[2]);
 
-    // Check if the modal shows up with the right title
-    expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+    });
 
-    // Find the Yes button and click it
     const yesBtn = screen.getByTestId('yesBtn');
-    fireEvent.click(yesBtn);
+    await userEvent.click(yesBtn);
 
-    // Wait for the error message to appear
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
         key: 'unknownError',
@@ -300,24 +296,24 @@ describe('Testing ItemUpdateStatusModal', () => {
   it('should show error when trying to mark as completed with only whitespace in post completion notes', async () => {
     renderItemUpdateStatusModal(link1, itemProps[1]);
 
-    // Check if the modal shows up with the right title
-    expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
-
-    // Find the completion notes input and set it to only whitespace
-    const notesInput = screen.getByLabelText(/completion notes/i);
-    fireEvent.change(notesInput, { target: { value: '   \n\t   ' } });
-
-    // Find the Mark Completion button and click it
-    const createBtn = screen.getByTestId('createBtn');
-    fireEvent.click(createBtn);
-
-    // Check that error toast is shown for required post completion notes
-    expect(NotificationToast.error).toHaveBeenCalledWith({
-      key: 'postCompletionNotesRequired',
-      namespace: 'translation',
+    await waitFor(() => {
+      expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
     });
 
-    // Verify that the modal is still open (hide function not called)
+    const notesInput = screen.getByLabelText(/completion notes/i);
+    await userEvent.clear(notesInput);
+    await userEvent.type(notesInput, '   ');
+
+    const createBtn = screen.getByTestId('createBtn');
+    await userEvent.click(createBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'postCompletionNotesRequired',
+        namespace: 'translation',
+      });
+    });
+
     expect(itemProps[1].hide).not.toHaveBeenCalled();
   });
 
@@ -380,41 +376,43 @@ describe('Testing ItemUpdateStatusModal', () => {
     it('should show error when post completion notes are empty', async () => {
       renderItemUpdateStatusModal(link1, recurringProps);
 
-      // Find the completion notes input and set it to empty
+      await waitFor(() => {
+        expect(screen.getByLabelText(/completion notes/i)).toBeInTheDocument();
+      });
+
       const notesInput = screen.getByLabelText(/completion notes/i);
-      fireEvent.change(notesInput, { target: { value: '' } });
+      await userEvent.clear(notesInput);
 
-      // Find the Complete for Instance button and click it
       const completeBtn = screen.getByText(t.completeForInstance);
-      fireEvent.click(completeBtn);
+      await userEvent.click(completeBtn);
 
-      // Check that error toast is shown
-      expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'postCompletionNotesRequired',
-        namespace: 'translation',
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'postCompletionNotesRequired',
+          namespace: 'translation',
+        });
       });
     });
 
     it('should successfully complete action for instance with valid notes', async () => {
       renderItemUpdateStatusModal(link1, recurringProps);
 
-      // Find the completion notes input and set valid notes
-      const notesInput = screen.getByLabelText(/completion notes/i);
-      fireEvent.change(notesInput, {
-        target: { value: 'Valid completion notes' },
+      await waitFor(() => {
+        expect(screen.getByLabelText(/completion notes/i)).toBeInTheDocument();
       });
 
-      // Find the Complete for Instance button and click it
-      const completeBtn = screen.getByText(t.completeForInstance);
-      fireEvent.click(completeBtn);
+      const notesInput = screen.getByLabelText(/completion notes/i);
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Valid completion notes');
 
-      // Wait for success
+      const completeBtn = screen.getByText(t.completeForInstance);
+      await userEvent.click(completeBtn);
+
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
           key: 'isCompleted',
           namespace: 'translation',
         });
-
         expect(recurringProps.actionItemsRefetch).toHaveBeenCalled();
         expect(recurringProps.hide).toHaveBeenCalled();
       });
@@ -423,17 +421,17 @@ describe('Testing ItemUpdateStatusModal', () => {
     it('should handle error when completing action for instance fails', async () => {
       renderItemUpdateStatusModal(link2, recurringProps);
 
-      // Find the completion notes input and set valid notes
-      const notesInput = screen.getByLabelText(/completion notes/i);
-      fireEvent.change(notesInput, {
-        target: { value: 'Valid completion notes' },
+      await waitFor(() => {
+        expect(screen.getByLabelText(/completion notes/i)).toBeInTheDocument();
       });
 
-      // Find the Complete for Instance button and click it
-      const completeBtn = screen.getByText(t.completeForInstance);
-      fireEvent.click(completeBtn);
+      const notesInput = screen.getByLabelText(/completion notes/i);
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Valid completion notes');
 
-      // Wait for error
+      const completeBtn = screen.getByText(t.completeForInstance);
+      await userEvent.click(completeBtn);
+
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
           key: 'unknownError',
@@ -442,16 +440,20 @@ describe('Testing ItemUpdateStatusModal', () => {
       });
     });
 
-    it('renders StatusBadge when action item is completed', () => {
+    it('renders StatusBadge when action item is completed', async () => {
       renderItemUpdateStatusModal(link1, itemProps[0]);
 
-      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+      });
     });
 
-    it('renders StatusBadge when action item is pending', () => {
+    it('renders StatusBadge when action item is pending', async () => {
       renderItemUpdateStatusModal(link1, itemProps[1]);
 
-      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+      });
     });
   });
 
@@ -514,17 +516,18 @@ describe('Testing ItemUpdateStatusModal', () => {
     it('should successfully mark action as pending for instance', async () => {
       renderItemUpdateStatusModal(link1, completedRecurringProps);
 
-      // Find the Pending for Instance button and click it
-      const pendingBtn = screen.getByText(t.pendingForInstance);
-      fireEvent.click(pendingBtn);
+      await waitFor(() => {
+        expect(screen.getByText(t.pendingForInstance)).toBeInTheDocument();
+      });
 
-      // Wait for success
+      const pendingBtn = screen.getByText(t.pendingForInstance);
+      await userEvent.click(pendingBtn);
+
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
           key: 'isPending',
           namespace: 'translation',
         });
-
         expect(completedRecurringProps.actionItemsRefetch).toHaveBeenCalled();
         expect(completedRecurringProps.hide).toHaveBeenCalled();
       });
@@ -533,16 +536,35 @@ describe('Testing ItemUpdateStatusModal', () => {
     it('should handle error when marking action as pending for instance fails', async () => {
       renderItemUpdateStatusModal(link2, completedRecurringProps);
 
-      // Find the Pending for Instance button and click it
-      const pendingBtn = screen.getByText(t.pendingForInstance);
-      fireEvent.click(pendingBtn);
+      await waitFor(() => {
+        expect(screen.getByText(t.pendingForInstance)).toBeInTheDocument();
+      });
 
-      // Wait for error
+      const pendingBtn = screen.getByText(t.pendingForInstance);
+      await userEvent.click(pendingBtn);
+
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
           key: 'unknownError',
           namespace: 'errors',
         });
+      });
+    });
+  });
+
+  describe('Keyboard Interactions', () => {
+    it('should close modal when Escape key is pressed', async () => {
+      const mockHide = vi.fn();
+      renderItemUpdateStatusModal(link1, { ...itemProps[0], hide: mockHide });
+
+      await waitFor(() => {
+        expect(screen.getByText(t.actionItemStatus)).toBeInTheDocument();
+      });
+
+      await userEvent.keyboard('{Escape}');
+
+      await waitFor(() => {
+        expect(mockHide).toHaveBeenCalled();
       });
     });
   });

@@ -8,11 +8,12 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button } from 'shared-components/Button';
 import { Alert } from 'react-bootstrap';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import styles from './LeaveOrganization.module.css';
 
@@ -61,7 +62,11 @@ const LeaveOrganization = (): JSX.Element => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+  const {
+    isOpen: showModal,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
   const [verificationStep, setVerificationStep] = useState(false);
 
   /**
@@ -82,7 +87,7 @@ const LeaveOrganization = (): JSX.Element => {
     ],
     onCompleted: () => {
       // Use a toast notification or in-app message
-      setShowModal(false);
+      closeModal();
       NotificationToast.success(t('leaveOrganization.leftOrganizationSuccess'));
       navigate(`/user/organizations`);
     },
@@ -163,24 +168,25 @@ const LeaveOrganization = (): JSX.Element => {
       <h1 className={styles.title}>{organization?.name}</h1>
       <p className={styles.description}>{organization?.description}</p>
 
-      <Button variant="danger" onClick={() => setShowModal(true)}>
+      <Button variant="danger" onClick={openModal}>
         {t('leaveOrganization.leaveOrganization')}
       </Button>
 
-      <BaseModal
-        show={showModal}
-        dataTestId="leave-organization-modal"
+      <CRUDModalTemplate
+        open={showModal}
+        data-testid="leave-organization-modal"
         title={t('leaveOrganization.confirmLeaveOrganization')}
-        onHide={() => {
-          setShowModal(false);
+        onClose={() => {
+          closeModal();
           setVerificationStep(false);
           setEmail('');
           setError('');
         }}
-        footer={
+        loading={loading}
+        customFooter={
           !verificationStep ? (
             <>
-              <Button variant="secondary" onClick={() => setShowModal(false)}>
+              <Button variant="secondary" onClick={closeModal}>
                 {t('common:cancel')}
               </Button>
               <Button
@@ -199,31 +205,28 @@ const LeaveOrganization = (): JSX.Element => {
                   setEmail('');
                   setError('');
                 }}
+                disabled={loading}
               >
                 {t('common:back')}
               </Button>
-              <LoadingState isLoading={loading} variant="inline">
-                <Button
-                  variant="danger"
-                  disabled={loading}
-                  onClick={handleVerifyAndLeave}
-                  aria-label={t('leaveOrganization.confirmLeaveButton')}
-                >
-                  {t('common:confirm')}
-                </Button>
-              </LoadingState>
+              <Button
+                variant="danger"
+                disabled={loading}
+                onClick={handleVerifyAndLeave}
+                aria-label={t('leaveOrganization.confirmLeaveButton')}
+              >
+                {t('common:confirm')}
+              </Button>
             </>
           )
         }
       >
         {!verificationStep ? (
-          <>
-            <p>
-              {t('leaveOrganization.leaveOrganizationConfirmation', {
-                orgName: organization?.name,
-              })}
-            </p>
-          </>
+          <p>
+            {t('leaveOrganization.leaveOrganizationConfirmation', {
+              orgName: organization?.name,
+            })}
+          </p>
         ) : (
           <FormTextField
             name="confirm-email"
@@ -238,7 +241,7 @@ const LeaveOrganization = (): JSX.Element => {
             onKeyDown={handleKeyPress}
           />
         )}
-      </BaseModal>
+      </CRUDModalTemplate>
     </div>
   );
 };
