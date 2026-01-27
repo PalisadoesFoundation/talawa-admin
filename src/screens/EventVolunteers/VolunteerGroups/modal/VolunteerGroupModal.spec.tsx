@@ -53,6 +53,10 @@ const t = {
 
 let modalProps: InterfaceVolunteerGroupModal[];
 
+beforeAll(() => {
+  vi.useRealTimers();
+});
+
 beforeEach(() => {
   successLink = new StaticMockLink(MOCKS);
   errorLink = new StaticMockLink(MOCKS_ERROR);
@@ -149,6 +153,10 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
+afterAll(() => {
+  vi.useFakeTimers();
+});
+
 const renderGroupModal = (
   link: ApolloLink,
   props: InterfaceVolunteerGroupModal,
@@ -173,6 +181,7 @@ describe('Testing VolunteerGroupModal', () => {
     const user = userEvent.setup();
     renderGroupModal(successLink, modalProps[0]);
     expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+    await wait();
 
     const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
@@ -184,7 +193,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(descInput).toBeInTheDocument();
     await user.clear(descInput);
     await user.type(descInput, 'desc');
-    expect(descInput).toHaveValue('desc');
+    await waitFor(() => {
+      expect(descInput).toHaveValue('desc');
+    });
 
     const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
@@ -329,6 +340,7 @@ describe('Testing VolunteerGroupModal', () => {
     const user = userEvent.setup();
     renderGroupModal(errorLink, modalProps[0]);
     expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+    await wait();
 
     const nameInput = await screen.findByTestId('groupNameInput');
     await user.clear(nameInput);
@@ -388,6 +400,7 @@ describe('Testing VolunteerGroupModal', () => {
     const user = userEvent.setup();
     renderGroupModal(successLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+    await wait();
 
     const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
@@ -399,7 +412,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(descInput).toBeInTheDocument();
     await user.clear(descInput);
     await user.type(descInput, 'desc new');
-    expect(descInput).toHaveValue('desc new');
+    await waitFor(() => {
+      expect(descInput).toHaveValue('desc new');
+    });
 
     const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
@@ -424,6 +439,7 @@ describe('Testing VolunteerGroupModal', () => {
     const user = userEvent.setup();
     renderGroupModal(errorLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+    await wait();
 
     const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
@@ -435,7 +451,9 @@ describe('Testing VolunteerGroupModal', () => {
     expect(descInput).toBeInTheDocument();
     await user.clear(descInput);
     await user.type(descInput, 'desc new');
-    expect(descInput).toHaveValue('desc new');
+    await waitFor(() => {
+      expect(descInput).toHaveValue('desc new');
+    });
 
     const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
@@ -517,6 +535,7 @@ describe('Testing VolunteerGroupModal', () => {
       const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, recurringEventProps);
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+      await wait();
 
       // Should show radio buttons for recurring events
       const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
@@ -544,10 +563,7 @@ describe('Testing VolunteerGroupModal', () => {
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
       await user.click(memberInputField);
-
-      await waitFor(() => {
-        expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
-      });
+      await user.type(memberInputField, 'Harve');
 
       const memberOption = await screen.findByRole('option', {
         name: 'Harve Lance',
@@ -557,10 +573,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
       await user.click(volunteerInputField);
-
-      await waitFor(() => {
-        expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
-      });
+      await user.type(volunteerInputField, 'John');
 
       const volunteerOption = await screen.findByRole('option', {
         name: 'John Doe',
@@ -583,6 +596,7 @@ describe('Testing VolunteerGroupModal', () => {
       const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, recurringEventProps);
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+      await wait();
 
       // Select "This Event Only" radio button
       const instanceRadio = screen.getByRole('radio', {
@@ -607,10 +621,7 @@ describe('Testing VolunteerGroupModal', () => {
       const memberSelect = await screen.findByTestId('leaderSelect');
       const memberInputField = within(memberSelect).getByRole('combobox');
       await user.click(memberInputField);
-
-      await waitFor(() => {
-        expect(memberInputField).toHaveAttribute('aria-expanded', 'true');
-      });
+      await user.type(memberInputField, 'Harve');
 
       const memberOption = await screen.findByRole('option', {
         name: 'Harve Lance',
@@ -620,10 +631,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInputField = within(volunteerSelect).getByRole('combobox');
       await user.click(volunteerInputField);
-
-      await waitFor(() => {
-        expect(volunteerInputField).toHaveAttribute('aria-expanded', 'true');
-      });
+      await user.type(volunteerInputField, 'John');
 
       const volunteerOption = await screen.findByRole('option', {
         name: 'John Doe',
@@ -693,6 +701,7 @@ describe('Testing VolunteerGroupModal', () => {
       await waitFor(() => {
         expect(screen.getByText(t.createGroup)).toBeInTheDocument();
       });
+      await wait();
 
       const nameInput = screen.getByTestId('groupNameInput');
       await user.clear(nameInput);
