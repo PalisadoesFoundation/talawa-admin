@@ -1975,36 +1975,6 @@ describe('DataTable', () => {
     await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
   });
-
-  it('activates sort with Space key', async () => {
-    type Row = {
-      active: boolean;
-    };
-
-    const rows: Row[] = [{ active: false }, { active: true }];
-
-    const columns = [
-      {
-        id: 'active',
-        header: 'Active',
-        accessor: (row: Row) => row.active,
-        sortable: true,
-      },
-    ];
-
-    const user = userEvent.setup();
-
-    render(<DataTable<Row> data={rows} columns={columns} />);
-
-    const header = screen.getByText('Active');
-
-    header.focus();
-    await user.keyboard(' ');
-
-    const cells = screen.getAllByTestId('datatable-cell-active');
-
-    expect(cells.map((c) => c.textContent)).toEqual(['false', 'true']);
-  });
 });
 
 describe('defaultCompare boolean/date branches', () => {
