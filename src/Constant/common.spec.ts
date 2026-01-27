@@ -47,10 +47,10 @@ describe('common constants and helpers', () => {
 
   describe('TEST_ID_PEOPLE_IMAGE', () => {
     it('should format people image test id with valid id', () => {
-      expect(TEST_ID_PEOPLE_IMAGE('123')).toBe('people-123-image');
+      expect(TEST_ID_PEOPLE_IMAGE('123')).toBe('people-image-123');
     });
     it('should format people image test id with empty string', () => {
-      expect(TEST_ID_PEOPLE_IMAGE('')).toBe('people--image');
+      expect(TEST_ID_PEOPLE_IMAGE('')).toBe('people-image-');
     });
   });
 
