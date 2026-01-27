@@ -6,7 +6,7 @@
 
 > **useLocalStorage**(`prefix`): `InterfaceStorageHelper`
 
-Defined in: [src/utils/useLocalstorage.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L81)
+Defined in: [src/utils/useLocalstorage.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L87)
 
 Factory function that returns localStorage helper methods with a common prefix.
 
