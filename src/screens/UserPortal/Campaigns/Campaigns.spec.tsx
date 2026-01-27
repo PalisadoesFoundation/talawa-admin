@@ -98,12 +98,9 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
