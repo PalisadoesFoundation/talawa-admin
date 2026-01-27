@@ -271,18 +271,6 @@ export interface InterfaceDataTableSkeletonProps<T> {
   skeletonRows: number;
   /** CSS class names for the table */
   tableClassNames?: string;
-  /** Number of columns to display in the skeleton */
-  columnsCount?: number;
-  /** Number of rows to display in the skeleton */
-  rowsCount?: number;
-  /** Whether to hide the header row in the skeleton */
-  noHeader?: boolean;
-  /** Bootstrap size variant: 'sm' for small or 'lg' for large */
-  size?: 'sm' | 'lg';
-  /** Whether to apply striped styling to skeleton rows */
-  striped?: boolean;
-  /** CSS class to apply to the skeleton container */
-  className?: string;
 }
 
 /**
