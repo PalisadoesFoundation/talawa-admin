@@ -752,7 +752,7 @@
     "agendaCategoryDeleted": "Categoría de la agenda eliminada exitosamente",
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
     "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?",
-    "errorLoadingOrganizationData": "Ocurrió un error al cargar los datos de la organización"
+    "errorLoadingAgendaCategories": "Ocurrió un error al cargar las categorías de la agenda"
   },
   "agendaItems": {
     "agendaItemDetails": "Detalles del punto del orden del día",

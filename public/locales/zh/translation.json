@@ -757,7 +757,7 @@
     "agendaCategoryDeleted": "议程类别删除成功",
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？",
-    "errorLoadingOrganizationData": "加载组织数据时发生错误"
+    "errorLoadingAgendaCategories": "加载议程类别时发生错误"
   },
   "agendaItems": {
     "agendaItemDetails": "议程项目详细信息",
