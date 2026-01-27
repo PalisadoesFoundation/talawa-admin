@@ -588,8 +588,7 @@ describe('EventRegistrantsModal', () => {
     // Wait for the button to appear
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Use click instead of keyboard Enter because focus inside popper is unstable in test env
-    await user.click(addOnspotLink);
+    await user.type(addOnspotLink, '{Enter}');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
@@ -606,16 +605,14 @@ describe('EventRegistrantsModal', () => {
     );
 
     await user.type(input, 'NonexistentUser');
-
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Use click instead of keyboard Space because focus inside popper is unstable in test env
-    await user.click(addOnspotLink);
+    await user.type(addOnspotLink, ' ');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
 
-  test('dont open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
+  test('doesnt open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -629,19 +626,18 @@ describe('EventRegistrantsModal', () => {
     await user.type(input, 'NonexistentUser');
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Focus on link first
+    // Focus on element first
     addOnspotLink.focus();
 
     // Keys that should NOT open the modal
     const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
 
-    for (const key in ignoredKeys) {
-      await user.keyboard(key);
-
-      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
+    for (const key of ignoredKeys) {
+      const keyPress = key.length === 1 ? key : `{${key}}`;
+      await user.keyboard(keyPress);
 
       // Ensure link is still focused for next key press
-      addOnspotLink.focus();
+      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
     }
   });
 });
