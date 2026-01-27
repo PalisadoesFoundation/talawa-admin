@@ -6,7 +6,7 @@
 
 > **TEST\_ID\_PEOPLE\_NAME**(`id`): `string`
 
-Defined in: [src/Constant/common.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L129)
+Defined in: [src/Constant/common.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L131)
 
 Generates the data-testid for the people name.
 
