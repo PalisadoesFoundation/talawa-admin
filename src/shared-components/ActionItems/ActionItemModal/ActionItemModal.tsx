@@ -533,6 +533,8 @@ const ItemModal: FC<IItemModalProps> = ({
                   ref={ref}
                   className={`${className ?? ''} ${styles.autocompleteWrapper}`}
                   onMouseDown={onMouseDown}
+                  role="presentation"
+                  tabIndex={-1}
                 >
                   {startAdornment}
                   <input
@@ -602,6 +604,8 @@ const ItemModal: FC<IItemModalProps> = ({
                         ref={ref}
                         className={`${className ?? ''} ${styles.autocompleteWrapper}`}
                         onMouseDown={onMouseDown}
+                        role="presentation"
+                        tabIndex={-1}
                       >
                         {startAdornment}
                         <input
@@ -659,6 +663,8 @@ const ItemModal: FC<IItemModalProps> = ({
                         ref={ref}
                         className={`${className ?? ''} ${styles.autocompleteWrapper}`}
                         onMouseDown={onMouseDown}
+                        role="presentation"
+                        tabIndex={-1}
                       >
                         {startAdornment}
                         <input
