@@ -220,6 +220,7 @@ module.exports = {
                                     }
 
                                     // Build properly indented afterEach block
+                                    // i18n-ignore-next-line: code template, not user-facing text
                                     const afterEachCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});\n\n`;
 
                                     return fixer.insertTextBeforeRange([insertPosition, insertPosition], afterEachCode);
@@ -266,6 +267,7 @@ module.exports = {
                                         }
                                     }
 
+                                    // i18n-ignore-next-line: code template, not user-facing text
                                     const cleanupCode = `\n${stmtIndent}vi.clearAllMocks();`;
                                     return fixer.insertTextBeforeRange([closingBrace, closingBrace], cleanupCode);
                                 } else {
