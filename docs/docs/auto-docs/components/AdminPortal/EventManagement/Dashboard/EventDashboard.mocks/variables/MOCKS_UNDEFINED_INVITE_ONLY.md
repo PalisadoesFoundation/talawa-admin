@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCKS\_WITH\_TIME
+# Variable: MOCKS\_UNDEFINED\_INVITE\_ONLY
 
-> `const` **MOCKS\_WITH\_TIME**: `object`[]
+> `const` **MOCKS\_UNDEFINED\_INVITE\_ONLY**: `object`[]
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L34)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L204)
 
 ## Type Declaration
 
@@ -80,7 +80,7 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 #### result.data.event.isInviteOnly
 
-> **isInviteOnly**: `boolean` = `false`
+> **isInviteOnly**: `any` = `null`
 
 #### result.data.event.isPublic
 
