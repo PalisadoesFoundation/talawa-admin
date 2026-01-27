@@ -109,7 +109,11 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   );
 };
 
-const mockEventListCardModals = vi.fn(() => (
+const { mockEventListCardModals } = vi.hoisted(() => ({
+  mockEventListCardModals: vi.fn(),
+}));
+
+mockEventListCardModals.mockImplementation(() => (
   <div data-testid="event-list-card-modals" />
 ));
 
@@ -457,14 +461,13 @@ describe('Testing Event Dashboard Screen', () => {
 
     expect(getByTestId('event-details')).toBeInTheDocument();
     expect(mockEventListCardModals).toHaveBeenCalled();
-    // Verify that the component was called with isInviteOnly defaulted to false inside eventListCardProps
-    expect(mockEventListCardModals).toHaveBeenCalledWith(
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props).toEqual(
       expect.objectContaining({
         eventListCardProps: expect.objectContaining({
           isInviteOnly: false,
         }),
       }),
-      expect.anything(),
     );
   });
 
