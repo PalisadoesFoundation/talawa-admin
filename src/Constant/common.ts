@@ -121,7 +121,7 @@ export const getDummyDateTime = (time: string): string =>
  * @returns The formatted data-testid.
  */
 export const TEST_ID_PEOPLE_IMAGE = (id: string): string =>
-  `people-${id}-image`;
+  `people-image-${id}`;
 
 /**
  * Generates the data-testid for the people name.
