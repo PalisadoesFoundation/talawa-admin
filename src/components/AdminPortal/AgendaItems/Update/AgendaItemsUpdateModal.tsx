@@ -55,6 +55,7 @@ const ALLOWED_TYPES = [
   'video/quicktime',
 ];
 
+// translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
