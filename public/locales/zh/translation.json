@@ -2322,17 +2322,7 @@
     "uploading": "上传中...",
     "screenshotCounter": "{{current}} / {{total}}",
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
-    "errorInstalling": "加载插件详情失败",
-    "loadingPlugin": "正在加载插件...",
-    "pluginIdMissing": "缺少插件 ID",
-    "invalidPluginRoute": "该路由没有有效的插件 ID",
-    "pluginNotRegistered": "插件未注册",
-    "addPluginToRegistry": "请将此插件添加到插件注册表中：",
-    "noComponentsFound": "未找到组件",
-    "componentNotFound": "未找到组件",
-    "availableComponents": "可用组件：",
-    "pluginLoadFailed": "组件加载失败",
-    "pluginError": "插件错误"
+    "errorInstalling": "加载插件详情失败"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "插件未找到或已禁用",

@@ -984,6 +984,7 @@ describe('Create Post Modal', () => {
 
     // Open modal
     const createButton = screen.getByTestId('createPostModalBtn');
+    expect(createButton).toHaveClass('styles.createButton');
     await user.click(createButton);
 
     await waitFor(() => {

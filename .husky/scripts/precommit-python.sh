@@ -59,7 +59,7 @@ echo "Initializing Python virtual environment..."
 VENV_BIN=$(./.husky/scripts/venv.sh) || exit 1
 
 UNAME_OUT=$(uname -s 2>/dev/null || echo "")
-if echo "UNAME_OUT" | grep -qiE 'mingw|msys|cygwin'; then
+if echo "$UNAME_OUT" | grep -qiE 'mingw|msys|cygwin'; then
   set -- cmd.exe //c "$VENV_BIN"
 else
   set -- "$VENV_BIN"

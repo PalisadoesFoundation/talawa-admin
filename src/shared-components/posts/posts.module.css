@@ -1,8 +1,8 @@
 .mainpagerightOrgPost > hr {
   margin-top: var(--space-6);
   width: 100%;
-  margin-left: var(--space-15);
-  margin-right: var(--space-15);
+  margin-left: calc(var(--space-15) * -1);
+  margin-right: calc(var(--space-15) * -1);
   margin-bottom: var(--space-6);
 }
 
@@ -15,11 +15,10 @@
 .createButton {
   background-color: var(--createButton-bg) !important;
   color: var(--createButton-color) !important;
-  border: var(--space-0-5) var(--createButton-border) !important;
-  margin: var(--space-1-5) var(--space-3-5);
+  border: var(--space-0-5) solid var(--createButton-border) !important;
+  margin: var(--space-1-5) var(--space-3-5) var(--space-3);
   width: var(--space-16);
   height: var(--space-10);
-  margin-bottom: var(--space-3);
 }
 
 .list_box {

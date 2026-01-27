@@ -2305,17 +2305,7 @@
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
-    "errorInstalling": "Error al cargar los detalles del plugin",
-    "loadingPlugin": "Cargando complemento...",
-    "pluginIdMissing": "Falta el ID del complemento",
-    "invalidPluginRoute": "Esta ruta no tiene un ID de complemento válido",
-    "pluginNotRegistered": "Complemento no registrado",
-    "addPluginToRegistry": "Agregue este complemento al registro de complementos en",
-    "noComponentsFound": "No se encontraron componentes",
-    "componentNotFound": "Componente no encontrado",
-    "availableComponents": "Componentes disponibles:",
-    "pluginLoadFailed": "Error al cargar el componente",
-    "pluginError": "Error del complemento"
+    "errorInstalling": "Error al cargar los detalles del plugin"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",

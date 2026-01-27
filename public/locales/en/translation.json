@@ -2305,17 +2305,7 @@
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details",
-    "loadingPlugin": "Loading plugin...",
-    "pluginIdMissing": "Plugin ID Missing",
-    "invalidPluginRoute": "This route does not have a valid plugin ID",
-    "pluginNotRegistered": "Plugin Not Registered",
-    "addPluginToRegistry": "Please add this plugin to the plugin registry in",
-    "noComponentsFound": "No Components Found",
-    "componentNotFound": "Component Not Found",
-    "availableComponents": "Available components:",
-    "pluginError": "Plugin Error",
-    "pluginLoadFailed": "Failed to load component"
+    "errorInstalling": "Failed to load plugin details"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

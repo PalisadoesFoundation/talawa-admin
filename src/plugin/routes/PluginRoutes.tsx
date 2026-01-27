@@ -68,7 +68,7 @@ const PluginRoutes: React.FC<InterfacePluginRoutesProps> = ({
                 <p className={styles.errorText}>
                   {t('plugins.plugin')}: <strong>{route.pluginId}</strong>
                 </p>
-                <p className={styles.errorDescription}>{error.message}</p>
+                <p className={styles.errorDetail}>{error.message}</p>
               </div>
             ),
           };

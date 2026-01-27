@@ -3,16 +3,21 @@
  */
 import React from 'react';
 import Button from 'shared-components/Button';
-import type { IPluginMeta } from 'plugin';
+import type { InterfacePluginCardProps } from 'types/AdminPortal/PluginCard/interface';
 import { useTranslation } from 'react-i18next';
 import styles from './PluginCard.module.css';
 
-interface IPluginCardProps {
-  plugin: IPluginMeta;
-  onManage: (plugin: IPluginMeta) => void;
-}
-
-export default function PluginCard({ plugin, onManage }: IPluginCardProps) {
+/**
+ * Individual plugin card component for the plugin store.
+ * Displays plugin icon, name, description, author, and a manage button.
+ *
+ * `@param` props - Component props from InterfacePluginCardProps
+ * `@returns` JSX.Element
+ */
+export default function PluginCard({
+  plugin,
+  onManage,
+}: InterfacePluginCardProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
 
   return (
