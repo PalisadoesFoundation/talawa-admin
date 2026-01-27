@@ -2,33 +2,12 @@ import React from 'react';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button/Button';
-import type { ChangeEvent } from 'react';
 
 import styles from 'style/app-fixed.module.css';
-
-interface InterfaceFormStateType {
-  id: string;
-  name: string;
-  description: string;
-  creator: {
-    id: string;
-    name: string;
-  };
-}
-
-interface InterfaceAgendaCategoryUpdateModalProps {
-  agendaFolderUpdateModalIsOpen: boolean;
-  hideUpdateModal: () => void;
-  folderFormState: InterfaceFormStateType;
-  setFolderFormState: (
-    state: React.SetStateAction<InterfaceFormStateType>,
-  ) => void;
-  updateAgendaFolderHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
-}
+import { InterfaceAgendaFolderUpdateModalProps } from 'types/Agenda/interface';
 
 const AgendaFolderUpdateModal: React.FC<
-  InterfaceAgendaCategoryUpdateModalProps
+  InterfaceAgendaFolderUpdateModalProps
 > = ({
   agendaFolderUpdateModalIsOpen,
   hideUpdateModal,

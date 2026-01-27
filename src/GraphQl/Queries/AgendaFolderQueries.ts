@@ -1,21 +1,21 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL query to retrieve agenda category by id.
+ * GraphQL query to retrieve agenda folders by event ID.
  *
- * @param agendaCategoryId - The ID of the category which is being retrieved.
- * @returns Agenda category associated with the id.
+ * @param eventId - The ID of the event for which folders are retrieved.
+ * @returns List of agenda folders with their items for the specified event.
  */
 
 export const AGENDA_FOLDER_LIST = gql`
-  query AgendaFolderByEventId($eventId: ID!) {
+  query AgendaFolderByEventId($eventId: ID!, $itemsFirst: Int = 50) {
     agendaFoldersByEventId(eventId: $eventId) {
       id
       name
       description
       sequence
       isDefaultFolder
-      items(first: 10) {
+      items(first: $itemsFirst) {
         edges {
           node {
             id

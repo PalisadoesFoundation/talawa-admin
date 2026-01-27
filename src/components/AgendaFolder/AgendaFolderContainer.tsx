@@ -47,13 +47,13 @@ import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaFolderInfo,
-} from 'utils/interfaces';
+} from 'types/Agenda/interface';
 import styles from 'style/app-fixed.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
-import { DELETE_AGENDA_ITEM_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
+import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
 import AgendaFolderDeleteModal from 'components/AgendaFolder/Delete/AgendaFolderDeleteModal';
 import AgendaFolderUpdateModal from './Update/AgendaFolderUpdateModal';
 import Button from 'shared-components/Button';
@@ -232,7 +232,7 @@ function AgendaFolderContainer({
     UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
   );
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
-  const [deleteAgendaFolder] = useMutation(DELETE_AGENDA_ITEM_FOLDER_MUTATION);
+  const [deleteAgendaFolder] = useMutation(DELETE_AGENDA_FOLDER_MUTATION);
 
   /**
    * Handles updating an agenda item.
@@ -262,7 +262,7 @@ function AgendaFolderContainer({
         },
       });
       refetchAgendaFolder();
-      hideUpdateModal();
+      hideUpdateItemModal();
       NotificationToast.success(t('agendaItemUpdated') as string);
     } catch (error) {
       if (error instanceof Error) {
@@ -316,7 +316,9 @@ function AgendaFolderContainer({
       NotificationToast.success(t('agendaFolderUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        NotificationToast.error(`Agenda folder Update Failed ${error.message}`);
+        NotificationToast.error(
+          t('agendaFolderUpdateFailed', { error: error.message }) as string,
+        );
       }
     }
   };
@@ -330,7 +332,7 @@ function AgendaFolderContainer({
         variables: { input: { id: agendaFolderId } },
       });
       refetchAgendaFolder();
-      toggleDeleteItemModal();
+      toggleDeleteModal();
       NotificationToast.success(t('agendaFolderDeleted') as string);
     } catch (error) {
       if (error instanceof Error) {
@@ -481,7 +483,7 @@ function AgendaFolderContainer({
           return Promise.resolve();
         }),
       );
-      NotificationToast.success(`Item sequence updated successfully`);
+      NotificationToast.success(t('itemSequenceUpdateSuccessMsg'));
       refetchAgendaFolder();
     } catch (error) {
       if (error instanceof Error) {
@@ -523,7 +525,7 @@ function AgendaFolderContainer({
           }
         }),
       );
-      NotificationToast.success(`Section sequence updated successfully`);
+      NotificationToast.success(t('sectionSequenceUpdateSuccessMsg'));
       // After updating all items, refetch data and notify success
       refetchAgendaFolder();
     } catch (error) {
@@ -598,6 +600,7 @@ function AgendaFolderContainer({
                                   onClick={() =>
                                     handleEditFolderClick(agendaFolder)
                                   }
+                                  aria-label={t('editFolder')}
                                 >
                                   <i className="fas fa-edit fa-sm" />
                                 </Button>
@@ -611,6 +614,7 @@ function AgendaFolderContainer({
                                   className={styles.icon}
                                   data-testid="previewAgendaItemModalDeleteBtn"
                                   variant="danger"
+                                  aria-label={t('deleteFolder')}
                                 >
                                   <i className="fas fa-trash"></i>
                                 </Button>
@@ -793,6 +797,9 @@ function AgendaFolderContainer({
                                                           agendaItem,
                                                         )
                                                       }
+                                                      aria-label={t(
+                                                        'itemPreview',
+                                                      )}
                                                     >
                                                       <i className="fas fa-info fa-sm" />
                                                     </Button>
@@ -805,6 +812,7 @@ function AgendaFolderContainer({
                                                           agendaItem,
                                                         )
                                                       }
+                                                      aria-label={t('editItem')}
                                                     >
                                                       <i className="fas fa-edit fa-sm" />
                                                     </Button>
@@ -815,6 +823,9 @@ function AgendaFolderContainer({
                                                           agendaItem,
                                                         );
                                                       }}
+                                                      aria-label={t(
+                                                        'deleteItem',
+                                                      )}
                                                       className={styles.icon}
                                                       data-testid="previewAgendaItemModalDeleteBtn"
                                                       variant="danger"
