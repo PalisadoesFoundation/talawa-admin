@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within, act } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -915,6 +915,200 @@ describe('ActionItemModal', () => {
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
       });
+    });
+  });
+
+  describe('Autocomplete isOptionEqualToValue coverage', () => {
+    it('should handle category autocomplete selection (covers line 510)', async () => {
+      renderModal();
+      await screen.findByTestId('actionItemModal');
+
+      // Select category - triggers isOptionEqualToValue when value is set
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      const categoryOption = await screen.findByText('Category 1');
+      await userEvent.click(categoryOption);
+
+      // Verify selection
+      await waitFor(
+        () => {
+          expect(categoryInput).toHaveValue('Category 1');
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    it('should handle volunteer autocomplete selection (covers line 573)', async () => {
+      renderModal();
+      await screen.findByTestId('actionItemModal');
+
+      // Select volunteer - triggers isOptionEqualToValue
+      const volunteerSelect = screen.getByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole(
+        'combobox',
+      ) as HTMLInputElement;
+      volunteerInput.focus();
+      await userEvent.click(volunteerInput);
+      await userEvent.type(volunteerInput, 'John');
+      const volunteerOption = await screen.findByText('John Doe', undefined, {
+        timeout: 3000,
+      });
+      await userEvent.click(volunteerOption);
+
+      // Verify selection
+      await waitFor(
+        () => {
+          expect(volunteerInput.value).toBe('John Doe');
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    it('should handle volunteer group autocomplete (covers line 634)', async () => {
+      const user = userEvent.setup();
+      await act(async () => {
+        renderModal();
+      });
+      await screen.findByTestId('actionItemModal');
+
+      // Switch to volunteer group
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await user.click(volunteerGroupChip);
+
+      // Wait for group select to appear after chip click
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
+      );
+      const groupInput = within(groupSelect).getByRole(
+        'combobox',
+      ) as HTMLInputElement;
+      groupInput.focus();
+      await user.click(groupInput);
+      const groupOption = await screen.findByText('Test Group 1');
+      await user.click(groupOption);
+
+      // Verify selection
+      await waitFor(
+        () => {
+          expect(groupInput.value).toBe('Test Group 1');
+        },
+        { timeout: 3000 },
+      );
+    });
+  });
+
+  describe('DatePicker and Form Field onChange coverage', () => {
+    it('should render assignment date picker in create mode (covers lines 692-694)', async () => {
+      renderModal();
+      await screen.findByTestId('actionItemModal');
+
+      // In create mode, the date picker should not be disabled
+      const dateInput = await screen.findByTestId('assignmentDate');
+      expect(dateInput).not.toBeDisabled();
+
+      // Verify it has today's date as default value (format DD/MM/YYYY)
+      expect(dateInput).toHaveValue(dayjs().format('DD/MM/YYYY'));
+    });
+
+    it('should update preCompletionNotes field (covers line 705)', async () => {
+      const user = userEvent.setup();
+      await act(async () => {
+        renderModal();
+      });
+      await screen.findByTestId('actionItemModal');
+
+      const notesInput = (await screen.findByLabelText(
+        'preCompletionNotes',
+      )) as HTMLInputElement;
+      notesInput.focus();
+      await user.type(notesInput, 'T');
+      notesInput.focus();
+      await user.type(notesInput, 'e');
+      notesInput.focus();
+      await user.type(notesInput, 's');
+      notesInput.focus();
+      await user.type(notesInput, 't');
+
+      await waitFor(() => {
+        expect(notesInput.value).toBe('Test');
+      });
+    });
+
+    it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
+      const user = userEvent.setup();
+      await act(async () => {
+        renderModal({ editMode: true, actionItem: mockCompletedActionItem });
+      });
+      await screen.findByTestId('actionItemModal');
+
+      const postNotesInput = (await screen.findByLabelText(
+        'postCompletionNotes',
+      )) as HTMLInputElement;
+      expect(postNotesInput.value).toBe('Completed notes');
+
+      // Clear and type new value to trigger onChange
+      postNotesInput.focus();
+      await user.clear(postNotesInput);
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'N');
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'e');
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'w');
+
+      await waitFor(() => {
+        expect(postNotesInput.value).toBe('New');
+      });
+    });
+
+    it('should disable date picker in edit mode', async () => {
+      renderModal({
+        editMode: true,
+        actionItem: { ...mockActionItem, isTemplate: false },
+      });
+      await screen.findByTestId('actionItemModal');
+
+      const dateInput = await screen.findByTestId('assignmentDate');
+      expect(dateInput).toBeDisabled();
+    });
+  });
+
+  describe('Autocomplete wrapper accessibility (covers lines 607-609)', () => {
+    it('should render volunteer select with accessible wrapper', async () => {
+      renderModal();
+      await screen.findByTestId('actionItemModal');
+
+      // The wrapper div should exist and be accessible
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      expect(volunteerSelect).toBeInTheDocument();
+
+      // Verify the combobox is accessible
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+      expect(volunteerInput).toBeInTheDocument();
+    });
+
+    it('should render volunteer group select with accessible wrapper', async () => {
+      renderModal();
+      await screen.findByTestId('actionItemModal');
+
+      // Switch to volunteer group
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await userEvent.click(volunteerGroupChip);
+
+      const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+      expect(groupSelect).toBeInTheDocument();
+
+      // Verify the combobox is accessible
+      const groupInput = within(groupSelect).getByRole('combobox');
+      expect(groupInput).toBeInTheDocument();
     });
   });
 });
