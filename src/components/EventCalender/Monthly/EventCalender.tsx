@@ -585,9 +585,8 @@ const Calendar: React.FC<
 
               {/* Info Cards: Holidays and Events Legend */}
               <div className={styles.calendar_infocards}>
-                <div
+                <section
                   className={styles.holidays_card}
-                  role="region"
                   aria-label={t('holidays')}
                 >
                   <h3 className={styles.card_title}>{t('holidays')}</h3>
@@ -604,11 +603,10 @@ const Calendar: React.FC<
                       </li>
                     ))}
                   </ul>
-                </div>
+                </section>
 
-                <div
+                <section
                   className={styles.events_card}
-                  role="region"
                   aria-label={t('events')}
                 >
                   <h3 className={styles.card_title}>{t('events')}</h3>
@@ -626,7 +624,7 @@ const Calendar: React.FC<
                       </span>
                     </div>
                   </div>
-                </div>
+                </section>
               </div>
             </>
           ) : viewType === ViewType.YEAR ? (
