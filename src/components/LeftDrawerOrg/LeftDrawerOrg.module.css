@@ -28,3 +28,9 @@
   border: none;
   overflow: hidden;
 }
+
+.switchPortalWrapper :global(a):focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
