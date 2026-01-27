@@ -8,7 +8,7 @@
   "notFoundMsg": "उफ़! ",
   "errorOccurredCouldntCreate": "एक त्रुटि हुई। {{entity}} नहीं बना सके",
   "errorLoading": "{{entity}} डेटा लोड करते समय त्रुटि हुई",
-  "invalidPhoneNumber": "DÃ¡ithÃ­ FÃ­ona",
+  "invalidPhoneNumber": "कृपया एक मान्य फोन-नंबर दर्ज करे",
   "invalidEducationGrade": "कृपया एक शिक्षा ग्रेड चुनें",
   "invalidEmploymentStatus": "कृपया वैध रोजगार स्थिति चुनें",
   "invalidMaritalStatus": "कृपया वैध वैवाहिक स्थिति चुनें",

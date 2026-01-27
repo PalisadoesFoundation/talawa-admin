@@ -85,17 +85,17 @@ def compare_translations(
     # Extract and match interpolation vars (ex: {{name}})
     def _extract_interpolation_vars(text):
         """Extract interpolation variables like {{variable}} from text."""
-        return set(re.findall(r'\{\{(\w+)\}\}', text))
+        return set(re.findall(r"\{\{(\w+)\}\}", text))
 
     def _check_interpolation_match(default_val, other_val, key):
         """Check if interpolation variables match between translations."""
         default_vars = _extract_interpolation_vars(default_val)
         other_vars = _extract_interpolation_vars(other_val)
-        
+
         if default_vars != other_vars:
             missing_vars = default_vars - other_vars
             extra_vars = other_vars - default_vars
-            
+
             if missing_vars:
                 errors.append(
                     f"Missing interpolation variables in key '{key}' in '{other_file}': "
@@ -109,7 +109,7 @@ def compare_translations(
 
     # Get all unique keys from both translations
     all_keys = set(default_translation.keys()) | set(other_translation.keys())
-    
+
     for key in all_keys:
         # Check if key is missing in other_translation
         if key not in other_translation:
@@ -118,7 +118,7 @@ Missing Key: '{key}' - This key from '{default_file}' \
 is missing in '{other_file}'."""
             errors.append(error_msg)
             continue
-        
+
         # Check for missing keys in default_translation
         if key not in default_translation:
             error_msg = f"""\
@@ -126,25 +126,31 @@ Error Key: '{key}' - This key in '{other_file}' \
 does not match any key in '{default_file}'."""
             errors.append(error_msg)
             continue
-        
+
         # Check for empty/null values
-        if default_translation[key] == '' or default_translation[key] is None:
+        if default_translation[key] == "" or default_translation[key] is None:
             error_msg = f"""\
 Empty value: '{key}' - This key in '{default_file}' \
 has incorrect value."""
             errors.append(error_msg)
 
-        if other_translation[key] == '' or other_translation[key] is None:
+        if other_translation[key] == "" or other_translation[key] is None:
             error_msg = f"""\
 Empty value: '{key}' - This key in '{other_file}' \
 has incorrect value."""
             errors.append(error_msg)
-        
+
         # Check interpolation match
-        if (isinstance(default_translation[key], str) and default_translation[key] and
-            isinstance(other_translation[key], str) and other_translation[key]):
-            _check_interpolation_match(default_translation[key], other_translation[key], key)
-    
+        if (
+            isinstance(default_translation[key], str)
+            and default_translation[key]
+            and isinstance(other_translation[key], str)
+            and other_translation[key]
+        ):
+            _check_interpolation_match(
+                default_translation[key], other_translation[key], key
+            )
+
     return errors
 
 
