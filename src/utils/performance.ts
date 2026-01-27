@@ -35,36 +35,41 @@ export interface InterfaceDebounceInputOptions {
  * The returned function is the same shape as the function returned by
  * `lodash.debounce` (it includes `cancel` and `flush`).
  *
- * @typeParam T - Function type to debounce
  * @param fn - The function to debounce
  * @param wait - Debounce wait time in milliseconds (default: 300)
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-// Using `any` in the generic constraint is necessary here to allow debounceInput
-// to accept functions with any parameter types (e.g., `(value: string) => void`).
-// This is a controlled use of `any` that maintains type safety for callers while
-// providing the flexibility needed for a general-purpose debounce wrapper.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function debounceInput<T extends (...args: any[]) => any>(
+/**
+ * Creates a debounced function tailored for input handlers.
+ *
+ * Defaults:
+ * - `wait`: 300 ms
+ * - `leading`: false
+ * - `trailing`: true
+ *
+ * The returned function is the same shape as the function returned by
+ * `lodash.debounce` (it includes `cancel` and `flush`).
+ *
+ * @param fn - The function to debounce
+ * @param wait - Debounce wait time in milliseconds (default: 300)
+ * @param options - Optional override for leading/trailing/maxWait
+ * @returns Debounced function with `cancel` and `flush` methods
+ */
+export function debounceInput<T extends (...args: never[]) => unknown>(
   fn: T,
   wait = 300,
   options?: InterfaceDebounceInputOptions,
-): T & { cancel: () => void; flush: () => ReturnType<T> | undefined } {
+): T & { cancel: () => void; flush: () => void } {
   const opts = {
     leading: false,
     trailing: true,
     ...(options || {}),
   } as InterfaceDebounceInputOptions;
 
-  // Type casting here keeps the lodash return type compatible with callers
-  return debounce(
-    fn as (...args: unknown[]) => unknown,
-    wait,
-    opts,
-  ) as unknown as T & {
+  return debounce(fn, wait, opts) as T & {
     cancel: () => void;
-    flush: () => ReturnType<T> | undefined;
+    flush: () => void;
   };
 }
 
