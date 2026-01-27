@@ -114,6 +114,7 @@ export const IDENTIFIER_ID = 'id';
  */
 export const getDummyDateTime = (time: string): string =>
   `${DUMMY_DATE_TIME_PREFIX}${time}`;
+
 /**
  * Generates the data-testid for the people image.
  * @param id - The ID of the person.
@@ -121,12 +122,14 @@ export const getDummyDateTime = (time: string): string =>
  */
 export const TEST_ID_PEOPLE_IMAGE = (id: string): string =>
   `people-${id}-image`;
+
 /**
  * Generates the data-testid for the people name.
  * @param id - The ID of the person.
  * @returns The formatted data-testid.
  */
 export const TEST_ID_PEOPLE_NAME = (id: string): string => `people-name-${id}`;
+
 /**
  * Generates the data-testid for the people email.
  * @param id - The ID of the person.
@@ -134,6 +137,7 @@ export const TEST_ID_PEOPLE_NAME = (id: string): string => `people-name-${id}`;
  */
 export const TEST_ID_PEOPLE_EMAIL = (id: string): string =>
   `people-email-${id}`;
+
 /**
  * Generates the data-testid for the people role.
  * @param id - The ID of the person.
