@@ -551,7 +551,7 @@ describe('Testing VolunteerGroupModal', () => {
     };
 
     it('should create volunteer group for entire series when applyTo is "series"', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, recurringEventProps);
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
@@ -708,7 +708,7 @@ describe('Testing VolunteerGroupModal', () => {
     });
 
     it('should use baseEvent ID for recurring events when available', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, recurringEventProps);
 
       await waitFor(() => {
@@ -1033,41 +1033,55 @@ describe('Testing VolunteerGroupModal', () => {
 
 describe('VolunteerGroupModal helper functions (coverage)', () => {
   it('areOptionsEqual returns true when ids match', () => {
-    const a = { id: '1' } as InterfaceUserInfoPG;
-    const b = { id: '1' } as InterfaceUserInfoPG;
+    const a: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+    const b: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
     expect(areOptionsEqual(a, b)).toBe(true);
   });
 
   it('areOptionsEqual returns false when ids differ', () => {
-    const a = { id: '1' } as InterfaceUserInfoPG;
-    const b = { id: '2' } as InterfaceUserInfoPG;
+    const a: InterfaceUserInfoPG = {
+      id: '1',
+      name: 'John Doe',
+    };
+    const b: InterfaceUserInfoPG = {
+      id: '2',
+      name: 'Jane Smith',
+    };
     expect(areOptionsEqual(a, b)).toBe(false);
   });
 
   it('getMemberLabel returns the member name', () => {
-    const member = {
+    const member: InterfaceUserInfoPG = {
       id: '1',
       name: 'John Doe',
-    } as InterfaceUserInfoPG;
+    };
 
     expect(getMemberLabel(member)).toBe('John Doe');
   });
 
   it('getMemberLabel returns combined first and last name', () => {
-    const member = {
+    const member: InterfaceUserInfoPG = {
       id: '2',
+      name: 'Jane Smith',
       firstName: 'Jane',
       lastName: 'Smith',
-    } as InterfaceUserInfoPG;
+    };
 
     expect(getMemberLabel(member)).toBe('Jane Smith');
   });
 
   it('getMemberLabel returns first name only when last name is missing', () => {
-    const member = {
+    const member: InterfaceUserInfoPG = {
       id: '3',
+      name: 'Alice',
       firstName: 'Alice',
-    } as InterfaceUserInfoPG;
+    };
 
     expect(getMemberLabel(member)).toBe('Alice');
   });
