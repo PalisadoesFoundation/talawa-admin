@@ -27,6 +27,7 @@ describe('AgendaItemsDeleteModal', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -71,23 +72,26 @@ describe('AgendaItemsDeleteModal', () => {
 
   // Interaction Tests
   test('calls toggleDeleteModal when close button is clicked', async () => {
+    const user = userEvent.setup();
     renderComponent();
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
   test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    await userEvent.click(confirmButton);
+    const user = userEvent.setup();
+    await user.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
   });
 
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
     renderComponent();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await userEvent.click(closeButton);
+    const user = userEvent.setup();
+    await user.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
@@ -96,11 +100,12 @@ describe('AgendaItemsDeleteModal', () => {
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
+    const user = userEvent.setup();
 
     // Simulate rapid clicks
-    await userEvent.click(confirmButton);
-    await userEvent.click(closeButton);
-    await userEvent.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(closeButton);
+    await user.click(confirmButton);
 
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(2);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
@@ -113,9 +118,8 @@ describe('AgendaItemsDeleteModal', () => {
     await user.keyboard('{Escape}');
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
 
-    // Enter / click on confirm button
+    // Click on confirm button
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    confirmButton.focus();
 
     await user.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
