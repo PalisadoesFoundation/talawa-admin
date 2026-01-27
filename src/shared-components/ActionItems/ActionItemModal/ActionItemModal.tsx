@@ -24,14 +24,19 @@
  * />
  * ```
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import type { FC } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import type { FormEvent, FC } from 'react';
 import styles from './ActionItemModal.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
-import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import ApplyToSelector from 'components/AdminPortal/ApplyToSelector/ApplyToSelector';
 import type { ApplyToType } from 'types/AdminPortal/ApplyToSelector/interface';
 import AssignmentTypeSelector from 'components/AdminPortal/AssignmentTypeSelector/AssignmentTypeSelector';
@@ -49,7 +54,7 @@ import type {
 } from 'types/shared-components/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,
@@ -62,9 +67,12 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import Button from 'shared-components/Button';
+import Autocomplete, {
+  type AutocompleteRenderInputParams,
+} from '@mui/material/Autocomplete';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -115,13 +123,48 @@ const ItemModal: FC<IItemModalProps> = ({
     useState<IEventVolunteerGroup | null>(null);
   const [assignmentType, setAssignmentType] =
     useState<AssignmentType>('volunteer');
+  const hasUserChangedAssignment = useRef(false);
 
   const [formState, setFormState] = useState<IFormStateType>(
     initializeFormState(actionItem),
   );
 
   const [applyTo, setApplyTo] = useState<ApplyToType>('instance');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleAssignmentTypeChange = useCallback(
+    (type: AssignmentType): void => {
+      hasUserChangedAssignment.current = true;
+      setAssignmentType(type);
+    },
+    [],
+  );
+
+  const renderAutocompleteInput = (
+    params: AutocompleteRenderInputParams,
+    label: string,
+  ): React.ReactElement => {
+    const { InputProps, inputProps, id } = params;
+    const {
+      ref,
+      className: inputRootClassName,
+      startAdornment,
+      endAdornment,
+      ...inputRootProps
+    } = InputProps;
+
+    return (
+      <FormFieldGroup name={id || label} label={label} required>
+        <div ref={ref} className={inputRootClassName} {...inputRootProps}>
+          {startAdornment}
+          <input
+            {...inputProps}
+            className={`${inputProps.className ?? ''} form-control`}
+          />
+          {endAdornment}
+        </div>
+      </FormFieldGroup>
+    );
+  };
 
   const {
     assignedAt,
@@ -243,7 +286,8 @@ const ItemModal: FC<IItemModalProps> = ({
     setSelectedVolunteerGroup(null);
   }, [handleFormChange]);
 
-  const createActionItemHandler = async (): Promise<void> => {
+  const createActionItemHandler = async (e: FormEvent): Promise<void> => {
+    e.preventDefault();
     try {
       if (!categoryId || (!volunteerId && !volunteerGroupId)) {
         NotificationToast.error({
@@ -253,7 +297,6 @@ const ItemModal: FC<IItemModalProps> = ({
         return;
       }
 
-      setIsSubmitting(true);
       const input: ICreateActionItemInput = {
         volunteerId: volunteerId || undefined,
         volunteerGroupId: volunteerGroupId || undefined,
@@ -290,12 +333,11 @@ const ItemModal: FC<IItemModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-  const updateActionItemHandler = async (): Promise<void> => {
+  const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
+    e.preventDefault();
     try {
       if (!actionItem?.id) {
         NotificationToast.error({
@@ -305,7 +347,6 @@ const ItemModal: FC<IItemModalProps> = ({
         return;
       }
 
-      setIsSubmitting(true);
       const input: IUpdateActionItemInput = {
         id: actionItem.id,
         isCompleted: isCompleted,
@@ -332,12 +373,13 @@ const ItemModal: FC<IItemModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
-  const updateActionForInstanceHandler = async (): Promise<void> => {
+  const updateActionForInstanceHandler = async (
+    e: FormEvent,
+  ): Promise<void> => {
+    e.preventDefault();
     try {
       if (!actionItem?.id) {
         NotificationToast.error({
@@ -347,7 +389,6 @@ const ItemModal: FC<IItemModalProps> = ({
         return;
       }
 
-      setIsSubmitting(true);
       const input: IUpdateActionForInstanceInput = {
         actionId: actionItem.id,
         eventId: eventId,
@@ -377,8 +418,6 @@ const ItemModal: FC<IItemModalProps> = ({
         key: 'unknownError',
         namespace: 'errors',
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -408,6 +447,12 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [actionItem]);
 
+  useEffect(() => {
+    if (!isOpen) {
+      hasUserChangedAssignment.current = false;
+    }
+  }, [isOpen]);
+
   // Separate useEffect for volunteer/volunteer group initialization (only when modal opens)
   useEffect(() => {
     if (!isOpen) return; // Only run when modal is open
@@ -432,7 +477,7 @@ const ItemModal: FC<IItemModalProps> = ({
         );
       setSelectedVolunteerGroup(foundGroup || null);
       setAssignmentType('volunteerGroup');
-    } else if (!actionItem) {
+    } else if (!actionItem && !hasUserChangedAssignment.current) {
       // For new action items, reset selections
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
@@ -475,7 +520,7 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [isOpen, editMode, actionItem]);
 
-  const getSubmitHandler = (): (() => Promise<void>) => {
+  const getSubmitHandler = (): ((e: FormEvent) => Promise<void>) => {
     if (!editMode) return createActionItemHandler;
     if (actionItem?.isTemplate && applyTo === 'instance') {
       return updateActionForInstanceHandler;
@@ -483,274 +528,170 @@ const ItemModal: FC<IItemModalProps> = ({
     return updateActionItemHandler;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    getSubmitHandler()();
-  };
-
-  const isFormValid = categoryId && (volunteerId || volunteerGroupId);
-
-  const modalContent = (
-    <>
-      {isRecurring && !editMode && (
-        <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
-      )}
-      {editMode &&
-        actionItem?.isTemplate &&
-        !actionItem.isInstanceException && (
+  return (
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.itemModal}
+      title={editMode ? t('updateActionItem') : t('createActionItem')}
+      dataTestId="actionItemModal"
+    >
+      <form onSubmit={getSubmitHandler()} className="p-2">
+        {isRecurring && !editMode && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
-      <div className="d-flex gap-3 mb-3">
-        <Autocomplete
-          className={`${styles.noOutline} w-100`}
-          data-testid="categorySelect"
-          data-cy="categorySelect"
-          options={actionItemCategories}
-          value={actionItemCategory}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          filterSelectedOptions={true}
-          getOptionLabel={(item: IActionItemCategoryInfo): string => item.name}
-          onChange={(_, newCategory): void => {
-            handleFormChange('categoryId', newCategory?.id ?? '');
-            setActionItemCategory(newCategory);
-          }}
-          renderInput={(params) => {
-            const { InputProps, inputProps } = params;
-            const {
-              ref,
-              className,
-              startAdornment,
-              endAdornment,
-              onMouseDown,
-            } = InputProps;
-            return (
-              <FormFieldGroup
-                name="categorySelect"
-                label={t('actionItemCategory')}
-                required
-              >
-                <div
-                  ref={ref}
-                  className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                  onMouseDown={onMouseDown}
-                  role="presentation"
-                  tabIndex={-1}
-                >
-                  {startAdornment}
-                  <input
-                    {...inputProps}
-                    className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                    required
-                  />
-                  {endAdornment}
-                </div>
-              </FormFieldGroup>
-            );
-          }}
-        />
-      </div>
-
-      {!isCompleted && (
-        <>
-          <AssignmentTypeSelector
-            assignmentType={assignmentType}
-            onTypeChange={setAssignmentType}
-            isVolunteerDisabled={isVolunteerChipDisabled}
-            isVolunteerGroupDisabled={isVolunteerGroupChipDisabled}
-            onClearVolunteer={handleClearVolunteer}
-            onClearVolunteerGroup={handleClearVolunteerGroup}
+        {editMode &&
+          actionItem?.isTemplate &&
+          !actionItem.isInstanceException && (
+            <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
+          )}
+        <div className="d-flex gap-3 mb-3">
+          <Autocomplete
+            className={`${styles.noOutline} w-100`}
+            data-testid="categorySelect"
+            data-cy="categorySelect"
+            options={actionItemCategories}
+            value={actionItemCategory}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            filterSelectedOptions={true}
+            getOptionLabel={(item: IActionItemCategoryInfo): string =>
+              item.name
+            }
+            onChange={(_, newCategory): void => {
+              handleFormChange('categoryId', newCategory?.id ?? '');
+              setActionItemCategory(newCategory);
+            }}
+            renderInput={(params) =>
+              renderAutocompleteInput(params, t('actionItemCategory'))
+            }
           />
+        </div>
 
-          {assignmentType === 'volunteer' && (
-            <div className="mb-3 w-100">
-              <Autocomplete
-                className={`${styles.noOutline} w-100`}
-                data-testid="volunteerSelect"
-                data-cy="volunteerSelect"
-                options={volunteers}
-                value={selectedVolunteer}
-                isOptionEqualToValue={(option, value) =>
-                  option.id === value?.id
-                }
-                filterSelectedOptions={true}
-                getOptionLabel={(
-                  volunteer: InterfaceEventVolunteerInfo,
-                ): string => {
-                  return volunteer.user?.name || t('unknownVolunteer');
-                }}
-                onChange={(_, newVolunteer): void => {
-                  const volunteerId = newVolunteer?.id;
-                  handleFormChange('volunteerId', volunteerId);
-                  handleFormChange('volunteerGroupId', '');
-                  setSelectedVolunteer(newVolunteer);
-                  setSelectedVolunteerGroup(null);
-                }}
-                renderInput={(params) => {
-                  const { InputProps, inputProps } = params;
-                  const {
-                    ref,
-                    className,
-                    startAdornment,
-                    endAdornment,
-                    onMouseDown,
-                  } = InputProps;
-                  return (
-                    <FormFieldGroup
-                      name="volunteerSelect"
-                      label={t('volunteer')}
-                      required
-                    >
-                      <div
-                        ref={ref}
-                        className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                        onMouseDown={onMouseDown}
-                        role="presentation"
-                        tabIndex={-1}
-                      >
-                        {startAdornment}
-                        <input
-                          {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                          required
-                        />
-                        {endAdornment}
-                      </div>
-                    </FormFieldGroup>
-                  );
-                }}
-              />
-            </div>
-          )}
-
-          {assignmentType === 'volunteerGroup' && (
-            <div className="mb-3 w-100">
-              <Autocomplete
-                className={`${styles.noOutline} w-100`}
-                data-testid="volunteerGroupSelect"
-                data-cy="volunteerGroupSelect"
-                options={volunteerGroups}
-                value={selectedVolunteerGroup}
-                isOptionEqualToValue={(option, value) =>
-                  option.id === value?.id
-                }
-                filterSelectedOptions={true}
-                getOptionLabel={(group: IEventVolunteerGroup): string => {
-                  return group.name;
-                }}
-                onChange={(_, newGroup): void => {
-                  const groupId = newGroup?.id;
-                  handleFormChange('volunteerGroupId', groupId);
-                  handleFormChange('volunteerId', '');
-                  setSelectedVolunteerGroup(newGroup);
-                  setSelectedVolunteer(null);
-                }}
-                renderInput={(params) => {
-                  const { InputProps, inputProps } = params;
-                  const {
-                    ref,
-                    className,
-                    startAdornment,
-                    endAdornment,
-                    onMouseDown,
-                  } = InputProps;
-                  return (
-                    <FormFieldGroup
-                      name="volunteerGroupSelect"
-                      label={t('volunteerGroup')}
-                      required
-                    >
-                      <div
-                        ref={ref}
-                        className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                        onMouseDown={onMouseDown}
-                        role="presentation"
-                        tabIndex={-1}
-                      >
-                        {startAdornment}
-                        <input
-                          {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                          required
-                        />
-                        {endAdornment}
-                      </div>
-                    </FormFieldGroup>
-                  );
-                }}
-              />
-            </div>
-          )}
-
-          <div className="d-flex gap-3 mx-auto mb-3">
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={t('assignmentDate')}
-              className={styles.noOutline}
-              value={dayjs(assignedAt)}
-              disabled={editMode}
-              data-testid="assignmentDate"
-              onChange={(date: Dayjs | null): void => {
-                if (date && !editMode) {
-                  handleFormChange('assignedAt', date.toDate());
-                }
-              }}
+        {!isCompleted && (
+          <>
+            {/* Assignment Type Selection */}
+            <AssignmentTypeSelector
+              assignmentType={assignmentType}
+              onTypeChange={handleAssignmentTypeChange}
+              isVolunteerDisabled={isVolunteerChipDisabled}
+              isVolunteerGroupDisabled={isVolunteerGroupChipDisabled}
+              onClearVolunteer={handleClearVolunteer}
+              onClearVolunteerGroup={handleClearVolunteerGroup}
             />
-          </div>
 
+            {/* Volunteer Selection */}
+            {assignmentType === 'volunteer' && (
+              <div className="mb-3 w-100">
+                <Autocomplete
+                  className={`${styles.noOutline} w-100`}
+                  data-testid="volunteerSelect"
+                  data-cy="volunteerSelect"
+                  options={volunteers}
+                  value={selectedVolunteer}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value?.id
+                  }
+                  filterSelectedOptions={true}
+                  getOptionLabel={(
+                    volunteer: InterfaceEventVolunteerInfo,
+                  ): string => {
+                    return volunteer.user?.name || t('unknownVolunteer');
+                  }}
+                  onChange={(_, newVolunteer): void => {
+                    const volunteerId = newVolunteer?.id;
+                    handleFormChange('volunteerId', volunteerId);
+                    handleFormChange('volunteerGroupId', '');
+                    setSelectedVolunteer(newVolunteer);
+                    setSelectedVolunteerGroup(null);
+                  }}
+                  renderInput={(params) =>
+                    renderAutocompleteInput(params, t('volunteer'))
+                  }
+                />
+              </div>
+            )}
+
+            {/* Volunteer Group Selection */}
+            {assignmentType === 'volunteerGroup' && (
+              <div className="mb-3 w-100">
+                <Autocomplete
+                  className={`${styles.noOutline} w-100`}
+                  data-testid="volunteerGroupSelect"
+                  data-cy="volunteerGroupSelect"
+                  options={volunteerGroups}
+                  value={selectedVolunteerGroup}
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value?.id
+                  }
+                  filterSelectedOptions={true}
+                  getOptionLabel={(group: IEventVolunteerGroup): string => {
+                    return group.name;
+                  }}
+                  onChange={(_, newGroup): void => {
+                    const groupId = newGroup?.id;
+                    handleFormChange('volunteerGroupId', groupId);
+                    handleFormChange('volunteerId', '');
+                    setSelectedVolunteerGroup(newGroup);
+                    setSelectedVolunteer(null);
+                  }}
+                  renderInput={(params) =>
+                    renderAutocompleteInput(params, t('volunteerGroup'))
+                  }
+                />
+              </div>
+            )}
+
+            <div className="d-flex gap-3 mx-auto mb-3">
+              <DatePicker
+                format="DD/MM/YYYY"
+                label={t('assignmentDate')}
+                className={styles.noOutline}
+                value={dayjs(assignedAt)}
+                disabled={editMode}
+                data-testid="assignmentDate"
+                onChange={(date: Dayjs | null): void => {
+                  if (date && !editMode) {
+                    handleFormChange('assignedAt', date.toDate());
+                  }
+                }}
+              />
+            </div>
+
+            <FormTextField
+              name="preCompletionNotes"
+              label={t('preCompletionNotes')}
+              data-cy="preCompletionNotes"
+              className={styles.noOutline}
+              value={preCompletionNotes}
+              onChange={(value) =>
+                handleFormChange('preCompletionNotes', value)
+              }
+            />
+          </>
+        )}
+
+        {isCompleted && (
           <FormTextField
-            name="preCompletionNotes"
-            label={t('preCompletionNotes')}
-            data-cy="preCompletionNotes"
+            name="postCompletionNotes"
+            label={t('postCompletionNotes')}
             className={styles.noOutline}
-            value={preCompletionNotes}
-            onChange={(value) => handleFormChange('preCompletionNotes', value)}
+            value={postCompletionNotes || ''}
+            onChange={(value) => handleFormChange('postCompletionNotes', value)}
+            as="textarea"
+            rows={3}
           />
-        </>
-      )}
+        )}
 
-      {isCompleted && (
-        <FormTextField
-          name="postCompletionNotes"
-          label={t('postCompletionNotes')}
-          className={styles.noOutline}
-          value={postCompletionNotes || ''}
-          onChange={(value) => handleFormChange('postCompletionNotes', value)}
-          as="textarea"
-          rows={3}
-        />
-      )}
-    </>
-  );
-
-  if (editMode) {
-    return (
-      <EditModal
-        open={isOpen}
-        title={t('updateActionItem')}
-        onClose={hide}
-        onSubmit={handleSubmit}
-        loading={isSubmitting}
-        data-testid="actionItemModal"
-        className={styles.itemModal}
-      >
-        {modalContent}
-      </EditModal>
-    );
-  }
-
-  return (
-    <CreateModal
-      open={isOpen}
-      title={t('createActionItem')}
-      onClose={hide}
-      onSubmit={handleSubmit}
-      loading={isSubmitting}
-      submitDisabled={!isFormValid}
-      data-testid="actionItemModal"
-      className={styles.itemModal}
-    >
-      {modalContent}
-    </CreateModal>
+        <Button
+          type="submit"
+          className={styles.addButton}
+          data-testid="submitBtn"
+          data-cy="submitBtn"
+        >
+          {editMode ? t('updateActionItem') : t('createActionItem')}
+        </Button>
+      </form>
+    </BaseModal>
   );
 };
 
