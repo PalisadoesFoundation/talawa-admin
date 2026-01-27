@@ -40,22 +40,6 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-/**
- * Creates a debounced function tailored for input handlers.
- *
- * Defaults:
- * - `wait`: 300 ms
- * - `leading`: false
- * - `trailing`: true
- *
- * The returned function is the same shape as the function returned by
- * `lodash.debounce` (it includes `cancel` and `flush`).
- *
- * @param fn - The function to debounce
- * @param wait - Debounce wait time in milliseconds (default: 300)
- * @param options - Optional override for leading/trailing/maxWait
- * @returns Debounced function with `cancel` and `flush` methods
- */
 export function debounceInput<T extends (...args: never[]) => unknown>(
   fn: T,
   wait = 300,
