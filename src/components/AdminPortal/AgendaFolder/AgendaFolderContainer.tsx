@@ -50,11 +50,11 @@ import type {
 } from 'types/Agenda/interface';
 import styles from 'style/app-fixed.module.css';
 
-import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
-import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
-import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
+import AgendaItemsPreviewModal from 'components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal';
+import AgendaItemsDeleteModal from 'components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal';
+import AgendaItemsUpdateModal from 'components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal';
 import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
-import AgendaFolderDeleteModal from 'components/AgendaFolder/Delete/AgendaFolderDeleteModal';
+import AgendaFolderDeleteModal from 'components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal';
 import AgendaFolderUpdateModal from './Update/AgendaFolderUpdateModal';
 import Button from 'shared-components/Button';
 
