@@ -6,7 +6,9 @@
 
 > **TEST\_ID\_PEOPLE\_IMAGE**(`id`): `string`
 
-Defined in: [src/Constant/common.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L118)
+Defined in: [src/Constant/common.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L122)
+
+Generates the data-testid for the people image.
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/Constant/common.ts:118](https://github.com/PalisadoesFoundation
 
 `string`
 
+The ID of the person.
+
 ## Returns
 
 `string`
+
+The formatted data-testid.

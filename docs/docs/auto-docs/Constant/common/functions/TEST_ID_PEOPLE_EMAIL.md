@@ -6,7 +6,9 @@
 
 > **TEST\_ID\_PEOPLE\_EMAIL**(`id`): `string`
 
-Defined in: [src/Constant/common.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L121)
+Defined in: [src/Constant/common.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L135)
+
+Generates the data-testid for the people email.
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/Constant/common.ts:121](https://github.com/PalisadoesFoundation
 
 `string`
 
+The ID of the person.
+
 ## Returns
 
 `string`
+
+The formatted data-testid.

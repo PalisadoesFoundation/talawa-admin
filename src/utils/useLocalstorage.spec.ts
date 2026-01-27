@@ -46,6 +46,23 @@ describe('Storage Helper Functions', () => {
     expect(retrievedValue).toBeNull();
   });
 
+  it('returns null and logs error when parsing invalid JSON', () => {
+    const key = 'testKey';
+    const prefix = 'TestPrefix';
+    const invalidJson = 'invalid-json';
+    const prefixedKey = getStorageKey(prefix, key);
+
+    localStorage.setItem(prefixedKey, invalidJson);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const retrievedValue = getItem(prefix, key);
+
+    expect(retrievedValue).toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      `Failed to parse localStorage key: ${prefixedKey}`,
+    );
+  });
+
   it('sets item in local storage', () => {
     const key = 'testKey';
     const prefix = 'TestPrefix';

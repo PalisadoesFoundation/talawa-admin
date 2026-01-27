@@ -479,5 +479,11 @@ describe('Testing Event Dashboard Screen', () => {
     // Covers formatTimeFromDateTime fallback to '08:00' when startAt/endAt are empty strings
     // (exercised via eventListCardProps.startTime/endTime construction)
     expect(getByTestId('event-details')).toBeInTheDocument();
+
+    // Assert the fallback time was passed to the modal component
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props?.eventListCardProps?.startTime).toBe('08:00');
+    expect(props?.eventListCardProps?.endTime).toBe('08:00');
   });
 });
