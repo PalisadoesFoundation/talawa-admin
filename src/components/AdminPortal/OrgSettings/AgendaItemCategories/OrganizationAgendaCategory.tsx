@@ -23,8 +23,6 @@
  * @returns The rendered component.
  *
  * @throws Error If there is an error while fetching agenda item categories.
- *
- * TODO: - Add additional error handling and improve UI for error states.
  */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
@@ -44,10 +42,7 @@ import styles from './OrganizationAgendaCategory.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
-interface InterfaceAgendaCategoryProps {
-  orgId: string;
-}
+import { InterfaceAgendaCategoryProps } from 'types/AdminPortal/OrganizationAgendaCategory/interface';
 
 const OrganiZationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
