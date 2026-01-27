@@ -47,7 +47,7 @@ Initial set of selected rows on component mount
 
 Defined in: [src/types/shared-components/DataTable/hooks.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L194)
 
-ReadonlyArray of keys for rows on the current page
+Array of keys for rows on the current page
 
 ***
 
