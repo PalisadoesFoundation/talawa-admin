@@ -119,6 +119,8 @@
   "viewDetails": "Ver detalles",
   "markComplete": "Marcar como completado",
   "plugins": "Complementos",
+  "pluginLabel": "Complemento:",
+  "componentLabel": "Componente:",
   "save": "Guardar",
   "saving": "Guardando...",
   "breadcrumb": "Rastro de navegación",

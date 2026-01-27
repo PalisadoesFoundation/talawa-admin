@@ -119,6 +119,8 @@
   "viewDetails": "Voir les détails",
   "markComplete": "Marquer comme complété",
   "plugins": "Extensions",
+  "pluginLabel": "Plugin :",
+  "componentLabel": "Composant :",
   "save": "Enregistrer",
   "saving": "Enregistrement...",
   "breadcrumb": "Fil d'ariane",

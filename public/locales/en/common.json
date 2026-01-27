@@ -122,6 +122,8 @@
   "viewDetails": "View Details",
   "markComplete": "Mark as Complete",
   "plugins": "Plugins",
+  "componentLabel": "Component:",
+  "pluginLabel": "Plugin:",
   "save": "Save",
   "saving": "Saving...",
   "loadingOrganizations": "Loading organizations...",

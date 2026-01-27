@@ -2322,7 +2322,17 @@
     "uploading": "अपलोड हो रहा है...",
     "screenshotCounter": "{{current}} में से {{total}}",
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
-    "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
+    "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
+    "loadingPlugin": "प्लगइन लोड हो रहा है...",
+    "pluginIdMissing": "प्लगइन आईडी अनुपस्थित है",
+
+    "invalidPluginRoute": "इस रूट में वैध प्लगइन आईडी नहीं है",
+    "pluginNotRegistered": "प्लगइन पंजीकृत नहीं है",
+
+    "addPluginToRegistry": "कृपया इस प्लगइन को प्लगइन रजिस्ट्री में जोड़ें",
+    "noComponentsFound": "कोई घटक नहीं मिला",
+    "componentNotFound": "घटक नहीं मिला",
+    "availableComponents": "उपलब्ध घटक:"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",

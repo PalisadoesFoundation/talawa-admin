@@ -119,6 +119,8 @@
   "viewDetails": "查看详情",
   "markComplete": "标记为完成",
   "plugins": "插件",
+  "pluginLabel": "插件：",
+  "componentLabel": "组件：",
   "save": "保存",
   "saving": "保存中...",
   "breadcrumb": "面包屑",

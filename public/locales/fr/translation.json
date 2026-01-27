@@ -2322,7 +2322,17 @@
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
-    "errorInstalling": "Échec du chargement des détails du plugin"
+    "errorInstalling": "Échec du chargement des détails du plugin",
+    "loadingPlugin": "Chargement du plugin...",
+    "pluginIdMissing": "ID du plugin manquant",
+
+    "invalidPluginRoute": "Cette route n'a pas d'ID de plugin valide",
+    "pluginNotRegistered": "Plugin non enregistré",
+
+    "addPluginToRegistry": "Veuillez ajouter ce plugin au registre des plugins dans",
+    "noComponentsFound": "Aucun composant trouvé",
+    "componentNotFound": "Composant introuvable",
+    "availableComponents": "Composants disponibles :"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",
