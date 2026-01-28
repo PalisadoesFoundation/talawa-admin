@@ -72,9 +72,9 @@ function AgendaFolderContainer({
   const [agendaItemId, setAgendaItemId] = useState('');
   const [agendaFolderId, setAgendaFolderId] = useState('');
   const [folder, setFolder] = useState<InterfaceAgendaFolderInfo[]>([]);
-  const [agendaFolderDeleteModalIsOpen, SetagendaFolderDeleteModalIsOpen] =
+  const [agendaFolderDeleteModalIsOpen, setAgendaFolderDeleteModalIsOpen] =
     useState<boolean>(false);
-  const [agendaFolderUpdateModalIsOpen, SetAgendaFolderUpdateModalIsOpen] =
+  const [agendaFolderUpdateModalIsOpen, setAgendaFolderUpdateModalIsOpen] =
     useState<boolean>(false);
   useEffect(() => {
     if (agendaFolderData) {
@@ -192,14 +192,14 @@ function AgendaFolderContainer({
    * Toggles the visibility of the update modal.
    */
   const showUpdateModal = (): void => {
-    SetAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
+    setAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const hideUpdateModal = (): void => {
-    SetAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
+    setAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
   };
 
   /**
@@ -220,7 +220,7 @@ function AgendaFolderContainer({
    * Toggles the visibility of the delete modal of folders.
    */
   const toggleDeleteModal = (): void => {
-    SetagendaFolderDeleteModalIsOpen(!agendaFolderDeleteModalIsOpen);
+    setAgendaFolderDeleteModalIsOpen(!agendaFolderDeleteModalIsOpen);
   };
 
   /**

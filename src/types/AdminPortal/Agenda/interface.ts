@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import type { DropResult } from '@hello-pangea/dnd';
 
 /**
@@ -116,6 +116,9 @@ export interface InterfaceAgendaFolderList {
   agendaFoldersByEventId: InterfaceAgendaFolderInfo[];
 }
 
+/**
+ * Defines the structure for file attachments in agenda items.
+ */
 export interface InterfaceAttachment {
   mimeType: string;
   fileHash: string;
@@ -167,6 +170,9 @@ export interface InterfaceAgendaItemsCreateModalProps {
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
 }
 
+/**
+ * Props for the AgendaItemsUpdateModal component.
+ */
 export interface InterfaceAgendaItemsUpdateModalProps {
   agendaItemUpdateModalIsOpen: boolean;
   hideUpdateItemModal: () => void;
@@ -180,6 +186,9 @@ export interface InterfaceAgendaItemsUpdateModalProps {
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
 }
 
+/**
+ * Props for the AgendaItemsDeleteModal component.
+ */
 export interface InterfaceAgendaItemsDeleteModalProps {
   agendaItemDeleteModalIsOpen: boolean;
   toggleDeleteItemModal: () => void;
@@ -236,7 +245,7 @@ export interface InterfaceAgendaFolderUpdateModalProps {
   setFolderFormState: (
     state: React.SetStateAction<InterfaceAgendaFolderUpdateFormStateType>,
   ) => void;
-  updateAgendaFolderHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  updateAgendaFolderHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
 }
 
@@ -257,6 +266,13 @@ interface InterfaceItemFormStateType {
   url: string[];
 }
 
+/**
+ * Props for the AgendaItemsPreviewModal component.
+ *
+ * Defines the data and callback functions required to display
+ * agenda item details in a preview modal and perform related actions
+ * such as updating or deleting an agenda item.
+ */
 export interface InterfaceAgendaItemsPreviewModalProps {
   agendaItemPreviewModalIsOpen: boolean;
   hidePreviewModal: () => void;
@@ -266,6 +282,13 @@ export interface InterfaceAgendaItemsPreviewModalProps {
   t: (key: string) => string;
 }
 
+/**
+ * Props for the AgendaDragAndDrop component.
+ *
+ * Defines the data and callback handlers required to render
+ * agenda folders and agenda items with drag-and-drop support,
+ * along with edit, preview, and delete actions.
+ */
 export interface InterfaceAgendaDragAndDropProps {
   folders: InterfaceAgendaFolderInfo[];
   agendaFolderConnection: 'Event';
@@ -280,4 +303,9 @@ export interface InterfaceAgendaDragAndDropProps {
   onPreviewItem: (item: InterfaceAgendaItemInfo) => void;
   onEditItem: (item: InterfaceAgendaItemInfo) => void;
   onDeleteItem: (item: InterfaceAgendaItemInfo) => void;
+}
+
+export interface InterfaceUseAgendaMutationsProps {
+  refetchAgendaFolder: () => void;
+  t: (key: string) => string;
 }

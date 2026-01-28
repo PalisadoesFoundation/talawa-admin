@@ -1,6 +1,20 @@
+/**
+ * Provides GraphQL mutation handlers for agenda folders and agenda items.
+ *
+ * This hook centralizes all agenda-related mutations such as updating,
+ * deleting, and reordering agenda folders and items. It also handles
+ * success notifications and triggers refetching of agenda data after
+ * successful mutations.
+ *
+ * @param params - Configuration object for agenda mutations.
+ * @param refetchAgendaFolder - Callback to refetch agenda folder data after mutations.
+ * @param t - Translation function scoped to the agenda section.
+ *
+ * @returns An object containing agenda mutation handler functions.
+ */
 import { useMutation } from '@apollo/client';
-import type { ChangeEvent, FormEvent } from 'react';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import type { FormEvent } from 'react';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import {
   DELETE_AGENDA_ITEM_MUTATION,
@@ -14,12 +28,8 @@ import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMut
 import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaFolderInfo,
+  InterfaceUseAgendaMutationsProps,
 } from 'types/AdminPortal/Agenda/interface';
-
-interface InterfaceUseAgendaMutationsProps {
-  refetchAgendaFolder: () => void;
-  t: (key: string) => string;
-}
 
 // translation-check-keyPrefix: agendaSection
 export function useAgendaMutations({
@@ -36,6 +46,11 @@ export function useAgendaMutations({
 
   /**
    * Updates an agenda item.
+   * @param e - Form submit event
+   * @param agendaItemId - ID of the agenda item to update
+   * @param itemFormState - Form state containing updated values
+   * @param onSuccess - Optional callback invoked after successful update
+   * @returns Promise that resolves when update completes
    */
   const updateAgendaItemHandler = async (
     e: FormEvent<HTMLFormElement>,
@@ -106,7 +121,7 @@ export function useAgendaMutations({
    * Updates an agenda folder.
    */
   const updateAgendaFolderHandler = async (
-    event: ChangeEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
     agendaFolderId: string,
     folderFormState: {
       name: string;
