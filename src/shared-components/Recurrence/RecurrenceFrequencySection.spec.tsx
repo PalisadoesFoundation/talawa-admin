@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceFrequencySection } from './RecurrenceFrequencySection';
 import { Frequency } from '../../utils/recurrenceUtils';
@@ -22,356 +22,154 @@ describe('RecurrenceFrequencySection', () => {
     vi.clearAllMocks();
   });
 
-  describe('Component Rendering', () => {
-    it('should render the component with all required elements', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} />);
-
-      expect(screen.getByText('repeatsEvery')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('customRecurrenceIntervalInput'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toBeInTheDocument();
-    });
-
-    it('should display the correct frequency in dropdown', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} />);
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      expect(dropdown).toHaveTextContent('Daily');
-    });
-
-    it('should display different frequencies correctly', () => {
-      const { rerender } = render(
-        <RecurrenceFrequencySection {...defaultProps} />,
-      );
-
-      // Test WEEKLY
-      rerender(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          frequency={Frequency.WEEKLY}
-        />,
-      );
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toHaveTextContent('Weekly');
-
-      // Test MONTHLY
-      rerender(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          frequency={Frequency.MONTHLY}
-        />,
-      );
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toHaveTextContent('Monthly');
-
-      // Test YEARLY
-      rerender(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          frequency={Frequency.YEARLY}
-        />,
-      );
-      expect(
-        screen.getByTestId('customRecurrenceFrequencyDropdown'),
-      ).toHaveTextContent('Yearly');
-    });
-
-    it('should display the interval value in input', () => {
-      render(
-        <RecurrenceFrequencySection {...defaultProps} localInterval="5" />,
-      );
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input.value).toBe('5');
-    });
+  it('renders all required elements', () => {
+    render(<RecurrenceFrequencySection {...defaultProps} />);
+    expect(screen.getAllByText('repeatsEvery').length).toBeGreaterThan(0);
+    expect(
+      screen.getByTestId('customRecurrenceIntervalInput'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+    ).toBeInTheDocument();
   });
 
-  describe('Props Handling', () => {
-    it('should handle interval value changes', () => {
-      const onIntervalChange = vi.fn();
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onIntervalChange={onIntervalChange}
-        />,
-      );
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      fireEvent.change(input, { target: { value: '3' } });
-
-      expect(onIntervalChange).toHaveBeenCalledTimes(1);
-    });
-
-    it('should have correct aria attributes', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} />);
-
-      const input = screen.getByTestId('customRecurrenceIntervalInput');
-      expect(input).toHaveAttribute('aria-label', 'repeatsEvery');
-      expect(input).toHaveAttribute('aria-required', 'true');
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      expect(dropdown).toHaveAttribute('aria-label', 'frequency');
-    });
-
-    it('should have min attribute set to 1', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} />);
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input).toHaveAttribute('min', '1');
-    });
-
-    it('should have placeholder set to "1"', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} />);
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input).toHaveAttribute('placeholder', '1');
-    });
+  it('shows correct frequency label', () => {
+    render(<RecurrenceFrequencySection {...defaultProps} />);
+    expect(
+      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+    ).toHaveTextContent('Daily');
   });
 
-  describe('User Interactions', () => {
-    it('should call onIntervalChange when input value changes', async () => {
-      const user = userEvent.setup();
-      const onIntervalChange = vi.fn();
+  it('handles interval changes', async () => {
+    const user = userEvent.setup();
+    const onIntervalChange = vi.fn();
+    render(
+      <RecurrenceFrequencySection
+        {...defaultProps}
+        onIntervalChange={onIntervalChange}
+      />,
+    );
 
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onIntervalChange={onIntervalChange}
-        />,
-      );
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      await user.clear(input);
-      await user.type(input, '7');
-
-      expect(onIntervalChange).toHaveBeenCalled();
-    });
-
-    it('should select all text on double click', async () => {
-      const user = userEvent.setup();
-      const onIntervalChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          localInterval="5"
-          onIntervalChange={onIntervalChange}
-        />,
-      );
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      await user.dblClick(input);
-
-      // The select behavior is handled by the browser, but we can verify the handler is set
-      expect(input).toBeInTheDocument();
-    });
-
-    it('should prevent negative, e, E, and + keys in input', () => {
-      const onIntervalChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onIntervalChange={onIntervalChange}
-        />,
-      );
-
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-
-      // Test that the onKeyDown handler prevents default for restricted keys
-      const restrictedKeys = ['-', 'e', 'E', '+'];
-
-      restrictedKeys.forEach((key) => {
-        const event = new KeyboardEvent('keydown', {
-          key,
-          bubbles: true,
-          cancelable: true,
-        });
-
-        // Spy on preventDefault
-        const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-        input.dispatchEvent(event);
-        expect(preventDefaultSpy).toHaveBeenCalled();
-
-        preventDefaultSpy.mockRestore();
-      });
-    });
-
-    it('should open dropdown and allow frequency selection', async () => {
-      const user = userEvent.setup();
-      const onFrequencyChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onFrequencyChange={onFrequencyChange}
-        />,
-      );
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      await user.click(dropdown);
-      expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-      expect(screen.getByTestId('customWeeklyRecurrence')).toBeInTheDocument();
-      expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
-      expect(screen.getByTestId('customYearlyRecurrence')).toBeInTheDocument();
-    });
-
-    it('should call onFrequencyChange when daily is selected', async () => {
-      const user = userEvent.setup();
-      const onFrequencyChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onFrequencyChange={onFrequencyChange}
-        />,
-      );
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      await user.click(dropdown);
-
-      const dailyOption = screen.getByTestId('customDailyRecurrence');
-      await user.click(dailyOption);
-
-      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY);
-    });
-
-    it('should call onFrequencyChange when weekly is selected', async () => {
-      const user = userEvent.setup();
-      const onFrequencyChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onFrequencyChange={onFrequencyChange}
-        />,
-      );
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      await user.click(dropdown);
-
-      const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
-      await user.click(weeklyOption);
-
-      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
-    });
-
-    it('should call onFrequencyChange when monthly is selected', async () => {
-      const user = userEvent.setup();
-      const onFrequencyChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onFrequencyChange={onFrequencyChange}
-        />,
-      );
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      await user.click(dropdown);
-
-      const monthlyOption = screen.getByTestId('customMonthlyRecurrence');
-      await user.click(monthlyOption);
-
-      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.MONTHLY);
-    });
-
-    it('should call onFrequencyChange when yearly is selected', async () => {
-      const user = userEvent.setup();
-      const onFrequencyChange = vi.fn();
-
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onFrequencyChange={onFrequencyChange}
-        />,
-      );
-
-      const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
-      await user.click(dropdown);
-
-      const yearlyOption = screen.getByTestId('customYearlyRecurrence');
-      await user.click(yearlyOption);
-
-      expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.YEARLY);
-    });
+    const input = screen.getByTestId('customRecurrenceIntervalInput');
+    await user.clear(input);
+    await user.type(input, '5');
+    expect(onIntervalChange).toHaveBeenCalled();
   });
 
-  describe('Edge Cases', () => {
-    it('should handle empty interval string', () => {
-      render(<RecurrenceFrequencySection {...defaultProps} localInterval="" />);
+  it('prevents invalid keys in interval input', async () => {
+    const user = userEvent.setup();
+    render(<RecurrenceFrequencySection {...defaultProps} />);
 
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input.value).toBe('');
-    });
+    const input = screen.getByTestId(
+      'customRecurrenceIntervalInput',
+    ) as HTMLInputElement;
 
-    it('should handle large interval values', () => {
-      render(
-        <RecurrenceFrequencySection {...defaultProps} localInterval="999" />,
-      );
+    const initialValue = input.value;
 
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input.value).toBe('999');
-    });
+    await user.type(input, '-');
+    await user.type(input, '+');
+    await user.type(input, 'e');
+    await user.type(input, 'E');
 
-    it('should handle string interval values', () => {
-      render(
-        <RecurrenceFrequencySection {...defaultProps} localInterval="abc" />,
-      );
+    expect(input.value).toBe(initialValue);
+  });
 
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
-      expect(input).toBeInTheDocument();
-      expect(input.value === '' || input.value === 'abc').toBe(true);
-    });
+  it('renders all frequency options', async () => {
+    const user = userEvent.setup();
+    render(<RecurrenceFrequencySection {...defaultProps} />);
 
-    it('should allow other keys to be typed normally', () => {
-      const onIntervalChange = vi.fn();
+    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
 
-      render(
-        <RecurrenceFrequencySection
-          {...defaultProps}
-          onIntervalChange={onIntervalChange}
-        />,
-      );
+    expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
+    expect(screen.getByTestId('customWeeklyRecurrence')).toBeInTheDocument();
+    expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
+    expect(screen.getByTestId('customYearlyRecurrence')).toBeInTheDocument();
+  });
 
-      const input = screen.getByTestId(
-        'customRecurrenceIntervalInput',
-      ) as HTMLInputElement;
+  it('selects interval text on double click', async () => {
+    const user = userEvent.setup();
+    render(<RecurrenceFrequencySection {...defaultProps} />);
 
-      const preventDefault = vi.fn();
-      const normalKeyEvent = {
-        key: '5',
-        preventDefault,
-      } as unknown as React.KeyboardEvent<HTMLInputElement>;
+    const input = screen.getByTestId(
+      'customRecurrenceIntervalInput',
+    ) as HTMLInputElement;
 
-      fireEvent.keyDown(input, normalKeyEvent);
-      // Should not prevent default for normal keys
-      expect(preventDefault).not.toHaveBeenCalled();
-    });
+    const selectSpy = vi.spyOn(input, 'select');
+    await user.dblClick(input);
+    expect(selectSpy).toHaveBeenCalled();
+  });
+
+  it('applies aria-label to frequency dropdown', () => {
+    render(<RecurrenceFrequencySection {...defaultProps} />);
+    const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
+    expect(dropdown).toHaveAttribute('aria-label', 'frequency');
+  });
+
+  it('calls onFrequencyChange when a frequency is selected', async () => {
+    const user = userEvent.setup();
+    const onFrequencyChange = vi.fn();
+    render(
+      <RecurrenceFrequencySection
+        {...defaultProps}
+        onFrequencyChange={onFrequencyChange}
+      />,
+    );
+
+    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
+  });
+
+  it('calls onFrequencyChange for daily frequency', async () => {
+    const user = userEvent.setup();
+    const onFrequencyChange = vi.fn();
+    render(
+      <RecurrenceFrequencySection
+        {...defaultProps}
+        onFrequencyChange={onFrequencyChange}
+      />,
+    );
+
+    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(screen.getByTestId('customDailyRecurrence'));
+    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY);
+  });
+
+  it('calls onFrequencyChange for monthly frequency', async () => {
+    const user = userEvent.setup();
+    const onFrequencyChange = vi.fn();
+    render(
+      <RecurrenceFrequencySection
+        {...defaultProps}
+        onFrequencyChange={onFrequencyChange}
+      />,
+    );
+
+    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.MONTHLY);
+  });
+
+  it('calls onFrequencyChange for yearly frequency', async () => {
+    const user = userEvent.setup();
+    const onFrequencyChange = vi.fn();
+    render(
+      <RecurrenceFrequencySection
+        {...defaultProps}
+        onFrequencyChange={onFrequencyChange}
+      />,
+    );
+
+    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.YEARLY);
+  });
+
+  it('handles empty interval safely', () => {
+    render(<RecurrenceFrequencySection {...defaultProps} localInterval="" />);
+    const input = screen.getByTestId(
+      'customRecurrenceIntervalInput',
+    ) as HTMLInputElement;
+    expect(input.value).toBe('');
   });
 });

@@ -2,7 +2,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import DateRangePicker from './DateRangePicker';
 import type {
@@ -115,29 +116,44 @@ describe('DateRangePicker', () => {
     expect(screen.getByTestId(`${dataTestId}-end-input`)).toBeInTheDocument();
   });
 
-  it('updates start date', () => {
+  it('updates start date', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: dayjs().add(5, 'days').format('YYYY-MM-DD') },
-    });
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    await user.clear(input);
+    await user.paste(dayjs().add(5, 'days').format('YYYY-MM-DD'));
 
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalled();
+    const lastCall =
+      onChangeMock.mock.calls[onChangeMock.mock.calls.length - 1][0];
+    const expectedDate = dayjs().add(5, 'days');
+    expect(lastCall.startDate.toDateString()).toBe(
+      expectedDate.toDate().toDateString(),
+    );
   });
 
-  it('updates end date', () => {
+  it('updates end date', async () => {
+    const user = userEvent.setup();
     renderComponent({
       value: { startDate: dayjs().toDate(), endDate: null },
     });
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-end-input`), {
-      target: { value: dayjs().add(10, 'days').format('YYYY-MM-DD') },
-    });
+    const input = screen.getByTestId(`${dataTestId}-end-input`);
+    await user.clear(input);
+    await user.paste(dayjs().add(10, 'days').format('YYYY-MM-DD'));
 
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalled();
+    const lastCall =
+      onChangeMock.mock.calls[onChangeMock.mock.calls.length - 1][0];
+    const expectedDate = dayjs().add(10, 'days');
+    expect(lastCall.endDate.toDateString()).toBe(
+      expectedDate.toDate().toDateString(),
+    );
   });
 
-  it('auto-adjusts end date when start > end', () => {
+  it('auto-adjusts end date when start > end', async () => {
+    const user = userEvent.setup();
     renderComponent({
       value: {
         startDate: dayjs().toDate(),
@@ -145,9 +161,9 @@ describe('DateRangePicker', () => {
       },
     });
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: dayjs().add(10, 'days').format('YYYY-MM-DD') },
-    });
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    await user.clear(input);
+    await user.type(input, dayjs().add(10, 'days').format('YYYY-MM-DD'));
 
     const emitted = onChangeMock.mock.calls[0][0] as IDateRangeValue;
 
@@ -156,12 +172,18 @@ describe('DateRangePicker', () => {
     );
   });
 
-  it('respects disabled state', () => {
+  it('respects disabled state', async () => {
+    const user = userEvent.setup();
     renderComponent({ disabled: true });
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: dayjs().format('YYYY-MM-DD') },
-    });
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    // userEvent might throw if interacting with disabled element, or just no-op.
+    // Usually type() throws on disabled. Let's try typing.
+    try {
+      await user.type(input, dayjs().format('YYYY-MM-DD'));
+    } catch {
+      // Expected
+    }
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
@@ -187,24 +209,24 @@ describe('DateRangePicker', () => {
     expect(root.className).toContain('custom-class');
   });
 
-  it('does not call onChange when start date normalizes to null', () => {
+  it('does not call onChange when start date normalizes to null', async () => {
+    const user = userEvent.setup();
     renderComponent();
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: '' },
-    });
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    await user.clear(input);
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
 
-  it('does not call onChange when end date normalizes to null', () => {
+  it('does not call onChange when end date normalizes to null', async () => {
+    const user = userEvent.setup();
     renderComponent({
       value: { startDate: new Date(), endDate: null },
     });
 
-    fireEvent.change(screen.getByTestId(`${dataTestId}-end-input`), {
-      target: { value: '' },
-    });
+    const input = screen.getByTestId(`${dataTestId}-end-input`);
+    await user.clear(input);
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
@@ -279,7 +301,8 @@ describe('DateRangePicker', () => {
     expect(dayjs(endPickerCall?.[0].minDate).toDate()).toEqual(start);
   });
 
-  it('calls onChange when preset button is clicked', () => {
+  it('calls onChange when preset button is clicked', async () => {
+    const user = userEvent.setup();
     const baseDate = dayjs();
     const testPreset = {
       key: 'last7days',
@@ -293,7 +316,7 @@ describe('DateRangePicker', () => {
     renderComponent({ presets: [testPreset] });
 
     const presetButton = screen.getByTestId(`${dataTestId}-preset-last7days`);
-    fireEvent.click(presetButton);
+    await user.click(presetButton);
 
     expect(onChangeMock).toHaveBeenCalledTimes(1);
     const emitted = onChangeMock.mock.calls[0][0];
@@ -305,7 +328,8 @@ describe('DateRangePicker', () => {
     );
   });
 
-  it('does not call onChange when preset clicked while disabled', () => {
+  it('does not call onChange when preset clicked while disabled', async () => {
+    const user = userEvent.setup();
     const testPreset = {
       key: 'test',
       label: 'Test',
@@ -314,7 +338,20 @@ describe('DateRangePicker', () => {
 
     renderComponent({ presets: [testPreset], disabled: true });
 
-    fireEvent.click(screen.getByTestId(`${dataTestId}-preset-test`));
+    // button is likely disabled, so user.click might throw or no-op
+    const btn = screen.getByTestId(`${dataTestId}-preset-test`);
+    // Ensure button is disabled
+    expect(btn).toBeDisabled();
+
+    // Attempt click if possible, or verify disabled state prevents interaction
+    // Replacing fireEvent.click with user.click on disabled element usually throws or does nothing.
+    // We can just assert it is disabled which implies it won't fire.
+    // But to match previous test intent:
+    try {
+      await user.click(btn);
+    } catch {
+      // Expected
+    }
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
@@ -336,6 +373,62 @@ describe('DateRangePicker', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('handles empty value object safely', () => {
+    renderComponent({
+      value: {} as IDateRangeValue,
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles invalid native Date object', () => {
+    renderComponent({
+      value: {
+        startDate: new Date('invalid'),
+        endDate: null,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles primitive value safely in normalizeToDate', () => {
+    renderComponent({
+      value: {
+        startDate: 123 as unknown as Date,
+        endDate: null,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles undefined presets safely', () => {
+    renderComponent({ presets: undefined });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('renders presets when showPresets is explicitly true', () => {
+    renderComponent({
+      presets: [
+        {
+          key: 'explicit',
+          label: 'Explicit',
+          getRange: () => ({
+            startDate: new Date(),
+            endDate: new Date(),
+          }),
+        },
+      ],
+      showPresets: true,
+    });
+
+    expect(
+      screen.getByTestId(`${dataTestId}-preset-explicit`),
+    ).toBeInTheDocument();
+  });
+
   it('does not render presets when presets array is empty', () => {
     renderComponent({ presets: [] });
 
@@ -349,6 +442,104 @@ describe('DateRangePicker', () => {
 
     const helperElement = screen.getByTestId(`${dataTestId}-helper`);
     expect(helperElement).toHaveTextContent('Error text');
-    expect(helperElement.className).toContain('text-danger'); // Add this assertion
+    expect(helperElement.className).toContain('text-danger');
+  });
+
+  it('covers normalizeToDate early return for undefined', () => {
+    renderComponent({
+      value: {
+        startDate: undefined as unknown as Date,
+        endDate: undefined as unknown as Date,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('covers isDayjsLike false branch with plain object', () => {
+    renderComponent({
+      value: {
+        startDate: { random: true } as unknown as Date,
+        endDate: null,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('covers activePresetKey when presets exist but none match', () => {
+    renderComponent({
+      presets: [
+        {
+          key: 'no-match',
+          label: 'No Match',
+          getRange: () => ({
+            startDate: new Date(2000, 1, 1),
+            endDate: new Date(2000, 1, 2),
+          }),
+        },
+      ],
+      value: {
+        startDate: new Date(),
+        endDate: new Date(),
+      },
+    });
+
+    expect(
+      screen.getByTestId(`${dataTestId}-preset-no-match`),
+    ).toBeInTheDocument();
+  });
+
+  it('covers handleStartChange early return when disabled', async () => {
+    const user = userEvent.setup();
+    renderComponent({ disabled: true });
+
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    try {
+      await user.type(input, dayjs().format('YYYY-MM-DD'));
+    } catch {
+      // Expected
+    }
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('covers handleStartChange early return when normalized start is null', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    const input = screen.getByTestId(`${dataTestId}-start-input`);
+    await user.clear(input);
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('covers handleEndChange early return when disabled', async () => {
+    const user = userEvent.setup();
+    renderComponent({
+      disabled: true,
+      value: { startDate: new Date(), endDate: null },
+    });
+
+    const input = screen.getByTestId(`${dataTestId}-end-input`);
+    try {
+      await user.type(input, dayjs().add(3, 'days').format('YYYY-MM-DD'));
+    } catch {
+      // Expected
+    }
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('covers handleEndChange early return when normalized endDate is null', async () => {
+    const user = userEvent.setup();
+    renderComponent({
+      value: { startDate: new Date(), endDate: null },
+    });
+
+    const input = screen.getByTestId(`${dataTestId}-end-input`);
+    await user.clear(input);
+
+    expect(onChangeMock).not.toHaveBeenCalled();
   });
 });
