@@ -15,11 +15,10 @@ import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaFolderInfo,
 } from 'types/AdminPortal/Agenda/interface';
-import type { TFunction } from 'i18next';
 
 interface InterfaceUseAgendaMutationsProps {
   refetchAgendaFolder: () => void;
-  t: TFunction;
+  t: (key: string) => string;
 }
 
 // translation-check-keyPrefix: agendaSection
@@ -133,9 +132,7 @@ export function useAgendaMutations({
       NotificationToast.success(t('agendaFolderUpdated') as string);
     } catch (error) {
       if (error instanceof Error) {
-        NotificationToast.error(
-          t('agendaFolderUpdateFailed', { error: error.message }) as string,
-        );
+        NotificationToast.error(t('agendaFolderUpdateFailed') as string);
       }
     }
   };
