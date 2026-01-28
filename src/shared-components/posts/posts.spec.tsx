@@ -1565,7 +1565,8 @@ describe('UserId Fallback Logic', () => {
   it('returns null when both "userId" and "id" are absent', async () => {
     localStorageMocks.getItem.mockImplementation(() => null);
 
-    renderComponent([createOrgPostMock(null), emptyPinnedPostsMock]);
+    // No mocks needed if queries are correctly skipped when userId is missing
+    renderComponent([]);
 
     await waitFor(() => {
       expect(screen.getByText('No posts available.')).toBeInTheDocument();
