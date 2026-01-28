@@ -28,10 +28,22 @@ const debounceMocks = vi.hoisted(() => {
   return { cancel, flush, debounced };
 });
 
-// Mock the performance util to return our debounced function
+// Mock the performance util to return our debounced function that invokes
+// the wrapped function and still exposes `cancel` and `flush`.
 vi.mock('utils/performance', async () => {
   const actual = await vi.importActual('utils/performance');
-  return { ...actual, debounceInput: () => debounceMocks.debounced };
+  return {
+    ...actual,
+    debounceInput: (fn: (...args: unknown[]) => unknown) => {
+      const debounced = ((...args: unknown[]) => fn(...args)) as unknown as ((
+        ...args: unknown[]
+      ) => unknown) & { cancel?: () => void; flush?: () => void };
+      // Attach the hoisted mock cancel/flush so tests can assert on them
+      debounced.cancel = debounceMocks.cancel;
+      debounced.flush = debounceMocks.flush;
+      return debounced;
+    },
+  };
 });
 
 // Mock dependencies
