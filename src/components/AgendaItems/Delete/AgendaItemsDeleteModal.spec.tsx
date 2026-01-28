@@ -68,22 +68,23 @@ describe('AgendaItemsDeleteModal', () => {
   });
 
   // Interaction Tests
-  test('calls toggleDeleteModal when close button is clicked', async () => {
-    const user = userEvent.setup();
-    renderComponent();
-    const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-    await user.click(closeButton);
-    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
-  });
+  describe('User Interactions', () => {
+    test('calls toggleDeleteModal when close button is clicked', async () => {
+      const user = userEvent.setup();
+      renderComponent();
+      const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
+      await user.click(closeButton);
+      expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+    });
 
-  test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
-    renderComponent();
-    const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    const user = userEvent.setup();
-    await user.click(confirmButton);
-    expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
+    test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
+      renderComponent();
+      const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
+      const user = userEvent.setup();
+      await user.click(confirmButton);
+      expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
+    });
   });
-
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
     renderComponent();
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -108,20 +109,22 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
-  test('closes modal when Escape key is pressed', async () => {
-    renderComponent();
-    const user = userEvent.setup();
-    await user.keyboard('{Escape}');
-    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
-  });
+  describe('Keyboard Accessibility', () => {
+    test('does not close modal when Escape key is pressed', async () => {
+      renderComponent();
+      const user = userEvent.setup();
+      await user.keyboard('{Escape}');
+      expect(mockToggleDeleteModal).not.toHaveBeenCalled();
+    });
 
-  test('confirm button is accessible via keyboard', async () => {
-    renderComponent();
-    const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    const user = userEvent.setup();
-    confirmButton.focus();
-    await user.keyboard('{Enter}');
-    expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
+    test('confirm button is accessible via keyboard', async () => {
+      renderComponent();
+      const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
+      const user = userEvent.setup();
+      confirmButton.focus();
+      await user.keyboard('{Enter}');
+      expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
+    });
   });
 
   test('handles multiple modal instances correctly', () => {

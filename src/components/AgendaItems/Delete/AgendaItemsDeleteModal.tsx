@@ -52,7 +52,7 @@ const AgendaItemsDeleteModal: React.FC<
       size="sm"
       className={styles.agendaItemModal}
       title={t('deleteAgendaItem')}
-      keyboard={true}
+      keyboard={false}
       backdrop="static"
       showCloseButton={true}
       headerClassName="bg-primary text-white"
