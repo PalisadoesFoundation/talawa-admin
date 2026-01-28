@@ -6,9 +6,6 @@
  * and confirming the new password. The component validates the input and
  * communicates with the backend to update the password using a GraphQL mutation.
  *
- * @param props - Component props
- * @param props.id - The unique identifier of the user whose password is being updated.
- *
  * @returns The rendered component.
  *
  * @remarks

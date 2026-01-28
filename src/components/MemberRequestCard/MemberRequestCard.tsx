@@ -4,15 +4,14 @@
  * This component represents a card displaying details of a membership request.
  * It provides functionality to accept or reject a membership request.
  *
- * @param props - The properties passed to the component.
- * @param props.id - The unique identifier of the membership request.
- * @param props.memberImage - The URL of the member's profile image.
- * @param props.memberName - The name of the member.
- * @param props.memberLocation - The location of the member.
- * @param props.email - The email address of the member.
- * @param props.joinDate - The date the member requested to join.
+ * @param id - The unique identifier of the membership request.
+ * @param memberImage - The URL of the member's profile image.
+ * @param memberName - The name of the member.
+ * @param memberLocation - The location of the member.
+ * @param email - The email address of the member.
+ * @param joinDate - The date the member requested to join.
  *
- * @returns {JSX.Element} A JSX element representing the membership request card.
+ * @returns A JSX element representing the membership request card.
  *
  * @remarks
  * - The component uses GraphQL mutations to handle accept and reject actions.
