@@ -1,4 +1,3 @@
-import { TFunction } from 'i18next';
 import type { ChangeEvent } from 'react';
 import type { DropResult } from '@hello-pangea/dnd';
 
@@ -270,7 +269,7 @@ export interface InterfaceAgendaItemsPreviewModalProps {
 export interface InterfaceAgendaDragAndDropProps {
   folders: InterfaceAgendaFolderInfo[];
   agendaFolderConnection: 'Event';
-  t: TFunction;
+  t: (key: string) => string;
 
   onFolderDragEnd: (result: DropResult) => Promise<void>;
   onItemDragEnd: (result: DropResult) => Promise<void>;
