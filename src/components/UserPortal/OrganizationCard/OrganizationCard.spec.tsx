@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
@@ -90,9 +91,10 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('calls mutation and shows success toast on join click', async () => {
+    const user = userEvent.setup();
     renderWithI18n(<OrganizationCard {...baseProps} />);
 
-    fireEvent.click(screen.getByTestId('joinBtn'));
+    await user.click(screen.getByTestId('joinBtn'));
 
     await waitFor(() => {
       expect(mockMutationFn).toHaveBeenCalledWith({
@@ -106,6 +108,7 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('calls mutation and shows success toast on withdraw click', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <OrganizationCard
         {...baseProps}
@@ -114,7 +117,7 @@ describe('OrganizationCard [PR-2]', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('withdrawBtn'));
+    await user.click(screen.getByTestId('withdrawBtn'));
 
     await waitFor(() => {
       expect(mockMutationFn).toHaveBeenCalledWith({
@@ -130,6 +133,7 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('shows error toast when withdraw mutation fails', async () => {
+    const user = userEvent.setup();
     mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
 
     renderWithI18n(
@@ -140,7 +144,7 @@ describe('OrganizationCard [PR-2]', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('withdrawBtn'));
+    await user.click(screen.getByTestId('withdrawBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -150,11 +154,12 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('shows error toast when join mutation fails', async () => {
+    const user = userEvent.setup();
     mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
 
     renderWithI18n(<OrganizationCard {...baseProps} />);
 
-    fireEvent.click(screen.getByTestId('joinBtn'));
+    await user.click(screen.getByTestId('joinBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -164,6 +169,7 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('does not call mutation when withdraw clicked but no pending request exists', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <OrganizationCard
         {...baseProps}
@@ -172,7 +178,7 @@ describe('OrganizationCard [PR-2]', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('withdrawBtn'));
+    await user.click(screen.getByTestId('withdrawBtn'));
 
     await waitFor(() => {
       expect(mockMutationFn).not.toHaveBeenCalled();
