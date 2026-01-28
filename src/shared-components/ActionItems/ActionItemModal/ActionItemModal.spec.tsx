@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within, act } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -1016,9 +1016,7 @@ describe('ActionItemModal', () => {
 
     it('should update preCompletionNotes field (covers line 705)', async () => {
       const user = userEvent.setup();
-      await act(async () => {
-        renderModal();
-      });
+      renderModal();
       await screen.findByTestId('actionItemModal');
 
       const notesInput = (await screen.findByLabelText(
@@ -1040,9 +1038,7 @@ describe('ActionItemModal', () => {
 
     it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
       const user = userEvent.setup();
-      await act(async () => {
-        renderModal({ editMode: true, actionItem: mockCompletedActionItem });
-      });
+      renderModal({ editMode: true, actionItem: mockCompletedActionItem });
       await screen.findByTestId('actionItemModal');
 
       const postNotesInput = (await screen.findByLabelText(
