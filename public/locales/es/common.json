@@ -208,7 +208,7 @@
   "userName": "Nombre de usuario",
   "unableToLoadData": "No se pudo cargar los datos.",
   "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo permitido es de {{size}}MB.",
-  "invalidFileType": "Tipo de archivo inválido. Por favor, suba un archivo {{types}}.",
+  "invalidFileType": "Tipo de archivo inválido. Por favor, suba un archivo JPEG, PNG o GIF.",
   "enterDescription": "Ingrese Descripción",
   "example": "Ej. {{example}}",
   "selectCountry": "Seleccione un país",
