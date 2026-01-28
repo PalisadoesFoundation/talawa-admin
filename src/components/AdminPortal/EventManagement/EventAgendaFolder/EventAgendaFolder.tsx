@@ -95,6 +95,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
       },
       urls: [] as string[],
       attachments: [] as {
+        name: string;
         mimeType: string;
         fileHash: string;
         objectName: string;
