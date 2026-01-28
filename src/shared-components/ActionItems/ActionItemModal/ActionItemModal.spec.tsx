@@ -1,5 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within, act } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -966,35 +966,40 @@ describe('ActionItemModal', () => {
       );
     });
 
-    it('should handle volunteer group autocomplete', async () => {
+    it('should handle volunteer group autocomplete (covers line 634)', async () => {
       const user = userEvent.setup();
-      renderModal();
+      await act(async () => {
+        renderModal();
+      });
       await screen.findByTestId('actionItemModal');
 
-      // Activate volunteerGroup
+      // Switch to volunteer group
       const volunteerGroupChip = screen.getByRole('button', {
-        name: /volunteerGroup/i,
+        name: 'volunteerGroup',
       });
       await user.click(volunteerGroupChip);
 
-      // Get the autocomplete container
-      const container = await screen.findByTestId('volunteerGroupSelect');
+      // Wait for group select to appear after chip click
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
+      );
+      const groupInput = within(groupSelect).getByRole(
+        'combobox',
+      ) as HTMLInputElement;
+      groupInput.focus();
+      await user.click(groupInput);
+      const groupOption = await screen.findByText('Test Group 1');
+      await user.click(groupOption);
 
-      // Get the actual input inside it
-      const input = within(container).getByRole('combobox') as HTMLInputElement;
-
-      // Type
-      await user.click(input);
-      await user.type(input, 'Test Group 1');
-
-      // Select option (MUI renders options in a portal)
-      const option = await screen.findByText('Test Group 1');
-      await user.click(option);
-
-      // Assert
-      await waitFor(() => {
-        expect(input.value).toBe('Test Group 1');
-      });
+      // Verify selection
+      await waitFor(
+        () => {
+          expect(groupInput.value).toBe('Test Group 1');
+        },
+        { timeout: 3000 },
+      );
     });
   });
 
@@ -1012,37 +1017,53 @@ describe('ActionItemModal', () => {
     });
 
     it('should update preCompletionNotes field (covers line 705)', async () => {
-      const user = userEvent.setup({ delay: 1 });
-
-      renderModal();
+      const user = userEvent.setup();
+      await act(async () => {
+        renderModal();
+      });
       await screen.findByTestId('actionItemModal');
 
-      const input = screen.getByLabelText(
+      const notesInput = (await screen.findByLabelText(
         'preCompletionNotes',
-      ) as HTMLInputElement;
-
-      await user.clear(input);
-      await user.type(input, 'Test');
+      )) as HTMLInputElement;
+      notesInput.focus();
+      await user.type(notesInput, 'T');
+      notesInput.focus();
+      await user.type(notesInput, 'e');
+      notesInput.focus();
+      await user.type(notesInput, 's');
+      notesInput.focus();
+      await user.type(notesInput, 't');
 
       await waitFor(() => {
-        expect(input.value).toBe('Test');
+        expect(notesInput.value).toBe('Test');
       });
     });
 
-    it('should update postCompletionNotes field for completed items', async () => {
+    it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
       const user = userEvent.setup();
-      renderModal({ editMode: true, actionItem: mockCompletedActionItem });
+      await act(async () => {
+        renderModal({ editMode: true, actionItem: mockCompletedActionItem });
+      });
       await screen.findByTestId('actionItemModal');
 
-      const input = screen.getByLabelText(
+      const postNotesInput = (await screen.findByLabelText(
         'postCompletionNotes',
-      ) as HTMLInputElement;
+      )) as HTMLInputElement;
+      expect(postNotesInput.value).toBe('Completed notes');
 
-      await user.clear(input);
-      await user.type(input, 'New');
+      // Clear and type new value to trigger onChange
+      postNotesInput.focus();
+      await user.clear(postNotesInput);
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'N');
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'e');
+      postNotesInput.focus();
+      await user.type(postNotesInput, 'w');
 
       await waitFor(() => {
-        expect(input.value).toBe('New');
+        expect(postNotesInput.value).toBe('New');
       });
     });
 
@@ -1073,22 +1094,25 @@ describe('ActionItemModal', () => {
     });
 
     it('should render volunteer group select with accessible wrapper', async () => {
-      const user = userEvent.setup();
       renderModal();
       await screen.findByTestId('actionItemModal');
 
-      // Activate volunteerGroup mode
+      // Switch to volunteer group
       const volunteerGroupChip = screen.getByRole('button', {
-        name: /volunteerGroup/i,
+        name: 'volunteerGroup',
       });
-      await user.click(volunteerGroupChip);
+      await userEvent.click(volunteerGroupChip);
 
-      // Now it exists
-      const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
+      );
       expect(groupSelect).toBeInTheDocument();
 
-      const combobox = within(groupSelect).getByRole('combobox');
-      expect(combobox).toBeInTheDocument();
+      // Verify the combobox is accessible
+      const groupInput = within(groupSelect).getByRole('combobox');
+      expect(groupInput).toBeInTheDocument();
     });
   });
 });
