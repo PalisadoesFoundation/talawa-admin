@@ -1,3 +1,5 @@
+import i18n from './i18n';
+
 type CSVData = (string | number)[][];
 
 export const exportToCSV = (data: CSVData, filename: string): void => {
@@ -90,7 +92,7 @@ export const exportDemographicsToCSV = (
     throw new Error('Labels and data arrays must have the same length');
   }
 
-  const heading = `${selectedCategory} Demographics`;
+  const heading = i18n.t('csv.demographics', { category: selectedCategory });
   const headers = [selectedCategory, 'Count'];
   const data: CSVData = [
     [heading],

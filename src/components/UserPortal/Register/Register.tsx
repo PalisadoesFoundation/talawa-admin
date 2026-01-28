@@ -1,29 +1,24 @@
 /**
- * @file Register.tsx
- * @description This component provides a user registration form with fields for first name, last name, email,
- * password, and confirm password. It includes validation, error handling, and integration with a GraphQL mutation
- * for user registration. The component also allows switching to the login mode.
+ * Registration form for new users in the user portal.
  *
- * @module Register
- *
- * @param {InterfaceRegisterProps} props - Props containing a function to change the current mode.
- *
- * @returns {JSX.Element} A registration form with input fields, validation, and a submit button.
+ * Renders inputs for first name, last name, email, and password with validation and mutation handling.
  *
  * @remarks
- * - Uses `react-bootstrap` for UI components and `@mui/icons-material` for icons.
- * - Integrates with `react-toastify` for notifications and `@apollo/client` for GraphQL mutation.
- * - Includes i18n support using `react-i18next`.
+ * Integrates the signup GraphQL mutation, toast notifications, i18n translations, and provides a control
+ * to switch back to login mode.
+ *
+ * @param props - Props containing a setter to change the current authentication mode.
+ * @returns A registration form with validated inputs and submit handling.
  *
  * @example
  * ```tsx
  * <Register setCurrentMode={setModeFunction} />
  * ```
- *
  */
 import type { ChangeEvent, SetStateAction } from 'react';
 import React from 'react';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import { InputGroup } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import { LockOutlined } from '@mui/icons-material';
@@ -34,6 +29,7 @@ import styles from './Register.module.css';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 interface InterfaceRegisterProps {
   /**
@@ -166,84 +162,124 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
     <>
       <h3 className="mt-3 font-weight-bold">{tCommon('register')}</h3>
       <div className="my-3">
-        <h6>{tCommon('firstName')}</h6>
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder={t('enterFirstName')}
-            className={styles.borderNone}
-            value={registerVariables.firstName}
-            onChange={handleFirstName}
-            data-testid="firstNameInput"
-          />
-          <InputGroup.Text
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
+        <div className="mb-3">
+          <FormFieldGroup
+            name="firstNameInput"
+            label={tCommon('firstName')}
+            required
           >
-            <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
-          </InputGroup.Text>
-        </InputGroup>
-        <h6>{tCommon('lastName')}</h6>
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder={t('enterLastName')}
-            className={styles.borderNone}
-            value={registerVariables.lastName}
-            onChange={handleLastName}
-            data-testid="lastNameInput"
-          />
-          <InputGroup.Text
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            <InputGroup>
+              <input
+                id="firstNameInput"
+                placeholder={t('enterFirstName')}
+                className={`${styles.borderNone} form-control`}
+                value={registerVariables.firstName}
+                onChange={handleFirstName}
+                data-testid="firstNameInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+          </FormFieldGroup>
+        </div>
+        <div className="mb-3">
+          <FormFieldGroup
+            name="lastNameInput"
+            label={tCommon('lastName')}
+            required
           >
-            <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
-          </InputGroup.Text>
-        </InputGroup>
-        <h6>{tCommon('emailAddress')}</h6>
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder={tCommon('enterEmail')}
-            type="email"
-            className={styles.borderNone}
-            value={registerVariables.email}
-            onChange={handleEmailChange}
-            data-testid="emailInput"
-          />
-          <InputGroup.Text
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            <InputGroup>
+              <input
+                id="lastNameInput"
+                placeholder={t('enterLastName')}
+                className={`${styles.borderNone} form-control`}
+                value={registerVariables.lastName}
+                onChange={handleLastName}
+                data-testid="lastNameInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <BadgeOutlinedIcon className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+          </FormFieldGroup>
+        </div>
+        <div className="mb-3">
+          <FormFieldGroup
+            name="emailInput"
+            label={tCommon('emailAddress')}
+            required
           >
-            <EmailOutlinedIcon className={`${styles.colorWhite}`} />
-          </InputGroup.Text>
-        </InputGroup>
-        <h6>{tCommon('password')}</h6>
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder={tCommon('enterPassword')}
-            type="password"
-            className={styles.borderNone}
-            value={registerVariables.password}
-            onChange={handlePasswordChange}
-            data-testid="passwordInput"
-          />
-          <InputGroup.Text
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            <InputGroup>
+              <input
+                id="emailInput"
+                placeholder={tCommon('enterEmail')}
+                type="email"
+                className={`${styles.borderNone} form-control`}
+                value={registerVariables.email}
+                onChange={handleEmailChange}
+                data-testid="emailInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <EmailOutlinedIcon className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+          </FormFieldGroup>
+        </div>
+        <div className="mb-3">
+          <FormFieldGroup
+            name="passwordInput"
+            label={tCommon('password')}
+            required
           >
-            <LockOutlined className={`${styles.colorWhite}`} />
-          </InputGroup.Text>
-        </InputGroup>
-        <h6>{tCommon('confirmPassword')}</h6>
-        <InputGroup className="mb-3">
-          <Form.Control
-            placeholder={t('enterConfirmPassword')}
-            type="password"
-            className={styles.borderNone}
-            value={registerVariables.confirmPassword}
-            onChange={handleConfirmPasswordChange}
-            data-testid="confirmPasswordInput"
-          />
-          <InputGroup.Text
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            <InputGroup>
+              <input
+                id="passwordInput"
+                placeholder={tCommon('enterPassword')}
+                type="password"
+                className={`${styles.borderNone} form-control`}
+                value={registerVariables.password}
+                onChange={handlePasswordChange}
+                data-testid="passwordInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <LockOutlined className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+          </FormFieldGroup>
+        </div>
+        <div className="mb-3">
+          <FormFieldGroup
+            name="confirmPasswordInput"
+            label={tCommon('confirmPassword')}
+            required
           >
-            <LockOutlined className={`${styles.colorWhite}`} />
-          </InputGroup.Text>
-        </InputGroup>
+            <InputGroup>
+              <input
+                id="confirmPasswordInput"
+                placeholder={t('enterConfirmPassword')}
+                type="password"
+                className={`${styles.borderNone} form-control`}
+                value={registerVariables.confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                data-testid="confirmPasswordInput"
+              />
+              <InputGroup.Text
+                className={`${styles.colorPrimary} ${styles.borderNone}`}
+              >
+                <LockOutlined className={`${styles.colorWhite}`} />
+              </InputGroup.Text>
+            </InputGroup>
+          </FormFieldGroup>
+        </div>
       </div>
       <Button
         className={`${styles.colorPrimary} ${styles.borderNone}`}

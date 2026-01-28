@@ -3,8 +3,7 @@
  *  A React component that secures routes based on user authentication and role.
  *  Redirects unauthorized users to the home page or displays a "Page Not Found" screen for non-administrator roles.
  *  Also includes session timeout and inactivity handling.
- * @component
- * @returns {JSX.Element} - Renders the child route if the user is authenticated and has the "administrator" role.
+ * @returns - Renders the child route if the user is authenticated and has the "administrator" role.
  * Redirects to the home page if the user is not logged in.
  * Displays a "Page Not Found" screen for unauthorized roles.
  *
@@ -13,7 +12,7 @@
  * - Implements session timeout and inactivity detection to enhance security.
  * - Displays a toast notification when the session expires.
  *
- * @dependencies
+ * dependencies
  * - `react-router-dom` for navigation (`Navigate`, `Outlet`).
  * - `NotificationToast` for toast notifications.
  * - `useLocalStorage` custom hook for local storage operations.
@@ -22,20 +21,13 @@
  * ```tsx
  * <SecuredRoute />
  * ```
- *
- * @event document#mousemove
- * Updates the `lastActive` timestamp on mouse movement to track user activity.
- *
- * @function setInterval
- * Periodically checks for user inactivity and logs out the user if the session has expired.
- * Displays a warning toast and redirects to the home page upon session expiration.
  */
 
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 
 // Time constants for session timeout and inactivity interval

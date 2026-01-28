@@ -1,0 +1,89 @@
+.volunteerGroupViewModal {
+  max-width: 80vw;
+  margin: 2vh auto;
+}
+
+.tableImages {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: 0;
+  margin-right: var(--space-3);
+}
+
+.avatarContainer {
+  width: var(--space-7);
+  height: var(--space-7);
+}
+
+.imageContainer {
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: 100%;
+  margin-right: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 100%;
+}
+
+.modalTable {
+  max-height: var(--space-17);
+  overflow-y: auto;
+}
+
+.modalTable img[alt='creator'] {
+  height: var(--space-7);
+  width: var(--space-7);
+  object-fit: contain;
+  border-radius: var(--radius-lg);
+  margin-right: var(--space-3);
+}
+
+.modalTable img[alt='orgImage'] {
+  height: var(--space-7);
+  width: var(--space-7);
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  margin-right: var(--space-3);
+}
+
+.titlemodal {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: var(--space-0);
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400);
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}
+
+.volunteersLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-700);
+}
+
+.formGroup {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}

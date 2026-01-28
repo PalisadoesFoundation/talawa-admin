@@ -83,6 +83,7 @@ if [ "$STATUS_KNIP1" -ne 0 ] || [ "$STATUS_KNIP2" -ne 0 ]; then
 fi
 
 pnpm run check-mock-cleanup || exit 1
+pnpm run check-route-prefix || exit 1
 pnpm run check-localstorage || exit 1
 
 git add docs/docs/auto-docs

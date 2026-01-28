@@ -265,7 +265,7 @@ describe('DataTable', () => {
       <DataTable
         data={data}
         columns={columns}
-        renderRow={(row) => (
+        renderRow={(row: (typeof data)[number]) => (
           <tr key={row.name}>
             <td data-testid="custom-row">Custom: {row.name}</td>
           </tr>
@@ -574,7 +574,7 @@ describe('DataTable', () => {
       <DataTable
         data={[{ id: 1 }]}
         columns={columns}
-        rowKey={(row) => `row-${row.id}`}
+        rowKey={(row: { id: number }) => `row-${row.id}`}
       />,
     );
 
@@ -664,7 +664,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         error={error}
-        renderError={(e) => <span>Custom: {e.message}</span>}
+        renderError={(e: Error) => <span>Custom: {e.message}</span>}
       />,
     );
 
@@ -816,7 +816,13 @@ describe('DataTable', () => {
     const data = [{ name: 'Ada' }];
 
     render(
-      <DataTable data={data} columns={columns} loadingMore skeletonRows={2} />,
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        loadingMore
+        skeletonRows={2}
+      />,
     );
 
     const appended = document.querySelectorAll(
@@ -1430,7 +1436,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           selectable
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -1467,7 +1473,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -1626,6 +1632,7 @@ describe('DataTable', () => {
         selectable
         rowKey="id"
         rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+        paginationMode="client"
         loadingMore
         skeletonRows={2}
       />,
@@ -1892,8 +1899,8 @@ describe('DataTable', () => {
     // Pagination.tsx line 52 covered
 
     // 3) Test row action boolean disable
-    const actionBtn = screen.getByTestId('action-btn-edit');
-    expect(actionBtn).toBeDisabled();
+    const actionBtns = screen.getAllByTestId('action-btn-edit');
+    actionBtns.forEach((btn) => expect(btn).toBeDisabled());
     // ActionsCell.tsx line 20-22 covered (boolean branch)
 
     // 4) Test TableLoader default rows
@@ -1902,6 +1909,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         loading
+        paginationMode="client"
         // Missing skeletonRows to test default = 5
       />,
     );
@@ -2007,7 +2015,6 @@ describe('defaultCompare boolean/date branches', () => {
 
   it('sorts boolean column (false < true, nulls last)', async () => {
     const onSortChange = vi.fn();
-    const user = userEvent.setup();
     render(
       <DataTable<Row>
         data={rows}
@@ -2017,7 +2024,7 @@ describe('defaultCompare boolean/date branches', () => {
     );
     const th = screen.getByRole('button', { name: /active/i });
     // Ascending: false, true, null/undefined
-    await user.click(th);
+    await userEvent.click(th);
     expect(onSortChange).toHaveBeenCalledWith(
       expect.objectContaining({
         sortBy: [{ columnId: 'active', direction: 'asc' }],
@@ -2035,7 +2042,7 @@ describe('defaultCompare boolean/date branches', () => {
     expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
     expect(th).toHaveAttribute('aria-sort', 'ascending');
     // Descending: true, false, null/undefined (nulls last)
-    await user.click(th);
+    await userEvent.click(th);
     expect(onSortChange).toHaveBeenCalledWith(
       expect.objectContaining({
         sortBy: [{ columnId: 'active', direction: 'desc' }],
@@ -2052,7 +2059,6 @@ describe('defaultCompare boolean/date branches', () => {
 
   it('sorts date column (earliest < latest, nulls last)', async () => {
     const onSortChange = vi.fn();
-    const user = userEvent.setup();
     render(
       <DataTable<Row>
         data={rows}
@@ -2062,7 +2068,7 @@ describe('defaultCompare boolean/date branches', () => {
     );
     const th = screen.getByRole('button', { name: /date/i });
     // Ascending: earliest, latest, null/undefined
-    await user.click(th);
+    await userEvent.click(th);
     expect(onSortChange).toHaveBeenCalledWith(
       expect.objectContaining({
         sortBy: [{ columnId: 'date', direction: 'asc' }],
@@ -2080,7 +2086,7 @@ describe('defaultCompare boolean/date branches', () => {
     expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
     expect(th).toHaveAttribute('aria-sort', 'ascending');
     // Descending: latest, earliest, null/undefined (nulls last)
-    await user.click(th);
+    await userEvent.click(th);
     expect(onSortChange).toHaveBeenCalledWith(
       expect.objectContaining({
         sortBy: [{ columnId: 'date', direction: 'desc' }],

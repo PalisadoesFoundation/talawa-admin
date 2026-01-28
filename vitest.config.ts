@@ -5,6 +5,7 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
+const isSharded = !!process.env.SHARD_INDEX || !!process.env.SHARD_COUNT;
 const cpuCount = cpus().length;
 
 const MAX_CI_THREADS = 12; // Reduced to leave headroom
@@ -17,6 +18,17 @@ const ciThreads = Math.min(
 
 const localThreads = Math.min(MAX_LOCAL_THREADS, Math.max(4, cpuCount));
 
+const baseTestInclude = [
+  'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+  'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
+];
+const eslintTestInclude = [
+  'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}',
+];
+const testInclude = isSharded
+  ? baseTestInclude
+  : [...baseTestInclude, ...eslintTestInclude];
+
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
   build: {
@@ -26,11 +38,7 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for faster tests
   },
   test: {
-    include: [
-      'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}'
-    ],
+    include: testInclude,
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
@@ -86,6 +94,7 @@ export default defineConfig({
         '.github/**', // Exclude GitHub workflows and scripts
         'scripts/!(eslint)/**', // Exclude scripts except eslint folder
         'scripts/*.{js,ts}',     // Exclude individual files in scripts root
+        'scripts/eslint/config/**', // Exclude ESLint config modules from coverage
         'config/**', // Exclude configuration files
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],

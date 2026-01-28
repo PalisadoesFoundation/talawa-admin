@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
 import type { InterfaceViewModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
-import styles from './CRUDModalTemplate.module.css';
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -73,7 +72,7 @@ export const ViewModal: React.FC<InterfaceViewModalProps> = ({
   const isLoading = loading || loadingData;
 
   const customFooter = (
-    <div className={styles.footerButtons}>
+    <div>
       {customActions}
       <Button
         variant="secondary"
@@ -99,7 +98,7 @@ export const ViewModal: React.FC<InterfaceViewModalProps> = ({
       data-testid={dataTestId}
       customFooter={customFooter}
     >
-      <div className={styles.formContainer}>{children}</div>
+      <div>{children}</div>
     </CRUDModalTemplate>
   );
 };

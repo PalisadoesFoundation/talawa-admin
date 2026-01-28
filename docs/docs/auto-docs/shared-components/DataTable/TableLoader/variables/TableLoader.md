@@ -18,7 +18,7 @@ Defined in: [src/shared-components/DataTable/TableLoader.tsx:69](https://github.
 
 ### props
 
-[`ITableLoaderProps`](../../../../types/shared-components/DataTable/interface/interfaces/ITableLoaderProps.md)\<`T`\>
+[`InterfaceTableLoaderProps`](../../../../types/shared-components/DataTable/props/interfaces/InterfaceTableLoaderProps.md)\<`T`\>
 
 ## Returns
 

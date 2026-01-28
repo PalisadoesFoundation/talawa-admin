@@ -66,7 +66,7 @@ const mockUsers = [
       id: 'user-3',
       name: 'Test User 3',
       avatarURL: '',
-      role: 'Member',
+      role: '',
     },
   },
 ];
@@ -258,6 +258,41 @@ describe('CreateDirectChatModal', () => {
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });
     expect(screen.queryByText('Test User 3')).not.toBeInTheDocument();
+  });
+
+  test('should clear the search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
+    renderComponent();
+
+    await screen.findAllByTestId('user');
+
+    const searchInput = screen.getByTestId('searchUser');
+    const searchButton = screen.getByTestId('submitBtn');
+
+    await user.type(searchInput, 'Test User 2');
+    await user.click(searchButton);
+
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
+      expect(userRows.length).toBe(1);
+      expect(userRows[0]).toHaveTextContent('Test User 2');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
+    expect(screen.queryByLabelText(/clear/i)).not.toBeInTheDocument();
+  });
+
+  test('shows member fallback when role is missing', async () => {
+    renderComponent();
+
+    const userRows = await screen.findAllByTestId('user');
+    const lastRow = userRows[userRows.length - 1];
+
+    expect(lastRow).toHaveTextContent('Test User 3');
+    expect(lastRow).toHaveTextContent('Member');
   });
 
   test('should prevent creating a duplicate chat', async () => {

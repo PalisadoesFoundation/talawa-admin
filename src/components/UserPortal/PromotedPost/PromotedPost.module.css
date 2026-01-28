@@ -1,0 +1,11 @@
+.cardHeaderPromotedPost {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  color: var(--cardHeaderPromotedPost-color);
+}
+
+.imageContainerPromotedPost {
+  max-width: 100%;
+}

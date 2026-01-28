@@ -3,7 +3,7 @@ export class ActionItemPage {
   private readonly categorySelect = '[data-cy="categorySelect"]';
   private readonly memberSelect = '[data-cy="memberSelect"]';
   private readonly volunteerSelect = '[data-cy="volunteerSelect"]';
-  private readonly submitBtn = '[data-cy="submitBtn"]';
+  private readonly submitBtn = '[data-testid="modal-submit-btn"]';
   private readonly sortBtn = '[data-testid="sort"]';
   private readonly sortByAssignedAtDesc = '[data-testid="assignedAt_DESC"]';
   private readonly editItemBtn = '[data-testid^="editItemBtn"]';
@@ -13,7 +13,7 @@ export class ActionItemPage {
   private readonly createCompletionBtn = '[data-testid="createBtn"]';
   private readonly completionBtnSeries = '[data-cy="markCompletionForSeries"]';
   private readonly deleteItemBtn = '[data-testid^="deleteItemBtn"]';
-  private readonly deleteYesBtn = '[data-testid="deleteyesbtn"]';
+  private readonly deleteYesBtn = '[data-testid="modal-delete-btn"]';
   private readonly modalCloseBtn = '[data-testid="modalCloseBtn"]';
   private readonly notesInput = '[data-cy="preCompletionNotes"]';
 
