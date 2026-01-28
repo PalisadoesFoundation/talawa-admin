@@ -2,6 +2,7 @@ import React from 'react';
 import {
   render,
   screen,
+  // eslint-disable-next-line no-restricted-imports -- fireEvent.scroll needed for scroll simulation, not user interaction
   fireEvent,
   waitFor,
   act,

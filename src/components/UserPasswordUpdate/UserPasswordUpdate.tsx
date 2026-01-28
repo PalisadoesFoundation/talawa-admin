@@ -24,6 +24,7 @@ import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
 import styles from '../../style/app-fixed.module.css';
+// eslint-disable-next-line no-restricted-imports -- Form.Control needs password type/aria props not in shared FormFieldGroup
 import { Form } from 'react-bootstrap';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 

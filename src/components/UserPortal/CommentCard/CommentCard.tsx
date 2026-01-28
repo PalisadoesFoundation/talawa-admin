@@ -23,8 +23,10 @@ import {
   Modal,
   Menu,
   MenuItem,
+  // eslint-disable-next-line no-restricted-imports -- MUI FormControl required for form layout, shared FormFieldGroup doesn't support fullWidth modal forms
   FormControl,
   Input,
+  // eslint-disable-next-line no-restricted-imports -- MUI Button has variant/startIcon props required for edit modal, shared Button lacks this API
   Button,
 } from '@mui/material';
 import {
@@ -82,9 +84,14 @@ interface InterfaceCommentCardProps {
   refetchComments?: () => void;
 }
 
-function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
-  const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
-    props;
+function CommentCard({
+  id,
+  creator,
+  hasUserVoted,
+  upVoteCount,
+  text,
+  refetchComments,
+}: InterfaceCommentCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');

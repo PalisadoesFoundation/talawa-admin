@@ -2,6 +2,7 @@ import React from 'react';
 import {
   render,
   screen,
+  // eslint-disable-next-line no-restricted-imports -- fireEvent needed for change events on file/form inputs
   fireEvent,
   waitFor,
   within,

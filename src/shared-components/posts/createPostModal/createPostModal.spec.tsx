@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -604,8 +604,10 @@ describe('CreatePostModal Integration Tests', () => {
       // Mock empty file selection
       Object.defineProperty(fileInput, 'files', { value: null });
 
+      // Use userEvent to trigger change event (though files will be null)
       await act(async () => {
-        fireEvent.change(fileInput);
+        // Trigger the change event handler directly since userEvent.upload requires actual files
+        fileInput.dispatchEvent(new Event('change', { bubbles: true }));
       });
 
       // Should not show any preview
