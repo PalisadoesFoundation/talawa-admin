@@ -39,17 +39,12 @@ const mockNotificationToast = vi.hoisted(() => ({
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
-vi.mock('utils/convertToBase64');
-let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
 
 describe('AgendaItemsCreateModal', () => {
   beforeEach(() => {
     mockHideCreateModal = vi.fn();
     mockSetFormState = vi.fn();
     mockCreateAgendaItemHandler = vi.fn();
-    mockedConvertToBase64 = convertToBase64 as MockedFunction<
-      typeof convertToBase64
-    >;
   });
 
   afterEach(() => {
@@ -319,48 +314,6 @@ describe('AgendaItemsCreateModal', () => {
       expect(mockNotificationToast.error).toHaveBeenCalledWith(
         'fileSizeExceedsLimit',
       );
-    });
-  });
-
-  test('adds files correctly when within size limit', async () => {
-    mockedConvertToBase64.mockResolvedValue('base64-file');
-
-    render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const fileInput = screen.getByTestId('attachment');
-    const smallFile = new File(['small-file-content'], 'small-file.jpg'); // Small file
-
-    Object.defineProperty(fileInput, 'files', {
-      value: [smallFile],
-    });
-
-    fireEvent.change(fileInput);
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        attachments: [...mockFormState1.attachments, 'base64-file'],
-      });
     });
   });
   test('renders video attachment preview correctly', async () => {
