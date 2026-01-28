@@ -61,6 +61,7 @@ describe('Storage Helper Functions', () => {
     expect(consoleSpy).toHaveBeenCalledWith(
       `Failed to parse localStorage key: ${prefixedKey}`,
     );
+    consoleSpy.mockRestore();
   });
 
   it('sets item in local storage', () => {
