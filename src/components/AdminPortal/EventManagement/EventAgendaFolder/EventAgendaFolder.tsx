@@ -59,6 +59,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { InterfaceCreateFormStateType } from 'types/AdminPortal/Agenda/interface';
+import { AGENDA_ITEM_MIME_TYPE } from 'Constant/fileUpload';
 
 function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -95,6 +96,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
       },
       urls: [] as string[],
       attachments: [] as {
+        id: string;
         name: string;
         mimeType: string;
         fileHash: string;
@@ -174,7 +176,8 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
             attachments:
               agendaItemFormState.attachments.length > 0
                 ? agendaItemFormState.attachments.map((att) => ({
-                    mimeType: att.mimeType,
+                    name: att.name,
+                    mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType],
                     fileHash: att.fileHash,
                     objectName: att.objectName,
                   }))
@@ -199,6 +202,8 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
         duration: '',
         folderId: '',
         attachments: [] as {
+          id: string;
+          name: string;
           mimeType: string;
           fileHash: string;
           objectName: string;

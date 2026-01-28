@@ -33,24 +33,24 @@ const AgendaItemsPreviewModal: React.FC<
    * @returns JSX elements for each attachment, displaying videos and images.
    */
   const renderAttachments = (): JSX.Element[] => {
-    return (formState.attachment ?? []).map((attachment, index) => (
+    return (formState.attachment ?? []).map((att, index) => (
       <div key={index} className={styles.previewFile}>
-        {attachment.includes('video') ? (
-          <a href={attachment} target="_blank" rel="noopener noreferrer">
+        {att.mimeType.startsWith('video') ? (
+          <a href={att.previewUrl} target="_blank" rel="noopener noreferrer">
             <video
               muted
-              autoPlay={true}
-              loop={true}
+              autoPlay
+              loop
               playsInline
-              crossOrigin="anonymous"
               controls
+              crossOrigin="anonymous"
             >
-              <source src={attachment} type="video/mp4" />
+              <source src={att.previewUrl} type={att.mimeType} />
             </video>
           </a>
         ) : (
-          <a href={attachment} target="_blank" rel="noopener noreferrer">
-            <img src={attachment} alt={t('attachmentPreviewAlt')} />
+          <a href={att.previewUrl} target="_blank" rel="noopener noreferrer">
+            <img src={att.previewUrl} alt={t('attachmentPreviewAlt')} />
           </a>
         )}
       </div>

@@ -18,12 +18,12 @@ import type { InterfaceAgendaFolderDeleteModalProps } from 'types/AdminPortal/Ag
  *
  * Displays a confirmation dialog with Yes/No buttons before deleting.
  *
- * `@param` agendaFolderDeleteModalIsOpen - Controls modal visibility.
- * `@param` toggleDeleteModal - Closes the modal.
- * `@param` deleteAgendaFolderHandler - Triggers deletion of the folder.
- * `@param` t - Agenda section i18n translator.
- * `@param` tCommon - Common i18n translator.
- * `@returns` JSX.Element
+ * @param agendaFolderDeleteModalIsOpen - Controls modal visibility.
+ * @param toggleDeleteModal - Closes the modal.
+ * @param deleteAgendaFolderHandler - Triggers deletion of the folder.
+ * @param t - Agenda section i18n translator.
+ * @param tCommon - Common i18n translator.
+ * @returns JSX.Element
  */
 const AgendaFolderDeleteModal: React.FC<
   InterfaceAgendaFolderDeleteModalProps

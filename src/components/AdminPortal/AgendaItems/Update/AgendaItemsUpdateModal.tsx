@@ -15,7 +15,9 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
-
+import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { useParams } from 'react-router';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -24,13 +26,14 @@ import {
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-import convertToBase64 from 'utils/convertToBase64';
 import styles from 'style/app-fixed.module.css';
 
 import type {
   InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaItemsUpdateModalProps,
+  InterfaceAttachment,
 } from 'types/AdminPortal/Agenda/interface';
+import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
@@ -46,12 +49,18 @@ const AgendaItemsUpdateModal: React.FC<
   agendaFolderData,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { orgId } = useParams();
+  const organizationId = orgId ?? 'organization';
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+
+  const MAX_FILE_SIZE_MB = 10;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
   useEffect(() => {
     setItemFormState((prevState) => ({
       ...prevState,
       url: prevState.url.filter((url) => url.trim() !== ''),
-      attachments: prevState.attachments.filter((att) => att !== ''),
     }));
   }, [setItemFormState]);
 
@@ -79,42 +88,68 @@ const AgendaItemsUpdateModal: React.FC<
     });
   };
 
-  const handleFileChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const target = e.target as HTMLInputElement;
-    if (target.files) {
-      const files = Array.from(target.files);
-      let totalSize = 0;
-
-      files.forEach((file) => {
-        totalSize += file.size;
-      });
-
-      if (totalSize > 10 * 1024 * 1024) {
-        NotificationToast.error(t('fileSizeExceedsLimit'));
-        return;
-      }
-
-      const base64Files = await Promise.all(
-        files.map(async (file) => await convertToBase64(file)),
-      );
-
-      setItemFormState({
-        ...itemFormState,
-        attachments: [...itemFormState.attachments, ...base64Files],
-      });
-    }
-  };
-
-  const handleRemoveAttachment = (attachment: string): void => {
+  const handleRemoveAttachment = (objectName: string): void => {
     setItemFormState({
       ...itemFormState,
-      attachments: itemFormState.attachments.filter(
-        (item) => item !== attachment,
+      attachments: itemFormState.attachments?.filter(
+        (att) => att.objectName !== objectName,
       ),
     });
   };
+
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): Promise<void> => {
+    const target = e.target;
+    if (!target.files || target.files.length === 0) return;
+
+    const files = Array.from(target.files);
+
+    try {
+      const uploadedAttachments: InterfaceAttachment[] = [];
+
+      for (const file of files) {
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+          NotificationToast.error(t('fileSizeExceedsLimit'));
+          continue;
+        }
+
+        if (!AGENDA_ITEM_ALLOWED_MIME_TYPES.includes(file.type)) {
+          NotificationToast.error(t('invalidFileType'));
+          continue;
+        }
+
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          organizationId,
+        );
+
+        const previewUrl = await getFileFromMinio(objectName, organizationId);
+
+        uploadedAttachments.push({
+          name: file.name,
+          mimeType: file.type,
+          objectName,
+          fileHash,
+          previewUrl,
+        });
+      }
+
+      if (uploadedAttachments.length > 0) {
+        setItemFormState((prev) => ({
+          ...prev,
+          attachments: [...prev.attachments, ...uploadedAttachments],
+        }));
+      }
+    } catch (error) {
+      console.error(error);
+      NotificationToast.error(t('fileUploadFailed'));
+    } finally {
+      // allow re-uploading same file
+      target.value = '';
+    }
+  };
+  console.log(itemFormState);
 
   return (
     <BaseModal
@@ -281,25 +316,29 @@ const AgendaItemsUpdateModal: React.FC<
           <small className="text-muted">{t('attachmentLimit')}</small>
         </FormFieldGroup>
 
-        {itemFormState.attachments && (
+        {itemFormState.attachments.length > 0 && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {itemFormState.attachments.map((attachment, index) => (
+            {itemFormState.attachments?.map((attachment, index) => (
               <div key={index} className={styles.attachmentPreview}>
-                {attachment.includes('video') ? (
+                {attachment.mimeType.startsWith('video') ? (
                   <video muted autoPlay loop playsInline>
-                    <source src={attachment} type="video/mp4" />
+                    <source
+                      src={attachment.previewUrl}
+                      type={attachment.mimeType}
+                    />
                   </video>
                 ) : (
-                  <img src={attachment} alt={t('attachmentPreviewAlt')} />
+                  <img
+                    src={attachment.previewUrl}
+                    alt={t('attachmentPreviewAlt')}
+                  />
                 )}
+
                 <button
                   type="button"
                   className={styles.closeButtonFile}
                   aria-label={t('removeAttachment')}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleRemoveAttachment(attachment);
-                  }}
+                  onClick={() => handleRemoveAttachment(attachment.objectName)}
                   data-testid="deleteAttachment"
                 >
                   <i className="fa fa-times" />

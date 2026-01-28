@@ -31,7 +31,11 @@ export default function AgendaDragAndDrop({
     const { destination, source, type } = result;
 
     if (!destination) return;
-    if (destination.index === source.index) return;
+    if (
+      destination.index === source.index &&
+      destination.droppableId === source.droppableId
+    )
+      return;
 
     if (type === 'ITEM') {
       await onItemDragEnd(result);

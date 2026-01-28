@@ -23,12 +23,13 @@ import {
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaItemsCreateModal.module.css';
 
 import type {
   InterfaceAgendaItemsCreateModalProps,
   InterfaceAttachment,
 } from 'types/AdminPortal/Agenda/interface';
+import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
@@ -53,15 +54,6 @@ const AgendaItemsCreateModal: React.FC<
 
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';
-
-  const ALLOWED_MIME_TYPES = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-    'video/mp4',
-    'video/webm',
-  ];
 
   const isValidUrl = (url: string): boolean => {
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -107,7 +99,7 @@ const AgendaItemsCreateModal: React.FC<
           continue;
         }
 
-        if (!ALLOWED_MIME_TYPES.includes(file.type)) {
+        if (!AGENDA_ITEM_ALLOWED_MIME_TYPES.includes(file.type)) {
           NotificationToast.error(t('invalidFileType'));
           continue;
         }
@@ -120,6 +112,7 @@ const AgendaItemsCreateModal: React.FC<
         const previewUrl = await getFileFromMinio(objectName, organizationId);
 
         uploadedAttachments.push({
+          name: file.name,
           mimeType: file.type,
           objectName,
           fileHash,
@@ -322,7 +315,7 @@ const AgendaItemsCreateModal: React.FC<
               !!att.previewUrl,
           )
           .map((attachment, index) => (
-            <div key={index} className={styles.attachmentPreview}>
+            <div key={index} className={styles.previewFile}>
               {attachment.mimeType.startsWith('video') ? (
                 <video muted autoPlay loop playsInline>
                   <source

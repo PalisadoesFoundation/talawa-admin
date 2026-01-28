@@ -30,6 +30,7 @@ import type {
   InterfaceAgendaFolderInfo,
   InterfaceUseAgendaMutationsProps,
 } from 'types/AdminPortal/Agenda/interface';
+import { AGENDA_ITEM_MIME_TYPE } from 'Constant/fileUpload';
 
 // translation-check-keyPrefix: agendaSection
 export function useAgendaMutations({
@@ -61,6 +62,13 @@ export function useAgendaMutations({
       duration: string;
       folder?: string;
       url: string[];
+      attachments: {
+        name: string;
+        objectName: string;
+        mimeType: string;
+        fileHash: string;
+        previewUrl?: string; // UI only
+      }[];
     },
     onSuccess?: () => void,
   ): Promise<void> => {
@@ -71,14 +79,23 @@ export function useAgendaMutations({
         variables: {
           input: {
             id: agendaItemId,
+
             name: itemFormState.name?.trim() || undefined,
             description: itemFormState.description?.trim() || undefined,
             duration: itemFormState.duration?.trim() || undefined,
             folderId: itemFormState.folder || undefined,
+
             url:
-              itemFormState.url?.length > 0
+              itemFormState.url.length > 0
                 ? itemFormState.url.map((u) => ({ url: u }))
-                : undefined,
+                : [],
+
+            attachments: itemFormState.attachments.map((att) => ({
+              name: att.name,
+              fileHash: att.fileHash,
+              mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType],
+              objectName: att.objectName,
+            })),
           },
         },
       });
