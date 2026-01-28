@@ -52,7 +52,7 @@ import styles from './EventManagement.module.css';
 
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
-import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
+import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/AdminPortal/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';

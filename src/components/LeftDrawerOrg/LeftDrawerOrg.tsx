@@ -33,6 +33,7 @@ import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropd
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaExchangeAlt } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './LeftDrawerOrg.module.css';
@@ -176,6 +177,17 @@ const LeftDrawerOrg = ({
       }
       footerContent={
         <>
+          <div className={styles.switchPortalWrapper}>
+            <SidebarNavItem
+              to="/user/organizations"
+              icon={<FaExchangeAlt />}
+              label={tCommon('switchToUserPortal')}
+              testId="switchToUserPortalBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              iconType="react-icon"
+            />
+          </div>
           <div
             className={
               hideDrawer
