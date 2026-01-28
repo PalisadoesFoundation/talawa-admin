@@ -70,7 +70,6 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       show={eventDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"
-      keyboard={false}
       centered
       title={t('deleteEvent')}
       dataTestId={TEST_ID_DELETE_EVENT_MODAL(eventListCardProps.id)}
