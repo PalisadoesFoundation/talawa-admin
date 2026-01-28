@@ -18,13 +18,16 @@
  * - Clear recovery actions
  *
  * @example
- * // Basic usage with default fallback
+ * Basic usage with default fallback:
+ * ```tsx
  * <ErrorBoundaryWrapper>
  *   <YourComponent />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
- * // With custom error message and logging
+ * With custom error message and logging:
+ * ```tsx
  * <ErrorBoundaryWrapper
  *   errorMessage={translatedErrorMessage}
  *   onError={(error, info) => logToService(error, info)}
@@ -32,12 +35,15 @@
  * >
  *   <ComplexModal />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
- * // With custom fallback component
+ * With custom fallback component:
+ * ```tsx
  * <ErrorBoundaryWrapper fallbackComponent={CustomModalError}>
  *   <Modal>...</Modal>
  * </ErrorBoundaryWrapper>
+ * ```
  */
 
 import React, { ReactNode, ErrorInfo } from 'react';
