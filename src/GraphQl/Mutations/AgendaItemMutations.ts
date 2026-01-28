@@ -37,8 +37,8 @@ export const CREATE_AGENDA_ITEM_MUTATION = gql`
 /**
  * GraphQL mutation to delete an agenda item.
  *
- * `@param` input - The deletion input containing the agenda item ID.
- * `@returns` The ID of the deleted agenda item.
+ * @param input - The deletion input containing the agenda item ID.
+ * @returns The ID of the deleted agenda item.
  */
 export const DELETE_AGENDA_ITEM_MUTATION = gql`
   mutation DeleteAgendaItem($input: MutationDeleteAgendaItemInput!) {
@@ -51,8 +51,8 @@ export const DELETE_AGENDA_ITEM_MUTATION = gql`
 /**
  * GraphQL mutation to update the sequence/order of an agenda item.
  *
- * `@param` input - The sequence update input containing item ID and new sequence.
- * `@returns` The updated agenda item with its new sequence.
+ * @param input - The sequence update input containing item ID and new sequence.
+ * @returns The updated agenda item with its new sequence.
  */
 export const UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION = gql`
   mutation UpdateAgendaItemSequence(
@@ -68,8 +68,8 @@ export const UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION = gql`
 /**
  * GraphQL mutation to update an agenda item's details.
  *
- * `@param` input - The update input containing item ID and fields to update.
- * `@returns` The updated agenda item with its details.
+ * @param input - The update input containing item ID and fields to update.
+ * @returns The updated agenda item with its details.
  */
 export const UPDATE_AGENDA_ITEM_MUTATION = gql`
   mutation UpdateAgendaItem($input: MutationUpdateAgendaItemInput!) {

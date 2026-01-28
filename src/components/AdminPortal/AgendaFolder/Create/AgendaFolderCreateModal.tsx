@@ -2,7 +2,8 @@ import React from 'react';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { InterfaceAgendaFolderCreateModalProps } from 'types/Agenda/interface';
+import { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
@@ -24,22 +25,15 @@ const AgendaFolderCreateModal: React.FC<
       dataTestId="createAgendaFolderModal"
     >
       <form onSubmit={createAgendaFolderHandler}>
-        <div className="mb-3">
-          <label htmlFor="name" className="form-label">
-            {t('folderName')}
-          </label>
-          <input
-            id="name"
-            type="text"
-            className="form-control"
-            placeholder={t('folderNamePlaceholder')}
-            value={formState.name}
-            required
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
-          />
-        </div>
+        <FormTextField
+          name="folderName"
+          type="text"
+          label={t('folderName')}
+          placeholder={t('folderNamePlaceholder')}
+          value={formState.name}
+          onChange={(val) => setFormState({ ...formState, name: val })}
+          required
+        />
 
         <div className="mb-3">
           <label htmlFor="description" className="form-label">

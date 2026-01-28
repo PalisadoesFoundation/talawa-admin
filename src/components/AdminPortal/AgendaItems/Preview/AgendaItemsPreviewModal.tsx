@@ -1,19 +1,22 @@
-/**
- * AgendaItemsPreviewModal Component
- *
- * This component renders a modal to preview the details of an agenda item.
- * It displays various properties of the agenda item, such as category, title,
- * description, duration, creator, URLs, and attachments. It also provides
- * options to update or delete the agenda item.
- */
 import React from 'react';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import { BaseModal } from 'shared-components/BaseModal';
-import { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
+import { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
+/**
+ * Modal for previewing agenda item details.
+ *
+ * @param agendaItemPreviewModalIsOpen - Controls modal visibility.
+ * @param hidePreviewModal - Closes the preview modal.
+ * @param showUpdateItemModal - Opens the update modal.
+ * @param toggleDeleteItemModal - Opens the delete confirmation modal.
+ * @param formState - Agenda item details to display.
+ * @param t - Translation function for agenda section keys.
+ * @returns JSX.Element
+ */
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
@@ -81,7 +84,7 @@ const AgendaItemsPreviewModal: React.FC<
       <div>
         <div className={styles.preview}>
           <p>{t('category')}</p>
-          <span className={styles.view}>{formState.category.name}</span>
+          <span className={styles.view}>{formState.category?.name ?? '-'}</span>
         </div>
 
         <div className={styles.preview}>
@@ -101,7 +104,7 @@ const AgendaItemsPreviewModal: React.FC<
 
         <div className={styles.preview}>
           <p>{t('createdBy')}</p>
-          <span className={styles.view}>{formState.creator.name}</span>
+          <span className={styles.view}>{formState.creator?.name ?? '-'}</span>
         </div>
 
         <div className={styles.preview}>

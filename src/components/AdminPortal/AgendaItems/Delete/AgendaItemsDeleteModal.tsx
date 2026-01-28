@@ -2,10 +2,21 @@ import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
+import type { InterfaceAgendaItemsDeleteModalProps } from 'types/AdminPortal/Agenda/interface';
 
+/**
+ * Confirmation modal for deleting an agenda item.
+ * @param agendaItemDeleteModalIsOpen - Whether the delete modal is visible.
+ * @param toggleDeleteItemModal - Closes the delete modal.
+ * @param deleteAgendaItemHandler - Executes the delete operation.
+ * @param t - Translation function for agenda section keys.
+ * @param tCommon - Translation function for common keys.
+ * @returns JSX.Element
+ */
 // translation-check-keyPrefix: agendaSection
-const AgendaItemDeleteModal: React.FC<InterfaceAgendaItemsDeleteModalProps> = ({
+const AgendaItemsDeleteModal: React.FC<
+  InterfaceAgendaItemsDeleteModalProps
+> = ({
   agendaItemDeleteModalIsOpen,
   toggleDeleteItemModal,
   deleteAgendaItemHandler,
@@ -50,4 +61,4 @@ const AgendaItemDeleteModal: React.FC<InterfaceAgendaItemsDeleteModalProps> = ({
   );
 };
 
-export default AgendaItemDeleteModal;
+export default AgendaItemsDeleteModal;

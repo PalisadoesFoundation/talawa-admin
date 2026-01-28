@@ -17,7 +17,7 @@
  *
  * @example
  * ```tsx
- * <EventAgendaItems eventId="12345" />
+ * <EventAgendaFolder eventId="12345" />
  * ```
  *
  * @remarks
@@ -51,14 +51,14 @@ import {
 import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaFolderList,
-} from 'types/Agenda/interface';
+} from 'types/AdminPortal/Agenda/interface';
 import AgendaFolderContainer from 'components/AdminPortal/AgendaFolder/AgendaFolderContainer';
 import AgendaFolderCreateModal from 'components/AdminPortal/AgendaFolder/Create/AgendaFolderCreateModal';
 import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
-import { InterfaceCreateFormStateType } from 'types/Agenda/interface';
+import { InterfaceCreateFormStateType } from 'types/AdminPortal/Agenda/interface';
 
 function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -128,7 +128,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   }: {
     data: InterfaceAgendaFolderList | undefined;
     loading: boolean;
-    error?: unknown | undefined;
+    error?: Error | undefined;
     refetch: () => void;
   } = useQuery(AGENDA_FOLDER_LIST, {
     variables: { eventId },
@@ -196,7 +196,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
         title: '',
         description: '',
         duration: '',
-        folderId: null,
+        folderId: '',
         attachments: [] as {
           mimeType: string;
           fileHash: string;
@@ -273,28 +273,28 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
    * Toggles the visibility of the create agenda folder modal.
    */
   const showCreateModal = (): void => {
-    setAgendaFolderCreateModalIsOpen(!agendaFolderCreateModalIsOpen);
+    setAgendaFolderCreateModalIsOpen(true);
   };
 
   /**
    * Toggles the visibility of the create agenda item modal.
    */
   const showItemsCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
+    setAgendaItemCreateModalIsOpen(true);
   };
 
   /**
    * Hides the create agenda folder modal.
    */
   const hideCreateModal = (): void => {
-    setAgendaFolderCreateModalIsOpen(!agendaFolderCreateModalIsOpen);
+    setAgendaFolderCreateModalIsOpen(false);
   };
 
   /**
    * Hides the create agenda agenda modal.
    */
   const hideItemCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
+    setAgendaItemCreateModalIsOpen(false);
   };
 
   // Show error message if there is an error loading data

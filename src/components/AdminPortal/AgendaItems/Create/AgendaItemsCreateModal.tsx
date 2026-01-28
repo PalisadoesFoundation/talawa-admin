@@ -28,7 +28,7 @@ import styles from 'style/app-fixed.module.css';
 import type {
   InterfaceAgendaItemsCreateModalProps,
   InterfaceAttachment,
-} from 'types/Agenda/interface';
+} from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
@@ -108,10 +108,7 @@ const AgendaItemsCreateModal: React.FC<
         }
 
         if (!ALLOWED_MIME_TYPES.includes(file.type)) {
-          NotificationToast.error(
-            t('invalidFileType') ||
-              'Invalid file type. Only images and videos are allowed.',
-          );
+          NotificationToast.error(t('invalidFileType'));
           continue;
         }
 
@@ -138,7 +135,7 @@ const AgendaItemsCreateModal: React.FC<
       }
     } catch (err) {
       console.error(err);
-      NotificationToast.error(t('fileUploadFailed') || 'File upload failed');
+      NotificationToast.error(t('fileUploadFailed'));
     } finally {
       target.value = '';
     }
@@ -295,6 +292,7 @@ const AgendaItemsCreateModal: React.FC<
                 className={styles.deleteButtonAgendaItems}
                 data-testid="deleteUrl"
                 onClick={() => handleRemoveUrl(url)}
+                aria-label={t('removeUrl')}
               >
                 <FaTrash />
               </Button>

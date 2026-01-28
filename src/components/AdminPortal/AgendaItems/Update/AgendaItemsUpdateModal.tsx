@@ -1,15 +1,15 @@
 /**
  * Renders the modal used to update agenda items.
  *
- * `@param` agendaItemUpdateModalIsOpen - Whether the modal is open.
- * `@param` hideUpdateItemModal - Handler to close the modal.
- * `@param` itemFormState - Current agenda item form state.
- * `@param` setItemFormState - Setter for agenda item form state.
- * `@param` updateAgendaItemHandler - Submit handler.
- * `@param` t - i18n translation function.
- * `@param` agendaItemCategories - Available agenda item categories.
- * `@param` agendaFolderData - Available agenda folders.
- * `@returns` JSX.Element
+ * @param agendaItemUpdateModalIsOpen - Whether the modal is open.
+ * @param hideUpdateItemModal - Handler to close the modal.
+ * @param itemFormState - Current agenda item form state.
+ * @param setItemFormState - Setter for agenda item form state.
+ * @param updateAgendaItemHandler - Submit handler.
+ * @param t - i18n translation function.
+ * @param agendaItemCategories - Available agenda item categories.
+ * @param agendaFolderData - Available agenda folders.
+ * @returns JSX.Element
  */
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
@@ -30,7 +30,7 @@ import styles from 'style/app-fixed.module.css';
 import type {
   InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaItemsUpdateModalProps,
-} from 'types/Agenda/interface';
+} from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
@@ -53,7 +53,7 @@ const AgendaItemsUpdateModal: React.FC<
       url: prevState.url.filter((url) => url.trim() !== ''),
       attachments: prevState.attachments.filter((att) => att !== ''),
     }));
-  }, []);
+  }, [setItemFormState]);
 
   const isValidUrl = (url: string): boolean => {
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
@@ -246,24 +246,26 @@ const AgendaItemsUpdateModal: React.FC<
             </Button>
           </div>
 
-          {itemFormState.url.map((url, index) => (
-            <li key={index} className={styles.urlListItem}>
-              <FaLink className={styles.urlIcon} />
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url.length > 50 ? `${url.substring(0, 50)}...` : url}
-              </a>
-              <Button
-                variant="danger"
-                size="sm"
-                data-testid="deleteUrl"
-                className={styles.deleteButtonAgendaItems}
-                onClick={() => handleRemoveUrl(url)}
-                aria-label={t('removeUrl')}
-              >
-                <FaTrash />
-              </Button>
-            </li>
-          ))}
+          <ul className={styles.urlList}>
+            {itemFormState.url.map((url, index) => (
+              <li key={index} className={styles.urlListItem}>
+                <FaLink className={styles.urlIcon} />
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url.length > 50 ? `${url.substring(0, 50)}...` : url}
+                </a>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  data-testid="deleteUrl"
+                  className={styles.deleteButtonAgendaItems}
+                  onClick={() => handleRemoveUrl(url)}
+                  aria-label={t('removeUrl')}
+                >
+                  <FaTrash />
+                </Button>
+              </li>
+            ))}
+          </ul>
         </FormFieldGroup>
 
         {/* Attachments */}
