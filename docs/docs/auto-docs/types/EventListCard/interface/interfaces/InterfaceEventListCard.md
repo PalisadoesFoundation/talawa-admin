@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventListCard
 
-Defined in: [src/types/EventListCard/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L8)
+Defined in: [src/types/EventListCard/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L9)
 
 Event list card props extending InterfaceEvent.
 
@@ -284,7 +284,7 @@ Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFound
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/EventListCard/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L9)
+Defined in: [src/types/EventListCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L10)
 
 #### Returns
 
