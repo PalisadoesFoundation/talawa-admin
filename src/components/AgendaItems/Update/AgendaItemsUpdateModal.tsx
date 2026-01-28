@@ -30,9 +30,11 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Button } from 'shared-components/Button';
-import { Autocomplete } from 'shared-components/Autocomplete';
-import { TextField } from 'shared-components/TextField';
-import type { AutocompleteRenderInputParams } from '@mui/material';
+import {
+  Autocomplete,
+  TextField,
+  type AutocompleteRenderInputParams,
+} from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
