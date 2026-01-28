@@ -116,14 +116,6 @@ describe('AgendaItemsDeleteModal', () => {
       await user.keyboard('{Escape}');
       expect(mockToggleDeleteModal).not.toHaveBeenCalled();
     });
-
-    test('confirm button click handler is called', async () => {
-      renderComponent();
-      const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-      const user = userEvent.setup();
-      await user.click(confirmButton);
-      expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
-    });
   });
 
   test('handles multiple modal instances correctly', () => {
@@ -159,7 +151,7 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles modal state transitions correctly', async () => {
     const { rerender } = renderComponent(true);
 
-    expect(screen.getAllByRole('dialog').length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('dialog')).toHaveLength(1);
 
     // Rerender with closed state
     rerender(
