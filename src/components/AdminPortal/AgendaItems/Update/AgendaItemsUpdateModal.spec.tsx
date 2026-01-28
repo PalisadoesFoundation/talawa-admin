@@ -17,7 +17,6 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
-import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockAgendaItemCategories, mockFormState1 } from '../AgendaItemsMocks';

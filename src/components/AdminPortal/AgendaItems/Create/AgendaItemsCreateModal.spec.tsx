@@ -19,7 +19,6 @@ import {
 } from 'shared-components/DateRangePicker';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
