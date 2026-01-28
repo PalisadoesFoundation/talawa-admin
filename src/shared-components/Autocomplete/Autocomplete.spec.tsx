@@ -1,9 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { Autocomplete } from './Autocomplete';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('Autocomplete', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders without errors', () => {
     render(
       <Autocomplete
@@ -51,18 +55,18 @@ describe('Autocomplete', () => {
   });
 
   it('supports generic typing', () => {
-    interface Option {
+    interface InterfaceTestOption {
       id: number;
       label: string;
     }
 
-    const options: Option[] = [
+    const options: InterfaceTestOption[] = [
       { id: 1, label: 'First' },
       { id: 2, label: 'Second' },
     ];
 
     render(
-      <Autocomplete<Option, false, false, false>
+      <Autocomplete<InterfaceTestOption, false, false, false>
         options={options}
         getOptionLabel={(option) => option.label}
         renderInput={(params) => <input {...params.inputProps} />}

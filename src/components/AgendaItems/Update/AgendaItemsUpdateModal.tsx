@@ -30,11 +30,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Button } from 'shared-components/Button';
-import {
-  Autocomplete,
-  TextField,
-  type AutocompleteRenderInputParams,
-} from '@mui/material';
+import { Autocomplete, type AutocompleteRenderInputParams } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
@@ -197,7 +193,7 @@ const AgendaItemsUpdateModal: React.FC<
                 });
               }}
               renderInput={(params: AutocompleteRenderInputParams) => (
-                <TextField {...params} label={t('category')} />
+                <div ref={params.InputProps.ref}><input {...params.inputProps} className="form-control" placeholder={t('category')} /></div>
               )}
             />
           </div>
