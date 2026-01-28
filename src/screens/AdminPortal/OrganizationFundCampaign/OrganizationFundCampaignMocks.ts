@@ -109,6 +109,7 @@ export const MOCKS = [
                   endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  fundingRaised: 0,
                 },
               },
               {
@@ -119,6 +120,7 @@ export const MOCKS = [
                   endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  fundingRaised: 0,
                 },
               },
             ],
