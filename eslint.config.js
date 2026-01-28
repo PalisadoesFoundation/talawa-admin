@@ -5,6 +5,7 @@ import {
 } from './scripts/eslint/config/exemptions.ts';
 import { cypressConfig } from './scripts/eslint/config/cypress.ts';
 import { testConfig } from './scripts/eslint/config/tests.ts';
+import { preferCrudModalTemplateConfig } from './scripts/eslint/config/prefer-crud-modal-template.ts';
 import {
   configFilesConfig,
   graphqlConfig,
@@ -42,4 +43,5 @@ export default [
   cypressConfig,
   configFilesConfig,
   testConfig,
+  preferCrudModalTemplateConfig,
 ];
