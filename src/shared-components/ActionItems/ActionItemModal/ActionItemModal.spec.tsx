@@ -976,7 +976,7 @@ describe('ActionItemModal', () => {
       // Verify selection
       await waitFor(
         () => {
-          expect(volunteerInput.value).toBe('John Doe');
+          expect(volunteerInput).toHaveValue('John Doe');
         },
         { timeout: 3000 },
       );
