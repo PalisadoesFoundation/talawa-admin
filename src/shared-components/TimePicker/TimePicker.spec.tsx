@@ -204,17 +204,17 @@ describe('TimePicker', () => {
     );
     const input = screen.getByRole('textbox');
 
-    // Enter invalid time format
-    await user.clear(input);
-    await user.type(input, 'invalid-time');
-
-    // Wait for MUI to complete its internal state updates to avoid cleanup errors
+    // Wrap all user interactions in act/waitFor to ensure MUI completes its internal state updates
     await act(async () => {
-      await waitFor(() => {
-        expect(input).toBeInTheDocument();
+      await waitFor(async () => {
+        // Enter invalid time format
+        await user.clear(input);
+        await user.type(input, 'invalid-time');
       });
     });
+
     // Component should still render without crashing
+    expect(input).toBeInTheDocument();
     // onChange may or may not be called depending on MUI's validation
   });
 
