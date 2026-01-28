@@ -1,0 +1,7 @@
+.flex {
+  display: flex;
+}
+
+.iconGrey {
+  fill: var(--color-gray-700);
+}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import UpcomingEventsCard from './UpcomingEventsCard';
 import type { IEvent } from 'utils/interfaces';
@@ -49,27 +50,30 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock CardItem component
-vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
-  default: ({
-    title,
-    startdate,
-    enddate,
-  }: {
-    title: string;
-    startdate?: string;
-    enddate?: string;
-  }) => (
-    <div data-testid="card-item">
-      <div>{title}</div>
-      <div>{startdate}</div>
-      <div>{enddate}</div>
-    </div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationDashCards/CardItem/CardItem',
+  () => ({
+    default: ({
+      title,
+      startdate,
+      enddate,
+    }: {
+      title: string;
+      startdate?: string;
+      enddate?: string;
+    }) => (
+      <div data-testid="card-item">
+        <div>{title}</div>
+        <div>{startdate}</div>
+        <div>{enddate}</div>
+      </div>
+    ),
+  }),
+);
 
 // Mock CardItemLoading component
 vi.mock(
-  'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
+  'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
     default: () => <div data-testid="card-item-loading">Loading...</div>,
   }),
@@ -137,13 +141,13 @@ describe('UpcomingEventsCard Component', () => {
     expect(screen.getByText('upcomingEvents')).toBeInTheDocument();
   });
 
-  it('displays view all button and handles click', () => {
+  it('displays view all button and handles click', async () => {
     render(<UpcomingEventsCard {...mockProps} />);
 
     const viewAllButton = screen.getByText('viewAll');
     expect(viewAllButton).toBeInTheDocument();
 
-    fireEvent.click(viewAllButton);
+    await userEvent.click(viewAllButton);
     expect(mockProps.onViewAllEventsClick).toHaveBeenCalled();
     expect(mockProps.onViewAllEventsClick).toHaveBeenCalledTimes(1);
   });
