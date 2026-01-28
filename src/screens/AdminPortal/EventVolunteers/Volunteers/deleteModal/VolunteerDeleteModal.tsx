@@ -14,23 +14,14 @@ import {
   useMutationModal,
 } from 'shared-components/CRUDModalTemplate';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+import type { InterfaceVolunteerDeleteModalProps } from 'types/AdminPortal/VolunteerDeleteModal/interface';
 
-export interface InterfaceDeleteVolunteerModal {
-  isOpen: boolean;
-  hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo;
-  refetchVolunteers: () => void;
-  // New props for recurring events
-  isRecurring?: boolean;
-  eventId?: string;
-}
-
-const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
+const VolunteerDeleteModal: React.FC<InterfaceVolunteerDeleteModalProps> = ({
   isOpen,
   hide,
   volunteer,

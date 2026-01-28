@@ -104,8 +104,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     }
   }, [memberData]);
 
-  const { pledgeUsers, pledgeAmount } = formState;
-
   const isAmountValid = formState.pledgeAmount > 0;
 
   // Update error handling to show exact error message
@@ -119,12 +117,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         const variables = {
           id: pledge?.id ?? '',
           ...(pledge &&
-            pledgeAmount !== pledge.amount && { amount: pledgeAmount }),
+            formState.pledgeAmount !== pledge.amount && {
+              amount: formState.pledgeAmount,
+            }),
         };
 
-        await updatePledge({
-          variables,
-        });
+        await updatePledge({ variables });
         NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
@@ -148,6 +146,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         if (!formState.pledgeUsers[0]?.id) {
           throw new Error(t('pledgeCreateFailed'));
         }
+
         await createPledge({
           variables: {
             campaignId,
@@ -188,7 +187,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           className={`${styles.noOutlinePledge} w-100`}
           data-testid="pledgerSelect"
           options={pledgers}
-          value={pledgeUsers[0] || null}
+          value={formState.pledgeUsers[0] || null}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfoPG): string =>
             `${member.name || ''}`
@@ -309,4 +308,5 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     </EditModal>
   );
 };
+
 export default PledgeModal;

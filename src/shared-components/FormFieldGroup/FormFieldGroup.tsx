@@ -19,6 +19,7 @@ export const FormFieldGroup: React.FC<
   error,
   touched,
   children,
+  labelClassName,
   inline,
   hideLabel,
 }) => {
@@ -46,7 +47,12 @@ export const FormFieldGroup: React.FC<
 
   return (
     <Form.Group controlId={name}>
-      <Form.Label className={hideLabel ? 'visually-hidden' : ''}>
+      <Form.Label
+        htmlFor={name}
+        className={[hideLabel ? 'visually-hidden' : null, labelClassName]
+          .filter(Boolean)
+          .join(' ')}
+      >
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}
       </Form.Label>

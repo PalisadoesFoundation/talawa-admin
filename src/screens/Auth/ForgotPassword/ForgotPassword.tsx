@@ -60,38 +60,32 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 const ForgotPassword = (): JSX.Element => {
-  // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'forgotPassword' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  // Set the page title
   document.title = t('title');
 
-  // Custom hook for accessing local storage
   const { getItem, removeItem, setItem } = useLocalStorage();
 
-  // State hooks for form data and UI
   const [showEnterEmail, setShowEnterEmail] = useState(true);
-
-  const [registeredEmail, setregisteredEmail] = useState('');
-
+  const [registeredEmail, setRegisteredEmail] = useState('');
   const [forgotPassFormData, setForgotPassFormData] = useState({
     userOtp: '',
     newPassword: '',
     confirmNewPassword: '',
   });
 
-  // GraphQL mutations
   const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION,
   );
 
-  // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
+
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
       window.location.replace('/admin/orglist');
@@ -101,11 +95,6 @@ const ForgotPassword = (): JSX.Element => {
     };
   }, []);
 
-  /**
-   * Handles the form submission for generating OTP.
-   *
-   * @param e - The form submit event
-   */
   const getOTP = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -126,15 +115,11 @@ const ForgotPassword = (): JSX.Element => {
     }
   };
 
-  /**
-   * manages the form submission for resetting the password.
-   *
-   * @param e - The form submit event
-   */
   const submitForgotPassword = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
@@ -143,7 +128,6 @@ const ForgotPassword = (): JSX.Element => {
     }
 
     const otpToken = getItem('otpToken');
-
     if (!otpToken) {
       return;
     }
@@ -184,29 +168,25 @@ const ForgotPassword = (): JSX.Element => {
                   fill="var(--forgot-password-fill)"
                 />
               </div>
+
               <h3 className="text-center fw-bold">
                 {tCommon('forgotPassword')}
               </h3>
+
               {showEnterEmail ? (
                 <div className="mt-4">
                   <form onSubmit={getOTP}>
-                    <label className="form-label" htmlFor="registeredEmail">
-                      {t('registeredEmail')}:
-                    </label>
-                    <div className="position-relative">
-                      <input
-                        type="email"
-                        className="form-control"
-                        id="registeredEmail"
-                        placeholder={t('registeredEmail')}
-                        value={registeredEmail}
-                        name="registeredEmail"
-                        required
-                        onChange={(e): void =>
-                          setregisteredEmail(e.target.value)
-                        }
-                      />
-                    </div>
+                    <FormTextField
+                      name="registeredEmail"
+                      label={t('registeredEmail')}
+                      type="email"
+                      placeholder={t('registeredEmail')}
+                      value={registeredEmail}
+                      onChange={setRegisteredEmail}
+                      required
+                      data-testid="registeredEmail"
+                    />
+
                     <Button
                       type="submit"
                       className={`mt-4 w-100 ${styles.login_btn}`}
@@ -219,71 +199,66 @@ const ForgotPassword = (): JSX.Element => {
               ) : (
                 <div className="mt-4">
                   <form onSubmit={submitForgotPassword}>
-                    <label className="form-label" htmlFor="userOtp">
-                      {t('enterOtp')}:
-                    </label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="userOtp"
-                      placeholder={t('userOtp')}
+                    <FormTextField
                       name="userOtp"
+                      label={t('enterOtp')}
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder={t('userOtp')}
                       value={forgotPassFormData.userOtp}
-                      required
-                      onChange={(e): void =>
+                      onChange={(value) =>
                         setForgotPassFormData({
                           ...forgotPassFormData,
-                          userOtp: e.target.value,
+                          userOtp: value,
                         })
                       }
+                      required
+                      data-testid="userOtp"
                     />
-                    <label className="form-label" htmlFor="newPassword">
-                      {t('enterNewPassword')}:
-                    </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="newPassword"
-                      placeholder={tCommon('password')}
-                      data-testid="newPassword"
+
+                    <FormTextField
                       name="newPassword"
-                      value={forgotPassFormData.newPassword}
-                      required
-                      onChange={(e): void =>
-                        setForgotPassFormData({
-                          ...forgotPassFormData,
-                          newPassword: e.target.value,
-                        })
-                      }
-                    />
-                    <label className="form-label" htmlFor="confirmNewPassword">
-                      {t('cofirmNewPassword')}:
-                    </label>
-                    <input
+                      label={t('enterNewPassword')}
                       type="password"
-                      className="form-control"
-                      id="confirmNewPassword"
-                      placeholder={t('cofirmNewPassword')}
-                      data-testid="confirmNewPassword"
-                      name="confirmNewPassword"
-                      value={forgotPassFormData.confirmNewPassword}
-                      required
-                      onChange={(e): void =>
+                      placeholder={tCommon('password')}
+                      value={forgotPassFormData.newPassword}
+                      onChange={(value) =>
                         setForgotPassFormData({
                           ...forgotPassFormData,
-                          confirmNewPassword: e.target.value,
+                          newPassword: value,
                         })
                       }
+                      required
+                      data-testid="newPassword"
                     />
+
+                    <FormTextField
+                      name="confirmNewPassword"
+                      label={t('confirmNewPassword')}
+                      type="password"
+                      placeholder={tCommon('password')}
+                      value={forgotPassFormData.confirmNewPassword}
+                      onChange={(value) =>
+                        setForgotPassFormData({
+                          ...forgotPassFormData,
+                          confirmNewPassword: value,
+                        })
+                      }
+                      required
+                      data-testid="confirmNewPassword"
+                    />
+
                     <Button type="submit" className="mt-2 w-100">
                       {t('changePassword')}
                     </Button>
                   </form>
                 </div>
               )}
+
               <div className="d-flex justify-content-between items-center mt-4">
                 <Link
-                  to={'/'}
+                  to="/"
                   className="mx-auto d-flex items-center text-secondary"
                 >
                   <ArrowRightAlt

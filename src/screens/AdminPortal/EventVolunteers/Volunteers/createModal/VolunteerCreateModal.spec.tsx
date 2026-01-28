@@ -163,6 +163,41 @@ describe('Testing VolunteerCreateModal', () => {
     expect(memberInputField).toHaveValue('John Doe');
   });
 
+  it('should clear userId when member selection is cleared', async () => {
+    const user = userEvent.setup();
+    renderCreateModal(createLink(), itemProps[0]);
+
+    // Select a member first
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const memberInputField = within(membersSelect).getByRole('combobox');
+
+    // Initial state: button should be disabled
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    expect(submitBtn).toBeDisabled();
+
+    await user.click(memberInputField);
+    const memberOption = await screen.findByText('John Doe');
+    await user.click(memberOption);
+
+    // After selection: button should be enabled
+    await waitFor(() => {
+      expect(memberInputField).toHaveValue('John Doe');
+      expect(submitBtn).not.toBeDisabled();
+    });
+
+    // Clear the selection using the clear button provided by Autocomplete (MUI usually adds one)
+    // or by clearing the input which triggers handleInputChange/onChange in controlled mode
+    const clearButton = await screen.findByTitle('Clear');
+    await user.click(clearButton);
+
+    await waitFor(() => {
+      // Input should be empty
+      expect(memberInputField).toHaveValue('');
+      // Downstream effect: Submit button should be disabled again because userId is empty
+      expect(submitBtn).toBeDisabled();
+    });
+  });
+
   describe('Recurring Events', () => {
     const recurringEventProps: InterfaceVolunteerCreateModal = {
       isOpen: true,

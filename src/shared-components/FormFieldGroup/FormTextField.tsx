@@ -24,6 +24,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   onChange,
   disabled,
   'data-testid': dataTestId,
+  labelClassName,
   ...props
 }) => {
   const isInvalid = touched && !!error;
@@ -33,9 +34,13 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       type={type}
       placeholder={placeholder}
       value={value}
-      onChange={(e) => {
-        onChange(e.target.value);
-      }}
+      onChange={
+        onChange
+          ? (e) => {
+              onChange(e.target.value);
+            }
+          : undefined
+      }
       isInvalid={isInvalid}
       disabled={disabled}
       data-testid={dataTestId}
@@ -51,6 +56,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       helpText={helpText}
       error={error}
       touched={touched}
+      labelClassName={labelClassName}
     >
       {startAdornment || endAdornment ? (
         <React.Fragment>

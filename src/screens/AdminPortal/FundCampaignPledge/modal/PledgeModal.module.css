@@ -37,3 +37,7 @@
   background-color: var(--color-gray-50);
   border-color: var(--color-blue-200);
 }
+
+.currencyContainer {
+  min-width: 150px;
+}
