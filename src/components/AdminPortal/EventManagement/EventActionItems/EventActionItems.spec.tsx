@@ -412,8 +412,11 @@ describe('EventActionItems', () => {
     vi.restoreAllMocks();
   });
 
-  it('calls debouncedSearch.cancel on unmount', () => {
-    const { unmount } = renderEventActionItems();
+  it('calls debouncedSearch.cancel on unmount', async () => {
+    const { unmount, findByTestId } = renderEventActionItems();
+
+    // wait for the search input to be present (post-mount signal)
+    await findByTestId('searchBy');
 
     unmount();
 
