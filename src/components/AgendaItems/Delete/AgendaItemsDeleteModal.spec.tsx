@@ -117,7 +117,7 @@ describe('AgendaItemsDeleteModal', () => {
       expect(mockToggleDeleteModal).not.toHaveBeenCalled();
     });
 
-    test('confirm button is accessible via keyboard', async () => {
+    test('confirm button click handler is called', async () => {
       renderComponent();
       const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
       const user = userEvent.setup();
