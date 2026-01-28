@@ -4,7 +4,9 @@
 
 # Interface: IFormState
 
-Defined in: [src/types/EventListCard/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L45)
+Defined in: [src/types/EventListCard/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L54)
+
+Form state captured from the EventListCard edit modal.
 
 ## Properties
 
@@ -12,15 +14,15 @@ Defined in: [src/types/EventListCard/interface.ts:45](https://github.com/Palisad
 
 > **endTime**: `string`
 
-Defined in: [src/types/EventListCard/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L50)
+Defined in: [src/types/EventListCard/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L59)
 
 ***
 
-### eventdescrip
+### eventDescription
 
-> **eventdescrip**: `string`
+> **eventDescription**: `string`
 
-Defined in: [src/types/EventListCard/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L47)
+Defined in: [src/types/EventListCard/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L56)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/EventListCard/interface.ts:47](https://github.com/Palisad
 
 > **location**: `string`
 
-Defined in: [src/types/EventListCard/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L48)
+Defined in: [src/types/EventListCard/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L57)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/EventListCard/interface.ts:48](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/EventListCard/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L46)
+Defined in: [src/types/EventListCard/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L55)
 
 ***
 
@@ -44,4 +46,4 @@ Defined in: [src/types/EventListCard/interface.ts:46](https://github.com/Palisad
 
 > **startTime**: `string`
 
-Defined in: [src/types/EventListCard/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L49)
+Defined in: [src/types/EventListCard/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L58)
