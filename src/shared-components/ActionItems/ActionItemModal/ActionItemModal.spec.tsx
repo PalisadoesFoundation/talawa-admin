@@ -989,7 +989,7 @@ describe('ActionItemModal', () => {
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      await user.click(volunteerGroupChip);
+      await userEvent.click(volunteerGroupChip);
 
       // Wait for group select to appear after chip click
       const groupSelect = await screen.findByTestId(
@@ -1001,9 +1001,9 @@ describe('ActionItemModal', () => {
         'combobox',
       ) as HTMLInputElement;
       groupInput.focus();
-      await user.click(groupInput);
+      await userEvent.click(groupInput);
       const groupOption = await screen.findByText('Test Group 1');
-      await user.click(groupOption);
+      await userEvent.click(groupOption);
 
       // Verify selection
       await waitFor(
