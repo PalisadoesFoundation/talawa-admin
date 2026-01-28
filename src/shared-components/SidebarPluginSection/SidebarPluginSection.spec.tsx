@@ -210,7 +210,7 @@ describe('SidebarPluginSection Component', () => {
       renderComponent({ useSimpleButton: true });
       const button = screen.getByTestId('plugin-plugin-1-btn');
       const wrapper = button.querySelector('div');
-      expect(wrapper).toHaveStyle({ display: 'flex', alignItems: 'center' });
+      expect(wrapper?.className).toContain('sidebarFlexAlignCenter');
     });
   });
 

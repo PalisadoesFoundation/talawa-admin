@@ -11225,3 +11225,13 @@ form {
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
   border-radius: 0.5rem;
 }
+
+/* Sidebar shared component styles */
+.sidebarFlexAlignCenter {
+  display: flex;
+  align-items: center;
+}
+
+.sidebarSimpleButtonHeight {
+  height: 40px;
+}

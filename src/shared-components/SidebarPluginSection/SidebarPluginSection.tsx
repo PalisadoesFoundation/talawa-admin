@@ -58,10 +58,8 @@ const SidebarPluginSection = ({
           title={hideDrawer ? item.label : undefined}
         >
           <div
-            style={
-              useSimpleButton
-                ? { display: 'flex', alignItems: 'center' }
-                : undefined
+            className={
+              useSimpleButton ? styles.sidebarFlexAlignCenter : undefined
             }
           >
             <div className={styles.iconWrapper}>

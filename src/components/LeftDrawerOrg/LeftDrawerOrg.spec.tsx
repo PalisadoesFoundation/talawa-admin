@@ -67,6 +67,18 @@ vi.mock(
   }),
 );
 
+vi.mock('shared-components/SidebarNavItem/SidebarNavItem.module.css', () => ({
+  default: {
+    sidebarBtn: 'sidebarBtn',
+    sidebarBtnActive: 'sidebarBtnActive',
+    iconWrapper: 'iconWrapper',
+    leftDrawerActiveButton: 'leftDrawerActiveButton',
+    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
+    sidebarFlexAlignCenter: 'sidebarFlexAlignCenter',
+    sidebarSimpleButtonHeight: 'sidebarSimpleButtonHeight',
+  },
+}));
+
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
