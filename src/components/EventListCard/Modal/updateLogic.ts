@@ -136,9 +136,9 @@ export const useUpdateEventHandler = () => {
         : dayjs.utc(eventStartDate).isValid()
           ? dayjs
               .utc(eventStartDate)
-              .hour(parseInt(formState.startTime.split(':')[0]))
-              .minute(parseInt(formState.startTime.split(':')[1]))
-              .second(parseInt(formState.startTime.split(':')[2]))
+              .hour(parseInt(formState.startTime.split(':')[0], 10) || 0)
+              .minute(parseInt(formState.startTime.split(':')[1], 10) || 0)
+              .second(parseInt(formState.startTime.split(':')[2], 10) || 0)
               .millisecond(0)
               .toISOString()
           : '';
@@ -278,7 +278,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        NotificationToast.success(t('eventUpdated') as string);
+        NotificationToast.success(t('eventUpdated'));
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
