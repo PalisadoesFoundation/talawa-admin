@@ -29,7 +29,6 @@ import type { JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
-import type { TFunction } from 'i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -43,7 +42,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
   const { t } = useTranslation(['translation', 'common']);
-  const tEventList = (key: string): string => t(`eventListCard.${key}`);
+  const { t: tEventList } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
@@ -130,7 +131,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={tEventList as unknown as TFunction<'translation', undefined>}
+          t={tEventList}
           tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">
