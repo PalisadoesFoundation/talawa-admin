@@ -66,9 +66,8 @@ interface IUpdateEventHandlerProps {
 /**
  * Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
  *
- * @param _ - Placeholder for future initialization parameters (currently unused).
  * @returns An object containing the update logic:
- * - updateEventHandler: (args: IUpdateEventHandlerProps) =\> Promise\<void\> - Asynchronous function that handles the event update process, including validation and mutation execution.
+ * - updateEventHandler: `(args: IUpdateEventHandlerProps) => Promise<void>` - Asynchronous function that handles the event update process, including validation and mutation execution.
  */
 export const useUpdateEventHandler = () => {
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
@@ -175,6 +174,7 @@ export const useUpdateEventHandler = () => {
           : ''
         : (() => {
             const endDateTimeStr = `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`;
+
             return dayjs.utc(endDateTimeStr).isValid()
               ? dayjs.utc(endDateTimeStr).toISOString()
               : '';
