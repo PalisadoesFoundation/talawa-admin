@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTable } from './DataTable';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
 
@@ -23,6 +23,10 @@ import type { IColumnDef } from '../../types/shared-components/DataTable/interfa
  * - Toggle selection interactions
  */
 describe('DataTableTable (table rendering functionality)', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const baseColumns: IColumnDef<{ id: string; name: string; email: string }>[] =
     [
       {
