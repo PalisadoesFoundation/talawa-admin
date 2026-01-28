@@ -1124,7 +1124,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetFormState = vi.fn();
     const currentFormState = {
       name: 'Test Event',
-      eventdescrip: 'Test description',
+      eventDescription: 'Test description',
       location: 'Test Location',
       startTime: '10:00:00',
       endTime: '09:00:00', // End time before start time

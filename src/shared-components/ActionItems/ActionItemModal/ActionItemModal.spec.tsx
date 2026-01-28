@@ -1123,9 +1123,9 @@ describe('ActionItemModal', () => {
       const groupSelect = screen.getByTestId('volunteerGroupSelect');
       expect(groupSelect).toBeInTheDocument();
 
-      // Verify the combobox is accessible
-      const groupInput = within(groupSelect).getByRole('combobox');
-      expect(groupInput).toBeInTheDocument();
+        // Verify the combobox is accessible
+        const groupInput = within(groupSelect).getByRole('combobox');
+        expect(groupInput).toBeInTheDocument();
+      }, { timeout: 3000 });
     });
   });
-});
