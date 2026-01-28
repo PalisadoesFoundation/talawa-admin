@@ -2,6 +2,7 @@ import { render, screen, renderHook, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
+import type { IColumnDef } from '../../types/shared-components/DataTable/column';
 import { DataTable } from './DataTable';
 import { TableLoader } from './TableLoader';
 import { useDataTableFiltering } from './hooks/useDataTableFiltering';
@@ -434,15 +435,18 @@ describe('DataTable', () => {
   });
 
   it('renders headers and rows', () => {
-    const columns = [
+    interface IRow {
+      name: string;
+    }
+    const columns: IColumnDef<IRow, unknown>[] = [
       {
         id: 'name',
         header: 'Name',
-        accessor: (row: { name: string }) => row.name,
+        accessor: (row: IRow) => row.name,
       },
     ];
 
-    render(<DataTable data={[{ name: 'Ada' }]} columns={columns} />);
+    render(<DataTable<IRow> data={[{ name: 'Ada' }]} columns={columns} />);
 
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Ada')).toBeInTheDocument();
@@ -508,14 +512,7 @@ describe('DataTable', () => {
       name: string;
     }
 
-    interface IColumnDef {
-      id: string;
-      header: string;
-      accessor: (row: IRow) => string;
-      render: (value: unknown, row: IRow) => JSX.Element;
-    }
-
-    const columns: IColumnDef[] = [
+    const columns: IColumnDef<IRow, unknown>[] = [
       {
         id: 'name',
         header: 'Name',
@@ -526,7 +523,7 @@ describe('DataTable', () => {
       },
     ];
 
-    render(<DataTable data={[{ name: 'ada' }]} columns={columns} />);
+    render(<DataTable<IRow> data={[{ name: 'ada' }]} columns={columns} />);
 
     expect(screen.getByTestId('custom')).toHaveTextContent('ADA');
   });
@@ -1966,5 +1963,376 @@ describe('DataTable', () => {
     // Bulk action button should NOT be disabled (once row is selected)
     await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
+  });
+});
+
+describe('defaultCompare boolean/date branches', () => {
+  type Row = {
+    id: string;
+    name: string;
+    active?: boolean | null;
+    date?: Date | null;
+  };
+  // Use dynamic dates to avoid hardcoded date strings
+  const date1 = dayjs().subtract(1, 'year').toDate();
+  const date2 = null;
+  const date3 = dayjs().add(1, 'year').toDate();
+  const date4 = undefined;
+  const rows: Row[] = [
+    { id: '1', name: 'Alice', active: false, date: date1 },
+    { id: '2', name: 'Bob', active: null, date: date2 },
+    { id: '3', name: 'Charlie', active: true, date: date3 },
+    { id: '4', name: 'Nulls', active: undefined, date: date4 },
+  ];
+  const columns = [
+    {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'active',
+      header: 'Active',
+      accessor: 'active' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'date',
+      header: 'Date',
+      accessor: 'date' as const,
+      meta: { sortable: true },
+    },
+  ];
+
+  it('sorts boolean column (false < true, nulls last)', async () => {
+    const onSortChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        onSortChange={onSortChange}
+      />,
+    );
+    const th = screen.getByRole('button', { name: /active/i });
+    // Ascending: false, true, null/undefined
+    await user.click(th);
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: true, false, null/undefined (nulls last)
+    await user.click(th);
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('sorts date column (earliest < latest, nulls last)', async () => {
+    const onSortChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        onSortChange={onSortChange}
+      />,
+    );
+    const th = screen.getByRole('button', { name: /date/i });
+    // Ascending: earliest, latest, null/undefined
+    await user.click(th);
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: latest, earliest, null/undefined (nulls last)
+    await user.click(th);
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts boolean and date columns', async () => {
+    const onSortChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        onSortChange={onSortChange}
+      />,
+    );
+    const thBool = screen.getByRole('button', { name: /active/i });
+    const thDate = screen.getByRole('button', { name: /date/i });
+    // Keyboard sort boolean with Enter
+    thBool.focus();
+    await user.keyboard('{Enter}');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await user.keyboard('{Enter}');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort boolean with Space
+    thBool.focus();
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Enter
+    thDate.focus();
+    await user.keyboard('{Enter}');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await user.keyboard('{Enter}');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Space
+    thDate.focus();
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'date', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts with Space key', async () => {
+    const onSortChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <DataTable<Row>
+        data={rows}
+        columns={columns}
+        onSortChange={onSortChange}
+      />,
+    );
+    const thBool = screen.getByRole('button', { name: /active/i });
+    thBool.focus();
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await user.keyboard(' ');
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'active', direction: 'desc' }],
+        sortDirection: 'desc',
+      }),
+    );
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('applies initialSortDirection to default sort state', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'active',
+        header: 'Active',
+        accessor: 'active' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Alice', active: false },
+      { id: '2', name: 'Bob', active: true },
+      { id: '3', name: 'Charlie', active: true },
+    ];
+
+    // Test with initialSortDirection='desc' and initialSortBy='name'
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+        initialSortDirection="desc"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should start with descending sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+
+    // Verify rows are sorted in descending order (Charlie, Bob, Alice)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Charlie', 'Bob', 'Alice']);
+  });
+
+  it('defaults to ascending sort when initialSortDirection is not provided', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should default to ascending sort when initialSortDirection is not provided
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Verify rows are sorted in ascending order (Alice, Bob, Charlie)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
+  });
+
+  it('does not apply aria-sort to non-active or non-sortable headers', async () => {
+    const onSortChange = vi.fn();
+    const user = userEvent.setup();
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: 'status' as const,
+        meta: { sortable: false },
+      },
+    ];
+
+    const rows = [
+      { id: '1', name: 'Alice', status: 'A' },
+      { id: '2', name: 'Bob', status: 'B' },
+    ];
+
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        onSortChange={onSortChange}
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    const statusHeader = screen.getByRole('columnheader', { name: /status/i });
+
+    // Sortable but inactive column has no aria-sort
+    expect(nameHeader).not.toHaveAttribute('aria-sort');
+    await user.click(nameHeader);
+
+    // Verify handler was called
+    expect(onSortChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sortBy: [{ columnId: 'name', direction: 'asc' }],
+        sortDirection: 'asc',
+      }),
+    );
+
+    // Active sortable column gets aria-sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+    expect(statusHeader).not.toHaveAttribute('aria-sort');
   });
 });
