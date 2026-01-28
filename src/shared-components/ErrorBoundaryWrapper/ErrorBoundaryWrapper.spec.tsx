@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ErrorBoundaryWrapper } from './ErrorBoundaryWrapper';
 import type { InterfaceErrorFallbackProps } from 'types/shared-components/ErrorBoundaryWrapper/interface';
@@ -265,7 +265,8 @@ describe('ErrorBoundaryWrapper', () => {
       expect(screen.getByTestId('custom-reset')).toBeInTheDocument();
     });
 
-    it('custom fallback component receives error and onReset props', () => {
+    it('custom fallback component receives error and onReset props', async () => {
+      const user = userEvent.setup();
       const onResetSpy = vi.fn();
       const renderCustomFallbackComponent = ({
         error,
@@ -295,7 +296,7 @@ describe('ErrorBoundaryWrapper', () => {
       );
 
       const resetButton = screen.getByTestId('test-reset');
-      fireEvent.click(resetButton);
+      await user.click(resetButton);
 
       expect(onResetSpy).toHaveBeenCalledTimes(1);
     });
