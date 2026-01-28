@@ -1,3 +1,8 @@
+/**
+ * AgendaItemsContainer.module.css
+ * Component-specific styles for AgendaItemsContainer
+ */
+
 .tableHeadAgendaItems {
   background-color: var(--tableHeadAgendaItems-bg) !important;
   color: var(--tableHeadAgendaItems-color);
@@ -40,11 +45,7 @@
   margin: 5px;
 }
 
-.agendaCategoryOptionsButton {
-  width: 24px;
-  height: 24px;
-}
-
+.agendaCategoryOptionsButton,
 .agendaItemsOptionsButton {
   width: 24px;
   height: 24px;
