@@ -154,7 +154,7 @@ const renderComponent = (props = {}) => {
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   beforeEach(() => {
     vi.clearAllMocks();
@@ -1165,7 +1165,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetFormState = vi.fn();
     const currentFormState = {
       name: 'Test Event',
-      eventdescrip: 'Test description',
+      eventDescription: 'Test description',
       location: 'Test Location',
       startTime: '10:00:00',
       endTime: '12:00:00',
@@ -1412,7 +1412,7 @@ describe('EventListCardPreviewModal', () => {
 
       const currentFormState = {
         name: 'Test Event',
-        eventdescrip: 'Test event description',
+        eventDescription: 'Test event description',
         location: 'Test Location',
         startTime: '10:00:00',
         endTime: '11:00:00',
