@@ -5,9 +5,7 @@
  * to a specific organization. It utilizes GraphQL mutation to perform
  * the operation and provides feedback to the user via toast notifications.
  *
- * @param props - The props for the component
- * @param props.key - Unique key for the component
- * @param props.id - The ID of the user to be added as an admin
+ * @param id - The ID of the user to be added as an admin
  *
  * @returns A button that triggers the add admin functionality
  *
