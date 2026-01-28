@@ -309,7 +309,7 @@ function CommentCard({
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <Box sx={{ mb: 2, width: '100%' }}>
+            <Box className={commentCardStyles.editInputWrapper}>
               <Input
                 multiline
                 rows={4}
@@ -317,11 +317,7 @@ function CommentCard({
                 onChange={handleEditCommentInput}
                 fullWidth
                 data-testid="edit-comment-input"
-                sx={{
-                  border: '1px solid #ccc',
-                  borderRadius: '4px',
-                  padding: '8px',
-                }}
+                className={commentCardStyles.editCommentInput}
               />
             </Box>
 
