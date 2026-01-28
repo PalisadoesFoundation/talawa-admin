@@ -44,6 +44,8 @@ import AgendaItemsUpdateModal from 'components/AdminPortal/AgendaItems/Update/Ag
 import AgendaFolderDeleteModal from 'components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal';
 import AgendaFolderUpdateModal from './Update/AgendaFolderUpdateModal';
 import AgendaDragAndDrop from './DragAndDrop/AgendaDragAndDrop';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { useParams } from 'react-router';
 
 function AgendaFolderContainer({
   agendaFolderConnection,
@@ -59,6 +61,9 @@ function AgendaFolderContainer({
   t: (key: string) => string;
 }): JSX.Element {
   const { t: tCommon } = useTranslation('common');
+  const { getFileFromMinio } = useMinioDownload();
+  const { orgId } = useParams();
+  const organizationId = orgId ?? 'organization';
 
   // State for modals
   const [agendaItemPreviewModalIsOpen, setAgendaItemPreviewModalIsOpen] =
@@ -113,7 +118,13 @@ function AgendaFolderContainer({
     url: string[];
     folder?: string;
     category: string;
-    attachments: string[];
+    attachments: {
+      name: string;
+      objectName: string;
+      mimeType: string;
+      fileHash: string;
+      preview?: string;
+    }[];
   }>({
     id: '',
     name: '',
@@ -122,14 +133,18 @@ function AgendaFolderContainer({
     url: [''],
     category: '',
     folder: '',
-    attachments: [''],
+    attachments: [],
   });
   const [formState, setFormState] = useState<{
     id: string;
     name: string;
     description: string;
     duration: string;
-    attachment?: string[];
+    attachment?: {
+      objectName: string;
+      mimeType: string;
+      previewUrl: string;
+    }[];
     sequence: number;
     category: {
       id: string;
@@ -146,7 +161,7 @@ function AgendaFolderContainer({
     id: '',
     description: '',
     duration: '',
-    attachment: [''],
+    attachment: [],
     sequence: 0,
     category: {
       id: '',
@@ -176,8 +191,10 @@ function AgendaFolderContainer({
    * Shows the preview modal with the details of the selected agenda item.
    * @param agendaItem - The agenda item to preview.
    */
-  const showPreviewModal = (agendaItem: InterfaceAgendaItemInfo): void => {
-    setAgendaItemState(agendaItem);
+  const showPreviewModal = async (
+    agendaItem: InterfaceAgendaItemInfo,
+  ): Promise<void> => {
+    await setAgendaItemState(agendaItem);
     setAgendaItemPreviewModalIsOpen(true);
   };
 
@@ -245,8 +262,10 @@ function AgendaFolderContainer({
    * Handles click event to show the update modal for the selected agenda item.
    * @param agendaItem - The agenda item to update.
    */
-  const handleItemsEditClick = (agendaItem: InterfaceAgendaItemInfo): void => {
-    setAgendaUpdateItemState(agendaItem);
+  const handleItemsEditClick = async (
+    agendaItem: InterfaceAgendaItemInfo,
+  ): Promise<void> => {
+    await setAgendaUpdateItemState(agendaItem);
     showUpdateItemModal();
   };
 
@@ -265,19 +284,30 @@ function AgendaFolderContainer({
    * Sets the state for the selected agenda item.
    * @param agendaItem - The agenda item to update in the state.
    */
-  const setAgendaUpdateItemState = (
+  const setAgendaUpdateItemState = async (
     agendaItem: InterfaceAgendaItemInfo,
-  ): void => {
+  ): Promise<void> => {
+    const attachmentsWithPreview = await Promise.all(
+      (agendaItem.attachments ?? []).map(async (media) => ({
+        name: media.name,
+        objectName: media.objectName,
+        mimeType: media.mimeType,
+        fileHash: media.fileHash,
+        previewUrl: await getFileFromMinio(media.objectName, organizationId),
+      })),
+    );
+
     setItemFormState({
-      ...itemFormState,
+      id: agendaItem.id,
       name: agendaItem.name,
       description: agendaItem.description,
       duration: agendaItem.duration,
-      //attachments: agendaItem.attachments,
+      attachments: attachmentsWithPreview,
       category: agendaItem.category.id,
       folder: agendaItem.folder?.id,
       url: agendaItem.url.map((u) => u.url) ?? [],
     });
+
     setAgendaItemId(agendaItem.id);
   };
 
@@ -295,24 +325,37 @@ function AgendaFolderContainer({
    * Sets the state for the selected agenda item.
    * @param agendaItem - The agenda item to set in the state.
    */
-  const setAgendaItemState = (agendaItem: InterfaceAgendaItemInfo): void => {
+  const setAgendaItemState = async (
+    agendaItem: InterfaceAgendaItemInfo,
+  ): Promise<void> => {
+    const attachments = agendaItem.attachments ?? [];
+    const attachmentsWithPreview = await Promise.all(
+      attachments.map(async (att) => ({
+        objectName: att.objectName,
+        mimeType: att.mimeType,
+        previewUrl: await getFileFromMinio(att.objectName, organizationId),
+      })),
+    );
+
     setFormState({
-      ...formState,
+      id: agendaItem.id,
       name: agendaItem.name,
       description: agendaItem.description,
       duration: agendaItem.duration,
-      //attachments: agendaItem.attachments,
+      attachment: attachmentsWithPreview,
+      sequence: agendaItem.sequence,
       category: {
         id: agendaItem.category.id,
         name: agendaItem.category.name,
         description: agendaItem.category.description,
       },
-      url: agendaItem.url.map((u) => u.url) ?? [],
+      url: agendaItem.url.map((u) => u.url),
       creator: {
         id: agendaItem.creator.id,
         name: agendaItem.creator.name,
       },
     });
+
     setAgendaItemId(agendaItem.id);
   };
 

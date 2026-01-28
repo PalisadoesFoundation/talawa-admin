@@ -36,11 +36,13 @@ export interface InterfaceAgendaItemInfo {
     name: string;
     description: string;
   };
-  // attachments: {
-  //   mimeType: string;
-  //   fileHash: string;
-  //   objectName: string;
-  // }[];
+  attachments?: {
+    id: string;
+    name: string;
+    mimeType: string;
+    fileHash: string;
+    objectName: string;
+  }[];
   creator: {
     id: string;
     name: string;
@@ -82,7 +84,13 @@ export interface InterfaceAgendaFolderInfo {
         description: string;
         duration: string;
         sequence: number;
-        attachment?: string[];
+        attachments?: {
+          id: string;
+          name: string;
+          mimeType: string;
+          objectName: string;
+          fileHash: string;
+        }[];
         category: {
           id: string;
           name: string;
@@ -120,6 +128,7 @@ export interface InterfaceAgendaFolderList {
  * Defines the structure for file attachments in agenda items.
  */
 export interface InterfaceAttachment {
+  name: string;
   mimeType: string;
   fileHash: string;
   objectName: string;
@@ -152,7 +161,13 @@ export interface InterfaceFormStateType {
   description: string;
   duration: string;
   category: string;
-  attachments: string[];
+  attachments: {
+    name: string;
+    objectName: string;
+    mimeType: string;
+    fileHash: string;
+    previewUrl?: string;
+  }[];
   url: string[];
   folder?: string;
 }
@@ -254,7 +269,10 @@ interface InterfaceItemFormStateType {
   name: string;
   description: string;
   duration: string;
-  attachment?: string[];
+  attachment?: {
+    mimeType: string;
+    previewUrl: string;
+  }[];
   creator: {
     id: string;
     name: string;

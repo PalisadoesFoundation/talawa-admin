@@ -1,105 +1,79 @@
 /**
-// translation-check-keyPrefix: agendaItems
- * AgendaItemsUpdateModal Component
+ * Renders the modal used to update agenda items.
  *
- * This component renders a modal for updating agenda items. It provides
- * functionality to edit agenda item details such as title, duration,
- * description, categories, URLs, and attachments. The modal also includes
- * validation for URLs and file size limits for attachments.
- *
- * See InterfaceAgendaItemsUpdateModalProps for props documentation.
- *
- * @remarks
- * - File attachments are uploaded via MinIO presigned URLs.
- * - URLs are validated using a regular expression.
- *
- * @example
- * ```tsx
- * <AgendaItemsUpdateModal
- *   agendaItemUpdateModalIsOpen={true}
- *   hideUpdateModal={closeModal}
- *   formState={formState}
- *   setFormState={setFormState}
- *   updateAgendaItemHandler={handleUpdate}
- *   t={t}
- *   agendaItemCategories={categories}
- * />
- * ```
+ * @param agendaItemUpdateModalIsOpen - Whether the modal is open.
+ * @param hideUpdateItemModal - Handler to close the modal.
+ * @param itemFormState - Current agenda item form state.
+ * @param setItemFormState - Setter for agenda item form state.
+ * @param updateAgendaItemHandler - Submit handler.
+ * @param t - i18n translation function.
+ * @param agendaItemCategories - Available agenda item categories.
+ * @param agendaFolderData - Available agenda folders.
+ * @returns JSX.Element
  */
-
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import Button from 'shared-components/Button/Button';
-import {
-  FormTextField,
-  FormSelectField,
-  FormFieldGroup,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMinioUpload } from 'utils/MinioUpload';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from './AgendaItemsUpdateModal.module.css';
-import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import type { InterfaceAgendaItemsUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
+import { useMinioDownload } from 'utils/MinioDownload';
+import { useParams } from 'react-router';
+import { BaseModal } from 'shared-components/BaseModal';
+import Button from 'shared-components/Button/Button';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import {
+  FormFieldGroup,
+  FormTextField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-// Constants for attachment validation
-const MAX_ATTACHMENTS = 10;
-const ALLOWED_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/gif',
-  'image/webp',
-  'video/mp4',
-  'video/webm',
-  'video/quicktime',
-];
+import styles from 'style/app-fixed.module.css';
+
+import type {
+  InterfaceAgendaItemCategoryInfo,
+  InterfaceAgendaItemsUpdateModalProps,
+  InterfaceAttachment,
+} from 'types/AdminPortal/Agenda/interface';
+import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
   agendaItemUpdateModalIsOpen,
-  hideUpdateModal,
-  formState,
-  setFormState,
+  hideUpdateItemModal,
+  itemFormState,
+  setItemFormState,
   updateAgendaItemHandler,
   t,
   agendaItemCategories,
+  agendaFolderData,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { orgId } = useParams();
+  const organizationId = orgId ?? 'organization';
   const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
-  // Filter empty URLs and attachments on mount only
+  const MAX_FILE_SIZE_MB = 10;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
   useEffect(() => {
-    setFormState((prevState) => ({
+    setItemFormState((prevState) => ({
       ...prevState,
-      urls: prevState.urls.filter((url) => url.trim() !== ''),
-      attachments: prevState.attachments.filter((att) => att !== ''),
+      url: prevState.url.filter((url) => url.trim() !== ''),
     }));
-  }, []);
+  }, [setItemFormState]);
 
-  /**
-   * Validates if a given URL is in a correct format.
-   *
-   * @param url - The URL to validate.
-   * @returns True if the URL is valid, false otherwise.
-   */
   const isValidUrl = (url: string): boolean => {
-    // Regular expression for basic URL validation
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
   };
 
-  /**
-   * Handles adding a new URL to the form state.
-   * Displays an error toast if the URL is invalid.
-   */
   const handleAddUrl = (): void => {
     if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
-      setFormState({
-        ...formState,
-        urls: [...formState.urls.filter((url) => url.trim() !== ''), newUrl],
+      setItemFormState({
+        ...itemFormState,
+        url: [...itemFormState.url.filter((u) => u.trim() !== ''), newUrl],
       });
       setNewUrl('');
     } else {
@@ -107,131 +81,144 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
-  /**
-   * Handles removing a URL from the form state.
-   *
-   * @param url - The URL to remove.
-   */
   const handleRemoveUrl = (url: string): void => {
-    setFormState({
-      ...formState,
-      urls: formState.urls.filter((item) => item !== url),
+    setItemFormState({
+      ...itemFormState,
+      url: itemFormState.url.filter((item) => item !== url),
     });
   };
 
-  /**
-   * Handles file input change event.
-   * Uploads selected files to MinIO and updates the form state.
-   * Displays an error toast if the total file size exceeds the limit.
-   *
-   * @param e - The change event for file input.
-   */
+  const handleRemoveAttachment = (objectName: string): void => {
+    setItemFormState({
+      ...itemFormState,
+      attachments: itemFormState.attachments?.filter(
+        (att) => att.objectName !== objectName,
+      ),
+    });
+  };
+
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
-    const target = e.target as HTMLInputElement;
-    if (target.files) {
-      const files = Array.from(target.files);
+    const target = e.target;
+    if (!target.files || target.files.length === 0) return;
 
-      // Check attachment count limit
-      const remainingSlots = MAX_ATTACHMENTS - formState.attachments.length;
-      if (files.length > remainingSlots) {
-        NotificationToast.error(t('tooManyAttachments'));
-        return;
-      }
+    const files = Array.from(target.files);
 
-      // Validate file types
-      const invalidTypeFiles = files.filter(
-        (file) => !ALLOWED_TYPES.includes(file.type),
-      );
-      if (invalidTypeFiles.length > 0) {
-        invalidTypeFiles.forEach((file) => {
-          NotificationToast.error(`${file.name}: ${t('invalidFileType')}`);
-        });
-        return;
-      }
-
-      // Check total file size
-      let totalSize = 0;
-      files.forEach((file) => {
-        totalSize += file.size;
-      });
-      if (totalSize > 10 * 1024 * 1024) {
-        NotificationToast.error(t('fileSizeExceedsLimit'));
-        return;
-      }
-
-      // Upload files to MinIO and store file metadata
-      const uploadedFiles: string[] = [];
+    try {
+      const uploadedAttachments: InterfaceAttachment[] = [];
 
       for (const file of files) {
-        try {
-          const result = await uploadFileToMinio(file, 'agendaItem');
-          if (result) {
-            // Enrich with mimeType and name from File object
-            const metadata = {
-              ...result,
-              mimeType: file.type || 'application/octet-stream',
-              name: file.name,
-            };
-            uploadedFiles.push(JSON.stringify(metadata));
-          }
-        } catch {
-          NotificationToast.error(t('fileUploadError'));
+        if (file.size > MAX_FILE_SIZE_BYTES) {
+          NotificationToast.error(t('fileSizeExceedsLimit'));
+          continue;
         }
+
+        if (!AGENDA_ITEM_ALLOWED_MIME_TYPES.includes(file.type)) {
+          NotificationToast.error(t('invalidFileType'));
+          continue;
+        }
+
+        const { objectName, fileHash } = await uploadFileToMinio(
+          file,
+          organizationId,
+        );
+
+        const previewUrl = await getFileFromMinio(objectName, organizationId);
+
+        uploadedAttachments.push({
+          name: file.name,
+          mimeType: file.type,
+          objectName,
+          fileHash,
+          previewUrl,
+        });
       }
 
-      setFormState((prevState) => ({
-        ...prevState,
-        attachments: [...prevState.attachments, ...uploadedFiles],
-      }));
+      if (uploadedAttachments.length > 0) {
+        setItemFormState((prev) => ({
+          ...prev,
+          attachments: [...prev.attachments, ...uploadedAttachments],
+        }));
+      }
+    } catch (error) {
+      console.error(error);
+      NotificationToast.error(t('fileUploadFailed'));
+    } finally {
+      // allow re-uploading same file
+      target.value = '';
     }
   };
-
-  /**
-   * Handles removing an attachment from the form state.
-   *
-   * @param attachment - The attachment to remove.
-   */
-  const handleRemoveAttachment = (attachment: string): void => {
-    setFormState((prevState) => ({
-      ...prevState,
-      attachments: prevState.attachments.filter((item) => item !== attachment),
-    }));
-  };
+  console.log(itemFormState);
 
   return (
     <BaseModal
       className={styles.AgendaItemModal}
       show={agendaItemUpdateModalIsOpen}
-      onHide={hideUpdateModal}
+      onHide={hideUpdateItemModal}
       title={t('updateAgendaItem')}
-      headerClassName={styles.modalHeader}
-      showCloseButton={true}
       dataTestId="updateAgendaItemModal"
     >
       <form onSubmit={updateAgendaItemHandler}>
-        <FormSelectField
-          name="categorySelect"
-          label={t('category')}
-          value={formState.agendaItemCategoryIds[0] || ''}
-          onChange={(value: string) => {
-            setFormState({
-              ...formState,
-              agendaItemCategoryIds: value ? [value] : [],
-            });
-          }}
-          data-testid="categorySelect"
-        >
-          <option value="">{t('selectCategory')}</option>
-          {(agendaItemCategories || []).map(
-            (category: InterfaceAgendaItemCategoryInfo) => (
-              <option key={category._id} value={category._id}>
-                {category.name}
-              </option>
-            ),
-          )}
-        </FormSelectField>
+        {/* Folder */}
+        <FormFieldGroup name="folder" label={t('folder')}>
+          <Autocomplete
+            options={agendaFolderData ?? []}
+            getOptionLabel={(folder) => folder.name}
+            value={
+              agendaFolderData?.find(
+                (folder) => folder.id === itemFormState.folder,
+              ) ?? null
+            }
+            onChange={(_, folder): void => {
+              setItemFormState({
+                ...itemFormState,
+                folder: folder?.id ?? '',
+              });
+            }}
+            renderInput={(params) => (
+              <div ref={params.InputProps.ref} className="position-relative">
+                <input
+                  {...params.inputProps}
+                  className="form-control"
+                  placeholder={t('folderName')}
+                />
+                {params.InputProps.endAdornment}
+              </div>
+            )}
+          />
+        </FormFieldGroup>
+
+        {/* Category */}
+        <FormFieldGroup name="category" label={t('category')}>
+          <Autocomplete
+            options={agendaItemCategories || []}
+            getOptionLabel={(
+              category: InterfaceAgendaItemCategoryInfo,
+            ): string => category.name}
+            value={
+              agendaItemCategories?.find(
+                (category) => category.id === itemFormState.category,
+              ) ?? null
+            }
+            onChange={(_, category): void => {
+              setItemFormState({
+                ...itemFormState,
+                category: category?.id ?? '',
+              });
+            }}
+            renderInput={(params) => (
+              <div ref={params.InputProps.ref} className="position-relative">
+                <input
+                  {...params.inputProps}
+                  className="form-control"
+                  placeholder={t('categoryName')}
+                />
+                {params.InputProps.endAdornment}
+              </div>
+            )}
+          />
+        </FormFieldGroup>
 
         <Row className="mb-3">
           <Col>
@@ -239,11 +226,13 @@ const AgendaItemsUpdateModal: React.FC<
               name="title"
               label={t('title')}
               placeholder={t('enterTitle')}
-              value={formState.title}
-              onChange={(value: string) =>
-                setFormState({ ...formState, title: value })
+              value={itemFormState.name}
+              onChange={(value) =>
+                setItemFormState({
+                  ...itemFormState,
+                  name: value,
+                })
               }
-              data-testid="titleInput"
             />
           </Col>
           <Col>
@@ -251,60 +240,61 @@ const AgendaItemsUpdateModal: React.FC<
               name="duration"
               label={t('duration')}
               placeholder={t('enterDuration')}
-              value={formState.duration}
-              onChange={(value: string) =>
-                setFormState({ ...formState, duration: value })
-              }
+              value={itemFormState.duration}
               required
-              data-testid="durationInput"
+              onChange={(value) =>
+                setItemFormState({
+                  ...itemFormState,
+                  duration: value,
+                })
+              }
             />
           </Col>
         </Row>
 
-        <FormFieldGroup name="description" label={t('description')}>
-          <textarea
-            id="description"
-            className="form-control"
-            rows={1}
-            placeholder={t('enterDescription')}
-            value={formState.description}
-            onChange={(e) =>
-              setFormState({ ...formState, description: e.target.value })
-            }
-            data-testid="descriptionInput"
-          />
-        </FormFieldGroup>
+        <FormTextField
+          name="description"
+          label={t('description')}
+          placeholder={t('enterDescription')}
+          value={itemFormState.description}
+          onChange={(value) =>
+            setItemFormState({
+              ...itemFormState,
+              description: value,
+            })
+          }
+        />
 
+        {/* URLs */}
         <FormFieldGroup name="url" label={t('url')}>
           <div className="d-flex">
             <input
               type="text"
               className="form-control"
               placeholder={t('enterUrl')}
-              id="url"
               data-testid="urlInput"
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
+            <Button onClick={handleAddUrl} data-testid="linkBtn">
               {t('link')}
             </Button>
           </div>
 
-          <ul className="list-unstyled">
-            {formState.urls.map((url, index) => (
+          <ul className={styles.urlList}>
+            {itemFormState.url.map((url, index) => (
               <li key={index} className={styles.urlListItem}>
                 <FaLink className={styles.urlIcon} />
                 <a href={url} target="_blank" rel="noopener noreferrer">
-                  {url.length > 50 ? url.substring(0, 50) + '...' : url}
+                  {url.length > 50 ? `${url.substring(0, 50)}...` : url}
                 </a>
                 <Button
-                  type="button"
                   variant="danger"
                   size="sm"
                   data-testid="deleteUrl"
                   className={styles.deleteButtonAgendaItems}
                   onClick={() => handleRemoveUrl(url)}
+                  aria-label={t('removeUrl')}
                 >
                   <FaTrash />
                 </Button>
@@ -313,90 +303,48 @@ const AgendaItemsUpdateModal: React.FC<
           </ul>
         </FormFieldGroup>
 
-        <FormFieldGroup
-          name="attachments"
-          label={t('attachments')}
-          helpText={t('attachmentLimit')}
-        >
+        {/* Attachments */}
+        <FormFieldGroup name="attachments" label={t('attachments')}>
           <input
-            accept="image/*, video/*"
-            data-testid="attachment"
-            name="attachments"
             type="file"
-            id="attachments"
-            multiple={true}
-            onChange={handleFileChange}
+            accept="image/*, video/*"
+            multiple
+            data-testid="attachment"
             className="form-control"
+            onChange={handleFileChange}
           />
+          <small className="text-muted">{t('attachmentLimit')}</small>
         </FormFieldGroup>
 
-        {formState.attachments && (
+        {itemFormState.attachments.length > 0 && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {formState.attachments.map((attachment, index) => {
-              // Try to parse MinIO metadata JSON, fallback to treating as URL
-              let previewUrl = attachment;
-              let isVideo = false;
-              let mimeType = '';
-              let fileName = '';
+            {itemFormState.attachments?.map((attachment, index) => (
+              <div key={index} className={styles.attachmentPreview}>
+                {attachment.mimeType.startsWith('video') ? (
+                  <video muted autoPlay loop playsInline>
+                    <source
+                      src={attachment.previewUrl}
+                      type={attachment.mimeType}
+                    />
+                  </video>
+                ) : (
+                  <img
+                    src={attachment.previewUrl}
+                    alt={t('attachmentPreviewAlt')}
+                  />
+                )}
 
-              try {
-                const parsed = JSON.parse(attachment);
-                if (parsed && parsed.objectName) {
-                  // MinIO metadata - use name for extension detection
-                  // Accept both mimeType and legacy mimetype for backward compatibility
-                  mimeType = parsed.mimeType || parsed.mimetype || '';
-                  fileName = parsed.name || 'Attachment';
-                  isVideo = mimeType.startsWith('video/');
-                  // For MinIO attachments, we can't preview directly without signed URL
-                  // Show a placeholder with filename instead
-                  previewUrl = '';
-                }
-              } catch {
-                // Not JSON, treat as regular URL
-                isVideo =
-                  attachment.includes('video') ||
-                  attachment.includes('.mp4') ||
-                  attachment.includes('.webm');
-                previewUrl = attachment;
-              }
-
-              return (
-                <div key={index} className={styles.attachmentPreview}>
-                  {isVideo && previewUrl ? (
-                    <video
-                      muted
-                      autoPlay={true}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      <source src={previewUrl} type={mimeType || 'video/mp4'} />
-                    </video>
-                  ) : previewUrl ? (
-                    <img src={previewUrl} alt={t('attachmentPreview')} />
-                  ) : (
-                    <div className={styles.attachmentPlaceholder}>
-                      <i className="fa fa-file" />
-                      {fileName && (
-                        <span className={styles.fileName}>{fileName}</span>
-                      )}
-                    </div>
-                  )}
-                  <button
-                    type="button"
-                    aria-label={t('deleteAttachment')}
-                    className={styles.closeButtonFile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveAttachment(attachment);
-                    }}
-                    data-testid="deleteAttachment"
-                  >
-                    <i className="fa fa-times" />
-                  </button>
-                </div>
-              );
-            })}
+                <button
+                  type="button"
+                  className={styles.closeButtonFile}
+                  aria-label={t('removeAttachment')}
+                  onClick={() => handleRemoveAttachment(attachment.objectName)}
+                  data-testid="deleteAttachment"
+                >
+                  <i className="fa fa-times" />
+                </button>
+              </div>
+            ))}
           </div>
         )}
 

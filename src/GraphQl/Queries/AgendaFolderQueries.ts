@@ -24,6 +24,13 @@ export const AGENDA_FOLDER_LIST = gql`
             sequence
             duration
             key
+            attachments {
+              id
+              name
+              fileHash
+              objectName
+              mimeType
+            }
             folder {
               id
               name
