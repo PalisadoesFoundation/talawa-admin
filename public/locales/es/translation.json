@@ -1226,7 +1226,8 @@
     "userRegistrationRequired": "Se requiere registro de usuario",
     "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
     "updateFailed": "Error al actualizar la organización",
-    "errorLoadingOrganizationData": "Error al cargar los datos de la organización"
+    "errorLoadingOrganizationData": "Error al cargar los datos de la organización",
+    "enterOrganizationLocation": "Ingrese la ubicación de la organización"
   },
   "public": {
     "invitation": {

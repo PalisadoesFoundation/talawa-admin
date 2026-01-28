@@ -54,10 +54,10 @@
 }
 
 .saveChangesBtn {
-  color: white;
-  border: 0px;
+  color: var(--btn-primary-text-color, white);
+  border: 0;
   height: 49px;
   width: 160px;
   font-size: 0.8rem;
-  background-color: var(--card-background-color) !important;
+  background-color: var(--card-background-color);
 }

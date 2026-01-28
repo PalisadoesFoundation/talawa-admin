@@ -175,6 +175,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         countryCode: formState.address?.countryCode,
         ...(formState.avatar ? { avatar: formState.avatar } : {}),
         isUserRegistrationRequired: userRegistrationRequiredChecked,
+        isVisibleInSearch: visiblechecked,
       };
 
       // Filter out empty fields
@@ -219,18 +220,17 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     <LoadingState isLoading={loading} variant="spinner">
       <div id="orgupdate">
         <form className={styles.ss}>
-          <FormFieldGroup name="orgName" label={tCommon('name')} required>
-            <FormTextField
-              name="orgName"
-              label={tCommon('name')}
-              placeholder={t('enterNameOrganization')}
-              autoComplete="off"
-              value={formState.orgName}
-              onChange={(value: string) => {
-                setFormState({ ...formState, orgName: value });
-              }}
-            />
-          </FormFieldGroup>
+          <FormTextField
+            name="orgName"
+            label={tCommon('name')}
+            required
+            placeholder={t('enterNameOrganization')}
+            autoComplete="off"
+            value={formState.orgName}
+            onChange={(value: string) => {
+              setFormState({ ...formState, orgName: value });
+            }}
+          />
 
           <FormFieldGroup
             name="orgDescrip"

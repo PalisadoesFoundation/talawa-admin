@@ -1248,7 +1248,8 @@
     "userRegistrationRequired": "需要用户注册",
     "nameDescriptionRequired": "名称和描述为必填项",
     "updateFailed": "更新组织失败",
-    "errorLoadingOrganizationData": "加载组织数据时出错"
+    "errorLoadingOrganizationData": "加载组织数据时出错",
+    "enterOrganizationLocation": "请输入组织位置"
   },
   "public": {
     "invitation": {

@@ -4,7 +4,9 @@
 
 # Interface: InterfaceOrganization
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L5)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L12)
+
+Represents an organization's basic data structure.
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:5](https://github.com/
 
 > **addressLine1**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L9)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L20)
+
+Primary address line.
 
 ***
 
@@ -20,7 +24,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:9](https://github.com/
 
 > **addressLine2**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L10)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L22)
+
+Secondary address line.
 
 ***
 
@@ -28,7 +34,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:10](https://github.com
 
 > **avatarURL**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L15)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L32)
+
+URL of the organization's avatar image, or null if not set.
 
 ***
 
@@ -36,7 +44,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:15](https://github.com
 
 > **city**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L11)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L24)
+
+City of the organization.
 
 ***
 
@@ -44,7 +54,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:11](https://github.com
 
 > **countryCode**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L14)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L30)
+
+ISO country code.
 
 ***
 
@@ -52,7 +64,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:14](https://github.com
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L8)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L18)
+
+Description of the organization.
 
 ***
 
@@ -60,7 +74,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:8](https://github.com/
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L6)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L14)
+
+Unique identifier of the organization.
 
 ***
 
@@ -68,7 +84,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:6](https://github.com/
 
 > **isUserRegistrationRequired**: `boolean`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L16)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L34)
+
+Whether user registration requires approval, or null if not configured.
 
 ***
 
@@ -76,7 +94,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:16](https://github.com
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L7)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L16)
+
+Name of the organization.
 
 ***
 
@@ -84,7 +104,9 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:7](https://github.com/
 
 > **postalCode**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L13)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L28)
+
+Postal or ZIP code.
 
 ***
 
@@ -92,4 +114,6 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:13](https://github.com
 
 > **state**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L12)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L26)
+
+State or province.
