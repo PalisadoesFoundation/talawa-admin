@@ -1,43 +1,103 @@
 .cardItem {
-  composes: cardItem from '../../../style/app-fixed.module.css';
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* Vertically centers the items */
+  justify-content: flex-start;
+  height: 6rem;
+  padding: 0.75rem;
+  gap: 1.5rem;
+  background-color: #f7f8fa;
+  border: 1px solid var(--cardItem-border);
+  border-radius: 8px;
+  margin-top: 20px;
 }
 
 .CardItemImage {
-  composes: CardItemImage from '../../../style/app-fixed.module.css';
+  background-color: #eaebef;
+  height: 5rem;
+  width: 5rem;
+  min-width: 5rem;
+  /* border: 3.25rem solid transparent; */
+  border-radius: 8px;
 }
 
-.CardItemMainDiv {
-  composes: CardItemMainDiv from '../../../style/app-fixed.module.css';
-}
-
-.CardItemMainDivEvent {
-  composes: CardItemMainDivEvent from '../../../style/app-fixed.module.css';
+.CardItemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 .cardItemtitle {
-  composes: cardItemtitle from '../../../style/app-fixed.module.css';
-}
-
-.upcomingEventsTitle {
-  composes: upcomingEventsTitle from '../../../style/app-fixed.module.css';
+  font-size: 15px;
+  font-weight: bold;
 }
 
 .CardItemDate {
-  composes: CardItemDate from '../../../style/app-fixed.module.css';
+  color: gray;
+  font-size: 12px;
+}
+
+.cardItem .iconWrapper {
+  position: relative;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CardItemMainDiv {
+  width: 100%;
+}
+
+.CardItemMainDivEvent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upcomingEventsTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .cardItemAuthor {
-  composes: cardItemAuthor from '../../../style/app-fixed.module.css';
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .rightCard {
-  composes: rightCard from '../../../style/app-fixed.module.css';
+  display: flex;
+  width: fit-content;
+  gap: 7px;
+  justify-content: center;
+  flex-direction: column;
+  margin-left: 10px;
+  overflow-x: hidden;
 }
 
-.location {
-  composes: location from '../../../style/app-fixed.module.css';
+.cardItem .location {
+  font-size: 0.9rem;
+  color: var(--cardItem-location-color);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 
 .time {
-  composes: time from '../../../style/app-fixed.module.css';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  width: fit-content;
+  border: 1px solid var(--time-border);
+  box-sizing: border-box;
+  background: var(--time-bg);
+  box-shadow: 0 3px 8px var(--time-box-shadow);
+  border-radius: 8px;
 }

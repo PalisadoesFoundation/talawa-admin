@@ -1,6 +1,7 @@
 import DashBoardCardLoading from './DashboardCardLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import styles from './DashboardCardLoading.module.css';
 describe('Testing the DashboardCardLoading component', () => {
   beforeEach(() => {

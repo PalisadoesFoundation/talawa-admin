@@ -14,12 +14,6 @@
   font-size: var(--error-icon-size, 40px);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: 0.5rem;
-  }
 }
 
 .btnsContainer {
@@ -57,7 +51,6 @@
 }
 
 .addButton:disabled {
-  margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
 }
