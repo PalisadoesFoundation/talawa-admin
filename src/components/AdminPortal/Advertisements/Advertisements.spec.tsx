@@ -103,6 +103,7 @@ describe('Testing Advertisement Component', () => {
     });
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
