@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -25,6 +25,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   __esModule: true,
@@ -275,6 +276,11 @@ const renderWithProviders = (
   );
 
 describe('EventRegistrantsModal', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
@@ -313,7 +319,7 @@ describe('EventRegistrantsModal', () => {
 
     // Close button has data-testid="modalCloseBtn"
     const closeButton = await screen.findByTestId('modalCloseBtn');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
   });
@@ -330,7 +336,7 @@ describe('EventRegistrantsModal', () => {
     const addButton = await screen.findByTestId('add-registrant-btn');
 
     // Click button
-    fireEvent.click(addButton);
+    await user.click(addButton);
 
     // Assert NotificationToast was called (it's mocked)
     await waitFor(() => {
@@ -341,10 +347,6 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -368,7 +370,7 @@ describe('EventRegistrantsModal', () => {
     await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
-    fireEvent.click(addButton);
+    await user.click(addButton);
 
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
@@ -382,10 +384,6 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('handles error when add registrant mutation fails', async () => {
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -397,7 +395,6 @@ describe('EventRegistrantsModal', () => {
 
     const input = await screen.findByTestId('autocomplete');
 
-    // Use userEvent to type
     await user.click(input);
     await user.type(input, 'John Doe');
 
@@ -410,7 +407,7 @@ describe('EventRegistrantsModal', () => {
     await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
-    fireEvent.click(addButton);
+    await user.click(addButton);
 
     // Assert warning shown first
     await waitFor(() => {
@@ -426,10 +423,6 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -441,7 +434,6 @@ describe('EventRegistrantsModal', () => {
 
     const input = await screen.findByTestId('autocomplete');
 
-    // Use userEvent to type
     await user.click(input);
     await user.type(input, 'John Doe');
 
@@ -454,7 +446,7 @@ describe('EventRegistrantsModal', () => {
     await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
-    fireEvent.click(addButton);
+    await user.click(addButton);
 
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
@@ -468,10 +460,6 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -497,10 +485,10 @@ describe('EventRegistrantsModal', () => {
     expect(onspotModal).toBeInTheDocument();
 
     const reloadBtn = screen.getByTestId('reload-members-btn');
-    fireEvent.click(reloadBtn);
+    await user.click(reloadBtn);
 
     const closeBtn = screen.getByTestId('add-onspot-close');
-    fireEvent.click(closeBtn);
+    await user.click(closeBtn);
 
     await waitFor(() => {
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
@@ -519,7 +507,7 @@ describe('EventRegistrantsModal', () => {
 
     // Click invite button using data-testid
     const inviteButton = screen.getByTestId('invite-by-email-btn');
-    fireEvent.click(inviteButton);
+    await user.click(inviteButton);
 
     // Wait for invite modal to appear (mocked as a div with data-testid)
     const inviteModal = await screen.findByTestId('invite-by-email-modal');
@@ -533,7 +521,7 @@ describe('EventRegistrantsModal', () => {
 
     // Close invite modal
     const closeInvite = screen.getByTestId('invite-close');
-    fireEvent.click(closeInvite);
+    await user.click(closeInvite);
 
     await waitFor(() => {
       expect(
@@ -552,7 +540,7 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal');
 
     const inviteButton = screen.getByTestId('invite-by-email-btn');
-    fireEvent.click(inviteButton);
+    await user.click(inviteButton);
 
     const inviteModal = await screen.findByTestId('invite-by-email-modal');
     expect(inviteModal).toBeInTheDocument();
@@ -562,7 +550,7 @@ describe('EventRegistrantsModal', () => {
 
     // Click send button to trigger onInvitesSent
     const sendBtn = screen.getByTestId('invite-send');
-    fireEvent.click(sendBtn);
+    await user.click(sendBtn);
     // onInvitesSent callback is triggered implicitly
   });
 
@@ -577,7 +565,7 @@ describe('EventRegistrantsModal', () => {
     expect(input).toBeInTheDocument();
 
     // Open autocomplete options
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    await user.type(input, '{ArrowDown}');
 
     // This text appears via getOptionLabel's t('unknownUser') fallback
     // i18nForTest translates it to the English text
@@ -592,10 +580,6 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
     );
@@ -604,8 +588,7 @@ describe('EventRegistrantsModal', () => {
     // Wait for the button to appear
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Use click instead of keyboard Enter because focus inside popper is unstable in test env
-    fireEvent.click(addOnspotLink);
+    await user.type(addOnspotLink, '{Enter}');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
@@ -617,25 +600,19 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
-    const user = await import('@testing-library/user-event').then(
-      (m) => m.default,
-    );
-
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
     );
 
     await user.type(input, 'NonexistentUser');
-
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Use click instead of keyboard Space because focus inside popper is unstable in test env
-    fireEvent.click(addOnspotLink);
+    await user.type(addOnspotLink, ' ');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
 
-  test('dont open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
+  test('doesnt open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -646,15 +623,18 @@ describe('EventRegistrantsModal', () => {
       'Choose the user that you want to add',
     );
 
-    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    await user.type(input, 'NonexistentUser');
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'].forEach((key) => {
-      fireEvent.keyDown(addOnspotLink, {
-        key,
-        code: key === 'a' ? 'KeyA' : key,
-      });
+    // Keys that should NOT open the modal
+    const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
+
+    for (const key of ignoredKeys) {
+      addOnspotLink.focus();
+      const keyPress = key.length === 1 ? key : `{${key}}`;
+      await user.keyboard(keyPress);
+
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
-    });
+    }
   });
 });
