@@ -4,6 +4,7 @@ import {
   render,
   screen,
   waitFor,
+  // eslint-disable-next-line no-restricted-imports -- fireEvent needed for DOM events like keyDown, change on controlled inputs
   fireEvent,
   within,
 } from '@testing-library/react';

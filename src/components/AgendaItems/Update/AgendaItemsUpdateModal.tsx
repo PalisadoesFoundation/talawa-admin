@@ -28,7 +28,9 @@
  */
 
 import React, { useState, useEffect } from 'react';
+// eslint-disable-next-line no-restricted-imports -- Form/Button from react-bootstrap required for complex form layout and controlId props not in shared components
 import { Form, Button, Row, Col } from 'react-bootstrap';
+// eslint-disable-next-line no-restricted-imports -- MUI Autocomplete+TextField required for multi-select category picker not available in shared components
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

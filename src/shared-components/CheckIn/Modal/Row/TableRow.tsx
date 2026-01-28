@@ -28,6 +28,7 @@
  */
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
+// eslint-disable-next-line no-restricted-imports -- MUI Button needed for variant='contained' prop not supported by shared Button
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
