@@ -1498,4 +1498,52 @@ describe('Calendar Component', () => {
 
     expect(screen.queryByText('BadDateEvent')).toBeNull();
   });
+
+  it('renders .calendar__weekdays with 7-column grid structure for weekday labels', async () => {
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="admin1"
+      />,
+    );
+
+    await waitFor(() =>
+      expect(screen.getByText('January')).toBeInTheDocument(),
+    );
+
+    // Query all weekday containers (one per month, 12 total)
+    const weekdayContainers = container.querySelectorAll(
+      '[class*="calendar__weekdays"]',
+    );
+
+    expect(weekdayContainers.length).toBe(12); // One for each month
+
+    // Verify that each weekday container has the calendar__weekdays class applied
+    weekdayContainers.forEach((weekdayContainer) => {
+      expect(weekdayContainer.className).toContain('calendar__weekdays');
+    });
+
+    // Verify that each container has exactly 7 weekday labels (M, T, W, T, F, S, S)
+    weekdayContainers.forEach((weekdayContainer) => {
+      const weekdayLabels = weekdayContainer.querySelectorAll(
+        '[class*="weekday__yearly"]',
+      );
+      expect(weekdayLabels.length).toBe(7);
+
+      // Verify the weekday labels contain expected text
+      const weekdayTexts = Array.from(weekdayLabels).map(
+        (label) => label.textContent,
+      );
+      expect(weekdayTexts).toEqual(['M', 'T', 'W', 'T', 'F', 'S', 'S']);
+    });
+
+    // Verify weekday container structure matches calendar days container
+    const dayContainers = container.querySelectorAll(
+      '[class*="calendar__days"]',
+    );
+    expect(dayContainers.length).toBe(12); // Same number as weekday containers
+  });
 });
