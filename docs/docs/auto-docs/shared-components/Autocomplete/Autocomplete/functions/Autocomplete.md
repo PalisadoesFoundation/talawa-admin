@@ -6,7 +6,7 @@
 
 > **Autocomplete**\<`T`, `Multiple`, `DisableClearable`, `FreeSolo`\>(`props`): `Element`
 
-Defined in: src/shared-components/Autocomplete/Autocomplete.tsx:12
+Defined in: [src/shared-components/Autocomplete/Autocomplete.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Autocomplete/Autocomplete.tsx#L12)
 
 Shared wrapper for MUI Autocomplete component.
 Use this component instead of importing directly from @mui/material.

@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line no-restricted-imports -- This component wraps MUI TextField to provide a shared implementation
 import { TextField as MuiTextField, TextFieldProps } from '@mui/material';
 
 /**

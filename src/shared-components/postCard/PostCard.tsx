@@ -12,9 +12,9 @@ import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'shared-components/Button';
 import {
   IconButton,
-  Button,
   Input,
   InputAdornment,
   Box,
@@ -469,14 +469,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         <Button
           onClick={toggleComments}
           data-testid="comment-card"
-          size="small"
-          sx={{
-            color: 'text.secondary',
-            fontSize: '0.75rem',
-            ml: 2,
-            mb: 1,
-            textTransform: 'none',
-          }}
+          className={postCardStyles.viewCommentsButton}
         >
           {showComments
             ? t('postCard.hideComments')
