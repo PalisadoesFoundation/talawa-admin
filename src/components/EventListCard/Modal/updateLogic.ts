@@ -40,9 +40,9 @@ export const useUpdateEventHandler = () => {
   const updateEventHandler = async ({
     eventListCardProps,
     formState,
-    alldaychecked,
-    publicchecked,
-    registrablechecked,
+    allDayChecked,
+    publicChecked,
+    registerableChecked,
     inviteOnlyChecked,
     eventStartDate,
     eventEndDate,
@@ -72,20 +72,20 @@ export const useUpdateEventHandler = () => {
       if (formState.location !== eventListCardProps.location) {
         updateInput.location = formState.location;
       }
-      if (publicchecked !== eventListCardProps.isPublic) {
-        updateInput.isPublic = publicchecked;
+      if (publicChecked !== eventListCardProps.isPublic) {
+        updateInput.isPublic = publicChecked;
       }
-      if (registrablechecked !== eventListCardProps.isRegisterable) {
-        updateInput.isRegisterable = registrablechecked;
+      if (registerableChecked !== eventListCardProps.isRegisterable) {
+        updateInput.isRegisterable = registerableChecked;
       }
       if (inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)) {
         updateInput.isInviteOnly = inviteOnlyChecked;
       }
-      if (alldaychecked !== eventListCardProps.allDay) {
-        updateInput.allDay = alldaychecked;
+      if (allDayChecked !== eventListCardProps.allDay) {
+        updateInput.allDay = allDayChecked;
       }
 
-      const newStartAt = alldaychecked
+      const newStartAt = allDayChecked
         ? dayjs.utc(eventStartDate).isValid()
           ? dayjs.utc(eventStartDate).startOf('day').toISOString()
           : ''
@@ -99,7 +99,7 @@ export const useUpdateEventHandler = () => {
               .toISOString()
           : '';
 
-      const newEndAt = alldaychecked
+      const newEndAt = allDayChecked
         ? dayjs.utc(eventEndDate).isValid()
           ? dayjs.utc(eventEndDate).endOf('day').toISOString()
           : ''
@@ -201,19 +201,19 @@ export const useUpdateEventHandler = () => {
             if (formState.location !== eventListCardProps.location) {
               entireSeriesInput.location = formState.location;
             }
-            if (publicchecked !== eventListCardProps.isPublic) {
-              entireSeriesInput.isPublic = publicchecked;
+            if (publicChecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicChecked;
             }
-            if (registrablechecked !== eventListCardProps.isRegisterable) {
-              entireSeriesInput.isRegisterable = registrablechecked;
+            if (registerableChecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registerableChecked;
             }
             if (
               inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
             ) {
               entireSeriesInput.isInviteOnly = inviteOnlyChecked;
             }
-            if (alldaychecked !== eventListCardProps.allDay) {
-              entireSeriesInput.allDay = alldaychecked;
+            if (allDayChecked !== eventListCardProps.allDay) {
+              entireSeriesInput.allDay = allDayChecked;
             }
 
             // Only include timing changes if they actually changed

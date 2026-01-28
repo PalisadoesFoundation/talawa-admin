@@ -159,24 +159,24 @@ export interface IPreviewEventModalProps {
   eventEndDate: Date;
   setEventStartDate: Dispatch<SetStateAction<Date>>;
   setEventEndDate: Dispatch<SetStateAction<Date>>;
-  alldaychecked: boolean;
+  allDayChecked: boolean;
   setAllDayChecked: Dispatch<SetStateAction<boolean>>;
-  publicchecked: boolean;
+  publicChecked: boolean;
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
-  registrablechecked: boolean;
-  setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
+  registerableChecked: boolean;
+  setRegisterableChecked: Dispatch<SetStateAction<boolean>>;
   inviteOnlyChecked: boolean;
   setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;

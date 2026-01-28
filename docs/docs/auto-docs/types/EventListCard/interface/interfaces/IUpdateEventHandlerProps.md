@@ -10,9 +10,9 @@ Arguments for the updateEventHandler function.
 
 ## Properties
 
-### alldaychecked
+### allDayChecked
 
-> **alldaychecked**: `boolean`
+> **allDayChecked**: `boolean`
 
 Defined in: [src/types/EventListCard/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L68)
 
@@ -78,9 +78,9 @@ Defined in: [src/types/EventListCard/interface.ts:71](https://github.com/Palisad
 
 ***
 
-### publicchecked
+### publicChecked
 
-> **publicchecked**: `boolean`
+> **publicChecked**: `boolean`
 
 Defined in: [src/types/EventListCard/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L69)
 
@@ -106,9 +106,9 @@ Defined in: [src/types/EventListCard/interface.ts:80](https://github.com/Palisad
 
 ***
 
-### registrablechecked
+### registerableChecked
 
-> **registrablechecked**: `boolean`
+> **registerableChecked**: `boolean`
 
 Defined in: [src/types/EventListCard/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L70)
 

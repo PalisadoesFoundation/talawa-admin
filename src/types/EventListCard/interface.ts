@@ -65,9 +65,9 @@ export interface IFormState {
 export interface IUpdateEventHandlerProps {
   eventListCardProps: InterfaceEventListCard;
   formState: IFormState;
-  alldaychecked: boolean;
-  publicchecked: boolean;
-  registrablechecked: boolean;
+  allDayChecked: boolean;
+  publicChecked: boolean;
+  registerableChecked: boolean;
   inviteOnlyChecked: boolean;
   eventStartDate: Date;
   eventEndDate: Date;

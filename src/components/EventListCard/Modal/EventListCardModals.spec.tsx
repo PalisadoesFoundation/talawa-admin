@@ -306,7 +306,7 @@ describe('EventListCardModals', () => {
     act(() => {
       initialPreviewProps.setFormState({
         ...initialPreviewProps.formState,
-        eventdescrip: 'Updated Description',
+        eventDescription: 'Updated Description',
       });
     });
     const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
@@ -370,7 +370,7 @@ describe('EventListCardModals', () => {
     renderComponent();
     const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
     act(() => {
-      initialPreviewProps.setRegistrableChecked(false);
+      initialPreviewProps.setRegisterableChecked(false);
     });
     const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
     await act(async () => {
@@ -613,7 +613,7 @@ describe('EventListCardModals', () => {
       previewProps.setFormState({
         ...previewProps.formState,
         name: 'Updated Series',
-        eventdescrip: 'Updated Series Description',
+        eventDescription: 'Updated Series Description',
       });
     });
 
@@ -681,7 +681,7 @@ describe('EventListCardModals', () => {
     act(() => {
       previewProps.setFormState({
         ...previewProps.formState,
-        eventdescrip: 'Updated Series Event Description',
+        eventDescription: 'Updated Series Event Description',
       });
     });
 

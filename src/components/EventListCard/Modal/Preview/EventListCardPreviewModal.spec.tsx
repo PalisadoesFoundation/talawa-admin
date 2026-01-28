@@ -97,7 +97,7 @@ const mockEventListCardProps = {
 
 const mockFormState = {
   name: 'Test Event',
-  eventdescrip: 'Test event description',
+  eventDescription: 'Test event description',
   location: 'Test Location',
   startTime: '10:00:00',
   endTime: '12:00:00',
@@ -116,12 +116,12 @@ const mockDefaultProps = {
   eventEndDate: dayjs.utc().add(10, 'days').toDate(),
   setEventStartDate: vi.fn(),
   setEventEndDate: vi.fn(),
-  alldaychecked: false,
+  allDayChecked: false,
   setAllDayChecked: vi.fn(),
-  publicchecked: true,
+  publicChecked: true,
   setPublicChecked: vi.fn(),
-  registrablechecked: true,
-  setRegistrableChecked: vi.fn(),
+  registerableChecked: true,
+  setRegisterableChecked: vi.fn(),
   inviteOnlyChecked: false,
   setInviteOnlyChecked: vi.fn(),
   formState: mockFormState,
@@ -272,9 +272,11 @@ describe('EventListCardPreviewModal', () => {
 
     // Check that setFormState was called, indicating the onChange handler works
     expect(mockSetFormState).toHaveBeenCalled();
-    // Verify that the eventdescrip field is being updated in the calls
+    // Verify that the eventDescription field is being updated in the calls
     const calls = mockSetFormState.mock.calls;
-    expect(calls.some((call) => call[0].eventdescrip.includes('Y'))).toBe(true);
+    expect(calls.some((call) => call[0].eventDescription.includes('Y'))).toBe(
+      true,
+    );
   });
 
   test('updates form state when location field changes', async () => {
@@ -309,7 +311,7 @@ describe('EventListCardPreviewModal', () => {
     const truncatedDescription = 'B'.repeat(256) + '...';
 
     renderComponent({
-      formState: { ...mockFormState, eventdescrip: longDescription },
+      formState: { ...mockFormState, eventDescription: longDescription },
     });
 
     const descriptionField = screen.getByTestId('updateDescription');
@@ -334,7 +336,7 @@ describe('EventListCardPreviewModal', () => {
     const sameTime = '10:00:00';
 
     renderComponent({
-      alldaychecked: true,
+      allDayChecked: true,
       setAllDayChecked: mockSetAllDayChecked,
       setFormState: mockSetFormState,
       formState: { ...mockFormState, startTime: sameTime, endTime: sameTime },
@@ -362,7 +364,7 @@ describe('EventListCardPreviewModal', () => {
     const endTime = '12:00:00';
 
     renderComponent({
-      alldaychecked: true,
+      allDayChecked: true,
       setAllDayChecked: mockSetAllDayChecked,
       setFormState: mockSetFormState,
       formState: { ...mockFormState, startTime, endTime },
@@ -393,7 +395,7 @@ describe('EventListCardPreviewModal', () => {
 
   test('selects public radio button when event is public', () => {
     renderComponent({
-      publicchecked: true,
+      publicChecked: true,
       inviteOnlyChecked: false,
     });
 
@@ -403,7 +405,7 @@ describe('EventListCardPreviewModal', () => {
 
   test('selects organization members radio when event is not public and not invite only', () => {
     renderComponent({
-      publicchecked: false,
+      publicChecked: false,
       inviteOnlyChecked: false,
     });
 
@@ -415,7 +417,7 @@ describe('EventListCardPreviewModal', () => {
 
   test('selects invite only radio when event is invite only', () => {
     renderComponent({
-      publicchecked: false,
+      publicChecked: false,
       inviteOnlyChecked: true,
     });
 
@@ -430,7 +432,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
-      publicchecked: false,
+      publicChecked: false,
       inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
@@ -448,7 +450,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
-      publicchecked: true,
+      publicChecked: true,
       inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
@@ -466,7 +468,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
-      publicchecked: true,
+      publicChecked: true,
       inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
@@ -516,24 +518,24 @@ describe('EventListCardPreviewModal', () => {
 
   test('toggles registrable checkbox', async () => {
     const user = userEvent.setup();
-    const mockSetRegistrableChecked = vi.fn();
-    renderComponent({ setRegistrableChecked: mockSetRegistrableChecked });
+    const mockSetRegisterableChecked = vi.fn();
+    renderComponent({ setRegisterableChecked: mockSetRegisterableChecked });
 
     const registrableCheckbox = screen.getByTestId('updateRegistrable');
     await user.click(registrableCheckbox);
 
-    expect(mockSetRegistrableChecked).toHaveBeenCalledWith(false);
+    expect(mockSetRegisterableChecked).toHaveBeenCalledWith(false);
   });
 
   test('hides time pickers when all-day is checked', () => {
-    renderComponent({ alldaychecked: true });
+    renderComponent({ allDayChecked: true });
 
     expect(screen.queryByText('startTime')).not.toBeInTheDocument();
     expect(screen.queryByText('endTime')).not.toBeInTheDocument();
   });
 
   test('shows time pickers when all-day is not checked', () => {
-    renderComponent({ alldaychecked: false });
+    renderComponent({ allDayChecked: false });
 
     // Use getAllByText to find multiple elements and check they exist
     const startTimeElements = screen.getAllByText('startTime');
@@ -1029,7 +1031,7 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('disables time pickers when all-day is checked', () => {
-    renderComponent({ alldaychecked: true });
+    renderComponent({ allDayChecked: true });
 
     // Time pickers should not be visible when all-day is checked
     expect(screen.queryByText('startTime')).not.toBeInTheDocument();
