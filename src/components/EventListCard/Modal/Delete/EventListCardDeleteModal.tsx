@@ -33,7 +33,7 @@
  * ```
  */
 // translation-check-keyPrefix: eventListCard
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
 import styles from './EventListCardDeleteModal.module.css';
@@ -52,6 +52,8 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   const [deleteOption, setDeleteOption] = useState<
     'single' | 'following' | 'all'
   >('single');
+
+  const idPrefix = useId();
 
   // Check if this is a recurring instance
   const isRecurringInstance =
@@ -102,7 +104,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           <p>{t('deleteRecurringEventMsg')}</p>
           <FormCheckField
             type="radio"
-            id="delete-single"
+            id={`${idPrefix}-delete-single`}
             name="deleteOption"
             value="single"
             checked={deleteOption === 'single'}
@@ -112,7 +114,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           />
           <FormCheckField
             type="radio"
-            id="delete-following"
+            id={`${idPrefix}-delete-following`}
             name="deleteOption"
             value="following"
             checked={deleteOption === 'following'}
@@ -122,7 +124,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           />
           <FormCheckField
             type="radio"
-            id="delete-all"
+            id={`${idPrefix}-delete-all`}
             name="deleteOption"
             value="all"
             checked={deleteOption === 'all'}

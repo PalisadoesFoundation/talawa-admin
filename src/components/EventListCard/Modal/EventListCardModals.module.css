@@ -1,4 +1,4 @@
-@import 'style/tokens/index.css';
+@import '../../../style/tokens/index.css';
 
 .modalHeader {
   background-color: var(--color-white);

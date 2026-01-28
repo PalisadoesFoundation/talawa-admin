@@ -1,8 +1,8 @@
-@import 'style/tokens/index.css';
+@import '../../../../style/tokens/index.css';
 
 .modalHeader {
   background-color: var(--color-white);
-  padding: 1rem;
+  padding: var(--space-4);
   border: none;
   font-weight: var(--font-weight-semibold);
 }
