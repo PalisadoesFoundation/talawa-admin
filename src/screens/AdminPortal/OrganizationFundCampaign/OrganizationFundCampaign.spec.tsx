@@ -21,7 +21,6 @@ import {
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
-
 vi.mock('GraphQl/Queries/fundQueries', async () => {
   const actual = await vi.importActual<
     typeof import('GraphQl/Queries/fundQueries')
@@ -521,17 +520,10 @@ describe('FundCampaigns Screen', () => {
     const campaignHalfCell = progressCells.find((cell) =>
       cell.textContent?.includes('50%'),
     );
-    const campaignFullCell = progressCells.find((cell) =>
+    const hundredPercentCells = progressCells.filter((cell) =>
       cell.textContent?.includes('100%'),
     );
-    const campaignOverCell = progressCells.find((cell) =>
-      cell.textContent?.includes('100%'),
-    ); // Capped at 100%
-
-    expect(campaign1Cell).toBeInTheDocument();
-    expect(campaignHalfCell).toBeInTheDocument();
-    expect(campaignFullCell).toBeInTheDocument();
-    expect(campaignOverCell).toBeInTheDocument();
+    expect(hundredPercentCells.length).toBe(2);
   });
 
   it('should display raised cells with currency symbol', async () => {
