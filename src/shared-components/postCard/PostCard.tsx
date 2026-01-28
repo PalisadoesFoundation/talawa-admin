@@ -14,7 +14,6 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { useTranslation } from 'react-i18next';
 import {
   IconButton,
-  // eslint-disable-next-line no-restricted-imports -- MUI Button needed for sx prop styling not supported by shared Button
   Button,
   Input,
   InputAdornment,
