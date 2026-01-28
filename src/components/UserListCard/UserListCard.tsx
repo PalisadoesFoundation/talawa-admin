@@ -25,7 +25,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserListCard.module.css';
 import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 

@@ -30,9 +30,9 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Button } from 'shared-components/Button';
-import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
-import { TextField } from 'shared-components/TextField/TextField';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { Autocomplete } from 'shared-components/Autocomplete';
+import { TextField } from 'shared-components/TextField';
+import type { AutocompleteRenderInputParams } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
@@ -186,7 +186,7 @@ const AgendaItemsUpdateModal: React.FC<
                 if (typeof option === 'string') return option;
                 return option.name;
               }}
-              onChange={(_, newCategories) => {
+              onChange={(_: unknown, newCategories: unknown) => {
                 setFormState({
                   ...formState,
                   agendaItemCategoryIds: (
@@ -194,7 +194,7 @@ const AgendaItemsUpdateModal: React.FC<
                   ).map((category) => category._id),
                 });
               }}
-              renderInput={(params) => (
+              renderInput={(params: AutocompleteRenderInputParams) => (
                 <TextField {...params} label={t('category')} />
               )}
             />
@@ -255,7 +255,9 @@ const AgendaItemsUpdateModal: React.FC<
           </div>
 
           <div className="mb-3">
-            <label className="form-label">{t('url')}</label>
+            <label htmlFor="basic-url" className="form-label">
+              {t('url')}
+            </label>
             <div className="d-flex">
               <input
                 type="text"

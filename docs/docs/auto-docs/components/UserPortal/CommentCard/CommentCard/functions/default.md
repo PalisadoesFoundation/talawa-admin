@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L89)
+Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L85)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 `InterfaceCommentCardProps`
 

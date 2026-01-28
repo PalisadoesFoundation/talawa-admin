@@ -28,8 +28,7 @@
  */
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
-// eslint-disable-next-line no-restricted-imports -- MUI Button needed for variant='contained' prop not supported by shared Button
-import Button from '@mui/material/Button';
+import { Button } from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -114,10 +113,10 @@ export const TableRow = ({
     >
       {data.isCheckedIn ? (
         <div>
-          <Button variant="contained" disabled className="m-2 p-2">
+          <Button disabled className="m-2 p-2">
             {t('checkedIn')}
           </Button>
-          <Button variant="contained" className="m-2 p-2" onClick={notify}>
+          <Button className="m-2 p-2" onClick={notify}>
             {t('downloadTag')}
           </Button>
         </div>

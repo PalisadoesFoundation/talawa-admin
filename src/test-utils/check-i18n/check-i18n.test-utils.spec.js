@@ -78,30 +78,28 @@ describe('check-i18n test utils', () => {
 
     it('calls spawnSync with merged env, cwd, and default timeout', () => {
       const original = process.env.TEST_VAR;
-      try {
-        process.env.TEST_VAR = 'kept';
+      process.env.TEST_VAR = 'kept';
 
-        const result = runScript(['--flag'], {
-          env: { TEST_VAR: 'abc', EXTRA: '1' },
-          cwd: '/tmp/workspace',
-          stdio: 'pipe',
-        });
+      const result = runScript(['--flag'], {
+        env: { TEST_VAR: 'abc', EXTRA: '1' },
+        cwd: '/tmp/workspace',
+        stdio: 'pipe',
+      });
 
-        const [execPath, args, options] = spawnSyncMock.mock.calls[0];
-        expect(execPath).toBe(process.execPath);
-        expect(args[0]).toBe(scriptPath);
-        expect(args[1]).toBe('--flag');
-        expect(options.env.TEST_VAR).toBe('abc');
-        expect(options.env.EXTRA).toBe('1');
-        expect(options.env.FORCE_COLOR).toBe('0');
-        expect(options.env.NO_COLOR).toBe('1');
-        expect(options.cwd).toBe('/tmp/workspace');
-        expect(options.timeout).toBe(30_000);
-        expect(result).toEqual({ status: 0, stdout: 'ok', stderr: '' });
-        expect(process.env.TEST_VAR).toBe('kept');
-      } finally {
-        process.env.TEST_VAR = original;
-      }
+      const [execPath, args, options] = spawnSyncMock.mock.calls[0];
+      expect(execPath).toBe(process.execPath);
+      expect(args[0]).toBe(scriptPath);
+      expect(args[1]).toBe('--flag');
+      expect(options.env.TEST_VAR).toBe('abc');
+      expect(options.env.EXTRA).toBe('1');
+      expect(options.env.FORCE_COLOR).toBe('0');
+      expect(options.env.NO_COLOR).toBe('1');
+      expect(options.cwd).toBe('/tmp/workspace');
+      expect(options.timeout).toBe(30_000);
+      expect(result).toEqual({ status: 0, stdout: 'ok', stderr: '' });
+      expect(process.env.TEST_VAR).toBe('kept');
+
+      process.env.TEST_VAR = original;
     });
 
     it('uses scriptContent when provided and leaves a temp file to clean', () => {
@@ -175,11 +173,7 @@ describe('check-i18n test utils', () => {
     it('stops after exhausting EBADF retries', () => {
       spawnSyncMock.mockReturnValue({ error: { code: 'EBADF' } });
 
-      try {
-        runScript(['--never']);
-      } catch (err) {
-        expect(err.code).toBe('EBADF');
-      }
+      expect(() => runScript(['--never'])).toThrow();
       expect(spawnSyncMock).toHaveBeenCalledTimes(8);
     });
   });

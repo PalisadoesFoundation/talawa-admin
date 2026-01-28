@@ -1,0 +1,39 @@
+.AgendaItemModal {
+  composes: AgendaItemModal from '../../../style/app-fixed.module.css';
+}
+
+.titlemodalAgendaItems {
+  composes: titlemodalAgendaItems from '../../../style/app-fixed.module.css';
+}
+
+.noOutline {
+  composes: noOutline from '../../../style/app-fixed.module.css';
+}
+
+.urlListItem {
+  composes: urlListItem from '../../../style/app-fixed.module.css';
+}
+
+.urlIcon {
+  composes: urlIcon from '../../../style/app-fixed.module.css';
+}
+
+.deleteButtonAgendaItems {
+  composes: deleteButtonAgendaItems from '../../../style/app-fixed.module.css';
+}
+
+.previewFile {
+  composes: previewFile from '../../../style/app-fixed.module.css';
+}
+
+.attachmentPreview {
+  composes: attachmentPreview from '../../../style/app-fixed.module.css';
+}
+
+.closeButtonFile {
+  composes: closeButtonFile from '../../../style/app-fixed.module.css';
+}
+
+.greenregbtnAgendaItems {
+  composes: greenregbtnAgendaItems from '../../../style/app-fixed.module.css';
+}

@@ -23,18 +23,17 @@ import {
   Modal,
   Menu,
   MenuItem,
-  // eslint-disable-next-line no-restricted-imports -- MUI FormControl required for form layout, shared FormFieldGroup doesn't support fullWidth modal forms
-  FormControl,
   Input,
-  // eslint-disable-next-line no-restricted-imports -- MUI Button has variant/startIcon props required for edit modal, shared Button lacks this API
-  Button,
 } from '@mui/material';
+import { Button } from 'shared-components/Button';
 import {
   MoreHoriz,
   ThumbUp,
   ThumbUpOutlined,
   EditOutlined,
   DeleteOutline,
+  Close as CloseIcon,
+  Save as SaveIcon,
 } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
@@ -42,7 +41,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import styles from '../../../style/app-fixed.module.css';
 import commentCardStyles from './CommentCard.module.css';
 import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
@@ -231,7 +229,7 @@ function CommentCard({
     >
       <CommentContainer>
         <Stack direction="row" spacing={2} alignItems="flex-start">
-          <span className={styles.userImageUserComment}>
+          <span className={commentCardStyles.userImageUserComment}>
             <ProfileAvatarDisplay
               imageUrl={creator.avatarURL || defaultAvatar}
               fallbackName={creator.name}
@@ -311,7 +309,7 @@ function CommentCard({
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2, width: '100%' }}>
               <Input
                 multiline
                 rows={4}
@@ -319,18 +317,29 @@ function CommentCard({
                 onChange={handleEditCommentInput}
                 fullWidth
                 data-testid="edit-comment-input"
+                sx={{
+                  border: '1px solid #ccc',
+                  borderRadius: '4px',
+                  padding: '8px',
+                }}
               />
-            </FormControl>
+            </Box>
 
             <Box className={commentCardStyles.modalActions}>
-              <Box />
-              <Box className={commentCardStyles.rightModalActions}>
-                <Button variant="outlined" onClick={toggleEditComment}>
+              <Box className={commentCardStyles.leftModalActions}>
+                <Button
+                  onClick={toggleEditComment}
+                  data-testid="edit-comment-modal-close-btn"
+                  icon={<CloseIcon />}
+                  iconPosition="start"
+                  variant="outlined"
+                >
                   {tCommon('cancel')}
                 </Button>
+              </Box>
+              <Box className={commentCardStyles.rightModalActions}>
                 <Button
-                  variant="contained"
-                  disabled={updatingComment}
+                  variant="primary"
                   onClick={async () => {
                     if (!editedCommentText.trim()) {
                       NotificationToast.error(
@@ -344,8 +353,10 @@ function CommentCard({
                       toggleEditComment();
                     }
                   }}
-                  data-testid="save-comment-button"
-                  startIcon={<EditOutlined />}
+                  data-testid="edit-comment-save-btn"
+                  icon={<SaveIcon />}
+                  iconPosition="start"
+                  disabled={updatingComment}
                 >
                   {updatingComment ? tCommon('saving') : tCommon('save')}
                 </Button>
