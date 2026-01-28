@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
 import type { InterfaceOrganizationPg } from 'utils/interfaces';
@@ -45,27 +46,30 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock CardItem component
-vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
-  default: ({
-    title,
-    time,
-    creator,
-  }: {
-    title: string;
-    time?: string;
-    creator?: { name: string };
-  }) => (
-    <div data-testid="card-item">
-      <div>{title}</div>
-      {time && <div>{time}</div>}
-      {creator && <div>Author: {creator.name}</div>}
-    </div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationDashCards/CardItem/CardItem',
+  () => ({
+    default: ({
+      title,
+      time,
+      creator,
+    }: {
+      title: string;
+      time?: string;
+      creator?: { name: string };
+    }) => (
+      <div data-testid="card-item">
+        <div>{title}</div>
+        {time && <div>{time}</div>}
+        {creator && <div>Author: {creator.name}</div>}
+      </div>
+    ),
+  }),
+);
 
 // Mock CardItemLoading component
 vi.mock(
-  'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
+  'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
     default: () => <div data-testid="card-item-loading">Loading...</div>,
   }),
@@ -129,7 +133,7 @@ describe('RecentPostsCard Component', () => {
     const viewAllButton = screen.getByText('viewAll');
     expect(viewAllButton).toBeInTheDocument();
 
-    fireEvent.click(viewAllButton);
+    await userEvent.click(viewAllButton);
     expect(mockProps.onViewAllClick).toHaveBeenCalled();
   });
 
@@ -186,7 +190,7 @@ describe('RecentPostsCard Component', () => {
     expect(screen.getByText('Author: Jane Smith')).toBeInTheDocument();
   });
 
-  it('handles click on view all button', () => {
+  it('handles click on view all button', async () => {
     const singleCallProps = {
       ...mockProps,
       onViewAllClick: vi.fn(),
@@ -194,7 +198,7 @@ describe('RecentPostsCard Component', () => {
     render(<RecentPostsCard {...singleCallProps} />);
 
     const viewAllButton = screen.getByText('viewAll');
-    fireEvent.click(viewAllButton);
+    await userEvent.click(viewAllButton);
 
     expect(singleCallProps.onViewAllClick).toHaveBeenCalledTimes(1);
   });
