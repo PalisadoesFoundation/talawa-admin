@@ -2,11 +2,10 @@ import React from 'react';
 import {
   render,
   screen,
-  // eslint-disable-next-line no-restricted-imports -- fireEvent needed for change events on file/form inputs
-  fireEvent,
   waitFor,
   within,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -111,20 +110,17 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText('title'), {
-      target: { value: 'New title' },
-    });
+    await userEvent.clear(screen.getByLabelText('title'));
+    await userEvent.type(screen.getByLabelText('title'), 'New title');
 
-    fireEvent.change(screen.getByLabelText('description'), {
-      target: { value: 'New description' },
-    });
+    await userEvent.clear(screen.getByLabelText('description'));
+    await userEvent.type(screen.getByLabelText('description'), 'New description');
 
-    fireEvent.change(screen.getByLabelText('duration'), {
-      target: { value: '30' },
-    });
+    await userEvent.clear(screen.getByLabelText('duration'));
+    await userEvent.type(screen.getByLabelText('duration'), '30');
 
-    fireEvent.click(screen.getByTestId('deleteUrl'));
-    fireEvent.click(screen.getByTestId('deleteAttachment'));
+    await userEvent.click(screen.getByTestId('deleteUrl'));
+    await userEvent.click(screen.getByTestId('deleteAttachment'));
 
     expect(mockSetFormState).toHaveBeenCalledWith({
       ...mockFormState1,
@@ -179,8 +175,8 @@ describe('AgendaItemsUpdateModal', () => {
     const urlInput = screen.getByTestId('urlInput');
     const linkBtn = screen.getByTestId('linkBtn');
 
-    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
-    fireEvent.click(linkBtn);
+    await userEvent.type(urlInput, 'https://example.com');
+    await userEvent.click(linkBtn);
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith({
@@ -216,8 +212,8 @@ describe('AgendaItemsUpdateModal', () => {
     const urlInput = screen.getByTestId('urlInput');
     const linkBtn = screen.getByTestId('linkBtn');
 
-    fireEvent.change(urlInput, { target: { value: 'invalid-url' } });
-    fireEvent.click(linkBtn);
+    await userEvent.type(urlInput, 'invalid-url');
+    await userEvent.click(linkBtn);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
@@ -255,11 +251,7 @@ describe('AgendaItemsUpdateModal', () => {
       'large-file.jpg',
     ); // 11 MB file
 
-    Object.defineProperty(fileInput, 'files', {
-      value: [largeFile],
-    });
-
-    fireEvent.change(fileInput);
+    await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
@@ -296,11 +288,7 @@ describe('AgendaItemsUpdateModal', () => {
     const fileInput = screen.getByTestId('attachment');
     const smallFile = new File(['small-file-content'], 'small-file.jpg'); // Small file
 
-    Object.defineProperty(fileInput, 'files', {
-      value: [smallFile],
-    });
-
-    fireEvent.change(fileInput);
+    await userEvent.upload(fileInput, smallFile);
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalledWith({
@@ -336,13 +324,14 @@ describe('AgendaItemsUpdateModal', () => {
     expect(autocomplete).toBeInTheDocument();
 
     const input = within(autocomplete).getByRole('combobox');
-    fireEvent.mouseDown(input);
+
+    await userEvent.click(input);
 
     const options = screen.getAllByRole('option');
     expect(options).toHaveLength(mockAgendaItemCategories.length);
 
-    fireEvent.click(options[0]);
-    fireEvent.click(options[1]);
+    await userEvent.click(options[0]);
+    await userEvent.click(options[1]);
   });
 
   test('useEffect filters empty URLs and attachments on component mount', async () => {
@@ -418,8 +407,8 @@ describe('AgendaItemsUpdateModal', () => {
     const linkBtn = screen.getByTestId('linkBtn');
 
     // Test empty URL
-    fireEvent.change(urlInput, { target: { value: '' } });
-    fireEvent.click(linkBtn);
+    await userEvent.type(urlInput, '');
+    await userEvent.click(linkBtn);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
@@ -428,8 +417,8 @@ describe('AgendaItemsUpdateModal', () => {
     });
 
     // Test whitespace-only URL
-    fireEvent.change(urlInput, { target: { value: '   ' } });
-    fireEvent.click(linkBtn);
+    await userEvent.type(urlInput, '   ');
+    await userEvent.click(linkBtn);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
@@ -464,11 +453,7 @@ describe('AgendaItemsUpdateModal', () => {
     const fileInput = screen.getByTestId('attachment');
 
     // Simulate file input change with no files
-    Object.defineProperty(fileInput, 'files', {
-      value: null,
-    });
-
-    fireEvent.change(fileInput);
+    await userEvent.upload(fileInput, []);
 
     // Should not call setFormState when no files are selected
     expect(mockSetFormState).not.toHaveBeenCalledWith(
@@ -683,11 +668,7 @@ describe('AgendaItemsUpdateModal', () => {
     const fileInput = screen.getByTestId('attachment');
 
     // Simulate file input change with no files property
-    Object.defineProperty(fileInput, 'files', {
-      value: undefined,
-    });
-
-    fireEvent.change(fileInput);
+    await userEvent.upload(fileInput, []);
 
     // Should not call setFormState when files property is undefined
     expect(mockSetFormState).not.toHaveBeenCalledWith(

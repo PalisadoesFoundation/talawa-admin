@@ -23,9 +23,8 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
-import styles from '../../style/app-fixed.module.css';
-// eslint-disable-next-line no-restricted-imports -- Form.Control needs password type/aria props not in shared FormFieldGroup
-import { Form } from 'react-bootstrap';
+import styles from './UserPasswordUpdate.module.css';
+
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
@@ -107,8 +106,9 @@ export const UserUpdate: React.FC<
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('previousPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('previousPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="previousPassword"
                 placeholder={t('previousPassword')}
@@ -126,8 +126,9 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('newPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('newPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="newPassword"
                 placeholder={t('newPassword')}
@@ -142,8 +143,9 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('confirmNewPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('confirmNewPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}
