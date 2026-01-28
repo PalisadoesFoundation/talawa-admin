@@ -1,3 +1,21 @@
-.grey {
-  color: grey;
+.container {
+  color: #6c757d;
+  opacity: 0.7;
+}
+
+.iconWrapper {
+  padding: 2rem;
+  background-color: #f8f9fa;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  font-size: 3rem !important;
+  color: #adb5bd;
+}
+
+.message {
+  font-weight: 500;
+  color: #6c757d;
 }

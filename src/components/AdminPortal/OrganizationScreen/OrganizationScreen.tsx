@@ -188,4 +188,5 @@ const map: InterfaceMapType = {
   orgvenues: 'organizationVenues',
   event: 'eventManagement',
   leaderboard: 'leaderboard',
+  orgchat: 'userChat',
 };
