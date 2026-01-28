@@ -47,7 +47,7 @@ import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaFolderInfo,
-} from 'types/Agenda/interface';
+} from 'types/AdminPortal/Agenda/interface';
 import styles from 'style/app-fixed.module.css';
 
 import AgendaItemsPreviewModal from 'components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal';
@@ -760,7 +760,8 @@ function AgendaFolderContainer({
                                                       }
                                                     >
                                                       {agendaItem.category
-                                                        ?.name ?? 'No Category'}
+                                                        ?.name ??
+                                                        t('noCategory')}
                                                     </span>
                                                   </div>
                                                 </Col>

@@ -10,9 +10,21 @@ import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceAgendaFolderDeleteModalProps } from 'types/Agenda/interface';
+import type { InterfaceAgendaFolderDeleteModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
+/**
+ * Modal component for confirming deletion of an agenda folder.
+ *
+ * Displays a confirmation dialog with Yes/No buttons before deleting.
+ *
+ * `@param` agendaFolderDeleteModalIsOpen - Controls modal visibility.
+ * `@param` toggleDeleteModal - Closes the modal.
+ * `@param` deleteAgendaFolderHandler - Triggers deletion of the folder.
+ * `@param` t - Agenda section i18n translator.
+ * `@param` tCommon - Common i18n translator.
+ * `@returns` JSX.Element
+ */
 const AgendaFolderDeleteModal: React.FC<
   InterfaceAgendaFolderDeleteModalProps
 > = ({
