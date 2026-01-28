@@ -36,7 +36,7 @@ export type UserProfileMenuItem = {
 
   /**
    * Translation key prefix (optional)
-   * default 'common'
+   * @defaultValue 'common'
    */
   translationKey?: string;
 
@@ -74,25 +74,25 @@ export type Language = {
 export type BrandingConfig = {
   /**
    * Logo image source URL or path
-   * default Talawa logo from assets/images/talawa-logo-600x600.png
+   * @defaultValue Talawa logo from assets/images/talawa-logo-600x600.png
    */
   logo?: string;
 
   /**
    * Brand name to display next to logo
-   * default 'Talawa' for user mode, organization name for organization mode
+   * @defaultValue 'Talawa' for user mode, organization name for organization mode
    */
   brandName?: string;
 
   /**
    * Alt text for logo image
-   * default Translation key 'userNavbar.talawaBranding'
+   * @defaultValue Translation key 'userNavbar.talawaBranding'
    */
   logoAltText?: string;
 
   /**
    * Click handler for brand/logo
-   * default undefined (no action)
+   * @defaultValue undefined (no action)
    */
   onBrandClick?: () => void;
 };
@@ -129,12 +129,12 @@ export type NavigationLink = {
 
   /**
    * Whether this link is currently active
-   * default false (will be determined by comparing id with currentPage)
+   * @defaultValue false (will be determined by comparing id with currentPage)
    */
   isActive?: boolean;
 
   /**
-   * Click handler (optional, overrides default navigation)
+   * Click handler (optional, overrides @defaultValue navigation)
    */
   onClick?: () => void | Promise<void>;
 

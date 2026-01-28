@@ -39,7 +39,12 @@ Unique identifier for the link (used for active state)
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L134)
 
 Whether this link is currently active
-default false (will be determined by comparing id with currentPage)
+
+#### Default Value
+
+```ts
+false (will be determined by comparing id with currentPage)
+```
 
 ***
 
@@ -59,11 +64,17 @@ Display text for the link
 
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L139)
 
-Click handler (optional, overrides default navigation)
+Click handler (optional, overrides
 
 #### Returns
 
 `void` \| `Promise`\<`void`\>
+
+#### Default Value
+
+```ts
+navigation)
+```
 
 ***
 

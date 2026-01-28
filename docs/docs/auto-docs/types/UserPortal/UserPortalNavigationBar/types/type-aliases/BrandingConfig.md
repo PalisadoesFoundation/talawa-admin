@@ -19,7 +19,12 @@ Branding configuration for the navbar
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L85)
 
 Brand name to display next to logo
-default 'Talawa' for user mode, organization name for organization mode
+
+#### Default Value
+
+```ts
+'Talawa' for user mode, organization name for organization mode
+```
 
 ***
 
@@ -30,7 +35,12 @@ default 'Talawa' for user mode, organization name for organization mode
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L79)
 
 Logo image source URL or path
-default Talawa logo from assets/images/talawa-logo-600x600.png
+
+#### Default Value
+
+```ts
+Talawa logo from assets/images/talawa-logo-600x600.png
+```
 
 ***
 
@@ -41,7 +51,12 @@ default Talawa logo from assets/images/talawa-logo-600x600.png
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L91)
 
 Alt text for logo image
-default Translation key 'userNavbar.talawaBranding'
+
+#### Default Value
+
+```ts
+Translation key 'userNavbar.talawaBranding'
+```
 
 ***
 
@@ -52,8 +67,13 @@ default Translation key 'userNavbar.talawaBranding'
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L97)
 
 Click handler for brand/logo
-default undefined (no action)
 
 #### Returns
 
 `void`
+
+#### Default Value
+
+```ts
+undefined (no action)
+```

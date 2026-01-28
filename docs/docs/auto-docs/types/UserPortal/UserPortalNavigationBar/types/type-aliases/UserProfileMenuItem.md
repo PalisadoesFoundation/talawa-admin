@@ -83,4 +83,9 @@ Test ID for testing
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/types.ts#L41)
 
 Translation key prefix (optional)
-default 'common'
+
+#### Default Value
+
+```ts
+'common'
+```
