@@ -50,13 +50,14 @@ function AgendaFolderContainer({
   agendaFolderData,
   refetchAgendaFolder,
   agendaItemCategories,
+  t,
 }: {
   agendaFolderConnection: 'Event';
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
   refetchAgendaFolder: () => void;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
+  t: (key: string) => string;
 }): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
   const { t: tCommon } = useTranslation('common');
 
   // State for modals
