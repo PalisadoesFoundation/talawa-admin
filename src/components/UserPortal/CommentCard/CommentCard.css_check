@@ -1,3 +1,0 @@
-/* Existing styles need to be preserved if any were local, but this file might be new or we overwrite. checking... */
-/* Assuming this file didn't exist or we are appending. Wait, CommentCard had local styles imported. */
-/* I need to check if CommentCard.module.css ALREADY exists. */
