@@ -751,7 +751,8 @@
     "agendaCategoryUpdated": "Categoría de la agenda actualizada exitosamente",
     "agendaCategoryDeleted": "Categoría de la agenda eliminada exitosamente",
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
-    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
+    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?",
+    "errorLoadingAgendaCategories": "Ocurrió un error al cargar las categorías de la agenda"
   },
   "agendaItems": {
     "agendaItemDetails": "Detalles del punto del orden del día",
@@ -1225,7 +1226,8 @@
     "enterOrganizationDescription": "Ingrese la descripción de la organización",
     "userRegistrationRequired": "Se requiere registro de usuario",
     "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
-    "updateFailed": "Error al actualizar la organización"
+    "updateFailed": "Error al actualizar la organización",
+    "errorLoadingOrganizationData": "Ocurrió un error al cargar los datos de la organización"
   },
   "public": {
     "invitation": {

@@ -1,8 +1,6 @@
 /**
  * Component for managing and displaying agenda item categories for an organization.
  *
- *
- * @param props - The props for the component.
  * @param orgId - The ID of the organization.
  *
  * @remarks
@@ -25,13 +23,11 @@
  * @returns The rendered component.
  *
  * @throws Error If there is an error while fetching agenda item categories.
- *
- * TODO: - Add additional error handling and improve UI for error states.
  */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
@@ -42,16 +38,13 @@ import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutation
 import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationAgendaCategory.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { InterfaceAgendaCategoryProps } from 'types/AdminPortal/OrganizationAgendaCategory/interface';
 
-interface InterfaceAgendaCategoryProps {
-  orgId: string;
-}
-
-const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
+const OrganiZationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
 }) => {
   const { t } = useTranslation('translation', {
@@ -128,14 +121,14 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
    * Toggles the visibility of the create agenda item category modal.
    */
   const showCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
+    setAgendaCategoryCreateModalIsOpen(true);
   };
 
   /**
    * Hides the create agenda item category modal.
    */
   const hideCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
+    setAgendaCategoryCreateModalIsOpen(false);
   };
 
   if (agendaCategoryError) {
@@ -146,9 +139,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
             className={`${styles.errorIcon} MuiSvgIcon-fontSizeLarge`}
           />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading{' '}
-            {agendaCategoryError && 'Agenda Categories'}
-            Data
+            {t('errorLoadingAgendaCategories')}
             <br />
             {agendaCategoryError && (agendaCategoryError as Error).message}
           </h6>
@@ -206,4 +197,4 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   );
 };
 
-export default organizationAgendaCategory;
+export default OrganiZationAgendaCategory;

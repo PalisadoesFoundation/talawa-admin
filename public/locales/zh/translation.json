@@ -756,7 +756,8 @@
     "agendaCategoryUpdated": "议程类别更新成功",
     "agendaCategoryDeleted": "议程类别删除成功",
     "deleteAgendaCategory": "删除议程类别",
-    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？",
+    "errorLoadingAgendaCategories": "加载议程类别时发生错误"
   },
   "agendaItems": {
     "agendaItemDetails": "议程项目详细信息",
@@ -1247,7 +1248,8 @@
     "enterOrganizationDescription": "输入组织描述",
     "userRegistrationRequired": "需要用户注册",
     "nameDescriptionRequired": "名称和描述为必填项",
-    "updateFailed": "更新组织失败"
+    "updateFailed": "更新组织失败",
+    "errorLoadingOrganizationData": "加载组织数据时发生错误"
   },
   "public": {
     "invitation": {
