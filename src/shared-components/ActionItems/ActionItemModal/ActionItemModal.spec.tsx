@@ -1026,8 +1026,12 @@ describe('ActionItemModal', () => {
       const notesInput = (await screen.findByLabelText(
         'preCompletionNotes',
       )) as HTMLInputElement;
+
+      await user.clear(notesInput);
       notesInput.focus();
       await user.type(notesInput, 'T');
+      await waitFor(() => expect(notesInput.value).toBe('T'));
+
       notesInput.focus();
       await user.type(notesInput, 'e');
       notesInput.focus();
