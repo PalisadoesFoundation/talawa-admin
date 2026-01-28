@@ -165,3 +165,29 @@
   outline: 2px solid var(--regBtnAgendaItems-border, var(--bs-success, #198754));
   outline-offset: 2px;
 }
+
+.attachmentPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--bs-secondary-bg, #f8f9fa);
+  border: 1px dashed var(--bs-border-color, #dee2e6);
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+.attachmentPlaceholder i {
+  font-size: 32px;
+  color: var(--bs-secondary, #6c757d);
+  margin-bottom: 8px;
+}
+
+.fileName {
+  font-size: 14px;
+  color: var(--bs-body-color, #212529);
+  word-break: break-word;
+  text-align: center;
+  max-width: 200px;
+}

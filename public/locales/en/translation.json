@@ -798,7 +798,9 @@
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data",
     "deleteAttachment": "Delete attachment",
     "fileUploadError": "Error uploading file",
-    "selectCategory": "Please select an agenda category"
+    "selectCategory": "Please select an agenda category",
+    "tooManyAttachments": "Maximum 10 attachments allowed",
+    "invalidFileType": "Invalid file type. Only images and videos are allowed"
   },
   "eventListCard": {
     "dogsCare": "Dogs Care",

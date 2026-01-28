@@ -29,7 +29,7 @@
  * />
  * ```
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import {
@@ -45,6 +45,18 @@ import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import { useMinioUpload } from 'utils/MinioUpload';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+
+// Constants for attachment validation
+const MAX_ATTACHMENTS = 10;
+const ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+];
 // translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
@@ -61,6 +73,8 @@ const AgendaItemsCreateModal: React.FC<
   const [previewUrls, setPreviewUrls] = useState<
     { url: string; mimeType: string }[]
   >([]);
+  // Ref to track blob URLs for cleanup to avoid stale closure issues
+  const previewUrlsRef = useRef<{ url: string; mimeType: string }[]>([]);
 
   const { uploadFileToMinio } = useMinioUpload();
 
@@ -104,10 +118,12 @@ const AgendaItemsCreateModal: React.FC<
         }),
       );
       setPreviewUrls(urls);
+      previewUrlsRef.current = urls;
     };
     generatePreviews();
     return () => {
-      previewUrls.forEach((preview) => {
+      // Use ref to access current preview URLs for cleanup
+      previewUrlsRef.current.forEach((preview) => {
         if (preview.url.startsWith('blob:')) {
           URL.revokeObjectURL(preview.url);
         }
@@ -139,7 +155,22 @@ const AgendaItemsCreateModal: React.FC<
     /* istanbul ignore else -- @preserve */
     if (files) {
       const fileArray = Array.from(files);
+
+      // Check attachment count limit
+      const remainingSlots = MAX_ATTACHMENTS - formState.attachments.length;
+      if (fileArray.length > remainingSlots) {
+        NotificationToast.error(t('tooManyAttachments'));
+        return;
+      }
+
+      // Validate file types and sizes
       const validFiles = fileArray.filter((file) => {
+        // Check MIME type
+        if (!ALLOWED_TYPES.includes(file.type)) {
+          NotificationToast.error(`${file.name}: ${t('invalidFileType')}`);
+          return false;
+        }
+        // Check file size
         if (file.size > 10 * 1024 * 1024) {
           NotificationToast.error(`${file.name} ${t('fileSizeExceedsLimit')}`);
           return false;

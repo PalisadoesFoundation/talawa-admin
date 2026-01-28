@@ -43,6 +43,18 @@ import styles from './AgendaItemsUpdateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 
+// Constants for attachment validation
+const MAX_ATTACHMENTS = 10;
+const ALLOWED_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'video/mp4',
+  'video/webm',
+  'video/quicktime',
+];
+
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -119,6 +131,26 @@ const AgendaItemsUpdateModal: React.FC<
     const target = e.target as HTMLInputElement;
     if (target.files) {
       const files = Array.from(target.files);
+
+      // Check attachment count limit
+      const remainingSlots = MAX_ATTACHMENTS - formState.attachments.length;
+      if (files.length > remainingSlots) {
+        NotificationToast.error(t('tooManyAttachments'));
+        return;
+      }
+
+      // Validate file types
+      const invalidTypeFiles = files.filter(
+        (file) => !ALLOWED_TYPES.includes(file.type),
+      );
+      if (invalidTypeFiles.length > 0) {
+        invalidTypeFiles.forEach((file) => {
+          NotificationToast.error(`${file.name}: ${t('invalidFileType')}`);
+        });
+        return;
+      }
+
+      // Check total file size
       let totalSize = 0;
       files.forEach((file) => {
         totalSize += file.size;
@@ -300,6 +332,7 @@ const AgendaItemsUpdateModal: React.FC<
               let previewUrl = attachment;
               let isVideo = false;
               let mimeType = '';
+              let fileName = '';
 
               try {
                 const parsed = JSON.parse(attachment);
@@ -307,9 +340,10 @@ const AgendaItemsUpdateModal: React.FC<
                   // MinIO metadata - use name for extension detection
                   // Accept both mimeType and legacy mimetype for backward compatibility
                   mimeType = parsed.mimeType || parsed.mimetype || '';
+                  fileName = parsed.name || 'Attachment';
                   isVideo = mimeType.startsWith('video/');
                   // For MinIO attachments, we can't preview directly without signed URL
-                  // Show a placeholder or the name instead
+                  // Show a placeholder with filename instead
                   previewUrl = '';
                 }
               } catch {
@@ -338,6 +372,9 @@ const AgendaItemsUpdateModal: React.FC<
                   ) : (
                     <div className={styles.attachmentPlaceholder}>
                       <i className="fa fa-file" />
+                      {fileName && (
+                        <span className={styles.fileName}>{fileName}</span>
+                      )}
                     </div>
                   )}
                   <button
