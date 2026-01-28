@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -114,7 +109,10 @@ describe('AgendaItemsUpdateModal', () => {
     await userEvent.type(screen.getByLabelText('title'), 'New title');
 
     await userEvent.clear(screen.getByLabelText('description'));
-    await userEvent.type(screen.getByLabelText('description'), 'New description');
+    await userEvent.type(
+      screen.getByLabelText('description'),
+      'New description',
+    );
 
     await userEvent.clear(screen.getByLabelText('duration'));
     await userEvent.type(screen.getByLabelText('duration'), '30');

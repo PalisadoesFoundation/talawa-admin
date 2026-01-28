@@ -1,11 +1,6 @@
 import React from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
