@@ -1,0 +1,42 @@
+@import 'style/tokens/index.css';
+
+.modalHeader {
+  background-color: var(--color-white);
+  padding: 1rem;
+  border: none;
+  font-weight: var(--font-weight-semibold);
+}
+
+.modalHeader :global(.modal-title) {
+  color: var(--color-gray-700);
+}
+
+.removeButton {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  /* Using available token, though original was darker */
+  border-color: var(--color-red-100);
+  width: auto;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500) !important;
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.addButton {
+  margin-bottom: 10px;
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-blue-200);
+  width: auto;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-blue-500);
+  color: var(--color-white);
+}

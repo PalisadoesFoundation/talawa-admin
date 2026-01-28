@@ -44,5 +44,6 @@ export interface IBaseModalProps {
   headerTestId?: string;
   bodyClassName?: string;
   footerClassName?: string;
+  id?: string;
   dataTestId?: string;
 }
