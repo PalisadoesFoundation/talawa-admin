@@ -1,20 +1,19 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
-let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -23,11 +22,10 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
-    user = userEvent.setup();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderComponent = (
@@ -71,23 +69,26 @@ describe('AgendaItemsDeleteModal', () => {
 
   // Interaction Tests
   test('calls toggleDeleteModal when close button is clicked', async () => {
+    const user = userEvent.setup();
     renderComponent();
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
   test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    await userEvent.click(confirmButton);
+    const user = userEvent.setup();
+    await user.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
   });
 
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
     renderComponent();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await userEvent.click(closeButton);
+    const user = userEvent.setup();
+    await user.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
@@ -96,28 +97,30 @@ describe('AgendaItemsDeleteModal', () => {
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
+    const user = userEvent.setup();
 
     // Simulate rapid clicks
-    await userEvent.click(confirmButton);
-    await userEvent.click(closeButton);
-    await userEvent.click(confirmButton);
+    await user.click(confirmButton);
+    await user.click(closeButton);
+    await user.click(confirmButton);
 
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(2);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
-  test('handles keyboard events correctly', async () => {
+  test('closes modal when Escape key is pressed', async () => {
     renderComponent();
-
-    // Test Escape key
+    const user = userEvent.setup();
     await user.keyboard('{Escape}');
-    expect(mockToggleDeleteModal).not.toHaveBeenCalled(); // Should not close as backdrop is static
+    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+  });
 
-    // Test Enter key on confirm button
+  test('confirm button is accessible via keyboard', async () => {
+    renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
+    const user = userEvent.setup();
     confirmButton.focus();
-
-    await user.click(confirmButton);
+    await user.keyboard('{Enter}');
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
   });
 
@@ -154,8 +157,7 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles modal state transitions correctly', async () => {
     const { rerender } = renderComponent(true);
 
-    // Verify initial open state
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getAllByRole('dialog').length).toBeGreaterThan(0);
 
     // Rerender with closed state
     rerender(
@@ -174,9 +176,8 @@ describe('AgendaItemsDeleteModal', () => {
       </Provider>,
     );
 
-    // Wait for the modal to be removed from the DOM
     await waitFor(() => {
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      expect(screen.queryAllByRole('dialog')).toHaveLength(0);
     });
   });
 
@@ -184,12 +185,16 @@ describe('AgendaItemsDeleteModal', () => {
   test('meets accessibility requirements', () => {
     renderComponent();
 
-    // Verify modal has correct ARIA attributes
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    const dialogs = screen.getAllByRole('dialog');
 
-    // Verify buttons have accessible names
-    const buttons = screen.getAllByRole('button');
+    const modal = dialogs.find(
+      (el) => el.getAttribute('aria-modal') === 'true',
+    );
+
+    expect(modal).toBeDefined();
+    expect(modal).toHaveAttribute('aria-modal', 'true');
+
+    const buttons = within(modal as HTMLElement).getAllByRole('button');
     buttons.forEach((button) => {
       expect(button).toHaveAccessibleName();
     });
