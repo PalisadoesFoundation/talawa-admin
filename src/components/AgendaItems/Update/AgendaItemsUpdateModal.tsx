@@ -180,16 +180,18 @@ const AgendaItemsUpdateModal: React.FC<
                 ) || []
               }
               filterSelectedOptions={true}
-              getOptionLabel={(option: string | InterfaceAgendaItemCategoryInfo) => {
-                 if (typeof option === 'string') return option;
-                 return option.name;
+              getOptionLabel={(
+                option: string | InterfaceAgendaItemCategoryInfo,
+              ) => {
+                if (typeof option === 'string') return option;
+                return option.name;
               }}
               onChange={(_, newCategories) => {
                 setFormState({
                   ...formState,
-                  agendaItemCategoryIds: (newCategories as InterfaceAgendaItemCategoryInfo[]).map(
-                    (category) => category._id,
-                  ),
+                  agendaItemCategoryIds: (
+                    newCategories as InterfaceAgendaItemCategoryInfo[]
+                  ).map((category) => category._id),
                 });
               }}
               renderInput={(params) => (
@@ -201,7 +203,9 @@ const AgendaItemsUpdateModal: React.FC<
           <Row className="mb-3">
             <Col>
               <div className="mb-3">
-                <label className="form-label" htmlFor="title">{t('title')}</label>
+                <label className="form-label" htmlFor="title">
+                  {t('title')}
+                </label>
                 <input
                   id="title"
                   type="text"
@@ -216,7 +220,9 @@ const AgendaItemsUpdateModal: React.FC<
             </Col>
             <Col>
               <div className="mb-3">
-                <label className="form-label" htmlFor="duration">{t('duration')}</label>
+                <label className="form-label" htmlFor="duration">
+                  {t('duration')}
+                </label>
                 <input
                   id="duration"
                   type="text"
@@ -233,7 +239,9 @@ const AgendaItemsUpdateModal: React.FC<
           </Row>
 
           <div className="mb-3">
-            <label className="form-label" htmlFor="description">{t('description')}</label>
+            <label className="form-label" htmlFor="description">
+              {t('description')}
+            </label>
             <textarea
               id="description"
               className="form-control"
@@ -258,7 +266,11 @@ const AgendaItemsUpdateModal: React.FC<
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
-              <Button onClick={handleAddUrl} data-testid="linkBtn" className="ms-2">
+              <Button
+                onClick={handleAddUrl}
+                data-testid="linkBtn"
+                className="ms-2"
+              >
                 {t('link')}
               </Button>
             </div>
@@ -281,7 +293,9 @@ const AgendaItemsUpdateModal: React.FC<
             ))}
           </div>
           <div className="mb-3">
-            <label className="form-label" htmlFor="attachment">{t('attachments')}</label>
+            <label className="form-label" htmlFor="attachment">
+              {t('attachments')}
+            </label>
             <input
               id="attachment"
               accept="image/*, video/*"
