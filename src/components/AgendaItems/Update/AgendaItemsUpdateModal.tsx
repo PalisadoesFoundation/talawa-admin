@@ -262,6 +262,7 @@ const AgendaItemsUpdateModal: React.FC<
 
         <FormFieldGroup name="description" label={t('description')}>
           <textarea
+            id="description"
             className="form-control"
             rows={1}
             placeholder={t('enterDescription')}
@@ -279,33 +280,36 @@ const AgendaItemsUpdateModal: React.FC<
               type="text"
               className="form-control"
               placeholder={t('enterUrl')}
-              id="basic-url"
+              id="url"
               data-testid="urlInput"
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Button onClick={handleAddUrl} data-testid="linkBtn">
+            <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
               {t('link')}
             </Button>
           </div>
 
-          {formState.urls.map((url, index) => (
-            <li key={index} className={styles.urlListItem}>
-              <FaLink className={styles.urlIcon} />
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url.length > 50 ? url.substring(0, 50) + '...' : url}
-              </a>
-              <Button
-                variant="danger"
-                size="sm"
-                data-testid="deleteUrl"
-                className={styles.deleteButtonAgendaItems}
-                onClick={() => handleRemoveUrl(url)}
-              >
-                <FaTrash />
-              </Button>
-            </li>
-          ))}
+          <ul className="list-unstyled">
+            {formState.urls.map((url, index) => (
+              <li key={index} className={styles.urlListItem}>
+                <FaLink className={styles.urlIcon} />
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url.length > 50 ? url.substring(0, 50) + '...' : url}
+                </a>
+                <Button
+                  type="button"
+                  variant="danger"
+                  size="sm"
+                  data-testid="deleteUrl"
+                  className={styles.deleteButtonAgendaItems}
+                  onClick={() => handleRemoveUrl(url)}
+                >
+                  <FaTrash />
+                </Button>
+              </li>
+            ))}
+          </ul>
         </FormFieldGroup>
 
         <FormFieldGroup
@@ -316,9 +320,9 @@ const AgendaItemsUpdateModal: React.FC<
           <input
             accept="image/*, video/*"
             data-testid="attachment"
-            name="attachment"
+            name="attachments"
             type="file"
-            id="attachment"
+            id="attachments"
             multiple={true}
             onChange={handleFileChange}
             className="form-control"

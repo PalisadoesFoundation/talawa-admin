@@ -40,12 +40,12 @@
 }
 
 .titlemodalAgendaItems {
-  color: var(--titlemodalAgendaItems-color);
+  color: var(--color-gray-900);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
+  border-bottom: 3px solid var(--color-gray-200);
   width: 65%;
 }
 
@@ -53,7 +53,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
+  border-bottom: 3px solid var(--color-gray-200);
 }
 
 .noOutline input {
@@ -62,16 +62,16 @@
 
 .noOutline input:focus-visible,
 .noOutline textarea:focus-visible {
-  outline: 2px solid var(--focus-ring, #1b6ef3);
+  outline: 2px solid var(--color-blue-500);
   outline-offset: 2px;
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--noOutline-input-disables) !important;
+  -webkit-text-fill-color: var(--color-gray-600);
 }
 
 .noOutline textarea:disabled {
-  color: var(--noOutline-textarea-disables) !important;
+  color: var(--color-gray-600);
   opacity: 1;
 }
 
@@ -136,21 +136,21 @@
   transform: scale(1.2);
   cursor: pointer;
   border: none;
-  color: var(--closeButtonFile-color);
+  color: var(--color-red-500);
   font-weight: 600;
   font-size: 16px;
 }
 
 .greenregbtnAgendaItems {
   margin-top: 15px;
-  border: 1px solid var(--regBtnAgendaItems-border);
-  box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow);
+  border: 1px solid var(--color-green-500);
+  box-shadow: 0 2px 2px var(--color-gray-300); /* Assuming gray-300 for shadow if not specified */
   padding: 10px 10px;
   border-radius: 5px;
-  background-color: var(--regBtnAgendaItems-bg);
+  background-color: var(--color-green-500);
   width: 100%;
   font-size: 16px;
-  color: var(--regBtnAgendaItems-color);
+  color: var(--color-white);
   outline: none;
   font-weight: 600;
   cursor: pointer;
@@ -160,6 +160,6 @@
 }
 
 .greenregbtnAgendaItems:focus-visible {
-  outline: 2px solid var(--regBtnAgendaItems-border);
+  outline: 2px solid var(--color-green-500);
   outline-offset: 2px;
 }

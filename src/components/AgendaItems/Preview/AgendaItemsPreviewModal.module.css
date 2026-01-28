@@ -32,13 +32,12 @@
 }
 
 .titlemodalAgendaItems {
-  color: var(--titlemodalAgendaItems-color, var(--bs-body-color));
+  color: var(--color-gray-900);
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
   padding-bottom: 5px;
-  border-bottom: 3px solid
-    var(--titlemodalAgendaItems-border, var(--bs-border-color));
+  border-bottom: 3px solid var(--color-gray-200);
   width: 65%;
 }
 
@@ -55,7 +54,7 @@
 }
 
 .view {
-  color: var(--bs-gray-600);
+  color: var(--color-gray-600);
   flex: 1;
 }
 
@@ -94,7 +93,7 @@
 
 .urlIcon {
   margin-right: 8px;
-  color: var(--bs-primary);
+  color: var(--color-blue-500);
 }
 
 .iconContainer {
@@ -103,7 +102,7 @@
   gap: 10px;
   margin-top: 20px;
   padding-top: 15px;
-  border-top: 1px solid var(--bs-gray-200);
+  border-top: 1px solid var(--color-gray-200);
 }
 
 .icon {
