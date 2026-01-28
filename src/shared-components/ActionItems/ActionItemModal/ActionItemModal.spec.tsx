@@ -1112,11 +1112,11 @@ describe('ActionItemModal', () => {
       });
       await user.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
-
-      const groupSelect = screen.getByTestId('volunteerGroupSelect');
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
+      );
       expect(groupSelect).toBeInTheDocument();
 
       // Verify the combobox is accessible
