@@ -1225,7 +1225,8 @@
     "enterOrganizationDescription": "Ingrese la descripción de la organización",
     "userRegistrationRequired": "Se requiere registro de usuario",
     "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
-    "updateFailed": "Error al actualizar la organización"
+    "updateFailed": "Error al actualizar la organización",
+    "errorLoadingOrganizationData": "Error al cargar los datos de la organización"
   },
   "public": {
     "invitation": {

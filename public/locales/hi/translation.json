@@ -1242,7 +1242,8 @@
     "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
     "nameDescriptionRequired": "नाम और विवरण आवश्यक हैं",
-    "updateFailed": "संगठन को अपडेट करने में विफल"
+    "updateFailed": "संगठन को अपडेट करने में विफल",
+    "errorLoadingOrganizationData": "संगठन का डेटा लोड करने में त्रुटि"
   },
   "public": {
     "invitation": {
