@@ -25,7 +25,7 @@ import {
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 import type {
   InterfaceAgendaItemCategoryInfo,

@@ -8,7 +8,7 @@ import gql from 'graphql-tag';
  */
 
 export const AGENDA_FOLDER_LIST = gql`
-  query AgendaFolderByEventId($eventId: ID!, $itemsFirst: Int = 50) {
+  query AgendaFolderByEventId($eventId: ID!, $itemsFirst: Int = 30) {
     agendaFoldersByEventId(eventId: $eventId) {
       id
       name

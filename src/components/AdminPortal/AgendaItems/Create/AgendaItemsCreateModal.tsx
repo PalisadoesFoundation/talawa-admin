@@ -23,7 +23,7 @@ import {
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 
 import type {
   InterfaceAgendaItemsCreateModalProps,
