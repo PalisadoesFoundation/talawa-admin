@@ -523,6 +523,8 @@ describe('FundCampaigns Screen', () => {
     const hundredPercentCells = progressCells.filter((cell) =>
       cell.textContent?.includes('100%'),
     );
+    expect(campaign1Cell).toBeInTheDocument();
+    expect(campaignHalfCell).toBeInTheDocument();
     expect(hundredPercentCells.length).toBe(2);
   });
 
