@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceOrgSelectorProps
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L19)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:19](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L19)
 
 Props for the OrgSelector component.
 
@@ -19,7 +19,7 @@ Integration with validators will be handled in Phase 2b.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L36)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:36](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L36)
 
 Whether the selector is disabled
 
@@ -29,7 +29,7 @@ Whether the selector is disabled
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L30)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:30](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L30)
 
 Error message to display - null or undefined means no error
 
@@ -39,7 +39,7 @@ Error message to display - null or undefined means no error
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L42)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:42](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L42)
 
 Optional custom label text - defaults to "Organization"
 
@@ -49,7 +49,7 @@ Optional custom label text - defaults to "Organization"
 
 > **onChange**: (`orgId`) => `void`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L27)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:27](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L27)
 
 Callback invoked when the selected organization changes
 
@@ -69,7 +69,7 @@ Callback invoked when the selected organization changes
 
 > **options**: [`InterfaceOrgOption`](InterfaceOrgOption.md)[]
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L21)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:21](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L21)
 
 Array of available organizations to select from
 
@@ -79,7 +79,7 @@ Array of available organizations to select from
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L39)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:39](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L39)
 
 Whether the field is required - shows asterisk if true
 
@@ -89,7 +89,7 @@ Whether the field is required - shows asterisk if true
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L33)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:33](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L33)
 
 Test ID for testing purposes
 
@@ -99,6 +99,6 @@ Test ID for testing purposes
 
 > `optional` **value**: `string`
 
-Defined in: [src/types/Auth/OrgSelector/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L24)
+Defined in: [src/types/Auth/OrgSelector/interface.ts:24](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/OrgSelector/interface.ts#L24)
 
 Currently selected organization ID

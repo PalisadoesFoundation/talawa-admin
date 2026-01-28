@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UserProfileMenuItem** = `object`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L28)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:28](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L28)
 
 User profile menu item configuration
 
@@ -16,7 +16,7 @@ User profile menu item configuration
 
 > `optional` **icon**: `React.ComponentType`\<\{ `className?`: `string`; \}\>
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L48)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:48](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L48)
 
 Icon component (optional)
 
@@ -26,7 +26,7 @@ Icon component (optional)
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L32)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:32](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L32)
 
 Unique identifier
 
@@ -36,7 +36,7 @@ Unique identifier
 
 > `optional` **isDivider**: `boolean`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L58)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:58](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L58)
 
 Whether this is a divider item (renders as Dropdown.Divider)
 
@@ -46,7 +46,7 @@ Whether this is a divider item (renders as Dropdown.Divider)
 
 > **label**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L37)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:37](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L37)
 
 Display label or translation key
 
@@ -56,7 +56,7 @@ Display label or translation key
 
 > **onClick**: () => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L53)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:53](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L53)
 
 Click handler
 
@@ -70,7 +70,7 @@ Click handler
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L63)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:63](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L63)
 
 Test ID for testing
 
@@ -80,7 +80,7 @@ Test ID for testing
 
 > `optional` **translationKey**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L43)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:43](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L43)
 
 Translation key prefix (optional)
 

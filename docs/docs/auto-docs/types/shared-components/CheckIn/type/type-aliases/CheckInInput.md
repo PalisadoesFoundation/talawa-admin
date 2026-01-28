@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CheckInInput** = `object`
 
-Defined in: [src/types/shared-components/CheckIn/type.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L16)
+Defined in: [src/types/shared-components/CheckIn/type.ts:16](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/CheckIn/type.ts#L16)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:16](https://github.com/
 
 > `optional` **allotedRoom**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/type.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L17)
+Defined in: [src/types/shared-components/CheckIn/type.ts:17](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/CheckIn/type.ts#L17)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:17](https://github.com/
 
 > `optional` **allotedSeat**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L18)
+Defined in: [src/types/shared-components/CheckIn/type.ts:18](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/CheckIn/type.ts#L18)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:18](https://github.com/
 
 > **eventId**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L19)
+Defined in: [src/types/shared-components/CheckIn/type.ts:19](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/CheckIn/type.ts#L19)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:19](https://github.com/
 
 > **userId**: `string`
 
-Defined in: [src/types/shared-components/CheckIn/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L20)
+Defined in: [src/types/shared-components/CheckIn/type.ts:20](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/CheckIn/type.ts#L20)

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Class: EventManager
 
-Defined in: [src/plugin/managers/event-manager.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L6)
+Defined in: [src/plugin/managers/event-manager.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L6)
 
 Event Manager
 Handles event listeners and event emission for the plugin system
@@ -25,7 +25,7 @@ Handles event listeners and event emission for the plugin system
 
 > **emit**(`event`, ...`args`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L45)
+Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L45)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/Palisad
 
 > **getEvents**(): `string`[]
 
-Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L76)
+Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L76)
 
 #### Returns
 
@@ -59,7 +59,7 @@ Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/Palisad
 
 > **getListenerCount**(`event`): `number`
 
-Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L71)
+Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L71)
 
 #### Parameters
 
@@ -77,7 +77,7 @@ Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/Palisad
 
 > **off**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L27)
+Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L27)
 
 #### Parameters
 
@@ -99,7 +99,7 @@ Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/Palisad
 
 > **on**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L10)
+Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L10)
 
 #### Parameters
 
@@ -121,7 +121,7 @@ Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/Palisad
 
 > **removeAllListeners**(`event?`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L63)
+Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/managers/event-manager.ts#L63)
 
 #### Parameters
 

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceDonationCardProps
 
-Defined in: [src/types/Donation/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L10)
+Defined in: [src/types/Donation/interface.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Donation/interface.ts:10](https://github.com/PalisadoesFo
 
 > **amount**: `string`
 
-Defined in: [src/types/Donation/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L13)
+Defined in: [src/types/Donation/interface.ts:13](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Donation/interface.ts:13](https://github.com/PalisadoesFo
 
 > **id**: `string`
 
-Defined in: [src/types/Donation/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L11)
+Defined in: [src/types/Donation/interface.ts:11](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L11)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Donation/interface.ts:11](https://github.com/PalisadoesFo
 
 > **name**: `string`
 
-Defined in: [src/types/Donation/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L12)
+Defined in: [src/types/Donation/interface.ts:12](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L12)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Donation/interface.ts:12](https://github.com/PalisadoesFo
 
 > **payPalId**: `string`
 
-Defined in: [src/types/Donation/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L15)
+Defined in: [src/types/Donation/interface.ts:15](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L15)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Donation/interface.ts:15](https://github.com/PalisadoesFo
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/Donation/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L16)
+Defined in: [src/types/Donation/interface.ts:16](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L16)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Donation/interface.ts:16](https://github.com/PalisadoesFo
 
 > **userId**: `string`
 
-Defined in: [src/types/Donation/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Donation/interface.ts#L14)
+Defined in: [src/types/Donation/interface.ts:14](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Donation/interface.ts#L14)

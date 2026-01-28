@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **updateDates**: `object`
 
-Defined in: [src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts#L173)
+Defined in: [src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts:173](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts#L173)
 
 ## Type Declaration
 

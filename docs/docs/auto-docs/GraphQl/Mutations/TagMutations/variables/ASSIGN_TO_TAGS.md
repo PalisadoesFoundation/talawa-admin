@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ASSIGN\_TO\_TAGS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L91)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:91](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/GraphQl/Mutations/TagMutations.ts#L91)
 
 GraphQL mutation to assign people to multiple tags.
 

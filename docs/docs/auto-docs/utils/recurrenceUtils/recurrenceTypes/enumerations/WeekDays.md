@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Enumeration: WeekDays
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L28)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:28](https://github.com
 
 > **FR**: `"FR"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L34)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:34](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L34)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:34](https://github.com
 
 > **MO**: `"MO"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L30)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:30](https://github.com
 
 > **SA**: `"SA"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L35)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:35](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L35)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:35](https://github.com
 
 > **SU**: `"SU"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L29)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:29](https://github.com
 
 > **TH**: `"TH"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L33)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:33](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L33)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:33](https://github.com
 
 > **TU**: `"TU"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L31)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:31](https://github.com
 
 > **WE**: `"WE"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:32](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceTypes.ts#L32)

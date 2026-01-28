@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceSearchFilterBarSimple
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L220)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:220](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L220)
 
 Configuration for SearchFilterBar with only search functionality (no dropdowns).
 Use this variant when you only need search capabilities without any sorting or filtering dropdowns.
@@ -30,7 +30,7 @@ Use this variant when you only need search capabilities without any sorting or f
 
 > `optional` **containerClassName**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L182)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:182](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L182)
 
 Optional custom class name for the container div.
 **Job:** Allows overriding the default container styling for different screen layouts.
@@ -52,7 +52,7 @@ default "btnsContainerSearchBar"
 
 > `optional` **debounceDelay**: `number`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L191)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:191](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L191)
 
 Optional delay in milliseconds for debouncing search input changes.
 **Job:** Controls how long to wait after the user stops typing before calling onSearchChange.
@@ -75,7 +75,7 @@ default 300
 
 > **hasDropdowns**: `false`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L226)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:226](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L226)
 
 Discriminator property indicating this variant has no dropdowns.
 
@@ -87,7 +87,7 @@ Discriminator property indicating this variant has no dropdowns.
 
 > **onSearchChange**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L142)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:142](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L142)
 
 Callback function triggered on every keystroke in the search input.
 **Trigger:** User types or deletes characters in the search field (onChange event).
@@ -122,7 +122,7 @@ onSearchChange={(value) => setSearchTerm(value)}
 
 > `optional` **onSearchSubmit**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L158)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:158](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L158)
 
 Optional callback function triggered when the user explicitly submits the search.
 **Trigger:** User presses Enter key or clicks the search button.
@@ -160,7 +160,7 @@ onSearchSubmit={(value) => {
 
 > `optional` **searchButtonTestId**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L174)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:174](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L174)
 
 Optional data-testid for the search button.
 **Job:** Enables testing frameworks to identify the search button element.
@@ -182,7 +182,7 @@ default "searchButton"
 
 > `optional` **searchInputTestId**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L166)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:166](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L166)
 
 Optional data-testid for the search input field.
 **Job:** Enables testing frameworks to identify the search input element.
@@ -204,7 +204,7 @@ default "searchInput"
 
 > **searchPlaceholder**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L121)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:121](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L121)
 
 Placeholder text displayed in the search input field.
 **Job:** Provides guidance to users about what they can search for.
@@ -225,7 +225,7 @@ Placeholder text displayed in the search input field.
 
 > **searchValue**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L129)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:129](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L129)
 
 The current search term value.
 **Job:** Controls the value of the search input field (controlled component pattern).
@@ -247,7 +247,7 @@ This should be managed in the parent component's state.
 
 > `optional` **translations**: [`InterfaceSearchFilterBarTranslations`](InterfaceSearchFilterBarTranslations.md)
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L204)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:204](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L204)
 
 Optional translation overrides for accessibility and UI customization.
 **Job:** Allows customizing internal component translations while providing sensible defaults.

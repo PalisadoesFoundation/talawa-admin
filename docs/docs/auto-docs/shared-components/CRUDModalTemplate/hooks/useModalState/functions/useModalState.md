@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useModalState**(`initialState`): [`InterfaceUseModalStateReturn`](../../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceUseModalStateReturn.md)
 
-Defined in: [src/shared-components/CRUDModalTemplate/hooks/useModalState.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/hooks/useModalState.ts#L27)
+Defined in: [src/shared-components/CRUDModalTemplate/hooks/useModalState.ts:27](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/CRUDModalTemplate/hooks/useModalState.ts#L27)
 
 Custom hook for managing modal open/close state.
 

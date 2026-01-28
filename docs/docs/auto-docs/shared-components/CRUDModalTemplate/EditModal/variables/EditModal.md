@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EditModal**: `React.FC`\<[`InterfaceEditModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/EditModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/EditModal.tsx#L43)
+Defined in: [src/shared-components/CRUDModalTemplate/EditModal.tsx:43](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/CRUDModalTemplate/EditModal.tsx#L43)
 
 EditModal Component
 

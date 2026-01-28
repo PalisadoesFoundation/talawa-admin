@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getVisibilityType**(`isPublic?`, `isInviteOnly?`): [`EventVisibility`](../type-aliases/EventVisibility.md)
 
-Defined in: [src/shared-components/EventForm/utils/visibilityUtils.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/visibilityUtils.ts#L19)
+Defined in: [src/shared-components/EventForm/utils/visibilityUtils.ts:19](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/EventForm/utils/visibilityUtils.ts#L19)
 
 Determines the visibility type based on boolean flags.
 

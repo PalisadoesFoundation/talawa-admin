@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetails.tsx#L80)
+Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:80](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/GroupChatDetails/GroupChatDetails.tsx#L80)
 
 ## Parameters
 

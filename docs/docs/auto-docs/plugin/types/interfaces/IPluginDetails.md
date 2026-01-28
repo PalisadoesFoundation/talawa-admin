@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: IPluginDetails
 
-Defined in: [src/plugin/types.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L98)
+Defined in: [src/plugin/types.ts:98](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L98)
 
 ## Extends
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:98](https://github.com/PalisadoesFoundation/tal
 
 > **author**: `string`
 
-Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L94)
+Defined in: [src/plugin/types.ts:94](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L94)
 
 #### Inherited from
 
@@ -32,7 +32,7 @@ Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/tal
 
 > **cdnUrl**: `string`
 
-Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L100)
+Defined in: [src/plugin/types.ts:100](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L100)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/ta
 
 > **changelog**: `object`[]
 
-Defined in: [src/plugin/types.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L107)
+Defined in: [src/plugin/types.ts:107](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L107)
 
 #### changes
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:107](https://github.com/PalisadoesFoundation/ta
 
 > **description**: `string`
 
-Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L93)
+Defined in: [src/plugin/types.ts:93](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L93)
 
 #### Inherited from
 
@@ -72,7 +72,7 @@ Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **features**: `string`[]
 
-Defined in: [src/plugin/types.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L106)
+Defined in: [src/plugin/types.ts:106](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L106)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/plugin/types.ts:106](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **homepage**: `string`
 
-Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L103)
+Defined in: [src/plugin/types.ts:103](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L103)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/ta
 
 > **icon**: `string`
 
-Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L95)
+Defined in: [src/plugin/types.ts:95](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L95)
 
 #### Inherited from
 
@@ -100,7 +100,7 @@ Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/tal
 
 > **id**: `string`
 
-Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L91)
+Defined in: [src/plugin/types.ts:91](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L91)
 
 #### Inherited from
 
@@ -112,7 +112,7 @@ Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **license**: `string`
 
-Defined in: [src/plugin/types.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L104)
+Defined in: [src/plugin/types.ts:104](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L104)
 
 ***
 
@@ -120,7 +120,7 @@ Defined in: [src/plugin/types.ts:104](https://github.com/PalisadoesFoundation/ta
 
 > **name**: `string`
 
-Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L92)
+Defined in: [src/plugin/types.ts:92](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L92)
 
 #### Inherited from
 
@@ -132,7 +132,7 @@ Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/tal
 
 > **readme**: `string`
 
-Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L101)
+Defined in: [src/plugin/types.ts:101](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L101)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/ta
 
 > **screenshots**: `string`[]
 
-Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L102)
+Defined in: [src/plugin/types.ts:102](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L102)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/ta
 
 > `optional` **tags**: `string`[]
 
-Defined in: [src/plugin/types.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L105)
+Defined in: [src/plugin/types.ts:105](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L105)
 
 ***
 
@@ -156,4 +156,4 @@ Defined in: [src/plugin/types.ts:105](https://github.com/PalisadoesFoundation/ta
 
 > **version**: `string`
 
-Defined in: [src/plugin/types.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L99)
+Defined in: [src/plugin/types.ts:99](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L99)

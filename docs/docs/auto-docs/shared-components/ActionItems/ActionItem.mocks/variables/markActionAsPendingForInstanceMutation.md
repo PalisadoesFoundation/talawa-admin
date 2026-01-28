@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **markActionAsPendingForInstanceMutation**: `object`
 
-Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:488](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItem.mocks.ts#L488)
+Defined in: [src/shared-components/ActionItems/ActionItem.mocks.ts:488](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItem.mocks.ts#L488)
 
 ## Type Declaration
 

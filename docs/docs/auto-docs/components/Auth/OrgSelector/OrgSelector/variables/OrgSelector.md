@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **OrgSelector**: `React.FC`\<[`InterfaceOrgSelectorProps`](../../../../../types/Auth/OrgSelector/interface/interfaces/InterfaceOrgSelectorProps.md)\>
 
-Defined in: [src/components/Auth/OrgSelector/OrgSelector.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/OrgSelector/OrgSelector.tsx#L26)
+Defined in: [src/components/Auth/OrgSelector/OrgSelector.tsx:26](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/Auth/OrgSelector/OrgSelector.tsx#L26)
 
 Reusable organization selector component with search/autocomplete and accessibility support.
 

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L4)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L4)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:4](https://github.com
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L6)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L6)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:6](https://github.com
 
 > **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L8)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:8](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L8)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:8](https://github.com
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L5)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L5)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:5](https://github.com
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L7)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:7](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L7)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:7](https://github.com
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L9)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/TagActions/interface.ts#L9)

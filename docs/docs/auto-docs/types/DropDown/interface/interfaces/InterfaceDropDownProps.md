@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceDropDownProps
 
-Defined in: [src/types/DropDown/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L2)
+Defined in: [src/types/DropDown/interface.ts:2](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/DropDown/interface.ts#L2)
 
 ## Extended by
 
@@ -16,7 +16,7 @@ Defined in: [src/types/DropDown/interface.ts:2](https://github.com/PalisadoesFou
 
 > `optional` **btnStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L4)
+Defined in: [src/types/DropDown/interface.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/DropDown/interface.ts#L4)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/DropDown/interface.ts:4](https://github.com/PalisadoesFou
 
 > `optional` **btnTextStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L5)
+Defined in: [src/types/DropDown/interface.ts:5](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/DropDown/interface.ts#L5)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/types/DropDown/interface.ts:5](https://github.com/PalisadoesFou
 
 > `optional` **parentContainerStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DropDown/interface.ts#L3)
+Defined in: [src/types/DropDown/interface.ts:3](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/DropDown/interface.ts#L3)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useMutationModal**\<`TData`, `TResult`\>(`mutationFn`, `options?`): [`InterfaceUseMutationModalReturn`](../../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceUseMutationModalReturn.md)\<`TData`, `TResult`\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/hooks/useMutationModal.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/hooks/useMutationModal.ts#L57)
+Defined in: [src/shared-components/CRUDModalTemplate/hooks/useMutationModal.ts:57](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/CRUDModalTemplate/hooks/useMutationModal.ts#L57)
 
 Custom hook for modals that execute mutations (GraphQL or API calls).
 

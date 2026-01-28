@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_SINGLE\_RECURRING\_EVENT\_INSTANCE\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventMutations.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L116)
+Defined in: [src/GraphQl/Mutations/EventMutations.ts:116](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/GraphQl/Mutations/EventMutations.ts#L116)

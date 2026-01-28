@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **createErrorComponent**(`pluginId`, `componentName`, `error`): `ComponentType`
 
-Defined in: [src/plugin/registry.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L34)
+Defined in: [src/plugin/registry.tsx:34](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/registry.tsx#L34)
 
 Create an error component for failed plugin loads
 

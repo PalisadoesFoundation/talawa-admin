@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceAssignmentTypeSelectorProps
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L9)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L9)
 
 Props interface for the AssignmentTypeSelector component.
 
@@ -14,7 +14,7 @@ Props interface for the AssignmentTypeSelector component.
 
 > **assignmentType**: [`AssignmentType`](../type-aliases/AssignmentType.md)
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L11)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:11](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L11)
 
 Current assignment type selection
 
@@ -24,7 +24,7 @@ Current assignment type selection
 
 > **isVolunteerDisabled**: `boolean`
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L15)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:15](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L15)
 
 Whether the volunteer chip is disabled
 
@@ -34,7 +34,7 @@ Whether the volunteer chip is disabled
 
 > **isVolunteerGroupDisabled**: `boolean`
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L17)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:17](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L17)
 
 Whether the volunteer group chip is disabled
 
@@ -44,7 +44,7 @@ Whether the volunteer group chip is disabled
 
 > **onClearVolunteer**: () => `void`
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L19)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:19](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L19)
 
 Callback to clear volunteer selection when switching to volunteer group
 
@@ -58,7 +58,7 @@ Callback to clear volunteer selection when switching to volunteer group
 
 > **onClearVolunteerGroup**: () => `void`
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L21)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:21](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L21)
 
 Callback to clear volunteer group selection when switching to volunteer
 
@@ -72,7 +72,7 @@ Callback to clear volunteer group selection when switching to volunteer
 
 > **onTypeChange**: (`type`) => `void`
 
-Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L13)
+Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:13](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/AssignmentTypeSelector/interface.ts#L13)
 
 Callback fired when assignment type changes
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **mapVolunteerStatusToVariant**(`status`): `object`
 
-Defined in: [src/utils/volunteerStatusMapper.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/volunteerStatusMapper.ts#L26)
+Defined in: [src/utils/volunteerStatusMapper.ts:26](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/volunteerStatusMapper.ts#L26)
 
 Maps volunteer membership status to StatusBadge variant.
 

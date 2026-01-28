@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IDateRangePreset
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L52)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:52](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DateRangePicker/interface.ts#L52)
 
 IDateRangePreset
 
@@ -34,7 +34,7 @@ Defaults to the current date if not provided.
 
 > **getRange**: (`refDate?`) => [`IDateRangeValue`](IDateRangeValue.md)
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L55)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:55](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DateRangePicker/interface.ts#L55)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:55](https:
 
 > **key**: `string`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L53)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:53](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DateRangePicker/interface.ts#L53)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:53](https:
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L54)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:54](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DateRangePicker/interface.ts#L54)

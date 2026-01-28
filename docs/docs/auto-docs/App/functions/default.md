@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `ReactElement`
 
-Defined in: [src/App.tsx:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L136)
+Defined in: [src/App.tsx:136](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/App.tsx#L136)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`

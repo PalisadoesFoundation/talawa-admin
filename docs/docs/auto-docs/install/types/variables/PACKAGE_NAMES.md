@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **PACKAGE\_NAMES**: readonly \[`"typescript"`, `"docker"`\]
 
-Defined in: [src/install/types.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L17)
+Defined in: [src/install/types.ts:17](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/install/types.ts#L17)

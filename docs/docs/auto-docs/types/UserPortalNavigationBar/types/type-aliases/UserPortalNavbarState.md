@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UserPortalNavbarState** = `object`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L158)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:158](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L158)
 
 Internal component state
 
@@ -16,7 +16,7 @@ Internal component state
 
 > **currentLanguageCode**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L162)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:162](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L162)
 
 Current selected language code
 
@@ -26,7 +26,7 @@ Current selected language code
 
 > **isMobileMenuOpen**: `boolean`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L172)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:172](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L172)
 
 Whether mobile menu is open
 
@@ -36,7 +36,7 @@ Whether mobile menu is open
 
 > **organizationDetails**: [`OrganizationData`](OrganizationData.md) \| `null`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L167)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:167](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L167)
 
 Organization details (null for user mode or when not fetched)
 
@@ -46,6 +46,6 @@ Organization details (null for user mode or when not fetched)
 
 > **userName**: `string` \| `null`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L177)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:177](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/UserPortalNavigationBar/types.ts#L177)
 
 User name from localStorage

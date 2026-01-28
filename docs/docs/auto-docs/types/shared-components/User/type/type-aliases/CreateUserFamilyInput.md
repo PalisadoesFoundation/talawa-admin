@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateUserFamilyInput** = `object`
 
-Defined in: [src/types/shared-components/User/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L54)
+Defined in: [src/types/shared-components/User/type.ts:54](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/type.ts:54](https://github.com/Pal
 
 > **title**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L55)
+Defined in: [src/types/shared-components/User/type.ts:55](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L55)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/shared-components/User/type.ts:55](https://github.com/Pal
 
 > **userIds**: `string`[]
 
-Defined in: [src/types/shared-components/User/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L56)
+Defined in: [src/types/shared-components/User/type.ts:56](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L56)

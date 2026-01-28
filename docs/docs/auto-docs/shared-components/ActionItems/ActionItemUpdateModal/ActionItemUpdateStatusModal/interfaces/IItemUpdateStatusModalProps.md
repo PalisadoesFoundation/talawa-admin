@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IItemUpdateStatusModalProps
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L50)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:50](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L50)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > **actionItem**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L54)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:54](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L54)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L53)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:53](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L53)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L56)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:56](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L56)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > **hide**: () => `void`
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L52)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:52](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L52)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > **isOpen**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L51)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:51](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L51)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemU
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L55)
+Defined in: [src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:55](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L55)

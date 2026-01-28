@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **usePluginFilters**(`__namedParameters`): `object`
 
-Defined in: [src/screens/AdminPortal/PluginStore/hooks/usePluginFilters.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/PluginStore/hooks/usePluginFilters.ts#L16)
+Defined in: [src/screens/AdminPortal/PluginStore/hooks/usePluginFilters.ts:16](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/PluginStore/hooks/usePluginFilters.ts#L16)
 
 ## Parameters
 

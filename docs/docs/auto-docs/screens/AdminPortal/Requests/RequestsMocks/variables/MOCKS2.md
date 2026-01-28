@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS2**: (\{ `request`: \{ `query`: `DocumentNode`; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `membershipRequests`: `object`[]; \}; \}; \}; \})[]
 
-Defined in: [src/screens/AdminPortal/Requests/RequestsMocks.ts:261](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Requests/RequestsMocks.ts#L261)
+Defined in: [src/screens/AdminPortal/Requests/RequestsMocks.ts:261](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/Requests/RequestsMocks.ts#L261)

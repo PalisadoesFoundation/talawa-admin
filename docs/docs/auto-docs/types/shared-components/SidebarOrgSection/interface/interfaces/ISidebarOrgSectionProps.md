@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: ISidebarOrgSectionProps
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L4)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SidebarOrgSection/interface.ts#L4)
 
 Props for the SidebarOrgSection component.
 
@@ -14,7 +14,7 @@ Props for the SidebarOrgSection component.
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L8)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:8](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SidebarOrgSection/interface.ts#L8)
 
 Whether the drawer is hidden/collapsed.
 
@@ -24,7 +24,7 @@ Whether the drawer is hidden/collapsed.
 
 > `optional` **isProfilePage**: `boolean`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L10)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SidebarOrgSection/interface.ts#L10)
 
 Whether current page is the profile page.
 
@@ -34,6 +34,6 @@ Whether current page is the profile page.
 
 > **orgId**: `string`
 
-Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SidebarOrgSection/interface.ts#L6)
+Defined in: [src/types/shared-components/SidebarOrgSection/interface.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SidebarOrgSection/interface.ts#L6)
 
 Organization ID to fetch and display.

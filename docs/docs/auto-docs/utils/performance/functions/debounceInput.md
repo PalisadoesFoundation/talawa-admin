@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **debounceInput**\<`T`\>(`fn`, `wait`, `options?`): `T` & `object`
 
-Defined in: [src/utils/performance.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L44)
+Defined in: [src/utils/performance.ts:43](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/performance.ts#L43)
 
 Creates a debounced function tailored for input handlers.
 
@@ -23,8 +23,6 @@ The returned function is the same shape as the function returned by
 ### T
 
 `T` *extends* (...`args`) => `unknown`
-
-Function type to debounce
 
 ## Parameters
 

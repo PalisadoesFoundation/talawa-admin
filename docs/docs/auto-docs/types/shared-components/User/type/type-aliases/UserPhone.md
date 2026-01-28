@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UserPhone** = `object`
 
-Defined in: [src/types/shared-components/User/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L28)
+Defined in: [src/types/shared-components/User/type.ts:28](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L28)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/type.ts:28](https://github.com/Pal
 
 > `optional` **home**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L29)
+Defined in: [src/types/shared-components/User/type.ts:29](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/type.ts:29](https://github.com/Pal
 
 > `optional` **mobile**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L30)
+Defined in: [src/types/shared-components/User/type.ts:30](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L30)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/shared-components/User/type.ts:30](https://github.com/Pal
 
 > `optional` **work**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L31)
+Defined in: [src/types/shared-components/User/type.ts:31](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/User/type.ts#L31)

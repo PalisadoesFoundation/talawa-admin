@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ENV\_KEYS**: `object`
 
-Defined in: [src/setup/setup.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L24)
+Defined in: [src/setup/setup.ts:24](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/setup/setup.ts#L24)
 
 Environment variable key names used by the setup script
 

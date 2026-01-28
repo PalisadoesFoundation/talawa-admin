@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **NotificationToastNamespace** = `"translation"` \| `"errors"` \| `"common"` \| `string` & `object`
 
-Defined in: [src/types/shared-components/NotificationToast/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L9)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/NotificationToast/interface.ts#L9)
 
 Supported i18next namespaces in Talawa Admin.
 

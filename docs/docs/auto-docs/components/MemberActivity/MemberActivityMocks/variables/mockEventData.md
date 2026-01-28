@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **mockEventData**: `object`
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L6)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/MemberActivity/MemberActivityMocks.ts#L6)
 
 ## Type Declaration
 

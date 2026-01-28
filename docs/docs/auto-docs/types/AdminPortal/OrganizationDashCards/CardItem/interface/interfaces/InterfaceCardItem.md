@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
 # Interface: InterfaceCardItem
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L1)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:1](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:1
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L7)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:7](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L7)
 
 #### id
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:7
 
 > `optional` **enddate**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L6)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L6)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:6
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L9)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L9)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:9
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L8)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:8](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L8)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:8
 
 > `optional` **startdate**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L5)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:5](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L5)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:5
 
 > `optional` **time**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L4)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L4)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:4
 
 > **title**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L3)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:3](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L3)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:3
 
 > **type**: `"Event"` \| `"Post"` \| `"MembershipRequest"`
 
-Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L2)
+Defined in: [src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts:2](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/OrganizationDashCards/CardItem/interface.ts#L2)

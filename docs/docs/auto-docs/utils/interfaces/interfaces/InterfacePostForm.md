@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfacePostForm
 
-Defined in: [src/utils/interfaces.ts:1011](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1011)
+Defined in: [src/utils/interfaces.ts:1011](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1011)
 
 Defines the structure for a post form.
 
@@ -14,7 +14,7 @@ Defines the structure for a post form.
 
 > **pinned**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1016](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1016)
+Defined in: [src/utils/interfaces.ts:1016](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1016)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1016](https://github.com/PalisadoesFoundati
 
 > **postinfo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1013](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1013)
+Defined in: [src/utils/interfaces.ts:1013](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1013)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1013](https://github.com/PalisadoesFoundati
 
 > **postphoto**: `string`
 
-Defined in: [src/utils/interfaces.ts:1014](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1014)
+Defined in: [src/utils/interfaces.ts:1014](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1014)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1014](https://github.com/PalisadoesFoundati
 
 > **posttitle**: `string`
 
-Defined in: [src/utils/interfaces.ts:1012](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1012)
+Defined in: [src/utils/interfaces.ts:1012](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1012)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:1012](https://github.com/PalisadoesFoundati
 
 > **postvideo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1015](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1015)
+Defined in: [src/utils/interfaces.ts:1015](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/interfaces.ts#L1015)

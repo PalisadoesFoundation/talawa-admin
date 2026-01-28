@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceCursorPaginationManagerProps\<TData, TNode, TVariables\>
 
-Defined in: [src/types/CursorPagination/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L40)
+Defined in: [src/types/CursorPagination/interface.ts:40](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L40)
 
 Props for the CursorPaginationManager component.
 
@@ -32,7 +32,7 @@ The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
 > `optional` **actionRef**: `Ref`\<[`InterfaceCursorPaginationManagerRef`](InterfaceCursorPaginationManagerRef.md)\<`TNode`\>\>
 
-Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L166)
+Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L166)
 
 Ref to access imperative actions
 
@@ -42,7 +42,7 @@ Ref to access imperative actions
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L171)
+Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L171)
 
 Custom class name for the container
 
@@ -52,7 +52,7 @@ Custom class name for the container
 
 > **dataPath**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L60)
+Defined in: [src/types/CursorPagination/interface.ts:60](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L60)
 
 Dot-separated path to extract connection data from the query response
 
@@ -72,7 +72,7 @@ Dot-separated path to extract connection data from the query response
 
 > `optional` **emptyStateComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L119)
+Defined in: [src/types/CursorPagination/interface.ts:119](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L119)
 
 Custom component to show when no items are available
 
@@ -82,7 +82,7 @@ Custom component to show when no items are available
 
 > `optional` **infiniteScroll**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L176)
+Defined in: [src/types/CursorPagination/interface.ts:176](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L176)
 
 Enable infinite scroll behavior (auto-load when reaching threshold)
 
@@ -92,7 +92,7 @@ Enable infinite scroll behavior (auto-load when reaching threshold)
 
 > `optional` **itemsPerPage**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L66)
+Defined in: [src/types/CursorPagination/interface.ts:66](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L66)
 
 Number of items to fetch per page
 default 10
@@ -103,7 +103,7 @@ default 10
 
 > `optional` **keyExtractor**: (`item`, `index`) => `string` \| `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L109)
+Defined in: [src/types/CursorPagination/interface.ts:109](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L109)
 
 Optional function to extract a unique key for each item
 
@@ -144,7 +144,7 @@ keyExtractor={(user) => user.id}
 
 > `optional` **loadingComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L114)
+Defined in: [src/types/CursorPagination/interface.ts:114](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L114)
 
 Custom loading component to show during initial data fetch
 
@@ -154,7 +154,7 @@ Custom loading component to show during initial data fetch
 
 > `optional` **onContentScroll**: (`e`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L161)
+Defined in: [src/types/CursorPagination/interface.ts:161](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L161)
 
 Callback to handle scroll events or restoration.
 If provided, the manager might delegate some scroll logic to the parent.
@@ -175,7 +175,7 @@ If provided, the manager might delegate some scroll logic to the parent.
 
 > `optional` **onDataChange**: (`data`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L124)
+Defined in: [src/types/CursorPagination/interface.ts:124](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L124)
 
 Callback invoked when the data changes (initial load or after loading more)
 
@@ -195,7 +195,7 @@ Callback invoked when the data changes (initial load or after loading more)
 
 > `optional` **onQueryResult**: (`data`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L155)
+Defined in: [src/types/CursorPagination/interface.ts:155](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L155)
 
 Callback to return the full query result data.
 Useful when the parent component needs access to metadata in the response
@@ -217,7 +217,7 @@ Useful when the parent component needs access to metadata in the response
 
 > `optional` **paginationType**: `"forward"` \| `"backward"`
 
-Defined in: [src/types/CursorPagination/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L137)
+Defined in: [src/types/CursorPagination/interface.ts:137](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L137)
 
 Direction of pagination.
 'forward': Uses 'first' and 'after' (default)
@@ -229,7 +229,7 @@ Direction of pagination.
 
 > **query**: `DocumentNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L48)
+Defined in: [src/types/CursorPagination/interface.ts:48](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L48)
 
 GraphQL query document for fetching data
 
@@ -239,7 +239,7 @@ GraphQL query document for fetching data
 
 > `optional` **queryVariables**: `Omit`\<`TVariables`, `"first"` \| `"after"`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L53)
+Defined in: [src/types/CursorPagination/interface.ts:53](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L53)
 
 Query variables (excluding pagination variables like 'first' and 'after')
 
@@ -249,7 +249,7 @@ Query variables (excluding pagination variables like 'first' and 'after')
 
 > `optional` **refetchTrigger**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L130)
+Defined in: [src/types/CursorPagination/interface.ts:130](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L130)
 
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
@@ -260,7 +260,7 @@ Can be a number (counter) or any value that changes
 
 > **renderItem**: (`item`, `index`) => `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L91)
+Defined in: [src/types/CursorPagination/interface.ts:91](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L91)
 
 Function to render each item in the list
 
@@ -306,7 +306,7 @@ for append-only pagination but may cause issues if items are reordered.
 
 > `optional` **scrollThreshold**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L182)
+Defined in: [src/types/CursorPagination/interface.ts:182](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L182)
 
 Distance from edge (top for backward, bottom for forward) to trigger load more.
 Default: 50px
@@ -317,7 +317,7 @@ Default: 50px
 
 > `optional` **variableKeyMap**: `object`
 
-Defined in: [src/types/CursorPagination/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L143)
+Defined in: [src/types/CursorPagination/interface.ts:143](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/CursorPagination/interface.ts#L143)
 
 Map generic pagination variables (first, after, last, before) to custom query variable names.
 Useful when the query uses different variable names (e.g., 'lastMessages' instead of 'last').

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **makeTagEdge**(`id`, `opts?`): [`TagEdge`](../type-aliases/TagEdge.md)
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L51)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:51](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L51)
 
 ## Parameters
 

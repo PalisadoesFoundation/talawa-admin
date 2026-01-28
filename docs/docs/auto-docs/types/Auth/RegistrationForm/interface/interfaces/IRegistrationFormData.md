@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IRegistrationFormData
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L6)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L6)
 
 Form data structure for user registration
 
@@ -14,7 +14,7 @@ Form data structure for user registration
 
 > **confirmPassword**: `string`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L10)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L10)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:10](https://github.com
 
 > **email**: `string`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L8)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:8](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:8](https://github.com/
 
 > **name**: `string`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L7)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:7](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L7)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:7](https://github.com/
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L11)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:11](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L11)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:11](https://github.com
 
 > **password**: `string`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L9)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/RegistrationForm/interface.ts#L9)

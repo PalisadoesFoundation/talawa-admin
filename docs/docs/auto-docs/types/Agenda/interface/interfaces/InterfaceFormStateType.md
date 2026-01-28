@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceFormStateType
 
-Defined in: [src/types/Agenda/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L23)
+Defined in: [src/types/Agenda/interface.ts:23](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:23](https://github.com/PalisadoesFoun
 
 > **agendaItemCategoryIds**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L24)
+Defined in: [src/types/Agenda/interface.ts:24](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L24)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:24](https://github.com/PalisadoesFoun
 
 > **agendaItemCategoryNames**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L25)
+Defined in: [src/types/Agenda/interface.ts:25](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/interface.ts:25](https://github.com/PalisadoesFoun
 
 > **attachments**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L29)
+Defined in: [src/types/Agenda/interface.ts:29](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Agenda/interface.ts:29](https://github.com/PalisadoesFoun
 
 > **createdBy**: `object`
 
-Defined in: [src/types/Agenda/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L31)
+Defined in: [src/types/Agenda/interface.ts:31](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L31)
 
 #### firstName
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/interface.ts:31](https://github.com/PalisadoesFoun
 
 > **description**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L27)
+Defined in: [src/types/Agenda/interface.ts:27](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L27)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Agenda/interface.ts:27](https://github.com/PalisadoesFoun
 
 > **duration**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L28)
+Defined in: [src/types/Agenda/interface.ts:28](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L28)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Agenda/interface.ts:28](https://github.com/PalisadoesFoun
 
 > **title**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L26)
+Defined in: [src/types/Agenda/interface.ts:26](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L26)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/Agenda/interface.ts:26](https://github.com/PalisadoesFoun
 
 > **urls**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L30)
+Defined in: [src/types/Agenda/interface.ts:30](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Agenda/interface.ts#L30)

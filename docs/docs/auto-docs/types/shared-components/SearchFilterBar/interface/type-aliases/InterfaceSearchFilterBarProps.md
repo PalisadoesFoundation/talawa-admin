@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **InterfaceSearchFilterBarProps** = [`InterfaceSearchFilterBarSimple`](../interfaces/InterfaceSearchFilterBarSimple.md) \| [`InterfaceSearchFilterBarAdvanced`](../interfaces/InterfaceSearchFilterBarAdvanced.md)
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L416)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:416](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/SearchFilterBar/interface.ts#L416)
 
 Main props interface for the SearchFilterBar component.
 

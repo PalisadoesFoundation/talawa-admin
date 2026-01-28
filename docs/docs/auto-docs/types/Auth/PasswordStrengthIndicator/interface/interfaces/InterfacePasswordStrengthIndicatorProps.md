@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfacePasswordStrengthIndicatorProps
 
-Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordStrengthIndicator/interface.ts#L7)
+Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:7](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/PasswordStrengthIndicator/interface.ts#L7)
 
 Props for the PasswordStrengthIndicator component.
 
@@ -18,7 +18,7 @@ Displays a checklist of password requirements with real-time feedback.
 
 > `optional` **isVisible**: `boolean`
 
-Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordStrengthIndicator/interface.ts#L12)
+Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:12](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/PasswordStrengthIndicator/interface.ts#L12)
 
 Controls component visibility - defaults to true
 
@@ -28,6 +28,6 @@ Controls component visibility - defaults to true
 
 > **password**: `string`
 
-Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordStrengthIndicator/interface.ts#L9)
+Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Auth/PasswordStrengthIndicator/interface.ts#L9)
 
 Password string to validate against requirements

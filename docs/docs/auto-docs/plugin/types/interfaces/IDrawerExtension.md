@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: IDrawerExtension
 
-Defined in: [src/plugin/types.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L72)
+Defined in: [src/plugin/types.ts:72](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L72)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:72](https://github.com/PalisadoesFoundation/tal
 
 > **icon**: `string`
 
-Defined in: [src/plugin/types.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L75)
+Defined in: [src/plugin/types.ts:75](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L75)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:75](https://github.com/PalisadoesFoundation/tal
 
 > **label**: `string`
 
-Defined in: [src/plugin/types.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L74)
+Defined in: [src/plugin/types.ts:74](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L74)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:74](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **order**: `number`
 
-Defined in: [src/plugin/types.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L78)
+Defined in: [src/plugin/types.ts:78](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L78)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:78](https://github.com/PalisadoesFoundation/tal
 
 > **path**: `string`
 
-Defined in: [src/plugin/types.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L76)
+Defined in: [src/plugin/types.ts:76](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L76)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/types.ts:76](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **permissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L77)
+Defined in: [src/plugin/types.ts:77](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L77)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/plugin/types.ts:77](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L73)
+Defined in: [src/plugin/types.ts:73](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/plugin/types.ts#L73)

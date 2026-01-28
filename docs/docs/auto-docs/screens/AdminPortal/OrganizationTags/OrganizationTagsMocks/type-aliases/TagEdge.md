@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **TagEdge** = `object`
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L9)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L9)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:9
 
 > **cursor**: `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L18)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:18](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L18)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:1
 
 > **node**: `object`
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L10)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L10)
 
 #### ancestorTags
 

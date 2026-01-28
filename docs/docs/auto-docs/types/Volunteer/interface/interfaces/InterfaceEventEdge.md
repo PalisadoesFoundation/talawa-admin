@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceEventEdge
 
-Defined in: [src/types/Volunteer/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L48)
+Defined in: [src/types/Volunteer/interface.ts:48](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Volunteer/interface.ts#L48)
 
 InterfaceEventEdge
 
@@ -18,7 +18,7 @@ Defines the structure for GraphQL event edge from queries.
 
 > **node**: `object`
 
-Defined in: [src/types/Volunteer/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L49)
+Defined in: [src/types/Volunteer/interface.ts:49](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Volunteer/interface.ts#L49)
 
 The event node containing all event data.
 

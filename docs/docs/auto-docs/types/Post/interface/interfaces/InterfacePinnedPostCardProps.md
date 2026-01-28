@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfacePinnedPostCardProps
 
-Defined in: [src/types/Post/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L112)
+Defined in: [src/types/Post/interface.ts:112](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Post/interface.ts#L112)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:112](https://github.com/PalisadoesFound
 
 > `optional` **onPostUpdate**: () => `void`
 
-Defined in: [src/types/Post/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L115)
+Defined in: [src/types/Post/interface.ts:115](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Post/interface.ts#L115)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Post/interface.ts:115](https://github.com/PalisadoesFound
 
 > **onStoryClick**: (`post`) => `void`
 
-Defined in: [src/types/Post/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L114)
+Defined in: [src/types/Post/interface.ts:114](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Post/interface.ts#L114)
 
 #### Parameters
 
@@ -42,4 +42,4 @@ Defined in: [src/types/Post/interface.ts:114](https://github.com/PalisadoesFound
 
 > **pinnedPost**: [`InterfacePostEdge`](InterfacePostEdge.md)
 
-Defined in: [src/types/Post/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L113)
+Defined in: [src/types/Post/interface.ts:113](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Post/interface.ts#L113)

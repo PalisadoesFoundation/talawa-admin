@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **PasswordStrengthIndicator**: `React.FC`\<[`InterfacePasswordStrengthIndicatorProps`](../../../../../types/Auth/PasswordStrengthIndicator/interface/interfaces/InterfacePasswordStrengthIndicatorProps.md)\>
 
-Defined in: [src/components/Auth/PasswordStrengthIndicator/PasswordStrengthIndicator.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/PasswordStrengthIndicator/PasswordStrengthIndicator.tsx#L17)
+Defined in: [src/components/Auth/PasswordStrengthIndicator/PasswordStrengthIndicator.tsx:17](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/Auth/PasswordStrengthIndicator/PasswordStrengthIndicator.tsx#L17)
 
 PasswordStrengthIndicator displays a visual checklist of password requirements.
 

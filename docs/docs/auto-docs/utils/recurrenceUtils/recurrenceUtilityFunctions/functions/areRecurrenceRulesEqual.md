@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **areRecurrenceRulesEqual**(`rule1`, `rule2`): `boolean`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L276)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:276](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L276)
 
 Checks if two recurrence rules are equal
 

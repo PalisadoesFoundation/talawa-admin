@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceCalendarProps`](../../../../../types/Event/interface/type-aliases/InterfaceCalendarProps.md)\>
 
-Defined in: [src/components/EventCalender/Yearly/YearlyEventCalender.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Yearly/YearlyEventCalender.tsx#L49)
+Defined in: [src/components/EventCalender/Yearly/YearlyEventCalender.tsx:49](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/components/EventCalender/Yearly/YearlyEventCalender.tsx#L49)

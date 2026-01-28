@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceFundModal`](../interfaces/InterfaceFundModal.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L35)
+Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:35](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L35)
 
 Modal component for creating or editing a Fund.
 

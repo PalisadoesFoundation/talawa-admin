@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ComponentType** = `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L34)
+Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/state/reducers/routesReducer.ts#L34)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/Palisado
 
 > **comp\_id**: `string` \| `null`
 
-Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L36)
+Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/state/reducers/routesReducer.ts#L36)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/Palisado
 
 > **component**: `string` \| `null`
 
-Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L37)
+Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/state/reducers/routesReducer.ts#L37)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/Palisado
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L35)
+Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/state/reducers/routesReducer.ts#L35)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/Palisado
 
 > `optional` **subTargets**: `object`[]
 
-Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L38)
+Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/state/reducers/routesReducer.ts#L38)
 
 #### comp\_id
 

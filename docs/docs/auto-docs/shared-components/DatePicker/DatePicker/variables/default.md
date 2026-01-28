@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`InterfaceDatePickerProps`\>
 
-Defined in: [src/shared-components/DatePicker/DatePicker.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DatePicker/DatePicker.tsx#L79)
+Defined in: [src/shared-components/DatePicker/DatePicker.tsx:79](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/shared-components/DatePicker/DatePicker.tsx#L79)
 
 DatePicker wrapper component that integrates MUI DatePicker with react-bootstrap styling.
 

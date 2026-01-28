@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IRowAction\<T\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:546](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L546)
+Defined in: [src/types/shared-components/DataTable/interface.ts:546](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L546)
 
 Row-level action definition for per-row action buttons.
 
@@ -29,7 +29,7 @@ const rowActions: IRowAction<User>[] = [
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:556](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L556)
+Defined in: [src/types/shared-components/DataTable/interface.ts:556](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L556)
 
 Accessible label for screen readers
 
@@ -39,7 +39,7 @@ Accessible label for screen readers
 
 > `optional` **disabled**: `boolean` \| (`row`) => `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:554](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L554)
+Defined in: [src/types/shared-components/DataTable/interface.ts:554](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L554)
 
 Disable this action (boolean or function returning boolean)
 
@@ -49,7 +49,7 @@ Disable this action (boolean or function returning boolean)
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:548](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L548)
+Defined in: [src/types/shared-components/DataTable/interface.ts:548](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L548)
 
 Unique identifier for the action
 
@@ -59,7 +59,7 @@ Unique identifier for the action
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:550](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L550)
+Defined in: [src/types/shared-components/DataTable/interface.ts:550](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L550)
 
 Button label text
 
@@ -69,7 +69,7 @@ Button label text
 
 > **onClick**: (`row`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:552](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L552)
+Defined in: [src/types/shared-components/DataTable/interface.ts:552](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/shared-components/DataTable/interface.ts#L552)
 
 Callback when action is triggered
 

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceHoliday
 
-Defined in: [src/types/Event/utils.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L1)
+Defined in: [src/types/Event/utils.ts:1](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Event/utils.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/utils.ts:1](https://github.com/PalisadoesFoundation
 
 > **date**: `string`
 
-Defined in: [src/types/Event/utils.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L3)
+Defined in: [src/types/Event/utils.ts:3](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Event/utils.ts#L3)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/utils.ts:3](https://github.com/PalisadoesFoundation
 
 > **month**: `string`
 
-Defined in: [src/types/Event/utils.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L4)
+Defined in: [src/types/Event/utils.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Event/utils.ts#L4)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Event/utils.ts:4](https://github.com/PalisadoesFoundation
 
 > **name**: `string`
 
-Defined in: [src/types/Event/utils.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L2)
+Defined in: [src/types/Event/utils.ts:2](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/Event/utils.ts#L2)

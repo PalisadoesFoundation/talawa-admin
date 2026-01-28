@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **InterfaceUserOrg** = `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L4)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:4](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:4](https
 
 > **adminsCount**: `number`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L8)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:8](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:8](https
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L11)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:11](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L11)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:11](http
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L10)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:10](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:10](http
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L5)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:5](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L5)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:5](https
 
 > **membersCount**: `number`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L9)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:9](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:9](https
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L6)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:6](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L6)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:6](https
 
 > **relation**: [`InterfaceOrgRelationType`](InterfaceOrgRelationType.md)
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L7)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/type.ts:7](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/UserDetails/UserOrganization/type.ts#L7)

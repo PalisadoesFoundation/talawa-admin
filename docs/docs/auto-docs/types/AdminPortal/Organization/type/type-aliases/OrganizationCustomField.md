@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **OrganizationCustomField** = `object`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L47)
+Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/Organization/type.ts#L47)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/P
 
 > **\_id**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L48)
+Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/Organization/type.ts#L48)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/P
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L49)
+Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/Organization/type.ts#L49)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/P
 
 > **organizationId**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L50)
+Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/Organization/type.ts#L50)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/P
 
 > **type**: `string`
 
-Defined in: [src/types/AdminPortal/Organization/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L51)
+Defined in: [src/types/AdminPortal/Organization/type.ts:51](https://github.com/MonishPuttu/talawa-admin/blob/4630ca9b3a05c039a7c82f0e137454f2802795b4/src/types/AdminPortal/Organization/type.ts#L51)
