@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import DashboardStats from './DashboardStats';
 
@@ -92,27 +93,27 @@ describe('DashboardStats Component', () => {
 
     // Click each card using accessible button queries
     const membersCard = screen.getByRole('button', { name: 'members' });
-    fireEvent.click(membersCard);
+    await userEvent.click(membersCard);
     expect(mockProps.onMembersClick).toHaveBeenCalled();
 
     const adminsCard = screen.getByRole('button', { name: 'admins' });
-    fireEvent.click(adminsCard);
+    await userEvent.click(adminsCard);
     expect(mockProps.onAdminsClick).toHaveBeenCalled();
 
     const eventsCard = screen.getByRole('button', { name: 'events' });
-    fireEvent.click(eventsCard);
+    await userEvent.click(eventsCard);
     expect(mockProps.onEventsClick).toHaveBeenCalled();
 
     const venuesCard = screen.getByRole('button', { name: 'venues' });
-    fireEvent.click(venuesCard);
+    await userEvent.click(venuesCard);
     expect(mockProps.onVenuesClick).toHaveBeenCalled();
 
     const postsCard = screen.getByRole('button', { name: 'posts' });
-    fireEvent.click(postsCard);
+    await userEvent.click(postsCard);
     expect(mockProps.onPostsClick).toHaveBeenCalled();
 
     const blockedCard = screen.getByRole('button', { name: 'blockedUsers' });
-    fireEvent.click(blockedCard);
+    await userEvent.click(blockedCard);
     expect(mockProps.onBlockedUsersClick).toHaveBeenCalled();
   });
 
