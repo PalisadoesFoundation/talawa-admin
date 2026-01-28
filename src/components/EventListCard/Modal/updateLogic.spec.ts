@@ -76,7 +76,7 @@ const mockEventListCardProps: MockEventListCardProps = {
 
 const mockFormState = {
   name: mockEventListCardProps.name,
-  eventdescrip: mockEventListCardProps.description,
+  eventDescription: mockEventListCardProps.description,
   location: mockEventListCardProps.location,
   startTime: mockEventListCardProps.startTime as string,
   endTime: mockEventListCardProps.endTime as string,
@@ -100,9 +100,9 @@ type HandlerOverrides = Partial<HandlerArgs>;
 const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   eventListCardProps: mockEventListCardProps,
   formState: mockFormState,
-  alldaychecked: mockEventListCardProps.allDay,
-  publicchecked: mockEventListCardProps.isPublic,
-  registrablechecked: mockEventListCardProps.isRegisterable,
+  allDayChecked: mockEventListCardProps.allDay,
+  publicChecked: mockEventListCardProps.isPublic,
+  registerableChecked: mockEventListCardProps.isRegisterable,
   inviteOnlyChecked: mockEventListCardProps.isInviteOnly,
   eventStartDate: new Date(mockEventListCardProps.startAt),
   eventEndDate: new Date(mockEventListCardProps.endAt),
@@ -198,7 +198,7 @@ describe('useUpdateEventHandler', () => {
         buildHandlerInput({
           formState: {
             ...mockFormState,
-            eventdescrip: 'Changed Event',
+            eventDescription: 'Changed Event',
           },
         }),
       );
@@ -238,7 +238,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          publicchecked: false,
+          publicChecked: false,
         }),
       );
 
@@ -256,7 +256,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          registrablechecked: false,
+          registerableChecked: false,
         }),
       );
 
@@ -447,7 +447,7 @@ describe('useUpdateEventHandler', () => {
           updateOption: 'entireSeries',
           formState: {
             ...mockFormState,
-            eventdescrip: 'Changed event description',
+            eventDescription: 'Changed event description',
           },
         }),
       );
@@ -473,7 +473,7 @@ describe('useUpdateEventHandler', () => {
             name: 'Changed Name',
             location: 'New Location',
           },
-          publicchecked: false, // Changed from true
+          publicChecked: false, // Changed from true
           inviteOnlyChecked: true, // Changed from false
         }),
       );
@@ -534,9 +534,9 @@ describe('useUpdateEventHandler', () => {
           formState: {
             ...mockFormState,
           },
-          publicchecked: true,
-          registrablechecked: false, // Changed from true
-          alldaychecked: true, // Changed from false
+          publicChecked: true,
+          registerableChecked: false, // Changed from true
+          allDayChecked: true, // Changed from false
           eventStartDate: newStartDate,
           eventEndDate: newEndDate,
         }),
@@ -573,7 +573,7 @@ describe('useUpdateEventHandler', () => {
               .add(2, 'hours')
               .toISOString(),
           },
-          alldaychecked: true,
+          allDayChecked: true,
           eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
           eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
         }),
@@ -608,7 +608,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          alldaychecked: true, // Changed from false
+          allDayChecked: true, // Changed from false
         }),
       );
 
@@ -637,7 +637,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          alldaychecked: true,
+          allDayChecked: true,
           eventStartDate: new Date('invalid'),
           eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
@@ -656,7 +656,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          alldaychecked: true,
+          allDayChecked: true,
           eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
           eventEndDate: new Date('invalid'),
           formState: {
@@ -684,7 +684,7 @@ describe('useUpdateEventHandler', () => {
             startAt: 'invalid-date',
             endAt: dayjs().add(2, 'hours').toISOString(),
           },
-          alldaychecked: true,
+          allDayChecked: true,
           eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
           eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
@@ -712,7 +712,7 @@ describe('useUpdateEventHandler', () => {
             startAt: dayjs().toISOString(),
             endAt: 'invalid-date',
           },
-          alldaychecked: true,
+          allDayChecked: true,
           eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
           eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
@@ -742,7 +742,7 @@ describe('useUpdateEventHandler', () => {
             startTime: 'invalid-time',
             endTime: '12:00:00',
           },
-          alldaychecked: false,
+          allDayChecked: false,
           eventStartDate: dayjs()
             .add(10, 'days')
             .hour(11)
@@ -784,7 +784,7 @@ describe('useUpdateEventHandler', () => {
             startTime: '10:00:00',
             endTime: 'invalid-time',
           },
-          alldaychecked: false,
+          allDayChecked: false,
           eventStartDate: dayjs()
             .add(10, 'days')
             .hour(10)

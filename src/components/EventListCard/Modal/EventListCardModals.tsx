@@ -65,11 +65,11 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [alldaychecked, setAllDayChecked] = useState(eventListCardProps.allDay);
-  const [publicchecked, setPublicChecked] = useState(
+  const [allDayChecked, setAllDayChecked] = useState(eventListCardProps.allDay);
+  const [publicChecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
   );
-  const [registrablechecked, setRegistrableChecked] = useState(
+  const [registerableChecked, setRegisterableChecked] = useState(
     eventListCardProps.isRegisterable,
   );
   const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
@@ -153,14 +153,14 @@ function EventListCardModals({
   const hasOnlyNameOrDescriptionChanged = (): boolean => {
     const nameChanged = formState.name !== eventListCardProps.name;
     const descriptionChanged =
-      formState.eventdescrip !== eventListCardProps.description;
+      formState.eventDescription !== eventListCardProps.description;
     const locationChanged = formState.location !== eventListCardProps.location;
-    const publicChanged = publicchecked !== eventListCardProps.isPublic;
+    const publicChanged = publicChecked !== eventListCardProps.isPublic;
     const registrableChanged =
-      registrablechecked !== eventListCardProps.isRegisterable;
+      registerableChecked !== eventListCardProps.isRegisterable;
     const inviteOnlyChanged =
       inviteOnlyChecked !== Boolean(eventListCardProps.isInviteOnly);
-    const allDayChanged = alldaychecked !== eventListCardProps.allDay;
+    const allDayChanged = allDayChecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
     // Return true if only name/description changed, and no other fields changed
@@ -180,7 +180,7 @@ function EventListCardModals({
 
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
-    eventdescrip: eventListCardProps.description,
+    eventDescription: eventListCardProps.description,
     location: eventListCardProps.location,
     startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
     endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
@@ -206,10 +206,10 @@ function EventListCardModals({
   }, [
     recurrence,
     formState,
-    publicchecked,
-    registrablechecked,
+    publicChecked,
+    registerableChecked,
     inviteOnlyChecked,
-    alldaychecked,
+    allDayChecked,
     eventStartDate,
     eventEndDate,
   ]);
@@ -241,9 +241,9 @@ function EventListCardModals({
       await updateEventHandler({
         eventListCardProps,
         formState,
-        alldaychecked,
-        publicchecked,
-        registrablechecked,
+        allDayChecked,
+        publicChecked,
+        registerableChecked,
         inviteOnlyChecked,
         eventStartDate,
         eventEndDate,
@@ -399,12 +399,12 @@ function EventListCardModals({
         eventEndDate={eventEndDate}
         setEventStartDate={setEventStartDate}
         setEventEndDate={setEventEndDate}
-        alldaychecked={alldaychecked}
+        allDayChecked={allDayChecked}
         setAllDayChecked={setAllDayChecked}
-        publicchecked={publicchecked}
+        publicChecked={publicChecked}
         setPublicChecked={setPublicChecked}
-        registrablechecked={registrablechecked}
-        setRegistrableChecked={setRegistrableChecked}
+        registerableChecked={registerableChecked}
+        setRegisterableChecked={setRegisterableChecked}
         inviteOnlyChecked={inviteOnlyChecked}
         setInviteOnlyChecked={setInviteOnlyChecked}
         formState={formState}
@@ -455,9 +455,9 @@ function EventListCardModals({
                 updateEventHandler({
                   eventListCardProps,
                   formState,
-                  alldaychecked,
-                  publicchecked,
-                  registrablechecked,
+                  allDayChecked,
+                  publicChecked,
+                  registerableChecked,
                   inviteOnlyChecked,
                   eventStartDate,
                   eventEndDate,
