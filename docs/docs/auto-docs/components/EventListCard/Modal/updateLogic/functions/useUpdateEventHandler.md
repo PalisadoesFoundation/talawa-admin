@@ -6,15 +6,16 @@
 
 > **useUpdateEventHandler**(): `object`
 
-Defined in: [src/components/EventListCard/Modal/updateLogic.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/updateLogic.ts#L70)
+Defined in: [src/components/EventListCard/Modal/updateLogic.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/updateLogic.ts#L73)
 
-Creates the update handler for EventListCard modal edits.
+Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
 
 ## Returns
 
 `object`
 
-Object containing updateEventHandler.
+An object containing the update logic:
+- updateEventHandler: (args: IUpdateEventHandlerProps) =\> Promise\<void\> - Asynchronous function that handles the event update process, including validation and mutation execution.
 
 ### updateEventHandler()
 
