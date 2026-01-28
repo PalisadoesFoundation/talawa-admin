@@ -96,8 +96,23 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
   }
 };
 
-// Ask and set up logging errors in the console
-const askAndSetLogErrors = async (): Promise<void> => {
+/**
+ * Prompts user to configure error logging settings and updates the .env file.
+ *
+ * @remarks
+ * This function handles the interactive setup for error logging configuration:
+ * - Asks whether to enable compile-time and runtime error logging
+ * - Updates ALLOW_LOGS in .env based on user choice
+ *
+ * @example
+ * ```typescript
+ * await askAndSetLogErrors();
+ * ```
+ *
+ * @returns `Promise<void>` - Resolves when configuration is complete.
+ * @throws Error - If user input fails or environment update fails.
+ */
+export const askAndSetLogErrors = async (): Promise<void> => {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
