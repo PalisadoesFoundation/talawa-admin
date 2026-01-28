@@ -781,6 +781,7 @@
     "agendaFolderCreated": "议程部分已成功创建",
     "attachmentPreviewAlt": "附件预览",
     "agendaFolderUpdateFailed": "议程文件夹更新失败",
+    "previewItem": "预览项目",
     "removeUrl": "移除网址",
     "removeAttachment": "移除附件",
     "itemSequenceUpdateSuccessMsg": "项目顺序已成功更新",

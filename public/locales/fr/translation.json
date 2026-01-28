@@ -776,6 +776,7 @@
     "folderName": "Dossier",
     "categoryName": "Catégorie",
     "noCategory": "Aucune catégorie",
+    "previewItem": "Aperçu de l’élément",
     "folder": "Dossier de l’agenda",
     "agendaFolderDetails": "Détails de la section de l’agenda",
     "agendaFolderCreated": "Section de l’agenda créée avec succès",

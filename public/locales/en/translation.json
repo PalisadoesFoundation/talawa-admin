@@ -800,6 +800,7 @@
     "enterDescription": "Enter Description",
     "category": "Agenda Category",
     "noCategory": "No category",
+    "previewItem": "Preview Item",
     "attachments": "Attachments",
     "attachmentLimit": "Add any image file or video file upto 10MB",
     "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",
