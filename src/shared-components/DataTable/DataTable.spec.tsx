@@ -264,7 +264,7 @@ describe('DataTable', () => {
       <DataTable
         data={data}
         columns={columns}
-        renderRow={(row) => (
+        renderRow={(row: (typeof data)[number]) => (
           <tr key={row.name}>
             <td data-testid="custom-row">Custom: {row.name}</td>
           </tr>
@@ -577,7 +577,7 @@ describe('DataTable', () => {
       <DataTable
         data={[{ id: 1 }]}
         columns={columns}
-        rowKey={(row) => `row-${row.id}`}
+        rowKey={(row: { id: number }) => `row-${row.id}`}
       />,
     );
 
@@ -667,7 +667,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         error={error}
-        renderError={(e) => <span>Custom: {e.message}</span>}
+        renderError={(e: Error) => <span>Custom: {e.message}</span>}
       />,
     );
 
@@ -819,7 +819,13 @@ describe('DataTable', () => {
     const data = [{ name: 'Ada' }];
 
     render(
-      <DataTable data={data} columns={columns} loadingMore skeletonRows={2} />,
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        loadingMore
+        skeletonRows={2}
+      />,
     );
 
     const appended = document.querySelectorAll(
@@ -1433,7 +1439,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           selectable
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -1470,7 +1476,7 @@ describe('DataTable', () => {
           data={data}
           columns={columns}
           rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
-          renderRow={(row) => (
+          renderRow={(row: (typeof data)[number]) => (
             <tr key={row.name}>
               <td>{row.name}</td>
             </tr>
@@ -1629,6 +1635,7 @@ describe('DataTable', () => {
         selectable
         rowKey="id"
         rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+        paginationMode="client"
         loadingMore
         skeletonRows={2}
       />,
@@ -1895,8 +1902,8 @@ describe('DataTable', () => {
     // Pagination.tsx line 52 covered
 
     // 3) Test row action boolean disable
-    const actionBtn = screen.getByTestId('action-btn-edit');
-    expect(actionBtn).toBeDisabled();
+    const actionBtns = screen.getAllByTestId('action-btn-edit');
+    actionBtns.forEach((btn) => expect(btn).toBeDisabled());
     // ActionsCell.tsx line 20-22 covered (boolean branch)
 
     // 4) Test TableLoader default rows
@@ -1905,6 +1912,7 @@ describe('DataTable', () => {
         data={[]}
         columns={columns}
         loading
+        paginationMode="client"
         // Missing skeletonRows to test default = 5
       />,
     );
@@ -1966,5 +1974,244 @@ describe('DataTable', () => {
     // Bulk action button should NOT be disabled (once row is selected)
     await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
+  });
+});
+
+describe('defaultCompare boolean/date branches', () => {
+  type Row = {
+    id: string;
+    name: string;
+    active?: boolean | null;
+    date?: Date | null;
+  };
+  // Use dynamic dates to avoid hardcoded date strings
+  const date1 = dayjs().subtract(1, 'year').toDate();
+  const date2 = null;
+  const date3 = dayjs().add(1, 'year').toDate();
+  const date4 = undefined;
+  const rows: Row[] = [
+    { id: '1', name: 'Alice', active: false, date: date1 },
+    { id: '2', name: 'Bob', active: null, date: date2 },
+    { id: '3', name: 'Charlie', active: true, date: date3 },
+    { id: '4', name: 'Nulls', active: undefined, date: date4 },
+  ];
+  const columns = [
+    {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'active',
+      header: 'Active',
+      accessor: 'active' as const,
+      meta: { sortable: true },
+    },
+    {
+      id: 'date',
+      header: 'Date',
+      accessor: 'date' as const,
+      meta: { sortable: true },
+    },
+  ];
+
+  it('sorts boolean column (false < true, nulls last)', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const th = screen.getByRole('button', { name: /active/i });
+    // Ascending: false, true, null/undefined
+    await userEvent.click(th);
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: true, false, null/undefined (nulls last)
+    await userEvent.click(th);
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('sorts date column (earliest < latest, nulls last)', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const th = screen.getByRole('button', { name: /date/i });
+    // Ascending: earliest, latest, null/undefined
+    await userEvent.click(th);
+    const headerCells = screen.getAllByRole('button');
+    const nameColIdx = headerCells.findIndex((cell) =>
+      /name/i.test(cell.textContent || ''),
+    );
+    const bodyRowsAsc = screen.getAllByRole('row').slice(1); // skip header
+    const namesAsc = bodyRowsAsc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesAsc).toEqual(['Alice', 'Charlie', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'ascending');
+    // Descending: latest, earliest, null/undefined (nulls last)
+    await userEvent.click(th);
+    const bodyRowsDesc = screen.getAllByRole('row').slice(1);
+    const namesDesc = bodyRowsDesc.map(
+      (row) => row.querySelectorAll('td')[nameColIdx]?.textContent,
+    );
+    expect(namesDesc).toEqual(['Charlie', 'Alice', 'Bob', 'Nulls']);
+    expect(th).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts boolean and date columns', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const thBool = screen.getByRole('button', { name: /active/i });
+    const thDate = screen.getByRole('button', { name: /date/i });
+    // Keyboard sort boolean with Enter
+    thBool.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard('{Enter}');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort boolean with Space
+    thBool.focus();
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Enter
+    thDate.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard('{Enter}');
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
+    // Keyboard sort date with Space
+    thDate.focus();
+    await userEvent.keyboard(' ');
+    expect(thDate).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thDate).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('keyboard sorts with Space key', async () => {
+    render(<DataTable<Row> data={rows} columns={columns} />);
+    const thBool = screen.getByRole('button', { name: /active/i });
+    thBool.focus();
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'ascending');
+    await userEvent.keyboard(' ');
+    expect(thBool).toHaveAttribute('aria-sort', 'descending');
+  });
+
+  it('applies initialSortDirection to default sort state', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'active',
+        header: 'Active',
+        accessor: 'active' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Alice', active: false },
+      { id: '2', name: 'Bob', active: true },
+      { id: '3', name: 'Charlie', active: true },
+    ];
+
+    // Test with initialSortDirection='desc' and initialSortBy='name'
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+        initialSortDirection="desc"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should start with descending sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+
+    // Verify rows are sorted in descending order (Charlie, Bob, Alice)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Charlie', 'Bob', 'Alice']);
+  });
+
+  it('defaults to ascending sort when initialSortDirection is not provided', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+    ];
+    const rows = [
+      { id: '1', name: 'Charlie' },
+      { id: '2', name: 'Alice' },
+      { id: '3', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<(typeof rows)[0]>
+        data={rows}
+        columns={columns}
+        initialSortBy="name"
+      />,
+    );
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    // Should default to ascending sort when initialSortDirection is not provided
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+
+    // Verify rows are sorted in ascending order (Alice, Bob, Charlie)
+    const bodyRows = screen.getAllByRole('row').slice(1); // skip header
+    const names = bodyRows.map((row) => row.querySelector('td')?.textContent);
+    expect(names).toEqual(['Alice', 'Bob', 'Charlie']);
+  });
+
+  it('does not apply aria-sort to non-active or non-sortable headers', async () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { sortable: true },
+      },
+      {
+        id: 'status',
+        header: 'Status',
+        accessor: 'status' as const,
+        meta: { sortable: false },
+      },
+    ];
+
+    const rows = [
+      { id: '1', name: 'Alice', status: 'A' },
+      { id: '2', name: 'Bob', status: 'B' },
+    ];
+
+    render(<DataTable<(typeof rows)[0]> data={rows} columns={columns} />);
+
+    const nameHeader = screen.getByRole('button', { name: /name/i });
+    const statusHeader = screen.getByRole('columnheader', { name: /status/i });
+
+    // Sortable but inactive column has no aria-sort
+    expect(nameHeader).not.toHaveAttribute('aria-sort');
+    await userEvent.click(nameHeader);
+
+    // Active sortable column gets aria-sort
+    expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+    expect(statusHeader).not.toHaveAttribute('aria-sort');
   });
 });

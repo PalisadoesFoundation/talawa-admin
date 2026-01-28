@@ -214,7 +214,8 @@ Some shared components are wrappers around third-party UI libraries. To enforce 
 - `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
 - `react-toastify` -> use `NotificationToast`
 
-These restrictions are enforced by `no-restricted-imports` in `eslint.config.js` and defined in `scripts/eslint/rules/imports.ts`.
+These restrictions are enforced by `no-restricted-imports` in `eslint.config.js` (configured in
+`scripts/eslint/config/base.ts`) and defined in `scripts/eslint/rules/imports.ts`.
 
 ### Where direct imports are allowed
 
@@ -273,8 +274,8 @@ Allowed IDs by folder:
   - `src/shared-components/TimePicker/**`
   - `src/index.tsx`
 - NotificationToast: `react-toastify`
-  - `src/components/NotificationToast/**`
-  - `src/types/NotificationToast/**`
+  - `src/shared-components/NotificationToast/**`
+  - `src/types/shared-components/NotificationToast/**`
 
 ### Adding a new restricted import or wrapper
 
@@ -315,7 +316,8 @@ Direct HTML search inputs are restricted to enforce consistent search UX pattern
 - Direct `<input type="search">` elements → use `SearchBar` or `SearchFilterBar`
 - Input elements with search-related attributes (placeholder, name, id, aria-label containing "search", "find", or "query") → use `SearchBar` or `SearchFilterBar`
 
-These restrictions are enforced by `no-restricted-syntax` in `eslint.config.js` and defined in `scripts/eslint/rules/rules.ts` under `searchInputRestrictions`.
+These restrictions are enforced by `no-restricted-syntax` in `eslint.config.js` (configured in
+`scripts/eslint/config/base.ts`) and defined in `scripts/eslint/rules/rules.ts` under `searchInputRestrictions`.
 
 ##### Where direct search inputs are allowed
 
@@ -372,7 +374,7 @@ This restriction ensures:
 If you need to create a new search component wrapper:
 
 1. Create the component in `src/shared-components/YourSearchComponent/`
-2. Add an exemption in `eslint.config.js`:
+2. Add an exemption in `scripts/eslint/config/exemptions.ts`:
    ```javascript
    {
      files: [
