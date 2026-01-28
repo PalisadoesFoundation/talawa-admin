@@ -1489,81 +1489,86 @@ describe('FetchMore Success Coverage', () => {
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
+});
 
-  describe('UserId Fallback Logic', () => {
-    const orgId = '123';
+describe('UserId Fallback Logic', () => {
+  const orgId = '123';
 
-    const createOrgPostMock = (userId: string | null): MockedResponse => ({
-      request: {
-        query: ORGANIZATION_POST_LIST_WITH_VOTES,
-        variables: {
-          input: { id: orgId },
-          userId: userId,
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
+  afterEach(() => {
+    // Reset localStorage mock to default behavior
+    localStorageMocks.getItem.mockReturnValue('user-123');
+  });
+
+  const createOrgPostMock = (userId: string | null): MockedResponse => ({
+    request: {
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
+      variables: {
+        input: { id: orgId },
+        userId: userId,
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
       },
-      result: {
-        data: {
-          organization: {
-            id: orgId,
-            name: 'Test Organization',
-            postsCount: 0,
-            posts: {
-              edges: [],
-              totalCount: 0,
-              pageInfo: {
-                startCursor: null,
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
+    },
+    result: {
+      data: {
+        organization: {
+          id: orgId,
+          name: 'Test Organization',
+          postsCount: 0,
+          posts: {
+            edges: [],
+            totalCount: 0,
+            pageInfo: {
+              startCursor: null,
+              endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
           },
         },
       },
+    },
+  });
+
+  it('retrieves userId from "userId" if it exists', async () => {
+    const testUserId = 'test-user-from-userId';
+    localStorageMocks.getItem.mockImplementation((key?: string) => {
+      if (key === IDENTIFIER_USER_ID) return testUserId;
+      if (key === IDENTIFIER_ID) return 'wrong-id';
+      return null;
     });
 
-    it('retrieves userId from "userId" if it exists', async () => {
-      const testUserId = 'test-user-from-userId';
-      localStorageMocks.getItem.mockImplementation((key?: string) => {
-        if (key === IDENTIFIER_USER_ID) return testUserId;
-        if (key === IDENTIFIER_ID) return 'wrong-id';
-        return null;
-      });
+    renderComponent([createOrgPostMock(testUserId), emptyPinnedPostsMock]);
 
-      renderComponent([createOrgPostMock(testUserId), emptyPinnedPostsMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+  });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
-      });
+  it('falls back to "id" if "userId" does not exist', async () => {
+    const testId = 'test-user-from-id';
+    localStorageMocks.getItem.mockImplementation((key?: string) => {
+      if (key === IDENTIFIER_USER_ID) return null;
+      if (key === IDENTIFIER_ID) return testId;
+      return null;
     });
 
-    it('falls back to "id" if "userId" does not exist', async () => {
-      const testId = 'test-user-from-id';
-      localStorageMocks.getItem.mockImplementation((key?: string) => {
-        if (key === IDENTIFIER_USER_ID) return null;
-        if (key === IDENTIFIER_ID) return testId;
-        return null;
-      });
+    renderComponent([createOrgPostMock(testId), emptyPinnedPostsMock]);
 
-      renderComponent([createOrgPostMock(testId), emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
     });
+  });
 
-    it('returns null when both "userId" and "id" are absent', async () => {
-      localStorageMocks.getItem.mockImplementation(() => null);
+  it('returns null when both "userId" and "id" are absent', async () => {
+    localStorageMocks.getItem.mockImplementation(() => null);
 
-      renderComponent([createOrgPostMock(null), emptyPinnedPostsMock]);
+    renderComponent([createOrgPostMock(null), emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(screen.getByText('No posts available.')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText('No posts available.')).toBeInTheDocument();
     });
   });
 });
