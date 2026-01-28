@@ -1,9 +1,11 @@
 /**
  * SecuredRoute Component
- *  A React component that secures routes based on user authentication and role.
- *  Redirects unauthorized users to the home page or displays a "Page Not Found" screen for non-administrator roles.
- *  Also includes session timeout and inactivity handling.
- * @returns - Renders the child route if the user is authenticated and has the "administrator" role.
+ * 
+ * A React component that secures routes based on user authentication and role.
+ * Redirects unauthorized users to the home page or displays a "Page Not Found" screen for non-administrator roles.
+ * Also includes session timeout and inactivity handling.
+ * 
+ * @returns Renders the child route if the user is authenticated and has the "administrator" role.
  * Redirects to the home page if the user is not logged in.
  * Displays a "Page Not Found" screen for unauthorized roles.
  *
@@ -11,11 +13,9 @@
  * - Uses `useLocalStorage` utility to manage local storage items.
  * - Implements session timeout and inactivity detection to enhance security.
  * - Displays a toast notification when the session expires.
- *
- * dependencies
- * - `react-router-dom` for navigation (`Navigate`, `Outlet`).
- * - `NotificationToast` for toast notifications.
- * - `useLocalStorage` custom hook for local storage operations.
+ * - Dependencies: `react-router-dom` for navigation (`Navigate`, `Outlet`).
+ * - Dependencies: `NotificationToast` for toast notifications.
+ * - Dependencies: `useLocalStorage` custom hook for local storage operations.
  *
  * @example
  * ```tsx

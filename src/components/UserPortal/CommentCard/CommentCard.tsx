@@ -4,7 +4,6 @@
  * This component represents a card displaying a comment with the ability to like or dislike it.
  * It shows the comment creator's details, the comment text, and the like/dislike counts.
  *
- * @component
  * @param props - The properties required by the CommentCard component.
  * @param props.id - The unique identifier of the comment.
  * @param props.creator - The creator of the comment, including their ID and name.
