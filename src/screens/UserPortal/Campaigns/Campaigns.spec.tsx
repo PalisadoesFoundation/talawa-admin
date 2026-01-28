@@ -5,13 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -88,7 +82,9 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing User Campaigns Screen', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
+    user = userEvent.setup();
     setItem('userId', 'userId');
   });
 
@@ -102,13 +98,9 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render the User Campaigns screen', async () => {
@@ -202,9 +194,8 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchByInput');
     expect(searchCampaigns).toBeInTheDocument();
 
-    fireEvent.change(searchCampaigns, {
-      target: { value: 'Hospital' },
-    });
+    await user.clear(searchCampaigns);
+    await user.type(searchCampaigns, 'Hospital');
 
     await waitFor(() => {
       expect(screen.queryByText('School Campaign')).toBeNull();
@@ -217,7 +208,7 @@ describe('Testing User Campaigns Screen', () => {
 
     const myPledgesBtn = await screen.findByText(cTranslations.myPledges);
     expect(myPledgesBtn).toBeInTheDocument();
-    await userEvent.click(myPledgesBtn);
+    await user.click(myPledgesBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -238,7 +229,7 @@ describe('Testing User Campaigns Screen', () => {
 
     expect(activeButton).toBeDefined();
     if (activeButton) {
-      await userEvent.click(activeButton);
+      await user.click(activeButton);
     }
 
     await waitFor(() => {
@@ -257,14 +248,14 @@ describe('Testing User Campaigns Screen', () => {
 
     const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
     const activeButton = addPledgeButtons[0];
-    await userEvent.click(activeButton);
+    await user.click(activeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
     const closeButton = screen.getByTestId('pledgeModalCloseBtn');
-    await userEvent.click(closeButton);
+    await user.click(closeButton);
 
     await waitFor(() => {
       expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
@@ -305,14 +296,15 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    fireEvent.change(searchInput, { target: { value: 'School' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'School');
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
 
-    fireEvent.change(searchInput, { target: { value: '' } });
+    await user.clear(searchInput);
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -347,7 +339,8 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    fireEvent.change(searchInput, { target: { value: 'School' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'School');
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -355,7 +348,7 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -371,7 +364,8 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     const searchInput = screen.getByTestId('searchByInput');
-    fireEvent.change(searchInput, { target: { value: 'NonExistentCampaign' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'NonExistentCampaign');
 
     await waitFor(() => {
       const campaignCells = screen.queryAllByTestId('campaignName');
@@ -424,14 +418,14 @@ describe('Testing User Campaigns Screen', () => {
     });
     expect(startDateHeader).toBeInTheDocument();
 
-    await userEvent.click(startDateHeader);
+    await user.click(startDateHeader);
 
     await waitFor(() => {
       const sortedOrder = getCampaignOrder();
       expect(sortedOrder).toEqual(['School Campaign', 'Hospital Campaign']);
     });
 
-    await userEvent.click(startDateHeader);
+    await user.click(startDateHeader);
 
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();
@@ -457,14 +451,14 @@ describe('Testing User Campaigns Screen', () => {
     });
     expect(endDateHeader).toBeInTheDocument();
 
-    await userEvent.click(endDateHeader);
+    await user.click(endDateHeader);
 
     await waitFor(() => {
       const sortedOrder = getCampaignOrder();
       expect(sortedOrder).toEqual(['Hospital Campaign', 'School Campaign']);
     });
 
-    await userEvent.click(endDateHeader);
+    await user.click(endDateHeader);
 
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();

@@ -115,6 +115,7 @@ const mockTImplementation = (key: string, options?: { name?: string }) => {
     Events: 'Events',
     'Action Items': 'Action Items',
     Posts: 'Posts',
+    switchToUserPortal: 'Switch to User Portal',
   };
 
   // Handle parameterized translations
@@ -388,6 +389,35 @@ describe('LeftDrawerOrg', () => {
       expect(
         screen.getByText('CollapsibleDropdown: Action Items'),
       ).toBeInTheDocument();
+    });
+  });
+
+  describe('Switch to User Portal', () => {
+    it('should render switch to user portal link with correct href and test id', () => {
+      renderComponent();
+
+      const switchButton = screen.getByTestId('switchToUserPortalBtn');
+      expect(switchButton).toBeInTheDocument();
+      expect(switchButton).toHaveTextContent('Switch to User Portal');
+
+      const switchLink = switchButton.closest('a');
+      expect(switchLink).toHaveAttribute('href', '/user/organizations');
+    });
+
+    it('should call setHideDrawer when switch link is clicked on mobile', async () => {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 800,
+      });
+
+      renderComponent();
+
+      const switchButton = screen.getByTestId('switchToUserPortalBtn');
+      const user = userEvent.setup();
+      await user.click(switchButton);
+
+      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
   });
 
