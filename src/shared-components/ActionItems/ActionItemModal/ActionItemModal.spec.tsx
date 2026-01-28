@@ -968,9 +968,7 @@ describe('ActionItemModal', () => {
 
     it('should handle volunteer group autocomplete (covers line 634)', async () => {
       const user = userEvent.setup();
-      await act(async () => {
-        renderModal();
-      });
+      renderModal();
       await screen.findByTestId('actionItemModal');
 
       // Switch to volunteer group
@@ -1094,6 +1092,7 @@ describe('ActionItemModal', () => {
     });
 
     it('should render volunteer group select with accessible wrapper', async () => {
+      const user = userEvent.setup();
       renderModal();
       await screen.findByTestId('actionItemModal');
 
@@ -1101,7 +1100,7 @@ describe('ActionItemModal', () => {
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      await userEvent.click(volunteerGroupChip);
+      await user.click(volunteerGroupChip);
 
       const groupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
