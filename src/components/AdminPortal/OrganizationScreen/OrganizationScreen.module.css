@@ -53,6 +53,7 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
@@ -76,7 +77,7 @@
   position: fixed;
   height: 40px;
   bottom: 0;
-  z-index: 9999;
+  z-index: 100;
   width: calc(300px + 2rem);
   background-color: rgba(245, 245, 245, 0.7);
   color: black;
@@ -99,7 +100,7 @@
   left: 0;
   width: 40px;
   height: 100vh;
-  z-index: 9999;
+  z-index: 100;
   background-color: rgba(245, 245, 245);
   border: none;
   border-radius: 0px;

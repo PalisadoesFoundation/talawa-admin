@@ -147,9 +147,6 @@ vi.mock('react-router-dom', async () => {
 });
 
 // Mock SVG imports
-vi.mock('assets/svgs/newChat.svg?react', () => ({
-  default: () => <svg data-testid="new-chat-icon" />,
-}));
 
 // --- GraphQL Mocks ---
 
@@ -364,7 +361,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
 
     expect(screen.getByTestId('chat')).toBeInTheDocument();
-    expect(screen.getByText('Messages')).toBeInTheDocument();
+    expect(screen.getByText('Chats')).toBeInTheDocument();
     expect(screen.getByTestId('dropdown')).toBeInTheDocument();
     expect(screen.getByTestId('chat-room')).toBeInTheDocument();
   });

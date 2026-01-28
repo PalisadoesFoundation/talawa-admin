@@ -17,7 +17,7 @@
  * ```
  */
 
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import styles from './EmptyChatState.module.css';
 
 interface IEmptyChatStateProps {
@@ -29,10 +29,14 @@ export default function EmptyChatState({
 }: IEmptyChatStateProps): JSX.Element {
   return (
     <div
-      className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
+      className={`d-flex flex-column justify-content-center align-items-center w-100 h-100 gap-2 ${styles.container}`}
     >
-      <PermContactCalendarIcon fontSize="medium" className={styles.grey} />
-      <h6 data-testid="noChatSelected">{message}</h6>
+      <div className={styles.iconWrapper}>
+        <ChatBubbleOutlineIcon className={styles.icon} />
+      </div>
+      <h6 className={styles.message} data-testid="noChatSelected">
+        {message}
+      </h6>
     </div>
   );
 }

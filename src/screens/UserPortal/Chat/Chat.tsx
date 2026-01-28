@@ -35,7 +35,7 @@ import Button from 'shared-components/Button';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import NewChat from 'assets/svgs/newChat.svg?react';
+import AddIcon from '@mui/icons-material/Add';
 import styles from './Chat.module.css';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
@@ -220,13 +220,13 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>{t('messages')}</h4>
+              <h4>{t('title')}</h4>
               <Dropdown className={styles.dropdownToggle}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
                 >
-                  <NewChat />
+                  <AddIcon />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item
