@@ -408,7 +408,6 @@ const renderEventActionItems = (
 describe('EventActionItems', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('calls debouncedSearch.cancel on unmount', async () => {
