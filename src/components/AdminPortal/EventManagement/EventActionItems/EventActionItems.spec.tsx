@@ -24,8 +24,7 @@ import type { IActionItemInfo } from 'types/shared-components/ActionItems/interf
 const debounceMocks = vi.hoisted(() => {
   const cancel = vi.fn();
   const flush = vi.fn();
-  const debounced = Object.assign(vi.fn(), { cancel, flush });
-  return { cancel, flush, debounced };
+  return { cancel, flush };
 });
 
 // Mock the performance util to return our debounced function that invokes
