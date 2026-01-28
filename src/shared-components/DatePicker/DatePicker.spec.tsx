@@ -1,4 +1,4 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -383,12 +383,14 @@ describe('DatePicker', () => {
       );
 
       const input = screen.getByTestId('blur-test');
-      await act(async () => {
-        await waitFor(async () => {
+
+      // Guard check and wrap user actions in act() for MUI pickers compatibility
+      if (input) {
+        await act(async () => {
           await user.click(input);
           await user.tab();
         });
-      });
+      }
 
       expect(mockOnBlur).toHaveBeenCalled();
     });
@@ -414,12 +416,14 @@ describe('DatePicker', () => {
       );
 
       const input = screen.getByTestId('dual-blur-test');
-      await act(async () => {
-        await waitFor(async () => {
+
+      // Guard check and wrap user actions in act() for MUI pickers compatibility
+      if (input) {
+        await act(async () => {
           await user.click(input);
           await user.tab();
         });
-      });
+      }
 
       expect(customOnBlur).toHaveBeenCalled();
       expect(slotPropsOnBlur).toHaveBeenCalled();
