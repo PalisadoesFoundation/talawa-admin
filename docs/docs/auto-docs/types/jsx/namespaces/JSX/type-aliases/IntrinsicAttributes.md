@@ -6,4 +6,4 @@
 
 > **IntrinsicAttributes** = `ReactSource.IntrinsicAttributes`
 
-Defined in: [src/types/jsx.d.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L12)
+Defined in: [src/types/jsx.d.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L16)
