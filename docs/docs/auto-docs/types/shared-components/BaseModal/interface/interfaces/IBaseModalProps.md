@@ -88,7 +88,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:42](https://gith
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L47)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L48)
 
 ***
 
@@ -129,6 +129,14 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:33](https://gith
 > `optional` **headerTestId**: `string`
 
 Defined in: [src/types/shared-components/BaseModal/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L44)
+
+***
+
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/types/shared-components/BaseModal/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L47)
 
 ***
 
