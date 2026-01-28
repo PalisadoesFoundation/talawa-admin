@@ -33,12 +33,13 @@
  * ```
  */
 import React, { useState } from 'react';
-import { Button } from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+
 import styles from './EventListCardDeleteModal.module.css';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 import { TEST_ID_DELETE_EVENT_MODAL } from 'Constant/common';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import Button from 'shared-components/Button';
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
@@ -67,25 +68,27 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   return (
     <BaseModal
       size={isRecurringInstance ? 'lg' : 'sm'}
+      id={`deleteEventModal${eventListCardProps.id}`}
       show={eventDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"
+      keyboard={false}
       centered
-      title={t('deleteEvent')}
+      title={<span>{t('deleteEvent')}</span>}
       dataTestId={TEST_ID_DELETE_EVENT_MODAL(eventListCardProps.id)}
+      headerClassName={`${styles.modalHeader}`}
       footer={
         <>
           <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={toggleDeleteModal}
+            variant="danger"
+            className={`btn ${styles.removeButton}`}
             data-testid="eventDeleteModalCloseBtn"
+            onClick={toggleDeleteModal}
           >
             {tCommon('no')}
           </Button>
           <Button
-            type="button"
-            className={`btn btn-danger ${styles.removeButton}`}
+            className={`btn ${styles.addButton}`}
             onClick={handleDelete}
             data-testid="deleteEventBtn"
           >
@@ -106,7 +109,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('single')}
             label={t('deleteThisInstance')}
             className="mb-2"
-            data-testid="delete-single-radio"
+            data-testid="deleteThisInstance"
           />
           <FormCheckField
             type="radio"
@@ -117,7 +120,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('following')}
             label={t('deleteThisAndFollowing')}
             className="mb-2"
-            data-testid="delete-following-radio"
+            data-testid="deleteThisAndFollowing"
           />
           <FormCheckField
             type="radio"
@@ -128,7 +131,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             onChange={() => setDeleteOption('all')}
             label={t('deleteAllEvents')}
             className="mb-2"
-            data-testid="delete-all-radio"
+            data-testid="deleteAllEvents"
           />
         </div>
       ) : (
