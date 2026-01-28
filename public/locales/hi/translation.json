@@ -807,7 +807,10 @@
     "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "event": "कार्यक्रम",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
-    "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
+    "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई",
+    "deleteAttachment": "अटैचमेंट हटाएं",
+    "fileUploadError": "फ़ाइल अपलोड करने में त्रुटि",
+    "selectCategory": "कृपया एक एजेंडा श्रेणी चुनें"
   },
   "eventListCard": {
     "dogsCare": "कुत्तों की देखभाल",

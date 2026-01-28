@@ -795,7 +795,10 @@
     "attachmentPreview": "附件預覽",
     "event": "活动",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
-    "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
+    "errorLoadingAgendaItems": "加载议程项目数据时发生错误",
+    "deleteAttachment": "删除附件",
+    "fileUploadError": "文件上传错误",
+    "selectCategory": "请选择议程类别"
   },
   "eventListCard": {
     "dogsCare": "狗狗护理",

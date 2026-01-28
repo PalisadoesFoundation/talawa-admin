@@ -790,7 +790,10 @@
     "attachmentPreview": "Vista previa del adjunto",
     "event": "Evento",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
-    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
+    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda",
+    "deleteAttachment": "Eliminar adjunto",
+    "fileUploadError": "Error al subir archivo",
+    "selectCategory": "Por favor seleccione una categoría de agenda"
   },
   "eventListCard": {
     "dogsCare": "Cuidado de Perros",
