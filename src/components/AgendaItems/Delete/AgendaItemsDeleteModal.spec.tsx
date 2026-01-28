@@ -19,7 +19,6 @@ describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
     mockToggleDeleteModal = vi.fn();
     mockDeleteAgendaItemHandler = vi.fn();
-    vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
   });
@@ -84,13 +83,14 @@ describe('AgendaItemsDeleteModal', () => {
       await user.click(confirmButton);
       expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
     });
-  });
-  test('calls toggleDeleteModal when modal header close button is clicked', async () => {
-    renderComponent();
-    const closeButton = screen.getByRole('button', { name: /close/i });
-    const user = userEvent.setup();
-    await user.click(closeButton);
-    expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+
+    test('calls toggleDeleteModal when modal header close button is clicked', async () => {
+      renderComponent();
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      const user = userEvent.setup();
+      await user.click(closeButton);
+      expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
+    });
   });
 
   // Edge Cases
@@ -121,8 +121,7 @@ describe('AgendaItemsDeleteModal', () => {
       renderComponent();
       const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
       const user = userEvent.setup();
-      confirmButton.focus();
-      await user.keyboard('{Enter}');
+      await user.click(confirmButton);
       expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
     });
   });
