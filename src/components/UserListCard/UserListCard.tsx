@@ -5,39 +5,23 @@
  * to a specific organization. It utilizes GraphQL mutation to perform
  * the operation and provides feedback to the user via toast notifications.
  *
- * @file UserListCard.tsx
- * @module components/UserListCard
- * @author Palisadoes
+ * @param props - The props for the component
+ * @param props.key - Unique key for the component
+ * @param props.id - The ID of the user to be added as an admin
  *
- * @requires React
- * @requires react-bootstrap/Button
- * @requires @apollo/client - For GraphQL mutation handling
- * @requires components/NotificationToast/NotificationToast - For displaying toast notifications
- * @requires react-i18next - For internationalization and translations
- * @requires react-router-dom - For accessing route parameters
- * @requires utils/errorHandler - For handling errors
- * @requires GraphQl/Mutations/mutations - Contains the ADD_ADMIN_MUTATION
- * @requires style/app-fixed.module.css - For styling the button
- *
- * @param {InterfaceUserListCardProps} props - The props for the component
- * @param {number} props.key - Unique key for the component
- * @param {string} props.id - The ID of the user to be added as an admin
- *
- * @returns {JSX.Element} A button that triggers the add admin functionality
- *
- * @function addAdmin
- * Handles the logic for adding a user as an admin. It performs a GraphQL
- * mutation and provides feedback to the user. In case of an error, it
- * utilizes the errorHandler utility.
+ * @returns A button that triggers the add admin functionality
  *
  * @remarks
+ * - Handles the logic for adding a user as an admin. It performs a GraphQL
+ *   mutation and provides feedback to the user. In case of an error, it
+ *   utilizes the errorHandler utility.
  * - The `useParams` hook is used to retrieve the current organization ID
  *   from the URL.
  * - The `useTranslation` hook is used for internationalization.
  * - The button reloads the page after a successful operation.
  */
 import React, { useRef, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button } from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
