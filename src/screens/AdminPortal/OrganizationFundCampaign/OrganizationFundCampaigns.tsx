@@ -275,7 +275,7 @@ const orgFundCampaign = (): JSX.Element => {
                 params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
-            0
+            {params.row.fundingRaised ?? 0}
           </div>
         );
       },
@@ -290,7 +290,7 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const raised = 0; // Currently hardcoded, will be updated when actual data is available
+        const raised = params.row.fundingRaised ?? 0;
         const goal = params.row.goalAmount as number;
         const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
 
