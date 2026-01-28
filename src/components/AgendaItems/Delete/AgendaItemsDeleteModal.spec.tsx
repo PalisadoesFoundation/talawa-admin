@@ -116,6 +116,16 @@ describe('AgendaItemsDeleteModal', () => {
       await user.keyboard('{Escape}');
       expect(mockToggleDeleteModal).not.toHaveBeenCalled();
     });
+
+    test('confirm button can be activated via keyboard', async () => {
+      renderComponent();
+      const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
+      const user = userEvent.setup();
+      confirmButton.focus();
+      expect(confirmButton).toHaveFocus();
+      await user.keyboard('{Enter}');
+      expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
+    });
   });
 
   test('handles multiple modal instances correctly', () => {
@@ -151,7 +161,8 @@ describe('AgendaItemsDeleteModal', () => {
   test('handles modal state transitions correctly', async () => {
     const { rerender } = renderComponent(true);
 
-    expect(screen.getAllByRole('dialog')).toHaveLength(1);
+    // Modal open
+    expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
 
     // Rerender with closed state
     rerender(
@@ -171,7 +182,7 @@ describe('AgendaItemsDeleteModal', () => {
     );
 
     await waitFor(() => {
-      expect(screen.queryAllByRole('dialog')).toHaveLength(0);
+      expect(screen.queryByText('deleteAgendaItem')).not.toBeInTheDocument();
     });
   });
 
