@@ -42,7 +42,8 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { debounceInput } from 'utils/performance';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'shared-components/ActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
@@ -143,9 +144,18 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   });
 
   const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
+    () =>
+      debounceInput<(value: string) => void>((value: string) =>
+        setSearchTerm(value),
+      ),
     [],
   );
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   useEffect(() => {
     if (eventData && eventData.event) {

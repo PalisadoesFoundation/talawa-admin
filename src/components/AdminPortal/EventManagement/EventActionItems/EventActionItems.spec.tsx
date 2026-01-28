@@ -20,6 +20,31 @@ import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
+// Hoisted mocks for debounce behaviour
+const debounceMocks = vi.hoisted(() => {
+  const cancel = vi.fn();
+  const flush = vi.fn();
+  return { cancel, flush };
+});
+
+// Mock the performance util to return our debounced function that invokes
+// the wrapped function and still exposes `cancel` and `flush`.
+vi.mock('utils/performance', async () => {
+  const actual = await vi.importActual('utils/performance');
+  return {
+    ...actual,
+    debounceInput: (fn: (...args: unknown[]) => unknown) => {
+      const debounced = ((...args: unknown[]) => fn(...args)) as unknown as ((
+        ...args: unknown[]
+      ) => unknown) & { cancel?: () => void; flush?: () => void };
+      // Attach the hoisted mock cancel/flush so tests can assert on them
+      debounced.cancel = debounceMocks.cancel;
+      debounced.flush = debounceMocks.flush;
+      return debounced;
+    },
+  };
+});
+
 // Mock dependencies
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -383,7 +408,17 @@ const renderEventActionItems = (
 describe('EventActionItems', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
+  });
+
+  it('calls debouncedSearch.cancel on unmount', async () => {
+    const { unmount, findByTestId } = renderEventActionItems();
+
+    // wait for the search input to be present (post-mount signal)
+    await findByTestId('searchBy');
+
+    unmount();
+
+    expect(debounceMocks.cancel).toHaveBeenCalled();
   });
 
   describe('Component Rendering', () => {
