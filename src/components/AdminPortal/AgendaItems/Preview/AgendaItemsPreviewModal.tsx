@@ -63,7 +63,7 @@ const AgendaItemsPreviewModal: React.FC<
    * @returns JSX elements for each URL, displaying clickable links.
    */
   const renderUrls = (): JSX.Element[] => {
-    return formState.url.map((url, index) => (
+    return (formState.url ?? []).map((url, index) => (
       <li key={index} className={styles.urlListItem}>
         <FaLink className={styles.urlIcon} />
         <a href={url} target="_blank" rel="noopener noreferrer">

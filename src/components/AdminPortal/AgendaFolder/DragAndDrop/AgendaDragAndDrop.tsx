@@ -1,5 +1,10 @@
 import React from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  type DropResult,
+} from '@hello-pangea/dnd';
 import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import styles from 'style/app-fixed.module.css';
@@ -18,13 +23,34 @@ export default function AgendaDragAndDrop({
   onEditItem,
   onDeleteItem,
 }: InterfaceAgendaDragAndDropProps) {
+  /**
+   * Unified drag handler for both folder and item reordering.
+   * Routes behavior based on droppable type.
+   */
+  const handleDragEnd = async (result: DropResult): Promise<void> => {
+    const { destination, source, type } = result;
+
+    if (!destination) return;
+    if (destination.index === source.index) return;
+
+    if (type === 'ITEM') {
+      await onItemDragEnd(result);
+      return;
+    }
+
+    if (type === 'FOLDER') {
+      await onFolderDragEnd(result);
+    }
+  };
+
   return (
-    <DragDropContext onDragEnd={onFolderDragEnd}>
-      <Droppable droppableId="agendaFolder">
+    <DragDropContext onDragEnd={handleDragEnd}>
+      {/* FOLDERS */}
+      <Droppable droppableId="agendaFolder" type="FOLDER">
         {(provided) => (
           <div
-            {...provided.droppableProps}
             ref={provided.innerRef}
+            {...provided.droppableProps}
             className="mx-4 bg-light p-3"
           >
             {folders.map((agendaFolder, index) => {
@@ -51,7 +77,7 @@ export default function AgendaDragAndDrop({
                           sm={4}
                           md={2}
                           lg={2}
-                          className="align-self-center text-body-secondary text-center"
+                          className="text-center align-self-center"
                         >
                           <span
                             {...provided.dragHandleProps}
@@ -66,7 +92,7 @@ export default function AgendaDragAndDrop({
                           sm={4}
                           md={2}
                           lg={1}
-                          className="align-self-center text-body-secondary text-center"
+                          className="text-center align-self-center"
                         >
                           <span className={styles.categoryChip}>
                             {agendaFolder.name}
@@ -78,14 +104,15 @@ export default function AgendaDragAndDrop({
                           sm={4}
                           md={2}
                           lg={9}
-                          className="p-0 align-self-center d-flex justify-content-end"
+                          className="d-flex justify-content-end align-self-center"
                         >
-                          <div className="d-flex align-items-center gap-2">
+                          <div className="d-flex gap-2">
                             <Button
                               size="sm"
                               disabled={isDefault}
                               variant="outline-secondary"
                               onClick={() => onEditFolder(agendaFolder)}
+                              aria-label={t('editFolder')}
                             >
                               <i className="fas fa-edit fa-sm" />
                             </Button>
@@ -94,6 +121,7 @@ export default function AgendaDragAndDrop({
                               disabled={isDefault}
                               variant="danger"
                               onClick={() => onDeleteFolder(agendaFolder)}
+                              aria-label={t('deleteFolder')}
                             >
                               <i className="fas fa-trash" />
                             </Button>
@@ -116,7 +144,7 @@ export default function AgendaDragAndDrop({
                         }`}
                       >
                         <Row
-                          className={`${styles.tableHeadAgendaItems} mx-0 border border-light-subtle py-3 ${
+                          className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${
                             agendaFolderConnection === 'Event'
                               ? 'rounded-top-4'
                               : 'rounded-top-2'
@@ -152,124 +180,124 @@ export default function AgendaDragAndDrop({
                         </Row>
                       </div>
 
-                      {/* Items */}
-                      <DragDropContext onDragEnd={onItemDragEnd}>
-                        <Droppable
-                          droppableId={`agenda-items-${agendaFolder.id}`}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.droppableProps}
-                              className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${
-                                agendaFolderConnection === 'Event'
-                                  ? 'rounded-bottom-4 mx-4'
-                                  : 'rounded-bottom-2 mx-0'
-                              }`}
-                            >
-                              {[...agendaFolder.items.edges]
-                                .sort(
-                                  (a, b) => a.node.sequence - b.node.sequence,
-                                )
-                                .map((edge, index) => {
-                                  const agendaItem = edge.node;
+                      {/* ITEMS */}
+                      <Droppable
+                        droppableId={`agenda-items-${agendaFolder.id}`}
+                        type="ITEM"
+                      >
+                        {(provided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                            className={`bg-light-subtle border border-top-0 shadow-sm ${
+                              agendaFolderConnection === 'Event'
+                                ? 'rounded-bottom-4 mx-4'
+                                : 'rounded-bottom-2 mx-0'
+                            }`}
+                          >
+                            {[...agendaFolder.items.edges]
+                              .sort((a, b) => a.node.sequence - b.node.sequence)
+                              .map((edge, index) => {
+                                const agendaItem = edge.node;
 
-                                  return (
-                                    <Draggable
-                                      key={agendaItem.id}
-                                      draggableId={agendaItem.id}
-                                      index={index}
-                                    >
-                                      {(provided, snapshot) => (
-                                        <div
-                                          ref={provided.innerRef}
-                                          {...provided.draggableProps}
-                                          className={`${styles.agendaItemRow} ${
-                                            snapshot.isDragging
-                                              ? styles.dragging
-                                              : ''
-                                          } py-2`}
-                                        >
-                                          <Row className="mx-3 my-3">
-                                            <Col lg={1} className="text-center">
-                                              <span
-                                                {...provided.dragHandleProps}
-                                                className="d-inline-flex align-items-center cursor-grab"
-                                              >
-                                                <i className="fas fa-bars fa-sm" />
-                                              </span>
-                                            </Col>
-
-                                            <Col lg={2} className="text-center">
-                                              {agendaItem.name}
-                                            </Col>
-
-                                            <Col
-                                              lg={2}
-                                              className="text-center d-none d-md-block"
+                                return (
+                                  <Draggable
+                                    key={agendaItem.id}
+                                    draggableId={agendaItem.id}
+                                    index={index}
+                                  >
+                                    {(provided, snapshot) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        className={`${styles.agendaItemRow} ${
+                                          snapshot.isDragging
+                                            ? styles.dragging
+                                            : ''
+                                        } py-2`}
+                                      >
+                                        <Row className="mx-3 my-3">
+                                          <Col lg={1} className="text-center">
+                                            <span
+                                              {...provided.dragHandleProps}
+                                              className="cursor-grab"
                                             >
-                                              {agendaItem.category?.name ??
-                                                t('noCategory')}
-                                            </Col>
+                                              <i className="fas fa-bars fa-sm" />
+                                            </span>
+                                          </Col>
 
-                                            <Col
-                                              lg={3}
-                                              className="text-center d-none d-md-block"
+                                          <Col lg={2} className="text-center">
+                                            {agendaItem.name}
+                                          </Col>
+
+                                          <Col
+                                            lg={2}
+                                            className="text-center d-none d-md-block"
+                                          >
+                                            {agendaItem.category?.name ??
+                                              t('noCategory')}
+                                          </Col>
+
+                                          <Col
+                                            lg={3}
+                                            className="text-center d-none d-md-block"
+                                          >
+                                            {agendaItem.description}
+                                          </Col>
+
+                                          <Col
+                                            lg={2}
+                                            className="text-center d-none d-md-block"
+                                          >
+                                            {agendaItem.duration || '-'}
+                                          </Col>
+
+                                          <Col
+                                            lg={2}
+                                            className="d-flex justify-content-center gap-2"
+                                          >
+                                            <Button
+                                              size="sm"
+                                              variant="outline-secondary"
+                                              onClick={() =>
+                                                onPreviewItem(agendaItem)
+                                              }
+                                              aria-label={t('previewItem')}
                                             >
-                                              {agendaItem.description}
-                                            </Col>
-
-                                            <Col
-                                              lg={2}
-                                              className="text-center d-none d-md-block"
+                                              <i className="fas fa-info fa-sm" />
+                                            </Button>
+                                            <Button
+                                              size="sm"
+                                              variant="outline-secondary"
+                                              onClick={() =>
+                                                onEditItem(agendaItem)
+                                              }
+                                              aria-label={t('editItem')}
                                             >
-                                              {agendaItem.duration || '-'}
-                                            </Col>
-
-                                            <Col
-                                              lg={2}
-                                              className="d-flex justify-content-center gap-2"
+                                              <i className="fas fa-edit fa-sm" />
+                                            </Button>
+                                            <Button
+                                              size="sm"
+                                              variant="danger"
+                                              onClick={() =>
+                                                onDeleteItem(agendaItem)
+                                              }
+                                              aria-label={t('deleteItem')}
                                             >
-                                              <Button
-                                                size="sm"
-                                                variant="outline-secondary"
-                                                onClick={() =>
-                                                  onPreviewItem(agendaItem)
-                                                }
-                                              >
-                                                <i className="fas fa-info fa-sm" />
-                                              </Button>
-                                              <Button
-                                                size="sm"
-                                                variant="outline-secondary"
-                                                onClick={() =>
-                                                  onEditItem(agendaItem)
-                                                }
-                                              >
-                                                <i className="fas fa-edit fa-sm" />
-                                              </Button>
-                                              <Button
-                                                size="sm"
-                                                variant="danger"
-                                                onClick={() =>
-                                                  onDeleteItem(agendaItem)
-                                                }
-                                              >
-                                                <i className="fas fa-trash" />
-                                              </Button>
-                                            </Col>
-                                          </Row>
-                                        </div>
-                                      )}
-                                    </Draggable>
-                                  );
-                                })}
+                                              <i className="fas fa-trash" />
+                                            </Button>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    )}
+                                  </Draggable>
+                                );
+                              })}
 
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
-                      </DragDropContext>
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
                     </div>
                   )}
                 </Draggable>
