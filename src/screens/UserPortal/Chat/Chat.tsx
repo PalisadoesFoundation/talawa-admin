@@ -42,8 +42,8 @@ import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/Crea
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
 // import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-import type { GroupChat } from 'types/Chat/type';
-import type { NewChatType } from 'types/Chat/interface';
+import type { GroupChat } from 'types/UserPortal/Chat/type';
+import type { NewChatType } from 'types/UserPortal/Chat/interface';
 
 // Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
 const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {

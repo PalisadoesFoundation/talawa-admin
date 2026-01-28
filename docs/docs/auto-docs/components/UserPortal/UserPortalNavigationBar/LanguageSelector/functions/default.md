@@ -6,31 +6,25 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx#L51)
+Defined in: [src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx#L48)
 
 LanguageSelector Component
+
+Renders a dropdown menu for language selection with flag icons and language names.
+Displays all available languages from the languages utility and automatically disables
+the currently selected language. Integrates with i18next for internationalization.
 
 ## Parameters
 
 ### props
 
-[`InterfaceLanguageSelectorProps`](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md)
-
-Component props
+[`InterfaceLanguageSelectorProps`](../../../../../types/UserPortal/UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md)
 
 ## Returns
 
 `Element`
 
 The rendered language selector dropdown, or null if showLanguageSelector is false
-
-## Description
-
-Renders a dropdown menu for language selection with flag icons and language names.
-Displays all available languages from the languages utility and automatically disables
-the currently selected language. Integrates with i18next for internationalization.
-
-## Component
 
 ## Example
 
@@ -58,5 +52,5 @@ const handleLanguageChange = async (languageCode: string) => {
 
 ## See
 
- - [InterfaceLanguageSelectorProps](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
+ - [InterfaceLanguageSelectorProps](../../../../../types/UserPortal/UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
  - [languages](../../../../../utils/languages/variables/languages.md) for the list of supported languages

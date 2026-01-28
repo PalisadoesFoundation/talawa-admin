@@ -29,7 +29,7 @@ import {
   DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
+import GroupChatDetails from 'components/UserPortal/GroupChatDetails/GroupChatDetails';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { INewChat } from './types';

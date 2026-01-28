@@ -1,27 +1,24 @@
 import { Dropdown } from 'react-bootstrap';
 import LanguageIcon from '@mui/icons-material/Language';
-import { InterfaceLanguageSelectorProps } from 'types/UserPortalNavigationBar/interface';
-import styles from './UserPortalNavigationBar.module.css';
+import { InterfaceLanguageSelectorProps } from 'types/UserPortal/UserPortalNavigationBar/interface';
+import styles from './LanguageSelector.module.css';
 import { languages } from 'utils/languages';
 import { useTranslation } from 'react-i18next';
 /**
  * LanguageSelector Component
  *
- * @description
  * Renders a dropdown menu for language selection with flag icons and language names.
  * Displays all available languages from the languages utility and automatically disables
  * the currently selected language. Integrates with i18next for internationalization.
  *
- * @component
  *
- * @param {InterfaceLanguageSelectorProps} props - Component props
- * @param {boolean} props.showLanguageSelector - Whether to display the selector (returns null if false)
- * @param {string} props.testIdPrefix - Prefix for test IDs to ensure unique identifiers across instances
- * @param {'up' | 'down' | 'start' | 'end'} props.dropDirection - Direction the dropdown menu opens relative to toggle
- * @param {(languageCode: string) => Promise<void>} props.handleLanguageChange - Async callback executed when user selects a language
- * @param {string} props.currentLanguageCode - ISO 639-1 language code of the currently active language (e.g., 'en', 'es', 'fr')
+ * @param showLanguageSelector - Whether to display the selector (returns null if false)
+ * @param testIdPrefix - Prefix for test IDs to ensure unique identifiers across instances
+ * @param dropDirection - Direction the dropdown menu opens relative to toggle
+ * @param handleLanguageChange - Async callback executed when user selects a language
+ * @param currentLanguageCode - ISO 639-1 language code of the currently active language (e.g., 'en', 'es', 'fr')
  *
- * @returns {JSX.Element | null} The rendered language selector dropdown, or null if showLanguageSelector is false
+ * @returns The rendered language selector dropdown, or null if showLanguageSelector is false
  *
  * @example
  * ```tsx

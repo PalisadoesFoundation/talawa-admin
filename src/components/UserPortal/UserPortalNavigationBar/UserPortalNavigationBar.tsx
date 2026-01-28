@@ -22,8 +22,8 @@ import {
   InterfaceUserPortalNavbarProps,
   DEFAULT_USER_MODE_PROPS,
   DEFAULT_ORGANIZATION_MODE_PROPS,
-} from 'types/UserPortalNavigationBar/interface';
-import { NavigationLink } from 'types/UserPortalNavigationBar/types';
+} from 'types/UserPortal/UserPortalNavigationBar/interface';
+import { NavigationLink } from 'types/UserPortal/UserPortalNavigationBar/types';
 import styles from './UserPortalNavigationBar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import useLocalStorage from 'utils/useLocalstorage';

@@ -1,0 +1,29 @@
+.cardHeader {
+  padding: 1.25rem 1rem 1rem 1rem;
+  border-bottom: 1px solid var(--bs-gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.cardBody {
+  padding: 1rem 0rem;
+  display: flex;
+  width: 100% !important;
+  justify-content: center;
+}
+
+.cardBody p {
+  margin: 1rem 0;
+}
+
+@media (max-width: 600px) {
+  .cardBody {
+    min-height: 120px;
+  }
+}
