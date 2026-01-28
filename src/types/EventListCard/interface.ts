@@ -41,7 +41,10 @@ export interface IEventUpdateInput {
   allDay?: boolean;
   startAt?: string;
   endAt?: string;
-  recurrenceRule?: InterfaceRecurrenceRule | null;
+  /**
+   * Recurrence rule for the event.
+   * This field is used for updating the recurrence pattern.
+   */
   recurrence?: InterfaceRecurrenceRule | null;
 }
 
@@ -50,7 +53,7 @@ export interface IEventUpdateInput {
  */
 export interface IFormState {
   name: string;
-  eventdescrip: string;
+  eventDescription: string;
   location: string;
   startTime: string;
   endTime: string;

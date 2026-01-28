@@ -66,8 +66,8 @@ export const useUpdateEventHandler = () => {
       if (formState.name !== eventListCardProps.name) {
         updateInput.name = formState.name;
       }
-      if (formState.eventdescrip !== eventListCardProps.description) {
-        updateInput.description = formState.eventdescrip;
+      if (formState.eventDescription !== eventListCardProps.description) {
+        updateInput.description = formState.eventDescription;
       }
       if (formState.location !== eventListCardProps.location) {
         updateInput.location = formState.location;
@@ -195,8 +195,8 @@ export const useUpdateEventHandler = () => {
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }
-            if (formState.eventdescrip !== eventListCardProps.description) {
-              entireSeriesInput.description = formState.eventdescrip;
+            if (formState.eventDescription !== eventListCardProps.description) {
+              entireSeriesInput.description = formState.eventDescription;
             }
             if (formState.location !== eventListCardProps.location) {
               entireSeriesInput.location = formState.location;
