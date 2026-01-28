@@ -12,8 +12,8 @@
 }
 
 .removeButton {
-  margin-bottom: 10px;
-  margin-right: 10px;
+  margin-bottom: var(--space-2);
+  margin-right: var(--space-2);
   background-color: var(--color-red-100);
   color: var(--color-red-500);
   /* Using available token, though original was darker */
@@ -22,7 +22,7 @@
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500) !important;
+  background-color: var(--color-red-500);
   border-color: var(--color-red-500);
   color: var(--color-white);
 }
