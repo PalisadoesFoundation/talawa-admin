@@ -5,7 +5,6 @@ import Button from 'shared-components/Button';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaDragAndDropProps } from 'types/AdminPortal/Agenda/interface';
 
-// translation-check-keyPrefix: agendaSection
 export default function AgendaDragAndDrop({
   folders,
   agendaFolderConnection,
