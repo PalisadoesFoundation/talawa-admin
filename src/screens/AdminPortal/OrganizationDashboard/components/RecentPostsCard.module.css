@@ -1,0 +1,22 @@
+.cardHeader {
+  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
+  border-bottom: var(--border-1) solid var(--color-gray-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-19);
+  font-weight: var(--font-weight-semibold);
+}
+
+.containerBody {
+  padding: var(--space-5);
+}
+
+.emptyContainer {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--color-gray-700);
+}
