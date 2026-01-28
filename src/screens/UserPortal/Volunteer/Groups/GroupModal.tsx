@@ -1,6 +1,5 @@
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
 import styles from './GroupModal.module.css';
@@ -9,6 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button/Button';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 import {
   Paper,
   Stack,
@@ -26,21 +29,7 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Button from 'shared-components/Button/Button';
-
-/**
- * Props for the GroupModal component.
- */
-export interface InterfaceGroupModal {
-  isOpen: boolean;
-  hide: () => void;
-  eventId: string;
-  group: InterfaceVolunteerGroupInfo;
-  refetchGroups: () => void;
-}
 
 /**
  * A modal dialog for editing a volunteer group.
@@ -67,7 +56,7 @@ export interface InterfaceGroupModal {
  * On form submission, the component calls `updateVolunteerGroup` mutation to update the group.
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
-const GroupModal: React.FC<InterfaceGroupModal> = ({
+const GroupModal: React.FC<InterfaceGroupModalProps> = ({
   isOpen,
   hide,
   eventId,
@@ -128,6 +117,9 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     }
   };
 
+  /**
+   * Query to fetch volunteer Membership requests for the event.
+   */
   const {
     data: requestsData,
     refetch: refetchRequests,
@@ -341,6 +333,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             />
           </FormFieldGroup>
 
+          {/* Button to submit the pledge form */}
           <Button
             type="submit"
             className={styles.regBtn}
@@ -389,24 +382,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           className="d-flex gap-1 align-items-center"
                           data-testid="userName"
                         >
-                          {avatarURL ? (
-                            <img
-                              src={avatarURL}
-                              alt={t('volunteerAlt')}
-                              data-testid={`image${id + 1}`}
-                              className={styles.TableImage}
-                            />
-                          ) : (
-                            <div className={styles.avatarContainer}>
-                              <Avatar
-                                containerStyle={styles.imageContainer}
-                                avatarStyle={styles.TableImage}
-                                name={name}
-                                alt={name}
-                                dataTestId="avatar"
-                              />
-                            </div>
-                          )}
+                          <ProfileAvatarDisplay
+                            key={id + '1'}
+                            imageUrl={avatarURL}
+                            fallbackName={name}
+                            dataTestId={'image-' + id}
+                            className={styles.TableImage}
+                          />
+
                           {name}
                         </TableCell>
                         <TableCell component="th" scope="row">
@@ -449,5 +432,4 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     </CRUDModalTemplate>
   );
 };
-
 export default GroupModal;

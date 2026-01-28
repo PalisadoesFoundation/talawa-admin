@@ -30,7 +30,6 @@
   border-radius: var(--radius-2);
   width: var(--space-14);
   height: var(--space-14);
-  object-fit: contain;
   background-color: var(--color-gray-100);
 }
 
@@ -43,7 +42,6 @@
   border-radius: var(--radius-2);
   width: var(--space-14);
   height: var(--space-14);
-  object-fit: contain;
   margin-bottom: var(--space-4);
   background-color: var(--color-gray-100);
 }
@@ -83,12 +81,22 @@
     width: 100%;
   }
 
+  .orgCard .innerContainer .content {
+    margin-left: var(--space-0);
+  }
+
   .orgCard button {
     bottom: var(--space-0);
     right: var(--space-0);
     position: relative;
     margin-left: auto;
     display: block;
+  }
+
+  .orgCard .withdrawBtn {
+    display: flex;
+    justify-content: space-around;
+    width: var(--space-14);
   }
 
   .orgCard .manageBtn {

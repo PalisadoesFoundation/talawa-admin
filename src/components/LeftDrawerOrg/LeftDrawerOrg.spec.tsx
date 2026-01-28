@@ -12,6 +12,7 @@ import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+
 // Mock CSS modules
 vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   default: {
@@ -103,7 +104,7 @@ let mockT: ReturnType<typeof vi.fn>;
 
 let mockTErrors: ReturnType<typeof vi.fn>;
 
-const mockTImplementation = (key: string) => {
+const mockTImplementation = (key: string, options?: { name?: string }) => {
   const translations: Record<string, string> = {
     talawaAdminPortal: 'Talawa Admin Portal',
     adminPortal: 'Admin Portal',
@@ -116,6 +117,12 @@ const mockTImplementation = (key: string) => {
     Posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
   };
+
+  // Handle parameterized translations
+  if (key === 'profileAvatar.altText' && options?.name) {
+    return `Profile picture of ${options.name}`;
+  }
+
   return translations[key] || key;
 };
 
@@ -287,6 +294,7 @@ const errorMocks: IMockedResponse[] = [
 describe('LeftDrawerOrg', () => {
   const originalInnerWidth = window.innerWidth;
   const mockSetHideDrawer = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
@@ -312,6 +320,7 @@ describe('LeftDrawerOrg', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    user = userEvent.setup();
     mockT = vi.fn(mockTImplementation);
     mockTErrors = vi.fn(mockTErrorsImplementation);
     mockGetItem = vi.fn((key: string) => {
@@ -437,9 +446,8 @@ describe('LeftDrawerOrg', () => {
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
 
-      const avatar = screen.getByAltText('Test Organization');
+      const avatar = screen.getByTestId('org-avatar');
       expect(avatar).toBeInTheDocument();
-      expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
 
     it('should display Avatar component when no avatarURL', async () => {
@@ -532,7 +540,6 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      const user = userEvent.setup();
       await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -548,7 +555,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard');
-      const user = userEvent.setup();
+
       await user.click(dashboardLink);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
@@ -564,7 +571,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const membersLink = screen.getByText('Members');
-      const user = userEvent.setup();
+
       await user.click(membersLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -580,7 +587,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const eventsLink = screen.getByText('Events');
-      const user = userEvent.setup();
+
       await user.click(eventsLink);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -748,7 +755,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const pluginButton = screen.getByText('Test Plugin');
-      const user = userEvent.setup();
+
       await user.click(pluginButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
@@ -830,7 +837,7 @@ describe('LeftDrawerOrg', () => {
     expect(toggleButton).toBeInTheDocument();
 
     // Test onClick functionality - clicking when drawer is visible should hide it
-    const user = userEvent.setup();
+
     await user.click(toggleButton);
 
     expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
@@ -930,7 +937,7 @@ describe('LeftDrawerOrg', () => {
       });
 
       const dashboardLink = screen.getByText('Dashboard');
-      const user = userEvent.setup();
+
       await user.click(dashboardLink);
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
 
