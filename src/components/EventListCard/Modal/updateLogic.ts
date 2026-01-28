@@ -1,5 +1,4 @@
 // translation-check-keyPrefix: eventListCard
-import type { TFunction } from 'i18next';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
@@ -11,57 +10,14 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type {
+  IEventUpdateInput,
+  IUpdateEventHandlerProps,
+} from 'types/EventListCard/interface';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
-
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
-
-interface IEventUpdateInput {
-  id: string;
-  name?: string;
-  description?: string;
-  location?: string;
-  isPublic?: boolean;
-  isRegisterable?: boolean;
-  isInviteOnly?: boolean;
-  allDay?: boolean;
-  startAt?: string;
-  endAt?: string;
-  recurrenceRule?: InterfaceRecurrenceRule | null;
-  recurrence?: InterfaceRecurrenceRule | null;
-}
-
-interface IFormState {
-  name: string;
-  eventdescrip: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-}
-
-interface IUpdateEventHandlerProps {
-  eventListCardProps: IEventListCard;
-  formState: IFormState;
-  alldaychecked: boolean;
-  publicchecked: boolean;
-  registrablechecked: boolean;
-  inviteOnlyChecked: boolean;
-  eventStartDate: Date;
-  eventEndDate: Date;
-  recurrence: InterfaceRecurrenceRule | null;
-  updateOption: 'single' | 'following' | 'entireSeries';
-  hasRecurrenceChanged?: boolean; // Add this parameter
-  t: TFunction<'translation', undefined>;
-  hideViewModal: () => void;
-  setEventUpdateModalIsOpen: (isOpen: boolean) => void;
-  refetchEvents?: () => void;
-}
 
 /**
  * Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
