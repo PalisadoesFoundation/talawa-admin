@@ -6,10 +6,10 @@ import type { IColumnDef } from '../../types/shared-components/DataTable/interfa
 
 /**
  * Tests for DataTableTable functionality (table rendering in DataTable)
- * 
+ *
  * This test file covers the table rendering logic that would be in DataTableTable component.
  * Tests are performed through DataTable component to avoid component extraction.
- * 
+ *
  * Coverage includes:
  * - Sortable vs non-sortable columns (structure ready for sorting)
  * - Header click and keyboard (Enter/Space) interactions (structure ready)
@@ -401,8 +401,16 @@ describe('DataTableTable (table rendering functionality)', () => {
       );
 
       expect(renderRowSpy).toHaveBeenCalledTimes(2);
-      expect(renderRowSpy).toHaveBeenNthCalledWith(1, { id: '1', name: 'Ada' }, 0);
-      expect(renderRowSpy).toHaveBeenNthCalledWith(2, { id: '2', name: 'Bob' }, 1);
+      expect(renderRowSpy).toHaveBeenNthCalledWith(
+        1,
+        { id: '1', name: 'Ada' },
+        0,
+      );
+      expect(renderRowSpy).toHaveBeenNthCalledWith(
+        2,
+        { id: '2', name: 'Bob' },
+        1,
+      );
     });
 
     it('custom renderRow ignores selectable and rowActions props', () => {
@@ -440,9 +448,14 @@ describe('DataTableTable (table rendering functionality)', () => {
           id: 'value',
           header: 'Value',
           accessor: 'value' as const,
-          render: (val, row) => (
-            <span data-testid="custom-cell">{val * 2} (from {row.name})</span>
-          ),
+          render: (val, row) => {
+            const numVal = val as number;
+            return (
+              <span data-testid="custom-cell">
+                {numVal * 2} (from {row.name})
+              </span>
+            );
+          },
         },
       ];
 
@@ -495,8 +508,14 @@ describe('DataTableTable (table rendering functionality)', () => {
       );
 
       expect(renderSpy).toHaveBeenCalledTimes(2);
-      expect(renderSpy).toHaveBeenNthCalledWith(1, 'Ada', { id: '1', name: 'Ada' });
-      expect(renderSpy).toHaveBeenNthCalledWith(2, 'Bob', { id: '2', name: 'Bob' });
+      expect(renderSpy).toHaveBeenNthCalledWith(1, 'Ada', {
+        id: '1',
+        name: 'Ada',
+      });
+      expect(renderSpy).toHaveBeenNthCalledWith(2, 'Bob', {
+        id: '2',
+        name: 'Bob',
+      });
     });
 
     it('renders cells with correct data-testid', () => {
@@ -525,7 +544,9 @@ describe('DataTableTable (table rendering functionality)', () => {
           id: 'fullName',
           header: 'Full Name',
           accessor: (row) => `${row.firstName} ${row.lastName}`,
-          render: (val) => <strong data-testid="full-name">{val}</strong>,
+          render: (val) => (
+            <strong data-testid="full-name">{val as string}</strong>
+          ),
         },
       ];
 
@@ -612,7 +633,9 @@ describe('DataTableTable (table rendering functionality)', () => {
       );
 
       expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Delete' }),
+      ).toBeInTheDocument();
     });
 
     it('does not render actions column when rowActions is empty array', () => {
@@ -886,9 +909,7 @@ describe('DataTableTable (table rendering functionality)', () => {
 
   describe('Edge Cases', () => {
     it('handles empty data array', () => {
-      render(
-        <DataTable data={[]} columns={baseColumns} />,
-      );
+      render(<DataTable data={[]} columns={baseColumns} />);
 
       expect(screen.getByTestId('datatable-empty')).toBeInTheDocument();
     });
