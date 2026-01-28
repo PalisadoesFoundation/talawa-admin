@@ -75,6 +75,17 @@
   gap: 8px;
 }
 
+.editInputWrapper {
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.editCommentInput {
+  border: 1px solid var(--bs-gray-400);
+  border-radius: 4px;
+  padding: 8px;
+}
+
 .userImageUserComment {
   composes: userImageUserComment from '../../../style/app-fixed.module.css';
 }

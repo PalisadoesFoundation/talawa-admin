@@ -10,11 +10,11 @@ import {
  */
 export const Autocomplete = <
   T,
-  Multiple extends boolean | undefined,
-  DisableClearable extends boolean | undefined,
-  FreeSolo extends boolean | undefined,
+  TMultiple extends boolean | undefined,
+  TDisableClearable extends boolean | undefined,
+  TFreeSolo extends boolean | undefined,
 >(
-  props: AutocompleteProps<T, Multiple, DisableClearable, FreeSolo>,
+  props: AutocompleteProps<T, TMultiple, TDisableClearable, TFreeSolo>,
 ): JSX.Element => {
   return <MuiAutocomplete {...props} />;
 };
