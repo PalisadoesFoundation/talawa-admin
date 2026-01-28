@@ -775,6 +775,7 @@
     "createAgendaFolder": "创建议程部分",
     "folderName": "文件夹",
     "categoryName": "类别",
+    "noCategory": "无分类",
     "folder": "议程文件夹",
     "agendaFolderDetails": "议程部分详情",
     "agendaFolderCreated": "议程部分已成功创建",

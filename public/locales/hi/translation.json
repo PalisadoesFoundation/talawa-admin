@@ -787,6 +787,7 @@
     "createAgendaFolder": "एजेंडा सेक्शन बनाएं",
     "folderName": "फ़ोल्डर",
     "categoryName": "श्रेणी",
+    "noCategory": "कोई एजेंडा श्रेणी नहीं",
     "folder": "एजेंडा फ़ोल्डर",
     "agendaFolderDetails": "एजेंडा सेक्शन विवरण",
     "agendaFolderCreated": "एजेंडा सेक्शन सफलतापूर्वक बनाया गया",

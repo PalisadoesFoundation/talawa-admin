@@ -770,6 +770,7 @@
     "createAgendaFolder": "Crear sección de la agenda",
     "folderName": "Carpeta",
     "categoryName": "Categoría",
+    "noCategory": "No categoría",
     "folder": "Carpeta de la agenda",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",
