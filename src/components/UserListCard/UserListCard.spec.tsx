@@ -11,7 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, it, beforeEach, afterEach, expect } from 'vitest';
 import * as errorHandlerModule from 'utils/errorHandler';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Mock react-router
 vi.mock('react-router', async () => {
@@ -25,7 +25,7 @@ vi.mock('react-router', async () => {
 });
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

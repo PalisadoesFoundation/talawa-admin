@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -12,7 +12,7 @@ import CreatePostModal from './createPostModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 // Styles loaded dynamically to avoid lint error about restricted imports in tests
 let styles: Record<string, string> = {};
 
@@ -29,7 +29,7 @@ const originalAcceptDescriptor = Object.getOwnPropertyDescriptor(
 );
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -604,8 +604,10 @@ describe('CreatePostModal Integration Tests', () => {
       // Mock empty file selection
       Object.defineProperty(fileInput, 'files', { value: null });
 
+      // Use userEvent to trigger change event (though files will be null)
       await act(async () => {
-        fireEvent.change(fileInput);
+        // Trigger the change event handler directly since userEvent.upload requires actual files
+        fileInput.dispatchEvent(new Event('change', { bubbles: true }));
       });
 
       // Should not show any preview

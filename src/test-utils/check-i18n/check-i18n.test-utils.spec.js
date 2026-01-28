@@ -78,9 +78,9 @@ describe('check-i18n test utils', () => {
 
     it('calls spawnSync with merged env, cwd, and default timeout', () => {
       const original = process.env.TEST_VAR;
-      try {
-        process.env.TEST_VAR = 'kept';
+      process.env.TEST_VAR = 'kept';
 
+      try {
         const result = runScript(['--flag'], {
           env: { TEST_VAR: 'abc', EXTRA: '1' },
           cwd: '/tmp/workspace',
@@ -175,11 +175,7 @@ describe('check-i18n test utils', () => {
     it('stops after exhausting EBADF retries', () => {
       spawnSyncMock.mockReturnValue({ error: { code: 'EBADF' } });
 
-      try {
-        runScript(['--never']);
-      } catch (err) {
-        expect(err.code).toBe('EBADF');
-      }
+      expect(() => runScript(['--never'])).toThrow();
       expect(spawnSyncMock).toHaveBeenCalledTimes(8);
     });
   });

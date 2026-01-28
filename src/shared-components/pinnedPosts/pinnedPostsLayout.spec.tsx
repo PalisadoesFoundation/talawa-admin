@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -16,10 +11,10 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 dayjs.extend(utc);
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
@@ -232,7 +227,7 @@ describe('PinnedPostsLayout Component', () => {
   });
 
   describe('Interactions', () => {
-    it('calls onStoryClick when view button is clicked', () => {
+    it('calls onStoryClick when view button is clicked', async () => {
       render(
         <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
@@ -245,7 +240,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const viewButtons = screen.getAllByTestId('view-post-btn');
-      fireEvent.click(viewButtons[0]);
+      await userEvent.click(viewButtons[0]);
 
       expect(mockOnStoryClick).toHaveBeenCalledWith(mockPinnedPosts[0].node);
     });
@@ -263,7 +258,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -310,7 +305,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Trigger scroll event to show buttons
       await act(async () => {
-        fireEvent.scroll(scrollContainer);
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
       });
 
       await waitFor(() => {
@@ -321,7 +316,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click left button
       const leftButton = screen.getByTestId('scroll-left-button');
-      fireEvent.click(leftButton);
+      await userEvent.click(leftButton);
 
       expect(scrollByMock).toHaveBeenCalled();
     });
@@ -358,7 +353,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Trigger scroll event to show buttons
       await act(async () => {
-        fireEvent.scroll(scrollContainer);
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
       });
 
       await waitFor(() => {
@@ -369,7 +364,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click right button
       const rightButton = screen.getByTestId('scroll-right-button');
-      fireEvent.click(rightButton);
+      await userEvent.click(rightButton);
 
       expect(scrollByMock).toHaveBeenCalled();
     });
@@ -452,7 +447,9 @@ describe('PinnedPostsLayout Component', () => {
       unmount();
 
       // Simulate a scroll event on the now-detached container
-      fireEvent.scroll(scrollContainer);
+      act(() => {
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
+      });
 
       // Should not see React warning about updating unmounted component
       expect(consoleErrorSpy).not.toHaveBeenCalledWith(
@@ -499,7 +496,9 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       act(() => {
-        fireEvent.scroll(scrollContainer);
+        act(() => {
+          scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
+        });
       });
 
       // Buttons should not appear when scrolling is not possible
@@ -621,7 +620,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click on more options button for first post
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -653,7 +652,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click on more options button for first post
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
@@ -705,7 +704,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Open menu
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -713,7 +712,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click pin/unpin option
       const pinMenuItem = screen.getByTestId('pin-post-menu-item');
-      fireEvent.click(pinMenuItem);
+      await userEvent.click(pinMenuItem);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -743,7 +742,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Open menu
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
@@ -751,7 +750,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click delete option
       const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
-      expect(() => fireEvent.click(deleteMenuItem)).not.toThrow();
+      await userEvent.click(deleteMenuItem);
     });
   });
 });

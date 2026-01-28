@@ -2,11 +2,11 @@ import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, screen, cleanup } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import SecuredRouteForUser from './SecuredRouteForUser';
 import userEvent from '@testing-library/user-event';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { warning: vi.fn() },
 }));
 

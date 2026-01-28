@@ -44,7 +44,7 @@ import React from 'react';
 import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 

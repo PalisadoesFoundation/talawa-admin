@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
@@ -29,7 +29,7 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

@@ -33,7 +33,7 @@ import type { ChangeEvent } from 'react';
 import { Button } from 'shared-components/Button';
 import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 
 import {

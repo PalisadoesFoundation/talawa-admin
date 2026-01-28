@@ -6,26 +6,11 @@
  * and confirming the new password. The component validates the input and
  * communicates with the backend to update the password using a GraphQL mutation.
  *
- * @file UserPasswordUpdate.tsx
- * @module UserUpdate
- * @requires React
- * @requires @apollo/client - For executing the GraphQL mutation.
- * @requires GraphQl/Mutations/mutations - Contains the `UPDATE_USER_PASSWORD_MUTATION`.
- * @requires react-i18next - For internationalization and translations.
- * @requires react-bootstrap/Button - For styled buttons.
- * @requires react-bootstrap/Form - For form controls.
- * @requires style/app.module.css - For component-specific styles.
- * @requires react-toastify - For displaying success and error notifications.
- *
- * @interface InterfaceUserPasswordUpdateProps
- * @property {string} id - The unique identifier of the user whose password is being updated.
- *
- * @function UserUpdate
- * @returns {JSX.Element} The rendered component.
+ * @returns The rendered component.
  *
  * @remarks
  * - Validates that all fields are filled and that the new password matches the confirmation.
- * - Displays success or error messages using `react-toastify`.
+ * - Displays success or error messages using toast notifications.
  * - Reloads the page after a successful update or when the user cancels the operation.
  *
  * @example
@@ -37,10 +22,10 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
-import styles from '../../style/app-fixed.module.css';
-import { Form } from 'react-bootstrap';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { Button } from 'shared-components/Button';
+import styles from './UserPasswordUpdate.module.css';
+
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
   id: string;
@@ -121,8 +106,9 @@ export const UserUpdate: React.FC<
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('previousPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('previousPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="previousPassword"
                 placeholder={t('previousPassword')}
@@ -140,8 +126,9 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('newPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('newPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="newPassword"
                 placeholder={t('newPassword')}
@@ -156,8 +143,9 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('confirmNewPassword')}</label>
-              <Form.Control
+              <label className="form-label">{t('confirmNewPassword')}</label>
+              <input
+                className="form-control"
                 type="password"
                 id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}

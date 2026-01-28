@@ -28,12 +28,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
-import { Autocomplete, TextField } from '@mui/material';
+import { Row, Col } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { Autocomplete, type AutocompleteRenderInputParams } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './AgendaItemsUpdateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -163,8 +164,8 @@ const AgendaItemsUpdateModal: React.FC<
           </>
         }
       >
-        <Form onSubmit={updateAgendaItemHandler}>
-          <Form.Group className="d-flex mb-3 w-100">
+        <form onSubmit={updateAgendaItemHandler}>
+          <div className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
               className={`${styles.noOutline} w-100`}
@@ -178,41 +179,52 @@ const AgendaItemsUpdateModal: React.FC<
               }
               filterSelectedOptions={true}
               getOptionLabel={(
-                category: InterfaceAgendaItemCategoryInfo,
-              ): string => category.name}
-              onChange={(_, newCategories): void => {
+                option: string | InterfaceAgendaItemCategoryInfo,
+              ) => {
+                if (typeof option === 'string') return option;
+                return option.name;
+              }}
+              onChange={(_: unknown, newCategories: unknown) => {
                 setFormState({
                   ...formState,
-                  agendaItemCategoryIds: newCategories.map(
-                    (category) => category._id,
-                  ),
+                  agendaItemCategoryIds: (
+                    newCategories as InterfaceAgendaItemCategoryInfo[]
+                  ).map((category) => category._id),
                 });
               }}
-              renderInput={(params) => (
-                <TextField {...params} label={t('category')} />
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <div ref={params.InputProps.ref}><input {...params.inputProps} className="form-control" placeholder={t('category')} /></div>
               )}
             />
-          </Form.Group>
+          </div>
 
           <Row className="mb-3">
             <Col>
-              <Form.Group className="mb-3" controlId="title">
-                <Form.Label>{t('title')}</Form.Label>
-                <Form.Control
+              <div className="mb-3">
+                <label className="form-label" htmlFor="title">
+                  {t('title')}
+                </label>
+                <input
+                  id="title"
                   type="text"
+                  className="form-control"
                   placeholder={t('enterTitle')}
                   value={formState.title}
                   onChange={(e) =>
                     setFormState({ ...formState, title: e.target.value })
                   }
                 />
-              </Form.Group>
+              </div>
             </Col>
             <Col>
-              <Form.Group controlId="duration">
-                <Form.Label>{t('duration')}</Form.Label>
-                <Form.Control
+              <div className="mb-3">
+                <label className="form-label" htmlFor="duration">
+                  {t('duration')}
+                </label>
+                <input
+                  id="duration"
                   type="text"
+                  className="form-control"
                   placeholder={t('enterDuration')}
                   value={formState.duration}
                   required
@@ -220,14 +232,17 @@ const AgendaItemsUpdateModal: React.FC<
                     setFormState({ ...formState, duration: e.target.value })
                   }
                 />
-              </Form.Group>
+              </div>
             </Col>
           </Row>
 
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              as="textarea"
+          <div className="mb-3">
+            <label className="form-label" htmlFor="description">
+              {t('description')}
+            </label>
+            <textarea
+              id="description"
+              className="form-control"
               rows={1}
               placeholder={t('enterDescription')}
               value={formState.description}
@@ -235,20 +250,27 @@ const AgendaItemsUpdateModal: React.FC<
                 setFormState({ ...formState, description: e.target.value })
               }
             />
-          </Form.Group>
+          </div>
 
-          <Form.Group className="mb-3">
-            <Form.Label>{t('url')}</Form.Label>
+          <div className="mb-3">
+            <label htmlFor="basic-url" className="form-label">
+              {t('url')}
+            </label>
             <div className="d-flex">
-              <Form.Control
+              <input
                 type="text"
+                className="form-control"
                 placeholder={t('enterUrl')}
                 id="basic-url"
                 data-testid="urlInput"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
-              <Button onClick={handleAddUrl} data-testid="linkBtn">
+              <Button
+                onClick={handleAddUrl}
+                data-testid="linkBtn"
+                className="ms-2"
+              >
                 {t('link')}
               </Button>
             </div>
@@ -261,29 +283,31 @@ const AgendaItemsUpdateModal: React.FC<
                 </a>
                 <Button
                   variant="danger"
-                  size="sm"
-                  data-testid="deleteUrl"
                   className={styles.deleteButtonAgendaItems}
                   onClick={() => handleRemoveUrl(url)}
+                  data-testid="deleteUrl"
                 >
                   <FaTrash />
                 </Button>
               </li>
             ))}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('attachments')}</Form.Label>
-            <Form.Control
+          </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="attachment">
+              {t('attachments')}
+            </label>
+            <input
+              id="attachment"
               accept="image/*, video/*"
               data-testid="attachment"
               name="attachment"
               type="file"
-              id="attachment"
               multiple={true}
               onChange={handleFileChange}
+              className="form-control"
             />
-            <Form.Text>{t('attachmentLimit')}</Form.Text>
-          </Form.Group>
+            <div className="form-text">{t('attachmentLimit')}</div>
+          </div>
           {formState.attachments && (
             <div className={styles.previewFile} data-testid="mediaPreview">
               {formState.attachments.map((attachment, index) => (
@@ -322,7 +346,7 @@ const AgendaItemsUpdateModal: React.FC<
           >
             {t('update')}
           </Button>
-        </Form>
+        </form>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );

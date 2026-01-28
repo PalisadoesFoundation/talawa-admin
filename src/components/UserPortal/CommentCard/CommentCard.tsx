@@ -4,16 +4,12 @@
  * This component represents a card displaying a comment with the ability to like or dislike it.
  * It shows the comment creator's details, the comment text, and the like/dislike counts.
  *
- * @component
- * @param props - The properties required by the CommentCard component.
- * @param props.id - The unique identifier of the comment.
- * @param props.creator - The creator of the comment, including their ID and name.
- * @param props.upVoteCount - The number of upvotes (likes) on the comment.
- * @param props.downVoteCount - The number of downvotes (dislikes) on the comment.
- * @param props.downVoters - An array of users who have disliked the comment.
- * @param props.text - The text content of the comment.
- * @param props.onVote - Callback function triggered when the comment is voted on.
- * @param props.fetchComments - Function to refresh comments after voting.
+ * @param id - The unique identifier of the comment.
+ * @param creator - The creator of the comment, including their ID and name.
+ * @param hasUserVoted - Whether the current user has voted and the vote type.
+ * @param upVoteCount - The number of upvotes (likes) on the comment.
+ * @param text - The text content of the comment.
+ * @param refetchComments - Function to refresh comments after voting.
  *
  * @returns A JSX element representing the comment card.
  */
@@ -27,24 +23,24 @@ import {
   Modal,
   Menu,
   MenuItem,
-  FormControl,
   Input,
-  Button,
 } from '@mui/material';
+import { Button } from 'shared-components/Button';
 import {
   MoreHoriz,
   ThumbUp,
   ThumbUpOutlined,
   EditOutlined,
   DeleteOutline,
+  Close as CloseIcon,
+  Save as SaveIcon,
 } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import styles from '../../../style/app-fixed.module.css';
 import commentCardStyles from './CommentCard.module.css';
 import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
@@ -86,9 +82,14 @@ interface InterfaceCommentCardProps {
   refetchComments?: () => void;
 }
 
-function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
-  const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
-    props;
+function CommentCard({
+  id,
+  creator,
+  hasUserVoted,
+  upVoteCount,
+  text,
+  refetchComments,
+}: InterfaceCommentCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
@@ -228,7 +229,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     >
       <CommentContainer>
         <Stack direction="row" spacing={2} alignItems="flex-start">
-          <span className={styles.userImageUserComment}>
+          <span className={commentCardStyles.userImageUserComment}>
             <ProfileAvatarDisplay
               imageUrl={creator.avatarURL || defaultAvatar}
               fallbackName={creator.name}
@@ -308,7 +309,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            <Box className={commentCardStyles.editInputWrapper}>
               <Input
                 multiline
                 rows={4}
@@ -316,18 +317,26 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 onChange={handleEditCommentInput}
                 fullWidth
                 data-testid="edit-comment-input"
+                className={commentCardStyles.editCommentInput}
+                aria-label="Edit comment"
               />
-            </FormControl>
+            </Box>
 
             <Box className={commentCardStyles.modalActions}>
-              <Box />
-              <Box className={commentCardStyles.rightModalActions}>
-                <Button variant="outlined" onClick={toggleEditComment}>
+              <Box className={commentCardStyles.leftModalActions}>
+                <Button
+                  onClick={toggleEditComment}
+                  data-testid="edit-comment-modal-close-btn"
+                  icon={<CloseIcon />}
+                  iconPosition="start"
+                  variant="outlined"
+                >
                   {tCommon('cancel')}
                 </Button>
+              </Box>
+              <Box className={commentCardStyles.rightModalActions}>
                 <Button
-                  variant="contained"
-                  disabled={updatingComment}
+                  variant="primary"
                   onClick={async () => {
                     if (!editedCommentText.trim()) {
                       NotificationToast.error(
@@ -341,8 +350,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                       toggleEditComment();
                     }
                   }}
-                  data-testid="save-comment-button"
-                  startIcon={<EditOutlined />}
+                  data-testid="edit-comment-save-btn"
+                  icon={<SaveIcon />}
+                  iconPosition="start"
+                  disabled={updatingComment}
                 >
                   {updatingComment ? tCommon('saving') : tCommon('save')}
                 </Button>
