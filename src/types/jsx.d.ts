@@ -2,7 +2,11 @@ import type {
   JSX as ReactSource,
   IntrinsicClassAttributes as ReactICAttr,
 } from 'react';
-
+/**
+ * Global JSX type augmentation for React 19 compatibility.
+ * Maps the global JSX namespace to React's JSX type definitions,
+ * ensuring TypeScript recognizes JSX syntax correctly across the codebase.
+ */
 declare global {
   namespace JSX {
     type Element = ReactSource.Element;

@@ -16,7 +16,7 @@ describe('Storage Helper Functions', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('generates correct storage key', () => {

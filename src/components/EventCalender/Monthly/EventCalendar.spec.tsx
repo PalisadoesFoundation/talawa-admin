@@ -212,7 +212,7 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
     await userEvent.click(nextButton);
     //Testing year change and month change
-    //Testing year change and month change
+    // Basic navigation - boundary conditions tested in dedicated tests below
     for (let index = 0; index < 5; index++) {
       await userEvent.click(prevButton);
     }
