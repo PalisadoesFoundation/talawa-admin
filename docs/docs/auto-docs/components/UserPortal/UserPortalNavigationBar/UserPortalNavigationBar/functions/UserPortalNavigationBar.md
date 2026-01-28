@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigat
 
 ### props
 
-[`InterfaceUserPortalNavbarProps`](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceUserPortalNavbarProps.md)
+[`InterfaceUserPortalNavbarProps`](../../../../../types/UserPortal/UserPortalNavigationBar/interface/interfaces/InterfaceUserPortalNavbarProps.md)
 
 ## Returns
 

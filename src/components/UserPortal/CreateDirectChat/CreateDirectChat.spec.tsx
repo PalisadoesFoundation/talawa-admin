@@ -18,7 +18,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { errorHandler } from 'utils/errorHandler';
-import type { GroupChat } from 'types/Chat/type';
+import type { GroupChat } from 'types/UserPortal/Chat/type';
 import userEvent from '@testing-library/user-event';
 
 // Mock dependencies

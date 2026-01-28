@@ -1101,7 +1101,10 @@ describe('ActionItemModal', () => {
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      await userEvent.click(volunteerGroupChip);
+
+      await act(async () => {
+        await userEvent.click(volunteerGroupChip);
+      });
 
       await waitFor(() => {
         expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
