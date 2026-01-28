@@ -109,6 +109,11 @@
   text-align: left;
 }
 
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
 .weekday__yearly {
   display: flex;
   justify-content: center;
