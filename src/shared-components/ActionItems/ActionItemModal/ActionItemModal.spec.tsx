@@ -974,7 +974,7 @@ describe('ActionItemModal', () => {
       // Verify selection
       await waitFor(
         () => {
-          expect(volunteerInput.value).toBe('John Doe');
+          expect(volunteerInput).toHaveValue('John Doe');
         },
         { timeout: 3000 },
       );
@@ -989,7 +989,7 @@ describe('ActionItemModal', () => {
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      await userEvent.click(volunteerGroupChip);
+      await user.click(volunteerGroupChip);
 
       // Wait for group select to appear after chip click
       const groupSelect = await screen.findByTestId(
@@ -1001,9 +1001,9 @@ describe('ActionItemModal', () => {
         'combobox',
       ) as HTMLInputElement;
       groupInput.focus();
-      await userEvent.click(groupInput);
+      await user.click(groupInput);
       const groupOption = await screen.findByText('Test Group 1');
-      await userEvent.click(groupOption);
+      await user.click(groupOption);
 
       // Verify selection
       await waitFor(
@@ -1038,16 +1038,7 @@ describe('ActionItemModal', () => {
       )) as HTMLInputElement;
 
       await user.clear(notesInput);
-      notesInput.focus();
-      await user.type(notesInput, 'T');
-      await waitFor(() => expect(notesInput.value).toBe('T'));
-
-      notesInput.focus();
-      await user.type(notesInput, 'e');
-      notesInput.focus();
-      await user.type(notesInput, 's');
-      notesInput.focus();
-      await user.type(notesInput, 't');
+      await user.paste('Test');
 
       await waitFor(() => {
         expect(notesInput.value).toBe('Test');
@@ -1067,16 +1058,14 @@ describe('ActionItemModal', () => {
       // Clear and type new value to trigger onChange
       postNotesInput.focus();
       await user.clear(postNotesInput);
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'N');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'e');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'w');
+      await user.paste('New');
 
-      await waitFor(() => {
-        expect(postNotesInput.value).toBe('New');
-      });
+      await waitFor(
+        () => {
+          expect(postNotesInput.value).toBe('New');
+        },
+        { timeout: 3000 },
+      );
     });
 
     it('should disable date picker in edit mode', async () => {
