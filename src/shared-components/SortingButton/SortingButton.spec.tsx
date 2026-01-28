@@ -12,6 +12,7 @@ beforeEach(() => {
   });
 });
 
+/* eslint-disable react/no-multi-comp -- Mock components required for react-bootstrap Dropdown testing */
 vi.mock('react-bootstrap/Dropdown', async () => {
   const React = await import('react');
 
@@ -40,6 +41,7 @@ vi.mock('react-bootstrap/Dropdown', async () => {
 
   return { default: Dropdown };
 });
+/* eslint-enable react/no-multi-comp */
 
 describe('SortingButton', () => {
   const mockSortingOptions: InterfaceSortingOption[] = [
