@@ -1,4 +1,6 @@
+import { TFunction } from 'i18next';
 import type { ChangeEvent } from 'react';
+import type { DropResult } from '@hello-pangea/dnd';
 
 /**
  * Defines the structure for agenda item category information.
@@ -263,4 +265,20 @@ export interface InterfaceAgendaItemsPreviewModalProps {
   toggleDeleteItemModal: () => void;
   formState: InterfaceItemFormStateType;
   t: (key: string) => string;
+}
+
+export interface InterfaceAgendaDragAndDropProps {
+  folders: InterfaceAgendaFolderInfo[];
+  agendaFolderConnection: 'Event';
+  t: TFunction;
+
+  onFolderDragEnd: (result: DropResult) => Promise<void>;
+  onItemDragEnd: (result: DropResult) => Promise<void>;
+
+  onEditFolder: (folder: InterfaceAgendaFolderInfo) => void;
+  onDeleteFolder: (folder: InterfaceAgendaFolderInfo) => void;
+
+  onPreviewItem: (item: InterfaceAgendaItemInfo) => void;
+  onEditItem: (item: InterfaceAgendaItemInfo) => void;
+  onDeleteItem: (item: InterfaceAgendaItemInfo) => void;
 }
