@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -208,8 +208,13 @@ describe('TimePicker', () => {
     await user.clear(input);
     await user.type(input, 'invalid-time');
 
+    // Wait for MUI to complete its internal state updates to avoid cleanup errors
+    await act(async () => {
+      await waitFor(() => {
+        expect(input).toBeInTheDocument();
+      });
+    });
     // Component should still render without crashing
-    expect(input).toBeInTheDocument();
     // onChange may or may not be called depending on MUI's validation
   });
 

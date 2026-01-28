@@ -390,9 +390,9 @@ describe('DatePicker', () => {
     });
 
     it('calls both custom onBlur and slotProps onBlur', async () => {
+      const user = userEvent.setup();
       const customOnBlur = vi.fn();
       const slotPropsOnBlur = vi.fn();
-      const user = userEvent.setup();
 
       renderWithProvider(
         <DatePicker
