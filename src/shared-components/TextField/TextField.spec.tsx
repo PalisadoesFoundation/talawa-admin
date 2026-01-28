@@ -22,9 +22,7 @@ describe('TextField', () => {
   });
 
   it('renders error state', () => {
-    render(
-      <TextField label="Email" error={true} helperText="Invalid email" />,
-    );
+    render(<TextField label="Email" error={true} helperText="Invalid email" />);
     expect(screen.getByText('Invalid email')).toBeInTheDocument();
   });
 
@@ -32,13 +30,7 @@ describe('TextField', () => {
     const user = userEvent.setup();
     const mockOnChange = vi.fn();
 
-    render(
-      <TextField
-        label="Input Field"
-        value=""
-        onChange={mockOnChange}
-      />,
-    );
+    render(<TextField label="Input Field" value="" onChange={mockOnChange} />);
 
     const input = screen.getByLabelText('Input Field');
     await user.type(input, 'test');
