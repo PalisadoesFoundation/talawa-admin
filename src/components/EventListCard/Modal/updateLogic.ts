@@ -150,9 +150,9 @@ export const useUpdateEventHandler = () => {
         : dayjs.utc(eventEndDate).isValid()
           ? dayjs
               .utc(eventEndDate)
-              .hour(parseInt(formState.endTime.split(':')[0]))
-              .minute(parseInt(formState.endTime.split(':')[1]))
-              .second(parseInt(formState.endTime.split(':')[2]))
+              .hour(parseInt(formState.endTime.split(':')[0], 10) || 0)
+              .minute(parseInt(formState.endTime.split(':')[1], 10) || 0)
+              .second(parseInt(formState.endTime.split(':')[2], 10) || 0)
               .millisecond(0)
               .toISOString()
           : '';
