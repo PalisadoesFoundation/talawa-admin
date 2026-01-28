@@ -27,6 +27,9 @@ export interface InterfaceEventListCardModalsProps {
   tCommon: TFunction<'translation', undefined>;
 }
 
+/**
+ * Input payload for updating an event. Optional fields are included only when changed.
+ */
 export interface IEventUpdateInput {
   id: string;
   name?: string;
@@ -42,6 +45,9 @@ export interface IEventUpdateInput {
   recurrence?: InterfaceRecurrenceRule | null;
 }
 
+/**
+ * Form state captured from the EventListCard edit modal.
+ */
 export interface IFormState {
   name: string;
   eventdescrip: string;
@@ -50,6 +56,9 @@ export interface IFormState {
   endTime: string;
 }
 
+/**
+ * Arguments for the updateEventHandler function.
+ */
 export interface IUpdateEventHandlerProps {
   eventListCardProps: InterfaceEventListCard;
   formState: IFormState;
