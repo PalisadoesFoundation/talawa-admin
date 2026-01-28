@@ -1,7 +1,7 @@
 {
   "**/*.{ts,tsx,yml}": ["eslint --fix"],
   "**/*.{ts,tsx,json,scss,css,yml}": ["prettier --write"],
-  "**/*.{ts,tsx}": [
+  "**/*.{ts,tsx,css}": [
     "npx tsx scripts/githooks/check-localstorage-usage.ts",
     "pnpm exec tsx scripts/check-css-imports.js --files"
   ],
