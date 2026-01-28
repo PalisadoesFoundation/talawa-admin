@@ -120,7 +120,7 @@ export const MOCKS = [
                 node: {
                   id: '2',
                   name: 'Campaign 2',
-                  startAt: '2021-01-01T00:00:00.000Z',
+                  startAt: BASE_DATE_UTC.subtract(4, 'years').toISOString(),
                   endAt: BASE_DATE_UTC.add(2, 'years')
                     .startOf('year')
                     .toISOString(),
