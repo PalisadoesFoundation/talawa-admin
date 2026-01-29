@@ -21,9 +21,8 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Import after mock to get the mocked version
-const { NotificationToast } = await import(
-  'shared-components/NotificationToast/NotificationToast'
-);
+const { NotificationToast } =
+  await import('shared-components/NotificationToast/NotificationToast');
 
 const link = new StaticMockLink(MOCKS, true);
 
