@@ -2,8 +2,8 @@ import type { InterfaceEvent } from 'types/Event/interface';
 
 /**
  * Props interface for the EventCard component.
- * Extends InterfaceEvent to include all event properties.
+ * Currently equivalent to InterfaceEvent.
+ * Defined as a type alias for now; can be changed to an interface
+ * when additional props need to be added.
  */
-export interface InterfaceEventCardProps extends InterfaceEvent {
-  // Additional props can be added here if needed in the future
-}
+export type InterfaceEventCardProps = InterfaceEvent;
