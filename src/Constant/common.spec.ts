@@ -7,7 +7,6 @@ import {
   FILE_NAME_TEMPLATE_BACKUP_ENV,
   IDENTIFIER_USER_ID,
   IDENTIFIER_ID,
-  getDummyDateTime,
   DUMMY_DATE_TIME_PREFIX,
   DATE_FORMAT,
   TEST_ID_DELETE_EVENT_MODAL,
@@ -135,17 +134,6 @@ describe('common constants and helpers', () => {
 
     it('IDENTIFIER_ID should be id', () => {
       expect(IDENTIFIER_ID).toBe('id');
-    });
-  });
-
-  describe('getDummyDateTime', () => {
-    it('should return combined dummy date time prefix and time', () => {
-      const time = '10:30:00';
-      expect(getDummyDateTime(time)).toBe(`${DUMMY_DATE_TIME_PREFIX}${time}`);
-    });
-
-    it('should handle empty time string', () => {
-      expect(getDummyDateTime('')).toBe(DUMMY_DATE_TIME_PREFIX);
     });
   });
 
