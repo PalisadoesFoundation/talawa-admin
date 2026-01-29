@@ -1,11 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  render,
-  screen,
-  waitFor,
-  within,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -700,9 +694,8 @@ describe('ActionItemModal', () => {
       });
 
       // Switch to volunteer group
-      // Use fireEvent for more reliable MUI Chip interaction (synchronous)
       const groupChip = screen.getByRole('button', { name: 'volunteerGroup' });
-      fireEvent.click(groupChip);
+      await user.click(groupChip);
 
       // Wait for group select to appear
       await screen.findByTestId('volunteerGroupSelect', {}, { timeout: 10000 });
@@ -1040,9 +1033,10 @@ describe('ActionItemModal', () => {
         'preCompletionNotes',
       )) as HTMLInputElement;
 
+      // Focus the input first so keystrokes go here (not to category autocomplete)
+      await user.click(notesInput);
       // Type a single character to trigger onChange (covers line 705)
-      // Using single char avoids race conditions with userEvent's async character-by-character typing
-      await user.type(notesInput, 'T');
+      await user.keyboard('T');
 
       // Wait for the value to be updated - verify onChange was triggered
       await waitFor(
