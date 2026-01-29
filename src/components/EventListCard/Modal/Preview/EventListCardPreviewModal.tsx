@@ -100,31 +100,31 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
   const getDayName = (dayIndex: number): string => {
     const days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
+      t('sunday'),
+      t('monday'),
+      t('tuesday'),
+      t('wednesday'),
+      t('thursday'),
+      t('friday'),
+      t('saturday'),
     ];
     return days[dayIndex];
   };
 
   const getMonthName = (monthIndex: number): string => {
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      t('january'),
+      t('february'),
+      t('march'),
+      t('april'),
+      t('may'),
+      t('june'),
+      t('july'),
+      t('august'),
+      t('september'),
+      t('october'),
+      t('november'),
+      t('december'),
     ];
     return months[monthIndex];
   };
@@ -142,19 +142,19 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
     return [
       {
-        label: 'Daily',
+        label: t('daily'),
         value: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
       },
       {
-        label: `Weekly on ${dayName}`,
+        label: t('weeklyOn', { day: dayName }),
         value: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
       },
       {
-        label: `Monthly on day ${dayOfMonth}`,
+        label: t('monthlyOnDay', { day: dayOfMonth }),
         value: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
       },
       {
-        label: `Annually on ${monthName} ${dayOfMonth}`,
+        label: t('annuallyOn', { month: monthName, day: dayOfMonth }),
         value: {
           frequency: Frequency.YEARLY,
           interval: 1,
@@ -164,7 +164,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         },
       },
       {
-        label: 'Every weekday (Monday to Friday)',
+        label: t('everyWeekday'),
         value: {
           frequency: Frequency.WEEKLY,
           interval: 1,
@@ -173,7 +173,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         },
       },
       {
-        label: 'Custom...',
+        label: t('customOption'),
         value: 'custom',
       },
     ];
@@ -223,7 +223,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     }
 
     // Fallback for non-recurring events or events without a description
-    return 'Select recurrence pattern';
+    return t('selectRecurrencePattern');
   };
 
   // Check if this is a recurring event (either template or instance)

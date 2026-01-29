@@ -1025,7 +1025,7 @@ describe('ActionItemModal', () => {
     });
 
     it('should update preCompletionNotes field (covers line 705)', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 10 });
       renderModal();
       await screen.findByTestId('actionItemModal');
 

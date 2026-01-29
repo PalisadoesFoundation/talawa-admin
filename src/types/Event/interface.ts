@@ -139,7 +139,7 @@ export interface IDeleteEventModalProps {
   eventListCardProps: IEventListCard;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   deleteEventHandler: (
     deleteOption?: 'single' | 'following' | 'all',
@@ -151,7 +151,7 @@ export interface IPreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
@@ -194,7 +194,7 @@ export interface IUpdateEventModalProps {
   eventListCardProps: IEventListCard;
   recurringEventUpdateModalIsOpen: boolean;
   toggleRecurringEventUpdateModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   updateEventHandler: () => Promise<void>;
 }
@@ -208,7 +208,7 @@ export interface IAttendanceStatisticsModalProps {
     attendanceRate: number;
   };
   memberData: IMember[];
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }
 
 export interface IEventsAttendedMemberModalProps {

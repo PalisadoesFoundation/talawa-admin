@@ -779,7 +779,7 @@ describe('EventListCardPreviewModal', () => {
       recurrence: null,
     });
 
-    expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
+    expect(screen.getByText('selectRecurrencePattern')).toBeInTheDocument();
   });
 
   test('opens recurrence dropdown and shows options', async () => {
@@ -1217,7 +1217,7 @@ describe('EventListCardPreviewModal', () => {
         },
         recurrence,
       });
-      expect(screen.getByText('Daily')).toBeInTheDocument();
+      expect(screen.getByText('daily')).toBeInTheDocument();
     });
 
     test('returns frequency when no matching option is found', () => {
@@ -1257,7 +1257,7 @@ describe('EventListCardPreviewModal', () => {
         },
         recurrence: null,
       });
-      expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
+      expect(screen.getByText('selectRecurrencePattern')).toBeInTheDocument();
     });
 
     test('returns custom recurrence description when recurrence is not defined', () => {
