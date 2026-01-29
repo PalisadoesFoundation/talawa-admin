@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
 import Button from 'shared-components/Button/Button';
 import styles from 'style/app-fixed.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { CREATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { useMutation } from '@apollo/client';
+import { useParams } from 'react-router';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
@@ -11,11 +15,75 @@ const AgendaFolderCreateModal: React.FC<
 > = ({
   agendaFolderCreateModalIsOpen,
   hideCreateModal,
-  formState,
-  setFormState,
-  createAgendaFolderHandler,
+  eventId,
+  agendaFolderData,
   t,
+  refetchAgendaFolder,
 }) => {
+  const { orgId } = useParams();
+  // Mutation for creating an agenda item
+  const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
+  // State to manage form values
+  const [formState, setFormState] = useState({
+    id: '',
+    name: '',
+    description: '',
+    creator: {
+      name: '',
+    },
+  });
+
+  /**
+   * Handler for creating a new agenda item.
+   *
+   * @param  e - The form submit event.
+   */
+  const createAgendaFolderHandler = async (
+    e: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    const agendaFolders = Array.isArray(
+      agendaFolderData?.agendaFoldersByEventId,
+    )
+      ? agendaFolderData?.agendaFoldersByEventId
+      : [];
+    const maxSequence = agendaFolders.reduce((max, folder) => {
+      const sequence = Number.isFinite(folder.sequence) ? folder.sequence : 0;
+      return Math.max(max, sequence);
+    }, 0);
+    const nextSequence = maxSequence + 1;
+    try {
+      await createAgendaFolder({
+        variables: {
+          input: {
+            name: formState.name,
+            description: formState.description,
+            eventId: eventId,
+            sequence: nextSequence, // Assign sequence based on current length
+            organizationId: orgId,
+          },
+        },
+      });
+
+      // Reset form state and hide modal
+      setFormState({
+        id: '',
+        name: '',
+        description: '',
+        creator: {
+          name: '',
+        },
+      });
+      hideCreateModal();
+      refetchAgendaFolder();
+      NotificationToast.success(t('agendaFolderCreated') as string);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        NotificationToast.error(error.message);
+      }
+    }
+  };
+
   return (
     <BaseModal
       className={`mt-5 ${styles.campaignModal}`}

@@ -6,7 +6,7 @@
  * categories, URLs, and attachments. The modal also provides functionality
  * for validating URLs, managing attachments, and submitting the form.
  */
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
@@ -19,7 +19,7 @@ import {
   FormFieldGroup,
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
-
+import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 
@@ -28,8 +28,13 @@ import styles from './AgendaItemsCreateModal.module.css';
 import type {
   InterfaceAgendaItemsCreateModalProps,
   InterfaceAttachment,
+  InterfaceCreateFormStateType,
 } from 'types/AdminPortal/Agenda/interface';
-import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
+import {
+  AGENDA_ITEM_ALLOWED_MIME_TYPES,
+  AGENDA_ITEM_MIME_TYPE,
+} from 'Constant/fileUpload';
+import { useMutation } from '@apollo/client';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
@@ -37,17 +42,18 @@ const AgendaItemsCreateModal: React.FC<
 > = ({
   agendaItemCreateModalIsOpen,
   hideItemCreateModal,
-  agendaItemFormState,
-  setAgendaItemFormState,
-  createAgendaItemHandler,
+  eventId,
   t,
   agendaItemCategories,
   agendaFolderData,
+  refetchAgendaFolder,
 }) => {
   const [newUrl, setNewUrl] = useState('');
 
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
+  // Mutation for creating an agenda item
+  const [createAgendaItem] = useMutation(CREATE_AGENDA_ITEM_MUTATION);
 
   const MAX_FILE_SIZE_MB = 10;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
@@ -58,6 +64,108 @@ const AgendaItemsCreateModal: React.FC<
   const isValidUrl = (url: string): boolean => {
     const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
     return urlRegex.test(url);
+  };
+
+  // State to manage form values
+  const [agendaItemFormState, setAgendaItemFormState] =
+    useState<InterfaceCreateFormStateType>({
+      id: '',
+      title: '',
+      description: '',
+      duration: '',
+      creator: {
+        name: '',
+      },
+      urls: [] as string[],
+      attachments: [] as {
+        id: string;
+        name: string;
+        mimeType: string;
+        fileHash: string;
+        objectName: string;
+      }[],
+      folderId: '',
+      categoryId: '',
+    });
+
+  /**
+   * Handler for creating a new agenda item.
+   *
+   * @param  e - The form submit event.
+   */
+  const createAgendaItemHandler = async (
+    e: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    const selectedFolder = agendaFolderData?.find(
+      (folder) => folder.id === agendaItemFormState.folderId,
+    );
+    const folderItems = selectedFolder?.items?.edges ?? [];
+    const maxSequence = folderItems.reduce(
+      (max, edge) => Math.max(max, edge.node.sequence ?? 0),
+      0,
+    );
+    const nextSequence = maxSequence + 1;
+    try {
+      await createAgendaItem({
+        variables: {
+          input: {
+            name: agendaItemFormState.title,
+            description: agendaItemFormState.description,
+            eventId: eventId,
+            sequence: nextSequence, // Assign sequence based on current length
+            duration: agendaItemFormState.duration,
+            folderId: agendaItemFormState.folderId,
+            categoryId: agendaItemFormState.categoryId,
+            attachments:
+              agendaItemFormState.attachments.length > 0
+                ? agendaItemFormState.attachments.map((att) => ({
+                    name: att.name,
+                    mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType],
+                    fileHash: att.fileHash,
+                    objectName: att.objectName,
+                  }))
+                : undefined,
+            type: 'general',
+            //key:
+            url:
+              agendaItemFormState.urls.length > 0
+                ? agendaItemFormState.urls.map((u) => ({
+                    url: u,
+                  }))
+                : undefined,
+          },
+        },
+      });
+
+      // Reset form state and hide modal
+      setAgendaItemFormState({
+        id: '',
+        title: '',
+        description: '',
+        duration: '',
+        folderId: '',
+        attachments: [] as {
+          id: string;
+          name: string;
+          mimeType: string;
+          fileHash: string;
+          objectName: string;
+        }[],
+        urls: [] as string[],
+        creator: {
+          name: '',
+        },
+        categoryId: '',
+      });
+      hideItemCreateModal();
+      refetchAgendaFolder();
+      NotificationToast.success(t('agendaItemCreated') as string);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        NotificationToast.error(error.message);
+      }
+    }
   };
 
   const handleAddUrl = (): void => {

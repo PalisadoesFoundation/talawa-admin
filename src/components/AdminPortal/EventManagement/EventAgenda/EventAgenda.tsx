@@ -31,22 +31,16 @@
  * @throws Will display an error message if data fetching or mutation fails.
  */
 import React, { useState } from 'react';
-import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import {
   AGENDA_ITEM_CATEGORY_LIST,
   AGENDA_FOLDER_LIST,
 } from 'GraphQl/Queries/Queries';
-import {
-  CREATE_AGENDA_FOLDER_MUTATION,
-  CREATE_AGENDA_ITEM_MUTATION,
-} from 'GraphQl/Mutations/mutations';
 
 import type {
   InterfaceAgendaItemCategoryList,
@@ -57,13 +51,9 @@ import AgendaFolderCreateModal from 'components/AdminPortal/AgendaFolder/Create/
 import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import styles from 'style/app-fixed.module.css';
-import { useParams } from 'react-router';
-import { InterfaceCreateFormStateType } from 'types/AdminPortal/Agenda/interface';
-import { AGENDA_ITEM_MIME_TYPE } from 'Constant/fileUpload';
 
-function EventAgendaFolder(props: { eventId: string }): JSX.Element {
+function EventAgenda(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
-  const { orgId } = useParams();
 
   const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
 
@@ -73,38 +63,6 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   // State to manage the create agenda item modal visibility
   const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
     useState<boolean>(false);
-
-  // State to manage form values
-  const [formState, setFormState] = useState({
-    id: '',
-    name: '',
-    description: '',
-    creator: {
-      name: '',
-    },
-  });
-
-  // State to manage form values
-  const [agendaItemFormState, setAgendaItemFormState] =
-    useState<InterfaceCreateFormStateType>({
-      id: '',
-      title: '',
-      description: '',
-      duration: '',
-      creator: {
-        name: '',
-      },
-      urls: [] as string[],
-      attachments: [] as {
-        id: string;
-        name: string;
-        mimeType: string;
-        fileHash: string;
-        objectName: string;
-      }[],
-      folderId: '',
-      categoryId: '',
-    });
 
   // Query for agenda item categories
   const {
@@ -137,143 +95,6 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
     variables: { eventId },
     notifyOnNetworkStatusChange: true,
   });
-
-  // Mutation for creating an agenda item
-  const [createAgendaItem] = useMutation(CREATE_AGENDA_ITEM_MUTATION);
-
-  // Mutation for creating an agenda item
-  const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
-
-  /**
-   * Handler for creating a new agenda item.
-   *
-   * @param  e - The form submit event.
-   */
-  const createAgendaItemHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    const selectedFolder = agendaFolderData?.agendaFoldersByEventId?.find(
-      (folder) => folder.id === agendaItemFormState.folderId,
-    );
-    const folderItems = selectedFolder?.items?.edges ?? [];
-    const maxSequence = folderItems.reduce(
-      (max, edge) => Math.max(max, edge.node.sequence ?? 0),
-      0,
-    );
-    const nextSequence = maxSequence + 1;
-    try {
-      await createAgendaItem({
-        variables: {
-          input: {
-            name: agendaItemFormState.title,
-            description: agendaItemFormState.description,
-            eventId: eventId,
-            sequence: nextSequence, // Assign sequence based on current length
-            duration: agendaItemFormState.duration,
-            folderId: agendaItemFormState.folderId,
-            categoryId: agendaItemFormState.categoryId,
-            attachments:
-              agendaItemFormState.attachments.length > 0
-                ? agendaItemFormState.attachments.map((att) => ({
-                    name: att.name,
-                    mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType],
-                    fileHash: att.fileHash,
-                    objectName: att.objectName,
-                  }))
-                : undefined,
-            type: 'general',
-            //key:
-            url:
-              agendaItemFormState.urls.length > 0
-                ? agendaItemFormState.urls.map((u) => ({
-                    url: u,
-                  }))
-                : undefined,
-          },
-        },
-      });
-
-      // Reset form state and hide modal
-      setAgendaItemFormState({
-        id: '',
-        title: '',
-        description: '',
-        duration: '',
-        folderId: '',
-        attachments: [] as {
-          id: string;
-          name: string;
-          mimeType: string;
-          fileHash: string;
-          objectName: string;
-        }[],
-        urls: [] as string[],
-        creator: {
-          name: '',
-        },
-        categoryId: '',
-      });
-      hideItemCreateModal();
-      refetchAgendaFolder();
-      NotificationToast.success(t('agendaItemCreated') as string);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        NotificationToast.error(error.message);
-      }
-    }
-  };
-
-  /**
-   * Handler for creating a new agenda item.
-   *
-   * @param  e - The form submit event.
-   */
-  const createAgendaFolderHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    const agendaFolders = Array.isArray(
-      agendaFolderData?.agendaFoldersByEventId,
-    )
-      ? agendaFolderData?.agendaFoldersByEventId
-      : [];
-    const maxSequence = agendaFolders.reduce(
-      (max, folder) => Math.max(max, folder.sequence ?? 0),
-      0,
-    );
-    const nextSequence = maxSequence + 1;
-    try {
-      await createAgendaFolder({
-        variables: {
-          input: {
-            name: formState.name,
-            description: formState.description,
-            eventId: eventId,
-            sequence: nextSequence, // Assign sequence based on current length
-            organizationId: orgId,
-          },
-        },
-      });
-
-      // Reset form state and hide modal
-      setFormState({
-        id: '',
-        name: '',
-        description: '',
-        creator: {
-          name: '',
-        },
-      });
-      hideCreateModal();
-      refetchAgendaFolder();
-      NotificationToast.success(t('agendaFolderCreated') as string);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        NotificationToast.error(error.message);
-      }
-    }
-  };
 
   /**
    * Toggles the visibility of the create agenda folder modal.
@@ -316,7 +137,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
           <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
-            {agendaFolderError ? 'Agenda Folders' : 'Agenda Items'} Data
+            {agendaFolderError ? 'Agenda Folders' : 'Agenda Items'}
             <br />
             {errorMessage}
           </h6>
@@ -376,18 +197,17 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
         <AgendaFolderCreateModal
           agendaFolderCreateModalIsOpen={agendaFolderCreateModalIsOpen}
           hideCreateModal={hideCreateModal}
-          formState={formState}
-          setFormState={setFormState}
-          createAgendaFolderHandler={createAgendaFolderHandler}
           t={t}
+          eventId={eventId}
+          agendaFolderData={agendaFolderData}
+          refetchAgendaFolder={refetchAgendaFolder}
         />
         <AgendaItemsCreateModal
           agendaItemCreateModalIsOpen={agendaItemCreateModalIsOpen}
           hideItemCreateModal={hideItemCreateModal}
-          agendaItemFormState={agendaItemFormState}
-          setAgendaItemFormState={setAgendaItemFormState}
-          createAgendaItemHandler={createAgendaItemHandler}
           t={t}
+          eventId={eventId}
+          refetchAgendaFolder={refetchAgendaFolder}
           agendaItemCategories={agendaCategoryData?.agendaCategoriesByEventId}
           agendaFolderData={agendaFolderData?.agendaFoldersByEventId}
         />
@@ -396,4 +216,4 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
   );
 }
 
-export default EventAgendaFolder;
+export default EventAgenda;

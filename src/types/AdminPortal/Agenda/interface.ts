@@ -175,14 +175,11 @@ export interface InterfaceFormStateType {
 export interface InterfaceAgendaItemsCreateModalProps {
   agendaItemCreateModalIsOpen: boolean;
   hideItemCreateModal: () => void;
-  agendaItemFormState: InterfaceCreateFormStateType;
-  setAgendaItemFormState: (
-    state: React.SetStateAction<InterfaceCreateFormStateType>,
-  ) => void;
-  createAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  eventId: string;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
+  refetchAgendaFolder: () => void;
 }
 
 /**
@@ -235,12 +232,10 @@ export interface InterfaceAgendaFolderCreateFormStateType {
 export interface InterfaceAgendaFolderCreateModalProps {
   agendaFolderCreateModalIsOpen: boolean;
   hideCreateModal: () => void;
-  formState: InterfaceAgendaFolderCreateFormStateType;
-  setFormState: (
-    state: React.SetStateAction<InterfaceAgendaFolderCreateFormStateType>,
-  ) => void;
-  createAgendaFolderHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  eventId: string;
+  agendaFolderData: InterfaceAgendaFolderList | undefined;
   t: (key: string) => string;
+  refetchAgendaFolder: () => void;
 }
 
 export interface InterfaceAgendaFolderUpdateFormStateType {

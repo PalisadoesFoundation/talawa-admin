@@ -33,6 +33,16 @@ vi.mock('@mui/icons-material', async () => {
   };
 });
 
+vi.mock(
+  'components/AdminPortal/EventManagement/EventAgenda/EventAgenda',
+  () => ({
+    __esModule: true,
+    default: ({ eventId }: { eventId: string }) => (
+      <div data-testid="mock-event-agenda">EventAgenda mock – {eventId}</div>
+    ),
+  }),
+);
+
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
   MOCKS_WITH_TIME[0].result.data.event.startAt;
@@ -194,6 +204,15 @@ describe('Event Management', () => {
     it('renders dashboard tab by default', async () => {
       renderEventManagement();
       expect(screen.getByTestId('eventDashboardTab')).toBeInTheDocument();
+    });
+
+    it('renders EventAgenda component when agendas tab is selected', async () => {
+      renderEventManagement();
+
+      await user.click(screen.getByTestId('agendasBtn'));
+
+      expect(screen.getByTestId('eventAgendasTab')).toBeInTheDocument();
+      expect(screen.getByTestId('mock-event-agenda')).toBeInTheDocument();
     });
 
     it('switches between all available tabs', async () => {

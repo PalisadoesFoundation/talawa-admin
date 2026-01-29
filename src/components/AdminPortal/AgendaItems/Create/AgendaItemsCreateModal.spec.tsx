@@ -1,394 +1,768 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
+import { vi } from 'vitest';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-import type { MockedFunction } from 'vitest';
-import { describe, test, expect, vi } from 'vitest';
-import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
+import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
-let mockHideCreateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
-const mockT = (key: string): string => key;
+import type {
+  InterfaceAgendaFolderInfo,
+  InterfaceAgendaItemCategoryInfo,
+} from 'types/AdminPortal/Agenda/interface';
 
-const mockNotificationToast = vi.hoisted(() => ({
+const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
-  dismiss: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockNotificationToast,
+  NotificationToast: toastMocks,
 }));
 
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: () => ({ orgId: 'org-123' }),
+  };
+});
+
+const uploadFileToMinioMock = vi.fn();
+const getFileFromMinioMock = vi.fn();
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: uploadFileToMinioMock,
+  }),
+}));
+
+vi.mock('utils/MinioDownload', () => ({
+  useMinioDownload: () => ({
+    getFileFromMinio: getFileFromMinioMock,
+  }),
+}));
+
+const createAgendaItemNode = (sequence: number) => ({
+  id: `item-${sequence}`,
+  name: `Item ${sequence}`,
+  description: 'Desc',
+  duration: '10',
+  sequence,
+  attachments: [],
+  category: {
+    id: 'cat-1',
+    name: 'Category',
+    description: 'Desc',
+  },
+  creator: {
+    id: 'u1',
+    name: 'Admin',
+  },
+  url: [],
+  folder: {
+    id: 'folder-1',
+    name: 'Folder',
+  },
+  event: {
+    id: 'event-1',
+    name: 'Event',
+  },
+});
+
+const agendaFolders: InterfaceAgendaFolderInfo[] = [
+  {
+    id: 'folder-1',
+    name: 'Folder',
+    sequence: 1,
+    items: {
+      edges: [
+        { node: createAgendaItemNode(1) },
+        { node: createAgendaItemNode(2) },
+      ],
+    },
+  },
+];
+
+const categories: InterfaceAgendaItemCategoryInfo[] = [
+  {
+    id: 'cat-1',
+    name: 'Category',
+    description: 'Desc',
+    creator: {
+      id: 'u1',
+      name: 'Admin',
+    },
+  },
+];
+
+const t = (key: string): string => key;
+
 describe('AgendaItemsCreateModal', () => {
-  beforeEach(() => {
-    mockHideCreateModal = vi.fn();
-    mockSetFormState = vi.fn();
-    mockCreateAgendaItemHandler = vi.fn();
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
-  test('filters out empty URLs and attachments on mount', async () => {
-    // URLs use trim() !== '', attachments use att !== ''
-    const mockFormStateWithEmptyEntries = {
-      title: 'Test Title',
-      description: 'Test Description',
-      duration: '20',
-      attachments: ['valid-attachment', ''],
-      urls: ['https://valid.com', '', '   '],
-      agendaItemCategoryIds: [],
-    };
-
+  it('renders modal when open', () => {
     render(
       <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormStateWithEmptyEntries}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
       </MockedProvider>,
     );
 
-    // The useEffect should filter out empty entries
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
-    });
-
-    // Verify the filter function was called with the correct logic
-    const setFormStateCalls = mockSetFormState.mock.calls;
-    const filterCall = setFormStateCalls.find(
-      (call) => typeof call[0] === 'function',
-    );
-    if (filterCall) {
-      const filterFn = filterCall[0];
-      const result = filterFn(mockFormStateWithEmptyEntries);
-      // URLs filter uses trim(), so whitespace-only strings are filtered
-      expect(result.urls).toEqual(['https://valid.com']);
-      // Attachments filter only checks !== '', so only empty strings are filtered
-      expect(result.attachments).toEqual(['valid-attachment']);
-    }
-  });
-
-  test('renders modal correctly', () => {
-    render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
+    expect(screen.getByTestId('createAgendaItemModal')).toBeInTheDocument();
     expect(screen.getByText('agendaItemDetails')).toBeInTheDocument();
-    expect(screen.getByTestId('createAgendaItemFormBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
-  test('tests the condition for formState', async () => {
-    const mockFormState1 = {
-      title: 'Test Title',
-      description: 'Test Description',
-      duration: '20',
-      attachments: ['Test Attachment'],
-      urls: ['https://example.com'],
-      agendaItemCategoryIds: ['1'],
-    };
+  it('creates agenda item with next sequence', async () => {
+    const user = userEvent.setup();
+
     render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: CREATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    name: 'Title',
+                    description: 'Desc',
+                    eventId: 'event-1',
+                    sequence: 3,
+                    duration: '10',
+                    folderId: 'folder-1',
+                    categoryId: 'cat-1',
+                    type: 'general',
+                  },
+                },
+              },
+              result: {
+                data: {
+                  createAgendaItem: {
+                    id: 'new-id',
+                  },
+                },
+              },
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText('title'), {
-      target: { value: 'New title' },
-    });
+    await user.type(screen.getByLabelText(/title/i), 'Title');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+    await user.type(screen.getByLabelText(/description/i), 'Desc');
 
-    fireEvent.change(screen.getByLabelText('description'), {
-      target: { value: 'New description' },
-    });
+    // select folder
+    const folderInput = screen.getByPlaceholderText('folderName');
+    await user.click(folderInput);
+    await user.type(folderInput, 'Folder');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
 
-    fireEvent.change(screen.getByLabelText('duration'), {
-      target: { value: '30' },
-    });
+    const categoryInput = screen.getByPlaceholderText('categoryName');
+    await user.click(categoryInput);
+    await user.type(categoryInput, 'Category');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
 
-    fireEvent.click(screen.getByTestId('deleteUrl'));
-    fireEvent.click(screen.getByTestId('deleteAttachment'));
-
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState1,
-      title: 'New title',
-    });
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState1,
-      description: 'New description',
-    });
-
-    expect(mockSetFormState).toHaveBeenCalledWith({
-      ...mockFormState1,
-      duration: '30',
-    });
+    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        urls: [],
-      });
-    });
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        attachments: [],
-      });
-    });
-  });
-  test('handleAddUrl correctly adds valid URL', async () => {
-    render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <AgendaItemsCreateModal
-                agendaItemCreateModalIsOpen
-                hideCreateModal={mockHideCreateModal}
-                formState={mockFormState1}
-                setFormState={mockSetFormState}
-                createAgendaItemHandler={mockCreateAgendaItemHandler}
-                t={mockT}
-                agendaItemCategories={[]}
-              />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const urlInput = screen.getByTestId('urlInput');
-    const linkBtn = screen.getByTestId('linkBtn');
-
-    fireEvent.change(urlInput, { target: { value: 'https://example.com' } });
-    fireEvent.click(linkBtn);
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        urls: [...mockFormState1.urls, 'https://example.com'],
-      });
-    });
-  });
-
-  test('shows error toast for invalid URL', async () => {
-    render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const urlInput = screen.getByTestId('urlInput');
-    const linkBtn = screen.getByTestId('linkBtn');
-
-    fireEvent.change(urlInput, { target: { value: 'invalid-url' } });
-    fireEvent.click(linkBtn);
-
-    await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalledWith('invalidUrl');
-    });
-  });
-
-  test('shows error toast for file size exceeding limit', async () => {
-    render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </MockedProvider>,
-    );
-
-    const fileInput = screen.getByTestId('attachment');
-    const largeFile = new File(
-      ['a'.repeat(11 * 1024 * 1024)],
-      'large-file.jpg',
-    ); // 11 MB file
-
-    Object.defineProperty(fileInput, 'files', {
-      value: [largeFile],
-    });
-
-    fireEvent.change(fileInput);
-
-    await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalledWith(
-        'fileSizeExceedsLimit',
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'agendaItemCreated',
       );
     });
   });
-  test('renders video attachment preview correctly', async () => {
-    const mockFormStateWithVideo = {
-      title: 'Test Title',
-      description: 'Test Description',
-      duration: '20',
-      attachments: ['data:video/mp4;base64,AAAA'],
-      urls: [],
-      agendaItemCategoryIds: [],
-    };
+
+  it('shows error toast when mutation fails', async () => {
+    const user = userEvent.setup();
 
     render(
-      <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormStateWithVideo}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={[]}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: CREATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    name: 'Title',
+                    description: 'Desc',
+                    eventId: 'event-1',
+                    sequence: 1,
+                    duration: '10',
+                    folderId: '',
+                    categoryId: '',
+                    type: 'general',
+                  },
+                },
+              },
+              error: new Error('Creation failed'),
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
       </MockedProvider>,
     );
 
-    const mediaPreview = screen.getByTestId('mediaPreview');
-    expect(mediaPreview).toBeInTheDocument();
+    await user.type(screen.getByLabelText(/title/i), 'Title');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+    await user.type(screen.getByLabelText(/description/i), 'Desc');
 
-    // Check that video element is rendered (not img)
-    const videoElement = mediaPreview.querySelector('video');
-    expect(videoElement).toBeInTheDocument();
+    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
+    });
   });
 
-  test('renders autocomplete and selects categories correctly', async () => {
+  it('adds and removes valid URL', async () => {
+    const user = userEvent.setup();
+
     render(
       <MockedProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <AgendaItemsCreateModal
-                  agendaItemCreateModalIsOpen
-                  hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
-                  setFormState={mockSetFormState}
-                  createAgendaItemHandler={mockCreateAgendaItemHandler}
-                  t={mockT}
-                  agendaItemCategories={mockAgendaItemCategories}
-                />
-              </LocalizationProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
       </MockedProvider>,
     );
 
-    const autocomplete = screen.getByTestId('categorySelect');
-    expect(autocomplete).toBeInTheDocument();
+    const urlInput = screen.getByTestId('urlInput');
 
-    const input = within(autocomplete).getByRole('combobox');
-    fireEvent.mouseDown(input);
+    await user.type(urlInput, 'https://example.com');
+    await user.click(screen.getByTestId('linkBtn'));
 
-    const options = screen.getAllByRole('option');
-    expect(options).toHaveLength(mockAgendaItemCategories.length);
+    expect(screen.getByText('https://example.com')).toBeInTheDocument();
 
-    fireEvent.click(options[0]);
-    fireEvent.click(options[1]);
+    await user.click(screen.getByTestId('deleteUrl'));
+
+    expect(screen.queryByText('https://example.com')).not.toBeInTheDocument();
+  });
+
+  it('rejects invalid URL', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByTestId('urlInput'), 'invalid-url');
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+  });
+
+  it('creates agenda item when agendaFolderData is undefined', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: CREATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    name: 'Title',
+                    description: 'Desc',
+                    eventId: 'event-1',
+                    sequence: 1,
+                    duration: '10',
+                    folderId: '',
+                    categoryId: '',
+                    type: 'general',
+                  },
+                },
+              },
+              result: { data: { createAgendaItem: { id: '1' } } },
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={undefined}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Title');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+    await user.type(screen.getByLabelText(/description/i), 'Desc');
+    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('rejects file exceeding size limit', async () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const file = new File(['x'.repeat(11 * 1024 * 1024)], 'big.png', {
+      type: 'image/png',
+    });
+
+    const input = screen.getByTestId('attachment') as HTMLInputElement;
+
+    await userEvent.upload(input, file);
+
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'fileSizeExceedsLimit',
+    );
+  });
+
+  it('rejects invalid attachment type', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const invalidImage = new File(['<svg></svg>'], 'icon.svg', {
+      type: 'image/svg+xml',
+    });
+
+    await user.upload(screen.getByTestId('attachment'), invalidImage);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
+    });
+  });
+
+  it('calls hideItemCreateModal on close', async () => {
+    const hideMock = vi.fn();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={hideMock}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+
+    expect(hideMock).toHaveBeenCalled();
+  });
+
+  it('truncates long URLs in display', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const longUrl = 'https://example.com/' + 'a'.repeat(60);
+
+    await user.type(screen.getByTestId('urlInput'), longUrl);
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(
+      screen.getByText(longUrl.substring(0, 50) + '...'),
+    ).toBeInTheDocument();
+  });
+
+  it('submits agenda item without attachments', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: CREATE_AGENDA_ITEM_MUTATION,
+                variables: {
+                  input: {
+                    name: 'Title',
+                    description: 'Desc',
+                    eventId: 'event-1',
+                    sequence: 1,
+                    duration: '10',
+                    folderId: '',
+                    categoryId: '',
+                    attachments: undefined,
+                    url: undefined,
+                    type: 'general',
+                  },
+                },
+              },
+              result: {
+                data: {
+                  createAgendaItem: {
+                    id: 'new-id',
+                  },
+                },
+              },
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Title');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+    await user.type(screen.getByLabelText(/description/i), 'Desc');
+
+    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'agendaItemCreated',
+      );
+    });
+  });
+
+  it('handles upload failure gracefully', async () => {
+    uploadFileToMinioMock.mockRejectedValueOnce(new Error('upload failed'));
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const file = new File(['x'], 'image.png', {
+      type: 'image/png',
+    });
+
+    await user.upload(screen.getByTestId('attachment'), file);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('fileUploadFailed');
+    });
+  });
+
+  it('rejects empty URL input', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+  });
+
+  it('does nothing when file input has no files', async () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = screen.getByTestId('attachment');
+
+    // manually fire change with empty FileList
+    await userEvent.upload(input, []);
+
+    expect(NotificationToast.error).not.toHaveBeenCalled();
+  });
+
+  it('uploads multiple valid files', async () => {
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'obj',
+      fileHash: 'hash',
+    });
+
+    getFileFromMinioMock.mockResolvedValue('preview-url');
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const files = [
+      new File(['a'], 'a.png', { type: 'image/png' }),
+      new File(['b'], 'b.png', { type: 'image/png' }),
+    ];
+
+    await user.upload(screen.getByTestId('attachment'), files);
+
+    // wait for BOTH to be committed
+    const deleteButtons = await screen.findAllByTestId('deleteAttachment');
+    expect(deleteButtons).toHaveLength(2);
+  });
+
+  it('skips invalid files but uploads valid ones', async () => {
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'obj',
+      fileHash: 'hash',
+    });
+    getFileFromMinioMock.mockResolvedValue('preview-url');
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const files = [
+      new File(['bad'], 'bad.svg', { type: 'image/svg+xml' }),
+      new File(['good'], 'good.png', { type: 'image/png' }),
+    ];
+
+    await user.upload(screen.getByTestId('attachment'), files);
+
+    await screen.findByTestId('deleteAttachment');
+
+    expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
+  });
+
+  it('renders video preview for video attachment', async () => {
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'video-obj',
+      fileHash: 'hash',
+    });
+    getFileFromMinioMock.mockResolvedValue('video-url');
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const video = new File(['video'], 'vid.mp4', { type: 'video/mp4' });
+
+    await user.upload(screen.getByTestId('attachment'), video);
+
+    await screen.findByTestId('deleteAttachment');
+
+    expect(document.querySelector('video')).toBeInTheDocument();
+  });
+
+  it('removes attachment from state', async () => {
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'obj',
+      fileHash: 'hash',
+    });
+    getFileFromMinioMock.mockResolvedValue('preview-url');
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            agendaItemCreateModalIsOpen
+            hideItemCreateModal={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.upload(
+      screen.getByTestId('attachment'),
+      new File(['img'], 'img.png', { type: 'image/png' }),
+    );
+
+    const deleteBtn = await screen.findByTestId('deleteAttachment');
+    await user.click(deleteBtn);
+
+    expect(screen.queryByTestId('deleteAttachment')).not.toBeInTheDocument();
   });
 });
