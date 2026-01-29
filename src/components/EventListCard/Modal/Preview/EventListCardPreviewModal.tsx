@@ -89,7 +89,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 }) => {
   const timeToDayJs = (time: string): Dayjs => {
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-    return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+    return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');
   };
 
   // Check if the user has permission to edit the event
@@ -558,7 +558,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             setCustomRecurrenceModalIsOpen(false)
           }
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={(key: string) => key} // Pass translation function if available
+          t={t}
           startDate={eventStartDate}
         />
       )}

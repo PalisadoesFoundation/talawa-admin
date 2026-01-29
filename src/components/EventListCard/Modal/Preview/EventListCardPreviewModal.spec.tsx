@@ -1234,7 +1234,7 @@ describe('EventListCardPreviewModal', () => {
         },
         recurrence,
       });
-      expect(screen.getByText('Monthly')).toBeInTheDocument();
+      expect(screen.getByText('customRecurrence')).toBeInTheDocument();
     });
 
     test('returns recurrenceDescription when recurrence is not set', () => {
