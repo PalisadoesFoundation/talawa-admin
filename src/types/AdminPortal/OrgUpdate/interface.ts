@@ -32,6 +32,8 @@ export interface InterfaceOrganization {
   avatarURL: string | null;
   /** Whether user registration requires approval, or null if not configured. */
   isUserRegistrationRequired: boolean | null;
+  /** Whether the organization is visible in search results. */
+  isVisibleInSearch: boolean | null;
 }
 
 /**

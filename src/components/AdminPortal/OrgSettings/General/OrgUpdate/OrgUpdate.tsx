@@ -115,6 +115,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       setuserRegistrationRequiredChecked(
         data.organization.isUserRegistrationRequired ?? false,
       );
+      setVisibleChecked(data.organization.isVisibleInSearch ?? false);
     }
     return () => {
       isMounted = false;
@@ -266,7 +267,14 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
-
+                if (!file.type.startsWith('image/')) {
+                  NotificationToast.error(t('invalidImageType') as string);
+                  return;
+                }
+                if (file.size > 5 * 1024 * 1024) {
+                  NotificationToast.error(t('imageSizeTooLarge') as string);
+                  return;
+                }
                 setFormState({
                   ...formState,
                   avatar: file,

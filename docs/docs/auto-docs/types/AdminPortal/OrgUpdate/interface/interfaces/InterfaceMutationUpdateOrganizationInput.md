@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMutationUpdateOrganizationInput
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L40)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L42)
 
 Input type for the updateOrganization mutation.
 
@@ -14,7 +14,7 @@ Input type for the updateOrganization mutation.
 
 > `optional` **addressLine1**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L44)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L46)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:44](https://github.com
 
 > `optional` **addressLine2**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L45)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L47)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:45](https://github.com
 
 > `optional` **avatar**: `File`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L50)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L52)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:50](https://github.com
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L46)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L48)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:46](https://github.com
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L49)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L51)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:49](https://github.com
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L43)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L45)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:43](https://github.com
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L41)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L43)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:41](https://github.com
 
 > `optional` **isUserRegistrationRequired**: `boolean`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L51)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L53)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:51](https://github.com
 
 > `optional` **isVisibleInSearch**: `boolean`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L52)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L54)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:52](https://github.com
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L42)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L44)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:42](https://github.com
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L48)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L50)
 
 ***
 
@@ -102,4 +102,4 @@ Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:48](https://github.com
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L47)
+Defined in: [src/types/AdminPortal/OrgUpdate/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgUpdate/interface.ts#L49)
