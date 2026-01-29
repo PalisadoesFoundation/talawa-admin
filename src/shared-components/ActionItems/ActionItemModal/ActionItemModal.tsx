@@ -384,7 +384,9 @@ const ItemModal: FC<IItemModalProps> = ({
 
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
+  }, [actionItem]);
 
+  useEffect(() => {
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
