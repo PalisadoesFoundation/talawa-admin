@@ -5,7 +5,6 @@
  * It provides functionality to view, update, and manage event properties such as
  * name, description, location, date, time, and visibility settings.
  *
- * @param  props - The props for the PreviewModal component.
  * @param eventModalIsOpen - Determines if the modal is open.
  * @param hideViewModal - Function to close the modal.
  * @param toggleDeleteModal - Function to toggle the delete confirmation modal.
@@ -210,10 +209,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
       // If no standard option matches, display the frequency of the custom rule.
       if (recurrence.frequency) {
-        return (
-          recurrence.frequency.charAt(0).toUpperCase() +
-          recurrence.frequency.slice(1).toLowerCase()
-        );
+        return t('customRecurrence');
       }
     }
 

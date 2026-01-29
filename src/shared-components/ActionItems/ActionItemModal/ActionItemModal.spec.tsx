@@ -1048,7 +1048,7 @@ describe('ActionItemModal', () => {
     });
 
     it('should update postCompletionNotes field for completed items (covers line 717)', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: 10 });
       renderModal({ editMode: true, actionItem: mockCompletedActionItem });
       await screen.findByTestId('actionItemModal');
 

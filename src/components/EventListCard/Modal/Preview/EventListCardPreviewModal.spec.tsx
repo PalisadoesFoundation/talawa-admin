@@ -1055,8 +1055,9 @@ describe('EventListCardPreviewModal', () => {
 
     // The CustomRecurrenceModal should be rendered in the DOM
     // (though it may not be visible unless customRecurrenceModalIsOpen is true)
-    const dialogs = screen.getAllByRole('dialog', { hidden: true });
-    expect(dialogs.length).toBeGreaterThan(0);
+    expect(
+      screen.getByTestId('mock-custom-recurrence-modal'),
+    ).toBeInTheDocument();
   });
 
   test('start date picker onChange updates dates correctly', () => {
