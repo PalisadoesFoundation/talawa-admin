@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useParams, useNavigate } from 'react-router';
 import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
@@ -83,9 +84,9 @@ describe('DeleteOrg Component', () => {
     vi.restoreAllMocks();
   });
 
-  it('renders delete button and opens confirmation modal', () => {
+  it('renders delete button and opens confirmation modal', async () => {
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
     expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
   });
 
@@ -93,14 +94,14 @@ describe('DeleteOrg Component', () => {
     deleteOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
       expect(deleteOrgMutationMock).toHaveBeenCalledWith({
         variables: { input: { id: '1' } },
       });
-      expect(navigateMock).toHaveBeenCalledWith('/orglist');
+      expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 
@@ -109,8 +110,8 @@ describe('DeleteOrg Component', () => {
     deleteOrgMutationMock.mockRejectedValue(error);
 
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
@@ -126,8 +127,8 @@ describe('DeleteOrg Component', () => {
     removeSampleOrgMutationMock.mockRejectedValue(error);
 
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(error.message);
@@ -142,8 +143,8 @@ describe('DeleteOrg Component', () => {
     removeSampleOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
       expect(removeSampleOrgMutationMock).toHaveBeenCalled();
@@ -154,7 +155,7 @@ describe('DeleteOrg Component', () => {
 
     await waitFor(
       () => {
-        expect(navigateMock).toHaveBeenCalledWith('/orglist');
+        expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
       },
       { timeout: 1500 },
     );
@@ -183,10 +184,10 @@ describe('DeleteOrg Component', () => {
 
   it('closes modal when close button is clicked', async () => {
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
     expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('closeDelOrgModalBtn'));
+    await userEvent.click(screen.getByTestId('closeDelOrgModalBtn'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('orgDeleteModal')).not.toBeInTheDocument();
@@ -198,8 +199,8 @@ describe('DeleteOrg Component', () => {
     deleteOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
-    fireEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
+    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
       expect(deleteOrgMutationMock).toHaveBeenCalledWith({

@@ -34,7 +34,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationScreen.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
@@ -50,14 +50,14 @@ const OrganizationScreen = (): JSX.Element => {
   });
   // Get the current location to determine the translation key
   const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[1]];
+  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
-  const isEventPath = useMatch('/event/:orgId/:eventId');
+  const isEventPath = useMatch('/admin/event/:orgId/:eventId');
   const eventId = isEventPath?.params.eventId;
   const shouldFetchEventName = Boolean(orgId && eventId);
   const EVENTS_PAGE_SIZE = 100;
@@ -138,7 +138,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   return (
     <>
-      <div className={styles.opendrawerdrawer}>
+      <div className={styles.opendrawer}>
         <LeftDrawerOrg
           orgId={orgId}
           targets={targets}

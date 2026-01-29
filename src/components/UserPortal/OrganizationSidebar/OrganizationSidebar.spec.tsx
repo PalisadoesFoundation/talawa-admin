@@ -7,7 +7,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -29,7 +29,7 @@ dayjs.extend(utc);
  * 2. **Component renders properly when events list is not empty**: Tests that the events section is rendered correctly when events are available, and "No Events to show" is not displayed.
  * 3. **Component renders properly when members list is not empty**: Verifies the correct display of members when available, ensuring "No Members to show" is not displayed.
  * 4. **Handles GraphQL errors properly**: Validates that the component properly handles GraphQL query errors by displaying appropriate fallback content ("No Members to show" and "No Events to show") when data fetching fails.
- * 5. **Should show Loading state initially** : Checks that loading indicators are properly displayed while data is being fetched, verifying that "Loading..." text appears in both the members and events sections before data loads.
+ * 5. **Should show Loading state initially** : Checks that loading indicators are properly displayed while data is being fetched, verifying that loading text appears in both the members and events sections before data loads.
  * 6. **Should render Member images properly** : Validates the correct rendering of member profile images, ensuring that default images are shown when no custom image is provided and that custom images are properly displayed when available.
  *
  * Mocked GraphQL queries simulate backend responses for members and events lists.
@@ -107,6 +107,35 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      variables: {
+        orgId: 'members-new',
+        first: 3,
+        skip: 0,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: '64001660a711c62d5b4076b1',
+                  name: 'Jane Doe Sr',
+                  emailAddress: 'jane@example.com',
+                  avatarURL: 'mockImageNew',
+                  createdAt: dayjs.utc().toISOString(),
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
@@ -120,8 +149,8 @@ async function wait(ms = 100): Promise<void> {
 }
 let mockId = '';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: mockId }),
@@ -188,6 +217,28 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
     await wait();
     expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
     expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+  });
+
+  it('Component should normalize members from organization members edges', async () => {
+    mockId = 'members-new';
+    render(
+      <MockedProvider link={link} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    expect(screen.queryByText('No Members to show')).not.toBeInTheDocument();
+    expect(screen.queryByText('No Events to show')).toBeInTheDocument();
+    expect(screen.getByText('Jane Doe Sr')).toBeInTheDocument();
+    const images = screen.getAllByRole('img');
+    expect(images[0]).toHaveAttribute('src', 'mockImageNew');
   });
 
   it('Handles GraphQL errors properly', async () => {

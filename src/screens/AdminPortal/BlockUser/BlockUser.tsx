@@ -42,7 +42,6 @@
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import Button from 'react-bootstrap/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   BLOCK_USER_MUTATION_PG,
@@ -69,6 +68,7 @@ import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
+import Button from 'shared-components/Button';
 
 type BlockUserRow = {
   user: InterfaceUserPg;
@@ -346,7 +346,7 @@ const BlockUser = (): JSX.Element => {
               <DataTable
                 data={tableRows}
                 columns={tableColumns}
-                rowKey={(row) => row.user.id}
+                rowKey={(row: (typeof tableRows)[number]) => row.user.id}
                 tableClassName={styles.custom_table}
               />
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -94,8 +94,10 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 };
 
 describe('AddOnSpotAttendee Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     sharedMocks.useParams.mockReturnValue({ eventId: '123', orgId: '123' });
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -146,14 +148,15 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
-    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await user.type(screen.getByLabelText(/Phone No./i), '1234567890');
     const genderSelect = screen.getByLabelText(/Gender/i);
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+    await user.selectOptions(genderSelect, 'Male');
+    expect(genderSelect).toHaveValue('Male');
 
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).not.toHaveBeenCalled(); // Ensure success toast is not shown
@@ -177,15 +180,15 @@ describe('AddOnSpotAttendee Component', () => {
     );
 
     // Fill the form
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
-    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await user.type(screen.getByLabelText(/Phone No./i), '1234567890');
     const genderSelect = screen.getByLabelText(/Gender/i);
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+    await user.selectOptions(genderSelect, 'Male');
 
     // Submit the form
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     // Wait for the error to be handled
     await waitFor(() => {
@@ -198,14 +201,14 @@ describe('AddOnSpotAttendee Component', () => {
   it('submits form successfully and calls necessary callbacks', async () => {
     renderAddOnSpotAttendee();
 
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
-    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await user.type(screen.getByLabelText(/Phone No./i), '1234567890');
     const genderSelect = screen.getByLabelText(/Gender/i);
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+    await user.selectOptions(genderSelect, 'Male');
 
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).toHaveBeenCalled();
       expect(mockProps.reloadMembers).toHaveBeenCalled();
@@ -225,7 +228,7 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     await waitFor(() => {
       // Expect specific error message key for missing orgId
@@ -237,7 +240,7 @@ describe('AddOnSpotAttendee Component', () => {
   it('displays error when required fields are missing', async () => {
     renderAddOnSpotAttendee();
 
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
@@ -257,9 +260,9 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
@@ -269,19 +272,19 @@ describe('AddOnSpotAttendee Component', () => {
   it('disables button and shows loading state during form submission', async () => {
     renderAddOnSpotAttendee();
 
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
-    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await user.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await user.type(screen.getByLabelText(/Phone No./i), '1234567890');
     const genderSelect = screen.getByLabelText(/Gender/i);
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+    await user.selectOptions(genderSelect, 'Male');
 
     // Verify initial state before submission
     const submitButton = screen.getByRole('button', { name: /add/i });
     expect(submitButton).not.toBeDisabled();
     expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
 
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+    await user.click(screen.getByRole('button', { name: /add/i }));
 
     // Wait for loading state to appear AND button to be gone (atomic check)
     await waitFor(() => {
@@ -306,6 +309,55 @@ describe('AddOnSpotAttendee Component', () => {
       // Callbacks should be invoked
       expect(mockProps.reloadMembers).toHaveBeenCalled();
       expect(mockProps.handleClose).toHaveBeenCalled();
+    });
+  });
+
+  it('does not submit when email is missing (Partial Submission)', async () => {
+    renderAddOnSpotAttendee();
+
+    await user.type(screen.getByLabelText(/First Name/i), 'John');
+    await user.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    // Email skipped intentionally
+    await user.type(screen.getByLabelText(/Phone No\./i), '1234567890');
+    const genderSelect = screen.getByLabelText(/Gender/i);
+    await user.selectOptions(genderSelect, 'Male');
+
+    await user.click(screen.getByRole('button', { name: /add/i }));
+
+    await waitFor(() => {
+      // Should show error because email is required (HTML5 validation or custom check?)
+      // Component check: if (!formData.firstName || !formData.lastName || !formData.email) -> NotificationToast.error.
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
+      expect(mockProps.reloadMembers).not.toHaveBeenCalled();
+    });
+  });
+
+  it('resets form fields after successful submission', async () => {
+    renderAddOnSpotAttendee();
+
+    const firstNameInput = screen.getByLabelText(/First Name/i);
+    const lastNameInput = screen.getByLabelText(/Last Name/i);
+    const emailInput = screen.getByLabelText(/Email/i);
+
+    // Ensure inputs are initially empty
+    expect(firstNameInput).toHaveValue('');
+
+    await user.type(firstNameInput, 'John');
+    await user.type(lastNameInput, 'Doe');
+    await user.type(emailInput, 'john@example.com');
+
+    // Verify values typed
+    expect(firstNameInput).toHaveValue('John');
+
+    await user.click(screen.getByRole('button', { name: /add/i }));
+
+    await waitFor(() => {
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalled();
+      // Since handleClose is a mock, the component remains mounted with show=true.
+      // verify resetForm() effect.
+      expect(firstNameInput).toHaveValue('');
+      expect(lastNameInput).toHaveValue('');
+      expect(emailInput).toHaveValue('');
     });
   });
 });

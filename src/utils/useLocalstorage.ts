@@ -9,7 +9,7 @@ interface InterfaceStorageHelper {
   clearAllItems: () => void;
 }
 
-const PREFIX = 'Talawa-admin';
+export const PREFIX = 'Talawa-admin';
 
 /**
  * Generates the prefixed key for storage.

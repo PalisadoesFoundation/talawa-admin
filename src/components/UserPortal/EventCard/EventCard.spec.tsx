@@ -4,6 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
+import translation from '../../../../public/locales/en/translation.json';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
@@ -42,7 +43,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
   clearAllItems();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing Event Card In User portal', () => {
@@ -55,6 +56,7 @@ describe('Testing Event Card In User portal', () => {
     startAt: dayjs.utc().add(10, 'days').toISOString(),
     endAt: dayjs.utc().add(12, 'days').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '19:49:12',
     startTime: '17:49:12',
@@ -75,6 +77,41 @@ describe('Testing Event Card In User portal', () => {
     recurrenceRule: null,
     isRecurringEventException: false,
   };
+
+  it('shows loading spinner when registration is in flight', async () => {
+    const user = userEvent.setup();
+    const delayedMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { id: '123' },
+        },
+        result: {
+          data: {
+            registerForEvent: [{ _id: '123' }],
+          },
+        },
+        delay: 500,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerBtn = screen.getByText('Register');
+    await user.click(registerBtn);
+
+    expect(screen.getByTestId('loadingIcon')).toBeInTheDocument();
+  });
 
   it('When the user is already registered', async () => {
     setItem('userId', '234');
@@ -124,7 +161,7 @@ describe('Testing Event Card In User portal', () => {
           query: REGISTER_EVENT,
           variables: { id: '123' },
         },
-        error: new Error('Failed to register for the event'),
+        error: new Error(translation.userEventCard.failedToRegister),
       },
     ];
 
@@ -146,9 +183,50 @@ describe('Testing Event Card In User portal', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        `Failed to register for the event`,
+        translation.userEventCard.failedToRegister,
       );
     });
+  });
+
+  it('should display "Invite Only" badge and disable registration when isInviteOnly is true', () => {
+    const inviteOnlyProps = { ...props, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...inviteOnlyProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
+    expect(screen.queryByText('Register')).not.toBeInTheDocument();
+  });
+
+  it('should handle combined scenario with isPublic: false and isInviteOnly: true', () => {
+    const combinedProps = { ...props, isPublic: false, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...combinedProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
   });
 });
 
@@ -162,6 +240,7 @@ describe('Event card when start and end time are not given', () => {
     startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
     endAt: dayjs.utc().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '',
     startTime: '',

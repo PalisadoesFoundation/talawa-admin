@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -35,6 +35,7 @@ import {
   beforeEach,
   afterEach,
 } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -87,6 +88,7 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const mockID = 'event123';
+let user: ReturnType<typeof userEvent.setup>;
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
@@ -114,6 +116,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   beforeEach(() => {
+    user = userEvent.setup();
     // Clear localStorage before each test
     localStorageMock.clear();
   });
@@ -121,7 +124,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
@@ -220,9 +223,7 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Click to open modal
-    await act(async () => {
-      fireEvent.click(editButton);
-    });
+    await user.click(editButton);
 
     await waitFor(() => {
       expect(getByTestId('event-list-card-modals')).toBeInTheDocument();
@@ -433,10 +434,10 @@ describe('Testing Event Dashboard Screen', () => {
 
     it('should hide spinner and render event details after LoadingState completes', async () => {
       const mockLink = new StaticMockLink(MOCKS_WITH_TIME);
-      const { getByTestId } = renderEventDashboard(mockLink);
+      const { getByTestId, queryByTestId } = renderEventDashboard(mockLink);
       await wait();
 
-      expect(document.querySelector('spinner')).not.toBeInTheDocument();
+      expect(queryByTestId('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
     });
   });

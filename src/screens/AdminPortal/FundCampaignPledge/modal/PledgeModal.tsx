@@ -2,7 +2,7 @@
  * Modal for creating or editing a pledge.
  *
  * @remarks
- * Provides a form for selecting pledgers, amounts, currencies, and dates, supporting both create and edit flows.
+ * Uses CreateModal and EditModal templates from CRUDModalTemplate for consistent UI and behavior.
  *
  * @param isOpen - Indicates whether the modal is open.
  * @param hide - Closes the modal.
@@ -29,8 +29,7 @@
  * />
  * ```
  */
-import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState } from 'react';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
@@ -38,23 +37,17 @@ import type {
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import styles from './PledgeModal.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
-  Autocomplete,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
-import { BaseModal } from 'shared-components/BaseModal';
-
+import { Autocomplete } from '@mui/material';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
+import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
-
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormSelectField } from 'shared-components/FormFieldGroup/FormSelectField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 export interface InterfacePledgeModal {
   isOpen: boolean;
   hide: () => void;
@@ -84,6 +77,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   });
 
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
@@ -116,18 +110,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
-      const variables: {
-        id?: string;
-        amount?: number;
-      } = {
-        id: pledge?.id,
-      };
+      if (isSubmitting) return;
 
-      if (pledgeAmount !== pledge?.amount) {
-        variables.amount = pledgeAmount;
-      }
+      setIsSubmitting(true);
       try {
         const variables = {
           id: pledge?.id ?? '',
@@ -143,18 +130,23 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         hide();
       } catch (error: unknown) {
         NotificationToast.error((error as Error).message);
+      } finally {
+        setIsSubmitting(false);
       }
     },
-    [formState, pledge, updatePledge, t, refetchPledge, hide],
+    [formState, pledge, updatePledge, t, refetchPledge, hide, isSubmitting],
   );
 
   // Function to create a new pledge
   const createPledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+      e.preventDefault();
+      if (isSubmitting) return;
+
+      setIsSubmitting(true);
       try {
-        e.preventDefault();
         if (!formState.pledgeUsers[0]?.id) {
-          throw new Error('Failed to create pledge');
+          throw new Error(t('pledgeCreateFailed'));
         }
         await createPledge({
           variables: {
@@ -174,137 +166,147 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         hide();
       } catch (error: unknown) {
         NotificationToast.error((error as Error).message);
+      } finally {
+        setIsSubmitting(false);
       }
     },
-    [formState, campaignId],
+    [formState, campaignId, isSubmitting],
   );
-
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value)) {
-      setFormState({
-        ...formState,
-        pledgeAmount: Math.max(0, value),
-      });
-    }
-  };
 
   const modalTitle = mode === 'create' ? t('createPledge') : t('editPledge');
 
-  return (
-    <BaseModal
-      className={styles.pledgeModal}
-      onHide={hide}
-      show={isOpen}
-      dataTestId="pledge-modal"
-      showCloseButton={false} // Custom close button used to preserve existing test ID
-      headerContent={
-        <div className="d-flex align-items-center justify-content-between w-100">
-          <h5 data-testid="createPledgeTitle" className="mb-0">
-            {modalTitle}
-          </h5>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="pledgeModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </div>
-      }
-    >
-      <Form
-        data-testid="pledgeForm"
-        onSubmitCapture={
-          mode === 'edit' ? updatePledgeHandler : createPledgeHandler
-        }
-        className="p-3"
+  const formContent = (
+    <>
+      {/* Single-select dropdown to choose the pledger for this pledge*/}
+      <FormFieldGroup
+        name="pledgers"
+        label={t('pledgers')}
+        touched={false}
+        error={undefined}
       >
-        {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
-        <Form.Group className="d-flex mb-3 w-100">
-          <Autocomplete
-            className={`${styles.noOutlinePledge} w-100`}
-            data-testid="pledgerSelect"
-            options={pledgers}
-            value={pledgeUsers[0] || null}
-            filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              `${member.name || ''}`
+        <Autocomplete
+          className={`${styles.noOutlinePledge} w-100`}
+          data-testid="pledgerSelect"
+          options={pledgers}
+          value={pledgeUsers[0] || null}
+          filterSelectedOptions={true}
+          getOptionLabel={(member: InterfaceUserInfoPG): string =>
+            `${member.name || ''}`
+          }
+          onChange={(_, newPledger): void => {
+            setFormState({
+              ...formState,
+              pledgeUsers: newPledger
+                ? [{ ...newPledger, id: newPledger.id }]
+                : [],
+            });
+          }}
+          renderInput={(params) => {
+            const { InputProps, inputProps } = params;
+            return (
+              <div ref={InputProps.ref} className="position-relative">
+                <input
+                  {...inputProps}
+                  type="text"
+                  className="form-control"
+                  aria-label={t('pledgers')}
+                />
+                {InputProps.endAdornment}
+              </div>
+            );
+          }}
+        />
+      </FormFieldGroup>
+
+      <div className="d-flex gap-3 mx-auto  mb-3">
+        {/* Dropdown to select the currency in which amount is to be pledged */}
+        <div className="w-50">
+          <FormSelectField
+            name="currency"
+            label={t('currency')}
+            value={formState.pledgeCurrency || ''}
+            onChange={(value) =>
+              setFormState({ ...formState, pledgeCurrency: value })
             }
-            onChange={(_, newPledger): void => {
-              setFormState({
-                ...formState,
-                pledgeUsers: newPledger
-                  ? [{ ...newPledger, id: newPledger.id }]
-                  : [],
-              });
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={t('pledgers')}
-                inputProps={{
-                  ...params.inputProps,
-                  'aria-label': t('pledgers'),
-                }}
-              />
-            )}
-          />
-        </Form.Group>
-        <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-          {/* Dropdown to select the currency in which amount is to be pledged */}
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              {t('currency')}
-            </InputLabel>
-            <Select
-              value={formState.pledgeCurrency || ''}
-              label={t('currency')}
-              inputProps={{
-                'aria-label': t('currency'),
-              }}
-              disabled
-              className="MuiSelect-disabled"
-            >
-              {currencyOptions.map((currency) => (
-                <MenuItem key={currency.label} value={currency.value}>
-                  {currency.label} ({currencySymbols[currency.value]})
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {/* Input field to enter amount to be pledged */}
-          <FormControl fullWidth>
-            <TextField
-              label={t('amount')}
-              variant="outlined"
-              type="number"
-              inputProps={{
-                min: 1,
-                'aria-label': t('amount'),
-              }}
-              error={formState.pledgeAmount < 1}
-              helperText={
-                formState.pledgeAmount < 1 ? t('amountMustBeAtLeastOne') : ''
+            touched={false}
+            error={undefined}
+            data-testid="currencySelect"
+          >
+            {currencyOptions.map((currency) => (
+              <option key={currency.label} value={currency.value}>
+                {currency.label} ({currencySymbols[currency.value]})
+              </option>
+            ))}
+          </FormSelectField>
+        </div>
+
+        {/* Input field to enter amount to be pledged */}
+        <div className="w-50">
+          <FormTextField
+            name="amount"
+            label={t('amount')}
+            type="number"
+            value={formState.pledgeAmount.toString()}
+            onChange={(value) => {
+              if (value === '') {
+                setFormState({
+                  ...formState,
+                  pledgeAmount: 0,
+                });
+              } else {
+                const parsed = parseInt(value);
+                if (!isNaN(parsed)) {
+                  setFormState({
+                    ...formState,
+                    pledgeAmount: Math.max(0, parsed),
+                  });
+                }
               }
-              className={styles.noOutlinePledge}
-              value={formState.pledgeAmount}
-              onChange={handleAmountChange}
-            />
-          </FormControl>
-        </Form.Group>
-        {/* Button to submit the pledge form */}
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="submitPledgeBtn"
-          disabled={!isAmountValid}
-        >
-          {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
-        </Button>
-      </Form>
-    </BaseModal>
+            }}
+            touched={true}
+            error={
+              formState.pledgeAmount < 1
+                ? t('amountMustBeAtLeastOne')
+                : undefined
+            }
+            data-testid="amountInput"
+            min={1}
+          />
+        </div>
+      </div>
+    </>
+  );
+
+  if (mode === 'create') {
+    return (
+      <CreateModal
+        open={isOpen}
+        title={modalTitle}
+        onClose={hide}
+        onSubmit={createPledgeHandler}
+        loading={isSubmitting}
+        submitDisabled={!isAmountValid}
+        data-testid="pledge-modal"
+        className={styles.pledgeModal}
+      >
+        {formContent}
+      </CreateModal>
+    );
+  }
+
+  return (
+    <EditModal
+      open={isOpen}
+      title={modalTitle}
+      onClose={hide}
+      onSubmit={updatePledgeHandler}
+      loading={isSubmitting}
+      submitDisabled={!isAmountValid}
+      data-testid="pledge-modal"
+      className={styles.pledgeModal}
+    >
+      {formContent}
+    </EditModal>
   );
 };
 export default PledgeModal;

@@ -4,7 +4,8 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -69,7 +70,7 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     onSortChange,
     dataTestIdPrefix,
@@ -120,7 +121,6 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
       <input
         data-testid={inputTestId}
         onChange={(e) => {
-          // Call onSearch immediately without debounce for testing
           onSearch(e.target.value);
         }}
       />
@@ -131,7 +131,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
 
 // Mock modal components
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal',
+  'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="view-modal">View Modal</div> : null,
@@ -139,7 +139,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemModal/ActionItemModal',
+  'shared-components/ActionItems/ActionItemModal/ActionItemModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? (
@@ -149,7 +149,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
+  'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="delete-modal">Delete Modal</div> : null,
@@ -157,7 +157,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
+  'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="status-modal">Status Modal</div> : null,
@@ -166,6 +166,7 @@ vi.mock(
 
 const mockActionItem: IActionItemInfo = {
   id: 'actionItemId1',
+  isTemplate: false,
   volunteerId: 'userId1',
   volunteerGroupId: null,
   categoryId: 'categoryId1',
@@ -225,6 +226,7 @@ const mockActionItem: IActionItemInfo = {
     allDay: false,
     isPublic: true,
     isRegisterable: true,
+    isInviteOnly: false,
     attendees: [],
     creator: {
       id: 'userId2',
@@ -259,6 +261,7 @@ const mockEventData = {
             ...mockActionItem,
             id: 'actionItemId2',
             volunteerId: 'userId3',
+            isTemplate: false,
             isCompleted: true,
             volunteer: {
               id: 'volunteerId2',
@@ -379,10 +382,8 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
-  beforeEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {
@@ -534,10 +535,11 @@ describe('EventActionItems', () => {
       });
 
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
-      fireEvent.click(searchToggleBtn);
+      await userEvent.click(searchToggleBtn);
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'Category' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'Category');
 
       await waitFor(() => {
         expect(screen.getByText('Category 1')).toBeInTheDocument();
@@ -554,7 +556,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'John' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'John');
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -571,15 +574,17 @@ describe('EventActionItems', () => {
       });
 
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
-      fireEvent.click(searchToggleBtn);
+      await userEvent.click(searchToggleBtn);
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'Category 2' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'Category 2');
 
       // Ensure `searchBy` state has applied before the debounced search term resolves.
       // This avoids a race where the first debounced search runs while still in "assignee" mode.
       await new Promise((resolve) => setTimeout(resolve, 0));
-      fireEvent.change(searchInput, { target: { value: 'Category 2' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'Category 2');
 
       await waitFor(() => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
@@ -595,7 +600,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'JOHN' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'JOHN');
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -613,16 +619,20 @@ describe('EventActionItems', () => {
 
       const searchInput = screen.getByTestId('searchBy');
       const searchButton = screen.getByTestId('searchBtn');
-      fireEvent.change(searchInput, { target: { value: 'John' } });
-      fireEvent.click(searchButton);
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'John');
+      await userEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
-      fireEvent.change(searchInput, { target: { value: '' } });
-      fireEvent.click(searchButton);
+      await userEvent.clear(searchInput);
+      // userEvent.type with empty string doesn't clear, so just clear is enough if we want empty
+      // But preserving behavior:
+      /* fireEvent.change(searchInput, { target: { value: '' } }); was clearing it */
+      await userEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -638,7 +648,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'nonexistent');
 
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
@@ -707,7 +718,8 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'Group Search' } });
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'Group Search');
 
       await waitFor(() => {
         expect(screen.getAllByText('Group Search')).toHaveLength(2);
@@ -768,7 +780,7 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      fireEvent.click(sortBtn);
+      await userEvent.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -831,8 +843,8 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      fireEvent.click(sortBtn);
-      fireEvent.click(sortBtn);
+      await userEvent.click(sortBtn);
+      await userEvent.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -892,7 +904,7 @@ describe('EventActionItems', () => {
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
-      fireEvent.click(sortBtn);
+      await userEvent.click(sortBtn);
 
       await waitFor(() => {
         expect(
@@ -1033,7 +1045,7 @@ describe('EventActionItems', () => {
 
       // Click filter button once to filter by Pending
       const filterBtn = screen.getByTestId('filterBtn');
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
 
       // Verify only pending item (John Doe) is visible
       await waitFor(() => {
@@ -1055,12 +1067,12 @@ describe('EventActionItems', () => {
       const filterBtn = screen.getByTestId('filterBtn');
 
       // Click twice to get to Completed filter
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
 
       // Small delay between clicks to ensure state updates
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
 
       // Verify only completed item (Bob Wilson) is visible
       await waitFor(
@@ -1086,13 +1098,13 @@ describe('EventActionItems', () => {
       const filterBtn = screen.getByTestId('filterBtn');
 
       // Click three times to cycle through all states
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      fireEvent.click(filterBtn);
+      await userEvent.click(filterBtn);
 
       // Both items should be visible again
       await waitFor(
@@ -1114,7 +1126,7 @@ describe('EventActionItems', () => {
       });
 
       const createBtn = screen.getByTestId('createActionItemBtn');
-      fireEvent.click(createBtn);
+      await userEvent.click(createBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1131,7 +1143,7 @@ describe('EventActionItems', () => {
       });
 
       const viewBtn = screen.getByTestId('viewItemBtnactionItemId1');
-      fireEvent.click(viewBtn);
+      await userEvent.click(viewBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('view-modal')).toBeInTheDocument();
@@ -1148,7 +1160,7 @@ describe('EventActionItems', () => {
       });
 
       const editBtn = screen.getByTestId('editItemBtnactionItemId1');
-      fireEvent.click(editBtn);
+      await userEvent.click(editBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
@@ -1165,7 +1177,7 @@ describe('EventActionItems', () => {
       });
 
       const deleteBtn = screen.getByTestId('deleteItemBtnactionItemId1');
-      fireEvent.click(deleteBtn);
+      await userEvent.click(deleteBtn);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
@@ -1182,7 +1194,7 @@ describe('EventActionItems', () => {
       });
 
       const statusCheckbox = screen.getByTestId('statusCheckboxactionItemId1');
-      fireEvent.click(statusCheckbox);
+      await userEvent.click(statusCheckbox);
 
       await waitFor(() => {
         expect(screen.getByTestId('status-modal')).toBeInTheDocument();
@@ -1303,8 +1315,14 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        const searchInput = screen.getByTestId('searchBy');
-        fireEvent.change(searchInput, { target: { value: 'test search' } });
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchBy');
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'test search');
+
+      await waitFor(() => {
         expect(searchInput).toHaveValue('test search');
       });
     });

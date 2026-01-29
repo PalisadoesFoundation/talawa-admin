@@ -4,15 +4,8 @@
  * Renders plugin items in the sidebar with proper icon handling and navigation.
  * Supports both global and organization-specific plugins.
  *
- * @component
- * @param {ISidebarPluginSectionProps} props - The props for the component
- * @param {IDrawerExtension[]} props.pluginItems - Array of plugin drawer items
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {string} [props.orgId] - Organization ID for org-specific plugins
- * @param {() => void} [props.onItemClick] - Handler for plugin item clicks
- * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
- *
- * @returns {React.ReactElement | null} The rendered SidebarPluginSection component or null if no plugins
+ * @param props - The props for the component
+ * @returns The rendered SidebarPluginSection component or null if no plugins
  *
  * @example
  * ```tsx
@@ -30,7 +23,7 @@ import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { IDrawerExtension } from 'plugin';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarPluginSection.module.css';
 import type { ISidebarPluginSectionProps } from '../../types/SidebarPluginSection/interface';
 
 const SidebarPluginSection = ({
@@ -77,7 +70,7 @@ const SidebarPluginSection = ({
                   src={item.icon}
                   alt={hideDrawer ? '' : item.label}
                   aria-hidden={hideDrawer ? 'true' : undefined}
-                  style={{ width: 25, height: 25 }}
+                  className={styles.pluginIcon}
                 />
               ) : (
                 <PluginLogo
@@ -106,25 +99,14 @@ const SidebarPluginSection = ({
       {!hideDrawer &&
         (useSimpleButton ? (
           <h5
-            className={`${styles.titleHeader} text-secondary`}
-            style={{
-              fontSize: '1.1rem',
-              marginTop: '1.5rem',
-              marginBottom: '0.75rem',
-            }}
+            className={`${styles.titleHeader} ${styles.simpleHeader} text-secondary`}
             data-testid="pluginSettingsHeader"
           >
             {tCommon('plugins')}
           </h5>
         ) : (
           <h4
-            className={styles.titleHeader}
-            style={{
-              fontSize: '1.1rem',
-              marginTop: '1.5rem',
-              marginBottom: '0.75rem',
-              color: 'var(--bs-secondary)',
-            }}
+            className={`${styles.titleHeader} ${styles.regularHeader}`}
             data-testid="pluginSettingsHeader"
           >
             {tCommon('pluginSettings')}

@@ -1,12 +1,9 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
-//Query List
-// Check Auth
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
   query CurrentUser {
-    currentUser {
+    user: currentUser {
       addressLine1
       addressLine2
       avatarMimeType
@@ -304,6 +301,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly
       startAt
       endAt
       createdAt
@@ -449,6 +447,33 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
   }
 `;
 
+export const GET_USER_BY_ID = gql`
+  query GetUserById($input: QueryUserInput!) {
+    user(input: $input) {
+      id
+      name
+      emailAddress
+      addressLine1
+      addressLine2
+      birthDate
+      city
+      avatarURL
+      countryCode
+      description
+      educationGrade
+      employmentStatus
+      homePhoneNumber
+      maritalStatus
+      mobilePhoneNumber
+      natalSex
+      naturalLanguageCode
+      postalCode
+      state
+      workPhoneNumber
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -540,6 +565,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -621,6 +647,15 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
+            creator {
+              id
+              name
+            }
+            attendees {
+              id
+              name
+            }
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -1198,6 +1233,7 @@ export const SIGNIN_QUERY = gql`
         role
         countryCode
         avatarURL
+        isEmailAddressVerified
       }
       authenticationToken
       refreshToken

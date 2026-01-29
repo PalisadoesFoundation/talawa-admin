@@ -1,14 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,8 +12,10 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
 import { MOCKS, MOCKS_ERROR, NO_FUNDS } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
 
 async function wait(ms = 500): Promise<void> {
@@ -66,16 +61,16 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
       <Provider store={store}>
-        <MemoryRouter initialEntries={['/orgfunds/orgId']}>
+        <MemoryRouter initialEntries={['/admin/orgfunds/orgId']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/orgfunds/:orgId"
+                  path="/admin/orgfunds/:orgId"
                   element={<OrganizationFunds />}
                 />
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
+                  path="/admin/orgfundcampaign/:orgId/:fundId"
                   element={
                     <div data-testid="campaignScreen">Campaign Screen</div>
                   }
@@ -94,12 +89,14 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationFunds Screen =>', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockedUseParams.mockReset();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -165,7 +162,7 @@ describe('OrganizationFunds Screen =>', () => {
     });
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/orgfunds/']}>
+        <MemoryRouter initialEntries={['/admin/orgfunds/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
@@ -173,7 +170,10 @@ describe('OrganizationFunds Screen =>', () => {
                   path="/"
                   element={<div data-testid="paramsError"></div>}
                 />
-                <Route path="/orgfunds/" element={<OrganizationFunds />} />
+                <Route
+                  path="/admin/orgfunds/"
+                  element={<OrganizationFunds />}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>
@@ -198,16 +198,16 @@ describe('OrganizationFunds Screen =>', () => {
 
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
-    await userEvent.click(createFundBtn);
+    await user.click(createFundBtn);
 
     await waitFor(() => {
       const modalTitle = screen.getByTestId('modalTitle');
       expect(modalTitle).toHaveTextContent(translations.fundCreate);
     });
 
-    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(screen.queryByTestId('fundModalCloseBtn')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -221,16 +221,16 @@ describe('OrganizationFunds Screen =>', () => {
 
     const editFundBtn = await screen.findAllByTestId('editFundBtn');
     await waitFor(() => expect(editFundBtn[0]).toBeInTheDocument());
-    await userEvent.click(editFundBtn[0]);
+    await user.click(editFundBtn[0]);
 
     await waitFor(() =>
       expect(
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -244,8 +244,8 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it (SearchBar now uses onChange, not searchBtn)
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.clear(searchField);
-    await userEvent.type(searchField, '2');
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     // Wait and verify search results - search now triggers on type
     await waitFor(
@@ -332,7 +332,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     expect(createdOnHeader).toBeInTheDocument();
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 
@@ -362,7 +362,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const fundName = await screen.findAllByTestId('fundName');
     expect(fundName[0]).toBeInTheDocument();
-    fireEvent.click(fundName[0]);
+    await user.click(fundName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -375,7 +375,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
     expect(viewBtn[0]).toBeInTheDocument();
-    fireEvent.click(viewBtn[0]);
+    await user.click(viewBtn[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -409,7 +409,7 @@ describe('OrganizationFunds Screen =>', () => {
       ) as HTMLButtonElement | null;
 
       if (nextButton && !nextButton.disabled) {
-        fireEvent.click(nextButton);
+        await user.click(nextButton);
         await wait(300);
       }
     }
@@ -430,14 +430,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'testsearch');
+    await user.type(searchField, 'testsearch');
 
     // Verify search text is entered (onChange trims spaces)
     expect(searchField).toHaveValue('testsearch');
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     // Verify search input is cleared
     await waitFor(() => {
@@ -460,7 +460,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Type a search term that won't match any funds
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'nonexistentfundxyz');
+    await user.type(searchField, 'nonexistentfundxyz');
 
     // Verify "No results found for" message is displayed
     await waitFor(() => {
@@ -507,11 +507,11 @@ describe('OrganizationFunds Screen =>', () => {
     );
 
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
 
       // Click again to toggle sort direction
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 

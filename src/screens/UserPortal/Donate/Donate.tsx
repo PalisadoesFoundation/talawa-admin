@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import Button from 'react-bootstrap/Button';
-import Dropdown from 'react-bootstrap/Dropdown';
+import { useParams } from 'react-router-dom';
+import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -17,14 +17,13 @@ import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import PaginationList from 'shared-components/PaginationList/PaginationList';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   InterfaceDonation,
   InterfaceDonationCardProps,
-} from 'types/Donation/interface';
+} from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 /**
  * Component for handling donations to an organization.
@@ -131,47 +130,55 @@ export default function Donate(): JSX.Element {
             {t('donateForThe')} {organizationDetails.name}
           </div>
 
-          <FormTextField
-            name="donationAmount"
-            type="text"
-            label={t('amount')}
-            placeholder={t('amount')}
-            value={amount}
-            onChange={setAmount}
-            required
-            data-testid="donationAmount"
-            startAdornment={
-              <Dropdown>
-                <Dropdown.Toggle
-                  data-testid="changeCurrencyBtn"
-                  className={`${styles.colorPrimary} ${styles.dropdown}`}
-                  variant="success"
-                >
-                  <span>{currencies[selectedCurrency]}</span>
-                </Dropdown.Toggle>
+          <InputGroup className={styles.width100}>
+            <Dropdown>
+              <Dropdown.Toggle
+                className={`${styles.colorPrimary} ${styles.dropdown}`}
+                variant="success"
+                data-testid="modeChangeBtn"
+              >
+                <span data-testid="changeCurrencyBtn">
+                  {currencies[selectedCurrency]}
+                </span>
+              </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-                  {currencies.map((currency, index) => (
-                    <Dropdown.Item
-                      key={currency}
-                      data-testid={`currency${index}`}
-                      onClick={() => setSelectedCurrency(index)}
-                    >
-                      {currency}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            }
-          />
+              <Dropdown.Menu>
+                {currencies.map((currency, index) => (
+                  <Dropdown.Item
+                    key={currency}
+                    data-testid={`currency${index}`}
+                    onClick={() => setSelectedCurrency(index)}
+                  >
+                    {currency}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
 
-          <small className="text-muted">{t('donationAmountDescription')}</small>
+            <label htmlFor="donationAmountInput" className="visually-hidden">
+              {t('amount')}
+            </label>
+            <FormControl
+              id="donationAmountInput"
+              type="text"
+              data-testid="donationAmount"
+              placeholder={t('amount')}
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              aria-describedby="donationAmountHelp"
+            />
+          </InputGroup>
+
+          <div id="donationAmountHelp" className="text-muted form-text">
+            {t('donationAmountDescription')}
+          </div>
 
           <Button
             size="sm"
             data-testid="donateBtn"
             onClick={donateToOrg}
             className={`${styles.addButton} ${styles.donateBtn}`}
+            variant="primary"
           >
             {t('donate')} <SendIcon />
           </Button>

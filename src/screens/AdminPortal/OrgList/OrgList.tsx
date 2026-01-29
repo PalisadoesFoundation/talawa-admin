@@ -1,74 +1,49 @@
-/**
- * The orgList component renders a list of organizations with search, sort, and
- * creation flows.
- *
- * @remarks
- * Features:
- * - Fetches organization data via GraphQL queries and mutations.
- * - Supports searching and sorting, with loading and error states.
- * - Provides modals for creating organizations and managing features.
- *
- * State:
- * - dialogModalisOpen: Controls the visibility of the plugin notification modal.
- * - dialogRedirectOrgId: Stores the ID of the organization to redirect after creation.
- * - isLoading: Indicates whether the organization data is loading.
- * - sortingState: Manages the sorting option and its label.
- * - searchByName: Stores the search query for filtering organizations.
- * - showModal: Controls the visibility of the organization creation modal.
- * - formState: Manages the state of the organization creation form.
- *
- * Methods:
- * - openDialogModal(redirectOrgId): Opens the plugin notification modal.
- * - closeDialogModal(): Closes the plugin notification modal.
- * - toggleDialogModal(): Toggles the plugin notification modal visibility.
- * - createOrg(e): Handles organization creation.
- * - handleChangeFilter(value): Filters organizations based on the search query.
- * - handleSortChange(value): Updates sorting state and refetches organizations.
- *
- * Error handling:
- * - Uses `errorHandler` for GraphQL and network errors.
- * - Clears local storage and redirects to the home page on critical errors.
- *
- * Dependencies:
- * - Apollo Client for GraphQL operations.
- * - react-i18next for localization.
- * - useLocalStorage for local storage data.
- * - NotificationToast and shared UI components.
- * - Material UI for buttons and icons.
- *
- * @returns The rendered organization list component.
- */
-import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { Group, Search } from '@mui/icons-material';
-import { Link } from 'react-router';
-import { useTranslation } from 'react-i18next';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  RESEND_VERIFICATION_EMAIL_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
   CURRENT_USER,
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import Button from 'shared-components/Button';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
-import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+
+import PaginationList from 'shared-components/PaginationList/PaginationList';
+import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgInfoTypePG,
-} from 'utils/interfaces';
-import useLocalStorage from 'utils/useLocalstorage';
-import OrganizationModal from './modal/OrganizationModal';
+import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
+
+interface InterfaceCurrentUserType {
+  user: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+    isEmailAddressVerified: boolean;
+  };
+}
+import {
+  getItem as getItemStatic,
+  setItem as setItemStatic,
+  removeItem as removeItemStatic,
+  PREFIX,
+} from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 
-const { getItem } = useLocalStorage();
+import OrganizationModal from './modal/OrganizationModal';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { Link } from 'react-router';
+import type { ChangeEvent } from 'react';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Group, Search } from '@mui/icons-material';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { Alert } from 'react-bootstrap';
+import RBButton from 'shared-components/Button';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -82,11 +57,38 @@ interface InterfaceFormStateType {
   state: string;
 }
 
-function orgList(): JSX.Element {
+/**
+ * OrgList component displays a list of organizations and allows administrators to create new ones.
+ * It also handles the email verification warning banner.
+ *
+ * @returns The rendered OrgList component.
+ */
+function OrgList(): JSX.Element {
+  const { getItem, setItem, removeItem } = useMemo(
+    () => ({
+      getItem: function <T>(key: string) {
+        return getItemStatic<T>(PREFIX, key);
+      },
+      setItem: (key: string, value: unknown) =>
+        setItemStatic(PREFIX, key, value),
+      removeItem: (key: string) => removeItemStatic(PREFIX, key),
+    }),
+    [],
+  );
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+
+  // Email verification warning state
+  const [showEmailWarning, setShowEmailWarning] = useState(false);
+
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
@@ -105,6 +107,28 @@ function orgList(): JSX.Element {
 
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
+
+  const handleDismissWarning = (): void => {
+    setShowEmailWarning(false);
+    removeItem('emailNotVerified');
+    removeItem('unverifiedEmail');
+  };
+
+  const handleResendVerification = async (): Promise<void> => {
+    try {
+      const { data } = await resendVerificationEmail();
+
+      if (data?.sendVerificationEmail?.success) {
+        NotificationToast.success(tLogin('emailResent'));
+      } else {
+        NotificationToast.error(
+          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+        );
+      }
+    } catch (error: unknown) {
+      errorHandler(tLogin, error);
+    }
+  };
 
   useEffect(() => {
     document.title = t('title');
@@ -145,16 +169,44 @@ function orgList(): JSX.Element {
   const context = token
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
+  // Fetch current user status (consolidated query with network-only for fresh data)
   const {
     data: userData,
   }: {
-    data: InterfaceCurrentUserTypePG | undefined;
+    data: InterfaceCurrentUserType | undefined;
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
-    variables: { userId: getItem('id') },
+    fetchPolicy: 'network-only',
     context,
   });
+
+  // Check for email verification status on component mount and sync with backend
+  useEffect(() => {
+    // Priority: API data > LocalStorage
+    if (userData?.user) {
+      if (userData.user.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Ensure flags are consistent
+        setItem('emailNotVerified', 'true');
+        if (userData.user.emailAddress) {
+          setItem('unverifiedEmail', userData.user.emailAddress);
+        }
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      const email = getItem('unverifiedEmail');
+      if (emailNotVerified === 'true' && typeof email === 'string') {
+        setShowEmailWarning(true);
+      }
+    }
+  }, [userData, getItem, setItem, removeItem]);
 
   const {
     data: allOrganizationsData,
@@ -162,7 +214,7 @@ function orgList(): JSX.Element {
     refetch: refetchOrgs,
   } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
@@ -243,7 +295,7 @@ function orgList(): JSX.Element {
 
       await createMembership({
         variables: {
-          memberId: userData?.currentUser.id,
+          memberId: userData?.user.id,
           organizationId: data?.createOrganization.id,
           role: 'administrator',
         },
@@ -272,7 +324,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs call with a filter argument is intentional.
+   * Note: The explicit refetchOrgs(\{filter: val \}) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
@@ -315,6 +367,35 @@ function orgList(): JSX.Element {
 
   return (
     <div className={styles.orgListContainer}>
+      {/* Email Verification Warning Banner */}
+      {showEmailWarning && (
+        <Alert
+          variant="warning"
+          dismissible
+          onClose={handleDismissWarning}
+          className="mb-3"
+          data-testid="email-verification-warning"
+          aria-live="polite"
+        >
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{tLogin('emailNotVerified')}</strong>
+            </div>
+            <RBButton
+              variant="outline-primary"
+              size="sm"
+              onClick={handleResendVerification}
+              disabled={resendLoading}
+              data-testid="resend-verification-btn"
+            >
+              {resendLoading
+                ? tCommon('loading')
+                : tLogin('resendVerification')}
+            </RBButton>
+          </div>
+        </Alert>
+      )}
+
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
         <SearchFilterBar
@@ -343,14 +424,14 @@ function orgList(): JSX.Element {
             <>
               <NotificationIcon />
               {role === 'administrator' && (
-                <Button
+                <RBButton
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
                   onClick={toggleModal}
                   data-testid="createOrganizationBtn"
                 >
                   <i className="fa fa-plus me-2" />
                   {t('createOrganization')}
-                </Button>
+                </RBButton>
               )}
             </>
           }
@@ -435,6 +516,19 @@ function orgList(): JSX.Element {
         </>
       )}
       {/* Create Organization Modal */}
+      {/**
+       * Renders the `OrganizationModal` component.
+       *
+       * @param showModal - A boolean indicating whether the modal should be displayed.
+       * @param toggleModal - A function to toggle the visibility of the modal.
+       * @param formState - The state of the form in the organization modal.
+       * @param setFormState - A function to update the state of the form in the organization modal.
+       * @param createOrg - A function to handle the submission of the organization creation form.
+       * @param t - A translation function for localization.
+       * @param userData - Information about the current user.
+       * @returns JSX element representing the `OrganizationModal`.
+       */}
+
       <OrganizationModal
         showModal={showModal}
         toggleModal={toggleModal}
@@ -443,7 +537,6 @@ function orgList(): JSX.Element {
         createOrg={createOrg}
         t={t}
         tCommon={tCommon}
-        userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
       <BaseModal
@@ -451,15 +544,15 @@ function orgList(): JSX.Element {
         onHide={toggleDialogModal}
         title={t('manageFeatures')}
         headerClassName={styles.modalHeader}
-        dataTestId="pluginNotificationHeader"
-        centered={false}
-        backdrop={true}
+        headerTestId="pluginNotificationHeader"
+        dataTestId="pluginNotificationModal"
       >
         <section id={styles.grid_wrapper}>
           <div>
             <h4 className={styles.titlemodaldialog}>
               {t('manageFeaturesInfo')}
             </h4>
+
             <div className={styles.pluginStoreBtnContainer}>
               <Link
                 className={pluginBtnClass}
@@ -468,7 +561,7 @@ function orgList(): JSX.Element {
               >
                 {t('goToStore')}
               </Link>
-              <Button
+              <RBButton
                 type="submit"
                 className={styles.enableEverythingBtn}
                 onClick={closeDialogModal}
@@ -476,7 +569,7 @@ function orgList(): JSX.Element {
                 data-testid="enableEverythingForm"
               >
                 {t('enableEverything')}
-              </Button>
+              </RBButton>
             </div>
           </div>
         </section>
@@ -484,4 +577,4 @@ function orgList(): JSX.Element {
     </div>
   );
 }
-export default orgList;
+export default OrgList;

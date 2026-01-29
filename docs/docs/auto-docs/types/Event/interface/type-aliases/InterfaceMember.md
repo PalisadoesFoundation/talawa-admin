@@ -6,4 +6,4 @@
 
 > **InterfaceMember** = [`IMember`](../interfaces/IMember.md)
 
-Defined in: [src/types/Event/interface.ts:274](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L274)
+Defined in: [src/types/Event/interface.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L296)

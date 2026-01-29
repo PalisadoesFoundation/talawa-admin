@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import type { FetchResult } from '@apollo/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
@@ -10,6 +11,35 @@ import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+// Mock CSS modules
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    titleHeader: 'titleHeader',
+    leftbarcompheight: 'leftbarcompheight',
+    optionList: 'optionList',
+    iconWrapper: 'iconWrapper',
+  },
+}));
+
+vi.mock('./UserSidebar.module.css', () => ({
+  default: {
+    switchPortalWrapper: 'switchPortalWrapper',
+  },
+}));
 
 dayjs.extend(utc);
 
@@ -35,6 +65,7 @@ const mockTCommonImplementation = (key: string) => {
     userPortal: 'User Portal',
     notifications: 'Notifications', // Used by notification button in component
     pluginSettings: 'Plugin Settings', // Used by SidebarPluginSection
+    switchToAdminPortal: 'Switch to Admin Portal',
   };
   return translations[key] || key;
 };
@@ -128,25 +159,10 @@ vi.mock('assets/svgs/plugins.svg?react', () => ({
   )),
 }));
 
-// Mock CSS modules
-vi.mock('../../../style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    titleHeader: 'titleHeader',
-    leftbarcompheight: 'leftbarcompheight',
-    optionList: 'optionList',
-    iconWrapper: 'iconWrapper',
-  },
-}));
-
 describe('UserSidebar', () => {
   const originalInnerWidth = window.innerWidth;
   const mockSetHideDrawer = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   const defaultProps: InterfaceUserSidebarProps = {
     hideDrawer: false,
@@ -199,6 +215,11 @@ describe('UserSidebar', () => {
     mockT = vi.fn(mockTImplementation);
     mockTCommon = vi.fn(mockTCommonImplementation);
     mockUsePluginDrawerItems.mockReturnValue([]);
+    mockUseLocalStorage.mockReturnValue({
+      setItem: vi.fn(),
+      getItem: vi.fn(() => 'regular'),
+    });
+    user = userEvent.setup();
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -248,6 +269,28 @@ describe('UserSidebar', () => {
       expect(profileDropdown).toBeInTheDocument();
     });
 
+    it('should render switch to admin portal button for non-regular role', () => {
+      mockUseLocalStorage.mockReturnValueOnce({
+        setItem: vi.fn(),
+        getItem: vi.fn(() => 'admin'),
+      });
+      renderComponent();
+
+      expect(screen.getByTestId('switchToAdminPortalBtn')).toBeInTheDocument();
+    });
+
+    it('should not render switch to admin portal button for user role', () => {
+      mockUseLocalStorage.mockReturnValueOnce({
+        setItem: vi.fn(),
+        getItem: vi.fn(() => 'user'),
+      });
+      renderComponent();
+
+      expect(
+        screen.queryByTestId('switchToAdminPortalBtn'),
+      ).not.toBeInTheDocument();
+    });
+
     it('should render navigation links with correct text', () => {
       renderComponent();
 
@@ -280,7 +323,7 @@ describe('UserSidebar', () => {
   });
 
   describe('Responsive Behavior', () => {
-    it('should hide drawer on mobile when organization link is clicked', () => {
+    it('should hide drawer on mobile when organization link is clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -290,12 +333,12 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('should hide drawer on mobile when settings link is clicked', () => {
+    it('should hide drawer on mobile when settings link is clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -305,12 +348,12 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const settingsButton = screen.getByTestId('settingsBtn');
-      fireEvent.click(settingsButton);
+      await user.click(settingsButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('should not hide drawer on desktop when links are clicked', () => {
+    it('should not hide drawer on desktop when links are clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -320,12 +363,12 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
 
-    it('should check mobile breakpoint at exactly 820px', () => {
+    it('should check mobile breakpoint at exactly 820px', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -335,12 +378,12 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('should trigger mobile behavior at 819px', () => {
+    it('should trigger mobile behavior at 819px', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -350,12 +393,12 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const settingsButton = screen.getByTestId('settingsBtn');
-      fireEvent.click(settingsButton);
+      await user.click(settingsButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('should not trigger mobile behavior at 821px', () => {
+    it('should not trigger mobile behavior at 821px', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -365,7 +408,7 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
@@ -447,7 +490,7 @@ describe('UserSidebar', () => {
       expect(screen.getByTestId('plugin-icon')).toBeInTheDocument();
     });
 
-    it('should hide drawer on mobile when plugin link is clicked', () => {
+    it('should hide drawer on mobile when plugin link is clicked', async () => {
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
         configurable: true,
@@ -467,7 +510,7 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const pluginButton = screen.getByText('Test Plugin');
-      fireEvent.click(pluginButton);
+      await user.click(pluginButton);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
@@ -579,7 +622,7 @@ describe('UserSidebar', () => {
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
     });
 
-    it('should handle window resize during interaction', () => {
+    it('should handle window resize during interaction', async () => {
       renderComponent();
 
       // Start on desktop
@@ -590,7 +633,7 @@ describe('UserSidebar', () => {
       });
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
 
       // Change to mobile during next interaction
@@ -600,7 +643,7 @@ describe('UserSidebar', () => {
         value: 800,
       });
 
-      fireEvent.click(orgsButton);
+      await user.click(orgsButton);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
   });
@@ -613,10 +656,10 @@ describe('UserSidebar', () => {
       expect(toggleBtn).toBeInTheDocument();
       expect(toggleBtn).toHaveAttribute('type', 'button');
       // The aria-label is on the toggle button itself
-      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
+      expect(toggleBtn).toHaveAttribute('aria-label', 'toggleSidebar');
     });
 
-    it('should toggle drawer when toggle button is clicked', () => {
+    it('should toggle drawer when toggle button is clicked', async () => {
       const mockSetItem = vi.fn();
       mockUseLocalStorage.mockReturnValue({
         setItem: mockSetItem,
@@ -626,13 +669,13 @@ describe('UserSidebar', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      fireEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
-    it('should toggle drawer when Enter key is pressed on toggle button', () => {
+    it('should toggle drawer when Enter key is pressed on toggle button', async () => {
       const mockSetItem = vi.fn();
       mockUseLocalStorage.mockReturnValue({
         setItem: mockSetItem,
@@ -642,13 +685,14 @@ describe('UserSidebar', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      fireEvent.keyDown(toggleBtn, { key: 'Enter' });
+      toggleBtn.focus();
+      await user.keyboard('{Enter}');
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
-    it('should toggle drawer when Space key is pressed on toggle button', () => {
+    it('should toggle drawer when Space key is pressed on toggle button', async () => {
       const mockSetItem = vi.fn();
       mockUseLocalStorage.mockReturnValue({
         setItem: mockSetItem,
@@ -658,13 +702,14 @@ describe('UserSidebar', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      fireEvent.keyDown(toggleBtn, { key: ' ' });
+      toggleBtn.focus();
+      await user.keyboard('{Space}');
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
-    it('should not toggle drawer when other keys are pressed on toggle button', () => {
+    it('should not toggle drawer when other keys are pressed on toggle button', async () => {
       const mockSetItem = vi.fn();
       mockUseLocalStorage.mockReturnValue({
         setItem: mockSetItem,
@@ -674,15 +719,14 @@ describe('UserSidebar', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      fireEvent.keyDown(toggleBtn, { key: 'Tab' });
-      fireEvent.keyDown(toggleBtn, { key: 'Escape' });
-      fireEvent.keyDown(toggleBtn, { key: 'ArrowDown' });
+      toggleBtn.focus();
+      await user.keyboard('{Tab}{Escape}{ArrowDown}');
 
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
       expect(mockSetItem).not.toHaveBeenCalled();
     });
 
-    it('should toggle from expanded to collapsed state', () => {
+    it('should toggle from expanded to collapsed state', async () => {
       const mockSetItem = vi.fn();
       mockUseLocalStorage.mockReturnValue({
         setItem: mockSetItem,
@@ -692,7 +736,7 @@ describe('UserSidebar', () => {
       renderComponent({ hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      fireEvent.click(toggleBtn);
+      await user.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);

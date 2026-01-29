@@ -34,37 +34,27 @@
 import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './TagActions.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import type { TagActionType } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import TagNode from './Node/TagNode';
-import type { TFunction } from 'i18next';
-import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
   name: string;
-}
-
-export interface InterfaceTagActionsProps {
-  tagActionsModalIsOpen: boolean;
-  hideTagActionsModal: () => void;
-  tagActionType: TagActionType;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
@@ -281,7 +271,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           </>
         }
       >
-        <Form id="tagActionForm" onSubmit={handleTagAction}>
+        <form id="tagActionForm" onSubmit={handleTagAction}>
           <div className="pb-0">
             <div
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
@@ -327,7 +317,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <ul
               id="scrollableDiv"
               data-testid="scrollableDiv"
-              className={componentStyles.tagActionsScrollableDiv}
+              className={styles.tagActionsScrollableDiv}
               aria-label={t('allTags')}
             >
               {tagActionsModalIsOpen && (
@@ -390,7 +380,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               )}
             </ul>
           </div>
-        </Form>
+        </form>
       </BaseModal>
     </>
   );

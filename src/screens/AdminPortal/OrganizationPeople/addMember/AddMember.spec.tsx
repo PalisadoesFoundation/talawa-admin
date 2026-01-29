@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -396,7 +397,7 @@ type RenderConfig = {
   initialEntry?: string;
 };
 
-const DEFAULT_ROUTE = '/orgpeople/org123';
+const DEFAULT_ROUTE = '/admin/orgpeople/org123';
 
 const renderAddMemberView = ({
   mocks = [],
@@ -407,7 +408,7 @@ const renderAddMemberView = ({
     <MemoryRouter initialEntries={[initialEntry]}>
       <I18nextProvider i18n={i18nForTest}>
         <Routes>
-          <Route path="/orgpeople/:orgId" element={<AddMember />} />
+          <Route path="/admin/orgpeople/:orgId" element={<AddMember />} />
         </Routes>
       </I18nextProvider>
     </MemoryRouter>
@@ -434,7 +435,7 @@ describe('AddMember Screen', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     expect(await screen.findByTestId('addMembers')).toBeInTheDocument();
   });
@@ -453,7 +454,7 @@ describe('AddMember Screen', () => {
     });
     const mocks = [orgMock, createOrganizationsMock(orgId), ...userListMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -531,7 +532,7 @@ describe('AddMember Screen', () => {
       searchUserListMock,
     ];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -572,7 +573,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), initialUserListMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -610,7 +611,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -664,7 +665,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -751,7 +752,7 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({
       link,
-      initialEntry: `/orgpeople/${orgId}`,
+      initialEntry: `/admin/orgpeople/${orgId}`,
     });
 
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -814,7 +815,7 @@ describe('AddMember Screen', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -824,7 +825,7 @@ describe('AddMember Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      expect(screen.getByTestId('nameInput')).toBeInTheDocument();
+      expect(screen.getByTestId('firstNameInput')).toBeInTheDocument();
       expect(screen.getByTestId('emailInput')).toBeInTheDocument();
       expect(screen.getByTestId('passwordInput')).toBeInTheDocument();
       expect(screen.getByTestId('confirmPasswordInput')).toBeInTheDocument();
@@ -836,7 +837,7 @@ describe('AddMember Screen', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -879,7 +880,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -887,7 +888,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -933,7 +934,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -941,7 +942,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -978,7 +979,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -986,7 +987,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -1023,7 +1024,7 @@ describe('AddMember Screen', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -1031,7 +1032,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -1088,7 +1089,7 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({
       link,
-      initialEntry: `/orgpeople/${orgId}`,
+      initialEntry: `/admin/orgpeople/${orgId}`,
     });
 
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -1147,7 +1148,7 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({
       link,
-      initialEntry: `/orgpeople/${orgId}`,
+      initialEntry: `/admin/orgpeople/${orgId}`,
     });
 
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -1185,7 +1186,7 @@ describe('AddMember Screen', () => {
     );
 
     const mocks = [createOrganizationsMock(orgId), userListMock];
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -1207,7 +1208,7 @@ describe('AddMember Screen', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const invalidSort = await screen.findByText('Invalid Sort');
     fireEvent.click(invalidSort);
@@ -1244,7 +1245,7 @@ describe('AddMember Screen', () => {
     const mocks = [createOrganizationsMock(orgId), emptyUserListMock];
     const link = new StaticMockLink(mocks, true);
 
-    renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ link, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -1272,7 +1273,7 @@ describe('AddMember Screen', () => {
     const mocks = [createOrganizationsMock(orgId), errorUserListMock];
     const link = new StaticMockLink(mocks, true);
 
-    renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ link, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
@@ -1309,7 +1310,7 @@ describe('AddMember Screen', () => {
       searchMock,
     ];
 
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
 
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);

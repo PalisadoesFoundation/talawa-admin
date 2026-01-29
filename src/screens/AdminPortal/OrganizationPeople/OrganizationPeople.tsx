@@ -36,13 +36,13 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
 import { languages } from 'utils/languages';
+import Button from 'shared-components/Button';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -330,7 +330,7 @@ function OrganizationPeople(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            to={`/member/${currentUrl}/${params.row.id}`}
+            to={`/admin/member/${currentUrl}/${params.row.id}`}
             state={{ id: params.row.id }}
             className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
           >

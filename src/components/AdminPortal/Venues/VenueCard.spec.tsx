@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import VenueCard from './VenueCard';
 import {
@@ -67,7 +68,8 @@ describe('VenueCard Component', () => {
     expect(imgElement.src).toBe('https://surl.li/odyiad');
   });
 
-  it('handles edit button click', (): void => {
+  it('handles edit button click', async (): Promise<void> => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
@@ -78,11 +80,12 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     const editButton = screen.getByTestId('updateVenueBtn-1');
-    fireEvent.click(editButton);
+    await user.click(editButton);
     expect(MOCK_HANDLE_EDIT).toHaveBeenCalledWith(MOCK_VENUE_ITEM);
   });
 
-  it('handles delete button click', (): void => {
+  it('handles delete button click', async (): Promise<void> => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
@@ -93,7 +96,7 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     const deleteButton = screen.getByTestId('deleteVenueBtn-1');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
     expect(MOCK_HANDLE_DELETE).toHaveBeenCalledWith('1');
   });
 

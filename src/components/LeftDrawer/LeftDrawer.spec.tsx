@@ -1,13 +1,28 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import styles from 'style/app-fixed.module.css';
+// Mock CSS modules
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    sidebarBtnActive: 'sidebarBtnActive',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    expandedDrawer: 'expandedDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+  },
+}));
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook
@@ -32,10 +47,7 @@ vi.mock('utils/useSession', () => ({
 // Mock the SignOut component to avoid Apollo Client dependencies
 vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
-    <div
-      data-testid="sign-out-component"
-      style={{ display: hideDrawer ? 'none' : 'block' }}
-    >
+    <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock
     </div>
   ),
@@ -84,6 +96,12 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -140,6 +158,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
       expect(screen.getByTestId('pluginStoreBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('switchToUserPortalBtn')).toBeInTheDocument();
     });
 
     it('renders users button for all users', () => {
@@ -187,7 +206,7 @@ describe('LeftDrawer Component', () => {
   });
 
   describe('Drawer toggling', () => {
-    it('toggles sidebar correctly on click', () => {
+    it('toggles sidebar correctly on click', async () => {
       renderComponent(false); // Start with drawer visible
       const element = screen.getByTestId('toggleBtn');
       const container = screen.getByTestId('leftDrawerContainer');
@@ -196,11 +215,11 @@ describe('LeftDrawer Component', () => {
       expect(container.className).toContain('expandedDrawer');
 
       // Click to hide
-      fireEvent.click(element);
+      await user.click(element);
       expect(container.className).toContain('collapsedDrawer');
     });
 
-    it('test onKeyDown toggles sidebar correctly', () => {
+    it('test onKeyDown toggles sidebar correctly', async () => {
       renderComponent(false); // Start with drawer visible
       const element = screen.getByTestId('toggleBtn');
       const container = screen.getByTestId('leftDrawerContainer');
@@ -209,18 +228,24 @@ describe('LeftDrawer Component', () => {
       expect(container.className).toContain('expandedDrawer');
 
       // Click to hide
-      fireEvent.click(element);
+      await user.click(element);
       expect(container.className).toContain('collapsedDrawer');
 
       // Enter key to show
-      fireEvent.keyDown(element, { key: 'Enter', code: 'Enter' });
-      expect(container.className).toContain('expandedDrawer');
+      element.focus();
+      await user.keyboard('{Enter}');
+      await waitFor(() => {
+        expect(container.className).toContain('expandedDrawer');
+      });
 
       // Space key to hide
-      fireEvent.keyDown(element, { key: ' ', code: 'Space' });
-      expect(container.className).toContain('collapsedDrawer');
+      element.focus();
+      await user.keyboard('{Space}');
+      await waitFor(() => {
+        expect(container.className).toContain('collapsedDrawer');
+      });
     });
-    it('test onKeyDown does not toggle sidebar on other keys', () => {
+    it('test onKeyDown does not toggle sidebar on other keys', async () => {
       renderComponent(false); // Start with drawer visible
       const element = screen.getByTestId('toggleBtn');
       const container = screen.getByTestId('leftDrawerContainer');
@@ -229,7 +254,8 @@ describe('LeftDrawer Component', () => {
       expect(container.className).toContain('expandedDrawer');
 
       // Other key should not toggle
-      fireEvent.keyDown(element, { key: 'A', code: 'KeyA' });
+      element.focus();
+      await user.keyboard('A');
       expect(container.className).toContain('expandedDrawer');
     });
   });
@@ -244,14 +270,14 @@ describe('LeftDrawer Component', () => {
         clearAllItems: vi.fn(),
       }));
 
-      window.history.pushState({}, '', '/users');
+      window.history.pushState({}, '', '/admin/users');
 
       renderComponent();
       const element = screen.getByTestId('usersBtn');
       expect(element.className).toContain('sidebarBtnActive');
     });
 
-    it('handles mobile view navigation button clicks', () => {
+    it('handles mobile view navigation button clicks', async () => {
       // Mock window.innerWidth
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
@@ -262,7 +288,7 @@ describe('LeftDrawer Component', () => {
       renderComponent(false); // Start with drawer visible
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
-      fireEvent.click(organizationsButton);
+      await user.click(organizationsButton);
 
       // In mobile view, clicking navigation should hide the drawer
       expect(screen.getByTestId('leftDrawerContainer').className).toContain(
@@ -275,12 +301,12 @@ describe('LeftDrawer Component', () => {
       const organizationsButton = screen.getByTestId('organizationsBtn');
 
       // Simulate active route
-      window.history.pushState({}, '', '/orglist');
+      window.history.pushState({}, '', '/admin/orglist');
 
-      expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
+      expect(organizationsButton).toHaveClass('sidebarBtnActive');
     });
 
-    it('does not hide drawer on desktop view navigation button clicks', () => {
+    it('does not hide drawer on desktop view navigation button clicks', async () => {
       // Mock window.innerWidth for desktop view
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
@@ -301,13 +327,13 @@ describe('LeftDrawer Component', () => {
       );
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
-      fireEvent.click(organizationsButton);
+      await user.click(organizationsButton);
       const leftDrawerContainer = screen.getByTestId('leftDrawerContainer');
 
-      expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
+      expect(leftDrawerContainer).toHaveClass('expandedDrawer');
     });
 
-    it('hides drawer on mobile view for all navigation buttons', () => {
+    it('hides drawer on mobile view for all navigation buttons', async () => {
       // Mock window.innerWidth for mobile view
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
@@ -329,18 +355,18 @@ describe('LeftDrawer Component', () => {
 
       // Test community profile button
       const communityProfileButton = screen.getByTestId('communityProfileBtn');
-      fireEvent.click(communityProfileButton);
+      await user.click(communityProfileButton);
 
       expect(setHideDrawer).toHaveBeenCalledWith(true);
       setHideDrawer.mockClear();
 
       // Test users button
       const usersButton = screen.getByTestId('usersBtn');
-      fireEvent.click(usersButton);
+      await user.click(usersButton);
       expect(setHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('simulates different viewport widths for responsive behavior', () => {
+    it('simulates different viewport widths for responsive behavior', async () => {
       // Test with exactly the breakpoint width
       Object.defineProperty(window, 'innerWidth', {
         writable: true,
@@ -360,7 +386,7 @@ describe('LeftDrawer Component', () => {
       );
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
-      fireEvent.click(organizationsButton);
+      await user.click(organizationsButton);
 
       // Should hide drawer as it's exactly at the breakpoint
       expect(setHideDrawer).toHaveBeenCalledWith(true);
@@ -478,7 +504,7 @@ describe('LeftDrawer Component', () => {
       expect(usePluginDrawerItems).toHaveBeenCalledWith([], true, false);
     });
 
-    it('should handle plugin item clicks and hide drawer on mobile', () => {
+    it('should handle plugin item clicks and hide drawer on mobile', async () => {
       const mockPluginItems = [
         {
           pluginId: 'mobile-plugin',
@@ -508,7 +534,7 @@ describe('LeftDrawer Component', () => {
       );
 
       const pluginButton = screen.getByTestId('plugin-mobile-plugin-btn');
-      fireEvent.click(pluginButton);
+      await user.click(pluginButton);
 
       expect(setHideDrawer).toHaveBeenCalledWith(true);
     });

@@ -267,6 +267,42 @@ const byLen = {
 };
 ```
 
+## File Structure and Components
+
+The DataTable is composed of the following modules:
+
+```
+src/shared-components/DataTable/
+├── DataTable.tsx                 # Main component: orchestrates layout, state
+├── DataTableTable.tsx            # Presentational: renders <table> with headers, rows
+├── DataTableSkeleton.tsx         # Skeleton loading state (initial load)
+├── LoadingMoreRows.tsx           # Appended skeleton rows (fetchMore state)
+├── SearchBar.tsx                 # Search input with debouncing
+├── Pagination.tsx                # Pagination controls (client and server modes)
+├── BulkActionsBar.tsx            # Bulk action buttons (when rows selected)
+├── cells/ActionsCell.tsx         # Cell renderer for row action buttons
+├── hooks/useTableData.ts         # Flattens GraphQL connections → rows
+├── hooks/useDataTableFiltering.ts  # Manages search, column filters
+├── hooks/useDataTableSelection.ts  # Manages row selection state
+├── TableLoader.tsx               # Reusable skeleton grid (utility)
+├── types.ts                      # Type definitions for hooks/utilities
+├── utils.ts                      # Helpers: renderHeader, getCellValue, toSearchableString
+├── [module].module.css           # Per‑component CSS (compose app-fixed)
+└── types/                        # Type aliases and interfaces
+    └── interface.ts              # ColumnDef, DataTableProps, etc.
+```
+
+### Key internal components
+
+- **DataTable**: Main orchestrator; manages loading states, pagination, sorting, filtering.
+- **DataTableTable**: Presentational component rendering `<table>` with headers, rows, and selection column.
+- **DataTableSkeleton**: Renders skeleton rows during initial load (loading=true, no data yet).
+- **LoadingMoreRows**: Appends skeleton rows at the end during fetchMore operations (loadingMore=true).
+- **SearchBar**: Global search input with debounce; emits to parent via onGlobalSearchChange.
+- **Pagination**: Pagination controls (prev/next buttons for client mode; "Load more" for server).
+- **BulkActionsBar**: Shows when rows are selected; triggers bulk action callbacks.
+- **ActionsCell**: Renders individual row action buttons.
+
 ## Component: DataTable
 
 The DataTable renders headers and rows from your typed column definitions. It includes built‑in
@@ -518,10 +554,29 @@ Skeleton cells render with:
 - `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
 - Shimmer animation (linear gradient) for visual feedback
 
-Essential CSS extracts:
+**CSS organization:**
+
+All DataTable styles are centralized in `src/style/app-fixed.module.css` for theming consistency. Per‑component CSS modules (`DataTable.module.css`, `DataTableSkeleton.module.css`, etc.) compose styles from `app-fixed` to satisfy the import policy checker.
+
+Example per-component module:
 
 ```css
-/* src/shared-components/DataTable/DataTable.module.css */
+/* src/shared-components/DataTable/DataTableSkeleton.module.css */
+@import 'src/style/app-fixed.module.css';
+
+.skeleton {
+  composes: dataSkeleton from global;
+}
+
+.skeletonCell {
+  composes: dataSkeletonCell from global;
+}
+```
+
+Centralized styles in `app-fixed`:
+
+```css
+/* src/style/app-fixed.module.css */
 @keyframes shimmer {
   0% {
     background-position: 0% 50%;
@@ -530,6 +585,7 @@ Essential CSS extracts:
     background-position: 200% 50%;
   }
 }
+
 .dataSkeletonCell {
   height: 16px;
   border-radius: 6px;
@@ -537,6 +593,7 @@ Essential CSS extracts:
   background-size: 200% 100%;
   animation: shimmer 1.2s ease-in-out infinite;
 }
+
 .dataLoadingOverlay {
   position: absolute;
   inset: 0;
@@ -684,11 +741,11 @@ Enable selection, add row actions, and bulk actions for selected rows.
 
 ```tsx
 import type {
-  RowAction,
-  BulkAction,
-} from 'src/shared-components/DataTable/types';
+  IRowAction,
+  IBulkAction,
+} from 'src/types/shared-components/DataTable/interface';
 
-const rowActions: RowAction<User>[] = [
+const rowActions: IRowAction<User>[] = [
   { id: 'open', label: 'Open', onClick: (u) => console.log('open', u.id) },
   {
     id: 'disable',
@@ -698,7 +755,7 @@ const rowActions: RowAction<User>[] = [
   },
 ];
 
-const bulkActions: BulkAction<User>[] = [
+const bulkActions: IBulkAction<User>[] = [
   {
     id: 'export',
     label: 'Export CSV',

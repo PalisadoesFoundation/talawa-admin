@@ -46,12 +46,13 @@ import { BsPersonCheck } from 'react-icons/bs';
 import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import styles from './EventManagement.module.css';
 
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
-import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
+import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
 import EventAgendaItems from 'components/AdminPortal/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
@@ -91,7 +92,7 @@ const EventManagement = (): JSX.Element => {
   const { eventId, orgId } = useParams();
   if (!eventId || !orgId) {
     // Redirect if event ID or organization ID is missing
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
 
   // Determine user role based on local storage
@@ -207,7 +208,7 @@ const EventManagement = (): JSX.Element => {
     if (userRole === 'USER') {
       navigate(`/user/events/${orgId}`);
     } else {
-      navigate(`/orgevents/${orgId}`);
+      navigate(`/admin/orgevents/${orgId}`);
     }
   };
 

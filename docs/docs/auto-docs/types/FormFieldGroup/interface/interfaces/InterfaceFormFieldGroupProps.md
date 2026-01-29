@@ -12,6 +12,7 @@ Props for FormFieldGroup component.
 
 - [`IFormTextFieldProps`](IFormTextFieldProps.md)
 - [`InterfaceFormSelectFieldProps`](../../../shared-components/FormFieldGroup/interface/interfaces/InterfaceFormSelectFieldProps.md)
+- [`InterfaceFormCheckFieldProps`](../../../shared-components/FormFieldGroup/interface/interfaces/InterfaceFormCheckFieldProps.md)
 
 ## Properties
 
@@ -36,6 +37,22 @@ Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/Palisad
 > `optional` **helpText**: `string`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L8)
+
+***
+
+### hideLabel?
+
+> `optional` **hideLabel**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+
+***
+
+### inline?
+
+> `optional` **inline**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
 
 ***
 

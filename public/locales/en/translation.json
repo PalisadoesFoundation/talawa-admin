@@ -1,4 +1,9 @@
 {
+  "plugin": {
+    "error": "Plugin Error",
+    "failedToLoad": "Failed to load component: <1>{{componentName}}</1>",
+    "id": "Plugin: <1>{{pluginId}}</1>"
+  },
   "securedRouteForUser": {
     "sessionExpired": "Please log in again; your session has expired."
   },
@@ -8,6 +13,9 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "role": {
+    "member": "Member"
+  },
   "invalidDetailsMessage": "Please check the details you entered.",
   "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
@@ -84,7 +92,12 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations",
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
-    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
+    "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Admin Profile",
@@ -158,6 +171,7 @@
     "requests": "Membership Requests",
     "communityProfile": "Community Profile",
     "notification": "Notifications",
+    "switchToUserPortal": "Switch to User Portal",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
     "users": "Users",
@@ -193,7 +207,16 @@
     "prev": "Prev",
     "next": "Next",
     "markAsRead": "Mark as Read",
-    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
+    "unreadCount_one": "{{count}} unread",
+    "unreadCount_other": "{{count}} unread",
+    "unreadCount": "{{count}} unread",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications",
+    "unread": "Unread",
+    "noNewNotifications": "No new notifications",
+    "viewAllNotifications": "View all notifications",
+    "openNotificationsMenu": "Open notifications menu"
   },
   "orgList": {
     "title": "Organizations",
@@ -255,7 +278,11 @@
   },
   "paginationList": {
     "rowsPerPage": "rows per page",
-    "all": "All"
+    "all": "All",
+    "firstPage": "First Page",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "lastPage": "Last Page"
   },
   "requests": {
     "profile": "Profile",
@@ -272,7 +299,7 @@
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "name": "name",
     "email": "email",
-    "profilePictureAlt": "User profile picture",
+    "profilePictureAlt": "Profile picture of {{name}}",
     "placeholderAvatarAlt": "Placeholder avatar",
     "newMembersWillAppearHere": "New membership requests will appear here"
   },
@@ -345,7 +372,28 @@
     "social": "Social Media Links",
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
-    "resetData": "Successfully reset the Profile Details."
+    "resetData": "Successfully reset the Profile Details.",
+    "sessionTimeout": {
+      "title": "Login Session Timeout",
+      "currentTimeout": "Current Timeout:",
+      "noTimeoutSet": "No timeout set",
+      "minutes": " {{count}} minutes",
+      "updateSession": "Update Session",
+      "updateTimeout": "Update Timeout",
+      "min15": "15 min",
+      "min30": "30 min",
+      "min45": "45 min",
+      "min60": "60 min",
+      "update": "Update"
+    }
+  },
+  "cardItem": {
+    "avatar": "{{title}} avatar",
+    "eventLocation": "Event Location",
+    "eventDate": "Event Date",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "Posted on:",
+    "author": "Author:"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -542,6 +590,10 @@
     "recurringEvent": "Recurring Event",
     "recurring": "Recurring",
     "isPublic": "Is Public",
+    "visibility": "Visibility",
+    "public": "Public",
+    "organizationMembers": "Organization Members",
+    "inviteOnly": "Invite Only",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
     "createChat": "Create Chat",
@@ -587,7 +639,12 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "Events": "Events",
+    "Workshops": "Workshops",
+    "selectMonth": "Select Month",
+    "selectDay": "Select Day",
+    "selectYear": "Select Year"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -736,12 +793,12 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
   },
   "eventListCard": {
+    "dogsCare": "Dogs Care",
     "deleteEvent": "Delete Event",
     "deleteEventMsg": "Do you want to remove this event?",
     "deleteRecurringEventMsg": "This is a recurring event. Choose how you want to delete it:",
@@ -760,6 +817,10 @@
     "allDay": "All Day",
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
+    "visibility": "Visibility",
+    "public": "Public",
+    "organizationMembers": "Organization Members",
+    "inviteOnly": "Invite Only",
     "isRegistrable": "Is Registrable",
     "createChat": "Create Chat",
     "updatePost": "Update Post",
@@ -909,7 +970,8 @@
     "pledged": "Pledged",
     "donated": "Donated",
     "campaignNotActive": "Campaign is not currently active",
-    "close": "Close"
+    "close": "Close",
+    "pledgeCreateFailed": "Failed to create pledge"
   },
   "createPostModal": {
     "title": "Posts",
@@ -1129,7 +1191,8 @@
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
     "notFoundMsg": "Oops! The Page you requested was not found!",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "logoAlt": "Logo"
   },
   "orgContribution": {
     "title": "Talawa Contributions",
@@ -1410,6 +1473,8 @@
     "menu": "menu"
   },
   "organizationSidebar": {
+    "loading": "Loading...",
+    "ends": "Ends",
     "viewAll": "View all",
     "events": "Events",
     "noEvents": "No Events to show",
@@ -1443,7 +1508,9 @@
     "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
@@ -1487,6 +1554,7 @@
     "postImagePreview": "Post Image Preview"
   },
   "settings": {
+    "dummyPicture": "dummy picture",
     "eventAttended": "Events Attended",
     "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
@@ -1500,6 +1568,7 @@
     "state": "City/State",
     "country": "Country",
     "resetChanges": "Reset Changes",
+    "profilePicture": "profile picture",
     "profileDetails": "Profile Details",
     "deleteUserMessage": "By clicking on Delete User button your user will be permanently deleted along with its events, tags and all related data.",
     "copyLink": "Copy Profile Link",
@@ -1616,7 +1685,6 @@
     "calendarView": "Calendar View",
     "allDay": "All Day",
     "eventCreated": "Event created and posted successfully.",
-    "eventDetails": "Event Details",
     "eventName": "Name",
     "enterName": "Enter Name",
     "enterDescription": "Enter Description",
@@ -1655,12 +1723,14 @@
     "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
+    "failedToRegister": "Failed to register for the event",
     "starts": "Starts",
     "ends": "Ends",
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "location": "location",
-    "register": "register"
+    "register": "register",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -1713,6 +1783,10 @@
     "advertisementLoading": "Loading advertisements..."
   },
   "userChat": {
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups",
     "title": "Chats",
     "add": "Add",
     "chat": "Chat",
@@ -1765,9 +1839,12 @@
     "loadingImage": "Loading image...",
     "imageNotAvailable": "Image not available",
     "attachment": "Attachment",
+    "members": "members",
     "reply": "Reply",
     "edit": "Edit",
     "delete": "Delete",
+    "noMessages": "No messages yet",
+    "you": "You",
     "errorBoundary": {
       "title": "Something went wrong",
       "message": "An unexpected error occurred in the chat room",
@@ -1895,8 +1972,6 @@
     "downloadTag": "Download Tag",
     "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
-    "checkedIn": "Checked In",
-    "downloadTag": "Download Tag",
     "checkIn": "Check In",
     "eventCheckInManagement": "Event Check In Management",
     "unknownUser": "Unknown User",
@@ -2017,7 +2092,8 @@
     "emailMismatchError": "The email you entered does not match your account email.",
     "continue": "Continue",
     "missingRequiredInfo": "Unable to process request: Missing required information.",
-    "organizationNotFound": "Organization not found"
+    "organizationNotFound": "Organization not found",
+    "confirmLeaveButton": "Confirm leave"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
@@ -2091,7 +2167,21 @@
     "viewGroup": "View group",
     "editGroup": "Edit group",
     "invalidNumber": "Invalid number",
-    "viewToggle": "Toggle view"
+    "viewToggle": "Toggle view",
+    "recurringVolunteerTitle": "Volunteer for {{eventName}}",
+    "recurringGroupTitle": "Join {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "Would you like to volunteer for the entire series or just this instance?",
+    "recurringGroupDescription": "Would you like to join \"{{groupName}}\" for the entire series or just this instance?",
+    "volunteerForEntireSeries": "Volunteer for Entire Series",
+    "volunteerForSeriesDescription": "You will be volunteering for all events in this recurring series",
+    "joinGroupForSeriesDescription": "You will join this group for all events in the recurring series",
+    "volunteerForThisInstanceOnly": "Volunteer for This Instance Only",
+    "volunteerForInstanceDescription": "You will only be volunteering for the event on {{date}}",
+    "joinGroupForInstanceDescription": "You will join this group only for the event on {{date}}",
+    "submitRequest": "Submit Request",
+    "baseEventRequired": "Base Event Required",
+    "selectVolunteer": "Select Volunteer",
+    "volunteerScope": "Volunteer Scope"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2217,6 +2307,10 @@
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details"
   },
+  "pluginInjector": {
+    "notFoundOrDisabled": "Plugin Not Found or Disabled",
+    "notFoundOrDisabledDescription": "The required plugin for this section is either not installed, not found, or has been disabled. Please contact your administrator for assistance."
+  },
   "statusBadge": {
     "completed": "Completed",
     "pending": "Pending",
@@ -2277,7 +2371,15 @@
     "talawaBranding": "Talawa Branding",
     "view": "View",
     "changeLanguage": "Change Language",
-    "userNotFoundError": "User not found"
+    "userNotFoundError": "User not found",
+    "selectAllOnPage": "Select all rows on this page",
+    "actions": "Actions",
+    "bulkActions": "Bulk actions",
+    "selected": "selected",
+    "clear": "Clear",
+    "clearSelection": "Clear selection",
+    "loading": "Loading...",
+    "selectRow": "Select row {{rowKey}}"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2334,11 +2436,75 @@
     "noEventsAttended": "No events attended"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Average Review Score",
+      "rated": "Rated {{score}} / 5"
+    },
     "title": "Event Statistics",
     "reviews": {
       "title": "Reviews",
       "emptyState": "Waiting for people to talk about the event...",
       "filledByCount": "Filled by {{count}} people."
+    },
+    "feedback": {
+      "title": "Feedback Analysis",
+      "emptyState": "Please ask attendees to submit feedback for insights!",
+      "filledByCount": "{{count}} people have filled feedback for this event."
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
+  },
+  "plugins": {
+    "loading": "Loading plugin...",
+    "component": "Component",
+    "plugin": "Plugin",
+    "errors": {
+      "missingPluginId": {
+        "title": "Plugin ID Missing",
+        "description": "This route does not have a valid plugin ID"
+      },
+      "notRegistered": {
+        "title": "Plugin Not Registered",
+        "description": "Please add this plugin to the plugin registry in {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "No Components Found"
+      },
+      "componentNotFound": {
+        "title": "Component Not Found",
+        "availableComponents": "Available components: {{components}}"
+      },
+      "pluginError": {
+        "title": "Plugin Error",
+        "failedToLoad": "Failed to load component"
+      }
+    }
+  },
+  "memberActivity": {
+    "dateNA": "Date N/A",
+    "yes": "Yes",
+    "no": "No",
+    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
+    "eventNotFound": "Event not found or has been deleted",
+    "numberOfAttendees": "Number of attendees",
+    "viewEventDetails": "View event details"
+  },
+  "promotedPost": {
+    "title": "Promoted Content",
+    "promotedContent": "Promoted content: {{title}}"
+  },
+  "csv": {
+    "demographics": "{{category}} Demographics"
   }
 }

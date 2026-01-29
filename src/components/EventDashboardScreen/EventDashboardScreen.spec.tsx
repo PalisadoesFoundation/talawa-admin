@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { act } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -10,8 +10,8 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
+import userEvent from '@testing-library/user-event';
 
 const { setItem } = useLocalStorage();
 
@@ -37,7 +37,9 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
+      pathname: mockID
+        ? `/admin/orgdash/${mockID}`
+        : '/admin/orgdash/undefined',
     }),
   };
 });
@@ -89,14 +91,16 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 const link = new StaticMockLink(MOCKS, true);
-
+const user = userEvent.setup();
 const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new Event('resize'));
+  act(() => {
+    window.innerWidth = width;
+    window.dispatchEvent(new Event('resize'));
+  });
 };
 
-const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
-  fireEvent.click(toggleButton);
+const clickToggleMenuBtn = async (toggleButton: HTMLElement): Promise<void> => {
+  await user.click(toggleButton);
 };
 
 describe('EventDashboardScreen Component', () => {
@@ -109,7 +113,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/undefined']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -129,7 +133,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -148,7 +152,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -158,7 +162,7 @@ describe('EventDashboardScreen Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText('Dashboard')).toBeInTheDocument();
   });
 
   it('renders and toggles drawer states correctly', async () => {
@@ -168,7 +172,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -185,7 +189,7 @@ describe('EventDashboardScreen Component', () => {
 
     // Resize window to trigger hideDrawer true
     resizeWindow(800);
-    clickToggleMenuBtn(toggleButton);
+    await clickToggleMenuBtn(toggleButton);
 
     const afterFirstToggle = mainPage.className;
     expect(afterFirstToggle).not.toBe(initialClass);
@@ -193,7 +197,7 @@ describe('EventDashboardScreen Component', () => {
 
     // Resize back
     resizeWindow(1200);
-    clickToggleMenuBtn(toggleButton);
+    await clickToggleMenuBtn(toggleButton);
 
     const afterSecondToggle = mainPage.className;
     expect(afterSecondToggle).not.toBe(afterFirstToggle);

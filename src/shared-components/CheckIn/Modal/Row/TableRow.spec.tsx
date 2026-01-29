@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { TableRow } from './TableRow';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -20,6 +20,7 @@ import {
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import userEvent from '@testing-library/user-event';
 
 dayjs.extend(utc);
 
@@ -37,13 +38,14 @@ vi.mock('@pdfme/generator', () => ({
  */
 
 describe('Testing Table Row for CheckIn Table', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
-    vi.clearAllMocks();
     global.URL.createObjectURL = vi.fn(() => 'mockURL');
     global.window.open = vi.fn();
+    user = userEvent.setup();
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {
@@ -78,7 +80,7 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     expect(await findByText('Check In')).toBeInTheDocument();
 
-    fireEvent.click(await findByText('Check In'));
+    await user.click(await findByText('Check In'));
 
     expect(await findByText('Checked in successfully')).toBeInTheDocument();
   });
@@ -116,7 +118,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     expect(await findByText('Checked In')).toBeInTheDocument();
     expect(await findByText('Download Tag')).toBeInTheDocument();
 
-    fireEvent.click(await findByText('Download Tag'));
+    await user.click(await findByText('Download Tag'));
 
     expect(await findByText('Generating pdf...')).toBeInTheDocument();
     expect(await findByText('PDF generated successfully!')).toBeInTheDocument();
@@ -154,7 +156,7 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     expect(await findByText('Check In')).toBeInTheDocument();
 
-    fireEvent.click(await findByText('Check In'));
+    await user.click(await findByText('Check In'));
 
     expect(await findByText('Error checking in')).toBeInTheDocument();
     expect(await findByText('Oops')).toBeInTheDocument();
@@ -190,7 +192,7 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    fireEvent.click(await findByText('Download Tag'));
+    await user.click(await findByText('Download Tag'));
 
     expect(await findByText('Error generating pdf')).toBeInTheDocument();
   });
@@ -228,7 +230,7 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     expect(await findByText('Check In')).toBeInTheDocument();
 
-    fireEvent.click(await findByText('Check In'));
+    await user.click(await findByText('Check In'));
 
     expect(await findByText('Checked in successfully')).toBeInTheDocument();
   });
@@ -267,7 +269,7 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    fireEvent.click(await findByText('Download Tag'));
+    await user.click(await findByText('Download Tag'));
 
     expect(await findByText('Error generating pdf')).toBeInTheDocument();
   });
@@ -304,7 +306,7 @@ describe('Testing Table Row for CheckIn Table', () => {
       </BrowserRouter>,
     );
 
-    fireEvent.click(await findByText('Check In'));
+    await user.click(await findByText('Check In'));
 
     expect(await findByText('Checked in successfully')).toBeInTheDocument();
     expect(mockOnCheckInUpdate).toHaveBeenCalledTimes(1);

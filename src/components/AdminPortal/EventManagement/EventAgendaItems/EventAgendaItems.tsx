@@ -36,7 +36,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
@@ -54,19 +54,22 @@ import type {
 import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './EventAgendaItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useParams } from 'react-router';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
+  const { orgId } = useParams();
 
   const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
-  // Extract organization ID from URL
-  const url: string = window.location.href;
-  const startIdx: number = url.indexOf('/event/') + '/event/'.length;
-  const orgId: string = url.slice(startIdx, url.indexOf('/', startIdx));
+  if (!orgId) {
+    // Avoid malformed orgId usage when the route is unexpected.
+    console.error('EventAgendaItems: missing orgId in route params.');
+    return <p>{t('errorLoadingAgendaCategories')}</p>;
+  }
 
   // State to manage the create agenda item modal visibility
   const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
