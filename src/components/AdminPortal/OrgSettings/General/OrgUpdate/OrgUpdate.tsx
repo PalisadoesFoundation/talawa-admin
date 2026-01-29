@@ -21,20 +21,8 @@ import type { InterfaceAddress } from 'utils/interfaces';
 import {
   InterfaceOrgUpdateProps,
   InterfaceOrganization,
+  InterfaceMutationUpdateOrganizationInput,
 } from 'types/AdminPortal/OrgUpdate/interface';
-
-interface InterfaceMutationUpdateOrganizationInput {
-  id: string;
-  name?: string;
-  description?: string;
-  addressLine1?: string;
-  addressLine2?: string;
-  city?: string;
-  state?: string;
-  postalCode?: string;
-  countryCode?: string;
-  avatar?: File;
-}
 
 /**
  * Component for updating organization details.

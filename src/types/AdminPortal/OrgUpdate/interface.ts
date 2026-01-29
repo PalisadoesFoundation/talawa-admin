@@ -33,3 +33,16 @@ export interface InterfaceOrganization {
   /** Whether user registration requires approval, or null if not configured. */
   isUserRegistrationRequired: boolean | null;
 }
+
+export interface InterfaceMutationUpdateOrganizationInput {
+  id: string;
+  name?: string;
+  description?: string;
+  addressLine1?: string;
+  addressLine2?: string;
+  city?: string;
+  state?: string;
+  postalCode?: string;
+  countryCode?: string;
+  avatar?: File;
+}

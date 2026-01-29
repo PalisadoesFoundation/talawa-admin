@@ -139,7 +139,6 @@ describe('OrgUpdate Component', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('loads and displays organization data', async () => {
