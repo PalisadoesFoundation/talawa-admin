@@ -58,7 +58,10 @@ import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
 import React from 'react';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import {
+  CRUDModalTemplate,
+  useModalState,
+} from 'shared-components/CRUDModalTemplate';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
@@ -73,7 +76,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 
 import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
@@ -162,7 +165,7 @@ export default function Events(): JSX.Element {
   );
 
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
-  const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
+  const createEventModal = useModalState();
   const { orgId: organizationId } = useParams();
   const [dateRange, setDateRange] = React.useState<{
     startDate: Date | null;
@@ -279,7 +282,7 @@ export default function Events(): JSX.Element {
           // Refetch failure is non-critical, suppressing error
         }
         setFormResetKey((prev) => prev + 1);
-        setCreateEventmodalisOpen(false);
+        createEventModal.close();
       } else if (errors && errors.length > 0) {
         throw new Error(errors[0].message);
       }
@@ -288,8 +291,7 @@ export default function Events(): JSX.Element {
     }
   };
 
-  const toggleCreateEventModal = (): void =>
-    setCreateEventmodalisOpen(!createEventModal);
+  const toggleCreateEventModal = (): void => createEventModal.toggle();
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
@@ -359,7 +361,7 @@ export default function Events(): JSX.Element {
    */
 
   const showInviteModal = (): void => {
-    setCreateEventmodalisOpen(true);
+    createEventModal.open();
   };
 
   /**
@@ -417,11 +419,12 @@ export default function Events(): JSX.Element {
         currentYear={calendarYear}
       />
       {/* </div> */}
-      <BaseModal
-        show={createEventModal}
-        onHide={toggleCreateEventModal}
+      <CRUDModalTemplate
+        open={createEventModal.isOpen}
+        onClose={toggleCreateEventModal}
         title={t('eventDetails')}
-        dataTestId="createEventModal"
+        data-testid="createEventModal"
+        showFooter={false}
       >
         <EventForm
           key={formResetKey}
@@ -436,7 +439,7 @@ export default function Events(): JSX.Element {
           showPublicToggle
           showRecurrenceToggle
         />
-      </BaseModal>
+      </CRUDModalTemplate>
 
       {/* </div> */}
     </>

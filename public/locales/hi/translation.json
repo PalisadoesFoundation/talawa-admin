@@ -1732,7 +1732,8 @@
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
     "repeatsEvery": "हर बार दोहराता है",
-    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!",
+    "eventDetails": "कार्यक्रम विवरण"
   },
   "userEventCard": {
     "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",

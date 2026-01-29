@@ -1737,7 +1737,8 @@
     "after": "Après",
     "customRecurrence": "Récurrence Personnalisée",
     "repeatsEvery": "Se répète tous les",
-    "noEventAvailable": "Aucun événement disponible !"
+    "noEventAvailable": "Aucun événement disponible !",
+    "eventDetails": "Détails de l'événement"
   },
   "userEventCard": {
     "failedToRegister": "Échec de l'inscription à l'événement",

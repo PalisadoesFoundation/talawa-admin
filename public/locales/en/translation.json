@@ -1720,7 +1720,8 @@
     "after": "After",
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
-    "noEventAvailable": "No Event Available!"
+    "noEventAvailable": "No Event Available!",
+    "eventDetails": "Event Details"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",
