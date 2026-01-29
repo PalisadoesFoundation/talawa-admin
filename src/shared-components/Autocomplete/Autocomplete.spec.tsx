@@ -12,7 +12,11 @@ describe('Autocomplete', () => {
     render(
       <Autocomplete
         options={['Option 1', 'Option 2']}
-        renderInput={(params) => <input {...params.inputProps} />}
+        renderInput={(params) => (
+          <div {...params.InputProps}>
+            <input {...params.inputProps} />
+          </div>
+        )}
       />,
     );
     expect(screen.getByRole('combobox')).toBeInTheDocument();
@@ -27,21 +31,27 @@ describe('Autocomplete', () => {
         value="Option 1"
         onChange={mockOnChange}
         disabled={false}
-        renderInput={(params) => <input {...params.inputProps} />}
+        disablePortal={true}
+        renderInput={(params) => (
+          <div {...params.InputProps}>
+            <input {...params.inputProps} />
+          </div>
+        )}
       />,
     );
     const combobox = screen.getByRole('combobox');
     expect(combobox).toBeInTheDocument();
 
-    // Open the autocomplete dropdown
+    // Open the autocomplete dropdown using keyboard
     await user.click(combobox);
+    await user.keyboard('{ArrowDown}');
 
     // Wait for the listbox to appear
     const listbox = await screen.findByRole('listbox');
     expect(listbox).toBeInTheDocument();
 
     // Find and click "Option 2" from the options list
-    const option2 = await screen.findByText('Option 2');
+    const option2 = await screen.findByRole('option', { name: 'Option 2' });
     await user.click(option2);
 
     // Verify onChange was called when selecting the option
@@ -52,7 +62,11 @@ describe('Autocomplete', () => {
     render(
       <Autocomplete
         options={[]}
-        renderInput={(params) => <input {...params.inputProps} />}
+        renderInput={(params) => (
+          <div {...params.InputProps}>
+            <input {...params.inputProps} />
+          </div>
+        )}
       />,
     );
     expect(screen.getByRole('combobox')).toBeInTheDocument();

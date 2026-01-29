@@ -1043,11 +1043,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
 
-    // Get the edit input element
-    const editInput = screen.getByTestId('edit-comment-input');
+    // Get the edit input element by explicitly querying the aria-label
+    const editInput = screen.getByLabelText('Edit comment');
     expect(editInput).toBeInTheDocument();
-
-    // Verify the aria-label attribute is set correctly
-    expect(editInput).toHaveAttribute('aria-label', 'Edit comment');
   });
 });

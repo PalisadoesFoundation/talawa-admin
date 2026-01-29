@@ -105,7 +105,7 @@ function EventCard({
       try {
         const { data } = await registerEventMutation({
           variables: {
-            id: id,
+            id,
           },
         });
         if (data) {
