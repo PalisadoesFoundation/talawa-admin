@@ -485,5 +485,9 @@ describe('Testing Event Dashboard Screen', () => {
     const props = mockEventListCardModals.mock.lastCall?.[0];
     expect(props?.eventListCardProps?.startTime).toBe('08:00');
     expect(props?.eventListCardProps?.endTime).toBe('08:00');
+
+    // Assert that the date containers are rendered even if content is empty (strict coverage)
+    expect(getByTestId('start-date')).toBeInTheDocument();
+    expect(getByTestId('end-date')).toBeInTheDocument();
   });
 });
