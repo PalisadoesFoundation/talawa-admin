@@ -604,9 +604,9 @@ describe('CreatePostModal Integration Tests', () => {
       // Mock empty file selection
       Object.defineProperty(fileInput, 'files', { value: null });
 
-      // Use userEvent to trigger change event (though files will be null)
+      // Trigger the native change event via dispatchEvent because userEvent.upload requires real File objects.
+      // Since files is null, this tests the edge case where no file is selected.
       await act(async () => {
-        // Trigger the change event handler directly since userEvent.upload requires actual files
         fileInput.dispatchEvent(new Event('change', { bubbles: true }));
       });
 

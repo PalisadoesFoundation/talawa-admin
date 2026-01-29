@@ -11,7 +11,6 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 dayjs.extend(utc);
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
@@ -23,6 +22,11 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
     dismiss: vi.fn(),
   },
 }));
+
+// Import after mock to get the mocked version
+const { NotificationToast } = await import(
+  'shared-components/NotificationToast/NotificationToast'
+);
 
 // Mock useLocalStorage
 const mockGetItem = vi.fn();
@@ -496,9 +500,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       act(() => {
-        act(() => {
-          scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
-        });
+        scrollContainer.dispatchEvent(new Event('scroll', { bubbles: true }));
       });
 
       // Buttons should not appear when scrolling is not possible

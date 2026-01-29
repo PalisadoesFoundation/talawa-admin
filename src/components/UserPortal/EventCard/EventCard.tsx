@@ -5,7 +5,7 @@
  * location, start and end times, and the creator's name. It also provides functionality for users
  * to register for the event.
  *
- * @param props - The event details passed as props, adhering to the `InterfaceEvent` type.
+ * @param props - The event details passed as props, adhering to the `InterfaceEventCardProps` type.
  *
  * @remarks
  * - The component uses the `useTranslation` hook for internationalization.
@@ -54,9 +54,9 @@ import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
 
-function eventCard(props: InterfaceEvent): JSX.Element {
+function eventCard(props: InterfaceEventCardProps): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',

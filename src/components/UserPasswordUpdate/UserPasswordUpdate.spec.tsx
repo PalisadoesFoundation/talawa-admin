@@ -9,7 +9,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS } from './UserPasswordUpdateMocks';
 import { vi } from 'vitest';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -20,6 +19,11 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
     dismiss: vi.fn(),
   },
 }));
+
+// Import after mock to get the mocked version
+const { NotificationToast } = await import(
+  'shared-components/NotificationToast/NotificationToast'
+);
 
 const link = new StaticMockLink(MOCKS, true);
 

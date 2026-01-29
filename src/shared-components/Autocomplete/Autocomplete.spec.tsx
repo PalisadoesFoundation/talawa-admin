@@ -1,5 +1,5 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Autocomplete } from './Autocomplete';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
@@ -18,8 +18,9 @@ describe('Autocomplete', () => {
     expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
-  it('forwards props to MuiAutocomplete', () => {
+  it('forwards props to MuiAutocomplete', async () => {
     const mockOnChange = vi.fn();
+    const user = userEvent.setup();
     render(
       <Autocomplete
         options={['Option 1', 'Option 2']}
@@ -29,7 +30,16 @@ describe('Autocomplete', () => {
         renderInput={(params) => <input {...params.inputProps} />}
       />,
     );
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
+    const combobox = screen.getByRole('combobox');
+    expect(combobox).toBeInTheDocument();
+
+    // Interact with the autocomplete to trigger onChange
+    await user.click(combobox);
+    await user.clear(combobox);
+    await user.type(combobox, 'Option 2');
+
+    // Verify onChange was called during interaction
+    expect(mockOnChange).toHaveBeenCalled();
   });
 
   it('handles empty options array', () => {
