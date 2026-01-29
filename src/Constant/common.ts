@@ -102,20 +102,6 @@ export const IDENTIFIER_USER_ID = 'userId';
 export const IDENTIFIER_ID = 'id';
 
 /**
- * Generates a dummy date time for dayjs parsing.
- * @deprecated Use DUMMY_DATE_TIME_PREFIX directly in new code.
- * This function will be removed in v4.0.0.
- *
- * Migration:
- * Replace `getDummyDateTime(time)` with `${DUMMY_DATE_TIME_PREFIX}${time}`
- *
- * @param time - The time string (HH:mm:ss).
- * @returns The formatted ISO-like string.
- */
-export const getDummyDateTime = (time: string): string =>
-  `${DUMMY_DATE_TIME_PREFIX}${time}`;
-
-/**
  * Generates the data-testid for the people image.
  * @param id - The ID of the person.
  * @returns The formatted data-testid.

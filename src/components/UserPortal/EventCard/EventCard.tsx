@@ -55,7 +55,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
-import { getDummyDateTime, IDENTIFIER_USER_ID } from 'Constant/common';
+import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
@@ -125,7 +125,9 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
-            {dayjs(getDummyDateTime(props.startTime)).format('h:mm:ss A')}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${props.startTime}`).format(
+              'h:mm:ss A',
+            )}
           </b>
         ) : (
           <></>
@@ -136,7 +138,9 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
-            {dayjs(getDummyDateTime(props.endTime)).format('h:mm:ss A')}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${props.endTime}`).format(
+              'h:mm:ss A',
+            )}
           </b>
         ) : (
           <></>
