@@ -1115,6 +1115,8 @@ describe('ActionItemModal', () => {
         // Verify the combobox is accessible
         const groupInput = within(groupSelect).getByRole('combobox');
         expect(groupInput).toBeInTheDocument();
-      }, { timeout: 3000 });
-    });
+      },
+      { timeout: 3000 },
+    );
   });
+});
