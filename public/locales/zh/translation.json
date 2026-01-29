@@ -1247,7 +1247,11 @@
     "enterOrganizationDescription": "输入组织描述",
     "userRegistrationRequired": "需要用户注册",
     "nameDescriptionRequired": "名称和描述为必填项",
-    "updateFailed": "更新组织失败"
+    "updateFailed": "更新组织失败",
+    "errorLoadingOrganizationData": "加载组织数据时出错",
+    "enterOrganizationLocation": "请输入组织位置",
+    "imageSizeTooLarge": "图片大小过大，请上传较小的文件。",
+    "invalidImageType": "无效的图片类型，请上传有效的图片文件。"
   },
   "public": {
     "invitation": {
