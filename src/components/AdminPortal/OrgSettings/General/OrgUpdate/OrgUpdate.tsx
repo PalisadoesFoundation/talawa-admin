@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
@@ -296,7 +296,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 inline
               >
                 <input
+                  id="isPublic"
                   type="checkbox"
+                  data-testid="user-reg-switch"
                   className="custom-switch"
                   checked={!userRegistrationRequiredChecked}
                   onChange={() =>
@@ -315,6 +317,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               >
                 <input
                   type="checkbox"
+                  data-testid="visibility-switch"
                   className="custom-switch"
                   checked={visiblechecked}
                   onChange={() => setVisibleChecked(!visiblechecked)}
