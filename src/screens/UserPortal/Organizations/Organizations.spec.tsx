@@ -23,6 +23,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 let setItem: ReturnType<typeof useLocalStorage>['setItem'];
 let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
+let user: ReturnType<typeof userEvent.setup>;
 
 const paginationMock = vi.hoisted(() => ({
   default: ({
@@ -460,6 +461,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
+  user = userEvent.setup();
   const { setItem: setItemLocal, clearAllItems: clearAllItemsLocal } =
     useLocalStorage();
   setItem = setItemLocal;
@@ -512,9 +514,9 @@ test('should search organizations when pressing Enter key', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  await userEvent.clear(searchInput);
-  await userEvent.type(searchInput, 'Search Term');
-  await userEvent.type(searchInput, '{Enter}');
+  await user.clear(searchInput);
+  await user.type(searchInput, 'Search Term');
+  await user.type(searchInput, '{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -540,11 +542,11 @@ test('should search organizations when clicking search button', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  await userEvent.clear(searchInput);
-  await userEvent.type(searchInput, 'Search Term');
+  await user.clear(searchInput);
+  await user.type(searchInput, 'Search Term');
 
   const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await user.click(searchButton);
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -571,7 +573,7 @@ test('Mode dropdown switches list correctly', async () => {
 
   // Test Mode 0 (All Organizations)
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
+  await user.click(modeButton);
 
   // Initially should be in mode 0 with organizations
   await waitFor(() => {
@@ -579,15 +581,15 @@ test('Mode dropdown switches list correctly', async () => {
   });
 
   // Switch to Mode 1 (Joined Organizations)
-  await userEvent.click(screen.getByTestId('1'));
+  await user.click(screen.getByTestId('1'));
 
   // Wait for mode change and check if component is still working
   await wait(200);
   expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
 
   // Switch to Mode 2 (Created Organizations)
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('2'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('2'));
 
   // Wait for mode change and check if component is still working
   await wait(200);
@@ -632,14 +634,14 @@ test('Pagination basic functionality works', async () => {
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
   expect(rowsPerPageSelect).toHaveValue('5');
 
-  await userEvent.selectOptions(rowsPerPageSelect, '10');
+  await user.selectOptions(rowsPerPageSelect, '10');
   expect(rowsPerPageSelect).toHaveValue('10');
 
   const currentPage = screen.getByTestId('current-page');
   expect(currentPage.textContent).toBe('0');
 
   const nextButton = screen.getByTestId('next-page');
-  await userEvent.click(nextButton);
+  await user.click(nextButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('current-page').textContent).toBe('1');
@@ -706,11 +708,11 @@ test('should handle search with special characters', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
-  await userEvent.type(searchInput, '@#$%');
+  await user.type(searchInput, '@#$%');
   expect(searchInput.value).toBe('@#$%');
 
   const searchButton = screen.getByTestId('searchBtn');
-  await userEvent.click(searchButton);
+  await user.click(searchButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
@@ -862,8 +864,8 @@ test('should handle mode switching to joined organizations', async () => {
 
   // Switch to joined organizations mode (mode 1)
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('1'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('1'));
 
   await wait(200);
 
@@ -890,8 +892,8 @@ test('should handle mode switching to created organizations', async () => {
 
   // Switch to created organizations mode (mode 2)
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('2'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('2'));
 
   await wait(200);
 
@@ -957,8 +959,8 @@ test('should handle null user data in joined organizations', async () => {
 
   // Switch to joined mode
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('1'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('1'));
 
   // Wait for the mode switch to complete - the else branch should execute
   // setting organizations to empty array
@@ -1026,8 +1028,8 @@ test('should handle missing organizationsWhereMember in joined organizations', a
 
   // Switch to joined mode
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('1'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('1'));
 
   // Wait for the mode switch to complete
   await wait(300);
@@ -1094,8 +1096,8 @@ test('should handle null createdOrganizations in created organizations', async (
 
   // Switch to created mode
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('2'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('2'));
 
   // Wait for the mode switch to complete
   await wait(300);
@@ -1162,8 +1164,8 @@ test('should handle missing createdOrganizations field', async () => {
 
   // Switch to created mode
   const modeButton = screen.getByTestId('modeChangeBtn');
-  await userEvent.click(modeButton);
-  await userEvent.click(screen.getByTestId('2'));
+  await user.click(modeButton);
+  await user.click(screen.getByTestId('2'));
 
   // Wait for the mode switch to complete
   await wait(300);
@@ -1289,7 +1291,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Go to next page first
   const nextButton = screen.getByTestId('next-page');
-  await userEvent.click(nextButton);
+  await user.click(nextButton);
 
   await waitFor(() => {
     expect(screen.getByTestId('current-page').textContent).toBe('1');
@@ -1297,7 +1299,7 @@ test('should reset page when changing rows per page', async () => {
 
   // Change rows per page
   const rowsPerPageSelect = screen.getByTestId('rows-per-page');
-  await userEvent.selectOptions(rowsPerPageSelect, '10');
+  await user.selectOptions(rowsPerPageSelect, '10');
 
   // Page should reset to 0
   await waitFor(() => {
@@ -1392,7 +1394,7 @@ describe('Email Verification Warning', () => {
     });
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    await userEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith(
@@ -1431,7 +1433,7 @@ describe('Email Verification Warning', () => {
     });
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    await userEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       expect(toastMocks.info).toHaveBeenCalledWith(
@@ -1460,7 +1462,7 @@ describe('Email Verification Warning', () => {
     });
 
     const dismissBtn = screen.getByLabelText(/close/i);
-    await userEvent.click(dismissBtn);
+    await user.click(dismissBtn);
 
     expect(
       screen.queryByTestId('email-verification-warning'),

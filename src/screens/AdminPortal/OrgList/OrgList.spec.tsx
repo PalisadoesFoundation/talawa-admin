@@ -1,14 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -64,8 +57,10 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
 type LSApi = ReturnType<typeof useLocalStorage>;
 let setItem: LSApi['setItem'];
 let removeItem: LSApi['removeItem'];
+let user: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
+  user = userEvent.setup();
   setItem = (key: string, value: unknown) => setItemStatic(PREFIX, key, value);
   removeItem = (key: string) => removeItemStatic(PREFIX, key);
 
@@ -730,7 +725,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await user.click(searchBtn);
   });
 
   test('Testing search functionality by with empty search bar', async () => {
@@ -742,7 +737,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.clear(searchBar);
-    fireEvent.click(searchBtn);
+    await user.click(searchBtn);
   });
 
   test('Testing debounced search functionality', async () => {
@@ -774,7 +769,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Type and press Enter to test immediate search
     await userEvent.type(searchBar, 'Dogs');
-    fireEvent.keyDown(searchBar, { key: 'Enter', code: 'Enter' });
+    await user.type(searchBar, '{Enter}');
   });
 
   test('Testing pagination component presence', async () => {
@@ -832,7 +827,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
-    fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+    await user.selectOptions(rowsPerPageSelect, '10');
 
     await wait();
   });
@@ -894,7 +889,11 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    fireEvent.scroll(window, { target: { scrollY: 1000 } });
+    Object.defineProperty(window, 'scrollY', {
+      value: 1000,
+      configurable: true,
+    });
+    window.dispatchEvent(new Event('scroll'));
   });
 });
 
@@ -912,25 +911,25 @@ describe('Organisations Page testing as Admin', () => {
     const sortToggle = screen.getByTestId('sortOrgs');
 
     await act(async () => {
-      fireEvent.click(sortToggle);
+      await user.click(sortToggle);
     });
 
     const latestOption = screen.getByTestId('Latest');
 
     await act(async () => {
-      fireEvent.click(latestOption);
+      await user.click(latestOption);
     });
 
     expect(sortDropdown).toBeInTheDocument();
 
     await act(async () => {
-      fireEvent.click(sortToggle);
+      await user.click(sortToggle);
     });
 
     const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
 
     await act(async () => {
-      fireEvent.click(oldestOption);
+      await user.click(oldestOption);
     });
 
     expect(sortDropdown).toBeInTheDocument();
@@ -1055,7 +1054,8 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Test pagination with rowsPerPage = 0 edge case
     const rowsPerPageSelect = screen.getByDisplayValue('5');
-    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    rowsPerPageSelect.setAttribute('value', '0');
+    rowsPerPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
   });
 
@@ -1079,7 +1079,7 @@ describe('Advanced Component Functionality Tests', () => {
       .find((btn) => btn.getAttribute('aria-label')?.includes('next'));
 
     if (nextPageButton && !nextPageButton.hasAttribute('disabled')) {
-      fireEvent.click(nextPageButton);
+      await user.click(nextPageButton);
       await wait(200);
     }
   });
@@ -1216,7 +1216,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open the create organization modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
@@ -1404,7 +1404,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
@@ -1612,7 +1612,7 @@ describe('Advanced Component Functionality Tests', () => {
     if (selects.length > 0) {
       // Trigger the select to ensure the handler is tested
       const paginationSelect = selects[0];
-      fireEvent.mouseDown(paginationSelect);
+      await user.click(paginationSelect);
       await wait(100);
     }
 
@@ -1836,7 +1836,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (nextButton && !nextButton.hasAttribute('disabled')) {
-      fireEvent.click(nextButton);
+      await user.click(nextButton);
       await wait(200);
     }
 
@@ -1846,7 +1846,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (prevButton && !prevButton.hasAttribute('disabled')) {
-      fireEvent.click(prevButton);
+      await user.click(prevButton);
       await wait(200);
     }
   });
@@ -2624,10 +2624,10 @@ describe('Email Verification Actions Tests', () => {
 
     const closeBtn = warningAlert.querySelector('.btn-close');
     if (closeBtn) {
-      fireEvent.click(closeBtn);
+      await user.click(closeBtn);
     } else {
       const altBtn = screen.getByLabelText('Close alert');
-      fireEvent.click(altBtn);
+      await user.click(altBtn);
     }
 
     await waitFor(() => {
@@ -2658,7 +2658,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
@@ -2680,7 +2680,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
@@ -2711,7 +2711,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await user.click(resendBtn);
 
     await waitFor(() => {
       // errorHandler should be called
