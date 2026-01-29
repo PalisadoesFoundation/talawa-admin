@@ -62,36 +62,35 @@ const collectComposeViolations = (filePath, content) => {
   const violations = [];
   const baseDir = path.dirname(filePath);
   const composeRegex = /composes\s*:[^;{]*\bfrom\s+['"]([^'"]+)['"]/gi;
-  const lines = content.split(/\r?\n/);
+  for (const match of content.matchAll(composeRegex)) {
+    const matchIndex = match.index ?? 0;
+    const line = content.slice(0, matchIndex).split(/\r?\n/).length;
+    const importPath = match[1];
 
-  lines.forEach((line, index) => {
-    for (const match of line.matchAll(composeRegex)) {
-      const importPath = match[1];
-      if (!importPath.startsWith('.')) {
-        violations.push({
-          filePath,
-          line: index + 1,
-          importedPath: importPath,
-          reason:
-            'composes must use a relative path within the component. Non-relative targets are disallowed.',
-        });
-        continue;
-      }
-
-      const resolvedImport = path.resolve(baseDir, importPath);
-      const isLocal = isLocalCssModule(baseDir, resolvedImport);
-
-      if (!isLocal) {
-        violations.push({
-          filePath,
-          line: index + 1,
-          importedPath: importPath,
-          reason:
-            'composes from a non-local stylesheet. Define styles locally instead.',
-        });
-      }
+    if (!importPath.startsWith('.')) {
+      violations.push({
+        filePath,
+        line,
+        importedPath: importPath,
+        reason:
+          'composes must use a relative path within the component. Non-relative targets are disallowed.',
+      });
+      continue;
     }
-  });
+
+    const resolvedImport = path.resolve(baseDir, importPath);
+    const isLocal = isLocalCssModule(baseDir, resolvedImport);
+
+    if (!isLocal) {
+      violations.push({
+        filePath,
+        line,
+        importedPath: importPath,
+        reason:
+          'composes from a non-local stylesheet. Define styles locally instead.',
+      });
+    }
+  }
 
   return violations;
 };
