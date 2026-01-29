@@ -1,0 +1,8 @@
+.errorState {
+  color: var(--errorState-color);
+  background: var(--errorState-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+}

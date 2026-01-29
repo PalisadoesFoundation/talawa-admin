@@ -1,0 +1,234 @@
+.orgCard {
+  background-color: var(--color-white);
+  margin: var(--space-3);
+  height: calc(var(--space-16) + var(--space-8));
+  padding: var(--space-5);
+  border-radius: var(--radius-4);
+  outline: var(--border-1) solid var(--color-gray-100);
+  position: relative;
+  margin-right: var(--space-8);
+}
+
+.innerContainer {
+  display: flex;
+  height: 100%;
+  gap: var(--space-5);
+}
+
+.orgCard .innerContainer {
+  display: flex;
+  height: 100%;
+  gap: var(--space-5);
+}
+
+.orgImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2);
+  width: var(--space-14);
+  height: var(--space-14);
+  object-fit: contain;
+  background-color: var(--color-gray-100);
+}
+
+.orgCard .innerContainer .orgImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2);
+  width: var(--space-14);
+  height: var(--space-14);
+  object-fit: contain;
+  margin-bottom: var(--space-4);
+  background-color: var(--color-gray-100);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: var(--space-5);
+  width: 70%;
+  margin-top: var(--space-4);
+}
+
+.orgCard .innerContainer .content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: var(--space-0);
+  width: 70%;
+  margin-top: var(--space-4);
+}
+
+@media (max-width: 580px) {
+  .orgCard {
+    width: 100%;
+    height: unset;
+    margin: var(--space-3) var(--space-0);
+    padding: var(--space-6) var(--space-7);
+  }
+
+  .orgCard .innerContainer {
+    flex-direction: column;
+  }
+
+  .orgCard .innerContainer .orgImgContainer img {
+    height: auto;
+    width: 100%;
+  }
+
+  .orgCard button {
+    bottom: var(--space-0);
+    right: var(--space-0);
+    position: relative;
+    margin-left: auto;
+    display: block;
+  }
+
+  .orgCard .manageBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: var(--font-size-md);
+}
+
+.orgdesc {
+  font-size: var(--font-size-15);
+  color: var(--color-gray-700);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: var(--space-21);
+}
+
+.address {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  align-items: center;
+}
+
+.address h6 {
+  font-size: var(--font-size-15);
+  color: var(--color-gray-700);
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
+  width: fit-content;
+}
+
+.member {
+  background-color: var(--color-green-100);
+  color: var(--color-green-500);
+}
+
+.pendingMembership {
+  background-color: var(--color-yellow-100);
+  color: var(--color-yellow-600);
+}
+
+.notMember {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-400);
+}
+
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: var(--space-5);
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: var(--space-14);
+  height: var(--space-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+  width: var(--space-14);
+  border: var(--border-1) solid var(--color-blue-200);
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  position: absolute;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.manageBtn:hover {
+  color: var(--color-gray-700);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-xs) 0 rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+}
+
+.withdrawBtn {
+  display: flex;
+  justify-content: space-around;
+  width: var(--space-14);
+}
+
+.outlineBtn {
+  background-color: var(--color-white);
+  color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  padding: var(--space-5) var(--space-5);
+  position: absolute;
+  right: var(--space-5);
+  bottom: var(--space-5);
+  width: var(--space-14);
+}
+
+.outlineBtn:is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  color: var(--color-white);
+  border-color: var(--color-blue-500);
+}
+
+.outlineBtn:disabled {
+  background-color: var(--color-white);
+  color: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+}
+
+.buttonWidth8rem {
+  width: var(--space-14);
+}

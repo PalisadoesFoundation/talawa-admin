@@ -5,12 +5,11 @@
  * It uses custom scroll functions to create a responsive, scrollable container that
  * shows multiple pinned post cards in a carousel format.
  *
- * @param props - The properties for the PinnedPostsLayout component.
- * @param props.pinnedPosts - Array of pinned post edges containing post data and cursor information.
- * @param props.onStoryClick - Callback function triggered when a post story/card is clicked.
- * @param props.onPostUpdate - Optional callback function triggered after any post updates.
+ * @param pinnedPosts - Array of pinned post edges containing post data and cursor information.
+ * @param onStoryClick - Callback function triggered when a post story/card is clicked.
+ * @param onPostUpdate - Optional callback function triggered after any post updates.
  *
- * @returns {JSX.Element} A JSX element representing the pinned posts carousel layout.
+ * @returns A JSX element representing the pinned posts carousel layout.
  *
  * @remarks
  * - Implements horizontal scrolling with left/right navigation buttons
@@ -29,6 +28,7 @@
  */
 
 import React, { useRef, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   InterfacePinnedPostsLayoutProps,
   InterfacePost,
@@ -43,6 +43,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   onStoryClick,
   onPostUpdate,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -96,7 +97,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           type="button"
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
-          aria-label="Scroll left"
+          aria-label={t('scrollLeft')}
           data-testid="scroll-left-button"
         >
           <ChevronLeft />
@@ -131,7 +132,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           type="button"
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
-          aria-label="Scroll right"
+          aria-label={t('scrollRight')}
           data-testid="scroll-right-button"
         >
           <ChevronRight />

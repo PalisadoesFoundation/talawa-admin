@@ -1,0 +1,21 @@
+.visuallyHidden {
+  composes: visuallyHidden from '../../style/app-fixed.module.css';
+}
+.selectCol {
+  composes: selectCol from '../../style/app-fixed.module.css';
+}
+.sortable {
+  composes: sortable from '../../style/app-fixed.module.css';
+}
+.headerInner {
+  composes: headerInner from '../../style/app-fixed.module.css';
+}
+.sortIndicator {
+  composes: sortIndicator from '../../style/app-fixed.module.css';
+}
+.active {
+  composes: active from '../../style/app-fixed.module.css';
+}
+.actionsCol {
+  composes: actionsCol from '../../style/app-fixed.module.css';
+}

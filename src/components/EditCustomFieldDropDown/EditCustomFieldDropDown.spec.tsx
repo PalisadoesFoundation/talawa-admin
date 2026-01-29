@@ -1,9 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import EditOrgCustomFieldDropDown from './EditCustomFieldDropDown';
+import userEvent from '@testing-library/user-event';
 
 // Initialize i18n for testing
 i18n.init({
@@ -48,7 +49,7 @@ describe('EditOrgCustomFieldDropDown Component', () => {
     setCustomFieldData: ReturnType<typeof vi.fn>;
     variant: 'outline-success';
   };
-
+  let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
     mockSetCustomFieldData = vi.fn();
     defaultProps = {
@@ -60,10 +61,11 @@ describe('EditOrgCustomFieldDropDown Component', () => {
       setCustomFieldData: mockSetCustomFieldData,
       variant: 'outline-success' as const,
     };
-    vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -103,9 +105,7 @@ describe('EditOrgCustomFieldDropDown Component', () => {
       </I18nextProvider>,
     );
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('toggleBtn'));
-    });
+    await user.click(screen.getByTestId('toggleBtn'));
 
     // Change to get items by their test IDs instead of role
     const menuItems = [
@@ -129,9 +129,7 @@ describe('EditOrgCustomFieldDropDown Component', () => {
       </I18nextProvider>,
     );
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('toggleBtn'));
-    });
+    await user.click(screen.getByTestId('toggleBtn'));
 
     const textOption = screen.getByTestId('dropdown-btn-0');
     expect(textOption).toHaveClass('dropdown-item', 'disabled');
@@ -144,13 +142,9 @@ describe('EditOrgCustomFieldDropDown Component', () => {
       </I18nextProvider>,
     );
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('toggleBtn'));
-    });
+    await user.click(screen.getByTestId('toggleBtn'));
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('dropdown-btn-1'));
-    });
+    await user.click(screen.getByTestId('dropdown-btn-1'));
 
     expect(mockSetCustomFieldData).toHaveBeenCalledWith({
       ...defaultProps.customFieldData,
@@ -176,13 +170,9 @@ describe('EditOrgCustomFieldDropDown Component', () => {
       </I18nextProvider>,
     );
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('toggleBtn'));
-    });
+    await user.click(screen.getByTestId('toggleBtn'));
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('dropdown-btn-2'));
-    });
+    await user.click(screen.getByTestId('dropdown-btn-2'));
 
     expect(mockSetCustomFieldData).toHaveBeenCalledWith({
       ...customFieldData,

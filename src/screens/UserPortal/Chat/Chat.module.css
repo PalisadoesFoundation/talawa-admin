@@ -27,7 +27,8 @@
   border-radius: var(--radius-lg);
   overflow-y: auto;
   background-color: var(--color-gray-50);
-  min-height: 0; /* Allow flex shrinking */
+  min-height: 0;
+  /* Allow flex shrinking */
 }
 
 .chatContainer::-webkit-scrollbar {
@@ -112,6 +113,7 @@
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
@@ -124,6 +126,7 @@
   margin-right: var(--space-5);
   --bs-btn-active-bg: none;
 }
+
 .customToggle svg {
   color: var(--color-black);
 }
@@ -131,12 +134,14 @@
 .customToggle::after {
   content: none;
 }
+
 .customToggle:hover,
 .customToggle:focus,
 .customToggle:active {
   background: none;
   border: none;
 }
+
 .customToggle svg {
   color: var(--color-black);
 }
@@ -152,6 +157,7 @@
     width: var(--space-18);
     height: var(--space-6);
   }
+
   .opendrawer {
     width: var(--space-8);
   }
@@ -203,4 +209,14 @@
   border: var(--border-1) solid var(--color-green-100);
   background-color: var(--color-green-100);
   color: var(--color-white);
+}
+
+.dropdownToggle {
+  cursor: pointer;
+}
+
+.contactCardList {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  flex: 1;
 }

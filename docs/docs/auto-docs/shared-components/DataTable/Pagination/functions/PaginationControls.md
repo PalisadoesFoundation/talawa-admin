@@ -23,7 +23,7 @@ AUDIT RESULT: All call sites verified (DataTable.tsx only caller):
 
 ### page
 
-[`IPaginationControlsProps`](../../../../types/shared-components/DataTable/interface/interfaces/IPaginationControlsProps.md)
+[`InterfacePaginationControlsProps`](../../../../types/shared-components/DataTable/pagination/interfaces/InterfacePaginationControlsProps.md)
 
 Current page number (1-indexed)
 

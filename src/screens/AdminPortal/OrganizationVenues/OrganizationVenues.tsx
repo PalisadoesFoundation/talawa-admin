@@ -46,7 +46,7 @@
  * @returns JSX.Element - The rendered OrganizationVenues component.
  */
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationVenues.module.css';
 import { errorHandler } from 'utils/errorHandler';
@@ -86,7 +86,7 @@ function organizationVenues(): JSX.Element {
   // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
   if (!orgId) {
-    return <Navigate to="/orglist" />;
+    return <Navigate to="/admin/orglist" />;
   }
 
   // GraphQL query for fetching venue data

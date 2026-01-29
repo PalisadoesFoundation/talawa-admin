@@ -25,13 +25,14 @@ import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';
-import styles from 'style/app-fixed.module.css';
+import styles from './SuperAdminScreen.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const superAdminScreen = (): React.ReactElement => {
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
-  const titleKey = map[location.pathname.split('/')[1]];
+  const segment = location.pathname.split('/')[2] || 'default';
+  const titleKey = map[segment] ?? map.default;
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
@@ -120,8 +121,9 @@ const map: Record<
   requests: 'requests',
   users: 'users',
   member: 'memberDetail',
-  admin: 'adminProfile',
+  profile: 'adminProfile',
   communityProfile: 'communityProfile',
   pluginstore: 'pluginStore',
   notification: 'notification',
+  default: 'orgList',
 };

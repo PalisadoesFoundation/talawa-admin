@@ -1,0 +1,59 @@
+.peopleTabUserTagContainer {
+  width: 100%;
+}
+.peopleTabUserTagComponentSection {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+.peopleTabUserTagTable {
+  width: 100%;
+}
+.peopleTabUserTagTableHeader {
+  background-color: #f9fafb;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-color: #e5e7eb;
+  border-style: solid;
+}
+.peopleTabUserTagColumnHeader {
+  background: #dddddd;
+  border: 1px solid #ddd;
+}
+.peopleTabUserTagTableHeaderCell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #000000;
+  text-transform: uppercase;
+  height: 4rem;
+}
+.peopleTabUserTagTableBody {
+  background: #ffffff;
+  border: 1px solid #ddd;
+}
+.peopleTabUserTagTableCell {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.peopleTabUserTagCreatedByButton {
+  color: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: underline #5f5fd9;
+}
+
+.peopleTabUserTagCreatedByButton:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}
+
+.peopleTabUserTagTableRow:hover {
+  background-color: #f9fafb;
+}

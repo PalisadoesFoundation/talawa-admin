@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Used on pages that require filtering, sorting, or searching
- * - Uses SearchBar and SortingButton subcomponents
+ * - Uses SearchBar and SortingButton shared-components
  * - Layout adapts based on provided props
  *
  * @example
@@ -44,10 +44,10 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './PeopleTabNavbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
-import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
+import type { InterfacePeopleTabNavbarProps } from 'types/shared-components/PeopleTabNavbar/interface';
 
 export default function PeopleTabNavbar({
   title,

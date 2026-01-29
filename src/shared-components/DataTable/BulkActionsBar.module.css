@@ -1,0 +1,15 @@
+.bulkBar {
+  composes: bulkBar from '../../style/app-fixed.module.css';
+}
+.bulkLeft {
+  composes: bulkLeft from '../../style/app-fixed.module.css';
+}
+.bulkRight {
+  composes: bulkRight from '../../style/app-fixed.module.css';
+}
+.bulkBtn {
+  composes: bulkBtn from '../../style/app-fixed.module.css';
+}
+.bulkClear {
+  composes: bulkClear from '../../style/app-fixed.module.css';
+}

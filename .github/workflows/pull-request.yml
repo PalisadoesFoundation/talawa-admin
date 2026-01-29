@@ -28,10 +28,17 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
+      - name: Checkout centralized CI/CD scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          ref: main
+          path: .github-central
 
-      - name: Install pnpm
+      - name: Install pnpm@10.4.1
         uses: pnpm/action-setup@v4
         with:
+          version: 10.4.1
           run_install: false
 
       - name: Set up Node.js
@@ -47,8 +54,10 @@ jobs:
 
       - name: Count number of lines
         run: |
-          chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --files ./.github/workflows/config/countline_excluded_file_list.txt
+          chmod +x .github-central/.github/workflows/scripts/countline.py
+          .github-central/.github/workflows/scripts/countline.py \
+            --lines 600 \
+            --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -146,6 +155,28 @@ jobs:
 
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports,nsExports,nsTypes
+
+      - name: Lint shell scripts (ShellCheck)
+        shell: bash
+        run: |
+          shopt -s globstar nullglob
+
+          candidates=(
+            scripts/**/*.sh
+            .husky/pre-commit
+            .husky/scripts/**/*.sh
+          )
+
+          files=()
+          for f in "${candidates[@]}"; do
+            [[ -f "$f" ]] && files+=("$f")
+          done
+
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No shell scripts found to lint."
+          else
+            shellcheck -S warning "${files[@]}"
+          fi
 
   CSS-Policy-Check:
     name: CSS Policy Check
@@ -435,6 +466,7 @@ jobs:
         Code-Quality-Checks,
         Check-AutoDocs,
         Check-Disable-Statements,
+        Check-Route-Prefix,
         Check-Mock-Isolation,
         CSS-Policy-Check,
         MinIO-Compliance-Check,
@@ -444,6 +476,38 @@ jobs:
     steps:
       - name: This job intentionally does nothing
         run: echo "This job intentionally does nothing"
+
+  Check-Route-Prefix:
+    name: Check Route Prefix
+    needs: [Code-Quality-Checks]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run route prefix check script
+        env:
+          CI: true
+        run: npm run check-route-prefix -- --scan-entire-repo
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
@@ -954,6 +1018,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Checkout centralized CI/CD scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          ref: main
+          path: .github-central
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
@@ -997,7 +1067,8 @@ jobs:
       - name: Run docstring compliance check
         run: |
           source venv/bin/activate
-          python .github/workflows/scripts/check_docstrings.py --directories .github
+          python .github-central/.github/workflows/scripts/check_docstrings.py \
+            --directories .github
 
   Test-Application-E2E:
     timeout-minutes: 35

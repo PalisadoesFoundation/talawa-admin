@@ -6,7 +6,7 @@
 
 > `const` **ENV\_KEYS**: `object`
 
-Defined in: [src/setup/setup.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L23)
+Defined in: [src/setup/setup.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L24)
 
 Environment variable key names used by the setup script
 

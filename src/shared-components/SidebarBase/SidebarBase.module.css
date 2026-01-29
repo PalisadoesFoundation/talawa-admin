@@ -3,6 +3,7 @@
   min-height: 100%;
   position: fixed;
   top: 0;
+  left: 0;
   bottom: 0;
   z-index: 100;
   display: flex;
@@ -40,6 +41,12 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  margin-right: auto;
+  padding-left: 5px;
+}
+
+.sidebarBrandingContainerHidden {
+  display: none !important;
 }
 
 .talawaLogo {
@@ -218,11 +225,27 @@
   cursor: pointer;
   color: var(--primaryText-color);
   transition: transform 0.3s ease;
+  height: 38px;
+}
+
+.hamburgerIconExpanded {
+  margin-left: 10px;
+}
+
+.hamburgerIconCollapsed {
+  margin-left: 0;
 }
 
 .collapsedDrawer {
   width: var(--sidebar-collapsed-width);
+  min-width: var(--sidebar-collapsed-width);
+  max-width: var(--sidebar-collapsed-width);
   overflow-x: hidden !important;
+}
+
+.leftDrawer.collapsedDrawer {
+  width: var(--sidebar-collapsed-width) !important;
+  max-width: var(--sidebar-collapsed-width);
 }
 
 .sidebarText {
@@ -316,10 +339,17 @@
 }
 
 @media (max-width: 820px) {
-  .leftDrawer {
+  .leftDrawer.expandedDrawer {
     width: 100%;
     left: 0;
     right: 0;
+  }
+
+  .collapsedDrawer {
+    width: var(--sidebar-collapsed-width);
+    max-width: var(--sidebar-collapsed-width);
+    right: auto;
+    box-sizing: border-box;
   }
 
   .inactiveDrawer {

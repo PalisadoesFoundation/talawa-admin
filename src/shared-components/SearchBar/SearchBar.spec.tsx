@@ -286,7 +286,6 @@ describe('SearchBar', () => {
 
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test{enter}');
-    // Should not throw
   });
 
   describe('showTrailingIcon feature', () => {
@@ -299,7 +298,6 @@ describe('SearchBar', () => {
         />,
       );
 
-      // The trailing icon should be rendered as a span with the search icon
       const container = screen.getByTestId('search-input').parentElement;
       expect(container).toBeInTheDocument();
       // Verify the trailing icon span exists

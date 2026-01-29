@@ -5,7 +5,7 @@ import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';
-import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
+import type { ISidebarOrgSectionProps } from 'types/shared-components/SidebarOrgSection/interface';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 
@@ -31,8 +31,12 @@ vi.mock('react-i18next', async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, options?: { entity?: string }) =>
-        options?.entity ? `Error loading ${options.entity}` : key,
+      t: (key: string, options?: { entity?: string; name?: string }) => {
+        if (options?.entity) return `Error loading ${options.entity}`;
+        if (key === 'picture' && options?.name)
+          return `${options.name} Picture`;
+        return key;
+      },
     }),
   };
 });

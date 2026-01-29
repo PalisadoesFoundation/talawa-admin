@@ -8,6 +8,7 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+import { pathToFileURL } from 'url';
 
 /**
  * Environment variable value constants
@@ -90,16 +91,28 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       throw error;
     }
     console.error('Error setting up reCAPTCHA:', error);
-    throw new Error(
-      `Failed to set up reCAPTCHA: ${
-        error instanceof Error ? error.message : String(error)
-      }`,
-    );
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to set up reCAPTCHA: ${errorMessage}`);
   }
 };
 
-// Ask and set up logging errors in the console
-const askAndSetLogErrors = async (): Promise<void> => {
+/**
+ * Prompts user to configure error logging settings and updates the .env file.
+ *
+ * @remarks
+ * This function handles the interactive setup for error logging configuration:
+ * - Asks whether to enable compile-time and runtime error logging
+ * - Updates ALLOW_LOGS in .env based on user choice
+ *
+ * @example
+ * ```typescript
+ * await askAndSetLogErrors();
+ * ```
+ *
+ * @returns `Promise<void>` - Resolves when configuration is complete.
+ * @throws Error - If user input fails or environment update fails.
+ */
+export const askAndSetLogErrors = async (): Promise<void> => {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
@@ -144,6 +157,7 @@ const askAndSetLogErrors = async (): Promise<void> => {
  */
 export async function main(): Promise<void> {
   // Handle user cancellation (CTRL+C)
+  let backupPath: string | null = null;
   const sigintHandler = (): void => {
     console.log('\n\n⚠️  Setup cancelled by user.');
     console.log(
@@ -156,12 +170,17 @@ export async function main(): Promise<void> {
 
   try {
     if (!checkEnvFile()) {
-      return;
+      console.error(
+        '❌ Environment file check failed. Please ensure .env exists.',
+      );
+      throw new Error(
+        'Environment file check failed. Please ensure .env exists.',
+      );
     }
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
-    await backupEnvFile();
+    backupPath = await backupEnvFile();
     modifyEnvFile();
     await askAndSetDockerOption();
 
@@ -192,11 +211,24 @@ export async function main(): Promise<void> {
     }
 
     console.error('\n❌ Setup failed:', error);
+    if (backupPath) {
+      console.log('🔄 Attempting to restore from backup...');
+      try {
+        fs.copyFileSync(backupPath, '.env');
+        console.log('✅ Configuration restored from backup.');
+      } catch (restoreError) {
+        console.error('❌ Failed to restore backup:', restoreError);
+        console.log(`Manual restore needed. Backup location: ${backupPath}`);
+      }
+    }
+
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   } finally {
     process.removeListener('SIGINT', sigintHandler);
   }
 }
-
-main();
+/* v8 ignore next 3 */
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}

@@ -38,7 +38,12 @@ const SidebarBase = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent): void => {
-    if (event.key === 'Enter' || event.key === ' ') {
+    const isToggleKey =
+      event.key === 'Enter' ||
+      event.key === ' ' ||
+      event.key === 'Space' ||
+      event.key === 'Spacebar';
+    if (isToggleKey) {
       event.preventDefault();
       handleToggle();
     }
@@ -66,7 +71,7 @@ const SidebarBase = ({
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
           type="button"
-          aria-label="Toggle sidebar"
+          aria-label={tCommon('toggleSidebar')}
         >
           <FaBars
             className={`${styles.hamburgerIcon} ${
@@ -96,7 +101,7 @@ const SidebarBase = ({
 
       {/* Main Content Area (Navigation Items) */}
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
-        {children}
+        <div className={styles.optionList}>{children}</div>
       </div>
 
       {/* Footer Section (Profile Card, Sign Out, etc.) */}

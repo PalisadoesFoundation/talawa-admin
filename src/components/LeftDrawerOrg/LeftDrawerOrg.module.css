@@ -1,0 +1,36 @@
+/* LeftDrawerOrg component styles */
+.optionList {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileContainer {
+  display: flex;
+}
+
+.profileContainerHidden {
+  display: none;
+}
+
+.switchPortalWrapper :global(a) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  text-align: start;
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  border-radius: 12px;
+  font-size: 16px;
+  padding: 0.6rem;
+  padding-left: 0.8rem;
+  outline: none;
+  border: none;
+  overflow: hidden;
+}
+
+.switchPortalWrapper :global(a):focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+  border-radius: 12px;
+}

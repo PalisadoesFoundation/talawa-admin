@@ -70,7 +70,7 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     onSortChange,
     dataTestIdPrefix,
@@ -121,7 +121,6 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
       <input
         data-testid={inputTestId}
         onChange={(e) => {
-          // Call onSearch immediately without debounce for testing
           onSearch(e.target.value);
         }}
       />
@@ -167,6 +166,7 @@ vi.mock(
 
 const mockActionItem: IActionItemInfo = {
   id: 'actionItemId1',
+  isTemplate: false,
   volunteerId: 'userId1',
   volunteerGroupId: null,
   categoryId: 'categoryId1',
@@ -261,6 +261,7 @@ const mockEventData = {
             ...mockActionItem,
             id: 'actionItemId2',
             volunteerId: 'userId3',
+            isTemplate: false,
             isCompleted: true,
             volunteer: {
               id: 'volunteerId2',
@@ -381,10 +382,8 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
-  beforeEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {

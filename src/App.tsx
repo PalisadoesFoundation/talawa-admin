@@ -2,18 +2,18 @@ import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
+import SecuredRoute from 'components/AdminPortal/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import LoginPage from 'screens/LoginPage/LoginPage';
+import LoginPage from 'screens/Auth/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -31,12 +31,12 @@ const EventManagement = lazy(
   () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
-  () => import('screens/ForgotPassword/ForgotPassword'),
+  () => import('screens/Auth/ForgotPassword/ForgotPassword'),
+);
+const MemberDetail = lazy(
+  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
 );
 const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
-const MemberDetail = lazy(
-  () => import('shared-components/ProfileForm/ProfileForm'),
-);
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
@@ -210,12 +210,15 @@ function App(): React.ReactElement {
           <Route path="/admin" element={<LoginPage />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
-              <Route path="/orglist" element={<OrgList />} />
-              <Route path="/notification" element={<Notification />} />
+              <Route path="/admin/orglist" element={<OrgList />} />
+              <Route path="/admin/notification" element={<Notification />} />
               <Route path="/admin/profile" element={<MemberDetail />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/communityProfile" element={<CommunityProfile />} />
-              <Route path="/pluginstore" element={<PluginStore />} />
+              <Route path="/admin/users" element={<Users />} />
+              <Route
+                path="/admin/communityProfile"
+                element={<CommunityProfile />}
+              />
+              <Route path="/admin/pluginstore" element={<PluginStore />} />
               {/* Admin global plugin routes (e.g., settings) */}
               {adminGlobalPluginRoutes.map((route) => (
                 <Route
@@ -231,58 +234,76 @@ function App(): React.ReactElement {
               ))}
             </Route>
             <Route element={<OrganizationScreen />}>
-              <Route path="/requests/:orgId" element={<Requests />} />
+              <Route path="/admin/requests/:orgId" element={<Requests />} />
               <Route
-                path="/orgdash/:orgId"
+                path="/admin/orgdash/:orgId"
                 element={<OrganizationDashboard />}
               />
               <Route
-                path="/orgpeople/:orgId"
+                path="/admin/orgpeople/:orgId"
                 element={<OrganizationPeople />}
               />
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId"
+                element={<OrganizationTags />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/member/:orgId/:userId" element={<MemberDetail />} />
               <Route
-                path="/orgevents/:orgId"
+                path="/admin/member/:orgId/:userId"
+                element={<MemberDetail />}
+              />
+              <Route
+                path="/admin/orgevents/:orgId"
                 element={<OrganizationEvents />}
               />
               <Route
-                path="/event/:orgId/:eventId"
+                path="/admin/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
 
-              <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
               <Route
-                path="/orgtransactions/:orgId"
+                path="/admin/orgfunds/:orgId"
+                element={<OrganizationFunds />}
+              />
+              <Route
+                path="/admin/orgtransactions/:orgId"
                 element={<OrganizationTransactions />}
               />
               <Route
-                path="/orgfundcampaign/:orgId/:fundId"
+                path="/admin/orgfundcampaign/:orgId/:fundId"
                 element={<OrganizationFundCampaign />}
               />
               <Route
-                path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
                 element={<FundCampaignPledge />}
               />
-              <Route path="/orgcontribution" element={<OrgContribution />} />
-              <Route path="/orgpost/:orgId" element={<PostsPage />} />
-              <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
-              <Route path="/orgads/:orgId" element={<Advertisements />} />
-              <Route path="/blockuser/:orgId" element={<BlockUser />} />
               <Route
-                path="/orgvenues/:orgId"
+                path="/admin/orgcontribution"
+                element={<OrgContribution />}
+              />
+              <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
+              <Route
+                path="/admin/orgsetting/:orgId"
+                element={<OrgSettings />}
+              />
+              <Route path="/admin/orgads/:orgId" element={<Advertisements />} />
+              <Route path="/admin/blockuser/:orgId" element={<BlockUser />} />
+              <Route
+                path="/admin/orgvenues/:orgId"
                 element={<OrganizationVenues />}
               />
-              <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
-              <Route path="/orgchat/:orgId" element={<Chat />} />
+              <Route
+                path="/admin/leaderboard/:orgId"
+                element={<Leaderboard />}
+              />
+              <Route path="/admin/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route
@@ -309,7 +330,6 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<MemberDetail />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (
@@ -328,6 +348,7 @@ function App(): React.ReactElement {
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
+              <Route path="/user/settings" element={<MemberDetail />} />
               <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />

@@ -14,7 +14,7 @@ export class PeoplePage {
 
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
-    cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
+    cy.url().should('match', /\/admin\/orgpeople\/[a-f0-9-]+/);
   }
 
   searchMemberByName(name: string, timeout = 40000) {

@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUserAttendee
 
-Defined in: [src/types/shared-components/User/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L19)
+Defined in: [src/types/shared-components/User/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L25)
+
+Props for User in attendee context.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/shared-components/User/interface.ts:19](https://github.co
 
 > **createdAt**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L27)
+Defined in: [src/types/shared-components/User/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L33)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/shared-components/User/interface.ts:27](https://github.co
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L20)
+Defined in: [src/types/shared-components/User/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L26)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/shared-components/User/interface.ts:20](https://github.co
 
 > **isRegistered**: `boolean`
 
-Defined in: [src/types/shared-components/User/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L26)
+Defined in: [src/types/shared-components/User/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L32)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/shared-components/User/interface.ts:26](https://github.co
 
 > **time**: `string`
 
-Defined in: [src/types/shared-components/User/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L28)
+Defined in: [src/types/shared-components/User/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L34)
 
 ***
 
@@ -44,7 +46,7 @@ Defined in: [src/types/shared-components/User/interface.ts:28](https://github.co
 
 > **user**: `object`
 
-Defined in: [src/types/shared-components/User/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L21)
+Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L27)
 
 #### emailAddress
 

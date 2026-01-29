@@ -28,8 +28,8 @@ import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
-import styles from '../../style/app-fixed.module.css';
-import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';
+import styles from './SidebarOrgSection.module.css';
+import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
 
 interface IOrganizationData {
   id: string;
@@ -52,6 +52,7 @@ const SidebarOrgSection = ({
   isProfilePage = false,
 }: ISidebarOrgSectionProps): React.ReactElement | null => {
   const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
@@ -106,11 +107,11 @@ const SidebarOrgSection = ({
               <Avatar
                 name={data.organization.name}
                 containerStyle={styles.avatarContainer}
-                alt={`${data.organization.name} Picture`}
+                alt={tCommon('picture', { name: data.organization.name })}
               />
             )}
           </div>
-          <div className={styles.ProfileRightConatiner}>
+          <div className={styles.ProfileRightContainer}>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
                 {data.organization.name}

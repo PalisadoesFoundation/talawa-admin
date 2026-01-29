@@ -1,0 +1,15 @@
+.dataTableWrapper {
+  composes: dataTableWrapper from '../../style/app-fixed.module.css';
+}
+.visuallyHidden {
+  composes: visuallyHidden from '../../style/app-fixed.module.css';
+}
+.selectCol {
+  composes: selectCol from '../../style/app-fixed.module.css';
+}
+.dataSkeletonCell {
+  composes: dataSkeletonCell from '../../style/app-fixed.module.css';
+}
+.actionsCol {
+  composes: actionsCol from '../../style/app-fixed.module.css';
+}

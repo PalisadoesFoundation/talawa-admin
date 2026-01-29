@@ -41,9 +41,9 @@ import {
   GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
 import UsersIcon from 'assets/svgs/users.svg?react';
-import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
-import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
-import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
+import CardItem from 'components/AdminPortal/OrganizationDashCards/CardItem/CardItem';
+import CardItemLoading from 'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading';
+import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -196,13 +196,13 @@ function OrganizationDashboard(): JSX.Element {
 
   // const currentDate = dayjs().toISOString();
 
-  // const leaderboardLink = `/leaderboard/${orgId}`;
-  // const peopleLink = `/orgpeople/${orgId}`;
-  const postsLink = `/orgpost/${orgId}`;
-  const eventsLink = `/orgevents/${orgId}`;
-  const venuesLink = `/orgvenues/${orgId}`;
-  const blockUserLink = `/blockuser/${orgId}`;
-  const requestLink = `/requests/${orgId}`;
+  // const leaderboardLink = `/admin/leaderboard/${orgId}`;
+  // const peopleLink = `/admin/orgpeople/${orgId}`;
+  const postsLink = `/admin/orgpost/${orgId}`;
+  const eventsLink = `/admin/orgevents/${orgId}`;
+  const venuesLink = `/admin/orgvenues/${orgId}`;
+  const blockUserLink = `/admin/blockuser/${orgId}`;
+  const requestLink = `/admin/requests/${orgId}`;
 
   /**
    * Query to fetch vvolunteer rankings.

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing';
 import PinnedPostCard from './pinnedPostCard';
@@ -27,6 +28,7 @@ vi.mock('react-i18next', () => ({
         editPost: 'Edit Post',
         pinPost: 'Pin Post',
         unpinPost: 'Unpin Post',
+        moreOptions: 'more options',
       };
       return translations[key] || key;
     },
@@ -281,7 +283,7 @@ describe('PinnedPostCard Component', () => {
   });
 
   describe('Interactions', () => {
-    it('calls onStoryClick with post node when View button is clicked', () => {
+    it('calls onStoryClick with post node when View button is clicked', async () => {
       render(
         <MockedProvider mocks={mockMutations}>
           <PinnedPostCard
@@ -291,8 +293,9 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const viewButton = screen.getByRole('button', { name: /view/i });
-      fireEvent.click(viewButton);
+      await user.click(viewButton);
 
       expect(mockOnStoryClick).toHaveBeenCalledTimes(1);
       expect(mockOnStoryClick).toHaveBeenCalledWith(mockPinnedPost.node);
@@ -311,11 +314,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton);
+      await user.click(moreOptionsButton);
 
       const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
-      fireEvent.click(deleteMenuItem);
+      await user.click(deleteMenuItem);
 
       await waitFor(() => {
         expect(mockOnPostUpdate).toHaveBeenCalledTimes(1);
@@ -324,7 +328,7 @@ describe('PinnedPostCard Component', () => {
   });
 
   describe('Permission-based rendering', () => {
-    it('shows only delete option for post creator who is not admin', () => {
+    it('shows only delete option for post creator who is not admin', async () => {
       // Mock non-admin user who is post creator
       mockLocalStorage.mockImplementation((key: string) => {
         if (key === 'role') return 'user'; // Non-admin
@@ -341,8 +345,9 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreBtn = screen.getByTestId('more-options-button');
-      fireEvent.click(moreBtn);
+      await user.click(moreBtn);
 
       // Should not show pin option for non-admin
       expect(
@@ -352,7 +357,7 @@ describe('PinnedPostCard Component', () => {
       expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
     });
 
-    it('handles userId fallback correctly', () => {
+    it('handles userId fallback correctly', async () => {
       // Mock scenario where userId is null but id exists
       mockLocalStorage.mockImplementation((key: string) => {
         if (key === 'role') return 'administrator';
@@ -370,8 +375,9 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptBtn = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptBtn);
+      await user.click(moreOptBtn);
 
       // Should still work correctly with id fallback
       expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
@@ -388,11 +394,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton1 = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton1);
+      await user.click(moreOptionsButton1);
 
       const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
-      fireEvent.click(deleteMenuItem);
+      await user.click(deleteMenuItem);
 
       // Should not crash when onPostUpdate is not provided
       await waitFor(() => {
@@ -425,11 +432,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton3 = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton3);
+      await user.click(moreOptionsButton3);
 
       const pinMenuItem = screen.getByTestId('pin-post-menu-item');
-      fireEvent.click(pinMenuItem);
+      await user.click(pinMenuItem);
 
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -480,11 +488,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton);
+      await user.click(moreOptionsButton);
 
       const pinMenuItem = screen.getByTestId('pin-post-menu-item');
-      fireEvent.click(pinMenuItem);
+      await user.click(pinMenuItem);
 
       await waitFor(() => {
         expect(mockOnPostUpdate).toHaveBeenCalledTimes(1);
@@ -502,11 +511,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton);
+      await user.click(moreOptionsButton);
 
       const pinMenuItem = screen.getByTestId('pin-post-menu-item');
-      fireEvent.click(pinMenuItem);
+      await user.click(pinMenuItem);
 
       // Just wait for the operation to complete - no callback should be triggered
       await waitFor(() => {
@@ -536,11 +546,12 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const moreOptionsButton4 = screen.getByTestId('more-options-button');
-      fireEvent.click(moreOptionsButton4);
+      await user.click(moreOptionsButton4);
 
       const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
-      fireEvent.click(deleteMenuItem);
+      await user.click(deleteMenuItem);
 
       await waitFor(() => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();

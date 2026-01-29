@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -106,17 +106,18 @@ const mockNotificationToast = vi.hoisted(() => ({
   dismiss: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
 //needs to be fixed in React 19
+const originalConsoleError = console.error;
 vi.spyOn(console, 'error').mockImplementation((message) => {
   if (message.includes('Support for defaultProps will be removed')) {
     return;
   }
-  console.error(message);
+  originalConsoleError(message);
 });
 
 async function wait(ms = 100): Promise<void> {
@@ -136,6 +137,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const formData = {
@@ -188,6 +190,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('opens and closes the update modal correctly', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -207,14 +210,14 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await user.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
     await waitFor(() =>
       expect(
@@ -224,6 +227,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('opens and closes the preview modal correctly', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -243,16 +247,14 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
-    );
+    await user.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('previewAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('previewAgendaItemModalCloseBtn'));
+    await user.click(screen.getByTestId('previewAgendaItemModalCloseBtn'));
 
     await waitFor(() =>
       expect(
@@ -262,6 +264,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -281,9 +284,7 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
-    );
+    await user.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
@@ -296,16 +297,14 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
-    );
+    await user.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaItemCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('deleteAgendaItemCloseBtn'));
+    await user.click(screen.getByTestId('deleteAgendaItemCloseBtn'));
 
     await waitFor(() =>
       expect(
@@ -318,16 +317,14 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalUpdateBtn'),
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('previewAgendaItemModalUpdateBtn'),
-    );
+    await user.click(screen.getByTestId('previewAgendaItemModalUpdateBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('updateAgendaItemModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
 
     await waitFor(() =>
       expect(
@@ -337,6 +334,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('updates an agenda Items and toasts success', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -358,30 +356,33 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await user.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     const title = screen.getByPlaceholderText(translations.enterTitle);
     const description = screen.getByPlaceholderText(
       translations.enterDescription,
     );
 
-    fireEvent.change(title, { target: { value: '' } });
-    await userEvent.type(title, formData.title);
+    await user.clear(title);
+    await user.type(title, formData.title);
 
-    fireEvent.change(description, { target: { value: '' } });
-    await userEvent.type(description, formData.description);
+    await user.clear(description);
+    await user.type(description, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      // expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+        translations.agendaItemUpdated,
+      );
     });
   });
 
   test('toasts error on unsuccessful updation', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link2}>
         <Provider store={store}>
@@ -403,21 +404,20 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
+    await user.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
     const titleInput = screen.getByLabelText(translations.title);
     const descriptionInput = screen.getByLabelText(translations.description);
-    fireEvent.change(titleInput, { target: { value: '' } });
-    fireEvent.change(descriptionInput, {
-      target: { value: '' },
-    });
-    await userEvent.type(titleInput, formData.title);
-    await userEvent.type(descriptionInput, formData.description);
+
+    await user.clear(titleInput);
+    await user.clear(descriptionInput);
+    await user.type(titleInput, formData.title);
+    await user.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
+    await user.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.error).toHaveBeenCalled();
@@ -425,6 +425,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('deletes the agenda item and toasts success', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -446,9 +447,7 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
-    );
+    await user.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
@@ -461,9 +460,7 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
-    );
+    await user.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
 
     await waitFor(() => {
       return expect(
@@ -471,7 +468,7 @@ describe('Testing Agenda Items components', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
+    await user.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.success).toHaveBeenCalledWith(
@@ -481,6 +478,7 @@ describe('Testing Agenda Items components', () => {
   });
 
   test('toasts error on unsuccessful deletion', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link2}>
         <Provider store={store}>
@@ -500,9 +498,7 @@ describe('Testing Agenda Items components', () => {
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getAllByTestId('previewAgendaItemModalBtn')[0],
-    );
+    await user.click(screen.getAllByTestId('previewAgendaItemModalBtn')[0]);
 
     await waitFor(() => {
       return expect(
@@ -515,16 +511,14 @@ describe('Testing Agenda Items components', () => {
         screen.getByTestId('previewAgendaItemModalDeleteBtn'),
       ).toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('previewAgendaItemModalDeleteBtn'),
-    );
+    await user.click(screen.getByTestId('previewAgendaItemModalDeleteBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaItemCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
+    await user.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.error).toHaveBeenCalled();

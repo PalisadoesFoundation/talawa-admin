@@ -2,16 +2,17 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { main, askAndSetRecaptcha } from './setup';
+import { main, askAndSetRecaptcha, askAndSetLogErrors } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import inquirer from 'inquirer';
+import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
-  backupEnvFile: vi.fn().mockResolvedValue(undefined),
+  backupEnvFile: vi.fn().mockResolvedValue('path/to/backup'),
 }));
 vi.mock('inquirer', () => ({
   default: {
@@ -21,13 +22,16 @@ vi.mock('inquirer', () => ({
 vi.mock('dotenv');
 vi.mock('fs', () => {
   const readFile = vi.fn();
+  const copyFileSync = vi.fn();
 
   return {
     default: {
+      copyFileSync,
       promises: {
         readFile,
       },
     },
+    copyFileSync,
     promises: {
       readFile,
     },
@@ -111,9 +115,22 @@ describe('Talawa Admin Setup', () => {
   it('should exit early when checkEnvFile returns false', async () => {
     vi.mocked(checkEnvFile).mockReturnValue(false);
 
-    await main();
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+    const consoleSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
 
     // Should not proceed with setup
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '❌ Environment file check failed. Please ensure .env exists.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
     expect(modifyEnvFile).not.toHaveBeenCalled();
     expect(askAndSetDockerOption).not.toHaveBeenCalled();
     expect(askAndUpdatePort).not.toHaveBeenCalled();
@@ -145,6 +162,75 @@ describe('Talawa Admin Setup', () => {
 
     // ALLOW_LOGS should be set to YES when user opts in
     expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+  });
+
+  it('should restore from backup when setup fails and backupPath exists', async () => {
+    const mockError = new Error('Setup failed');
+    vi.mocked(backupEnvFile).mockResolvedValue('path/to/backup');
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const copyFileSyncSpy = vi
+      .spyOn(fs, 'copyFileSync')
+      .mockImplementation(() => undefined);
+    const consoleSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '🔄 Attempting to restore from backup...',
+    );
+    expect(copyFileSyncSpy).toHaveBeenCalledWith('path/to/backup', '.env');
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '✅ Configuration restored from backup.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
+  });
+
+  it('should log error when backup restoration fails and notify manual restore needed', async () => {
+    const mockError = new Error('Initial Setup Failure');
+    vi.mocked(backupEnvFile).mockResolvedValue('path/to/backup');
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const restoreError = new Error('File system read-only');
+    vi.spyOn(fs, 'copyFileSync').mockImplementation(() => {
+      throw restoreError;
+    });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '🔄 Attempting to restore from backup...',
+    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      '❌ Failed to restore backup:',
+      restoreError,
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        'Manual restore needed. Backup location: path/to/backup',
+      ),
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
   });
 
   it('should handle errors during setup process (and call process.exit(1))', async () => {
@@ -320,6 +406,26 @@ describe('Talawa Admin Setup', () => {
     );
 
     localConsoleError.mockRestore();
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to NO when user opts out', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: false,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'NO');
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to YES when user opts in', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: true,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
   });
 
   it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {

@@ -465,7 +465,10 @@ const Users = (): JSX.Element => {
                 columns={tableColumns}
                 rowKey="id"
                 tableClassName="mb-0"
-                renderRow={(user, index) => (
+                renderRow={(
+                  user: (typeof displayedUsers)[number],
+                  index: number,
+                ) => (
                   <UsersTableItem
                     index={index}
                     resetAndRefetch={resetAndRefetch}
