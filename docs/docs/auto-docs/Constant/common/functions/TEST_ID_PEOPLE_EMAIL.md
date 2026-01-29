@@ -6,7 +6,7 @@
 
 > **TEST\_ID\_PEOPLE\_EMAIL**(`id`): `string`
 
-Defined in: [src/Constant/common.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L138)
+Defined in: [src/Constant/common.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/common.ts#L124)
 
 Generates the data-testid for the people email.
 
