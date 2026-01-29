@@ -1229,7 +1229,7 @@
     "errorLoadingOrganizationData": "Error al cargar los datos de la organización",
     "enterOrganizationLocation": "Ingrese la ubicación de la organización",
     "imageSizeTooLarge": "El tamaño de la imagen es demasiado grande. Por favor, sube un archivo más pequeño.",
-  "invalidImageType": "Tipo de imagen no válido. Por favor, sube un archivo de imagen válido."
+    "invalidImageType": "Tipo de imagen no válido. Por favor, sube un archivo de imagen válido."
   },
   "public": {
     "invitation": {
