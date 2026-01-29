@@ -1094,27 +1094,33 @@ describe('ActionItemModal', () => {
       expect(volunteerInput).toBeInTheDocument();
     });
 
-    it('should render volunteer group select with accessible wrapper', async () => {
-      const user = userEvent.setup();
-      renderModal();
-      await screen.findByTestId('actionItemModal');
+    it(
+      'should render volunteer group select with accessible wrapper',
+      async () => {
+        const user = userEvent.setup();
+        renderModal();
+        await screen.findByTestId('actionItemModal');
 
-      // Switch to volunteer group
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
-      await user.click(volunteerGroupChip);
+        // Switch to volunteer group
+        const volunteerGroupChip = screen.getByRole('button', {
+          name: 'volunteerGroup',
+        });
+        await user.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+        });
 
-      const groupSelect = screen.getByTestId('volunteerGroupSelect');
-      expect(groupSelect).toBeInTheDocument();
+        const groupSelect = screen.getByTestId('volunteerGroupSelect');
+        expect(groupSelect).toBeInTheDocument();
 
         // Verify the combobox is accessible
         const groupInput = within(groupSelect).getByRole('combobox');
         expect(groupInput).toBeInTheDocument();
-      }, { timeout: 3000 });
-    });
+      },
+      { timeout: 3000 },
+    );
   });
+});
