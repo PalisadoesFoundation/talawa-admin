@@ -79,6 +79,10 @@ function EventCard({
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  // Date prefix for parsing time strings with dayjs
+  // This is a technical constant, not user-visible text
+  const DATE_PREFIX = '2015-03-04T';
+
   // Create a full name for the event creator
   const creatorName = creator.name;
 
@@ -136,7 +140,7 @@ function EventCard({
         {`${t('starts')} `}
         {startTime ? (
           <b data-testid="startTime">
-            {dayjs(`2015-03-04T${startTime}`).format('h:mm:ss A')}
+            {dayjs(DATE_PREFIX + startTime).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
@@ -147,7 +151,7 @@ function EventCard({
         {`${t('ends')} `}
         {endTime ? (
           <b data-testid="endTime">
-            {dayjs(`2015-03-04T${endTime}`).format('h:mm:ss A')}
+            {dayjs(DATE_PREFIX + endTime).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
