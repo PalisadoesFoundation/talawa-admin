@@ -25,6 +25,7 @@
  * - bodyClassName: Additional CSS classes for the modal body.
  * - footerClassName: Additional CSS classes for the modal footer.
  * - dataTestId: Test ID for automated testing.
+ * - id: Optional HTML id attribute for the modal container element.
  */
 export interface IBaseModalProps {
   show: boolean;
@@ -44,5 +45,6 @@ export interface IBaseModalProps {
   headerTestId?: string;
   bodyClassName?: string;
   footerClassName?: string;
+  id?: string;
   dataTestId?: string;
 }
