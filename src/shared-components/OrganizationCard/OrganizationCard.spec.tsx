@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OrganizationCard from './OrganizationCard';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
@@ -59,12 +59,23 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="mock-avatar">{name}</div>
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    dataTestId,
+  }: {
+    imageUrl?: string | null;
+    fallbackName?: string;
+    dataTestId?: string;
+  }) => (
+    <div
+      data-testid={dataTestId ?? 'profile-avatar'}
+      data-image-url={imageUrl ?? ''}
+      data-fallback-name={fallbackName ?? ''}
+    />
   ),
 }));
-
 vi.mock('shared-components/TruncatedText/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
@@ -145,9 +156,11 @@ describe('OrganizationCard', () => {
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
-    const img = screen.getByAltText('Test Org');
-    expect(img).toBeInTheDocument();
-    expect(img).toHaveAttribute('src', 'http://example.com/avatar.png');
+    const avatar = screen.getByTestId('emptyContainerForImage');
+    expect(avatar).toHaveAttribute(
+      'data-image-url',
+      'http://example.com/avatar.png',
+    );
   });
 
   it('renders Avatar component when avatarURL is missing', () => {
@@ -157,7 +170,9 @@ describe('OrganizationCard', () => {
         <OrganizationCard data={dataWithoutAvatar} />
       </MockedProvider>,
     );
-    expect(screen.getByTestId('mock-avatar')).toBeInTheDocument();
+    const avatar = screen.getByTestId('emptyContainerForImage');
+    expect(avatar).toHaveAttribute('data-image-url', '');
+    expect(avatar).toHaveAttribute('data-fallback-name', 'Test Org');
     expect(
       screen.getByRole('heading', { name: 'Test Org' }),
     ).toBeInTheDocument();
@@ -188,7 +203,7 @@ describe('OrganizationCard', () => {
     expect(screen.queryByText('admins:')).not.toBeInTheDocument();
   });
 
-  it('renders "Manage" button and navigates correctly for admin role', () => {
+  it('renders "Manage" button and navigates correctly for admin role', async () => {
     const adminData = { ...mockData, role: 'admin' };
     render(
       <MockedProvider>
@@ -199,11 +214,11 @@ describe('OrganizationCard', () => {
     const button = screen.getByTestId('manageBtn');
     expect(button).toHaveTextContent('Manage');
 
-    fireEvent.click(button);
+    await userEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/admin/orgdash/123');
   });
 
-  it('renders "Visit" button and navigates correctly for joined user', () => {
+  it('renders "Visit" button and navigates correctly for joined user', async () => {
     const joinedData = { ...mockData, isJoined: true };
     render(
       <MockedProvider>
@@ -214,7 +229,7 @@ describe('OrganizationCard', () => {
     const button = screen.getByTestId('manageBtn');
     expect(button).toHaveTextContent('Visit');
 
-    fireEvent.click(button);
+    await userEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
   });
 
@@ -336,7 +351,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
@@ -362,6 +377,14 @@ describe('OrganizationCard', () => {
           },
         },
       },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {},
+        },
+      },
     ];
 
     render(
@@ -371,7 +394,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -405,7 +428,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('AlreadyJoined');
@@ -437,7 +460,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
@@ -462,7 +485,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
@@ -510,7 +533,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
@@ -547,7 +570,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('UserIdNotFound');
@@ -575,6 +598,14 @@ describe('OrganizationCard', () => {
           },
         },
       },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {},
+        },
+      },
     ];
 
     render(
@@ -584,7 +615,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -607,7 +638,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -640,7 +671,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -677,7 +708,7 @@ describe('OrganizationCard', () => {
       );
 
       const button = screen.getByTestId('withdrawBtn');
-      fireEvent.click(button);
+      await userEvent.click(button);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();

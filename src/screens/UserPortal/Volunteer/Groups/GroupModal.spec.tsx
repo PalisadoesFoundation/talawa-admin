@@ -660,7 +660,10 @@ describe('Testing GroupModal', () => {
     await user.click(requestsRadio);
 
     // Wait for the image to be rendered
-    const avatarImage = await screen.findByAltText(t.volunteerAlt);
+    // ProfileAvatarDisplay uses profileAvatar.altText which generates "Profile picture of {{name}}"
+    const avatarImage = await screen.findByAltText(
+      'Profile picture of John Doe',
+    );
     expect(avatarImage).toBeInTheDocument();
     expect(avatarImage).toHaveAttribute(
       'src',

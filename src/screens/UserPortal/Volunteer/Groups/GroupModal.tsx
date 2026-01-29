@@ -26,10 +26,10 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button/Button';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 /**
  * Props for the GroupModal component.
@@ -389,24 +389,13 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           className="d-flex gap-1 align-items-center"
                           data-testid="userName"
                         >
-                          {avatarURL ? (
-                            <img
-                              src={avatarURL}
-                              alt={t('volunteerAlt')}
-                              data-testid={`image${id + 1}`}
-                              className={styles.TableImage}
-                            />
-                          ) : (
-                            <div className={styles.avatarContainer}>
-                              <Avatar
-                                containerStyle={styles.imageContainer}
-                                avatarStyle={styles.TableImage}
-                                name={name}
-                                alt={name}
-                                dataTestId="avatar"
-                              />
-                            </div>
-                          )}
+                          <ProfileAvatarDisplay
+                            key={id + '1'}
+                            imageUrl={avatarURL}
+                            fallbackName={name}
+                            dataTestId={'image-' + id}
+                            className={styles.TableImage}
+                          />
                           {name}
                         </TableCell>
                         <TableCell component="th" scope="row">
