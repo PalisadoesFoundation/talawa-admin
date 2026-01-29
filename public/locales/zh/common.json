@@ -145,7 +145,7 @@
   "contactInfoHeading": "联系信息",
   "educationGrade": "教育程度",
   "employmentStatus": "就业状态",
-  "fileTooLarge": "文件过大。最大允许大小为 5MB。",
+  "fileTooLarge": "文件过大。最大允许大小为 {{size}}MB。",
   "homePhoneNumber": "家庭电话号码",
   "invalidFileType": "无效的文件类型。请上传 JPEG、PNG 或 GIF 文件。",
   "maritalStatus": "婚姻状况",

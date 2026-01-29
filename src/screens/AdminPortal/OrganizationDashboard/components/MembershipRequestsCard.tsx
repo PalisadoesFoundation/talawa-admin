@@ -32,12 +32,13 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
-import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
+import CardItem from 'components/AdminPortal/OrganizationDashCards/CardItem/CardItem';
+import CardItemLoading from 'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from '../OrganizationDashboard.module.css';
+import styles from './MembershipRequestsCard.module.css';
 
 interface InterfaceMembershipRequestsProps {
   membershipRequestData: {

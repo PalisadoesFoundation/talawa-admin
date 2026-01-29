@@ -166,7 +166,7 @@
   "contactInfoHeading": "Informations de contact",
   "educationGrade": "Niveau d’éducation",
   "employmentStatus": "Statut professionnel",
-  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo.",
+  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de {{size}}Mo.",
   "homePhoneNumber": "Numéro de téléphone fixe",
   "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou GIF.",
   "maritalStatus": "État civil",
