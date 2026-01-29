@@ -12,7 +12,7 @@ global.console.warn = function (...args): void {
   throw new Error(format(...args));
 };
 Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
-  set: () => { },
+  set: () => {},
 });
 
 // Global CSS here

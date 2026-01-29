@@ -203,7 +203,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 
-
   if (eventInfoLoading) {
     return (
       <LoadingState isLoading={eventInfoLoading} variant="spinner">
