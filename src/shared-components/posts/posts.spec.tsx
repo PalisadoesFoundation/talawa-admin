@@ -53,6 +53,8 @@ vi.mock('utils/useLocalstorage', () => ({
     getItem: localStorageMocks.getItem,
     setItem: vi.fn(),
     removeItem: vi.fn(),
+    clearAllItems: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
   }),
 }));
 
