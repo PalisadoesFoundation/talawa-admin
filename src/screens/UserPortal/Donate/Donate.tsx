@@ -22,7 +22,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   InterfaceDonation,
   InterfaceDonationCardProps,
-} from 'types/Donation/interface';
+} from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
