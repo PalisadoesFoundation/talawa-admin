@@ -108,21 +108,19 @@ describe('OrgUpdate Component', () => {
       result: {
         data: {
           updateOrganization: {
-            organization: {
-              __typename: 'Organization',
-              id: '1',
-              name: 'Updated Org',
-              description: 'Updated Description',
-              addressLine1: '123 Test St',
-              addressLine2: 'Suite 100',
-              city: 'Test City',
-              state: 'Test State',
-              postalCode: '12345',
-              countryCode: 'US',
-              avatarMimeType: null,
-              avatarURL: null,
-              updatedAt: dayjs.utc().toISOString(),
-            },
+            __typename: 'Organization',
+            id: '1',
+            name: 'Updated Org',
+            description: 'Updated Description',
+            addressLine1: '123 Test St',
+            addressLine2: 'Suite 100',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatarMimeType: null,
+            avatarURL: null,
+            updatedAt: dayjs.utc().toISOString(),
           },
         },
       },
@@ -648,6 +646,7 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
+      await screen.findByDisplayValue('Test Org');
       const userRegSwitch = screen.getByTestId('user-reg-switch');
       const visibilitySwitch = screen.getByTestId('visibility-switch');
 
