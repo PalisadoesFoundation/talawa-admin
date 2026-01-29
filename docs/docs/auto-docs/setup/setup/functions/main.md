@@ -6,7 +6,7 @@
 
 > **main**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L143)
+Defined in: [src/setup/setup.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L158)
 
 Main setup orchestrator for Talawa Admin initial configuration.
 

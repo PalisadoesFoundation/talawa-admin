@@ -26,24 +26,27 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock CardItem component
-vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
-  default: ({
-    title,
-    creator,
-  }: {
-    title: string;
-    creator?: { name: string };
-  }) => (
-    <div data-testid="card-item">
-      <div>{title}</div>
-      <div>{creator?.name}</div>
-    </div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationDashCards/CardItem/CardItem',
+  () => ({
+    default: ({
+      title,
+      creator,
+    }: {
+      title: string;
+      creator?: { name: string };
+    }) => (
+      <div data-testid="card-item">
+        <div>{title}</div>
+        <div>{creator?.name}</div>
+      </div>
+    ),
+  }),
+);
 
 // Mock CardItemLoading component
 vi.mock(
-  'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
+  'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
     default: () => <div data-testid="card-loading" />,
   }),
