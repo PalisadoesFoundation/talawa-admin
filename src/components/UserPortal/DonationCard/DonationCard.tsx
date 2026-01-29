@@ -27,7 +27,7 @@ import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
-import type { InterfaceDonationCardProps } from 'types/Donation/interface';
+import type { InterfaceDonationCardProps } from 'types/UserPortal/Donation/interface';
 import styles from './DonationCard.module.css';
 
 const DonationCard: React.FC<InterfaceDonationCardProps> = ({

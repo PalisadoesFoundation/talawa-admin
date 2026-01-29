@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
-import styles from './OrganizationEvents.module.css';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { errorHandler } from 'utils/errorHandler';
 import EventForm, {
@@ -15,6 +12,7 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import type { ICreateEventInput } from 'types/Event/interface';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 interface ICreateEventModalProps {
   /** Whether the modal is currently open/visible */
@@ -131,39 +129,29 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   };
 
   return (
-    <>
-      <Modal show={isOpen} onHide={handleClose}>
-        <Modal.Header>
-          <p className={styles.titlemodalOrganizationEvents}>
-            {t('eventDetails')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={handleClose}
-            className={styles.closeButtonOrganizationEvents}
-            data-testid="createEventModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <EventForm
-            key={formResetKey}
-            initialValues={defaultValues}
-            onSubmit={handleSubmit}
-            onCancel={handleClose}
-            submitLabel={t('createEvent')}
-            t={t}
-            tCommon={tCommon}
-            showRegisterable
-            showPublicToggle
-            showRecurrenceToggle
-            submitting={createLoading}
-            showCancelButton
-          />
-        </Modal.Body>
-      </Modal>
-    </>
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={handleClose}
+      title={t('eventDetails')}
+      loading={createLoading}
+      showFooter={false}
+      data-testid="createEventModal"
+    >
+      <EventForm
+        key={formResetKey}
+        initialValues={defaultValues}
+        onSubmit={handleSubmit}
+        onCancel={handleClose}
+        submitLabel={t('createEvent')}
+        t={t}
+        tCommon={tCommon}
+        showRegisterable
+        showPublicToggle
+        showRecurrenceToggle
+        submitting={createLoading}
+        showCancelButton
+      />
+    </CRUDModalTemplate>
   );
 };
 export default CreateEventModal;
