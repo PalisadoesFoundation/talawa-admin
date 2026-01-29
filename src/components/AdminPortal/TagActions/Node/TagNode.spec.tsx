@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import React, { act } from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
@@ -8,6 +8,7 @@ import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+import userEvent from '@testing-library/user-event';
 
 const mockTag: InterfaceTagData = {
   _id: '1',
@@ -28,15 +29,19 @@ let mockToggleTagSelection: ReturnType<typeof vi.fn>;
 const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
   key) as TFunction<'translation', 'manageTag'>;
 
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  mockToggleTagSelection = vi.fn();
+  user = userEvent.setup();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+  vi.restoreAllMocks();
+});
+
 describe('TagNode', () => {
-  beforeEach(() => {
-    mockToggleTagSelection = vi.fn();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   // Existing tests
   it('renders the tag name', () => {
     render(
@@ -53,7 +58,7 @@ describe('TagNode', () => {
     expect(screen.getByText('Parent Tag')).toBeInTheDocument();
   });
 
-  it('calls toggleTagSelection when the checkbox is clicked', () => {
+  it('calls toggleTagSelection when the checkbox is clicked', async () => {
     render(
       <MockedProvider mocks={MOCKS}>
         <TagNode
@@ -66,7 +71,7 @@ describe('TagNode', () => {
     );
 
     const checkbox = screen.getByTestId(`checkTag${mockTag._id}`);
-    fireEvent.click(checkbox);
+    await user.click(checkbox);
     expect(mockToggleTagSelection).toHaveBeenCalledWith(mockTag, true);
   });
 
@@ -84,7 +89,7 @@ describe('TagNode', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
@@ -105,7 +110,7 @@ describe('TagNode', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       expect(
@@ -127,7 +132,7 @@ describe('TagNode', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
@@ -136,7 +141,10 @@ describe('TagNode', () => {
     const scrollableDiv = screen.getByTestId(
       `subTagsScrollableDiv${mockTag._id}`,
     );
-    fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
+    await act(async () => {
+      scrollableDiv.scrollTop = 100;
+      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
+    });
 
     await waitFor(() => {
       expect(screen.getByText('subTag 11')).toBeInTheDocument();
@@ -172,7 +180,7 @@ describe('TagNode with Mocks', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
@@ -193,7 +201,7 @@ describe('TagNode with Mocks', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     // Verify first set of subtags
     await waitFor(() => {
@@ -205,7 +213,10 @@ describe('TagNode with Mocks', () => {
     const scrollableDiv = screen.getByTestId(
       `subTagsScrollableDiv${mockTag._id}`,
     );
-    fireEvent.scroll(scrollableDiv, { target: { scrollY: 100 } });
+    await act(async () => {
+      scrollableDiv.scrollTop = 100;
+      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
+    });
 
     // Verify paginated subtags
     await waitFor(() => {
@@ -226,7 +237,7 @@ describe('TagNode with Mocks', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     // Verify error message
     await waitFor(() => {
@@ -364,7 +375,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       // The InfiniteScroll should render and the dataLength={subTagsList?.length ?? 0}
@@ -419,7 +430,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       // When subTagsList is an empty array, the InfiniteScroll component is not rendered
@@ -496,7 +507,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       // Wait for initial data to load
@@ -509,7 +520,10 @@ describe('Edge Cases and Coverage Improvements', () => {
     const scrollableDiv = screen.getByTestId(
       `subTagsScrollableDiv${mockTag._id}`,
     );
-    fireEvent.scroll(scrollableDiv, { target: { scrollTop: 1000 } });
+    await act(async () => {
+      scrollableDiv.scrollTop = 1000;
+      scrollableDiv.dispatchEvent(new Event('scroll', { bubbles: true }));
+    });
 
     await waitFor(() => {
       // The component should still render after fetchMore returns undefined
@@ -547,7 +561,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       // When data is null, subTagsList will be [] (empty array), so the InfiniteScroll won't render
@@ -614,7 +628,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     );
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
-    fireEvent.click(expandIcon);
+    await user.click(expandIcon);
 
     await waitFor(() => {
       // The InfiniteScroll should render and the nullish coalescing operator ?? false

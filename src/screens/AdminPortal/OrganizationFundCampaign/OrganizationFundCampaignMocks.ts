@@ -9,6 +9,8 @@ import {
 } from 'GraphQl/Mutations/CampaignMutation';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 
+const BASE_DATE_UTC = dayjs.utc('2025-01-01T00:00:00.000Z');
+
 export const MOCKS = [
   // Base mock with no filters
   {
@@ -29,20 +31,55 @@ export const MOCKS = [
                 node: {
                   id: 'campaignId1',
                   name: 'Campaign 1',
-                  startAt: dayjs.utc().add(1, 'month').toISOString(),
-                  endAt: dayjs.utc().add(13, 'month').toISOString(),
+                  startAt: BASE_DATE_UTC.add(1, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  fundingRaised: 0,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1half',
+                  name: 'Campaign Half',
+                  startAt: BASE_DATE_UTC.add(1, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 50,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1full',
+                  name: 'Campaign Full',
+                  startAt: BASE_DATE_UTC.add(1, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 100,
+                },
+              },
+              {
+                node: {
+                  id: 'campaignId1over',
+                  name: 'Campaign Over',
+                  startAt: BASE_DATE_UTC.add(1, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(13, 'month').toISOString(),
+                  currencyCode: 'USD',
+                  goalAmount: 100,
+                  fundingRaised: 150,
                 },
               },
               {
                 node: {
                   id: '2',
                   name: 'Campaign 2',
-                  startAt: dayjs.utc().subtract(1, 'month').toISOString(),
-                  endAt: dayjs.utc().add(11, 'month').toISOString(),
+                  startAt: BASE_DATE_UTC.subtract(1, 'month').toISOString(),
+                  endAt: BASE_DATE_UTC.add(11, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  fundingRaised: 0,
                 },
               },
             ],
@@ -70,20 +107,26 @@ export const MOCKS = [
                 node: {
                   id: 'campaignId1',
                   name: 'Campaign 1',
-                  startAt: dayjs().toISOString(),
-                  endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
+                  startAt: BASE_DATE_UTC.toISOString(),
+                  endAt: BASE_DATE_UTC.add(2, 'years')
+                    .startOf('year')
+                    .toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  fundingRaised: 0,
                 },
               },
               {
                 node: {
                   id: '2',
                   name: 'Campaign 2',
-                  startAt: '2021-01-01T00:00:00.000Z',
-                  endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
+                  startAt: BASE_DATE_UTC.subtract(4, 'years').toISOString(),
+                  endAt: BASE_DATE_UTC.add(2, 'years')
+                    .startOf('year')
+                    .toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  fundingRaised: 0,
                 },
               },
             ],

@@ -160,7 +160,7 @@
   "contactInfoHeading": "संपर्क जानकारी",
   "educationGrade": "शैक्षिक स्तर",
   "employmentStatus": "रोज़गार स्थिति",
-  "fileTooLarge": "फ़ाइल का आकार बहुत बड़ा है। अधिकतम आकार 5MB है।",
+  "fileTooLarge": "फ़ाइल का आकार बहुत बड़ा है। अधिकतम आकार {{size}}MB है।",
   "homePhoneNumber": "घर का फोन नंबर",
   "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG या GIF फ़ाइल अपलोड करें।",
   "maritalStatus": "वैवाहिक स्थिति",
