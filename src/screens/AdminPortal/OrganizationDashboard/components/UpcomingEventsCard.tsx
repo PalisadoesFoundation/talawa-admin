@@ -43,13 +43,14 @@
  */
 
 import React from 'react';
-import { Button, Card, Col } from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
-import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
+import CardItem from 'components/AdminPortal/OrganizationDashCards/CardItem/CardItem';
+import CardItemLoading from 'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { IEvent } from 'utils/interfaces';
-import styles from '../OrganizationDashboard.module.css';
+import styles from './UpcomingEventsCard.module.css';
 
 interface InterfaceUpcomingEventsCardProps {
   upcomingEvents: IEvent[];

@@ -56,7 +56,7 @@ import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapp
 import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
+import VolunteerGroupViewModal from 'shared-components/VolunteerGroupViewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
 

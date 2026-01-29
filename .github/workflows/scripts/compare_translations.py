@@ -55,6 +55,7 @@ import argparse
 import json
 import os
 import sys
+import re
 from collections import namedtuple
 
 # Named tuple for file and missing
@@ -81,21 +82,93 @@ def compare_translations(
     """
     errors = []
 
-    # Check for missing keys in other_translation
-    for key in default_translation:
+    # Extract and match interpolation vars (ex: {{name}})
+    def _extract_interpolation_vars(text):
+        """Extract interpolation variables like {{variable}} from text.
+
+        Args:
+            text (str): The text to extract variables from.
+
+        Returns:
+            set: A set of variable names found in the text.
+        """
+        return set(re.findall(r"\{\{(\w+)\}\}", text))
+
+    def _check_interpolation_match(default_val, other_val, key):
+        """Check if interpolation variables match between translations.
+
+        Args:
+            default_val (str): The default translation value.
+            other_val (str): The other translation value.
+            key (str): The translation key being checked.
+
+        Returns:
+            None: Modifies the errors list in outer scope.
+        """
+        default_vars = _extract_interpolation_vars(default_val)
+        other_vars = _extract_interpolation_vars(other_val)
+
+        if default_vars != other_vars:
+            missing_vars = default_vars - other_vars
+            extra_vars = other_vars - default_vars
+
+            if missing_vars:
+                errors.append(
+                    f"Missing interpolation variables in key '{key}' in "
+                    f"'{other_file}': "
+                    f"{', '.join('{{' + var + '}}' for var in missing_vars)}"
+                )
+            if extra_vars:
+                errors.append(
+                    f"Extra interpolation variables in key '{key}' in "
+                    f"'{other_file}': "
+                    f"{', '.join('{{' + var + '}}' for var in extra_vars)}"
+                )
+
+    # Get all unique keys from both translations
+    all_keys = set(default_translation.keys()) | set(other_translation.keys())
+
+    for key in all_keys:
+        # Check if key is missing in other_translation
         if key not in other_translation:
             error_msg = f"""\
 Missing Key: '{key}' - This key from '{default_file}' \
 is missing in '{other_file}'."""
             errors.append(error_msg)
-    # Check for keys in other_translation that don't
-    # match any in default_translation
-    for key in other_translation:
+            continue
+
+        # Check for missing keys in default_translation
         if key not in default_translation:
             error_msg = f"""\
 Error Key: '{key}' - This key in '{other_file}' \
 does not match any key in '{default_file}'."""
             errors.append(error_msg)
+            continue
+
+        # Check for empty/null values
+        if default_translation[key] == "" or default_translation[key] is None:
+            error_msg = f"""\
+Empty value: '{key}' - This key in '{default_file}' \
+has incorrect value."""
+            errors.append(error_msg)
+
+        if other_translation[key] == "" or other_translation[key] is None:
+            error_msg = f"""\
+Empty value: '{key}' - This key in '{other_file}' \
+has incorrect value."""
+            errors.append(error_msg)
+
+        # Check interpolation match
+        if (
+            isinstance(default_translation[key], str)
+            and default_translation[key]
+            and isinstance(other_translation[key], str)
+            and other_translation[key]
+        ):
+            _check_interpolation_match(
+                default_translation[key], other_translation[key], key
+            )
+
     return errors
 
 
@@ -190,7 +263,7 @@ def check_translations(directory):
     if error_found:
         sys.exit(1)  # Exit with an error status code
     else:
-        print("All translations are present")
+        print("All translations are present with correct interpolations.")
         sys.exit(0)
 
 

@@ -709,7 +709,8 @@ This helps developers quickly identify and fix configuration errors during devel
 ## Linter Enforcement
 
 Direct usage of `@mui/x-data-grid` and `@mui/x-data-grid-pro` is enforced via ESLint
-(`no-restricted-imports`) in `eslint.config.js`.
+(`no-restricted-imports`) in `eslint.config.js`, with wrapper exemptions managed in
+`scripts/eslint/config/exemptions.ts`.
 
 Only the `DataGridWrapper` and its associated type definitions are allowed to import
 these packages directly. All other usage must go through the standardized wrapper.

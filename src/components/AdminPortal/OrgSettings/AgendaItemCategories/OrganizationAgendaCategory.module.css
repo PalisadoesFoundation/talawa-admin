@@ -1,0 +1,56 @@
+.container {
+  min-height: 100vh;
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--error-icon-size, 40px);
+  color: var(--bs-danger, var(--errorIcon-color));
+  margin-bottom: 1rem;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+}
+
+/* Add Button */
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  background-color: var(--disabled-btn);
+  border-color: var(--addButton-bg);
+}

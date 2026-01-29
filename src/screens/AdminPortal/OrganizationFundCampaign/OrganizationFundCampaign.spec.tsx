@@ -21,6 +21,36 @@ import {
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
+vi.mock('GraphQl/Queries/fundQueries', async () => {
+  const actual = await vi.importActual<
+    typeof import('GraphQl/Queries/fundQueries')
+  >('GraphQl/Queries/fundQueries');
+  const gql = (await import('graphql-tag')).default;
+  return {
+    ...actual,
+    FUND_CAMPAIGN: gql`
+      query GetFundById($input: QueryFundInput!) {
+        fund(input: $input) {
+          id
+          name
+          campaigns(first: 10) {
+            edges {
+              node {
+                id
+                name
+                startAt
+                endAt
+                currencyCode
+                goalAmount
+                fundingRaised
+              }
+            }
+          }
+        }
+      }
+    `,
+  };
+});
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -413,9 +443,8 @@ describe('FundCampaigns Screen', () => {
     // Wait for campaigns to load
     await waitFor(() => {
       const campaignNameCells = screen.getAllByTestId('campaignName');
-      expect(campaignNameCells.length).toBe(2);
+      expect(campaignNameCells.length).toBe(5);
       expect(campaignNameCells[0]).toHaveTextContent('Campaign 1');
-      expect(campaignNameCells[1]).toHaveTextContent('Campaign 2');
     });
   });
 
@@ -484,10 +513,19 @@ describe('FundCampaigns Screen', () => {
     const progressCells = screen.getAllByTestId('progressCell');
     expect(progressCells.length).toBeGreaterThan(0);
 
-    // Each progress cell should contain 0% (since raised is hardcoded to 0)
-    progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
-    });
+    // Filter out only the cells that match our specific test cases (ignoring others if any)
+    const campaign1Cell = progressCells.find((cell) =>
+      cell.textContent?.includes('0%'),
+    );
+    const campaignHalfCell = progressCells.find((cell) =>
+      cell.textContent?.includes('50%'),
+    );
+    const hundredPercentCells = progressCells.filter((cell) =>
+      cell.textContent?.includes('100%'),
+    );
+    expect(campaign1Cell).toBeInTheDocument();
+    expect(campaignHalfCell).toBeInTheDocument();
+    expect(hundredPercentCells.length).toBe(2);
   });
 
   it('should display raised cells with currency symbol', async () => {
@@ -503,10 +541,24 @@ describe('FundCampaigns Screen', () => {
     const raisedCells = screen.getAllByTestId('raisedCell');
     expect(raisedCells.length).toBeGreaterThan(0);
 
-    // Each raised cell should contain $0 (USD currency)
-    raisedCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('$0');
-    });
+    // Verify presence of specific amounts
+    const raised0 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$0'),
+    );
+    const raised50 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$50'),
+    );
+    const raised100 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$100'),
+    );
+    const raised150 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$150'),
+    );
+
+    expect(raised0).toBeInTheDocument();
+    expect(raised50).toBeInTheDocument();
+    expect(raised100).toBeInTheDocument();
+    expect(raised150).toBeInTheDocument();
   });
 
   it('should display end of results message when campaigns are displayed', async () => {
@@ -521,10 +573,10 @@ describe('FundCampaigns Screen', () => {
 
     // Verify that multiple campaign elements are visible (confirming the list is displayed)
     const campaignNameCells = screen.getAllByTestId('campaignName');
-    expect(campaignNameCells.length).toBe(2);
+    expect(campaignNameCells.length).toBe(5);
 
     // Verify goal cells are also visible (confirming table rendering)
     const goalCells = screen.getAllByTestId('goalCell');
-    expect(goalCells.length).toBe(2);
+    expect(goalCells.length).toBe(5);
   });
 });
