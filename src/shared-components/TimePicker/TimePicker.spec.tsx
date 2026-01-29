@@ -207,9 +207,13 @@ describe('TimePicker', () => {
     // Guard check and wrap user actions in act() for MUI pickers compatibility
     if (input) {
       await act(async () => {
+        input.focus();
         await user.clear(input);
         await user.type(input, 'invalid-time');
+        input.blur();
       });
+
+      await act(async () => {});
     }
 
     // Component should still render without crashing
