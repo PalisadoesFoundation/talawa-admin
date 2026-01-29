@@ -61,11 +61,23 @@ const isLocalCssModule = (baseDir, targetPath) => {
 const collectComposeViolations = (filePath, content) => {
   const violations = [];
   const baseDir = path.dirname(filePath);
-  const composeRegex = /composes\s*:[^;{]*\bfrom\s+['"]([^'"]+)['"]/gi;
+  const composeRegex =
+    /composes\s*:[^;{]*\bfrom\s+(?:['"]([^'"]+)['"]|(global))\b/gi;
   for (const match of content.matchAll(composeRegex)) {
     const matchIndex = match.index ?? 0;
     const line = content.slice(0, matchIndex).split(/\r?\n/).length;
-    const importPath = match[1];
+    const importPath = match[1] ?? match[2];
+
+    if (importPath === 'global') {
+      violations.push({
+        filePath,
+        line,
+        importedPath: 'global',
+        reason:
+          'composes from global is disallowed. Define styles locally instead.',
+      });
+      continue;
+    }
 
     if (!importPath.startsWith('.')) {
       violations.push({
