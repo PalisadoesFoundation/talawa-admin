@@ -198,6 +198,7 @@ describe('AgendaItemsCreateModal', () => {
       expect(result.attachments).not.toContain('');
     }
   });
+
   test('handleAddUrl correctly adds valid URL', async () => {
     render(
       <MockedProvider>
@@ -521,6 +522,9 @@ describe('AgendaItemsCreateModal', () => {
       categorySelect,
       mockAgendaItemCategories[0]._id,
     );
+
+    // Verify the selection handler was called with the category
+    expect(mockSetFormState).toHaveBeenCalled();
   });
 
   test('revokes object URLs on component unmount', async () => {
@@ -529,7 +533,8 @@ describe('AgendaItemsCreateModal', () => {
       .spyOn(URL, 'createObjectURL')
       .mockReturnValue('blob:http://localhost/test-url');
 
-    // Mock fetch for preview generation
+    // Mock fetch for preview generation - save original to restore later
+    const originalFetch = global.fetch;
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       headers: {
@@ -579,6 +584,7 @@ describe('AgendaItemsCreateModal', () => {
 
     createObjectURLSpy.mockRestore();
     revokeObjectURLSpy.mockRestore();
+    global.fetch = originalFetch;
   });
 
   test('handles delete attachment button correctly', async () => {
@@ -587,7 +593,8 @@ describe('AgendaItemsCreateModal', () => {
       .spyOn(URL, 'createObjectURL')
       .mockReturnValue('blob:http://localhost/preview-url');
 
-    // Mock fetch for preview generation
+    // Mock fetch for preview generation - save original to restore later
+    const originalFetch = global.fetch;
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       headers: {
@@ -645,6 +652,7 @@ describe('AgendaItemsCreateModal', () => {
 
     createObjectURLSpy.mockRestore();
     revokeObjectURLSpy.mockRestore();
+    global.fetch = originalFetch;
   });
 
   test('renders video preview for video file uploads', async () => {
@@ -652,7 +660,8 @@ describe('AgendaItemsCreateModal', () => {
       .spyOn(URL, 'createObjectURL')
       .mockReturnValue('blob:http://localhost/video-preview');
 
-    // Mock fetch for preview generation
+    // Mock fetch for preview generation - save original to restore later
+    const originalFetch = global.fetch;
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       headers: {
@@ -701,6 +710,7 @@ describe('AgendaItemsCreateModal', () => {
     });
 
     createObjectURLSpy.mockRestore();
+    global.fetch = originalFetch;
   });
 
   test('handleRemoveAttachment filters attachment by index (line 182)', async () => {
@@ -709,7 +719,8 @@ describe('AgendaItemsCreateModal', () => {
       .mockReturnValue('blob:http://localhost/preview');
     const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
 
-    // Mock fetch for the preview generation
+    // Mock fetch for the preview generation - save original to restore later
+    const originalFetch = global.fetch;
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       headers: {
@@ -782,6 +793,7 @@ describe('AgendaItemsCreateModal', () => {
 
     createObjectURLSpy.mockRestore();
     revokeObjectURLSpy.mockRestore();
+    global.fetch = originalFetch;
   });
 
   test('handles MinIO JSON metadata in attachments for preview generation', async () => {

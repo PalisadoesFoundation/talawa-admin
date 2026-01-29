@@ -793,7 +793,7 @@
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda",
     "deleteAttachment": "Eliminar adjunto",
     "fileUploadError": "Error al subir archivo",
-    "selectCategory": "Por favor seleccione una categoría de agenda",
+    "selectCategory": "Por favor seleccione una categoría del orden del día",
     "tooManyAttachments": "Máximo 10 adjuntos permitidos",
     "invalidFileType": "Tipo de archivo no válido. Solo se permiten imágenes y videos"
   },
