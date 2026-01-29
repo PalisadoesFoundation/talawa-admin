@@ -1215,6 +1215,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
         endAt: string;
         currencyCode: string;
         goalAmount: number;
+        fundingRaised?: number;
       };
     }[];
   };
@@ -1319,6 +1320,7 @@ export interface InterfaceCampaignInfo {
   endAt: Date;
   createdAt: string;
   currencyCode: string;
+  fundingRaised?: number;
 }
 
 /**
