@@ -318,7 +318,7 @@ function CommentCard({
                 fullWidth
                 data-testid="edit-comment-input"
                 className={commentCardStyles.editCommentInput}
-                aria-label="Edit comment"
+                aria-label={t('commentCard.editComment')}
               />
             </Box>
 
