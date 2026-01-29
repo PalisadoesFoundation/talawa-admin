@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -14,6 +14,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -313,18 +314,21 @@ const mocksNoAvatar = [
 
 describe('CreateGroupChat', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const { setItem } = useLocalStorage();
   const toggleCreateGroupChatModal = vi.fn();
   const chatsListRefetch = vi.fn();
 
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     for (const key in mockLocalStorageStore) {
       delete mockLocalStorageStore[key];
     }
     setItem('userId', '1');
-    vi.clearAllMocks();
+    user = userEvent.setup();
   });
 
   test('should create a group chat successfully, allowing adding/removing members', async () => {
@@ -347,19 +351,20 @@ describe('CreateGroupChat', () => {
     expect(screen.getByText('New Group')).toBeInTheDocument();
 
     // Fill form
-    fireEvent.change(screen.getByTestId('groupTitleInput'), {
-      target: { value: 'Test Group' },
-    });
-    fireEvent.change(screen.getByTestId('groupDescriptionInput'), {
-      target: { value: 'Test Description' },
-    });
+    const groupTitleInput = screen.getByTestId('groupTitleInput');
+    await user.clear(groupTitleInput);
+    await user.type(groupTitleInput, 'Test Group');
+
+    const groupDescriptionInput = screen.getByTestId('groupDescriptionInput');
+    await user.clear(groupDescriptionInput);
+    await user.type(groupDescriptionInput, 'Test Description');
 
     // Upload image
     const fileInput = screen.getByTestId('fileInput');
     const file = new File(['(⌐□_□)'], 'chucknorris.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await user.upload(fileInput, file);
 
     // Wait for the async state update to be reflected in the DOM
     await waitFor(() => {
@@ -376,7 +381,7 @@ describe('CreateGroupChat', () => {
     });
 
     // Go to next modal
-    fireEvent.click(screen.getByTestId('nextBtn'));
+    await user.click(screen.getByTestId('nextBtn'));
 
     // Modal 2: Add users
     await waitFor(() => {
@@ -393,25 +398,25 @@ describe('CreateGroupChat', () => {
 
     // Add a user
     const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
+    await user.click(addButtons[0]);
 
     // Verify user is added
     const removeBtn = await screen.findByTestId('removeBtn');
     expect(removeBtn).toBeInTheDocument();
 
     // Remove user
-    fireEvent.click(removeBtn);
+    await user.click(removeBtn);
 
     // Verify user is removed
     const addButtonAgain = await screen.findAllByTestId('addBtn');
     expect(addButtonAgain[0]).toBeInTheDocument();
 
     // Add user back
-    fireEvent.click(addButtonAgain[0]);
+    await user.click(addButtonAgain[0]);
     await screen.findByTestId('removeBtn');
 
     // Create group
-    fireEvent.click(screen.getByTestId('createBtn'));
+    await user.click(screen.getByTestId('createBtn'));
 
     // Final assertions
     await waitFor(() => {
@@ -436,22 +441,23 @@ describe('CreateGroupChat', () => {
     );
 
     // Fill in form with description
-    fireEvent.change(screen.getByTestId('groupTitleInput'), {
-      target: { value: 'Test Group' },
-    });
-    fireEvent.change(screen.getByTestId('groupDescriptionInput'), {
-      target: { value: 'Test Description' },
-    });
+    const groupTitleInput = screen.getByTestId('groupTitleInput');
+    await user.clear(groupTitleInput);
+    await user.type(groupTitleInput, 'Test Group');
+
+    const groupDescriptionInput = screen.getByTestId('groupDescriptionInput');
+    await user.clear(groupDescriptionInput);
+    await user.type(groupDescriptionInput, 'Test Description');
 
     // Go to next modal
-    fireEvent.click(screen.getByTestId('nextBtn'));
+    await user.click(screen.getByTestId('nextBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
     // Create the group
-    fireEvent.click(screen.getByTestId('createBtn'));
+    await user.click(screen.getByTestId('createBtn'));
 
     await waitFor(() => {
       expect(chatsListRefetch).toHaveBeenCalled();
@@ -473,8 +479,10 @@ describe('CreateGroupChat', () => {
     );
 
     // Verify description is cleared
-    const descriptionInput = screen.getByTestId('groupDescriptionInput');
-    expect(descriptionInput).toHaveValue('');
+    const freshGroupDescriptionInput = screen.getByTestId(
+      'groupDescriptionInput',
+    );
+    expect(freshGroupDescriptionInput).toHaveValue('');
   });
 
   test('should clear selectedImage and description when modal is cancelled', async () => {
@@ -493,16 +501,17 @@ describe('CreateGroupChat', () => {
     );
 
     // Fill in form with description
-    fireEvent.change(screen.getByTestId('groupTitleInput'), {
-      target: { value: 'Test Group' },
-    });
-    fireEvent.change(screen.getByTestId('groupDescriptionInput'), {
-      target: { value: 'Test Description' },
-    });
+    const groupTitleInput = screen.getByTestId('groupTitleInput');
+    await user.clear(groupTitleInput);
+    await user.type(groupTitleInput, 'Test Group');
+
+    const groupDescriptionInput = screen.getByTestId('groupDescriptionInput');
+    await user.clear(groupDescriptionInput);
+    await user.type(groupDescriptionInput, 'Test Description');
 
     // Close the modal (cancel)
     const closeButton = screen.getByTestId('modalCloseBtn');
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     await waitFor(() => {
       expect(toggleCreateGroupChatModal).toHaveBeenCalled();
@@ -524,8 +533,10 @@ describe('CreateGroupChat', () => {
     );
 
     // Verify description is cleared
-    const descriptionInput = screen.getByTestId('groupDescriptionInput');
-    expect(descriptionInput).toHaveValue('');
+    const freshGroupDescriptionInput = screen.getByTestId(
+      'groupDescriptionInput',
+    );
+    expect(freshGroupDescriptionInput).toHaveValue('');
   });
 
   test('should allow searching for users', async () => {
@@ -544,7 +555,7 @@ describe('CreateGroupChat', () => {
     );
 
     // Go to add users modal
-    fireEvent.click(screen.getByTestId('nextBtn'));
+    await user.click(screen.getByTestId('nextBtn'));
     await waitFor(() => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
@@ -557,8 +568,9 @@ describe('CreateGroupChat', () => {
     // Search for a user
     const searchInput = screen.getByTestId('searchUser');
     const searchButton = screen.getByTestId('submitBtn');
-    fireEvent.change(searchInput, { target: { value: 'Test User 1' } });
-    fireEvent.click(searchButton);
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Test User 1');
+    await user.click(searchButton);
 
     // Assert search results
     await waitFor(async () => {
@@ -641,17 +653,17 @@ describe('CreateGroupChat', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByTestId('groupTitleInput'), {
-      target: { value: 'No Avatar Group' },
-    });
+    const groupTitleInput = screen.getByTestId('groupTitleInput');
+    await user.clear(groupTitleInput);
+    await user.type(groupTitleInput, 'No Avatar Group');
 
-    fireEvent.click(screen.getByTestId('nextBtn'));
+    await user.click(screen.getByTestId('nextBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('createBtn'));
+    await user.click(screen.getByTestId('createBtn'));
 
     await waitFor(() => {
       expect(chatsListRefetch).toHaveBeenCalled();
@@ -688,7 +700,7 @@ describe('CreateGroupChat', () => {
       const file = new File(['(⌐□_□)'], 'chucknorris.png', {
         type: 'image/png',
       });
-      fireEvent.change(fileInput, { target: { files: [file] } });
+      await user.upload(fileInput, file);
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith(
@@ -706,7 +718,7 @@ describe('CreateGroupChat', () => {
     }
   });
 
-  test('should handle edit image button click', () => {
+  test('should handle edit image button click', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <I18nextProvider i18n={i18nForTest}>
@@ -725,7 +737,7 @@ describe('CreateGroupChat', () => {
     const fileInput = screen.getByTestId('fileInput');
     const clickSpy = vi.spyOn(fileInput, 'click');
 
-    fireEvent.click(editBtn);
+    await user.click(editBtn);
     expect(clickSpy).toHaveBeenCalled();
   });
 
@@ -744,17 +756,18 @@ describe('CreateGroupChat', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByTestId('nextBtn'));
+    await user.click(screen.getByTestId('nextBtn'));
     await waitFor(() => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
     const searchInput = screen.getByTestId('searchUser');
-    fireEvent.change(searchInput, { target: { value: 'Test User' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Test User');
     expect(searchInput).toHaveValue('Test User');
 
     const clearBtn = screen.getByLabelText('Clear');
-    fireEvent.click(clearBtn);
+    await user.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
   });
