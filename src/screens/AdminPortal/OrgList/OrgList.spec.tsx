@@ -713,7 +713,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchInput/i);
     expect(searchBar).toBeInTheDocument();
-    await userEvent.type(searchBar, 'Dummy{enter}');
+    await user.type(searchBar, 'Dummy{enter}');
   });
 
   test('Testing search functionality by Btn click', async () => {
@@ -724,7 +724,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.type(searchBar, 'Dummy');
+    await user.type(searchBar, 'Dummy');
     await user.click(searchBtn);
   });
 
@@ -736,7 +736,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.clear(searchBar);
+    await user.clear(searchBar);
     await user.click(searchBtn);
   });
 
@@ -750,7 +750,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(searchBar).toBeInTheDocument();
 
     // Type multiple characters quickly to test debouncing
-    await userEvent.type(searchBar, 'Dum');
+    await user.type(searchBar, 'Dum');
 
     // Wait for debounce delay (300ms)
     await act(async () => {
@@ -768,7 +768,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(searchBar).toBeInTheDocument();
 
     // Type and press Enter to test immediate search
-    await userEvent.type(searchBar, 'Dogs');
+    await user.type(searchBar, 'Dogs');
     await user.type(searchBar, '{Enter}');
   });
 
@@ -797,7 +797,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(paginationElement).toBeInTheDocument();
 
     // Check if rows per page selector is present
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
+    const rowsPerPageSelect = screen.getByDisplayValue(
+      '5',
+    ) as HTMLSelectElement;
     expect(rowsPerPageSelect).toBeInTheDocument();
   });
 
@@ -823,7 +825,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await wait();
 
     // Verify default rows per page is 5
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
+    const rowsPerPageSelect = screen.getByDisplayValue(
+      '5',
+    ) as HTMLSelectElement;
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
@@ -845,7 +849,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Perform search
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'Dog');
+    await user.type(searchInput, 'Dog');
 
     // Wait for debounce
     await act(async () => {
@@ -958,39 +962,30 @@ describe('Plugin Modal Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form and submit
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
@@ -1008,30 +1003,34 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
-    // Create mock with exactly one organization to test edge case
-    const singleOrgMocks = [
-      ...MOCKS,
+    // Create mock with 6 organizations to validate rowsPerPage <= 0 branch
+    const edgeCaseOrganizations = [
+      ...mockOrgData.multipleOrgs,
       {
-        request: {
-          query: ORGANIZATION_FILTER_LIST,
-          variables: { filter: '' },
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'single',
-                name: 'Single Organization',
-                avatarURL: '',
-                description: 'Only organization',
-                members: { id: 'members_conn', edges: [] },
-                addressLine1: 'Single Address',
-              },
-            ],
-          },
-        },
+        id: 'xyz5',
+        name: 'Rabbit Care',
+        avatarURL: '',
+        description: 'Rabbit care center',
+        createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
+        members: { id: 'members_conn', edges: [] },
+        addressLine1: 'Texas, USA',
+        isMember: false,
+        __typename: 'Organization',
+      },
+      {
+        id: 'xyz6',
+        name: 'Horse Care',
+        avatarURL: '',
+        description: 'Horse care center',
+        createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
+        members: { id: 'members_conn', edges: [] },
+        addressLine1: 'Texas, USA',
+        isMember: false,
+        __typename: 'Organization',
       },
     ];
+
+    const singleOrgMocks = createOrgMock(edgeCaseOrganizations);
 
     render(
       <MockedProvider mocks={singleOrgMocks}>
@@ -1053,10 +1052,18 @@ describe('Advanced Component Functionality Tests', () => {
     expect(paginationElement).toBeInTheDocument();
 
     // Test pagination with rowsPerPage = 0 edge case
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
-    rowsPerPageSelect.setAttribute('value', '0');
+    const rowsPerPageSelect = screen.getByDisplayValue(
+      '5',
+    ) as HTMLSelectElement;
+    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
+
+    rowsPerPageSelect.value = '0';
     rowsPerPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
+
+    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(
+      edgeCaseOrganizations.length,
+    );
   });
 
   test('Testing handleChangePage pagination navigation', async () => {
@@ -1097,11 +1104,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
-    await userEvent.click(sortButton);
+    await user.click(sortButton);
 
     // Select Latest option to verify descending date sort functionality
     const latestOption = screen.getByTestId('Latest');
-    await userEvent.click(latestOption);
+    await user.click(latestOption);
 
     await wait(200);
 
@@ -1122,11 +1129,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
-    await userEvent.click(sortButton);
+    await user.click(sortButton);
 
     // Select Earliest option to verify ascending date sort functionality
     const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
 
     await wait(200);
 
@@ -1155,40 +1162,31 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
@@ -1245,40 +1243,31 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form to verify organization creation flow
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after successful submission
     await waitFor(() => {
@@ -1309,38 +1298,29 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open and fill the form
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
-    await userEvent.type(
+    await user.click(screen.getByTestId('createOrganizationBtn'));
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
@@ -1409,37 +1389,25 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Fill form
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationName'),
-      'Test Org',
-    );
-    await userEvent.type(
+    await user.type(screen.getByTestId('modalOrganizationName'), 'Test Org');
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Desc',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     await wait();
   });
@@ -1479,7 +1447,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Type search term
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'NonexistentOrg');
+    await user.type(searchInput, 'NonexistentOrg');
 
     // Wait for debounced search to complete
     await waitFor(
@@ -1516,11 +1484,11 @@ describe('Advanced Component Functionality Tests', () => {
     expect(sortDropdown).toBeInTheDocument();
 
     // Click to open dropdown
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
 
     // Select Earliest option - use the exact test ID from the component
     const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
 
     await wait();
 
@@ -1543,11 +1511,11 @@ describe('Advanced Component Functionality Tests', () => {
     expect(sortDropdown).toBeInTheDocument();
 
     // Click to open dropdown
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
 
     // Select Latest option
     const latestOption = screen.getByTestId('Latest');
-    await userEvent.click(latestOption);
+    await user.click(latestOption);
 
     await wait();
 
@@ -1572,15 +1540,15 @@ describe('Advanced Component Functionality Tests', () => {
     const sortDropdown = screen.getByTestId('sortOrgs');
 
     // Test Latest sorting (dateB - dateA path)
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
     const latestOption = screen.getByTestId('Latest');
-    await userEvent.click(latestOption);
+    await user.click(latestOption);
     await wait(200);
 
     // Test Earliest sorting (dateA - dateB path)
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
     const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
     await wait(200);
   });
 
@@ -1985,43 +1953,34 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
-    await userEvent.click(createBtn);
+    await user.click(createBtn);
 
     await wait();
 
     // Fill the form with values matching our mock
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'New Test Org',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'New Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Main St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit the form to verify organization creation flow
     const submitBtn = screen.getByTestId('submitOrganizationForm');
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     // Wait for the modal to close, indicating mutations completed
     await waitFor(() => {
@@ -2055,20 +2014,20 @@ describe('Advanced Component Functionality Tests', () => {
     // Ensure no search filter is active - clear search input if it exists
     const searchInput = screen.queryByTestId('searchInput');
     if (searchInput) {
-      await userEvent.clear(searchInput);
+      await user.clear(searchInput);
       await wait(100);
     }
 
     // Find and open sort dropdown
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
     await wait(100);
 
     // Select "Earliest" option to verify ascending date sort works correctly
     const earliestOption = screen.getByTestId('Earliest');
     expect(earliestOption).toBeInTheDocument();
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
     await wait(300); // Give more time for re-render
 
     // Verify sorting was applied by checking the order of rendered cards
@@ -2143,41 +2102,29 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
-    await userEvent.click(createBtn);
+    await user.click(createBtn);
     await wait();
 
     // Fill and submit form with exact values matching our mock
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'New Test Organization',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationDescription'),
-      'Test',
-    );
-    await userEvent.type(
+    await user.type(screen.getByTestId('modalOrganizationDescription'), 'Test');
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'United States',
     );
 
     const submitBtn = screen.getByTestId('submitOrganizationForm');
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     // Wait for the plugin modal to appear and verify closeDialogModal is triggered
     try {
@@ -2186,7 +2133,7 @@ describe('Advanced Component Functionality Tests', () => {
         {},
         { timeout: 3000 },
       );
-      await userEvent.click(enableEverythingBtn);
+      await user.click(enableEverythingBtn);
       await wait(200);
     } catch {
       // If button doesn't appear, test still passes
@@ -2250,41 +2197,35 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Create an organization to trigger the plugin modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
-    await userEvent.click(createBtn);
+    await user.click(createBtn);
     await wait();
 
     // Fill and submit form with exact values matching our mock
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Toggle Test Org',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Desc',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '456 Test Ave',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Toggle City',
-    );
-    await userEvent.type(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Toggle City');
+    await user.type(
       screen.getByTestId('modalOrganizationState'),
       'Toggle State',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '54321',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '54321');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'United States',
     );
 
     const submitBtn = screen.getByTestId('submitOrganizationForm');
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     // Wait for plugin modal to appear, then verify toggleDialogModal behavior when closing
     try {
@@ -2300,7 +2241,7 @@ describe('Advanced Component Functionality Tests', () => {
       // Find close button or backdrop to trigger onHide (toggleDialogModal)
       const closeButtons = screen.queryAllByLabelText(/close/i);
       if (closeButtons.length > 0) {
-        await userEvent.click(closeButtons[closeButtons.length - 1]);
+        await user.click(closeButtons[closeButtons.length - 1]);
         await wait(200);
       }
     } catch {
@@ -2381,40 +2322,31 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for form submission to complete
     await wait();
