@@ -390,7 +390,11 @@ const AgendaItemsCreateModal: React.FC<
           {agendaItemFormState.urls.map((url, index) => (
             <li key={index} className={styles.urlListItem}>
               <FaLink className={styles.urlIcon} />
-              <a href={url} target="_blank" rel="noopener noreferrer">
+              <a
+                href={encodeURI(url)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 {url.length > 50 ? `${url.substring(0, 50)}...` : url}
               </a>
               <Button
