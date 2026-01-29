@@ -56,7 +56,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
 
-function eventCard(props: InterfaceEventCardProps): JSX.Element {
+function EventCard(props: InterfaceEventCardProps): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
@@ -168,4 +168,4 @@ function eventCard(props: InterfaceEventCardProps): JSX.Element {
   );
 }
 
-export default eventCard;
+export default EventCard;

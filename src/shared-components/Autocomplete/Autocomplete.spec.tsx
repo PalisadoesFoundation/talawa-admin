@@ -33,12 +33,18 @@ describe('Autocomplete', () => {
     const combobox = screen.getByRole('combobox');
     expect(combobox).toBeInTheDocument();
 
-    // Interact with the autocomplete to trigger onChange
+    // Open the autocomplete dropdown
     await user.click(combobox);
-    await user.clear(combobox);
-    await user.type(combobox, 'Option 2');
 
-    // Verify onChange was called during interaction
+    // Wait for the listbox to appear
+    const listbox = await screen.findByRole('listbox');
+    expect(listbox).toBeInTheDocument();
+
+    // Find and click "Option 2" from the options list
+    const option2 = await screen.findByText('Option 2');
+    await user.click(option2);
+
+    // Verify onChange was called when selecting the option
     expect(mockOnChange).toHaveBeenCalled();
   });
 
