@@ -3,6 +3,11 @@
  *
  * This component renders a modal dialog for confirming the deletion of an agenda item.
  * It provides a user-friendly interface to either confirm or cancel the deletion action.
+ * @param agendaItemDeleteModalIsOpen - Determines whether the modal is open or closed.
+ * @param toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param deleteAgendaItemHandler - Function to handle the deletion of the agenda item.
+ * @param t - Translation function for agenda-specific text.
+ * @param tCommon - Translation function for common text (e.g., "yes", "no").
  *
  * @param agendaItemDeleteModalIsOpen - Determines whether the modal is open or closed.
  * @param toggleDeleteModal - Function to toggle the visibility of the modal.

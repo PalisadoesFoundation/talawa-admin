@@ -299,7 +299,7 @@
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "name": "name",
     "email": "email",
-    "profilePictureAlt": "User profile picture",
+    "profilePictureAlt": "Profile picture of {{name}}",
     "placeholderAvatarAlt": "Placeholder avatar",
     "newMembersWillAppearHere": "New membership requests will appear here"
   },
