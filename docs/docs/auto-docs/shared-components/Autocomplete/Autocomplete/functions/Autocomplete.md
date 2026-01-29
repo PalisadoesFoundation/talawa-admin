@@ -4,9 +4,9 @@
 
 # Function: Autocomplete()
 
-> **Autocomplete**\<`T`, `Multiple`, `DisableClearable`, `FreeSolo`\>(`props`): `Element`
+> **Autocomplete**\<`T`, `TMultiple`, `TDisableClearable`, `TFreeSolo`\>(`props`): `Element`
 
-Defined in: [src/shared-components/Autocomplete/Autocomplete.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Autocomplete/Autocomplete.tsx#L12)
+Defined in: [src/shared-components/Autocomplete/Autocomplete.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Autocomplete/Autocomplete.tsx#L30)
 
 Shared wrapper for MUI Autocomplete component.
 Use this component instead of importing directly from @mui/material.
@@ -17,24 +17,44 @@ Use this component instead of importing directly from @mui/material.
 
 `T`
 
-### Multiple
+### TMultiple
 
-`Multiple` *extends* `boolean`
+`TMultiple` *extends* `boolean`
 
-### DisableClearable
+### TDisableClearable
 
-`DisableClearable` *extends* `boolean`
+`TDisableClearable` *extends* `boolean`
 
-### FreeSolo
+### TFreeSolo
 
-`FreeSolo` *extends* `boolean`
+`TFreeSolo` *extends* `boolean`
 
 ## Parameters
 
 ### props
 
-`AutocompleteProps`\<`T`, `Multiple`, `DisableClearable`, `FreeSolo`\>
+`AutocompleteProps`\<`T`, `TMultiple`, `TDisableClearable`, `TFreeSolo`\>
+
+All props from MUI AutocompleteProps, including:
+- options: Array of options to display
+- value: The current selected value(s)
+- onChange: Callback when selection changes
+- renderInput: Function to render the input field
+- disabled: Whether the autocomplete is disabled
+- multiple: Whether multiple selections are allowed
+- And all other MUI Autocomplete props
 
 ## Returns
 
 `Element`
+
+JSX.Element - The rendered Autocomplete component
+
+## Example
+
+```tsx
+<Autocomplete
+  options={['Option 1', 'Option 2']}
+  renderInput={(params) => <TextField {...params} label="Select" />}
+/>
+```

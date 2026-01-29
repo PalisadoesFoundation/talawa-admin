@@ -78,7 +78,7 @@ Optional left section (avatar, logo, thumbnail, icon)
 
 ### variant?
 
-> `optional` **variant**: `"standard"` \| `"compact"` \| `"expanded"`
+> `optional` **variant**: `"compact"` \| `"standard"` \| `"expanded"`
 
 Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L24)
 
