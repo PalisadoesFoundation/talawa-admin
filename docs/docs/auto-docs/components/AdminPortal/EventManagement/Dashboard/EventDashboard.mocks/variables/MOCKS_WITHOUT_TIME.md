@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITHOUT\_TIME**: `object`[]
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L53)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L73)
 
 ## Type Declaration
 
@@ -38,33 +38,33 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 > **event**: `object`
 
-#### result.data.event.\_id
-
-> **\_id**: `string` = `'event123'`
-
 #### result.data.event.allDay
 
 > **allDay**: `boolean` = `true`
 
-#### result.data.event.attendees
+#### result.data.event.baseEvent
 
-> **attendees**: `object`[]
+> **baseEvent**: `any` = `null`
+
+#### result.data.event.createdAt
+
+> **createdAt**: `string` = `'2023-01-01T00:00:00.000Z'`
 
 #### result.data.event.creator
 
 > **creator**: `object`
 
-#### result.data.event.creator.\_id
+#### result.data.event.creator.emailAddress
 
-> **\_id**: `string` = `'creator1'`
+> **emailAddress**: `string` = `'john.doe@example.com'`
 
-#### result.data.event.creator.firstName
+#### result.data.event.creator.id
 
-> **firstName**: `string` = `'John'`
+> **id**: `string` = `'creator1'`
 
-#### result.data.event.creator.lastName
+#### result.data.event.creator.name
 
-> **lastName**: `string` = `'Doe'`
+> **name**: `string` = `'John Doe'`
 
 #### result.data.event.description
 
@@ -73,10 +73,6 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 #### result.data.event.endAt
 
 > **endAt**: `string`
-
-#### result.data.event.endTime
-
-> **endTime**: `any` = `null`
 
 #### result.data.event.id
 
@@ -90,6 +86,10 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 > **isPublic**: `boolean` = `true`
 
+#### result.data.event.isRecurringEventTemplate
+
+> **isRecurringEventTemplate**: `boolean` = `false`
+
 #### result.data.event.isRegisterable
 
 > **isRegisterable**: `boolean` = `true`
@@ -102,10 +102,42 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 > **name**: `string` = `'Test Event'`
 
+#### result.data.event.organization
+
+> **organization**: `object`
+
+#### result.data.event.organization.id
+
+> **id**: `string` = `'org1'`
+
+#### result.data.event.organization.name
+
+> **name**: `string` = `'Test Org'`
+
+#### result.data.event.recurrenceRule
+
+> **recurrenceRule**: `any` = `null`
+
 #### result.data.event.startAt
 
 > **startAt**: `string`
 
-#### result.data.event.startTime
+#### result.data.event.updatedAt
 
-> **startTime**: `any` = `null`
+> **updatedAt**: `string` = `'2023-01-02T00:00:00.000Z'`
+
+#### result.data.event.updater
+
+> **updater**: `object`
+
+#### result.data.event.updater.emailAddress
+
+> **emailAddress**: `string` = `'updater@example.com'`
+
+#### result.data.event.updater.id
+
+> **id**: `string` = `'updater1'`
+
+#### result.data.event.updater.name
+
+> **name**: `string` = `'Updater Person'`

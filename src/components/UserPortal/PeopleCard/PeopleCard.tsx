@@ -36,15 +36,16 @@ import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard'
 import Avatar from 'shared-components/Avatar/Avatar';
 
 import styles from './PeopleCard.module.css';
+import {
+  TEST_ID_PEOPLE_CARD,
+  TEST_ID_PEOPLE_SNO,
+  TEST_ID_PEOPLE_IMAGE,
+  TEST_ID_PEOPLE_NAME,
+  TEST_ID_PEOPLE_EMAIL,
+  TEST_ID_PEOPLE_ROLE,
+} from 'Constant/common';
 
-export interface InterfacePeopleCardProps {
-  id: string;
-  name: string;
-  image: string;
-  email: string;
-  role: string;
-  sno: string;
-}
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   id,
@@ -57,11 +58,11 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={`people-card-${id}`}
+      dataTestId={TEST_ID_PEOPLE_CARD(id)}
       className={styles.card}
     >
       <div className={styles.row}>
-        <span className={styles.snoBadge} data-testid={`people-sno-${id}`}>
+        <span className={styles.snoBadge} data-testid={TEST_ID_PEOPLE_SNO(id)}>
           {sno}
         </span>
         {image ? (
@@ -69,7 +70,7 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
             src={image}
             alt={name}
             className={styles.avatarImage}
-            data-testid={`people-${id}-image`}
+            data-testid={TEST_ID_PEOPLE_IMAGE(id)}
           />
         ) : (
           <Avatar
@@ -79,13 +80,13 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
             size={56}
           />
         )}
-        <b className={styles.name} data-testid={`people-name-${id}`}>
+        <b className={styles.name} data-testid={TEST_ID_PEOPLE_NAME(id)}>
           {name}
         </b>
-        <span className={styles.email} data-testid={`people-email-${id}`}>
+        <span className={styles.email} data-testid={TEST_ID_PEOPLE_EMAIL(id)}>
           {email}
         </span>
-        <div className={styles.role} data-testid={`people-role-${id}`}>
+        <div className={styles.role} data-testid={TEST_ID_PEOPLE_ROLE(id)}>
           {role}
         </div>
       </div>

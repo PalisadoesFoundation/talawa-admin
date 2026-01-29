@@ -6,7 +6,7 @@
 
 > **backupEnvFile**(): `Promise`\<`string`\>
 
-Defined in: [src/setup/backupEnvFile/backupEnvFile.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/backupEnvFile/backupEnvFile.ts#L12)
+Defined in: [src/setup/backupEnvFile/backupEnvFile.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/backupEnvFile/backupEnvFile.ts#L13)
 
 Prompts the user to back up the current .env file before setup modifications.
 Creates a timestamped backup in the .backup directory if confirmed.

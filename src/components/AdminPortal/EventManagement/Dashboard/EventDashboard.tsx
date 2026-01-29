@@ -42,7 +42,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
   const { t } = useTranslation(['translation', 'common']);
-  const tEventList = (key: string): string => t(`eventListCard.${key}`);
+  const { t: tEventList } = useTranslation('translation', {
+    keyPrefix: 'eventListCard',
+  });
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
@@ -198,7 +200,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.startDate} data-testid="start-date">
-                  {formatDate(eventData.event.startAt)}{' '}
+                  {eventData.event.startAt
+                    ? formatDate(eventData.event.startAt)
+                    : ''}{' '}
                 </span>
               </p>
               <p className={styles.to}>{t('to')}</p>
@@ -209,7 +213,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.endDate} data-testid="end-date">
-                  {formatDate(eventData.event.endAt)}{' '}
+                  {eventData.event.endAt
+                    ? formatDate(eventData.event.endAt)
+                    : ''}{' '}
                 </span>
               </p>
             </div>

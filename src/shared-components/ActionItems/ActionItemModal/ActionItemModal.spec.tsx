@@ -974,7 +974,7 @@ describe('ActionItemModal', () => {
       // Verify selection
       await waitFor(
         () => {
-          expect(volunteerInput.value).toBe('John Doe');
+          expect(volunteerInput).toHaveValue('John Doe');
         },
         { timeout: 3000 },
       );
@@ -1036,14 +1036,9 @@ describe('ActionItemModal', () => {
       const notesInput = (await screen.findByLabelText(
         'preCompletionNotes',
       )) as HTMLInputElement;
-      notesInput.focus();
-      await user.type(notesInput, 'T');
-      notesInput.focus();
-      await user.type(notesInput, 'e');
-      notesInput.focus();
-      await user.type(notesInput, 's');
-      notesInput.focus();
-      await user.type(notesInput, 't');
+
+      await user.clear(notesInput);
+      await user.paste('Test');
 
       await waitFor(() => {
         expect(notesInput.value).toBe('Test');
@@ -1063,16 +1058,14 @@ describe('ActionItemModal', () => {
       // Clear and type new value to trigger onChange
       postNotesInput.focus();
       await user.clear(postNotesInput);
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'N');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'e');
-      postNotesInput.focus();
-      await user.type(postNotesInput, 'w');
+      await user.paste('New');
 
-      await waitFor(() => {
-        expect(postNotesInput.value).toBe('New');
-      });
+      await waitFor(
+        () => {
+          expect(postNotesInput.value).toBe('New');
+        },
+        { timeout: 3000 },
+      );
     });
 
     it('should disable date picker in edit mode', async () => {
@@ -1101,27 +1094,33 @@ describe('ActionItemModal', () => {
       expect(volunteerInput).toBeInTheDocument();
     });
 
-    it('should render volunteer group select with accessible wrapper', async () => {
-      const user = userEvent.setup();
-      renderModal();
-      await screen.findByTestId('actionItemModal');
+    it(
+      'should render volunteer group select with accessible wrapper',
+      async () => {
+        const user = userEvent.setup();
+        renderModal();
+        await screen.findByTestId('actionItemModal');
 
-      // Switch to volunteer group
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
-      await user.click(volunteerGroupChip);
+        // Switch to volunteer group
+        const volunteerGroupChip = screen.getByRole('button', {
+          name: 'volunteerGroup',
+        });
+        await user.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
+        await waitFor(() => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+        });
 
-      const groupSelect = screen.getByTestId('volunteerGroupSelect');
-      expect(groupSelect).toBeInTheDocument();
+        const groupSelect = screen.getByTestId('volunteerGroupSelect');
+        expect(groupSelect).toBeInTheDocument();
 
-      // Verify the combobox is accessible
-      const groupInput = within(groupSelect).getByRole('combobox');
-      expect(groupInput).toBeInTheDocument();
-    });
+        // Verify the combobox is accessible
+        const groupInput = within(groupSelect).getByRole('combobox');
+        expect(groupInput).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });

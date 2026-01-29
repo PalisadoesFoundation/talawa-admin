@@ -17,12 +17,12 @@
  * @param eventEndDate - The end date of the event.
  * @param setEventStartDate - Function to update the event start date.
  * @param setEventEndDate - Function to update the event end date.
- * @param alldaychecked - Indicates if the event is an all-day event.
+ * @param allDayChecked - Indicates if the event is an all-day event.
  * @param setAllDayChecked - Function to toggle the all-day event setting.
- * @param publicchecked - Indicates if the event is public.
+ * @param publicChecked - Indicates if the event is public.
  * @param setPublicChecked - Function to toggle the public event setting.
- * @param registrablechecked - Indicates if the event is registrable.
- * @param setRegistrableChecked - Function to toggle the registrable event setting.
+ * @param registerableChecked - Indicates if the event is registrable.
+ * @param setRegisterableChecked - Function to toggle the registrable event setting.
  * @param inviteOnlyChecked - Indicates if the event is invite-only.
  * @param setInviteOnlyChecked - Function to toggle the invite-only event setting.
  * @param formState - The state of the form fields.
@@ -69,12 +69,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventEndDate,
   setEventStartDate,
   setEventEndDate,
-  alldaychecked,
+  allDayChecked,
   setAllDayChecked,
-  publicchecked,
+  publicChecked,
   setPublicChecked,
-  registrablechecked,
-  setRegistrableChecked,
+  registerableChecked,
+  setRegisterableChecked,
 
   inviteOnlyChecked,
   setInviteOnlyChecked,
@@ -331,12 +331,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-cy="updateDescription"
             required
             value={
-              formState.eventdescrip?.length > 256
-                ? formState.eventdescrip.substring(0, 256) + '...'
-                : formState.eventdescrip || ''
+              formState.eventDescription?.length > 256
+                ? formState.eventDescription.substring(0, 256) + '...'
+                : formState.eventDescription || ''
             }
             onChange={(val) =>
-              setFormState({ ...formState, eventdescrip: val })
+              setFormState({ ...formState, eventDescription: val })
             }
             disabled={!canEditEvent}
           />
@@ -384,7 +384,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             />
           </div>
 
-          {!alldaychecked && (
+          {!allDayChecked && (
             <div className={styles.datediv}>
               <TimePicker
                 label={tCommon('startTime')}
@@ -434,9 +434,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 data-testid="updateAllDay"
                 className={`me-4 ${styles.switch}`}
-                checked={alldaychecked}
+                checked={allDayChecked}
                 onChange={() => {
-                  const newAllDayChecked = !alldaychecked;
+                  const newAllDayChecked = !allDayChecked;
                   setAllDayChecked(newAllDayChecked);
                   if (
                     !newAllDayChecked &&
@@ -460,7 +460,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('public')}
                     name="eventVisibility"
                     id="visibility-public"
-                    checked={publicchecked}
+                    checked={publicChecked}
                     onChange={() => {
                       setPublicChecked(true);
                       setInviteOnlyChecked(false);
@@ -473,7 +473,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('organizationMembers')}
                     name="eventVisibility"
                     id="visibility-members"
-                    checked={!publicchecked && !inviteOnlyChecked}
+                    checked={!publicChecked && !inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(false);
@@ -486,7 +486,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('inviteOnly')}
                     name="eventVisibility"
                     id="visibility-inviteonly"
-                    checked={!publicchecked && inviteOnlyChecked}
+                    checked={!publicChecked && inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(true);
@@ -505,8 +505,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 data-testid="updateRegistrable"
                 className={`me-4 ${styles.switch}`}
-                checked={registrablechecked}
-                onChange={() => setRegistrableChecked(!registrablechecked)}
+                checked={registerableChecked}
+                onChange={() => setRegisterableChecked(!registerableChecked)}
                 disabled={!canEditEvent}
               />
             </div>

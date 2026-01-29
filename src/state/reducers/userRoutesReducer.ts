@@ -1,4 +1,5 @@
 import type { InterfaceAction } from 'state/helpers/Action';
+import { ROUTE_USER, ROUTE_USER_ORG } from 'Constant/common';
 
 export type TargetsType = {
   name: string;
@@ -77,12 +78,18 @@ const generateRoutes = (
   currentOrg?: string,
 ): TargetsType[] => {
   return comps
-    .filter((comp) => comp.name && comp.name !== '')
+    .filter((comp) => comp.name && comp.name !== '' && comp.comp_id)
     .map((comp) => {
       const entry: TargetsType =
         comp.comp_id === 'organizations'
-          ? { name: comp.name, url: `user/${comp.comp_id}` }
-          : { name: comp.name, url: `user/${comp.comp_id}/${currentOrg}` };
+          ? {
+              name: comp.name,
+              url: ROUTE_USER(comp.comp_id as string),
+            }
+          : {
+              name: comp.name,
+              url: ROUTE_USER_ORG(comp.comp_id as string, currentOrg),
+            };
       return entry;
     });
 };
