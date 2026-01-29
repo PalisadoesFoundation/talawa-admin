@@ -1033,9 +1033,9 @@ describe('ActionItemModal', () => {
         'preCompletionNotes',
       )) as HTMLInputElement;
 
-      // Focus the input first so keystrokes go here (not to category autocomplete)
+      // Click to focus first; user.type() alone can send keystrokes to the category
+      // autocomplete when it retains focus on modal open, so we use click + keyboard.
       await user.click(notesInput);
-      // Type a single character to trigger onChange (covers line 705)
       await user.keyboard('T');
 
       // Wait for the value to be updated - verify onChange was triggered
