@@ -54,6 +54,62 @@ describe('Talawa Admin Setup', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => undefined);
   });
+  it('should exit when logging prompt rejects', async () => {
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockRejectedValueOnce(new Error('Prompt failure'));
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+    const consoleSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '\n❌ Setup failed:',
+      new Error('Prompt failure'),
+    );
+    expect(updateEnvFile).not.toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+
+    consoleSpy.mockRestore();
+    exitMock.mockRestore();
+  });
+  it('should exit when updateEnvFile throws during logging setup', async () => {
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: true });
+
+    vi.mocked(updateEnvFile).mockImplementation((key, value) => {
+      if (key === 'ALLOW_LOGS' && value === 'YES') {
+        throw new Error('Env update failure');
+      }
+      return undefined;
+    });
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+    const consoleSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '\n❌ Setup failed:',
+      new Error('Env update failure'),
+    );
+
+    exitMock.mockRestore();
+    consoleSpy.mockRestore();
+  });
 
   afterEach(() => {
     vi.resetAllMocks();
