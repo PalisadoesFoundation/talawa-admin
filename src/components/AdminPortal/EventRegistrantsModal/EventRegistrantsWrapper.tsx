@@ -31,8 +31,8 @@
  */
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
-import { Button } from 'react-bootstrap';
-import style from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import style from './EventRegistrantsWrapper.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 
