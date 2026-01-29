@@ -83,6 +83,7 @@ describe('AgendaItemsDeleteModal', () => {
       await user.click(confirmButton);
       expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
     });
+  });
 
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
     renderComponent();
