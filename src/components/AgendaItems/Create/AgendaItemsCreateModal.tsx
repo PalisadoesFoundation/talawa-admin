@@ -132,7 +132,8 @@ const AgendaItemsCreateModal: React.FC<
   }, [formState.attachments]);
 
   const handleAddUrl = (): void => {
-    const urlPattern = /^(https?:\/\/)?[\w.-]+\.[a-z]{2,}(\/[^\s]*)?$/i;
+    // URL regex requires protocol (ftp, http, https) - matches UpdateModal pattern
+    const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
     if (newUrl.trim() !== '' && urlPattern.test(newUrl.trim())) {
       setFormState({ ...formState, urls: [...formState.urls, newUrl.trim()] });
       setNewUrl('');

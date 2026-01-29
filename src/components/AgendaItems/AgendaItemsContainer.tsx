@@ -151,7 +151,8 @@ function AgendaItemsContainer({
         .map((att) => {
           try {
             return JSON.parse(att);
-          } catch {
+          } catch (error) {
+            console.error('Failed to parse attachment metadata:', att, error);
             return null;
           }
         })
