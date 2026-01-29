@@ -2,7 +2,7 @@
  * Modal that confirms deletion of a pledge.
  *
  * @remarks
- * Uses `react-bootstrap` for layout, translations for copy, and a GraphQL mutation to remove the pledge.
+ * Uses DeleteModal template from CRUDModalTemplate for consistent UI and behavior.
  *
  * @param props - Component props including visibility flag, pledge details, and callbacks.
  *
@@ -18,15 +18,13 @@
  * />
  * ```
  */
-import { Button } from 'shared-components/Button';
-import styles from './PledgeDeleteModal.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { BaseModal } from 'shared-components/BaseModal';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 
 export interface InterfaceDeletePledgeModal {
   isOpen: boolean;
@@ -42,10 +40,8 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   refetchPledge,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
-  const { t: tCommon } = useTranslation('common');
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onConfirmDelete = async (): Promise<void> => {
@@ -65,32 +61,18 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   };
 
   return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
+    <DeleteModal
+      open={isOpen}
+      onClose={hide}
       title={t('deletePledge')}
-      className={styles.pledgeModal}
-      closeButtonVariant="danger"
-      dataTestId="pledge-delete-modal"
-      footer={
-        <>
-          <Button
-            variant="danger"
-            onClick={onConfirmDelete}
-            disabled={isSubmitting}
-            data-testid="deleteyesbtn"
-          >
-            {tCommon('yes')}
-          </Button>
-
-          <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
-            {tCommon('no')}
-          </Button>
-        </>
-      }
+      onDelete={onConfirmDelete}
+      loading={isSubmitting}
+      entityName={pledge?.pledger?.name}
+      showWarning={false}
+      data-testid="pledge-delete-modal"
     >
       <p>{t('deletePledgeMsg')}</p>
-    </BaseModal>
+    </DeleteModal>
   );
 };
 

@@ -609,7 +609,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     await user.type(searchInput, 'A'); // Type 'A' without Enter
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
@@ -632,7 +632,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     searchInput.remove();
 
     await user.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
   });
 });
 

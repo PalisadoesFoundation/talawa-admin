@@ -8,6 +8,9 @@
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
+  "role": {
+    "member": "成员"
+  },
   "invalidDetailsMessage": "请检查您输入的详细信息。",
   "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
@@ -163,6 +166,7 @@
     "requests": "会员申请",
     "communityProfile": "社区资料",
     "notification": "通知",
+    "switchToUserPortal": "切换到用户门户",
     "talawaAdminPortal": "Talawa管理门户",
     "menu": "菜单",
     "users": "用户",
@@ -198,7 +202,24 @@
     "prev": "上一页",
     "next": "下一页",
     "markAsRead": "标记为已读",
-    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount_one": "{{count}} 条未读",
+    "unreadCount_other": "{{count}} 条未读",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
+  },
+  "cardItem": {
+    "avatar": "{{title}} 头像",
+    "eventLocation": "活动地点",
+    "eventDate": "活动日期",
+    "loadingPlaceholder": "\u00A0",
+    "postedOn": "发布于：",
+    "author": "作者："
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -260,7 +281,11 @@
   },
   "paginationList": {
     "rowsPerPage": "每页行数",
-    "all": "全部"
+    "all": "全部",
+    "firstPage": "第一页",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "lastPage": "最后一页"
   },
   "requests": {
     "profile": "个人资料",
@@ -350,7 +375,25 @@
     "social": "社交媒体链接",
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
-    "resetData": "成功重置个人资料详细信息。"
+    "resetData": "成功重置个人资料详细信息。",
+    "sessionTimeout": {
+      "title": "登录会话超时",
+      "currentTimeout": "当前超时：",
+      "noTimeoutSet": "未设置超时",
+      "minutes": " {{count}} 分钟",
+      "updateSession": "更新会话",
+      "updateTimeout": "更新时间限制",
+      "min15": "15 分钟",
+      "min30": "30 分钟",
+      "min45": "45 分钟",
+      "min60": "60 分钟",
+      "update": "更新"
+    }
+  },
+  "plugin": {
+    "error": "插件错误",
+    "failedToLoad": "加载组件失败：<1>{{componentName}}</1>",
+    "id": "插件：<1>{{pluginId}}</1>"
   },
   "dashboard": {
     "title": "仪表板",
@@ -596,7 +639,12 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "search": "搜索",
+    "Events": "活动",
+    "Workshops": "研讨会",
+    "selectMonth": "选择月份",
+    "selectDay": "选择日期",
+    "selectYear": "选择年份"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -750,6 +798,7 @@
     "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
   },
   "eventListCard": {
+    "dogsCare": "狗狗护理",
     "deleteEvent": "删除事件",
     "deleteEventMsg": "您想删除此事件吗？",
     "deleteRecurringEventMsg": "这是一个重复事件。请选择您想要如何删除它：",
@@ -921,7 +970,8 @@
     "pledged": "已承诺",
     "donated": "已捐赠",
     "campaignNotActive": "活动当前未激活",
-    "close": "关闭"
+    "close": "关闭",
+    "pledgeCreateFailed": "创建承诺失败"
   },
   "createPostModal": {
     "title": "帖子",
@@ -1096,8 +1146,9 @@
     "title": "404 未找到",
     "talawaAdmin": "塔拉瓦管理员",
     "talawaUser": "塔拉瓦用户",
-    "notFoundMsg": "哎呀！",
-    "backToHome": "返回首页"
+    "notFoundMsg": "哎呀！您请求的页面未找到！",
+    "backToHome": "回到首页",
+    "logoAlt": "徽标"
   },
   "orgContribution": {
     "title": "塔拉瓦 贡献",
@@ -1378,6 +1429,8 @@
     "menu": "菜单"
   },
   "organizationSidebar": {
+    "loading": "加载中...",
+    "ends": "结束",
     "viewAll": "查看全部",
     "events": "活动",
     "noEvents": "没有可显示的活动",
@@ -1411,7 +1464,9 @@
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
     "unexpectedError": "发生了意外错误。请重试。",
-    "moreOptions": "更多选择"
+    "moreOptions": "更多选择",
+    "scrollLeft": "向左滚动",
+    "scrollRight": "向右滚动"
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
@@ -1516,8 +1571,10 @@
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
   "settings": {
+    "dummyPicture": "虚拟图片",
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",
+    "profilePicture": "个人资料图片",
     "profileSettings": "配置文件设置",
     "gender": "性别",
     "phoneNumber": "电话号码",
@@ -1647,7 +1704,6 @@
     "calendarView": "日历视图",
     "allDay": "一整天",
     "eventCreated": "活动已成功创建并发布。",
-    "eventDetails": "活动详情",
     "eventName": "名称",
     "enterName": "输入名称",
     "enterDescription": "输入描述",
@@ -1684,12 +1740,14 @@
     "noEventAvailable": "沒有可用的活動！"
   },
   "userEventCard": {
+    "failedToRegister": "无法注册该活动",
     "starts": "开始",
     "ends": "结束",
     "creator": "创作者",
     "alreadyRegistered": "已经注册",
     "location": "位置",
-    "register": "注册"
+    "register": "注册",
+    "registeredSuccessfully": "成功注册 {{eventName}}"
   },
   "advertisement": {
     "title": "广告",
@@ -1742,6 +1800,10 @@
     "advertisementLoading": "广告加载中..."
   },
   "userChat": {
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "群组",
     "title": "聊天",
     "add": "添加",
     "chat": "聊天",
@@ -2047,7 +2109,8 @@
     "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
     "continue": "继续",
     "missingRequiredInfo": "无法处理请求：缺少必需信息。",
-    "organizationNotFound": "未找到组织"
+    "organizationNotFound": "未找到组织",
+    "confirmLeaveButton": "确认离开"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
@@ -2121,7 +2184,21 @@
     "viewGroup": "查看小组",
     "editGroup": "编辑小组",
     "invalidNumber": "无效数字",
-    "viewToggle": "切换视图"
+    "viewToggle": "切换视图",
+    "recurringVolunteerTitle": "为 {{eventName}} 提供志愿服务",
+    "recurringGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "您想为整个系列还是仅为此实例提供志愿服务？",
+    "recurringGroupDescription": "您想为整个系列还是仅为此实例加入“{{groupName}}”？",
+    "volunteerForEntireSeries": "为整个系列提供志愿服务",
+    "volunteerForSeriesDescription": "您将为该周期性系列中的所有活动提供志愿服务",
+    "joinGroupForSeriesDescription": "您将加入此小组以参加该周期性系列中的所有活动",
+    "volunteerForThisInstanceOnly": "仅为此实例提供志愿服务",
+    "volunteerForInstanceDescription": "您仅为 {{date}} 的活动提供志愿服务",
+    "joinGroupForInstanceDescription": "您仅为 {{date}} 的活动加入此小组",
+    "submitRequest": "提交申请",
+    "baseEventRequired": "需要基础事件",
+    "selectVolunteer": "选择志愿者",
+    "volunteerScope": "志愿者范围"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2246,6 +2323,10 @@
     "screenshotCounter": "{{current}} / {{total}}",
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败"
+  },
+  "pluginInjector": {
+    "notFoundOrDisabled": "插件未找到或已禁用",
+    "notFoundOrDisabledDescription": "抱歉，您尝试访问的插件未找到或已被组织管理员禁用。如有疑问，请联系组织管理员。"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",
@@ -2383,5 +2464,47 @@
     "resendSuccess": "验证邮件发送成功!",
     "resendFailed": "发送验证邮件失败。请稍后再试。",
     "goToLogin": "前往登录"
+  },
+  "plugins": {
+    "loading": "正在加载插件...",
+    "component": "组件",
+    "plugin": "插件",
+    "errors": {
+      "missingPluginId": {
+        "title": "缺少插件 ID",
+        "description": "此路由没有有效的插件 ID"
+      },
+      "notRegistered": {
+        "title": "插件未注册",
+        "description": "请将此插件添加到插件注册表中 {{registryPath}}"
+      },
+      "noComponents": {
+        "title": "未找到组件"
+      },
+      "componentNotFound": {
+        "title": "未找到组件",
+        "availableComponents": "可用组件: {{components}}"
+      },
+      "pluginError": {
+        "title": "插件错误",
+        "failedToLoad": "加载组件失败"
+      }
+    }
+  },
+  "memberActivity": {
+    "dateNA": "日期不可用",
+    "yes": "是",
+    "no": "否",
+    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
+    "eventNotFound": "未找到活动或已被删除",
+    "numberOfAttendees": "出席人数",
+    "viewEventDetails": "查看活动详情"
+  },
+  "promotedPost": {
+    "title": "推广内容",
+    "promotedContent": "推广内容：{{title}}"
+  },
+  "csv": {
+    "demographics": "{{category}} 人口统计"
   }
 }

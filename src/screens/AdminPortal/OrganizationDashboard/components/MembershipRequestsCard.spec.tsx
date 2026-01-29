@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import MembershipRequestsCard from './MembershipRequestsCard';
+import userEvent from '@testing-library/user-event';
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -25,33 +26,43 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock CardItem component
-vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
-  default: ({
-    title,
-    creator,
-  }: {
-    title: string;
-    creator?: { name: string };
-  }) => (
-    <div data-testid="card-item">
-      <div>{title}</div>
-      <div>{creator?.name}</div>
-    </div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationDashCards/CardItem/CardItem',
+  () => ({
+    default: ({
+      title,
+      creator,
+    }: {
+      title: string;
+      creator?: { name: string };
+    }) => (
+      <div data-testid="card-item">
+        <div>{title}</div>
+        <div>{creator?.name}</div>
+      </div>
+    ),
+  }),
+);
 
 // Mock CardItemLoading component
 vi.mock(
-  'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
+  'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
     default: () => <div data-testid="card-loading" />,
   }),
 );
 
 describe('MembershipRequestsCard Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   afterEach(() => {
     toastMocks.success.mockReset();
     toastMocks.error.mockReset();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const mockMembershipRequestData = {
@@ -101,7 +112,7 @@ describe('MembershipRequestsCard Component', () => {
 
     // Use the specific test id for membership requests button
     const viewAllButton = screen.getByTestId('viewAllMembershipRequests');
-    fireEvent.click(viewAllButton);
+    await user.click(viewAllButton);
 
     expect(mockProps.onViewAllClick).toHaveBeenCalled();
   });
@@ -169,7 +180,7 @@ describe('MembershipRequestsCard Component', () => {
     render(<MembershipRequestsCard {...mockProps} />);
 
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
-    fireEvent.click(leaderboardButton);
+    await user.click(leaderboardButton);
 
     expect(NotificationToast.success).toHaveBeenCalledWith('comingSoon');
   });
@@ -180,7 +191,7 @@ describe('MembershipRequestsCard Component', () => {
     render(<MembershipRequestsCard {...asyncProps} />);
 
     const viewAllButton = screen.getByTestId('viewAllMembershipRequests');
-    fireEvent.click(viewAllButton);
+    await user.click(viewAllButton);
 
     expect(asyncClickHandler).toHaveBeenCalled();
   });

@@ -4,17 +4,14 @@
  * This component renders a card displaying details of an event attended by a user.
  * It includes the event's title, start date, location, and a link to the event's details.
  *
- * @component
- * @param {InterfaceCardItem} props - The properties passed to the component.
- * @param {string} props.title - The title of the event.
- * @param {string} [props.time] - The time of the event (optional, not currently used).
- * @param {string} [props.startdate] - The start date of the event in ISO format (optional).
- * @param {string} [props.creator] - The creator of the event (optional, not currently used).
- * @param {string} [props.location] - The location of the event (optional).
- * @param {string} [props.eventId] - The unique identifier for the event (optional).
- * @param {string} [props.orgId] - The unique identifier for the organization hosting the event (optional).
- *
- * @returns {JSX.Element} A styled card displaying event details.
+ * @param title - Event title displayed on the card.
+ * @param time - Optional time metadata for the event.
+ * @param startdate - Optional start date ISO string for the event.
+ * @param creator - Optional creator name or identifier.
+ * @param location - Optional location string for the event.
+ * @param eventId - Optional event identifier used for navigation.
+ * @param orgId - Optional organization identifier used for navigation.
+ * @returns A styled card displaying event details.
  *
  * @remarks
  * - If the `startdate` is provided and valid, it displays the month and day.
@@ -39,20 +36,18 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventsAttendedCardItem.module.css';
+import { useTranslation } from 'react-i18next';
+import type { InterfaceCardItem } from 'types/MemberActivity/interface';
 
-export interface InterfaceCardItem {
-  title: string;
-  time?: string;
-  startdate?: string;
-  creator?: string;
-  location?: string;
-  eventId?: string;
-  orgId?: string;
-}
-
-const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
-  const { title, startdate, location, orgId, eventId } = props;
+const EventAttendedCard = ({
+  title,
+  startdate,
+  location,
+  orgId,
+  eventId,
+}: InterfaceCardItem): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const { getItem } = useLocalStorage();
 
   // Check if user is administrator - only administrators can navigate to event details
@@ -85,7 +80,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
                 <div
                   className={`fs-7 fw-bold ${styles.eventsAttendedCardDateNA}`}
                 >
-                  Date N/A
+                  {t('dateNA')}
                 </div>
               )}
             </div>
@@ -110,12 +105,13 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
               </div>
             )}
           </Col>
-          {isAdministrator && (
+          {isAdministrator && orgId && eventId && (
             <Col xs={2} md={1} className="text-end">
               <Link
-                to={`/event/${orgId}/${eventId}`}
+                to={`/admin/event/${orgId}/${eventId}`}
                 state={{ id: eventId }}
                 className="text-decoration-none"
+                aria-label={t('viewEventDetails')}
               >
                 <div
                   className={`rounded-circle d-flex align-items-center justify-content-center ${styles.eventsAttendedCardChevron}`}

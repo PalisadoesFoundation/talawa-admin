@@ -1,0 +1,35 @@
+.opendrawer {
+  composes: opendrawer from '../../../style/app-fixed.module.css';
+}
+
+.collapseSidebarButton {
+  composes: collapseSidebarButton from '../../../style/app-fixed.module.css';
+}
+
+.pageContainer {
+  composes: pageContainer from '../../../style/app-fixed.module.css';
+}
+
+.expand {
+  composes: expand from '../../../style/app-fixed.module.css';
+}
+
+.contract {
+  composes: contract from '../../../style/app-fixed.module.css';
+}
+
+.navContainer {
+  composes: navContainer from '../../../style/app-fixed.module.css';
+}
+
+.collapsedDrawer {
+  composes: collapsedDrawer from '../../../style/app-fixed.module.css';
+  width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
+}
+
+.expandedDrawer {
+  composes: expandedDrawer from '../../../style/app-fixed.module.css';
+  width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
+}

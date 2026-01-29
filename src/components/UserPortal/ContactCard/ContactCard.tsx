@@ -3,17 +3,15 @@
  * This component displays a contact's avatar, name, last message,
  * and the count of unseen messages. It also highlights the selected contact.
  *
- * @component
- * @param {InterfaceContactCardProps} props - The properties for the contact card.
- * @param {string} props.id - The unique identifier for the contact.
- * @param {string} props.title - The name or title of the contact.
- * @param {string} [props.image] - The URL of the contact's avatar image.
- * @param {string} [props.lastMessage] - The last message sent or received from the contact.
- * @param {number} [props.unseenMessages] - The count of unseen messages for the contact.
- * @param {string} props.selectedContact - The ID of the currently selected contact.
- * @param {(id: string) => void} props.setSelectedContact - Callback to update the selected contact.
+ * @param id - The unique identifier for the contact.
+ * @param title - The name or title of the contact.
+ * @param image - The URL of the contact's avatar image.
+ * @param lastMessage - The last message sent or received from the contact.
+ * @param unseenMessages - The count of unseen messages for the contact.
+ * @param selectedContact - The ID of the currently selected contact.
+ * @param setSelectedContact - Callback to update the selected contact.
  *
- * @returns {JSX.Element} A styled contact card component.
+ * @returns A styled contact card component.
  *
  * @remarks
  * - The component uses `React.useState` to manage the selection state of the contact.
@@ -39,7 +37,7 @@ import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
-import type { InterfaceContactCardProps } from 'types/Chat/interface';
+import type { InterfaceContactCardProps } from 'types/UserPortal/Chat/interface';
 
 import styles from './ContactCard.module.css';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';

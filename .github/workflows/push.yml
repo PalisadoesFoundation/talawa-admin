@@ -28,14 +28,39 @@ jobs:
       - name: Merge conflict finder
         uses: olivernybroe/action-conflict-finder@v4.1
 
+  Check-Route-Prefix:
+    name: Check Route Prefix
+    needs: [Merge-Conflict-Check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run route prefix check
+        env:
+          CI: true
+        run: npm run check-route-prefix -- --scan-entire-repo
+
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Test and Calculate Code Coverage
-    needs: [Merge-Conflict-Check]
+    needs: [Merge-Conflict-Check, Check-Route-Prefix]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [22.x]
+        node-version: [24.x]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

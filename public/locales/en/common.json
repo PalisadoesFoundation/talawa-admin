@@ -57,6 +57,8 @@
   "talawaAdminPortal": "Talawa Admin Portal",
   "adminPortal": "Admin Portal",
   "userPortal": "User Portal",
+  "switchToUserPortal": "Switch to User Portal",
+  "switchToAdminPortal": "Switch to Admin Portal",
   "address": "Address",
   "location": "Location",
   "enterLocation": "Enter Location",
@@ -164,7 +166,7 @@
   "contactInfoHeading": "Contact Information",
   "educationGrade": "Educational Grade",
   "employmentStatus": "Employment Status",
-  "fileTooLarge": "File is too large. Maximum size is 5MB.",
+  "fileTooLarge": "File is too large. Maximum size is {{size}}MB.",
   "homePhoneNumber": "Home Phone Number",
   "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
   "maritalStatus": "Marital Status",
@@ -290,6 +292,7 @@
   "linkCopied": "Link copied to clipboard",
   "copyToClipboardError": "Error copying link to clipboard",
   "share": "Share",
+  "failedToLoadUserData": "Failed to load user data",
   "userNotFound": "User not found",
   "avatarProcessingError": "Error processing avatar, please check your image.",
   "viewEventStatistics": "View Event Statistics",
@@ -298,5 +301,8 @@
   "selectRow": "Select row {{rowKey}}",
   "bulkActions": "Bulk actions",
   "selected": "selected",
-  "clearSelection": "Clear selection"
+  "unavailable": "Unavailable",
+  "clearSelection": "Clear selection",
+  "toggleSidebar": "Toggle sidebar",
+  "picture": "{{name}} Picture"
 }

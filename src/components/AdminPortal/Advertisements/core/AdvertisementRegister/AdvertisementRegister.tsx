@@ -46,8 +46,7 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import styles from 'style/app-fixed.module.css';
-import { Button, Form } from 'react-bootstrap';
+import styles from './AdvertisementRegister.module.css';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
@@ -58,7 +57,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-
+import Button from 'shared-components/Button';
 // Extend dayjs with UTC plugin
 dayjs.extend(utc);
 import { useParams } from 'react-router';
@@ -67,9 +66,10 @@ import type {
   InterfaceFormStateTypes,
 } from 'types/AdminPortal/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -415,57 +415,50 @@ function AdvertisementRegister({
         footer={modalFooter}
         dataTestId="advertisementModal"
       >
-        <Form>
-          <Form.Group className="mb-3" controlId="registerForm.Rname">
-            <Form.Label>{t('Rname')}</Form.Label>
-            <Form.Control
+        <div>
+          <FormFieldGroup name="name" label={t('Rname')} required>
+            <input
+              className={styles.inputField}
               type="text"
+              id="name"
               placeholder={t('EXname')}
               autoComplete="off"
               required
               value={formState.name}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  name: e.target.value,
-                });
-              }}
-              className={styles.inputField}
+              onChange={(e) =>
+                setFormState({ ...formState, name: e.target.value })
+              }
               data-cy="advertisementNameInput"
+              data-testid="advertisementNameInput"
             />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="registerForm.Rdesc">
-            <Form.Label>{t('Rdesc')}</Form.Label>
-            <Form.Control
+          </FormFieldGroup>
+          <FormFieldGroup name="description" label={t('Rdesc')}>
+            <input
+              className={styles.inputField}
+              id="description"
               type="text"
               placeholder={t('EXdesc')}
               autoComplete="off"
               value={formState.description || ''}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  description: e.target.value,
-                });
-              }}
-              className={styles.inputField}
+              onChange={(e) =>
+                setFormState({ ...formState, description: e.target.value })
+              }
               data-cy="advertisementDescriptionInput"
+              data-testid="advertisementDescriptionInput"
             />
-          </Form.Group>
+          </FormFieldGroup>
           {formStatus === 'register' && (
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="advertisementMedia">
-                {t('Rmedia')}
-              </Form.Label>
-              <Form.Control
+            <FormFieldGroup name="attachments" label={t('Rmedia')}>
+              <input
+                className={styles.inputField}
+                id="advertisementMedia"
                 accept="image/*, video/*"
-                data-testid="advertisementMedia"
                 name="advertisementMedia"
                 type="file"
-                id="advertisementMedia"
-                multiple={true}
+                multiple
                 onChange={handleFileUpload}
-                className={styles.inputField}
                 data-cy="advertisementMediaInput"
+                data-testid="advertisementMedia"
               />
               {/* Preview section */}
               {formState.attachments.map((file, index) => (
@@ -501,61 +494,55 @@ function AdvertisementRegister({
                   </Button>
                 </div>
               ))}
-            </Form.Group>
+            </FormFieldGroup>
           )}
-          <Form.Group className="mb-3" controlId="registerForm.Rtype">
-            <Form.Label>{t('Rtype')}</Form.Label>
-            <Form.Select
+          <FormFieldGroup name="type" label={t('Rtype')} required>
+            <select
+              className={styles.inputField}
+              id="type"
               aria-label={t('Rtype')}
               value={formState.type}
-              onChange={(e): void => {
-                setFormState({
-                  ...formState,
-                  type: e.target.value,
-                });
-              }}
-              className={styles.inputField}
+              onChange={(e) =>
+                setFormState({ ...formState, type: e.target.value })
+              }
               data-cy="advertisementTypeSelect"
+              data-testid="advertisementTypeSelect"
             >
-              <option value="banner">{t('bannerAd')} </option>
+              <option value="banner">{t('bannerAd')}</option>
               <option value="pop_up">{t('popupAd')}</option>
               <option value="menu">{t('menuAd')}</option>
-            </Form.Select>
-          </Form.Group>
+            </select>
+          </FormFieldGroup>
 
-          <Form.Group className="mb-3" controlId="registerForm.RstartAt">
-            <Form.Label>{t('RstartDate')}</Form.Label>
-            <Form.Control
+          <FormFieldGroup name="startAt" label={t('RstartDate')} required>
+            <input
+              className={styles.inputField}
               type="date"
+              id="startAt"
               required
               value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
-              onChange={(e): void => {
+              onChange={(e) => {
                 const newDate = dayjs.utc(e.target.value).toDate();
-                setFormState({
-                  ...formState,
-                  startAt: newDate,
-                });
+                setFormState({ ...formState, startAt: newDate });
               }}
-              className={styles.inputField}
+              data-testid="advertisementStartDate"
             />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="registerForm.RDate">
-            <Form.Label>{t('RendDate')}</Form.Label>
-            <Form.Control
+          </FormFieldGroup>
+          <FormFieldGroup name="endAt" label={t('RendDate')} required>
+            <input
+              className={styles.inputField}
               type="date"
+              id="endAt"
               required
               value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
-              onChange={(e): void => {
+              onChange={(e) => {
                 const newDate = dayjs.utc(e.target.value).toDate();
-                setFormState({
-                  ...formState,
-                  endAt: newDate,
-                });
+                setFormState({ ...formState, endAt: newDate });
               }}
-              className={styles.inputField}
+              data-testid="advertisementEndDate"
             />
-          </Form.Group>
-        </Form>
+          </FormFieldGroup>
+        </div>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );

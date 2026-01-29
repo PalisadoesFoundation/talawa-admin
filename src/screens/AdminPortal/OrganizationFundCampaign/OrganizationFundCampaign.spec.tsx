@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -21,6 +21,36 @@ import {
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
+vi.mock('GraphQl/Queries/fundQueries', async () => {
+  const actual = await vi.importActual<
+    typeof import('GraphQl/Queries/fundQueries')
+  >('GraphQl/Queries/fundQueries');
+  const gql = (await import('graphql-tag')).default;
+  return {
+    ...actual,
+    FUND_CAMPAIGN: gql`
+      query GetFundById($input: QueryFundInput!) {
+        fund(input: $input) {
+          id
+          name
+          campaigns(first: 10) {
+            edges {
+              node {
+                id
+                name
+                startAt
+                endAt
+                currencyCode
+                goalAmount
+                fundingRaised
+              }
+            }
+          }
+        }
+      }
+    `,
+  };
+});
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -53,7 +83,7 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
     return (
       <nav data-testid="breadcrumbs">
         {items.map((item, index) => {
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? item.to?.includes('/campaigns')
               ? 'campaignsLink'
               : 'fundsLink'
@@ -88,21 +118,21 @@ const translations = JSON.parse(
 const renderFundCampaign = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgfundcampaign/orgId/fundId']}>
+      <MemoryRouter initialEntries={['/admin/orgfundcampaign/orgId/fundId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
+                  path="/admin/orgfundcampaign/:orgId/:fundId"
                   element={<OrganizationFundCampaign />}
                 />
                 <Route
-                  path="/fundCampaignPledge/orgId/campaignId1"
+                  path="/admin/fundCampaignPledge/orgId/campaignId1"
                   element={<div data-testid="pledgeScreen"></div>}
                 />
                 <Route
-                  path="/orgfunds/orgId"
+                  path="/admin/orgfunds/orgId"
                   element={<div data-testid="fundScreen"></div>}
                 />
                 <Route
@@ -146,13 +176,13 @@ describe('FundCampaigns Screen', () => {
     mockRouteParams('', '');
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/orgfundcampaign/']}>
+        <MemoryRouter initialEntries={['/admin/orgfundcampaign/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <I18nextProvider i18n={i18nForTest}>
                 <Routes>
                   <Route
-                    path="/orgfundcampaign/"
+                    path="/admin/orgfundcampaign/"
                     element={<OrganizationFundCampaign />}
                   />
                   <Route
@@ -214,14 +244,14 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Search the Campaigns list by Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
 
     // SearchBar now uses onChange instead of searchBtn
-    fireEvent.change(searchField, {
-      target: { value: '2' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();
@@ -307,12 +337,13 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on Campaign Name', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const campaignName = await screen.findAllByTestId('campaignName');
     expect(campaignName[0]).toBeInTheDocument();
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -320,6 +351,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('Click on View Pledge (via row click)', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -327,7 +359,7 @@ describe('FundCampaigns Screen', () => {
     expect(campaignName[0]).toBeInTheDocument();
 
     // Row click navigates to pledge screen
-    fireEvent.click(campaignName[0]);
+    await user.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
@@ -341,8 +373,8 @@ describe('FundCampaigns Screen', () => {
     const fundBreadcrumb = await screen.findByTestId('fundsLink');
     expect(fundBreadcrumb).toBeInTheDocument();
     // Verify the breadcrumb link has the correct href to the funds page
-    expect(fundBreadcrumb).toHaveAttribute('href', '/orgfunds/orgId');
-    expect(fundBreadcrumb).toHaveAttribute('data-to', '/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('href', '/admin/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('data-to', '/admin/orgfunds/orgId');
   });
 
   it('should sort campaigns by start date when clicking start date column header', async () => {
@@ -411,22 +443,21 @@ describe('FundCampaigns Screen', () => {
     // Wait for campaigns to load
     await waitFor(() => {
       const campaignNameCells = screen.getAllByTestId('campaignName');
-      expect(campaignNameCells.length).toBe(2);
+      expect(campaignNameCells.length).toBe(5);
       expect(campaignNameCells[0]).toHaveTextContent('Campaign 1');
-      expect(campaignNameCells[1]).toHaveTextContent('Campaign 2');
     });
   });
 
   it('should display no results empty state when search yields no matches', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term that doesn't match any campaign
-    fireEvent.change(searchField, {
-      target: { value: 'NonExistentCampaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'NonExistentCampaign');
 
     // Assert EmptyState is rendered
     const emptyState = await screen.findByTestId('campaigns-search-empty');
@@ -446,15 +477,15 @@ describe('FundCampaigns Screen', () => {
   });
 
   it('should clear search input when clear button is clicked', async () => {
+    const user = userEvent.setup();
     mockRouteParams();
     renderFundCampaign(link1);
 
     const searchField = await screen.findByTestId('searchFullName');
 
     // Search for a term
-    fireEvent.change(searchField, {
-      target: { value: 'Campaign' },
-    });
+    await user.clear(searchField);
+    await user.type(searchField, 'Campaign');
 
     await waitFor(() => {
       expect(searchField).toHaveValue('Campaign');
@@ -462,7 +493,7 @@ describe('FundCampaigns Screen', () => {
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     await waitFor(() => {
       expect(searchField).toHaveValue('');
@@ -482,10 +513,19 @@ describe('FundCampaigns Screen', () => {
     const progressCells = screen.getAllByTestId('progressCell');
     expect(progressCells.length).toBeGreaterThan(0);
 
-    // Each progress cell should contain 0% (since raised is hardcoded to 0)
-    progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
-    });
+    // Filter out only the cells that match our specific test cases (ignoring others if any)
+    const campaign1Cell = progressCells.find((cell) =>
+      cell.textContent?.includes('0%'),
+    );
+    const campaignHalfCell = progressCells.find((cell) =>
+      cell.textContent?.includes('50%'),
+    );
+    const hundredPercentCells = progressCells.filter((cell) =>
+      cell.textContent?.includes('100%'),
+    );
+    expect(campaign1Cell).toBeInTheDocument();
+    expect(campaignHalfCell).toBeInTheDocument();
+    expect(hundredPercentCells.length).toBe(2);
   });
 
   it('should display raised cells with currency symbol', async () => {
@@ -501,10 +541,24 @@ describe('FundCampaigns Screen', () => {
     const raisedCells = screen.getAllByTestId('raisedCell');
     expect(raisedCells.length).toBeGreaterThan(0);
 
-    // Each raised cell should contain $0 (USD currency)
-    raisedCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('$0');
-    });
+    // Verify presence of specific amounts
+    const raised0 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$0'),
+    );
+    const raised50 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$50'),
+    );
+    const raised100 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$100'),
+    );
+    const raised150 = raisedCells.find((cell) =>
+      cell.textContent?.includes('$150'),
+    );
+
+    expect(raised0).toBeInTheDocument();
+    expect(raised50).toBeInTheDocument();
+    expect(raised100).toBeInTheDocument();
+    expect(raised150).toBeInTheDocument();
   });
 
   it('should display end of results message when campaigns are displayed', async () => {
@@ -519,10 +573,10 @@ describe('FundCampaigns Screen', () => {
 
     // Verify that multiple campaign elements are visible (confirming the list is displayed)
     const campaignNameCells = screen.getAllByTestId('campaignName');
-    expect(campaignNameCells.length).toBe(2);
+    expect(campaignNameCells.length).toBe(5);
 
     // Verify goal cells are also visible (confirming table rendering)
     const goalCells = screen.getAllByTestId('goalCell');
-    expect(goalCells.length).toBe(2);
+    expect(goalCells.length).toBe(5);
   });
 });

@@ -6,4 +6,4 @@
 
 > `const` **userId**: `unknown`
 
-Defined in: [src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx#L26)
+Defined in: [src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx#L28)

@@ -14,10 +14,11 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell, FaUsers } from 'react-icons/fa';
+import { FaBell, FaExchangeAlt, FaUsers } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
+import styles from './LeftDrawer.module.css';
 
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
@@ -54,7 +55,7 @@ const LeftDrawer = ({
     () => (
       <>
         <SidebarNavItem
-          to="/orglist"
+          to="/admin/orglist"
           icon={<OrganizationsIcon />}
           label={t('my organizations')}
           testId="organizationsBtn"
@@ -63,7 +64,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/users"
+          to="/admin/users"
           icon={<FaUsers />}
           label={t('users')}
           testId="usersBtn"
@@ -73,7 +74,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/pluginstore"
+          to="/admin/pluginstore"
           icon={<PluginLogo />}
           label={t('plugin store')}
           testId="pluginStoreBtn"
@@ -82,7 +83,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/communityProfile"
+          to="/admin/communityProfile"
           icon={<SettingsIcon />}
           label={t('communityProfile')}
           testId="communityProfileBtn"
@@ -91,7 +92,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/notification"
+          to="/admin/notification"
           icon={<FaBell />}
           label={t('notification')}
           testId="notificationBtn"
@@ -118,11 +119,24 @@ const LeftDrawer = ({
       portalType="admin"
       footerContent={
         <>
-          {!hideDrawer && (
-            <div>
-              <ProfileCard />
-            </div>
-          )}
+          <div className={styles.switchPortalWrapper}>
+            <SidebarNavItem
+              to="/user/organizations"
+              icon={<FaExchangeAlt />}
+              label={t('switchToUserPortal')}
+              testId="switchToUserPortalBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              iconType="react-icon"
+            />
+          </div>
+          <div
+            className={
+              hideDrawer ? styles.profileCardHidden : styles.profileCardWrapper
+            }
+          >
+            <ProfileCard />
+          </div>
           <SignOut hideDrawer={hideDrawer} />
         </>
       }

@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -50,7 +44,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(
   MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY,
@@ -68,6 +61,7 @@ const translations = {
 
 describe('Testing Agenda Categories Component', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -134,6 +128,7 @@ describe('Testing Agenda Categories Component', () => {
   });
 
   it('opens and closes the create agenda category modal', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -153,20 +148,21 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
   it('creates new agenda cagtegory', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -186,7 +182,7 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
@@ -194,18 +190,16 @@ describe('Testing Agenda Categories Component', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.name),
       formData.name,
     );
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.description),
       formData.description,
     );
-    await userEvent.click(
-      screen.getByTestId('createAgendaCategoryFormSubmitBtn'),
-    );
+    await user.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -215,6 +209,7 @@ describe('Testing Agenda Categories Component', () => {
   });
 
   test('toasts error on unsuccessful creation', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link3}>
         <Provider store={store}>
@@ -234,7 +229,7 @@ describe('Testing Agenda Categories Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaCategoryBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('createAgendaCategoryBtn'));
 
     await waitFor(() => {
       return expect(
@@ -242,18 +237,16 @@ describe('Testing Agenda Categories Component', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.name),
       formData.name,
     );
 
-    await userEvent.type(
+    await user.type(
       screen.getByPlaceholderText(translations.description),
       formData.description,
     );
-    await userEvent.click(
-      screen.getByTestId('createAgendaCategoryFormSubmitBtn'),
-    );
+    await user.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -262,6 +255,7 @@ describe('Testing Agenda Categories Component', () => {
     });
   });
   test('allow user to type in the search field', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -286,12 +280,13 @@ describe('Testing Agenda Categories Component', () => {
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    await userEvent.type(searchInput, 'Category 1');
+    await user.type(searchInput, 'Category 1');
     await waitFor(() => {
       expect(searchInput).toHaveValue('Category 1');
     });
   });
   test('triggers search on pressing Enter key', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -316,16 +311,16 @@ describe('Testing Agenda Categories Component', () => {
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
-    await userEvent.type(searchInput, 'Category');
+    await user.type(searchInput, 'Category');
     await act(async () => {
-      fireEvent.keyUp(searchInput, { key: 'Enter' });
+      await user.keyboard('{enter}');
     });
-    screen.debug();
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
     });
   });
   test('triggers search on clicking search button', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -349,15 +344,16 @@ describe('Testing Agenda Categories Component', () => {
 
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
-    await userEvent.type(searchInput, 'Category');
+    await user.type(searchInput, 'Category');
 
     const searchButton = screen.getByTestId('searchBtn');
-    await userEvent.click(searchButton);
+    await user.click(searchButton);
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
     });
   });
   test('Search categories by name and clear the input by backspace', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -381,7 +377,7 @@ describe('Testing Agenda Categories Component', () => {
 
     const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
-    await userEvent.type(searchInput, 'A{backspace}');
+    await user.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
     });

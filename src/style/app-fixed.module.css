@@ -878,8 +878,6 @@
 
   --input-bg: #f2f7ff;
 
-  --peopleTabUserTagTableBody: #ffffff;
-
   --peopleTabUserTagTableHeaderCell-color: #000000;
 
   --empty-state-bg: #ffffff;
@@ -1873,10 +1871,6 @@ form label,
   color: var(--search-button-border);
 }
 
-.testRedBackground {
-  background-color: red;
-}
-
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
@@ -2094,29 +2088,6 @@ form label,
   height: 1rem;
   width: 1rem;
   margin-right: 8px;
-}
-
-/* -- AdvertisementRegister.tsx -- */
-
-.previewAdvertisementRegister {
-  display: flex;
-  position: relative;
-  width: 100%;
-  margin-top: 10px;
-  overflow: hidden;
-  justify-content: center;
-  border: 1px solid var(--previewAdvertisementRegister-border);
-}
-
-.previewAdvertisementRegister img {
-  width: 400px;
-  height: auto;
-  object-fit: cover;
-}
-
-.previewAdvertisementRegister video {
-  width: 400px;
-  height: auto;
 }
 
 .closeButtonAdvertisementRegister {
@@ -2858,6 +2829,36 @@ form label,
   color: var(--groupsLabel-color);
 }
 
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+.avatarPlaceholderSize {
+  width: 40px;
+  height: 40px;
+}
 .calendar__header {
   display: flex;
   align-items: stretch;
@@ -4374,106 +4375,10 @@ form label,
   padding: 1rem 1.2rem;
 }
 
-.peopleTabComponent {
-  background: #fff;
-  padding-top: 1rem;
-  border-radius: 20px;
-  margin: 1rem;
-}
-
-.peopleTabComponentSection {
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 3rem;
-}
-
-.peopleTabUserTagContainer {
-  width: 100%;
-}
-
-.peopleTabUserTagComponentSection {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  border-radius: 10px;
-}
-
-.peopleTabUserTagColumnHeader {
-  background: #dddddd;
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTableCell {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  white-space: nowrap;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.peopleTabUserTagCreatedByButton {
-  color: #2563eb;
-  cursor: pointer;
-  transition: 0.2s ease;
-  text-decoration: underline #5f5fd9;
-}
-
-.peopleTabUserTagCreatedByButton:hover {
-  text-decoration: underline;
-  color: #1d4ed8;
-}
-
-.peopleTabUserTagTableHeader {
-  background-color: #f9fafb; /* bg-gray-50 */
-  border-top-width: 1px; /* border-y */
-  border-bottom-width: 1px;
-  border-color: #e5e7eb; /* border-gray-200 */
-  border-style: solid;
-}
-
-.peopleTabUserTagTableRow:hover {
-  background-color: #f9fafb;
-}
-
-.peopleTabUserTagTableHeaderCell {
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  font-size: 0.9rem;
-  color: var(--peopleTabUserTagTableHeaderCell-color);
-  text-transform: uppercase;
-  height: 4rem;
-}
-
-.peopleTabUserTagTableBody {
-  background: var(--peopleTabUserTagTableBody-bg);
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTable {
-  width: 100%;
-}
-
-.peopleTabNavbarButtonHeader {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-left: 4rem;
-  margin-top: 2rem;
-}
-
 .peopleTabIconWrapper:hover {
   color: #808080;
   border: 1px solid #dddddd;
   cursor: pointer;
-}
-
-.peopleTabUserEventsContainer {
-  width: 100%;
 }
 
 .peopleTabUserEventContainer {
@@ -4506,12 +4411,6 @@ form label,
   margin: 2rem 0.5rem;
   display: flex;
   flex-direction: column;
-}
-.peoplePageUserEventCardBody {
-  display: grid;
-  gap: 1rem;
-  justify-content: center;
-  grid-template-columns: repeat(2, minmax(650px, 1fr));
 }
 
 .peopleTabUserEventActionButton {
@@ -4679,16 +4578,6 @@ form label,
 
 .peopleTabUserOrganizationsEditButton:hover {
   background-color: #90c1ff;
-}
-
-.peopleTabUserOrganizationsContainer {
-  width: 100%;
-}
-
-.peopleTabUserOrganizationsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
 }
 
 .peopleTabUserEventsGrid {
@@ -5871,7 +5760,7 @@ form label,
   margin-right: 8px;
 }
 
-.modelHeaderDelete {
+.modalHeaderDelete {
   background-color: var(--card-header-background-color);
 }
 
@@ -8127,10 +8016,6 @@ form {
   margin-top: 20px !important;
 }
 
-/* -- RemoveUserTagModal.tsx -- */
-
-/* -- UnassignUserTagModal.tsx -- */
-
 /* -- MemberDetail.tsx -- */
 
 .allRound {
@@ -9030,8 +8915,7 @@ form {
   max-width: var(--modal-max-width);
 }
 
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
 }
 
@@ -9779,48 +9663,6 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
-}
-
-.userContactDetailPersonalCardHeader {
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  background: #eaebef;
-}
-
-.userContactDetailContactCardHeader {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailProfileImage {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailEditAvatarIcon {
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.userContactDetailSaveChangesBtn {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailContactAvatarUrl {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailContactAvatarEditIcon {
-  cursor: pointer;
-  font-size: '1.2rem';
 }
 
 .custom_row_center {
@@ -10900,8 +10742,30 @@ form {
 
 /* -- DataTable Component Styles -- */
 
+:root {
+  --datatable-border: #ddd;
+  --datatable-surface: #ffffff;
+  --datatable-text: #555555;
+  --datatable-focus-outline: var(--primary-theme-color, #1778f2);
+  --datatable-focus-ring: var(--focus-ring-color, #90caf9);
+  --datatable-focus-background: #e3f2fd;
+  --datatable-hover-bg: var(--row-hover-bg, #f0f0f0);
+  --datatable-bulk-bg: #f6f8fa;
+  --datatable-bulk-border: #e5e7eb;
+  --datatable-bulk-text: #333333;
+  --datatable-muted-text: #666666;
+  --datatable-error-text: #842029;
+  --datatable-error-border: #f5c2c7;
+  --datatable-error-bg: #f8d7da;
+  --datatable-empty-border: #dddddd;
+  --datatable-empty-bg: #f9f9f9;
+  --datatable-skeleton-base: var(--skeleton-base, #e0e0e0);
+  --datatable-skeleton-highlight: var(--skeleton-highlight, #f0f0f0);
+}
+
 .dataTableWrapper {
   width: 100%;
+  position: relative;
   overflow-x: auto;
 }
 
@@ -10909,59 +10773,19 @@ form {
   font-size: 0.95rem;
 }
 
-.dataEmptyState {
-  padding: 16px;
-  text-align: center;
-  color: var(--secondText-color);
-  background: var(--empty-state-bg);
-  border: 1px solid var(--empty-state-border-color);
-  border-radius: 6px;
-}
-
-.dataErrorState {
-  padding: 16px;
-  text-align: left;
-  color: var(--errorState-color);
-  background: var(--errorState-bg);
-  border: 1px solid var(--errorState-border);
-  border-radius: 6px;
-}
-
-.visuallyHidden {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-}
-
-.tableBodyCell {
-  font-size: 14px;
-}
-
-.tableHeadCell {
-  background-color: var(--table-head-bg, blue);
-  color: var(--table-header-color, black);
-}
-
-.dataErrorDetails {
-  margin-top: 4px;
-  font-size: 0.875rem;
-  opacity: 0.85;
-}
-
 .dataSkeletonCell {
   height: 1em;
   width: 100%;
-  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  background: linear-gradient(
+    90deg,
+    var(--datatable-skeleton-highlight) 25%,
+    var(--datatable-skeleton-base) 50%,
+    var(--datatable-skeleton-highlight) 75%
+  );
   border-radius: 4px;
-  animation: skeleton-loading 1.2s ease-in-out infinite;
+  animation: datatable-loading 1.2s ease-in-out infinite;
 }
-
-@keyframes skeleton-loading {
+@keyframes datatable-loading {
   0% {
     background-position: -200px 0;
   }
@@ -10969,6 +10793,226 @@ form {
   100% {
     background-position: calc(200px + 100%) 0;
   }
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+.sortable:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+}
+
+.sortable:focus-visible {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--datatable-focus-ring);
+  background: var(--datatable-focus-background);
+}
+
+.headerInner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sortIndicator {
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+.active {
+  opacity: 1;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+
+.searchWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--datatable-border);
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: var(--datatable-surface);
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  min-width: 220px;
+}
+
+.searchInput:focus-visible,
+.searchInput:focus {
+  outline: 2px solid var(--datatable-focus-outline);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.searchClear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 4px;
+  font-size: 0.9rem;
+  color: var(--datatable-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchClear:hover {
+  color: var(--primaryText-color, #000000);
+}
+
+.tableWrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dataErrorState {
+  padding: 16px;
+  text-align: left;
+  color: var(--datatable-error-text);
+  background: var(--datatable-error-bg);
+  border: 1px solid var(--datatable-error-border);
+  border-radius: 6px;
+}
+
+.dataErrorDetails {
+  margin-top: 4px;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.875rem;
+  color: var(--errorState-color, #5c1a21);
+}
+
+.loading {
+  padding: 16px;
+  text-align: center;
+}
+
+.dataEmptyState {
+  padding: 16px;
+  text-align: center;
+  color: var(--datatable-text);
+  border: 1px solid var(--datatable-empty-border);
+  border-radius: 6px;
+  background: var(--datatable-empty-bg);
+}
+
+.selectCol {
+  width: 42px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.selectCol input[type='checkbox'] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+.actionsCol {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.actionsCellContainer {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.actionBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.actionBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.actionBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  margin: 0 0 8px;
+  background: var(--datatable-bulk-bg);
+  border: 1px solid var(--datatable-bulk-border);
+  border-radius: 8px;
+}
+
+.bulkLeft {
+  color: var(--datatable-bulk-text);
+  font-size: 0.9rem;
+}
+
+.bulkRight {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.bulkBtn {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: background-color 0.15s ease;
+}
+
+.bulkBtn:hover:not(:disabled) {
+  background: var(--datatable-hover-bg);
+}
+
+.bulkBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bulkClear {
+  border: 1px solid var(--datatable-border);
+  background: var(--datatable-surface);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: var(--datatable-muted-text);
+}
+
+.bulkClear:hover {
+  background: var(--datatable-hover-bg);
+}
+
+.dataLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.6);
 }
 
 /* OrgSelector Component Styles */

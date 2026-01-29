@@ -7,7 +7,7 @@
  * @returns  A React functional component rendering the delete confirmation modal.
  *
  * @remarks
- * Uses `BaseModal` from `shared-components` for the modal and `react-bootstrap` for button components.
+ * Uses DeleteModal template from CRUDModalTemplate for consistent UI and behavior.
  * Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
  * Displays success or error messages using `NotificationToast`.
  * Supports internationalization with `react-i18next`.
@@ -24,7 +24,6 @@
  *
  */
 import React, { useState } from 'react';
-import Button from 'shared-components/Button/Button';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import {
@@ -36,7 +35,7 @@ import type {
   IDeleteActionItemInput,
 } from 'types/shared-components/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface IItemDeleteModalProps {
@@ -55,12 +54,12 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   actionItemsRefetch,
   eventId,
 }) => {
-  const { t: tCommon } = useTranslation('translation');
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
 
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
@@ -74,6 +73,9 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   );
 
   const handleDelete = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       if (actionItem.isTemplate && applyTo === 'instance') {
         const input = {
@@ -99,75 +101,62 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
       NotificationToast.success(t('successfulDeletion'));
     } catch (error: unknown) {
       NotificationToast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
-      title={t('deleteActionItem')}
-      showCloseButton
-      footer={
-        <div>
-          <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>
-            {tCommon('no')}
-          </Button>
-          <Button
-            variant="danger"
-            onClick={handleDelete}
-            data-testid="deleteyesbtn"
-          >
-            {tCommon('yes')}
-          </Button>
+  const recurringEventContent =
+    actionItem.isTemplate && !actionItem.isInstanceException ? (
+      <FormFieldGroup
+        name="applyTo"
+        label={t('applyTo')}
+        touched={false}
+        error={undefined}
+      >
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="applyTo"
+            id="deleteApplyToSeries"
+            data-testid="deleteApplyToSeries"
+            checked={applyTo === 'series'}
+            onChange={() => setApplyTo('series')}
+          />
+          <label className="form-check-label" htmlFor="deleteApplyToSeries">
+            {t('entireSeries')}
+          </label>
         </div>
-      }
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="applyTo"
+            id="deleteApplyToInstance"
+            data-testid="deleteApplyToInstance"
+            checked={applyTo === 'instance'}
+            onChange={() => setApplyTo('instance')}
+          />
+          <label className="form-check-label" htmlFor="deleteApplyToInstance">
+            {t('thisEventOnly')}
+          </label>
+        </div>
+      </FormFieldGroup>
+    ) : undefined;
+
+  return (
+    <DeleteModal
+      open={isOpen}
+      onClose={hide}
+      title={t('deleteActionItem')}
+      onDelete={handleDelete}
+      loading={isSubmitting}
+      showWarning={false}
+      recurringEventContent={recurringEventContent}
     >
       <p>{t('deleteActionItemMsg')}</p>
-
-      {actionItem.isTemplate && !actionItem.isInstanceException && (
-        <FormFieldGroup
-          name="applyTo"
-          label={t('applyTo')}
-          touched={false}
-          error={undefined}
-        >
-          <div className="mb-2">
-            <div className="form-check">
-              <input
-                type="radio"
-                name="applyTo"
-                id="deleteApplyToSeries"
-                className="form-check-input"
-                data-testid="deleteApplyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
-              />
-              <label className="form-check-label" htmlFor="deleteApplyToSeries">
-                {t('entireSeries')}
-              </label>
-            </div>
-            <div className="form-check">
-              <input
-                type="radio"
-                name="applyTo"
-                id="deleteApplyToInstance"
-                className="form-check-input"
-                data-testid="deleteApplyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
-              />
-              <label
-                className="form-check-label"
-                htmlFor="deleteApplyToInstance"
-              >
-                {t('thisEventOnly')}
-              </label>
-            </div>
-          </div>
-        </FormFieldGroup>
-      )}
-    </BaseModal>
+    </DeleteModal>
   );
 };
 

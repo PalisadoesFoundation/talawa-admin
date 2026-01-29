@@ -1,0 +1,84 @@
+.removeButton {
+  margin-bottom: 10px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  margin-right: 10px;
+  --bs-btn-border-color: var(--removeButton-border);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
+}
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  margin-bottom: 10px;
+  background-color: var(--disabled-btn);
+  border-color: var(--addButton-bg);
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder styling */
+.inputField::placeholder {
+  color: var(--inputField-placeholder-color) !important;
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: 0.1px solid var(--inputField-border-focus) !important;
+  background-color: var(--inputField-bg-focus) !important;
+  box-shadow: var(--drop-shadow);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.previewAdvertisementRegister {
+  display: flex;
+  position: relative;
+  width: 100%;
+  margin-top: 10px;
+  overflow: hidden;
+  justify-content: center;
+  border: 1px solid var(--previewAdvertisementRegister-border);
+}
+
+.previewAdvertisementRegister img {
+  width: 400px;
+  height: auto;
+  object-fit: cover;
+}
+
+.previewAdvertisementRegister video {
+  width: 400px;
+  height: auto;
+}

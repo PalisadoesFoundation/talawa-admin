@@ -24,6 +24,12 @@ set -euo pipefail
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
 VENV_DIR="$REPO_ROOT/venv"
+
+if [ ! -d "$VENV_DIR" ]; then
+  echo "[X] Python virtual environment not found...." >&2
+  exit 1
+fi
+
 if [ -x "$VENV_DIR/bin/python" ]; then
   VENV_PY="$VENV_DIR/bin/python"
 elif [ -x "$VENV_DIR/Scripts/python.exe" ]; then
