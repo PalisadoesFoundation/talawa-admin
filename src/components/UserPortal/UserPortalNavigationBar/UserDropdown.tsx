@@ -1,27 +1,24 @@
 import { Dropdown } from 'react-bootstrap';
-import { InterfaceUserDropdownProps } from 'types/UserPortalNavigationBar/interface';
+import { InterfaceUserDropdownProps } from 'types/UserPortal/UserPortalNavigationBar/interface';
 /**
  * UserProfileDropdown Component
  *
- * @description
  * Renders a dropdown menu for user profile actions including settings navigation
  * and logout functionality. This component is typically used in the navigation bar
  * to provide quick access to user-related actions.
  *
- * @component
  *
- * @param {InterfaceUserDropdownProps} props - Component props
- * @param {boolean} props.showUserProfile - Whether to display the dropdown (returns null if false)
- * @param {string} props.testIdPrefix - Prefix for test IDs to ensure unique identifiers
- * @param {'up' | 'down' | 'start' | 'end'} props.dropDirection - Direction the dropdown menu opens
- * @param {() => void} props.handleLogout - Callback function executed when user clicks logout
- * @param {string} props.finalUserName - User's display name shown in the dropdown
- * @param {NavigateFunction} props.navigate - React Router navigation function for routing
- * @param {TFunction} props.tCommon - i18next translation function for common translations
- * @param {CSSModuleClasses} props.styles - CSS module classes for styling
- * @param {OverridableComponent<SvgIconTypeMap>} props.PermIdentityIcon - Material-UI icon component for user avatar
+ * @param showUserProfile - Whether to display the dropdown (returns null if false)
+ * @param testIdPrefix - Prefix for test IDs to ensure unique identifiers
+ * @param dropDirection - Direction the dropdown menu opens
+ * @param handleLogout - Callback function executed when user clicks logout
+ * @param finalUserName - User's display name shown in the dropdown
+ * @param navigate - React Router navigation function for routing
+ * @param tCommon - i18next translation function for common translations
+ * @param styles - CSS module classes for styling
+ * @param PermIdentityIcon - Material-UI icon component for user avatar
  *
- * @returns {JSX.Element | null} The rendered dropdown component, or null if showUserProfile is false
+ * @returns The rendered dropdown component, or null if showUserProfile is false
  *
  * @example
  * ```tsx
