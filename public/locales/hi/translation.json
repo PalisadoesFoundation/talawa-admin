@@ -1247,7 +1247,11 @@
     "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
     "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
     "nameDescriptionRequired": "नाम और विवरण आवश्यक हैं",
-    "updateFailed": "संगठन को अपडेट करने में विफल"
+    "updateFailed": "संगठन को अपडेट करने में विफल",
+    "errorLoadingOrganizationData": "संगठन का डेटा लोड करने में त्रुटि",
+    "enterOrganizationLocation": "संगठन का स्थान दर्ज करें",
+    "imageSizeTooLarge": "छवि का आकार बहुत बड़ा है। कृपया एक छोटी फ़ाइल अपलोड करें।",
+    "invalidImageType": "अमान्य छवि प्रकार। कृपया एक मान्य छवि फ़ाइल अपलोड करें।"
   },
   "public": {
     "invitation": {

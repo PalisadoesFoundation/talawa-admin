@@ -1230,7 +1230,11 @@
     "enterOrganizationDescription": "Ingrese la descripción de la organización",
     "userRegistrationRequired": "Se requiere registro de usuario",
     "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
-    "updateFailed": "Error al actualizar la organización"
+    "updateFailed": "Error al actualizar la organización",
+    "errorLoadingOrganizationData": "Error al cargar los datos de la organización",
+    "enterOrganizationLocation": "Ingrese la ubicación de la organización",
+    "imageSizeTooLarge": "El tamaño de la imagen es demasiado grande. Por favor, sube un archivo más pequeño.",
+    "invalidImageType": "Tipo de imagen no válido. Por favor, sube un archivo de imagen válido."
   },
   "public": {
     "invitation": {
