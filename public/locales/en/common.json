@@ -166,7 +166,7 @@
   "contactInfoHeading": "Contact Information",
   "educationGrade": "Educational Grade",
   "employmentStatus": "Employment Status",
-  "fileTooLarge": "File is too large. Maximum size is 5MB.",
+  "fileTooLarge": "File is too large. Maximum size is {{size}}MB.",
   "homePhoneNumber": "Home Phone Number",
   "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
   "maritalStatus": "Marital Status",

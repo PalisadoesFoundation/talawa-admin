@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { main, askAndSetRecaptcha } from './setup';
+import { main, askAndSetRecaptcha, askAndSetLogErrors } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './updateEnvFile/updateEnvFile';
@@ -406,6 +406,26 @@ describe('Talawa Admin Setup', () => {
     );
 
     localConsoleError.mockRestore();
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to NO when user opts out', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: false,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'NO');
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to YES when user opts in', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: true,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
   });
 
   it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {
