@@ -225,8 +225,9 @@ export default function chat(): JSX.Element {
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
+                  aria-label={t('newChat')}
                 >
-                  <AddIcon />
+                  <AddIcon data-testid="new-chat-icon" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                   <Dropdown.Item

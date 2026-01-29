@@ -1,21 +1,20 @@
 .container {
-  color: #6c757d;
-  opacity: 0.7;
+  color: var(--color-gray-600);
 }
 
 .iconWrapper {
-  padding: 2rem;
-  background-color: #f8f9fa;
-  border-radius: 50%;
-  margin-bottom: 1rem;
+  padding: var(--space-8);
+  background-color: var(--color-gray-50);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-5);
 }
 
 .icon {
-  font-size: 3rem !important;
-  color: #adb5bd;
+  font-size: var(--font-size-4xl) !important;
+  color: var(--color-gray-300);
 }
 
 .message {
-  font-weight: 500;
-  color: #6c757d;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-600);
 }
