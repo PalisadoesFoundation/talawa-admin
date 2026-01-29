@@ -61,9 +61,13 @@ const AgendaItemsCreateModal: React.FC<
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';
 
-  const isValidUrl = (url: string): boolean => {
-    const urlRegex = /^(ftp|http|https):\/\/[^ "]+$/;
-    return urlRegex.test(url);
+  const isSafeUrl = (url: string): boolean => {
+    try {
+      const parsed = new URL(url);
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
   };
 
   // State to manage form values
@@ -169,12 +173,14 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   const handleAddUrl = (): void => {
-    if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
+    const trimmedUrl = newUrl.trim();
+
+    if (trimmedUrl !== '' && isSafeUrl(trimmedUrl)) {
       setAgendaItemFormState({
         ...agendaItemFormState,
         urls: [
           ...agendaItemFormState.urls.filter((url) => url.trim() !== ''),
-          newUrl,
+          trimmedUrl,
         ],
       });
       setNewUrl('');
