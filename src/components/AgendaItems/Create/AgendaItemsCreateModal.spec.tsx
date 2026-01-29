@@ -31,7 +31,7 @@ const sharedMocks = vi.hoisted(() => ({
   uploadFileToMinio: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.NotificationToast,
 }));
 
@@ -957,5 +957,56 @@ describe('AgendaItemsCreateModal', () => {
         'invalidUrl',
       );
     });
+  });
+  test('shows error toast when exceeding MAX_ATTACHMENTS and does not upload', async () => {
+    // Tests lines 160-165 - MAX_ATTACHMENTS check (MAX_ATTACHMENTS = 10)
+    sharedMocks.uploadFileToMinio.mockClear();
+    sharedMocks.NotificationToast.error.mockClear();
+
+    // Create form state with 9 attachments already (one slot remaining)
+    const formStateWith9Attachments = {
+      ...mockFormState1,
+      attachments: Array(9).fill(
+        JSON.stringify({ objectName: 'test.jpg', fileHash: 'hash' }),
+      ),
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={formStateWith9Attachments}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    // Try to upload 2 files when only 1 slot is remaining
+    const file1 = new File(['content1'], 'image1.jpg', { type: 'image/jpeg' });
+    const file2 = new File(['content2'], 'image2.jpg', { type: 'image/jpeg' });
+
+    await userEvent.upload(fileInput, [file1, file2]);
+
+    await waitFor(() => {
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'tooManyAttachments',
+      );
+    });
+
+    // Verify uploadFileToMinio was NOT called since limit was exceeded
+    expect(sharedMocks.uploadFileToMinio).not.toHaveBeenCalled();
   });
 });
