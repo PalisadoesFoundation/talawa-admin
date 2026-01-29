@@ -119,7 +119,6 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
           disabled={disabled}
           className={styles.fullWidth}
           enableAccessibleFieldDOMStructure={false}
-          disableOpenPicker
           reduceAnimations
           slotProps={{
             ...slotProps,
@@ -169,7 +168,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                     {...inputProps}
                     {...other}
                     id={inputId}
-                    ref={ref}
+                    aria-label={label}
                     required={required}
                     disabled={disabled}
                     aria-required={required}
