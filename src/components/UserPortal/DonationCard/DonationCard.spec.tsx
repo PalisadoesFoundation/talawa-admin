@@ -16,7 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import DonationCard from './DonationCard';
-import type { InterfaceDonationCardProps } from 'types/Donation/interface';
+import type { InterfaceDonationCardProps } from 'types/UserPortal/Donation/interface';
 
 const link = new StaticMockLink([], true);
 
