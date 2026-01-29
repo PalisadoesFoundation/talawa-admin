@@ -31,7 +31,7 @@
  * @throws Will display an error message if data fetching or mutation fails.
  */
 import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared-components/Button';
 
@@ -150,7 +150,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
    * @param  e - The form submit event.
    */
   const createAgendaItemHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     const selectedFolder = agendaFolderData?.agendaFoldersByEventId?.find(
@@ -230,7 +230,7 @@ function EventAgendaFolder(props: { eventId: string }): JSX.Element {
    * @param  e - The form submit event.
    */
   const createAgendaFolderHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     const agendaFolders = Array.isArray(

@@ -303,7 +303,7 @@ function AgendaFolderContainer({
       description: agendaItem.description,
       duration: agendaItem.duration,
       attachments: attachmentsWithPreview,
-      category: agendaItem.category.id,
+      category: agendaItem.category?.id ?? '',
       folder: agendaItem.folder?.id,
       url: agendaItem.url.map((u) => u.url) ?? [],
     });
@@ -344,11 +344,17 @@ function AgendaFolderContainer({
       duration: agendaItem.duration,
       attachment: attachmentsWithPreview,
       sequence: agendaItem.sequence,
-      category: {
-        id: agendaItem.category.id,
-        name: agendaItem.category.name,
-        description: agendaItem.category.description,
-      },
+      category: agendaItem.category
+        ? {
+            id: agendaItem.category.id,
+            name: agendaItem.category.name,
+            description: agendaItem.category.description,
+          }
+        : {
+            id: '',
+            name: t('noCategory'),
+            description: '',
+          },
       url: agendaItem.url.map((u) => u.url),
       creator: {
         id: agendaItem.creator.id,

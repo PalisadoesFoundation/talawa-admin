@@ -1,4 +1,4 @@
-import type { ChangeEvent, FormEvent } from 'react';
+import type { FormEvent } from 'react';
 import type { DropResult } from '@hello-pangea/dnd';
 
 /**
@@ -179,7 +179,7 @@ export interface InterfaceAgendaItemsCreateModalProps {
   setAgendaItemFormState: (
     state: React.SetStateAction<InterfaceCreateFormStateType>,
   ) => void;
-  createAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  createAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
@@ -195,7 +195,7 @@ export interface InterfaceAgendaItemsUpdateModalProps {
   setItemFormState: (
     state: React.SetStateAction<InterfaceFormStateType>,
   ) => void;
-  updateAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  updateAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
@@ -239,7 +239,7 @@ export interface InterfaceAgendaFolderCreateModalProps {
   setFormState: (
     state: React.SetStateAction<InterfaceAgendaFolderCreateFormStateType>,
   ) => void;
-  createAgendaFolderHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  createAgendaFolderHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
 }
 

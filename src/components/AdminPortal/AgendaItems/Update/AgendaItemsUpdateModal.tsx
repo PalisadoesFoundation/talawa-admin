@@ -1,16 +1,3 @@
-/**
- * Renders the modal used to update agenda items.
- *
- * @param agendaItemUpdateModalIsOpen - Whether the modal is open.
- * @param hideUpdateItemModal - Handler to close the modal.
- * @param itemFormState - Current agenda item form state.
- * @param setItemFormState - Setter for agenda item form state.
- * @param updateAgendaItemHandler - Submit handler.
- * @param t - i18n translation function.
- * @param agendaItemCategories - Available agenda item categories.
- * @param agendaFolderData - Available agenda folders.
- * @returns JSX.Element
- */
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Autocomplete } from '@mui/material';
@@ -36,6 +23,19 @@ import type {
 import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
 
 // translation-check-keyPrefix: agendaSection
+/**
+ * Renders the modal used to update agenda items.
+ *
+ * @param agendaItemUpdateModalIsOpen - Whether the modal is open.
+ * @param hideUpdateItemModal - Handler to close the modal.
+ * @param itemFormState - Current agenda item form state.
+ * @param setItemFormState - Setter for agenda item form state.
+ * @param updateAgendaItemHandler - Submit handler.
+ * @param t - i18n translation function.
+ * @param agendaItemCategories - Available agenda item categories.
+ * @param agendaFolderData - Available agenda folders.
+ * @returns JSX.Element
+ */
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -149,7 +149,6 @@ const AgendaItemsUpdateModal: React.FC<
       target.value = '';
     }
   };
-  console.log(itemFormState);
 
   return (
     <BaseModal
@@ -276,7 +275,7 @@ const AgendaItemsUpdateModal: React.FC<
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Button onClick={handleAddUrl} data-testid="linkBtn">
+            <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
               {t('link')}
             </Button>
           </div>
@@ -289,6 +288,7 @@ const AgendaItemsUpdateModal: React.FC<
                   {url.length > 50 ? `${url.substring(0, 50)}...` : url}
                 </a>
                 <Button
+                  type="button"
                   variant="danger"
                   size="sm"
                   data-testid="deleteUrl"
