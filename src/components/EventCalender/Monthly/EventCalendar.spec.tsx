@@ -2011,4 +2011,192 @@ describe('Calendar', () => {
       }
     });
   });
+
+  describe('Info Cards (Holidays and Events Legend)', () => {
+    const onMonthChange = vi.fn();
+
+    it('should render holidays section with aria-label', () => {
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = [
+        { name: 'Christmas Day', date: '12-25', month: 'December' },
+      ];
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={11}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        const holidaysSection = screen.getByRole('region', {
+          name: /holidays/i,
+        });
+        expect(holidaysSection).toBeInTheDocument();
+
+        const holidaysHeading = screen.getByRole('heading', {
+          name: /holidays/i,
+        });
+        expect(holidaysHeading).toBeInTheDocument();
+      } finally {
+        mockHolidays.value = originalValue;
+      }
+    });
+
+    it('should render each holiday with name and formatted date using months array', () => {
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = [
+        { name: 'Christmas Day', date: '12-25', month: 'December' },
+      ];
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={11}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        expect(screen.getByText('Christmas Day')).toBeInTheDocument();
+        expect(screen.getByText(/December/)).toBeInTheDocument();
+        expect(screen.getByText('25')).toBeInTheDocument();
+      } finally {
+        mockHolidays.value = originalValue;
+      }
+    });
+
+    it('should render events section with aria-label', () => {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={[]}
+                viewType={ViewType.MONTH}
+                onMonthChange={onMonthChange}
+                currentMonth={new Date().getMonth()}
+                currentYear={new Date().getFullYear()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      const eventsSection = screen.getByRole('region', { name: /events/i });
+      expect(eventsSection).toBeInTheDocument();
+
+      const eventsHeading = screen.getAllByRole('heading', { name: /events/i });
+      expect(eventsHeading.length).toBeGreaterThan(0);
+    });
+
+    it('should render legend with organizationIndicator and holidayIndicator classes', () => {
+      const { container } = render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={[]}
+                viewType={ViewType.MONTH}
+                onMonthChange={onMonthChange}
+                currentMonth={new Date().getMonth()}
+                currentYear={new Date().getFullYear()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      const eventsLegend = container.querySelector('[class*="eventsLegend"]');
+      expect(eventsLegend).toBeInTheDocument();
+
+      const orgIndicator = container.querySelector(
+        '[class*="organizationIndicator"]',
+      );
+      expect(orgIndicator).toBeInTheDocument();
+
+      const listContainerHolidays = container.querySelector(
+        '[class*="list_container_holidays"]',
+      );
+      expect(listContainerHolidays).toBeInTheDocument();
+
+      const holidayIndicator = container.querySelector(
+        '[class*="holidayIndicator"]',
+      );
+      expect(holidayIndicator).toBeInTheDocument();
+    });
+
+    it('should render legend text for eventsCreatedByOrganization and holidays', () => {
+      render(
+        <Router>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Calendar
+                eventData={[]}
+                viewType={ViewType.MONTH}
+                onMonthChange={onMonthChange}
+                currentMonth={new Date().getMonth()}
+                currentYear={new Date().getFullYear()}
+              />
+            </I18nextProvider>
+          </MockedProvider>
+        </Router>,
+      );
+
+      expect(
+        screen.getByText(/events created by organization/i),
+      ).toBeInTheDocument();
+
+      const holidaysTexts = screen.getAllByText(/holidays/i);
+      expect(holidaysTexts.length).toBeGreaterThanOrEqual(2);
+    });
+
+    it('should filter holidays to show only current month entries', () => {
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = [
+        { name: 'Christmas Day', date: '12-25', month: 'December' },
+        { name: 'Independence Day', date: '07-04', month: 'July' },
+      ];
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={11}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        expect(screen.getByText('Christmas Day')).toBeInTheDocument();
+        expect(screen.queryByText('Independence Day')).not.toBeInTheDocument();
+      } finally {
+        mockHolidays.value = originalValue;
+      }
+    });
+  });
 });

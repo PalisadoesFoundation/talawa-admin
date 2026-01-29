@@ -1,7 +1,3 @@
-:root {
-  --picker-icon-space: 40px;
-}
-
 .fullWidth {
   width: 100%;
 }
@@ -15,6 +11,8 @@
 
 /* Container styling to match SearchBar */
 .pickerInputContainer {
+  /* Scoped custom property for icon button width */
+  --picker-icon-space: 40px;
   display: flex;
   align-items: center;
   border: var(--border-1) solid var(--color-gray-200);
@@ -35,6 +33,13 @@
   box-shadow: 0 0 0 var(--shadow-spread-xs) rgba(23, 120, 242, 0.25);
 }
 
+/*
+ * Override MUI TextField internal styles to remove default borders/padding/shadow.
+ * The !important declarations are required because MUI's DatePicker applies
+ * high-specificity inline styles and internal class selectors (.MuiInputBase-input,
+ * .MuiOutlinedInput-notchedOutline) that cannot be overridden with normal CSS
+ * specificity. These overrides ensure our custom styling takes precedence.
+ */
 .pickerInput {
   flex: 1;
   border: none !important;
