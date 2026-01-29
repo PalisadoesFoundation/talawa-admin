@@ -34,6 +34,9 @@ export interface InterfaceOrganization {
   isUserRegistrationRequired: boolean | null;
 }
 
+/**
+ * Input type for the updateOrganization mutation.
+ */
 export interface InterfaceMutationUpdateOrganizationInput {
   id: string;
   name?: string;
@@ -45,4 +48,6 @@ export interface InterfaceMutationUpdateOrganizationInput {
   postalCode?: string;
   countryCode?: string;
   avatar?: File;
+  isUserRegistrationRequired?: boolean;
+  isVisibleInSearch?: boolean;
 }

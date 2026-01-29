@@ -24,10 +24,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('utils/convertToBase64', () => ({
-  default: vi.fn().mockResolvedValue('base64String'),
-}));
-
 i18n.init({
   lng: 'en',
   resources: {
@@ -521,8 +517,6 @@ describe('OrgUpdate Component', () => {
       );
 
       const nameInput = await screen.findByDisplayValue('Test Org');
-      const descriptionInput =
-        await screen.findByDisplayValue('Test Description');
       const saveButton = screen.getByTestId('save-org-changes-btn');
 
       await user.clear(nameInput);
@@ -534,6 +528,8 @@ describe('OrgUpdate Component', () => {
         );
       });
 
+      const descriptionInput =
+        await screen.findByDisplayValue('Test Description');
       await user.type(nameInput, 'Test Org');
       await user.clear(descriptionInput);
       await user.click(saveButton);
@@ -910,5 +906,242 @@ describe('OrgUpdate Component', () => {
       const saveButton = await screen.findByTestId('save-org-changes-btn');
       expect(saveButton).toBeEnabled();
     });
+  });
+
+  it('handles file upload with mutation and clears file input after success', async () => {
+    const user = userEvent.setup();
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+
+    const fileUploadMocks = [
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: { data: mockOrgData },
+      },
+      {
+        request: {
+          query: UPDATE_ORGANIZATION_MUTATION,
+          variables: {
+            input: {
+              id: '1',
+              name: 'Test Org',
+              description: 'Test Description',
+              addressLine1: '123 Test St',
+              addressLine2: 'Suite 100',
+              city: 'Test City',
+              state: 'Test State',
+              postalCode: '12345',
+              countryCode: 'US',
+              avatar: file,
+              isUserRegistrationRequired: false,
+              isVisibleInSearch: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateOrganization: {
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+                name: 'Test Org',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: { data: mockOrgData },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={fileUploadMocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+    await user.upload(fileInput, file);
+
+    expect(fileInput.files?.[0]).toBe(file);
+
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    await user.click(saveButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        i18n.t('orgUpdate.successfulUpdated'),
+      );
+    });
+
+    expect(fileInput.value).toBe('');
+  });
+
+  it('filters out empty address fields from mutation payload', async () => {
+    const user = userEvent.setup();
+
+    const mockWithEmptyFields = {
+      organization: {
+        __typename: 'Organization',
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: '',
+        city: '',
+        state: 'Test State',
+        postalCode: '',
+        countryCode: 'US',
+        avatarURL: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        isUserRegistrationRequired: false,
+      },
+    };
+
+    const mocksWithEmptyFields = [
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: { data: mockWithEmptyFields },
+      },
+      {
+        request: {
+          query: UPDATE_ORGANIZATION_MUTATION,
+          variables: {
+            input: {
+              id: '1',
+              name: 'Test Org',
+              description: 'Test Description',
+              addressLine1: '123 Test St',
+              state: 'Test State',
+              countryCode: 'US',
+              isUserRegistrationRequired: false,
+              isVisibleInSearch: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            updateOrganization: {
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: { data: mockWithEmptyFields },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithEmptyFields}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    await user.click(saveButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        i18n.t('orgUpdate.successfulUpdated'),
+      );
+    });
+  });
+
+  it('handles empty file selection (user cancels file picker)', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+
+    await user.upload(fileInput, []);
+
+    expect(fileInput.files).toHaveLength(0);
+
+    const saveButton = screen.getByTestId('save-org-changes-btn');
+    expect(saveButton).toBeEnabled();
+  });
+
+  it('handles organization with null isUserRegistrationRequired value', async () => {
+    const mockOrgWithNull = {
+      organization: {
+        __typename: 'Organization',
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        isUserRegistrationRequired: null,
+      },
+    };
+
+    const mocksWithNull = [
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: { data: mockOrgWithNull },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithNull}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const userRegSwitch = screen.getByTestId('user-reg-switch');
+    expect(userRegSwitch).toBeChecked();
   });
 });
