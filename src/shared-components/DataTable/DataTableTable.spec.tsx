@@ -1,12 +1,27 @@
+/**
+ * Unit tests for DataTableTable component.
+ *
+ * Covers rendering, sorting, selection, custom rows/cells, actions, loading state,
+ * ARIA attributes, and keyboard interactions to achieve full branch coverage.
+ */
+
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTableTable } from './DataTableTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 type Row = { id: string; name: string; value?: number };
 
-function defaultProps(overrides: Partial<Parameters<typeof DataTableTable<Row>>[0]> = {}) {
+/**
+ * Builds default props for DataTableTable tests with optional overrides.
+ *
+ * @param overrides - Partial props to merge over defaults
+ * @returns Props object suitable for DataTableTable<Row>
+ */
+function defaultProps(
+  overrides: Partial<Parameters<typeof DataTableTable<Row>>[0]> = {},
+) {
   const columns: IColumnDef<Row, unknown>[] = [
     { id: 'name', header: 'Name', accessor: 'name' as const },
     { id: 'value', header: 'Value', accessor: (row: Row) => row.value ?? 0 },
@@ -41,6 +56,10 @@ function defaultProps(overrides: Partial<Parameters<typeof DataTableTable<Row>>[
 }
 
 describe('DataTableTable', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   /* ------------------------------------------------------------------
    * Basic rendering
    * ------------------------------------------------------------------ */
@@ -70,7 +89,10 @@ describe('DataTableTable', () => {
   it('sets aria-busy on table when ariaBusy is true', () => {
     const props = defaultProps({ ariaBusy: true });
     render(<DataTableTable<Row> {...props} />);
-    expect(screen.getByTestId('datatable')).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByTestId('datatable')).toHaveAttribute(
+      'aria-busy',
+      'true',
+    );
   });
 
   it('does not set aria-busy to true when ariaBusy is false', () => {
@@ -94,7 +116,12 @@ describe('DataTableTable', () => {
   it('renders sortable column with role button, tabIndex 0, and sort indicator', () => {
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: true },
+        },
         { id: 'value', header: 'Value', accessor: 'value' as const },
       ],
     });
@@ -108,7 +135,12 @@ describe('DataTableTable', () => {
   it('renders non-sortable column without role, tabIndex, or sort indicator', () => {
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: false } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: false },
+        },
       ],
     });
     render(<DataTableTable<Row> {...props} />);
@@ -121,7 +153,12 @@ describe('DataTableTable', () => {
   it('applies aria-sort ascending when column is active and activeSortDir is asc', () => {
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: true },
+        },
       ],
       activeSortBy: 'name',
       activeSortDir: 'asc',
@@ -135,7 +172,12 @@ describe('DataTableTable', () => {
   it('applies aria-sort descending when column is active and activeSortDir is desc', () => {
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: true },
+        },
       ],
       activeSortBy: 'name',
       activeSortDir: 'desc',
@@ -149,8 +191,18 @@ describe('DataTableTable', () => {
   it('does not set aria-sort on inactive sortable column', () => {
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } },
-        { id: 'value', header: 'Value', accessor: 'value' as const, meta: { sortable: true } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: true },
+        },
+        {
+          id: 'value',
+          header: 'Value',
+          accessor: 'value' as const,
+          meta: { sortable: true },
+        },
       ],
       activeSortBy: 'name',
       activeSortDir: 'asc',
@@ -161,19 +213,20 @@ describe('DataTableTable', () => {
   });
 
   it('applies column meta width when provided', () => {
+    const widthValue = 'var(--data-table-col-width)';
     const props = defaultProps({
       columns: [
         {
           id: 'name',
           header: 'Name',
           accessor: 'name' as const,
-          meta: { width: '200px' },
+          meta: { width: widthValue },
         },
       ],
     });
     render(<DataTableTable<Row> {...props} />);
     const th = screen.getByRole('button', { name: /name/i });
-    expect(th).toHaveStyle({ width: '200px' });
+    expect(th).toHaveStyle({ width: widthValue });
   });
 
   it('renders header from function when header is a function', () => {
@@ -197,7 +250,12 @@ describe('DataTableTable', () => {
   it('calls handleHeaderClick when sortable header is clicked', async () => {
     const user = userEvent.setup();
     const handleHeaderClick = vi.fn();
-    const col = { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } };
+    const col = {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    };
     const props = defaultProps({
       columns: [col],
       handleHeaderClick,
@@ -210,7 +268,12 @@ describe('DataTableTable', () => {
   it('calls handleHeaderClick when Enter is pressed on sortable header', async () => {
     const user = userEvent.setup();
     const handleHeaderClick = vi.fn();
-    const col = { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } };
+    const col = {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    };
     const props = defaultProps({
       columns: [col],
       handleHeaderClick,
@@ -225,7 +288,12 @@ describe('DataTableTable', () => {
   it('calls handleHeaderClick when Space is pressed on sortable header', async () => {
     const user = userEvent.setup();
     const handleHeaderClick = vi.fn();
-    const col = { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } };
+    const col = {
+      id: 'name',
+      header: 'Name',
+      accessor: 'name' as const,
+      meta: { sortable: true },
+    };
     const props = defaultProps({
       columns: [col],
       handleHeaderClick,
@@ -242,7 +310,12 @@ describe('DataTableTable', () => {
     const handleHeaderClick = vi.fn();
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: false } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: false },
+        },
       ],
       handleHeaderClick,
     });
@@ -256,7 +329,12 @@ describe('DataTableTable', () => {
     const handleHeaderClick = vi.fn();
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, meta: { sortable: true } },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          meta: { sortable: true },
+        },
       ],
       handleHeaderClick,
     });
@@ -286,7 +364,9 @@ describe('DataTableTable', () => {
       someSelectedOnPage: false,
     });
     render(<DataTableTable<Row> {...props} />);
-    const checkbox = screen.getByTestId('select-all-checkbox') as HTMLInputElement;
+    const checkbox = screen.getByTestId(
+      'select-all-checkbox',
+    ) as HTMLInputElement;
     expect(checkbox.checked).toBe(true);
     expect(checkbox).toHaveAttribute('aria-checked', 'true');
   });
@@ -399,20 +479,32 @@ describe('DataTableTable', () => {
     const getKey = vi.fn((row: Row, idx: number) => row.id ?? String(idx));
     const props = defaultProps({ startIndex: 5, getKey });
     render(<DataTableTable<Row> {...props} />);
-    expect(getKey).toHaveBeenCalledWith(expect.objectContaining({ id: '1', name: 'Ada' }), 5);
-    expect(getKey).toHaveBeenCalledWith(expect.objectContaining({ id: '2', name: 'Bob' }), 6);
+    expect(getKey).toHaveBeenCalledWith(
+      expect.objectContaining({ id: '1', name: 'Ada' }),
+      5,
+    );
+    expect(getKey).toHaveBeenCalledWith(
+      expect.objectContaining({ id: '2', name: 'Bob' }),
+      6,
+    );
   });
 
   it('renders custom rows when renderRow is provided', () => {
     const renderRow = vi.fn((row: Row, index: number) => (
       <tr key={row.id} data-testid={`custom-row-${row.id}`}>
-        <td>Custom: {row.name} (index {index})</td>
+        <td>
+          Custom: {row.name} (index {index})
+        </td>
       </tr>
     ));
     const props = defaultProps({ renderRow });
     render(<DataTableTable<Row> {...props} />);
-    expect(screen.getByTestId('custom-row-1')).toHaveTextContent('Custom: Ada (index 0)');
-    expect(screen.getByTestId('custom-row-2')).toHaveTextContent('Custom: Bob (index 1)');
+    expect(screen.getByTestId('custom-row-1')).toHaveTextContent(
+      'Custom: Ada (index 0)',
+    );
+    expect(screen.getByTestId('custom-row-2')).toHaveTextContent(
+      'Custom: Bob (index 1)',
+    );
     expect(renderRow).toHaveBeenCalledWith(
       expect.objectContaining({ id: '1', name: 'Ada' }),
       0,
@@ -462,15 +554,25 @@ describe('DataTableTable', () => {
 
   it('passes value and row to column render function', () => {
     const renderFn = vi.fn((value: unknown, row: Row) => (
-      <span data-testid="cell-with-row">{row.name}-{String(value)}</span>
+      <span data-testid="cell-with-row">
+        {row.name}-{String(value)}
+      </span>
     ));
     const props = defaultProps({
       columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const, render: renderFn },
+        {
+          id: 'name',
+          header: 'Name',
+          accessor: 'name' as const,
+          render: renderFn,
+        },
       ],
     });
     render(<DataTableTable<Row> {...props} />);
-    expect(renderFn).toHaveBeenCalledWith('Ada', expect.objectContaining({ id: '1', name: 'Ada' }));
+    expect(renderFn).toHaveBeenCalledWith(
+      'Ada',
+      expect.objectContaining({ id: '1', name: 'Ada' }),
+    );
     const cells = screen.getAllByTestId('cell-with-row');
     expect(cells[0]).toHaveTextContent('Ada-Ada');
     expect(cells[1]).toHaveTextContent('Bob-Bob');
@@ -498,7 +600,9 @@ describe('DataTableTable', () => {
       tCommon: vi.fn((key: string) => (key === 'actions' ? 'Actions' : key)),
     });
     render(<DataTableTable<Row> {...props} />);
-    expect(screen.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('columnheader', { name: 'Actions' }),
+    ).toBeInTheDocument();
   });
 
   it('renders ActionsCell in each row when hasRowActions is true', () => {
@@ -521,7 +625,9 @@ describe('DataTableTable', () => {
     });
     render(<DataTableTable<Row> {...props} />);
     await user.click(screen.getAllByRole('button', { name: 'Open' })[0]);
-    expect(onClick).toHaveBeenCalledWith(expect.objectContaining({ id: '1', name: 'Ada' }));
+    expect(onClick).toHaveBeenCalledWith(
+      expect.objectContaining({ id: '1', name: 'Ada' }),
+    );
   });
 
   /* ------------------------------------------------------------------
@@ -534,7 +640,9 @@ describe('DataTableTable', () => {
       skeletonRows: 3,
     });
     render(<DataTableTable<Row> {...props} />);
-    const skeletonRows = document.querySelectorAll('[data-testid^="skeleton-append-"]');
+    const skeletonRows = document.querySelectorAll(
+      '[data-testid^="skeleton-append-"]',
+    );
     expect(skeletonRows).toHaveLength(3);
   });
 
@@ -546,7 +654,9 @@ describe('DataTableTable', () => {
       skeletonRows: 2,
     });
     render(<DataTableTable<Row> {...props} />);
-    const skeletonRows = document.querySelectorAll('[data-testid^="skeleton-append-"]');
+    const skeletonRows = document.querySelectorAll(
+      '[data-testid^="skeleton-append-"]',
+    );
     expect(skeletonRows).toHaveLength(2);
     const firstRow = skeletonRows[0];
     const cells = firstRow?.querySelectorAll('td');
@@ -556,7 +666,9 @@ describe('DataTableTable', () => {
   it('does not render LoadingMoreRows when loadingMore is false', () => {
     const props = defaultProps({ loadingMore: false });
     render(<DataTableTable<Row> {...props} />);
-    expect(document.querySelectorAll('[data-testid^="skeleton-append-"]')).toHaveLength(0);
+    expect(
+      document.querySelectorAll('[data-testid^="skeleton-append-"]'),
+    ).toHaveLength(0);
   });
 
   /* ------------------------------------------------------------------
@@ -580,9 +692,7 @@ describe('DataTableTable', () => {
 
   it('treats column as sortable when meta is undefined (default)', () => {
     const props = defaultProps({
-      columns: [
-        { id: 'name', header: 'Name', accessor: 'name' as const },
-      ],
+      columns: [{ id: 'name', header: 'Name', accessor: 'name' as const }],
     });
     render(<DataTableTable<Row> {...props} />);
     const nameHeader = screen.getByRole('button', { name: /name/i });
