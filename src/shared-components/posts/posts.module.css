@@ -16,6 +16,8 @@
 
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
     var(--border-shadow-xs)
     color-mix(in srgb, var(--color-black) 30%, transparent);
   background-color: var(--color-gray-50);
