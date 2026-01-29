@@ -1,14 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -555,7 +548,10 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+let user: ReturnType<typeof userEvent.setup>;
+
 beforeEach(() => {
+  user = userEvent.setup();
   vi.spyOn(Storage.prototype, 'setItem');
 });
 
@@ -575,7 +571,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchInput/i);
     expect(searchBar).toBeInTheDocument();
-    await userEvent.type(searchBar, 'Dummy{enter}');
+    await user.type(searchBar, 'Dummy{enter}');
   });
 
   test('Testing search functionality by Btn click', async () => {
@@ -586,8 +582,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await user.type(searchBar, 'Dummy');
+    await user.click(searchBtn);
   });
 
   test('Testing search functionality by with empty search bar', async () => {
@@ -598,8 +594,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.clear(searchBar);
-    fireEvent.click(searchBtn);
+    await user.clear(searchBar);
+    await user.click(searchBtn);
   });
 
   test('Testing debounced search functionality', async () => {
@@ -612,7 +608,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(searchBar).toBeInTheDocument();
 
     // Type multiple characters quickly to test debouncing
-    await userEvent.type(searchBar, 'Dum');
+    await user.type(searchBar, 'Dum');
 
     // Wait for debounce delay (300ms)
     await act(async () => {
@@ -630,8 +626,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(searchBar).toBeInTheDocument();
 
     // Type and press Enter to test immediate search
-    await userEvent.type(searchBar, 'Dogs');
-    fireEvent.keyUp(searchBar, { key: 'Enter', code: 'Enter' });
+    await user.type(searchBar, 'Dogs');
+    await user.keyboard('{Enter}');
   });
 
   test('Testing pagination component presence', async () => {
@@ -689,7 +685,10 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
-    fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+    const combobox = screen.getByRole('combobox');
+    await user.click(combobox);
+    const option10 = await screen.findByRole('option', { name: '10' });
+    await user.click(option10);
 
     await wait();
   });
@@ -707,7 +706,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Perform search
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'Dog');
+    await user.type(searchInput, 'Dog');
 
     // Wait for debounce
     await act(async () => {
@@ -754,7 +753,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    fireEvent.scroll(window, { target: { scrollY: 1000 } });
+    Object.defineProperty(window, 'scrollY', { value: 1000, writable: true });
+    window.dispatchEvent(new Event('scroll'));
   });
 });
 
@@ -771,27 +771,19 @@ describe('Organisations Page testing as Admin', () => {
 
     const sortToggle = screen.getByTestId('sortOrgs');
 
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
+    await user.click(sortToggle);
 
     const latestOption = screen.getByTestId('Latest');
 
-    await act(async () => {
-      fireEvent.click(latestOption);
-    });
+    await user.click(latestOption);
 
     expect(sortDropdown).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
+    await user.click(sortToggle);
 
     const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
 
-    await act(async () => {
-      fireEvent.click(oldestOption);
-    });
+    await user.click(oldestOption);
 
     expect(sortDropdown).toBeInTheDocument();
   });
@@ -916,9 +908,12 @@ describe('Advanced Component Functionality Tests', () => {
     const paginationElement = screen.getByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
-    // Test pagination with rowsPerPage = 0 edge case
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
-    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    // Test pagination with the "All" rows-per-page option (covers edge case handling)
+    const rowsPerPageSelect = screen.getByLabelText(/rows per page/i);
+    await user.selectOptions(
+      rowsPerPageSelect,
+      String(Number.MAX_SAFE_INTEGER),
+    );
     await wait();
   });
 
@@ -942,7 +937,7 @@ describe('Advanced Component Functionality Tests', () => {
       .find((btn) => btn.getAttribute('aria-label')?.includes('next'));
 
     if (nextPageButton && !nextPageButton.hasAttribute('disabled')) {
-      fireEvent.click(nextPageButton);
+      await user.click(nextPageButton);
       await wait(200);
     }
   });
@@ -960,11 +955,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
-    await userEvent.click(sortButton);
+    await user.click(sortButton);
 
     // Select Latest option to verify descending date sort functionality
     const latestOption = screen.getByTestId('Latest');
-    await userEvent.click(latestOption);
+    await user.click(latestOption);
 
     await wait(200);
 
@@ -985,11 +980,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
-    await userEvent.click(sortButton);
+    await user.click(sortButton);
 
     // Select Earliest option to verify ascending date sort functionality
     const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
 
     await wait(200);
 
@@ -1021,40 +1016,31 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
@@ -1082,7 +1068,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open the create organization modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
@@ -1114,40 +1100,31 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    await user.click(screen.getByTestId('createOrganizationBtn'));
 
     // Fill form
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form to verify organization creation flow
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after successful submission
     await waitFor(() => {
@@ -1181,38 +1158,29 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open and fill the form
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
-    await userEvent.type(
+    await user.click(screen.getByTestId('createOrganizationBtn'));
+    await user.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Description',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 Test St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
@@ -1276,42 +1244,30 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await user.click(createOrgBtn);
 
     await wait();
 
     // Fill form
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationName'),
-      'Test Org',
-    );
-    await userEvent.type(
+    await user.type(screen.getByTestId('modalOrganizationName'), 'Test Org');
+    await user.type(
       screen.getByTestId('modalOrganizationDescription'),
       'Test Desc',
     );
-    await userEvent.type(
+    await user.type(
       screen.getByTestId('modalOrganizationAddressLine1'),
       '123 St',
     );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationCity'),
-      'Test City',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationState'),
-      'Test State',
-    );
-    await userEvent.type(
-      screen.getByTestId('modalOrganizationPostalCode'),
-      '12345',
-    );
-    await userEvent.selectOptions(
+    await user.type(screen.getByTestId('modalOrganizationCity'), 'Test City');
+    await user.type(screen.getByTestId('modalOrganizationState'), 'Test State');
+    await user.type(screen.getByTestId('modalOrganizationPostalCode'), '12345');
+    await user.selectOptions(
       screen.getByTestId('modalOrganizationCountryCode'),
       'Afghanistan',
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await user.click(screen.getByTestId('submitOrganizationForm'));
 
     await wait();
   });
@@ -1351,11 +1307,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Type search term
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'NonexistentOrg');
+    await user.type(searchInput, 'NonexistentOrg');
 
     // Click search button
     const searchBtn = screen.getByTestId('searchBtn');
-    fireEvent.click(searchBtn);
+    await user.click(searchBtn);
 
     await wait();
 
@@ -1389,11 +1345,11 @@ describe('Advanced Component Functionality Tests', () => {
     expect(sortDropdown).toBeInTheDocument();
 
     // Click to open dropdown
-    await userEvent.click(sortDropdown);
+    await user.click(sortDropdown);
 
     // Select Earliest option - use the exact test ID from the component
     const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
+    await user.click(earliestOption);
 
     await wait();
 
@@ -1485,7 +1441,7 @@ describe('Advanced Component Functionality Tests', () => {
     if (selects.length > 0) {
       // Trigger the select to ensure the handler is tested
       const paginationSelect = selects[0];
-      fireEvent.mouseDown(paginationSelect);
+      await user.click(paginationSelect);
       await wait(100);
     }
 
@@ -1677,7 +1633,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (nextButton && !nextButton.hasAttribute('disabled')) {
-      fireEvent.click(nextButton);
+      await user.click(nextButton);
       await wait(200);
     }
 
@@ -1687,7 +1643,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (prevButton && !prevButton.hasAttribute('disabled')) {
-      fireEvent.click(prevButton);
+      await user.click(prevButton);
       await wait(200);
     }
   });

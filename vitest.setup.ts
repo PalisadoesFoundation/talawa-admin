@@ -37,12 +37,46 @@ beforeAll(() => {
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  if (typeof window !== 'undefined') {
+    window.localStorage?.clear?.();
+  }
 });
 
 // Global mocks for URL API (needed for file upload tests)
 // TODO: Remove once test isolation is properly fixed in individual test files
 global.URL.createObjectURL = vi.fn(() => 'mock-object-url');
 global.URL.revokeObjectURL = vi.fn();
+
+// Mock localStorage for jsdom tests (prevents undefined setItem/getItem)
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: vi.fn((key: string) => store[key] ?? null),
+    setItem: vi.fn((key: string, value: string) => {
+      store[key] = value.toString();
+    }),
+    removeItem: vi.fn((key: string) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+    key: vi.fn((index: number) => {
+      const keys = Object.keys(store);
+      return keys[index] ?? null;
+    }),
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+})();
+
+if (typeof window !== 'undefined') {
+  Object.defineProperty(window, 'localStorage', {
+    value: localStorageMock,
+    writable: true,
+  });
+}
 
 // Mock HTMLFormElement.prototype.requestSubmit for jsdom
 // TODO: Remove once jsdom adds native support

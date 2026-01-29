@@ -1,7 +1,7 @@
 /* global HTMLSelectElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -339,11 +339,13 @@ const MOCKS = [
 ];
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new window.Event('resize'));
 };
 
 const TEST_USER_NAME = 'Noble Mittal';
+let user: ReturnType<typeof userEvent.setup>;
 beforeEach(() => {
+  user = userEvent.setup();
   setItem('name', TEST_USER_NAME);
   setItem('userId', TEST_USER_ID);
 });
@@ -390,20 +392,20 @@ test('Search works properly', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  await userEvent.type(searchInput, '2');
+  await user.type(searchInput, '2');
 
   const searchBtn = screen.getByTestId('searchBtn');
-  await userEvent.click(searchBtn);
+  await user.click(searchBtn);
 
   await wait(300);
 
-  await userEvent.clear(searchInput);
-  await userEvent.click(searchBtn);
+  await user.clear(searchInput);
+  await user.click(searchBtn);
 
   await wait(300);
 
-  await userEvent.type(searchInput, '2');
-  await userEvent.keyboard('{Enter}');
+  await user.type(searchInput, '2');
+  await user.keyboard('{Enter}');
 
   await wait(300);
 
@@ -428,9 +430,9 @@ test('Mode is changed to joined organizations', async () => {
 
   await wait();
 
-  await userEvent.click(screen.getByTestId('modeChangeBtn'));
+  await user.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn1'));
+  await user.click(screen.getByTestId('modeBtn1'));
   await wait();
 
   expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
@@ -451,9 +453,9 @@ test('Mode is changed to created organizations', async () => {
 
   await wait();
 
-  await userEvent.click(screen.getByTestId('modeChangeBtn'));
+  await user.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn2'));
+  await user.click(screen.getByTestId('modeBtn2'));
   await wait();
 
   expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
@@ -679,7 +681,7 @@ test('should update rowsPerPage when rows per page selector is changed', async (
   ) as HTMLSelectElement;
   expect(rowsPerPageSelect.value).toBe('5');
 
-  fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+  await user.selectOptions(rowsPerPageSelect, '10');
 
   expect(rowsPerPageSelect.value).toBe('10');
 
@@ -769,11 +771,11 @@ test('setPage updates page state correctly when pagination controls are used', a
   const nextButton = screen.getByTestId('next-page');
 
   await act(async () => {
-    fireEvent.click(nextButton);
+    await user.click(nextButton);
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -786,11 +788,11 @@ test('setPage updates page state correctly when pagination controls are used', a
   const prevButton = screen.getByTestId('prev-page');
 
   await act(async () => {
-    fireEvent.click(prevButton);
+    await user.click(prevButton);
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
 
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new window.Event('resize'));
 
   await waitFor(
     () => {
@@ -1002,9 +1004,9 @@ test('should set membershipRequestStatus to "created" for created organizations'
   });
 
   const modeBtn = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeBtn);
+  await user.click(modeBtn);
   const createdModeBtn = screen.getByTestId('modeBtn2');
-  fireEvent.click(createdModeBtn);
+  await user.click(createdModeBtn);
 
   await waitFor(() => {
     const orgCard = screen.getByTestId('organization-card');
@@ -1102,10 +1104,10 @@ test('correctly map joined organizations data when mode is 1', async () => {
   });
 
   const modeBtn = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeBtn);
+  await user.click(modeBtn);
 
   const joinedModeBtn = screen.getByTestId('modeBtn1');
-  fireEvent.click(joinedModeBtn);
+  await user.click(joinedModeBtn);
 
   await waitFor(() => {
     const cards = screen.getAllByTestId('organization-card');
@@ -1218,9 +1220,8 @@ test('should search organizations when pressing Enter key', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  fireEvent.change(searchInput, { target: { value: 'Search Term' } });
-
-  fireEvent.keyUp(searchInput, { key: 'Enter' });
+  await user.type(searchInput, 'Search Term');
+  await user.keyboard('{Enter}');
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -1319,10 +1320,10 @@ test('should search organizations when clicking search button', async () => {
   });
 
   const searchInput = screen.getByTestId('searchInput');
-  fireEvent.change(searchInput, { target: { value: 'Button Search' } });
+  await user.type(searchInput, 'Button Search');
 
   const searchButton = screen.getByTestId('searchBtn');
-  fireEvent.click(searchButton);
+  await user.click(searchButton);
 
   await waitFor(() => {
     const orgCards = screen.getAllByTestId('organization-card');
@@ -1396,50 +1397,42 @@ test('doSearch function should call appropriate refetch based on mode', async ()
 
   const searchInput = screen.getByTestId('searchInput');
 
-  await act(async () => {
-    fireEvent.change(searchInput, { target: { value: searchValue } });
-    fireEvent.keyUp(searchInput, { key: 'Enter' });
-  });
+  await user.clear(searchInput);
+  await user.type(searchInput, searchValue);
+  await user.keyboard('{Enter}');
+
   await wait(300);
 
   const modeChangeBtn = screen.getByTestId('modeChangeBtn');
 
-  await act(async () => {
-    userEvent.click(modeChangeBtn);
-    await wait(100);
-  });
+  await user.click(modeChangeBtn);
+  await wait(100);
 
   const modeBtn1 = screen.getByTestId('modeBtn1');
   expect(modeBtn1).toBeInTheDocument();
 
-  await act(async () => {
-    userEvent.click(modeBtn1);
-    await wait(100);
-  });
+  await user.click(modeBtn1);
+  await wait(100);
 
-  await act(async () => {
-    fireEvent.change(searchInput, { target: { value: searchValue } });
-    fireEvent.keyUp(searchInput, { key: 'Enter' });
-  });
+  await user.clear(searchInput);
+  await user.type(searchInput, searchValue);
+  await user.keyboard('{Enter}');
+
   await wait(300);
 
-  await act(async () => {
-    userEvent.click(modeChangeBtn);
-    await wait(100);
-  });
+  await user.click(modeChangeBtn);
+  await wait(100);
 
   const modeBtn2 = screen.getByTestId('modeBtn2');
   expect(modeBtn2).toBeInTheDocument();
 
-  await act(async () => {
-    userEvent.click(modeBtn2);
-    await wait(100);
-  });
+  await user.click(modeBtn2);
+  await wait(100);
 
-  await act(async () => {
-    fireEvent.change(searchInput, { target: { value: searchValue } });
-    fireEvent.keyUp(searchInput, { key: 'Enter' });
-  });
+  await user.clear(searchInput);
+  await user.type(searchInput, searchValue);
+  await user.keyboard('{Enter}');
+
   await wait(300);
 
   expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
@@ -1741,7 +1734,10 @@ test('should handle rowsPerPage <= 0 to show all organizations', async () => {
   ) as HTMLSelectElement;
 
   // Simulate setting rowsPerPage to 0 or negative to trigger the else branch
-  fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+  const option = document.createElement('option');
+  option.value = '0';
+  rowsPerPageSelect.appendChild(option);
+  await user.selectOptions(rowsPerPageSelect, '0');
 
   await waitFor(() => {
     // All organizations should be displayed when rowsPerPage <= 0
