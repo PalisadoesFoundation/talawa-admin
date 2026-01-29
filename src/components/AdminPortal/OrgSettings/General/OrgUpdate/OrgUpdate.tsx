@@ -3,7 +3,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -316,17 +315,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
           <div className="w-full d-flex justify-content-between mt-4 ">
             <Row>
-              <Col sm={6}>
-                <Button
-                  variant="outline"
-                  className={styles.resetChangesBtn}
-                  value="resetchanges"
-                  // onClick={onResetChangesClicked}
-                >
-                  <SyncIcon className={styles.syncIconStyle} />
-                  {tCommon('resetChanges')}
-                </Button>
-              </Col>
+              <Col sm={6}></Col>
               <Col sm={6} className="d-flex justify-content-end">
                 <Button
                   className={styles.saveChangesBtn}
