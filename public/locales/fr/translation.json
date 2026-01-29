@@ -1249,7 +1249,9 @@
     "nameDescriptionRequired": "Le nom et la description sont requis",
     "updateFailed": "Échec de la mise à jour de l'organisation",
     "errorLoadingOrganizationData": "Erreur lors du chargement des données de l’organisation",
-    "enterOrganizationLocation": "Saisir l’emplacement de l’organisation"
+    "enterOrganizationLocation": "Saisir l’emplacement de l’organisation",
+    "imageSizeTooLarge": "La taille de l’image est trop grande. Veuillez télécharger un fichier plus petit.",
+    "invalidImageType": "Type d’image invalide. Veuillez télécharger un fichier image valide."
   },
   "public": {
     "invitation": {

@@ -1293,7 +1293,9 @@
     "nameDescriptionRequired": "Name and description are required",
     "updateFailed": "Failed to update organization",
     "errorLoadingOrganizationData": "Error loading organization data",
-    "enterOrganizationLocation": "Enter Organization location"
+    "enterOrganizationLocation": "Enter Organization location",
+    "imageSizeTooLarge": "Image size is too large. Please upload a smaller file.",
+    "invalidImageType": "Invalid image type. Please upload a valid image file."
   },
   "public": {
     "invitation": {
