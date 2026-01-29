@@ -746,8 +746,8 @@ describe('DataTableTable (table rendering functionality)', () => {
       );
 
       const table = screen.getByTestId('datatable');
+      expect(table).toBeInTheDocument();
       // ariaLabel is rendered as caption, not aria-label on table
-      // But we can check the caption exists
       expect(screen.getByText('User data table')).toBeInTheDocument();
     });
 
