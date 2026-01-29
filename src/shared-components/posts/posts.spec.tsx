@@ -1496,6 +1496,12 @@ describe('FetchMore Success Coverage', () => {
 describe('UserId Fallback Logic', () => {
   const orgId = '123';
 
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
   afterEach(() => {
     // Reset localStorage mock to default behavior
     localStorageMocks.getItem.mockReturnValue('user-123');
