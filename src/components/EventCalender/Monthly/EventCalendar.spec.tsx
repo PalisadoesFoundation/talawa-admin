@@ -2013,8 +2013,6 @@ describe('Calendar', () => {
   });
 
   describe('Info Cards (Holidays and Events Legend)', () => {
-    const onMonthChange = vi.fn();
-
     it('should render holidays section with aria-label', () => {
       const originalValue = mockHolidays.value;
       mockHolidays.value = [

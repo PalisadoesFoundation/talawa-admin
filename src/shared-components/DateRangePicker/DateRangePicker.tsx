@@ -152,6 +152,10 @@ export default function DateRangePicker({
     [disabled, onChange],
   );
 
+  const startInputId = dataTestId + '-start-input';
+  const endInputId = dataTestId + '-end-input';
+  const helperId = dataTestId + '-helper';
+
   return (
     <div
       className={`${styles.root} ${className ?? ''}`}
@@ -160,17 +164,14 @@ export default function DateRangePicker({
       <div role="group">
         <Row className={styles.controlsRow}>
           <Col xs={12} sm={6}>
-            <label
-              className={styles.pickerLabel}
-              htmlFor={`${dataTestId}-start-input`}
-            >
+            <label className={styles.pickerLabel} htmlFor={startInputId}>
               {t('startDate')}
             </label>
             <DatePicker
               value={startDayjs}
               onChange={handleStartChange}
               disabled={disabled}
-              data-testid={`${dataTestId}-start-input`}
+              data-testid={startInputId}
               slotProps={{
                 textField: {
                   'aria-label': t('startDate'),
@@ -179,10 +180,7 @@ export default function DateRangePicker({
             />
           </Col>
           <Col xs={12} sm={6}>
-            <label
-              className={styles.pickerLabel}
-              htmlFor={`${dataTestId}-end-input`}
-            >
+            <label className={styles.pickerLabel} htmlFor={endInputId}>
               {t('endDate')}
             </label>
             <DatePicker
@@ -192,7 +190,7 @@ export default function DateRangePicker({
               minDate={
                 normalizedStartDate ? dayjs(normalizedStartDate) : undefined
               }
-              data-testid={`${dataTestId}-end-input`}
+              data-testid={endInputId}
               slotProps={{
                 textField: {
                   'aria-label': t('endDate'),
@@ -228,8 +226,8 @@ export default function DateRangePicker({
 
         {helperText && (
           <small
-            className={`text-muted ${error ? 'text-danger' : ''}`}
-            data-testid={`${dataTestId}-helper`}
+            className={`${styles.helperText} ${error ? styles.helperTextError : ''}`}
+            data-testid={helperId}
           >
             {helperText}
           </small>
