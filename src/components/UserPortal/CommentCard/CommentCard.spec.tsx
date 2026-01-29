@@ -989,4 +989,63 @@ describe('Testing CommentCard Component [User Portal]', () => {
     // Verify the like count didn't change because id was null
     expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
   });
+
+  it('should close edit modal when close button is clicked', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open the edit modal
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('update-comment-button'));
+
+    // Verify the modal is open by checking for the edit input
+    const editInput = screen.getByTestId('edit-comment-input');
+    expect(editInput).toBeInTheDocument();
+
+    // Click the close button
+    const closeButton = screen.getByTestId('edit-comment-modal-close-btn');
+    await userEvent.click(closeButton);
+
+    // Verify the modal is closed - edit input should no longer be in the document
+    await wait();
+    expect(screen.queryByTestId('edit-comment-input')).not.toBeInTheDocument();
+  });
+
+  it('should have correct aria-label on edit input when modal is open', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open the edit modal
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('update-comment-button'));
+
+    // Get the edit input element
+    const editInput = screen.getByTestId('edit-comment-input');
+    expect(editInput).toBeInTheDocument();
+
+    // Verify the aria-label attribute is set correctly
+    expect(editInput).toHaveAttribute('aria-label', 'Edit comment');
+  });
 });
