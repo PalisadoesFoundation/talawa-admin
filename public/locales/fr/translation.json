@@ -801,7 +801,12 @@
     "event": "Événement",
     "attachmentPreview": "Aperçu de la pièce jointe",
     "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
-    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
+    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour",
+    "deleteAttachment": "Supprimer la pièce jointe",
+    "fileUploadError": "Erreur lors du téléchargement du fichier",
+    "selectCategory": "Veuillez sélectionner une catégorie de l'ordre du jour",
+    "tooManyAttachments": "Maximum 10 pièces jointes autorisées",
+    "invalidFileType": "Type de fichier invalide. Seules les images et vidéos sont autorisées."
   },
   "eventListCard": {
     "dogsCare": "Soins des Chiens",
