@@ -11,7 +11,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Register from './Register';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
 import { vi } from 'vitest';
 
 /**
@@ -84,15 +84,17 @@ const ERROR_MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 // Mock NotificationToast helper
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-    dismiss: vi.fn(),
-    promise: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+  promise: vi.fn(),
+}));
+
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 describe('Testing Register Component [User Portal]', () => {
@@ -209,7 +211,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
     );
   });
@@ -232,7 +234,7 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
     );
   });
@@ -259,7 +261,7 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
     );
   });
@@ -290,7 +292,7 @@ describe('Testing Register Component [User Portal]', () => {
     );
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'Please enter valid details.',
     );
   });
@@ -325,7 +327,7 @@ describe('Testing Register Component [User Portal]', () => {
     );
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
     );
   });
@@ -370,7 +372,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    expect(NotificationToast.success).toHaveBeenCalledWith(
+    expect(mockNotificationToast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
     );
     expect(screen.getByTestId('firstNameInput')).toHaveValue('');
@@ -410,7 +412,7 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Assert that toast.error is called with the error message
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'GraphQL error occurred',
     );
   });
