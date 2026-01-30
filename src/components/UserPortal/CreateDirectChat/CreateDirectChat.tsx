@@ -50,27 +50,30 @@ import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
-import type { NewChatType } from 'types/UserPortal/Chat/interface';
+import type {
+  NewChatType,
+  InterfaceOrganizationMember,
+  InterfaceCreateDirectChatProps,
+} from 'types/UserPortal/Chat/interface';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-interface InterfaceOrganizationMember {
-  id: string;
-  name: string;
-  avatarURL?: string;
-  role: string;
-}
-interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  chats: NewChatType[];
-}
-
 const { getItem } = useLocalStorage();
 
+/**
+ * Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
+ *
+ * @param id - The ID of the user to chat with.
+ * @param userName - The name of the user to chat with.
+ * @param chats - Array of existing chats to check for duplicates.
+ * @param t - i18n translation function.
+ * @param createChat - Mutation function to create a new chat.
+ * @param createChatMembership - Mutation function to add members to the chat.
+ * @param navigate - Function to navigate to the chat page.
+ * @param toggleCreateDirectChatModal - Function to close the modal.
+ * @param organizationId - The ID of the current organization.
+ * @param chatsListRefetch - Function to refetch the list of chats.
+ */
 export const handleCreateDirectChat = async (
   id: string,
   userName: string,

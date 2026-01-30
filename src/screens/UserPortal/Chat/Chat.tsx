@@ -42,18 +42,15 @@ import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/Crea
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
 // import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-import type { NewChatType } from 'types/UserPortal/Chat/interface';
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
+import type {
+  NewChatType,
+  InterfaceContactCardProps,
+} from 'types/UserPortal/Chat/interface';
 
+/**
+ * Chat component that lists all chats and displays the selected chat room.
+ * Supports filtering by All, Unread, and Group chats.
+ */
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
