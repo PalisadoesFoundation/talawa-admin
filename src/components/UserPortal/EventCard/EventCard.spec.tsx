@@ -228,6 +228,43 @@ describe('Testing Event Card In User portal', () => {
     expect(inviteOnlyButton).toBeInTheDocument();
     expect(inviteOnlyButton.closest('button')).toBeDisabled();
   });
+
+  it('should not show success toast when register mutation returns no data', async () => {
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
+    setItem('userId', '456');
+
+    const nullDataMocks = [
+      {
+        request: {
+          query: REGISTER_EVENT,
+          variables: { id: '123' },
+        },
+        result: { data: null },
+      },
+    ];
+
+    const nullDataLink = new StaticMockLink(nullDataMocks, true);
+
+    render(
+      <MockedProvider link={nullDataLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await userEvent.click(screen.getByText('Register'));
+
+    // Wait for mutation to complete
+    await waitFor(() => {
+      // Toast should NOT have been called since data is null
+      expect(toastSuccessSpy).not.toHaveBeenCalled();
+    });
+  });
 });
 
 describe('Event card when start and end time are not given', () => {
