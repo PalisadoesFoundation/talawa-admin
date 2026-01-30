@@ -341,11 +341,15 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           /* Plugin Details Content */
           <>
             {/* Tabs */}
-            <div className={styles.tabsContainer}>
+            <div className={styles.tabsContainer} role="tablist">
               {TABS.map((tName) => (
                 <button
                   key={tName}
+                  id={`tab-${tName}`}
                   type="button"
+                  role="tab"
+                  aria-selected={tab === tName}
+                  aria-controls={`panel-${tName}`}
                   onClick={() => setTab(tName)}
                   className={tab === tName ? styles.tabActive : styles.tab}
                 >
@@ -356,103 +360,127 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
 
             {/* Tab Content */}
             <div className={styles.tabContent}>
-              {tab === 'details' && (
-                <>
-                  <div className={styles.sectionTitle}>
-                    {tCommon('description')}
-                  </div>
-                  <div className={styles.description}>
-                    {plugin?.description}
-                  </div>
+              <div
+                role="tabpanel"
+                id="panel-details"
+                aria-labelledby="tab-details"
+                hidden={tab !== 'details'}
+              >
+                {tab === 'details' && (
+                  <>
+                    <div className={styles.sectionTitle}>
+                      {tCommon('description')}
+                    </div>
+                    <div className={styles.description}>
+                      {plugin?.description}
+                    </div>
 
-                  {details?.screenshots && details.screenshots.length > 0 && (
-                    <>
-                      <div className={styles.sectionTitle}>
-                        {t('screenshots')}
-                      </div>
-                      <div className={styles.screenshotsContainer}>
-                        {details.screenshots.map((src, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            className={styles.screenshotThumbnailButton}
-                            onClick={() =>
-                              openScreenshotViewer(details.screenshots, idx)
-                            }
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter' || e.key === ' ') {
-                                e.preventDefault();
-                                openScreenshotViewer(details.screenshots, idx);
+                    {details?.screenshots && details.screenshots.length > 0 && (
+                      <>
+                        <div className={styles.sectionTitle}>
+                          {t('screenshots')}
+                        </div>
+                        <div className={styles.screenshotsContainer}>
+                          {details.screenshots.map((src, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              className={styles.screenshotThumbnailButton}
+                              onClick={() =>
+                                openScreenshotViewer(details.screenshots, idx)
                               }
-                            }}
-                            title={t('clickToViewFullSize')}
-                          >
-                            <img
-                              src={src}
-                              alt={`${t('ss')} ${idx + 1}`}
-                              className={styles.screenshotThumbnail}
-                            />
-                          </button>
-                        ))}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  openScreenshotViewer(
+                                    details.screenshots,
+                                    idx,
+                                  );
+                                }
+                              }}
+                              title={t('clickToViewFullSize')}
+                            >
+                              <img
+                                src={src}
+                                alt={`${t('ss')} ${idx + 1}`}
+                                className={styles.screenshotThumbnail}
+                              />
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    {fetching && (
+                      <div className={styles.loadingText}>
+                        {t('loadingDetails')}
                       </div>
-                    </>
-                  )}
-                  {fetching && (
-                    <div className={styles.loadingText}>
-                      {t('loadingDetails')}
+                    )}
+                  </>
+                )}
+              </div>
+              <div
+                role="tabpanel"
+                id="panel-features"
+                aria-labelledby="tab-features"
+                hidden={tab !== 'features'}
+              >
+                {tab === 'features' && (
+                  <>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('features')}
                     </div>
-                  )}
-                </>
-              )}
-              {tab === 'features' && (
-                <>
-                  <div className={styles.sectionTitleLarge}>
-                    {t('features')}
-                  </div>
-                  {features && features.length > 0 ? (
-                    <ul className={styles.featuresList}>
-                      {features.map((f, i) => (
-                        <li key={i} className={styles.featuresListItem}>
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className={styles.noFeaturesMessage}>
-                      {t('noFeaturesInfoAvailableForThisPlugin')}
-                    </div>
-                  )}
-                  {fetching && (
-                    <div className={styles.loadingText}>
-                      {t('loadingFeatures')}
-                    </div>
-                  )}
-                </>
-              )}
-              {tab === 'changelog' && (
-                <>
-                  <div className={styles.sectionTitleLarge}>
-                    {t('changelog')}
-                  </div>
-                  {changelog.map((entry, idx) => (
-                    <div key={idx} className={styles.changelogEntry}>
-                      <div className={styles.changelogVersion}>
-                        {t('v')} {entry.version} - {entry.date}
-                      </div>
-                      <ul className={styles.changelogList}>
-                        {entry.changes.map((c, i) => (
-                          <li key={i}>{c}</li>
+                    {features && features.length > 0 ? (
+                      <ul className={styles.featuresList}>
+                        {features.map((f, i) => (
+                          <li key={i} className={styles.featuresListItem}>
+                            {f}
+                          </li>
                         ))}
                       </ul>
+                    ) : (
+                      <div className={styles.noFeaturesMessage}>
+                        {t('noFeaturesInfoAvailableForThisPlugin')}
+                      </div>
+                    )}
+                    {fetching && (
+                      <div className={styles.loadingText}>
+                        {t('loadingFeatures')}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+              <div
+                role="tabpanel"
+                id="panel-changelog"
+                aria-labelledby="tab-changelog"
+                hidden={tab !== 'changelog'}
+              >
+                {tab === 'changelog' && (
+                  <>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('changelog')}
                     </div>
-                  ))}
-                  {fetching && (
-                    <div className={styles.loadingText}>
-                      {t('loadingChangelog')}
-                    </div>
-                  )}
-                </>
-              )}
+                    {changelog.map((entry, idx) => (
+                      <div key={idx} className={styles.changelogEntry}>
+                        <div className={styles.changelogVersion}>
+                          {t('v')} {entry.version} - {entry.date}
+                        </div>
+                        <ul className={styles.changelogList}>
+                          {entry.changes.map((c, i) => (
+                            <li key={i}>{c}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                    {fetching && (
+                      <div className={styles.loadingText}>
+                        {t('loadingChangelog')}
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           </>
         )}

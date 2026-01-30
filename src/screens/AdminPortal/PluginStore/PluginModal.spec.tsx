@@ -203,7 +203,7 @@ describe('PluginModal', () => {
       expect(screen.getByText('Feature 2')).toBeInTheDocument();
 
       // Changelog tab
-      await user.click(screen.getByRole('button', { name: 'Changelog' }));
+      await user.click(screen.getByRole('tab', { name: 'Changelog' }));
       expect(screen.getByText('Fixed bug X')).toBeInTheDocument();
       expect(screen.getByText('Added feature Y')).toBeInTheDocument();
     });
@@ -614,10 +614,10 @@ describe('PluginModal', () => {
         expect(screen.getByText('v1.2.3')).toBeInTheDocument();
       });
 
-      await user.click(screen.getByRole('button', { name: 'Changelog' }));
+      await user.click(screen.getByRole('tab', { name: 'Changelog' }));
       // Should not crash, changelog tab should be active
       expect(
-        screen.getByRole('button', { name: 'Changelog' }),
+        screen.getByRole('tab', { name: 'Changelog' }),
       ).toBeInTheDocument();
     });
 
@@ -640,6 +640,144 @@ describe('PluginModal', () => {
 
       // Viewer should not open
       expect(screen.queryByText(/Back to Details/)).not.toBeInTheDocument();
+    });
+
+    it('opens viewer via Enter key on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(mockDetails);
+      const user = userEvent.setup();
+      renderModal();
+
+      await waitFor(() => {
+        expect(screen.getByText('v1.2.3')).toBeInTheDocument();
+      });
+
+      const thumbnails = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      thumbnails[0].focus();
+      await user.keyboard('{Enter}');
+
+      // Viewer should open
+      expect(screen.getByText(/Back to Details/)).toBeInTheDocument();
+    });
+
+    it('opens viewer via Space key on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(mockDetails);
+      const user = userEvent.setup();
+      renderModal();
+
+      await waitFor(() => {
+        expect(screen.getByText('v1.2.3')).toBeInTheDocument();
+      });
+
+      const thumbnails = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      thumbnails[0].focus();
+      await user.keyboard(' ');
+
+      // Viewer should open
+      expect(screen.getByText(/Back to Details/)).toBeInTheDocument();
+    });
+
+    it('shows loading text while fetching features', async () => {
+      let resolveDetails: ((value: IPluginDetails) => void) | null = null;
+      const detailsPromise = new Promise<IPluginDetails>((resolve) => {
+        resolveDetails = resolve;
+      });
+      (
+        AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
+      ).mockReturnValue(detailsPromise);
+
+      const user = userEvent.setup();
+      renderModal();
+
+      // Switch to features tab while still fetching
+      await user.click(screen.getByText(i18nForTest.t('pluginStore.features')));
+
+      // Should show loading text
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingFeatures')),
+      ).toBeInTheDocument();
+
+      // Resolve the promise
+      await act(async () => {
+        if (resolveDetails) {
+          resolveDetails(mockDetails);
+        }
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText(i18nForTest.t('pluginStore.loadingFeatures')),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('shows loading text while fetching changelog', async () => {
+      let resolveDetails: ((value: IPluginDetails) => void) | null = null;
+      const detailsPromise = new Promise<IPluginDetails>((resolve) => {
+        resolveDetails = resolve;
+      });
+      (
+        AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
+      ).mockReturnValue(detailsPromise);
+
+      const user = userEvent.setup();
+      renderModal();
+
+      // Switch to changelog tab while still fetching
+      await user.click(screen.getByRole('tab', { name: 'Changelog' }));
+
+      // Should show loading text
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingChangelog')),
+      ).toBeInTheDocument();
+
+      // Resolve the promise
+      await act(async () => {
+        if (resolveDetails) {
+          resolveDetails(mockDetails);
+        }
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText(i18nForTest.t('pluginStore.loadingChangelog')),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('renders tabpanels with correct ARIA attributes', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(mockDetails);
+      renderModal();
+
+      await waitFor(() => {
+        expect(screen.getByText('v1.2.3')).toBeInTheDocument();
+      });
+
+      // Check tablist and tabs have correct ARIA attributes
+      const tablist = screen.getByRole('tablist');
+      expect(tablist).toBeInTheDocument();
+
+      const detailsTab = screen.getByRole('tab', { name: 'Details' });
+      expect(detailsTab).toHaveAttribute('aria-selected', 'true');
+      expect(detailsTab).toHaveAttribute('aria-controls', 'panel-details');
+
+      const featuresTab = screen.getByRole('tab', { name: 'Features' });
+      expect(featuresTab).toHaveAttribute('aria-selected', 'false');
+      expect(featuresTab).toHaveAttribute('aria-controls', 'panel-features');
+
+      // Check tabpanels exist
+      expect(document.getElementById('panel-details')).toBeInTheDocument();
+      expect(document.getElementById('panel-features')).toBeInTheDocument();
+      expect(document.getElementById('panel-changelog')).toBeInTheDocument();
     });
   });
 });
