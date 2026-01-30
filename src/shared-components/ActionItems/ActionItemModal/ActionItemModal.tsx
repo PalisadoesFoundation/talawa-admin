@@ -383,8 +383,9 @@ const ItemModal: FC<IItemModalProps> = ({
   };
 
   useEffect(() => {
+    if (!isOpen) return;
     setFormState(initializeFormState(actionItem));
-  }, [actionItem]);
+  }, [isOpen, actionItem?.id]);
 
   useEffect(() => {
     if (actionItem?.category?.id) {
