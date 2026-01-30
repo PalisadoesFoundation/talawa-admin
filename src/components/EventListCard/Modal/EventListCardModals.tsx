@@ -19,6 +19,7 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { JSX } from 'react';
 import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import dayjs from 'dayjs';
@@ -75,8 +76,8 @@ function EventListCardModals({
   const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
     Boolean(eventListCardProps.isInviteOnly),
   );
-  const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const eventDeleteModal = useModalState();
+  const eventUpdateModal = useModalState();
   const [updateOption, setUpdateOption] = useState<
     'single' | 'following' | 'entireSeries'
   >('single');
@@ -175,8 +176,7 @@ function EventListCardModals({
     );
   };
 
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const customRecurrenceModal = useModalState();
 
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
@@ -236,7 +236,7 @@ function EventListCardModals({
       !!eventListCardProps.baseEvent?.id;
 
     if (isRecurringInstance) {
-      setEventUpdateModalIsOpen(true);
+      eventUpdateModal.open();
     } else {
       await updateEventHandler({
         eventListCardProps,
@@ -252,7 +252,7 @@ function EventListCardModals({
         hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
         t,
         hideViewModal,
-        setEventUpdateModalIsOpen,
+        setEventUpdateModalIsOpen: eventUpdateModal.close,
         refetchEvents,
       });
     }
@@ -331,7 +331,7 @@ function EventListCardModals({
 
       if (data) {
         NotificationToast.success(t('eventDeleted') as string);
-        setEventDeleteModalIsOpen(false);
+        eventDeleteModal.close();
         hideViewModal();
         if (refetchEvents) {
           refetchEvents();
@@ -343,11 +343,11 @@ function EventListCardModals({
   };
 
   const toggleDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
+    eventDeleteModal.toggle();
   };
 
   const toggleUpdateModal = (): void => {
-    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
+    eventUpdateModal.toggle();
   };
 
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(
@@ -414,13 +414,13 @@ function EventListCardModals({
         openEventDashboard={openEventDashboard}
         recurrence={recurrence}
         setRecurrence={setRecurrence}
-        customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-        setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
+        customRecurrenceModalIsOpen={customRecurrenceModal.isOpen}
+        setCustomRecurrenceModalIsOpen={customRecurrenceModal.open}
       />
 
       <EventListCardDeleteModal
         eventListCardProps={eventListCardProps}
-        eventDeleteModalIsOpen={eventDeleteModalIsOpen}
+        eventDeleteModalIsOpen={eventDeleteModal.isOpen}
         toggleDeleteModal={toggleDeleteModal}
         t={t}
         tCommon={tCommon}
@@ -430,7 +430,7 @@ function EventListCardModals({
       <BaseModal
         size="lg"
         dataTestId={TEST_ID_UPDATE_EVENT_MODAL(eventListCardProps.id)}
-        show={eventUpdateModalIsOpen}
+        show={eventUpdateModal.isOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
         keyboard={false}
@@ -466,7 +466,7 @@ function EventListCardModals({
                   hasRecurrenceChanged: hasRecurrenceChanged(),
                   t,
                   hideViewModal,
-                  setEventUpdateModalIsOpen,
+                  setEventUpdateModalIsOpen: eventUpdateModal.close,
                   refetchEvents,
                 })
               }

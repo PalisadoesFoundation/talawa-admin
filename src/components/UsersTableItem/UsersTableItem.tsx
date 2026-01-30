@@ -12,6 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -38,8 +39,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
   const [showBlockedOrganizations, setShowBlockedOrganizations] =
     useState(false);
-  const [showRemoveUserModal, setShowRemoveUserModal] = useState(false);
-  const [showBlockedUserModal, setShowBlockedUserModal] = useState(false);
+  const removeUserModal = useModalState();
+  const blockedUserModal = useModalState();
   const [removeUserProps, setremoveUserProps] = useState<{
     orgName: string;
     orgId: string;
@@ -74,7 +75,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           tCommon('removedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
-        setShowRemoveUserModal(false);
+        removeUserModal.close();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -91,7 +92,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           tCommon('unblockedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
-        setShowBlockedUserModal(false);
+        blockedUserModal.close();
         setShowBlockedOrganizations(true);
       }
     } catch (error: unknown) {
@@ -155,14 +156,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
   };
 
   function onHideRemoveUserModal(): void {
-    setShowRemoveUserModal(false);
+    removeUserModal.close();
     if (removeUserProps.setShowOnCancel === 'JOINED') {
       setShowJoinedOrganizations(true);
     }
   }
 
   function onHideBlockUserModal(): void {
-    setShowBlockedUserModal(false);
+    blockedUserModal.close();
     if (removeUserProps.setShowOnCancel === 'Blocked') {
       setShowBlockedOrganizations(true);
     }
@@ -348,7 +349,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                                 setShowOnCancel: 'JOINED',
                               });
                               setShowJoinedOrganizations(false);
-                              setShowRemoveUserModal(true);
+                              removeUserModal.open();
                             }}
                           >
                             {tCommon('removeUser')}
@@ -364,7 +365,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </Row>
       </BaseModal>
       <BaseModal
-        show={showRemoveUserModal}
+        show={removeUserModal.isOpen}
         key={`modal-remove-org-${index}`}
         dataTestId={`modal-remove-user-${user.id}`} // i18n-ignore-line
         onHide={() => onHideRemoveUserModal()}
@@ -512,7 +513,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                                 setShowOnCancel: 'Blocked',
                               });
                               setShowBlockedOrganizations(false);
-                              setShowBlockedUserModal(true);
+                              blockedUserModal.open();
                             }}
                           >
                             {tCommon('unblock')}
@@ -528,7 +529,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </Row>
       </BaseModal>
       <BaseModal
-        show={showBlockedUserModal}
+        show={blockedUserModal.isOpen}
         key={`modal-unblock-user-${index}`}
         dataTestId={`modal-unblock-user-${user.id}`} // i18n-ignore-line
         onHide={() => onHideBlockUserModal()}

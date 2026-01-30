@@ -29,6 +29,7 @@
  */
 
 import React, { useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { ChangeEvent } from 'react';
 import { Button } from 'shared-components/Button';
 import { Col, Row } from 'react-bootstrap';
@@ -62,14 +63,9 @@ function agendaCategoryContainer({
   const { t: tCommon } = useTranslation('common');
 
   // State management for modals and form data
-  const [
-    agendaCategoryPreviewModalIsOpen,
-    setAgendaCategoryPreviewModalIsOpen,
-  ] = useState(false);
-  const [agendaCategoryUpdateModalIsOpen, setAgendaCategoryUpdateModalIsOpen] =
-    useState(false);
-  const [agendaCategoryDeleteModalIsOpen, setAgendaCategoryDeleteModalIsOpen] =
-    useState(false);
+  const previewModal = useModalState();
+  const updateModal = useModalState();
+  const deleteModal = useModalState();
 
   const [agendaCategoryId, setAgendaCategoryId] = useState('');
 
@@ -88,35 +84,35 @@ function agendaCategoryContainer({
     agendaItemCategory: InterfaceAgendaItemCategoryInfo,
   ): void => {
     setAgendaCategoryState(agendaItemCategory);
-    setAgendaCategoryPreviewModalIsOpen(true);
+    previewModal.open();
   };
 
   /**
    * Closes the preview modal.
    */
   const hidePreviewModal = (): void => {
-    setAgendaCategoryPreviewModalIsOpen(false);
+    previewModal.close();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const showUpdateModal = (): void => {
-    setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
+    updateModal.toggle();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const hideUpdateModal = (): void => {
-    setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
+    updateModal.toggle();
   };
 
   /**
    * Toggles the visibility of the delete modal.
    */
   const toggleDeleteModal = (): void => {
-    setAgendaCategoryDeleteModalIsOpen(!agendaCategoryDeleteModalIsOpen);
+    deleteModal.toggle();
   };
 
   const [updateAgendaCategory] = useMutation(
@@ -308,7 +304,7 @@ function agendaCategoryContainer({
 
       {/* Preview modal */}
       <AgendaCategoryPreviewModal
-        agendaCategoryPreviewModalIsOpen={agendaCategoryPreviewModalIsOpen}
+        agendaCategoryPreviewModalIsOpen={previewModal.isOpen}
         hidePreviewModal={hidePreviewModal}
         showUpdateModal={showUpdateModal}
         toggleDeleteModal={toggleDeleteModal}
@@ -317,7 +313,7 @@ function agendaCategoryContainer({
       />
       {/* Update modal */}
       <AgendaCategoryUpdateModal
-        agendaCategoryUpdateModalIsOpen={agendaCategoryUpdateModalIsOpen}
+        agendaCategoryUpdateModalIsOpen={updateModal.isOpen}
         hideUpdateModal={hideUpdateModal}
         formState={formState}
         setFormState={setFormState}
@@ -326,7 +322,7 @@ function agendaCategoryContainer({
       />
       {/* Delete modal */}
       <AgendaCategoryDeleteModal
-        agendaCategoryDeleteModalIsOpen={agendaCategoryDeleteModalIsOpen}
+        agendaCategoryDeleteModalIsOpen={deleteModal.isOpen}
         toggleDeleteModal={toggleDeleteModal}
         deleteAgendaCategoryHandler={deleteAgendaCategoryHandler}
         t={t}
