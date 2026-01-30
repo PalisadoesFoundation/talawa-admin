@@ -24,8 +24,8 @@
  */
 import React, { useState } from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
-import { Button } from 'react-bootstrap';
-import style from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import style from './CheckInWrapper.module.css';
 import { useTranslation } from 'react-i18next';
 
 type PropType = {
