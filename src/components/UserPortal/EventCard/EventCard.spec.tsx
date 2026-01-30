@@ -308,7 +308,9 @@ describe('Testing Event Card In User portal', () => {
     // But let's see if we can trigger it fast.
     // Actually, to hit the 'else', isRegistered must be true.
     // If we wait for the first one to finish:
-    await waitFor(() => expect(screen.getByText('Already registered')).toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.getByText('Already registered')).toBeInTheDocument(),
+    );
 
     // Now isRegistered is true. But the button is gone.
     // So we can't click it.
