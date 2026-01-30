@@ -48,6 +48,9 @@ vi.mock('@mui/material', async () => {
   const actual = await vi.importActual('@mui/material');
   return {
     ...actual,
+    // Mock Autocomplete that simulates selection when user types 'John'
+    // - typing text ending with 'John' selects { id: '1', name: 'John Doe' }
+    // - clearing the input (empty string) deselects the option
     Autocomplete: (props: Record<string, unknown>) => {
       const { value, onChange, getOptionLabel, renderInput, ...otherProps } =
         props;
