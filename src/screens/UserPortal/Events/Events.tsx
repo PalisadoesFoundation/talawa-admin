@@ -66,7 +66,7 @@ import {
 } from 'shared-components/CRUDModalTemplate';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';

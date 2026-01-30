@@ -31,7 +31,7 @@ import React from 'react';
 import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './EventHeader.module.css';
-import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -83,7 +83,7 @@ function EventHeader({
             title={t('eventType')}
             sortingOptions={[
               { label: t('events'), value: 'Events' },
-              { label: t('Workshops'), value: 'Workshops' },
+              { label: t('workshops'), value: 'Workshops' },
             ]}
             selectedOption={t('eventType')}
             onSortChange={() => {}}

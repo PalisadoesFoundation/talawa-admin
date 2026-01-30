@@ -115,25 +115,25 @@ describe('Testing Collapsible Dropdown component', () => {
 
 describe('IconComponent sx color handling', () => {
   it('applies sx color to Campaigns icon', () => {
-    render(<IconComponent name="campaigns" fill="#FF0000" />);
+    render(<IconComponent name="campaigns" fill="var(--bs-danger)" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
     // Material-UI applies style prop to the root element
-    expect(icon).toHaveStyle({ color: 'rgb(255, 0, 0)' });
+    expect(icon).toHaveStyle({ '--icon-color': 'var(--bs-danger)' });
   });
 
   it('applies sx color to MyPledges icon', () => {
-    render(<IconComponent name="myPledges" fill="#00FF00" />);
+    render(<IconComponent name="myPledges" fill="var(--bs-success)" />);
     const icon = screen.getByTestId('Icon-Component-My-Pledges');
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveStyle({ color: 'rgb(0, 255, 0)' });
+    expect(icon).toHaveStyle({ '--icon-color': 'var(--bs-success)' });
   });
 
   it('applies sx color to LeaveOrganization icon', () => {
-    render(<IconComponent name="leaveOrganization" fill="#0000FF" />);
+    render(<IconComponent name="leaveOrganization" fill="var(--bs-primary)" />);
     const icon = screen.getByTestId('Icon-Component-Leave-Organization');
     expect(icon).toBeInTheDocument();
-    expect(icon).toHaveStyle({ color: 'rgb(0, 0, 255)' });
+    expect(icon).toHaveStyle({ '--icon-color': 'var(--bs-primary)' });
   });
 
   it('uses currentColor as fallback when fill is not provided for Campaigns', () => {
@@ -165,7 +165,7 @@ describe('IconComponent sx color handling', () => {
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
     // CSS variables are passed through as-is to the sx prop
-    expect(icon).toHaveStyle({ color: 'var(--bs-primary)' });
+    expect(icon).toHaveStyle({ '--icon-color': 'var(--bs-primary)' });
   });
 });
 describe('IconComponent Chat icon', () => {

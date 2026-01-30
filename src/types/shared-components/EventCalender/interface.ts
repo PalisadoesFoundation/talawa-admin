@@ -1,4 +1,11 @@
-import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+/**
+ * Props for EventHeader component.
+ */
+export enum ViewType {
+  DAY = 'Day',
+  MONTH = 'Month View',
+  YEAR = 'Year View',
+}
 
 export interface IEventHeaderProps {
   viewType: ViewType;

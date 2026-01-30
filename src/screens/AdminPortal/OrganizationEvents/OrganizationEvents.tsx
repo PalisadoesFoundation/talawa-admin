@@ -83,11 +83,7 @@ interface IEventEdge {
   cursor: string;
 }
 
-export enum ViewType {
-  DAY = 'Day',
-  MONTH = 'Month View',
-  YEAR = 'Year View',
-}
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {

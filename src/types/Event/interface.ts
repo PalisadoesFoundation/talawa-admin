@@ -1,4 +1,4 @@
-import type { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+import type { ViewType } from 'types/shared-components/EventCalender/interface';
 import type { Dispatch, SetStateAction } from 'react';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 

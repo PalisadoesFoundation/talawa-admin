@@ -1,0 +1,20 @@
+.iconReact {
+  font-size: 25px;
+}
+
+.iconReactActive {
+  color: var(--bs-black);
+}
+
+.iconReactInactive {
+  color: var(--bs-secondary);
+}
+
+.simpleButtonHeight {
+  height: 40px;
+}
+
+.contentWrapper {
+  display: flex;
+  align-items: center;
+}

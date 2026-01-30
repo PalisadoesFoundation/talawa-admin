@@ -40,7 +40,7 @@ import type { JSX } from 'react';
 import Button from 'shared-components/Button';
 import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
-import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 import HolidayCard from '../../HolidayCards/HolidayCard';
 import { holidays, months, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';

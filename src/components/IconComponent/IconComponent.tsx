@@ -60,107 +60,102 @@ import type { InterfaceIconComponentProps } from 'types/shared-components/IconCo
 
 import styles from './IconComponent.module.css';
 
-const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
-  switch (props.name) {
+const IconComponent = ({
+  name,
+  fill,
+  height,
+  width,
+  ...rest
+}: InterfaceIconComponentProps): JSX.Element => {
+  switch (name) {
     case 'actionItems':
       return (
         <ActionItemIcon
-          stroke={props.fill}
+          stroke={fill}
           data-testid="Icon-Component-ActionItemIcon"
         />
       );
     case 'myOrganizations':
       return (
         <OrganizationsIcon
-          stroke={props.fill}
+          stroke={fill}
           data-testid="Icon-Component-MyOrganizationsIcon"
         />
       );
     case 'dashboard':
       return (
-        <DashboardIcon {...props} data-testid="Icon-Component-DashboardIcon" />
+        <DashboardIcon {...rest} data-testid="Icon-Component-DashboardIcon" />
       );
     case 'people':
-      return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
+      return <PeopleIcon {...rest} data-testid="Icon-Component-PeopleIcon" />;
     case 'tags':
-      return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
+      return <TagsIcon {...rest} data-testid="Icon-Component-TagsIcon" />;
     case 'tag':
-      return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
+      return <TagIcon {...rest} data-testid="Icon-Component-TagIcon" />;
     case 'chat':
-      return <ChatIcon {...props} data-testid="Icon-Component-ChatIcon" />;
+      return <ChatIcon {...rest} data-testid="Icon-Component-ChatIcon" />;
     case 'membershipRequests':
       return (
         <RequestsIcon
           width={20}
           height={20}
-          fill={props.fill || 'currentColor'}
+          fill={fill || 'currentColor'}
           data-testid="Icon-Component-RequestsIcon"
         />
       );
     case 'events':
-      return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
+      return <EventsIcon {...rest} data-testid="Icon-Component-EventsIcon" />;
 
     case 'posts':
-      return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
+      return <PostsIcon {...rest} data-testid="Icon-Component-PostsIcon" />;
     case 'blockUnblock':
       return (
         <BlockUserIcon
-          {...props}
+          {...rest}
           data-testid="Block/Icon-Component-UnblockIcon"
         />
       );
     case 'settings':
       return (
-        <SettingsIcon
-          stroke={props.fill}
-          data-testid="Icon-Component-SettingsIcon"
-        />
+        <SettingsIcon stroke={fill} data-testid="Icon-Component-SettingsIcon" />
       );
     case 'listEventRegistrants':
       return (
         <ListEventRegistrantsIcon
           data-testid="Icon-Component-List-Event-Registrants"
-          stroke={props.fill}
+          stroke={fill}
         />
       );
     case 'checkInRegistrants':
       return (
         <CheckInRegistrantsIcon
           data-testid="Icon-Component-Check-In-Registrants"
-          stroke={props.fill}
+          stroke={fill}
         />
       );
     case 'advertisement':
       return (
-        <PostsIcon
-          data-testid="Icon-Component-Advertisement"
-          stroke={props.fill}
-        />
+        <PostsIcon data-testid="Icon-Component-Advertisement" stroke={fill} />
       );
     case 'funds':
-      return (
-        <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
-      );
+      return <FundsIcon data-testid="Icon-Component-Funds" stroke={fill} />;
     case 'donate':
-      return (
-        <FundsIcon data-testid="Icon-Component-Donate" stroke={props.fill} />
-      );
+      return <FundsIcon data-testid="Icon-Component-Donate" stroke={fill} />;
     case 'transactions':
       return (
-        <FundsIcon
-          data-testid="Icon-Component-Transactions"
-          stroke={props.fill}
-        />
+        <FundsIcon data-testid="Icon-Component-Transactions" stroke={fill} />
       );
     case 'venues':
-      return (
-        <VenueIcon data-testid="Icon-Component-Venues" stroke={props.fill} />
-      );
+      return <VenueIcon data-testid="Icon-Component-Venues" stroke={fill} />;
     case 'campaigns':
       return (
         <NewspaperOutlined
           className={styles.iconColor}
-          style={{ color: props.fill || 'currentColor' }}
+          style={
+            {
+              '--icon-color': fill || 'currentColor',
+            } as React.CSSProperties
+          }
           data-testid="Icon-Component-Campaigns"
         />
       );
@@ -168,7 +163,11 @@ const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
       return (
         <ContactPageOutlined
           className={styles.iconColor}
-          style={{ color: props.fill || 'currentColor' }}
+          style={
+            {
+              '--icon-color': fill || 'currentColor',
+            } as React.CSSProperties
+          }
           data-testid="Icon-Component-My-Pledges"
         />
       );
@@ -176,7 +175,11 @@ const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
       return (
         <ExitToAppIcon
           className={styles.iconColor}
-          style={{ color: props.fill || 'currentColor' }}
+          style={
+            {
+              '--icon-color': fill || 'currentColor',
+            } as React.CSSProperties
+          }
           data-testid="Icon-Component-Leave-Organization"
         />
       );
@@ -184,21 +187,21 @@ const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
     case 'volunteers':
       return (
         <MdOutlineVolunteerActivism
-          fill={props.fill}
-          height={props.height}
-          width={props.width}
+          fill={fill}
+          height={height}
+          width={width}
           data-testid="Icon-Component-Volunteer"
         />
       );
     default:
       return (
         <QuestionMarkOutlined
-          {...props}
-          className={styles.iconLarge}
+          {...rest}
+          className={styles.iconColor}
           data-testid="Icon-Component-DefaultIcon"
         />
       );
   }
 };
 
-export default iconComponent;
+export default IconComponent;

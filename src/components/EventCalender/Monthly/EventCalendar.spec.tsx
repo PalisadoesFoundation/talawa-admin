@@ -4,7 +4,7 @@ import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';

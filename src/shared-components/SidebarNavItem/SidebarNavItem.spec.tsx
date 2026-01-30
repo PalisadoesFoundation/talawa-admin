@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
 
@@ -64,18 +65,21 @@ describe('SidebarNavItem Component', () => {
       expect(link).toHaveAttribute('href', '/dashboard');
     });
 
-    it('handles click events', () => {
+    it('handles click events', async () => {
+      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const button = screen.getByTestId('testBtn');
-      fireEvent.click(button);
+      await user.click(button);
       expect(handleClick).toHaveBeenCalled();
     });
 
-    it('does not call onClick if not provided', () => {
+    it('does not call onClick if not provided', async () => {
+      const user = userEvent.setup();
       renderComponent();
       const button = screen.getByTestId('testBtn');
-      expect(() => fireEvent.click(button)).not.toThrow();
+      await user.click(button);
+      // No assertion needed as we just check it doesn't throw, which userEvent.click shouldn't either unless element is disabled etc.
     });
   });
 
@@ -114,7 +118,7 @@ describe('SidebarNavItem Component', () => {
     it('applies height style when using simple button', () => {
       renderComponent({ useSimpleButton: true });
       const button = screen.getByTestId('testBtn');
-      expect(button.style.height).toBe('40px');
+      expect(button.className).toContain('simpleButtonHeight');
     });
   });
 
@@ -236,21 +240,23 @@ describe('SidebarNavItem Component', () => {
   });
 
   describe('Click Handler Integration', () => {
-    it('calls onClick before navigation', () => {
+    it('calls onClick before navigation', async () => {
+      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
       expect(link).not.toBeNull();
-      fireEvent.click(link as Element);
+      await user.click(link as Element);
       expect(handleClick).toHaveBeenCalled();
     });
 
-    it('allows event propagation after onClick', () => {
+    it('allows event propagation after onClick', async () => {
+      const user = userEvent.setup();
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
       expect(link).not.toBeNull();
-      fireEvent.click(link as Element);
+      await user.click(link as Element);
       // Just verify that the onClick was called, navigation is handled by React Router
       expect(handleClick).toHaveBeenCalled();
     });
