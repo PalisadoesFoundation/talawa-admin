@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: IUpdateEventHandlerProps
+# Interface: InterfaceUpdateEventHandlerProps
 
 Defined in: [src/types/EventListCard/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L65)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/EventListCard/interface.ts:72](https://github.com/Palisad
 
 ### formState
 
-> **formState**: [`IFormState`](IFormState.md)
+> **formState**: [`InterfaceFormState`](InterfaceFormState.md)
 
 Defined in: [src/types/EventListCard/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L67)
 

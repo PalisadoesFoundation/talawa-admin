@@ -6,4 +6,4 @@
 
 > **ElementAttributesProperty** = `ReactSource.ElementAttributesProperty`
 
-Defined in: [src/types/jsx.d.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L14)
+Defined in: [src/types/jsx.d.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L11)

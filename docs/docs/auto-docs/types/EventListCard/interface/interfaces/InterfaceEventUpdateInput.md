@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: IEventUpdateInput
+# Interface: InterfaceEventUpdateInput
 
 Defined in: [src/types/EventListCard/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L33)
 

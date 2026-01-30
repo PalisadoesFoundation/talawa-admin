@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: IFormState
+# Interface: InterfaceFormState
 
 Defined in: [src/types/EventListCard/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L54)
 
