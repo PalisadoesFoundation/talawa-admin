@@ -6,10 +6,10 @@
  * using a local state to toggle its visibility.
  *
 
- * @param eventId - The unique identifier of the event for which
- * members are being checked in.
- *
- * @returns The rendered CheckInWrapper component.
+ * @param props - Component props.
+ * @param eventId - The unique identifier of the event for which members are being checked in.
+ * @param onCheckInUpdate - Optional callback invoked after check-in updates.
+ * @returns JSX.Element
  *
  * @remarks
  * - The `CheckInModal` component is used to handle the modal functionality.
@@ -28,7 +28,6 @@ import Button from 'shared-components/Button';
 import style from './CheckInWrapper.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCheckInWrapperProps } from 'types/shared-components/CheckInWrapper/interface';
-
 export const CheckInWrapper = ({
   eventId,
   onCheckInUpdate,
