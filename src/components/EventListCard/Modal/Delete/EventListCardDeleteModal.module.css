@@ -1,14 +1,14 @@
 /* EventListCardDeleteModal.module.css */
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-2);
   color: var(--addButton-font);
   background-color: var(--addButton-bg);
   border-color: var(--addButton-bg);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
+  background-color: var(--color-blue-500);
   border-color: var(--addButton-border-hover);
 }
 
@@ -18,15 +18,15 @@
 }
 
 .removeButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-2);
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
-  margin-right: 10px;
+  margin-right: var(--space-2);
   border-color: var(--removeButton-border);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover) !important;
+  background-color: var(--removeButton-bg-hover);
   border-color: var(--removeButton-border-hover);
   color: var(--removeButton-color-hover);
 }

@@ -436,7 +436,7 @@ function EventListCardModals({
         keyboard={false}
         centered
         title={t('updateEvent')}
-        headerClassName={`${styles.modalHeader} text-white`}
+        headerClassName={`${styles.modalHeader}`}
         footer={
           <>
             <Button
