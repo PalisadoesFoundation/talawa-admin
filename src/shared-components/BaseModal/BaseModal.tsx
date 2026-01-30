@@ -45,6 +45,7 @@ export default function BaseModal({
   showCloseButton = true,
   closeButtonVariant = 'danger',
   dataTestId,
+  id,
 }: IBaseModalProps) {
   const { t } = useTranslation('common');
   const titleId = useId();
@@ -76,6 +77,7 @@ export default function BaseModal({
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={bodyId}
       data-testid={dataTestId}
+      id={id}
     >
       {headerContent ? (
         <Modal.Header className={headerClassName} data-testid={headerTestId}>
