@@ -120,7 +120,6 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                     {...inputProps}
                     {...other}
                     id={inputId}
-                    aria-label={label ? undefined : label}
                     required={required}
                     disabled={disabled}
                     aria-required={required}
