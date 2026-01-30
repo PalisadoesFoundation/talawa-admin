@@ -771,6 +771,7 @@
     "folderName": "Carpeta",
     "categoryName": "Categoría",
     "noCategory": "Sin categoría",
+    "organizationRequired": "La organización es obligatoria",
     "folder": "Carpeta de la agenda",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",

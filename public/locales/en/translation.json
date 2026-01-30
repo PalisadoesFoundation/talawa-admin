@@ -774,6 +774,7 @@
     "folderNamePlaceholder": "Folder Name",
     "createAgendaFolder": "Create Agenda Section",
     "folderName": "Folder",
+    "organizationRequired": "Organization is required",
     "categoryName": "Category",
     "folder": "Agenda Folder",
     "agendaFolderDetails": "Agenda Section Details",

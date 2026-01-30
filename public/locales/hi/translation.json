@@ -806,6 +806,7 @@
     "agendaItemDetails": "एजेंडा आइटम विवरण",
     "updateAgendaItem": "एजेंडा आइटम अपडेट करें",
     "fileUploadFailed": "फ़ाइल अपलोड विफल हुआ",
+    "organizationRequired": "संगठन आवश्यक है",
     "title": "शीर्षक",
     "enterTitle": "शीर्षक दर्ज करें",
     "sequence": "क्रम",

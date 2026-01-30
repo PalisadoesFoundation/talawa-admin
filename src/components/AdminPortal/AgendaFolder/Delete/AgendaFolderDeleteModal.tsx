@@ -37,6 +37,7 @@ const AgendaFolderDeleteModal: React.FC<
   return (
     <BaseModal
       size="sm"
+      // i18n-ignore-next-line
       dataTestId={`deleteAgendaFolderModal`}
       className={styles.agendaFolderModal}
       show={agendaFolderDeleteModalIsOpen}

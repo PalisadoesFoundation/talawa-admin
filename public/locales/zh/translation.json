@@ -794,6 +794,7 @@
     "agendaItemDetails": "议程项目详细信息",
     "updateAgendaItem": "更新议程项目",
     "fileUploadFailed": "文件上传失败",
+    "organizationRequired": "需要选择组织",
     "title": "标题",
     "enterTitle": "输入标题",
     "sequence": "顺序",

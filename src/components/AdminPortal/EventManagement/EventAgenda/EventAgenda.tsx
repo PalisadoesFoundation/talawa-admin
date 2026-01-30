@@ -186,6 +186,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
           <hr />
 
           <AgendaFolderContainer
+            // i18n-ignore-next-line
             agendaFolderConnection={`Event`}
             agendaFolderData={agendaFolderData?.agendaFoldersByEventId}
             refetchAgendaFolder={refetchAgendaFolder}
