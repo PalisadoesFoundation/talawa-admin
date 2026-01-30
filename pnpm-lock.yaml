@@ -300,6 +300,15 @@ importers:
       husky:
         specifier: ^9.1.6
         version: 9.1.7
+      istanbul-lib-coverage:
+        specifier: ^3.2.2
+        version: 3.2.2
+      istanbul-lib-report:
+        specifier: ^3.0.1
+        version: 3.0.1
+      istanbul-reports:
+        specifier: ^3.2.0
+        version: 3.2.0
       knip:
         specifier: ^5.66.0
         version: 5.70.0(@types/node@24.10.1)(typescript@5.9.3)

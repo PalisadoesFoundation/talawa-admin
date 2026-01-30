@@ -162,7 +162,7 @@ function EventCard({
 
       <div className={`d-flex flex-row ${styles.eventActions}`}>
         {loading ? (
-          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
+          <HourglassBottomIcon fontSize="small" data-testid="hourglass-icon" />
         ) : isRegistered ? (
           <Button size="sm" disabled>
             {t('alreadyRegistered')}

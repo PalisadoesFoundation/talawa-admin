@@ -75,29 +75,30 @@ export default defineConfig({
     },
     coverage: {
       enabled: true,
-      provider: 'istanbul',
-      reportsDirectory: './coverage/vitest',
+      provider: 'istanbul', // Keep this
+      reportsDirectory: './coverage', // output directly to ./coverage
       exclude: [
         'node_modules',
         'dist',
         'docs/**',
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
-        '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}', // Exclude mock/helper files from coverage
+        '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}',
         'coverage/**',
-        'src/!(install)/index.{js,ts}',  // Exclude index files except in install folder
+        'src/!(install)/index.{js,ts}',
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
         'vitest.setup.ts',
         'cypress/**',
         'cypress.config.ts',
-        '.github/**', // Exclude GitHub workflows and scripts
-        'scripts/!(eslint)/**', // Exclude scripts except eslint folder
-        'scripts/*.{js,ts}',     // Exclude individual files in scripts root
-        'scripts/eslint/config/**', // Exclude ESLint config modules from coverage
-        'config/**', // Exclude configuration files
+        '.github/**',
+        'scripts/!(eslint)/**',
+        'scripts/*.{js,ts}',
+        'scripts/eslint/config/**',
+        'config/**',
       ],
-      reporter: ['lcov', 'json', 'text', 'text-summary'],
+      reporter: ['html', 'json-summary', 'text', 'text-summary'], // add 'html' to generate index.html
+      all: true, // include all files, not just tested ones
     },
   },
 });
