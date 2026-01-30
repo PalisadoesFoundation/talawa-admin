@@ -32,7 +32,6 @@
  * />
  * ```
  */
-// translation-check-keyPrefix: eventListCard
 import React, { useId, useState } from 'react';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
