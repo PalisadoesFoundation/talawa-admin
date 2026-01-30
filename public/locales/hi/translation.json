@@ -8,6 +8,12 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "frequency": "आवृत्ति",
+  "repeatsEvery": "हर बार दोहराता है",
+  "day": "दिन",
+  "week": "सप्ताह",
+  "month": "महीना",
+  "year": "वर्ष",
   "role": {
     "member": "सदस्य"
   },
