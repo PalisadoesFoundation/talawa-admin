@@ -1283,8 +1283,6 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
-export { AgendaItemByEvent } from './AgendaItemQueries';
-
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 export { AGENDA_FOLDER_LIST } from './AgendaFolderQueries';
 // to take the list of the blocked users
