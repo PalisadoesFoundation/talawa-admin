@@ -226,6 +226,12 @@ const MOCK_PLEDGE_DATA = {
   },
 };
 
+/** Delayed create pledge mock so we can assert loading state before response */
+const MOCK_PLEDGE_DATA_DELAYED = {
+  ...MOCK_PLEDGE_DATA,
+  delay: 500,
+};
+
 const MOCK_UPDATE_PLEDGE_DATA = {
   request: {
     query: UPDATE_PLEDGE,
@@ -520,6 +526,7 @@ describe('PledgeModal', () => {
 
   // Coverage for Line 185: Verify error toast behavior when createPledge fails with specific error message
   it('should show specific error message from backend when createPledge fails', async () => {
+    const user = userEvent.setup({ delay: null });
     const errorMsg = 'Specific backend error';
     const ERROR_MOCK = {
       request: {
@@ -546,18 +553,18 @@ describe('PledgeModal', () => {
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    await userEvent.type(pledgerInput, 'John');
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await userEvent.clear(amountInput);
-    await userEvent.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('modal-submit-btn'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
     });
 
     await waitFor(() => {
@@ -886,30 +893,36 @@ describe('PledgeModal', () => {
   });
 
   it('should display loading state during pledge creation', async () => {
+    const loadingMockLink = new StaticMockLink([
+      ...PLEDGE_MODAL_MOCKS,
+      MOCK_PLEDGE_DATA_DELAYED,
+      MEMBERS_MOCK,
+    ]);
     const props = { ...pledgeProps[0], refetchPledge: vi.fn(), hide: vi.fn() };
-    renderPledgeModal(mockLink, props);
+    renderPledgeModal(loadingMockLink, props);
 
     const pledgerSelect = screen.getByTestId('pledgerSelect');
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
-    // Type to select pledger (mocked autocomplete will handle selection)
-    await userEvent.type(pledgerInput, 'John');
+    const user = userEvent.setup({ delay: null });
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await userEvent.clear(amountInput);
-    await userEvent.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
 
-    const submitButton = screen.getByTestId('modal-submit-btn');
-
-    await act(async () => {
-      await userEvent.click(submitButton);
+    await waitFor(() => {
+      expect((amountInput as HTMLInputElement).value).toBe('100');
     });
 
-    // Button should be disabled during loading
+    const submitButton = screen.getByTestId('modal-submit-btn');
+    await user.click(submitButton);
+
+    // Button should be disabled while mutation is in flight (mock delays 500ms)
     await waitFor(() => {
       expect(submitButton).toBeDisabled();
     });
@@ -950,13 +963,12 @@ describe('PledgeModal', () => {
     expect(pledgerInput).toHaveValue('John Doe');
   });
 
-  it('should handle filterSelectedOptions prop', async () => {
+  it('should render pledger autocomplete input', async () => {
     renderPledgeModal(mockLink, pledgeProps[0]);
 
     const pledgerSelect = screen.getByTestId('pledgerSelect');
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
-    // The mocked Autocomplete doesn't render a listbox, so we just verify the input exists
     await waitFor(() => {
       expect(pledgerInput).toBeInTheDocument();
     });
