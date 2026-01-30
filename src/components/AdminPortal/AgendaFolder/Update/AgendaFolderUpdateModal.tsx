@@ -7,6 +7,22 @@ import styles from './AgendaFolderUpdateModal.module.css';
 import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
+/**
+ * AgendaFolderUpdateModal Component
+ *
+ * This component renders a modal for updating an existing agenda folder.
+ * It provides form fields for editing the folder name and description
+ * and submits the updated data using a provided handler.
+ *
+ * @remarks
+ * The component:
+ * - Displays a modal using `BaseModal`
+ * - Manages controlled form inputs for folder name and description
+ * - Submits updated folder data via a callback function
+ * - Supports internationalization using `react-i18next`
+ *
+ * @returns A JSX element that renders the agenda folder update modal.
+ */
 const AgendaFolderUpdateModal: React.FC<
   InterfaceAgendaFolderUpdateModalProps
 > = ({
