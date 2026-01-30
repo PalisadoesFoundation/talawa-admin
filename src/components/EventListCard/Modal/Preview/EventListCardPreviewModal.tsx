@@ -5,7 +5,6 @@
  * It provides functionality to view, update, and manage event properties such as
  * name, description, location, date, time, and visibility settings.
  *
- * @param  props - The props for the PreviewModal component.
  * @param eventModalIsOpen - Determines if the modal is open.
  * @param hideViewModal - Function to close the modal.
  * @param toggleDeleteModal - Function to toggle the delete confirmation modal.
@@ -17,12 +16,12 @@
  * @param eventEndDate - The end date of the event.
  * @param setEventStartDate - Function to update the event start date.
  * @param setEventEndDate - Function to update the event end date.
- * @param alldaychecked - Indicates if the event is an all-day event.
+ * @param allDayChecked - Indicates if the event is an all-day event.
  * @param setAllDayChecked - Function to toggle the all-day event setting.
- * @param publicchecked - Indicates if the event is public.
+ * @param publicChecked - Indicates if the event is public.
  * @param setPublicChecked - Function to toggle the public event setting.
- * @param registrablechecked - Indicates if the event is registrable.
- * @param setRegistrableChecked - Function to toggle the registrable event setting.
+ * @param registerableChecked - Indicates if the event is registrable.
+ * @param setRegisterableChecked - Function to toggle the registrable event setting.
  * @param inviteOnlyChecked - Indicates if the event is invite-only.
  * @param setInviteOnlyChecked - Function to toggle the invite-only event setting.
  * @param formState - The state of the form fields.
@@ -69,12 +68,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventEndDate,
   setEventStartDate,
   setEventEndDate,
-  alldaychecked,
+  allDayChecked,
   setAllDayChecked,
-  publicchecked,
+  publicChecked,
   setPublicChecked,
-  registrablechecked,
-  setRegistrableChecked,
+  registerableChecked,
+  setRegisterableChecked,
 
   inviteOnlyChecked,
   setInviteOnlyChecked,
@@ -90,7 +89,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 }) => {
   const timeToDayJs = (time: string): Dayjs => {
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
-    return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+    return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss');
   };
 
   // Check if the user has permission to edit the event
@@ -100,31 +99,31 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
   const getDayName = (dayIndex: number): string => {
     const days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
+      t('sunday'),
+      t('monday'),
+      t('tuesday'),
+      t('wednesday'),
+      t('thursday'),
+      t('friday'),
+      t('saturday'),
     ];
     return days[dayIndex];
   };
 
   const getMonthName = (monthIndex: number): string => {
     const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      t('january'),
+      t('february'),
+      t('march'),
+      t('april'),
+      t('may'),
+      t('june'),
+      t('july'),
+      t('august'),
+      t('september'),
+      t('october'),
+      t('november'),
+      t('december'),
     ];
     return months[monthIndex];
   };
@@ -142,19 +141,19 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
     return [
       {
-        label: 'Daily',
+        label: t('daily'),
         value: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
       },
       {
-        label: `Weekly on ${dayName}`,
+        label: t('weeklyOn', { day: dayName }),
         value: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
       },
       {
-        label: `Monthly on day ${dayOfMonth}`,
+        label: t('monthlyOnDay', { day: dayOfMonth }),
         value: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
       },
       {
-        label: `Annually on ${monthName} ${dayOfMonth}`,
+        label: t('annuallyOn', { month: monthName, day: dayOfMonth }),
         value: {
           frequency: Frequency.YEARLY,
           interval: 1,
@@ -164,7 +163,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         },
       },
       {
-        label: 'Every weekday (Monday to Friday)',
+        label: t('everyWeekday'),
         value: {
           frequency: Frequency.WEEKLY,
           interval: 1,
@@ -173,7 +172,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         },
       },
       {
-        label: 'Custom...',
+        label: t('customOption'),
         value: 'custom',
       },
     ];
@@ -210,10 +209,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
       // If no standard option matches, display the frequency of the custom rule.
       if (recurrence.frequency) {
-        return (
-          recurrence.frequency.charAt(0).toUpperCase() +
-          recurrence.frequency.slice(1).toLowerCase()
-        );
+        return t('customRecurrence');
       }
     }
 
@@ -223,7 +219,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     }
 
     // Fallback for non-recurring events or events without a description
-    return 'Select recurrence pattern';
+    return t('selectRecurrencePattern');
   };
 
   // Check if this is a recurring event (either template or instance)
@@ -331,12 +327,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-cy="updateDescription"
             required
             value={
-              formState.eventdescrip?.length > 256
-                ? formState.eventdescrip.substring(0, 256) + '...'
-                : formState.eventdescrip || ''
+              formState.eventDescription?.length > 256
+                ? formState.eventDescription.substring(0, 256) + '...'
+                : formState.eventDescription || ''
             }
             onChange={(val) =>
-              setFormState({ ...formState, eventdescrip: val })
+              setFormState({ ...formState, eventDescription: val })
             }
             disabled={!canEditEvent}
           />
@@ -384,7 +380,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             />
           </div>
 
-          {!alldaychecked && (
+          {!allDayChecked && (
             <div className={styles.datediv}>
               <TimePicker
                 label={tCommon('startTime')}
@@ -434,9 +430,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 data-testid="updateAllDay"
                 className={`me-4 ${styles.switch}`}
-                checked={alldaychecked}
+                checked={allDayChecked}
                 onChange={() => {
-                  const newAllDayChecked = !alldaychecked;
+                  const newAllDayChecked = !allDayChecked;
                   setAllDayChecked(newAllDayChecked);
                   if (
                     !newAllDayChecked &&
@@ -460,7 +456,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('public')}
                     name="eventVisibility"
                     id="visibility-public"
-                    checked={publicchecked}
+                    checked={publicChecked}
                     onChange={() => {
                       setPublicChecked(true);
                       setInviteOnlyChecked(false);
@@ -473,7 +469,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('organizationMembers')}
                     name="eventVisibility"
                     id="visibility-members"
-                    checked={!publicchecked && !inviteOnlyChecked}
+                    checked={!publicChecked && !inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(false);
@@ -486,7 +482,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('inviteOnly')}
                     name="eventVisibility"
                     id="visibility-inviteonly"
-                    checked={!publicchecked && inviteOnlyChecked}
+                    checked={!publicChecked && inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(true);
@@ -505,8 +501,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 data-testid="updateRegistrable"
                 className={`me-4 ${styles.switch}`}
-                checked={registrablechecked}
-                onChange={() => setRegistrableChecked(!registrablechecked)}
+                checked={registerableChecked}
+                onChange={() => setRegisterableChecked(!registerableChecked)}
                 disabled={!canEditEvent}
               />
             </div>
@@ -562,7 +558,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             setCustomRecurrenceModalIsOpen(false)
           }
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={(key: string) => key} // Pass translation function if available
+          t={t}
           startDate={eventStartDate}
         />
       )}
