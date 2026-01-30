@@ -64,13 +64,9 @@ const getFileInput = () => {
 };
 
 describe('UploadPluginModal Component', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Initial Render', () => {

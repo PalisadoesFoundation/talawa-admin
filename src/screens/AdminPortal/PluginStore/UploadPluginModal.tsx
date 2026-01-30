@@ -139,7 +139,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
     <CRUDModalTemplate
       open={show}
       onClose={handleClose}
-      title=""
+      title={t('uploadPlugin')}
       size="xl"
       showFooter={false}
       className={styles.container}

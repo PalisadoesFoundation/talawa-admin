@@ -267,7 +267,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             isOptionEqualToValue={(option, value) => option.id === value.id}
             filterSelectedOptions={true}
             getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              `${member.firstName} ${member.lastName}`
+              getMemberLabel(member)
             }
             onChange={(_, newPledger): void => {
               setFormState({
@@ -328,7 +328,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 return;
               }
               const numValue = parseInt(value);
-              if (!isNaN(numValue) && numValue > 0) {
+              if (!isNaN(numValue) && numValue >= 0) {
                 setFormState({
                   ...formState,
                   pledgeAmount: numValue,

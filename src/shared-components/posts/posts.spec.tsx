@@ -549,7 +549,6 @@ beforeEach(() => {
 describe('PostsPage Component', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -862,7 +861,6 @@ describe('PostsPage Component', () => {
 describe('Sorting Functionality', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -967,7 +965,6 @@ describe('Sorting Functionality', () => {
 describe('Create Post Modal', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 

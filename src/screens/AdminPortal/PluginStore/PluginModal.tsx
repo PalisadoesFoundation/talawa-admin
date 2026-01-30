@@ -174,7 +174,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
     <CRUDModalTemplate
       open={show}
       onClose={onHide}
-      title=""
+      title={t('details')}
       size="xl"
       showFooter={false}
       className={styles.modalContainer}
@@ -257,8 +257,10 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {/* Header with back button */}
             <div className={styles.screenshotHeader}>
               <button
+                type="button"
                 onClick={closeScreenshotViewer}
                 className={styles.backButton}
+                aria-label={t('backToDetails')}
               >
                 {t('backToDetails')}
               </button>
@@ -277,16 +279,20 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
             {screenshotViewer.screenshots.length > 1 && (
               <>
                 <button
+                  type="button"
                   onClick={previousScreenshot}
                   className={styles.navigationButtonLeft}
                   title={`${t('previousImage')}`}
+                  aria-label={`${t('previousImage')}`}
                 >
                   <FaChevronLeft />
                 </button>
                 <button
+                  type="button"
                   onClick={nextScreenshot}
                   className={styles.navigationButtonRight}
                   title={`${t('nextImage')}`}
+                  aria-label={`${t('nextImage')}`}
                 >
                   <FaChevronRight />
                 </button>
@@ -311,6 +317,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                 <div className={styles.dotIndicators}>
                   {screenshotViewer.screenshots.map((_, index) => (
                     <button
+                      type="button"
                       key={index}
                       onClick={() => {
                         setScreenshotViewer((prev) => ({
@@ -324,6 +331,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                           : styles.dotIndicator
                       }
                       title={`${t('screenshot', { number: index + 1 })}`}
+                      aria-label={`${t('screenshot', { number: index + 1 })}`}
                     />
                   ))}
                 </div>

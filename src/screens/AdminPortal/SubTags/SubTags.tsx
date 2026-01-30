@@ -66,6 +66,7 @@ function SubTags(): JSX.Element {
   const hideAddSubTagModal = (): void => {
     addSubTagModal.close();
     setTagName('');
+    setTagNameTouched(false);
   };
 
   const {

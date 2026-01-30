@@ -25,7 +25,7 @@
  *
  * Methods:
  * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
- * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
+ * - `closeCreateEventModal`: Toggles the visibility of the event creation modal.
  * - `showInviteModal`: Opens the event creation modal.
  * - `handleChangeView`: Updates the calendar view type.
  *
@@ -291,7 +291,7 @@ export default function Events(): JSX.Element {
     }
   };
 
-  const toggleCreateEventModal = (): void => createEventModal.toggle();
+  const closeCreateEventModal = (): void => createEventModal.close();
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
@@ -421,7 +421,7 @@ export default function Events(): JSX.Element {
       {/* </div> */}
       <CRUDModalTemplate
         open={createEventModal.isOpen}
-        onClose={toggleCreateEventModal}
+        onClose={closeCreateEventModal}
         title={t('eventDetails')}
         data-testid="createEventModal"
         showFooter={false}
@@ -430,7 +430,7 @@ export default function Events(): JSX.Element {
           key={formResetKey}
           initialValues={defaultEventValues}
           onSubmit={handleCreateEvent}
-          onCancel={toggleCreateEventModal}
+          onCancel={closeCreateEventModal}
           submitLabel={t('createEvent')}
           t={t}
           tCommon={tCommon}
