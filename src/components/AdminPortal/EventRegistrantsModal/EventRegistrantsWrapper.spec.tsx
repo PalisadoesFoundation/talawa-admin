@@ -127,7 +127,8 @@ describe('EventRegistrantsWrapper Component', () => {
       renderComponent(defaultProps);
 
       const button = screen.getByTestId('filter-button');
-      expect(button).toHaveClass('border-1', 'mx-4');
+
+      expect(button).toHaveClass('btn', 'btn-primary');
     });
 
     test('should not render modal initially', () => {

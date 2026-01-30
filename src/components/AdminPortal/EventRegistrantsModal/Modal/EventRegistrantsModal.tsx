@@ -38,7 +38,7 @@
  * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   EVENT_ATTENDEES,
@@ -46,13 +46,13 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import TextField from '@mui/material/TextField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
-import styles from '../EventRegistrants.module.css';
+import styles from './EventRegistrantsModal.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -70,6 +70,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const [open, setOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
@@ -190,10 +191,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 <p className="me-2">{t('noRegistrationsFound')}</p>
                 <button
                   type="button"
+                  data-testid="add-onspot-link"
                   className={`underline ${styles.underlineText}`}
-                  onClick={() => {
-                    setOpen(true);
-                  }}
+                  onClick={() => setOpen(true)}
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {t('addOnspotRegistrationLink')}
@@ -205,11 +205,17 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               member.name || t('unknownUser')
             }
             renderInput={(params): React.ReactNode => (
-              <TextField
-                {...params}
-                data-testid="autocomplete"
+              <FormTextField
+                name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
+                ref={params.InputProps.ref}
+                value={inputValue}
+                onChange={(v: string) => setInputValue(v)}
                 placeholder={t('addRegistrantPlaceholder') as string}
+                data-testid="autocomplete"
+                id={params.id}
+                disabled={params.disabled}
+                fullWidth
               />
             )}
           />

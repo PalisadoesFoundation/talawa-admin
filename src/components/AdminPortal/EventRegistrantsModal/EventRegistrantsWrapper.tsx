@@ -59,18 +59,15 @@ export const EventRegistrantsWrapper = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      {/* Button to open the event registrants modal */}
+      {}
       <Button
         data-testid="filter-button"
-        className={`border-1 mx-4 ${style.createButton}`}
+        className={style.createButton}
         aria-label={t('registerMember')}
-        onClick={(): void => {
-          setShowModal(true); // Show the modal when button is clicked
-        }}
+        onClick={() => setShowModal(true)}
       >
         {t('registerMember')}
       </Button>
-
       {/* Render the EventRegistrantsModal if showModal is true */}
       {showModal && (
         <EventRegistrantsModal
