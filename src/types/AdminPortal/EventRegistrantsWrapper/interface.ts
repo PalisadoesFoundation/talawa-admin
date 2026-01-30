@@ -1,4 +1,3 @@
-// src/types/AdminPortal/EventRegistrantsWrapper/interface.ts
 /**
  * Props for EventRegistrantsWrapper component.
  */

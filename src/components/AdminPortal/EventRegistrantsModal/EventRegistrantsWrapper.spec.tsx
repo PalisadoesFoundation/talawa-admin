@@ -138,8 +138,8 @@ describe('EventRegistrantsWrapper Component', () => {
   });
 
   describe('Modal Opening Functionality', () => {
-    const user = userEvent.setup();
     test('should open modal when Register Member button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       const button = screen.getByText(
@@ -153,6 +153,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should set showModal state to true when button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
@@ -169,6 +170,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should render modal when eventId is provided', async () => {
+      const user = userEvent.setup();
       const customProps = { ...defaultProps, eventId: 'custom-event-123' };
       renderComponent(customProps);
 
@@ -184,6 +186,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should render modal when orgId is provided', async () => {
+      const user = userEvent.setup();
       const customProps = { ...defaultProps, orgId: 'custom-org-456' };
       renderComponent(customProps);
 
@@ -200,8 +203,8 @@ describe('EventRegistrantsWrapper Component', () => {
   });
 
   describe('Modal Closing Functionality', () => {
-    const user = userEvent.setup();
     test('should close modal when close button is clicked', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       await user.click(
@@ -223,6 +226,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should set showModal state to false when modal is closed', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       await user.click(
@@ -243,8 +247,8 @@ describe('EventRegistrantsWrapper Component', () => {
   });
 
   describe('onUpdate Callback Functionality', () => {
-    const user = userEvent.setup();
     test('should call onUpdate callback when modal is closed', async () => {
+      const user = userEvent.setup();
       const onUpdateMock = vi.fn();
       const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
 
@@ -267,6 +271,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should call onUpdate exactly once per modal close', async () => {
+      const user = userEvent.setup();
       const onUpdateMock = vi.fn();
       const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
 
@@ -290,6 +295,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should not call onUpdate when modal is opened', async () => {
+      const user = userEvent.setup();
       const onUpdateMock = vi.fn();
       const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
 
@@ -309,6 +315,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should not throw error when onUpdate is not provided', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       await user.click(
@@ -321,9 +328,7 @@ describe('EventRegistrantsWrapper Component', () => {
         expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
-      expect(async () => {
-        await user.click(await screen.findByRole('button', { name: /close/i }));
-      }).not.toThrow();
+      await user.click(await screen.findByRole('button', { name: /close/i }));
 
       await waitFor(() => {
         expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
@@ -331,6 +336,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should not throw error when onUpdate is undefined', async () => {
+      const user = userEvent.setup();
       const propsWithUndefined = { ...defaultProps, onUpdate: undefined };
       renderComponent(propsWithUndefined);
 
@@ -344,15 +350,13 @@ describe('EventRegistrantsWrapper Component', () => {
         expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
-      expect(async () => {
-        await user.click(await screen.findByRole('button', { name: /close/i }));
-      }).not.toThrow();
+      await user.click(await screen.findByRole('button', { name: /close/i }));
     });
   });
 
   describe('Modal State Management', () => {
-    const user = userEvent.setup();
     test('should toggle modal visibility multiple times correctly', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       // First cycle
@@ -397,6 +401,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should call onUpdate for each modal close in multiple cycles', async () => {
+      const user = userEvent.setup();
       const onUpdateMock = vi.fn();
       const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
 
@@ -447,8 +452,8 @@ describe('EventRegistrantsWrapper Component', () => {
   });
 
   describe('Props Passing to EventRegistrantsModal', () => {
-    const user = userEvent.setup();
     test('should pass show prop as true when modal is open', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       await user.click(
@@ -463,6 +468,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should pass handleClose function to modal', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       await user.click(
@@ -480,6 +486,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should render EventRegistrantsModal with all props', async () => {
+      const user = userEvent.setup();
       const customProps = {
         eventId: 'test-event-789',
         orgId: 'test-org-101',
@@ -501,8 +508,8 @@ describe('EventRegistrantsWrapper Component', () => {
   });
 
   describe('Edge Cases', () => {
-    const user = userEvent.setup();
     test('should handle rapid button clicks without breaking', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       const button = screen.getByText(
@@ -520,6 +527,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should handle empty string eventId', async () => {
+      const user = userEvent.setup();
       const propsWithEmptyEventId = { ...defaultProps, eventId: '' };
       renderComponent(propsWithEmptyEventId);
 
@@ -535,6 +543,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should handle empty string orgId', async () => {
+      const user = userEvent.setup();
       const propsWithEmptyOrgId = { ...defaultProps, orgId: '' };
       renderComponent(propsWithEmptyOrgId);
 
@@ -550,6 +559,7 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should maintain button functionality after modal operations', async () => {
+      const user = userEvent.setup();
       renderComponent(defaultProps);
 
       const button = screen.getByText(
