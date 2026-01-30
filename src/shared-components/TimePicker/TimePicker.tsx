@@ -123,13 +123,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                       {...inputProps}
                       {...other}
                       id={dataTestId}
-                      ref={(node) => {
-                        if (typeof ref === 'function') {
-                          ref(node);
-                        } else if (ref) {
-                          ref.current = node;
-                        }
-                      }}
+                      ref={ref}
                       disabled={disabled}
                       required={props.required}
                       data-testid={dataTestId}

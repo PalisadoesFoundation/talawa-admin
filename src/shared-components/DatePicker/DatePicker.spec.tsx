@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import DatePicker from './DatePicker';
@@ -388,7 +391,8 @@ describe('DatePicker', () => {
       expect(updatedInput.value).toBe(initialDate.format('MM/DD/YYYY'));
     });
 
-    it('calls onBlur when field loses focus', () => {
+    it('calls onBlur when field loses focus', async () => {
+      const user = userEvent.setup();
       renderWithProvider(
         <DatePicker
           name="test-date"
@@ -400,10 +404,15 @@ describe('DatePicker', () => {
         />,
       );
 
-      expect(screen.getByTestId('blur-test')).toBeInTheDocument();
+      const input = screen.getByTestId('blur-test');
+      await user.click(input);
+      await user.click(document.body);
+
+      expect(mockOnBlur).toHaveBeenCalledTimes(1);
     });
 
-    it('calls both custom onBlur and slotProps onBlur', () => {
+    it('calls both custom onBlur and slotProps onBlur', async () => {
+      const user = userEvent.setup();
       const customOnBlur = vi.fn();
       const slotPropsOnBlur = vi.fn();
 
@@ -422,7 +431,87 @@ describe('DatePicker', () => {
         />,
       );
 
-      expect(screen.getByTestId('dual-blur-test')).toBeInTheDocument();
+      const input = screen.getByTestId('dual-blur-test');
+      await user.click(input);
+      await user.click(document.body);
+
+      expect(customOnBlur).toHaveBeenCalledTimes(1);
+      expect(slotPropsOnBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles onBlur when only slotProps onBlur is provided', async () => {
+      const user = userEvent.setup();
+      const slotPropsOnBlur = vi.fn();
+
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={null}
+          onChange={mockOnChange}
+          slotProps={{
+            textField: {
+              onBlur: slotPropsOnBlur,
+            },
+          }}
+          data-testid="slot-blur-only-test"
+        />,
+      );
+
+      const input = screen.getByTestId('slot-blur-only-test');
+      await user.click(input);
+      await user.click(document.body);
+
+      expect(slotPropsOnBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles onBlur when slotProps textField is not an object', async () => {
+      const user = userEvent.setup();
+      const customOnBlur = vi.fn();
+
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={null}
+          onChange={mockOnChange}
+          onBlur={customOnBlur}
+          slotProps={{
+            textField: null as any,
+          }}
+          data-testid="null-slot-blur-test"
+        />,
+      );
+
+      const input = screen.getByTestId('null-slot-blur-test');
+      await user.click(input);
+      await user.click(document.body);
+
+      expect(customOnBlur).toHaveBeenCalledTimes(1);
+    });
+
+    it('handles onBlur when slotProps onBlur is not a function', async () => {
+      const user = userEvent.setup();
+      const customOnBlur = vi.fn();
+
+      renderWithProvider(
+        <DatePicker
+          name="test-date"
+          value={null}
+          onChange={mockOnChange}
+          onBlur={customOnBlur}
+          slotProps={{
+            textField: {
+              onBlur: 'not-a-function' as any,
+            },
+          }}
+          data-testid="invalid-blur-test"
+        />,
+      );
+
+      const input = screen.getByTestId('invalid-blur-test');
+      await user.click(input);
+      await user.click(document.body);
+
+      expect(customOnBlur).toHaveBeenCalledTimes(1);
     });
   });
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -5,6 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import TimePicker from './TimePicker';
 import { vi } from 'vitest';
+import React from 'react';
 
 const originalError = console.error;
 beforeAll(() => {
@@ -213,6 +215,7 @@ describe('TimePicker', () => {
     expect(input).toBeDisabled();
     expect(input).toBeRequired();
   });
+
   it('handles invalid user input gracefully', () => {
     renderWithProvider(
       <TimePicker label="Select Time" value={null} onChange={mockOnChange} />,
@@ -383,5 +386,179 @@ describe('TimePicker', () => {
     // Assert paddedInput class is NOT on the input
     const input = screen.getByTestId('no-adornment-input');
     expect(input.className).not.toContain('paddedInput');
+  });
+
+  describe('Ref Handling', () => {
+    it('handles function ref correctly', () => {
+      const refCallback = vi.fn();
+
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="function-ref-test"
+          slotProps={{
+            textField: {
+              ref: refCallback,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('function-ref-test');
+      expect(input).toBeInTheDocument();
+      expect(refCallback).toHaveBeenCalled();
+      expect(refCallback).toHaveBeenCalledWith(expect.any(HTMLInputElement));
+    });
+
+    it('handles object ref with current property', () => {
+      const objectRef = { current: null } as {
+        current: HTMLInputElement | null;
+      };
+
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="object-ref-test"
+          slotProps={{
+            textField: {
+              ref: objectRef,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('object-ref-test') as HTMLInputElement;
+      expect(input).toBeInTheDocument();
+
+      // This should trigger the else if (ref) { ref.current = node; } branch
+      expect(objectRef.current).not.toBeNull();
+      expect(objectRef.current).toBe(input);
+      expect(objectRef.current instanceof HTMLInputElement).toBe(true);
+    });
+
+    it('assigns node to ref.current when ref has current property', () => {
+      let capturedNode: HTMLInputElement | null = null;
+      const mutableRef = {
+        get current() {
+          return capturedNode;
+        },
+        set current(value: HTMLInputElement | null) {
+          capturedNode = value;
+        },
+      };
+
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="mutable-ref-test"
+          slotProps={{
+            textField: {
+              ref: mutableRef,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('mutable-ref-test') as HTMLInputElement;
+
+      // Verify the ref.current assignment happened
+      expect(capturedNode).not.toBeNull();
+      expect(capturedNode).toBe(input);
+      expect(mutableRef.current).toBe(input);
+    });
+
+    it('sets ref.current to null on unmount', () => {
+      const objectRef = { current: null } as {
+        current: HTMLInputElement | null;
+      };
+
+      const { unmount } = render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label="Select Time"
+            value={null}
+            onChange={mockOnChange}
+            data-testid="unmount-ref-test"
+            slotProps={{
+              textField: {
+                ref: objectRef,
+              } as any,
+            }}
+          />
+        </LocalizationProvider>,
+      );
+
+      expect(objectRef.current).not.toBeNull();
+
+      unmount();
+
+      expect(objectRef.current).toBeNull();
+    });
+
+    it('handles React.createRef correctly', () => {
+      const reactRef = React.createRef<HTMLInputElement>();
+
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="react-ref-test"
+          slotProps={{
+            textField: {
+              ref: reactRef,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('react-ref-test');
+      expect(input).toBeInTheDocument();
+      expect(reactRef.current).toBe(input);
+    });
+
+    it('handles null ref gracefully', () => {
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="null-ref-test"
+          slotProps={{
+            textField: {
+              ref: null,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('null-ref-test');
+      expect(input).toBeInTheDocument();
+    });
+
+    it('handles undefined ref gracefully', () => {
+      renderWithProvider(
+        <TimePicker
+          label="Select Time"
+          value={null}
+          onChange={mockOnChange}
+          data-testid="undefined-ref-test"
+          slotProps={{
+            textField: {
+              ref: undefined,
+            } as any,
+          }}
+        />,
+      );
+
+      const input = screen.getByTestId('undefined-ref-test');
+      expect(input).toBeInTheDocument();
+    });
   });
 });
