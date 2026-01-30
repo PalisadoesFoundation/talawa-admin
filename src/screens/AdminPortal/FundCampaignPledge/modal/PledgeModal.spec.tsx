@@ -628,18 +628,21 @@ describe('PledgeModal', () => {
       expect(screen.getByLabelText('Amount')).toHaveAttribute('value', '100');
     });
 
-    const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
-    amountInput.focus();
-    await user.clear(amountInput);
-    amountInput.focus();
-    await user.type(amountInput, '2');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-    amountInput.focus();
-    await user.type(amountInput, '0');
+    const pledgerSelect = screen.getByTestId('pledgerSelect');
+    const pledgerInput = within(pledgerSelect).getByRole('combobox');
+    // specific to EditModal: waits for auto-focus to settle on the first input
+    await waitFor(() => {
+      expect(pledgerInput).toHaveFocus();
+    });
+
+    const amountInput = screen.getByLabelText('Amount');
+    await act(async () => {
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
+    });
 
     await waitFor(() => {
-      expect(parseInt(amountInput.value)).toBe(200);
+      expect((amountInput as HTMLInputElement).value).toBe('200');
     });
 
     await user.click(screen.getByTestId('modal-submit-btn'));
@@ -706,6 +709,14 @@ describe('PledgeModal', () => {
     renderPledgeModal(mockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
+
+    // specific to EditModal: waits for auto-focus to settle on the first input
+    const pledgerSelect = screen.getByTestId('pledgerSelect');
+    const pledgerInput = within(pledgerSelect).getByRole('combobox');
+    await waitFor(() => {
+      expect(pledgerInput).toHaveFocus();
+    });
+
     await user.clear(amountInput);
     await user.type(amountInput, '200');
 
