@@ -18,9 +18,9 @@
  *
  */
 // translation-check-keyPrefix: eventListCard
-import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
+import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { UserRole } from 'types/Event/interface';

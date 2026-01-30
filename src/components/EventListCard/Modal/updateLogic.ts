@@ -11,8 +11,8 @@ import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type {
-  IEventUpdateInput,
-  IUpdateEventHandlerProps,
+  InterfaceEventUpdateInput,
+  InterfaceUpdateEventHandlerProps,
 } from 'types/EventListCard/interface';
 
 // Extend dayjs with utc plugin
@@ -53,14 +53,16 @@ export const useUpdateEventHandler = () => {
     hideViewModal,
     setEventUpdateModalIsOpen,
     refetchEvents,
-  }: IUpdateEventHandlerProps): Promise<void> => {
+  }: InterfaceUpdateEventHandlerProps): Promise<void> => {
     const isRecurringInstance =
       !eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id;
 
     try {
       let data;
-      const updateInput: IEventUpdateInput = { id: eventListCardProps.id };
+      const updateInput: InterfaceEventUpdateInput = {
+        id: eventListCardProps.id,
+      };
 
       // Only include fields that have actually changed
       if (formState.name !== eventListCardProps.name) {
@@ -187,7 +189,7 @@ export const useUpdateEventHandler = () => {
             break;
           }
           case 'entireSeries': {
-            const entireSeriesInput: IEventUpdateInput = {
+            const entireSeriesInput: InterfaceEventUpdateInput = {
               id: eventListCardProps.id,
             };
 

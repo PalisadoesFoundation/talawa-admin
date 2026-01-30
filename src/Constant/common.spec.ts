@@ -16,6 +16,7 @@ import {
   TEST_ID_PEOPLE_NAME,
   TEST_ID_PEOPLE_EMAIL,
   TEST_ID_PEOPLE_ROLE,
+  DUMMY_DATE_TIME_PREFIX,
 } from './common';
 
 afterEach(() => {
@@ -161,6 +162,12 @@ describe('common constants and helpers', () => {
   describe('DATE_FORMAT_ISO_DATE', () => {
     it('should be a valid date format string', () => {
       expect(DATE_FORMAT_ISO_DATE).toBe('YYYY-MM-DD');
+    });
+  });
+
+  describe('DUMMY_DATE_TIME_PREFIX', () => {
+    it('should be 2015-03-04T', () => {
+      expect(DUMMY_DATE_TIME_PREFIX).toBe('2015-03-04T');
     });
   });
 });

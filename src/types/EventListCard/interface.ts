@@ -30,7 +30,7 @@ export interface InterfaceEventListCardModalsProps {
 /**
  * Input payload for updating an event. Optional fields are included only when changed.
  */
-export interface IEventUpdateInput {
+export interface InterfaceEventUpdateInput {
   id: string;
   name?: string;
   description?: string;
@@ -51,7 +51,7 @@ export interface IEventUpdateInput {
 /**
  * Form state captured from the EventListCard edit modal.
  */
-export interface IFormState {
+export interface InterfaceFormState {
   name: string;
   eventDescription: string;
   location: string;
@@ -62,9 +62,9 @@ export interface IFormState {
 /**
  * Arguments for the updateEventHandler function.
  */
-export interface IUpdateEventHandlerProps {
+export interface InterfaceUpdateEventHandlerProps {
   eventListCardProps: InterfaceEventListCard;
-  formState: IFormState;
+  formState: InterfaceFormState;
   allDayChecked: boolean;
   publicChecked: boolean;
   registerableChecked: boolean;

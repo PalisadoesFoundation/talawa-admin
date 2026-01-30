@@ -1,7 +1,4 @@
-import type {
-  JSX as ReactSource,
-  IntrinsicClassAttributes as ReactICAttr,
-} from 'react';
+import type { JSX as ReactSource } from 'react';
 /**
  * Global JSX type augmentation for React 19 compatibility.
  * Maps the global JSX namespace to React's JSX type definitions,
@@ -16,7 +13,7 @@ declare global {
     type IntrinsicAttributes = ReactSource.IntrinsicAttributes;
     // prettier-ignore
     type IntrinsicClassAttributes<T> =
-      ReactICAttr<T>;
+      ReactSource.IntrinsicClassAttributes<T>;
     type IntrinsicElements = ReactSource.IntrinsicElements;
     type LibraryManagedAttributes<TComponent, TProps> =
       ReactSource.LibraryManagedAttributes<TComponent, TProps>;

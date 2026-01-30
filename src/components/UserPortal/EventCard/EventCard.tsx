@@ -57,7 +57,19 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import type { InterfaceEvent } from 'types/Event/interface';
 import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
 
-function eventCard(props: InterfaceEvent): JSX.Element {
+function EventCard({
+  id,
+  name,
+  description,
+  location,
+  startAt,
+  endAt,
+  startTime,
+  endTime,
+  creator,
+  attendees,
+  isInviteOnly,
+}: InterfaceEvent): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
@@ -69,10 +81,10 @@ function eventCard(props: InterfaceEvent): JSX.Element {
   const userId = getItem(IDENTIFIER_USER_ID);
 
   // Create a full name for the event creator
-  const creatorName = props.creator.name;
+  const creatorName = creator.name;
 
   // Check if the user is initially registered for the event
-  const isInitiallyRegistered = props.attendees.some(
+  const isInitiallyRegistered = attendees.some(
     (attendee) => attendee.id === userId,
   );
 
@@ -90,13 +102,13 @@ function eventCard(props: InterfaceEvent): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            id: props.id,
+            id,
           },
         });
         if (data) {
           setIsRegistered(true);
           NotificationToast.success(
-            t('registeredSuccessfully', { eventName: props.name }),
+            t('registeredSuccessfully', { eventName: name }),
           );
         }
       } catch (error) {
@@ -110,42 +122,38 @@ function eventCard(props: InterfaceEvent): JSX.Element {
     <div className={styles.mainContainer}>
       <div className="d-flex flex-row justify-content-between align-items-center">
         <div className={styles.orgName}>
-          <b>{props.name}</b>
+          <b>{name}</b>
         </div>
         <div>
           <CalendarMonthIcon />
         </div>
       </div>
-      {props.description}
+      {description}
       <span>
         {`${tCommon('location')} `}
-        <b>{props.location}</b>
+        <b>{location}</b>
       </span>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('starts')} `}
-        {props.startTime ? (
+        {startTime ? (
           <b data-testid="startTime">
-            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${props.startTime}`).format(
-              'h:mm:ss A',
-            )}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${startTime}`).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
         )}
-        <b> {dayjs(props.startAt).format('D MMMM YYYY')}</b>
+        <b> {dayjs(startAt).format('D MMMM YYYY')}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
-        {props.endTime ? (
+        {endTime ? (
           <b data-testid="endTime">
-            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${props.endTime}`).format(
-              'h:mm:ss A',
-            )}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${endTime}`).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
-        )}{' '}
-        <b> {dayjs(props.endAt).format('D MMMM YYYY')}</b>
+        )}
+        <b> {dayjs(endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>
         {`${t('creator')} `}
@@ -159,7 +167,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
           <Button size="sm" disabled>
             {t('alreadyRegistered')}
           </Button>
-        ) : props.isInviteOnly ? (
+        ) : isInviteOnly ? (
           <Button size="sm" disabled>
             {tCommon('inviteOnlyEvent')}
           </Button>
@@ -173,4 +181,4 @@ function eventCard(props: InterfaceEvent): JSX.Element {
   );
 }
 
-export default eventCard;
+export default EventCard;

@@ -1503,6 +1503,7 @@ describe('UserId Fallback Logic', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     // Reset localStorage mock to default behavior
     localStorageMocks.getItem.mockReturnValue('user-123');
   });
