@@ -6,7 +6,7 @@
  * @returns JSX.Element
  */
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,13 +23,9 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 
-export interface InterfaceVolunteerViewModal {
-  isOpen: boolean;
-  hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo;
-}
+import type { InterfaceVolunteerViewModalProps } from 'types/AdminPortal/VolunteerViewModal/interface';
 
-const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
+const VolunteerViewModal: React.FC<InterfaceVolunteerViewModalProps> = ({
   isOpen,
   hide,
   volunteer,
