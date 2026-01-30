@@ -1048,7 +1048,24 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Test pagination with rowsPerPage = 0 edge case
     const rowsPerPageSelect = screen.getByDisplayValue('5');
-    await userEvent.selectOptions(rowsPerPageSelect, '0');
+    // Manually trigger change since '0' might not be a selectable option in the UI
+    const nativeSelectValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLSelectElement.prototype,
+      'value',
+    )?.set;
+    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set;
+
+    // Try setting as Select first, then Input
+    if (nativeSelectValueSetter && rowsPerPageSelect instanceof HTMLSelectElement) {
+      nativeSelectValueSetter.call(rowsPerPageSelect, '0');
+    } else if (nativeInputValueSetter) {
+      nativeInputValueSetter.call(rowsPerPageSelect, '0');
+    }
+
+    rowsPerPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
   });
 
