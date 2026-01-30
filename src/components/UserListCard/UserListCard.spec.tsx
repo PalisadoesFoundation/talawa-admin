@@ -213,7 +213,7 @@ describe('Testing User List Card', () => {
       </BrowserRouter>,
     );
 
-    const button = screen.getByText(/Add Admin/i);
+    const button = screen.getByRole('button', { name: /Add Admin/i });
     expect(button).toBeInTheDocument();
     expect(button.tagName).toBe('BUTTON');
     expect(button.className).toContain('memberfontcreatedbtnUserListCard');

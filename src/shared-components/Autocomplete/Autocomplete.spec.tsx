@@ -191,6 +191,15 @@ describe('Autocomplete', () => {
 
     // Verify that custom input is accepted
     expect(combobox).toHaveValue('Custom Value');
+
+    // Commit the value by pressing Enter
+    await user.keyboard('{Enter}');
+
+    // Verify onChange was called with the custom string value
+    expect(mockOnChange).toHaveBeenCalled();
+    // The onChange call should include the custom string value
+    const lastCall = mockOnChange.mock.calls[mockOnChange.mock.calls.length - 1];
+    expect(lastCall[1]).toBe('Custom Value');
   });
 
   it('supports disableClearable to prevent clearing value', async () => {
