@@ -136,6 +136,9 @@ describe('TimePicker', () => {
     await user.type(input, '08:00:00'); // Before minTime
 
     // Verify constraint enforcement
+    // Either onChange should NOT be called with the invalid date, OR the input should be invalid
+    // Note: MUI often calls onChange with 'Invalid Date' or null for out of range depending on config,
+    // but definitely NOT the restricted time.
     expect(onChange).not.toHaveBeenCalledWith(
       expect.objectContaining({ $H: 8 }),
     );

@@ -53,6 +53,8 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
         name={effectiveName}
         label={label || ''}
         required={required}
+        // Use local showError logic to ensure error is hidden when not touched,
+        // as FormFieldGroup's internal logic might differ or be bypassed in some contexts.
         error={showError ? error : undefined}
         touched={touched}
         helpText={helpText}
@@ -118,7 +120,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                     {...inputProps}
                     {...other}
                     id={inputId}
-                    aria-label={label}
+                    aria-label={label ? undefined : label}
                     required={required}
                     disabled={disabled}
                     aria-required={required}
