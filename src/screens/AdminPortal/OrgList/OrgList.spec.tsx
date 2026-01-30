@@ -886,7 +886,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    window.scrollY = 1000;
+    Object.defineProperty(window, 'scrollY', { value: 1000, writable: true });
     window.dispatchEvent(new Event('scroll'));
   });
 });

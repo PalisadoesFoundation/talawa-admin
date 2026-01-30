@@ -9,91 +9,91 @@ afterEach(() => {
 
 const screenTestIdMap: Record<string, Record<string, string>> = {
   MyOrganizations: {
-    name: 'My Organizations',
+    name: 'myOrganizations',
     testId: 'Icon-Component-MyOrganizationsIcon',
   },
   Dashboard: {
-    name: 'Dashboard',
+    name: 'dashboard',
     testId: 'Icon-Component-DashboardIcon',
   },
   People: {
-    name: 'People',
+    name: 'people',
     testId: 'Icon-Component-PeopleIcon',
   },
   Tags: {
-    name: 'Tags',
+    name: 'tags',
     testId: 'Icon-Component-TagsIcon',
   },
   Tag: {
-    name: 'Tag',
+    name: 'tag',
     testId: 'Icon-Component-TagIcon',
   },
   Requests: {
-    name: 'Requests',
+    name: 'membershipRequests',
     testId: 'Icon-Component-RequestsIcon',
   },
   Events: {
-    name: 'Events',
+    name: 'events',
     testId: 'Icon-Component-EventsIcon',
   },
   ActionItems: {
-    name: 'ActionItem',
+    name: 'actionItems',
     testId: 'Icon-Component-ActionItemIcon',
   },
   Posts: {
-    name: 'Posts',
+    name: 'posts',
     testId: 'Icon-Component-PostsIcon',
   },
   BlockUnblock: {
-    name: 'Block/Unblock',
+    name: 'blockUnblock',
     testId: 'Block/Icon-Component-UnblockIcon',
   },
   Settings: {
-    name: 'Settings',
+    name: 'settings',
     testId: 'Icon-Component-SettingsIcon',
   },
   ListEventRegistrants: {
-    name: 'List Event Registrants',
+    name: 'listEventRegistrants',
     testId: 'Icon-Component-List-Event-Registrants',
   },
   CheckInRegistrants: {
-    name: 'Check In Registrants',
+    name: 'checkInRegistrants',
     testId: 'Icon-Component-Check-In-Registrants',
   },
   Advertisement: {
-    name: 'Advertisement',
+    name: 'advertisement',
     testId: 'Icon-Component-Advertisement',
   },
   Funds: {
-    name: 'Funds',
+    name: 'funds',
     testId: 'Icon-Component-Funds',
   },
   Venues: {
-    name: 'Venues',
+    name: 'venues',
     testId: 'Icon-Component-Venues',
   },
   Donate: {
-    name: 'Donate',
+    name: 'donate',
     testId: 'Icon-Component-Donate',
   },
   Campaigns: {
-    name: 'Campaigns',
+    name: 'campaigns',
     testId: 'Icon-Component-Campaigns',
   },
   MyPledges: {
-    name: 'My Pledges',
+    name: 'myPledges',
     testId: 'Icon-Component-My-Pledges',
   },
   LeaveOrganization: {
-    name: 'Leave Organization',
+    name: 'leaveOrganization',
     testId: 'Icon-Component-Leave-Organization',
   },
   Volunteer: {
-    name: 'Volunteer',
+    name: 'volunteer',
     testId: 'Icon-Component-Volunteer',
   },
   Transactions: {
-    name: 'Transactions',
+    name: 'transactions',
     testId: 'Icon-Component-Transactions',
   },
   default: {
@@ -115,7 +115,7 @@ describe('Testing Collapsible Dropdown component', () => {
 
 describe('IconComponent sx color handling', () => {
   it('applies sx color to Campaigns icon', () => {
-    render(<IconComponent name="Campaigns" fill="#FF0000" />);
+    render(<IconComponent name="campaigns" fill="#FF0000" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
     // Material-UI applies sx color via inline style or class
@@ -124,21 +124,21 @@ describe('IconComponent sx color handling', () => {
   });
 
   it('applies sx color to MyPledges icon', () => {
-    render(<IconComponent name="My Pledges" fill="#00FF00" />);
+    render(<IconComponent name="myPledges" fill="#00FF00" />);
     const icon = screen.getByTestId('Icon-Component-My-Pledges');
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveStyle({ color: 'rgb(0, 255, 0)' });
   });
 
   it('applies sx color to LeaveOrganization icon', () => {
-    render(<IconComponent name="Leave Organization" fill="#0000FF" />);
+    render(<IconComponent name="leaveOrganization" fill="#0000FF" />);
     const icon = screen.getByTestId('Icon-Component-Leave-Organization');
     expect(icon).toBeInTheDocument();
     expect(icon).toHaveStyle({ color: 'rgb(0, 0, 255)' });
   });
 
   it('uses currentColor as fallback when fill is not provided for Campaigns', () => {
-    render(<IconComponent name="Campaigns" />);
+    render(<IconComponent name="campaigns" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
     // When fill is not provided, the component uses 'currentColor' which is computed
@@ -148,21 +148,21 @@ describe('IconComponent sx color handling', () => {
   });
 
   it('uses currentColor as fallback when fill is not provided for MyPledges', () => {
-    render(<IconComponent name="My Pledges" />);
+    render(<IconComponent name="myPledges" />);
     const icon = screen.getByTestId('Icon-Component-My-Pledges');
     expect(icon).toBeInTheDocument();
     expect(icon.tagName.toLowerCase()).toBe('svg');
   });
 
   it('uses currentColor as fallback when fill is not provided for LeaveOrganization', () => {
-    render(<IconComponent name="Leave Organization" />);
+    render(<IconComponent name="leaveOrganization" />);
     const icon = screen.getByTestId('Icon-Component-Leave-Organization');
     expect(icon).toBeInTheDocument();
     expect(icon.tagName.toLowerCase()).toBe('svg');
   });
 
   it('applies sx color with CSS variable value', () => {
-    render(<IconComponent name="Campaigns" fill="var(--bs-primary)" />);
+    render(<IconComponent name="campaigns" fill="var(--bs-primary)" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
     // CSS variables are passed through as-is to the sx prop
@@ -171,7 +171,7 @@ describe('IconComponent sx color handling', () => {
 });
 describe('IconComponent Chat icon', () => {
   it('renders Chat icon with correct testId', () => {
-    render(<IconComponent name="Chat" />);
+    render(<IconComponent name="chat" />);
     const icon = screen.getByTestId('Icon-Component-ChatIcon');
     expect(icon).toBeInTheDocument();
   });

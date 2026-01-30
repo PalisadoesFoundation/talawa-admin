@@ -330,7 +330,7 @@ describe('LeftDrawerOrg', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
       writable: true,

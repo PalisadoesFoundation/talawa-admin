@@ -51,7 +51,7 @@ let mockTCommon: ReturnType<typeof vi.fn>;
 const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
     talawaUserPortal: 'Talawa User Portal',
-    'my organizations': 'My Organizations',
+    myOrganizations: 'My Organizations',
     menu: 'Menu',
     Settings: 'Settings', // Capital S for common namespace
   };
@@ -62,6 +62,7 @@ const mockTCommonImplementation = (key: string) => {
   const translations: Record<string, string> = {
     menu: 'Menu',
     Settings: 'Settings',
+    settings: 'Settings',
     userPortal: 'User Portal',
     notifications: 'Notifications', // Used by notification button in component
     pluginSettings: 'Plugin Settings', // Used by SidebarPluginSection
@@ -578,8 +579,8 @@ describe('UserSidebar', () => {
       renderComponent();
 
       expect(mockTCommon).toHaveBeenCalledWith('userPortal');
-      expect(mockT).toHaveBeenCalledWith('my organizations');
-      expect(mockTCommon).toHaveBeenCalledWith('Settings');
+      expect(mockT).toHaveBeenCalledWith('myOrganizations');
+      expect(mockTCommon).toHaveBeenCalledWith('settings');
     });
   });
 
