@@ -24,6 +24,8 @@ import {
   MOCKS_MISSING_DATA,
   MOCKS_NO_LOCATION,
   MOCKS_INVALID_DATETIME,
+  MOCKS_UNDEFINED_INVITE_ONLY,
+  MOCKS_EMPTY_DATE_STRINGS,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
@@ -107,11 +109,19 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   );
 };
 
+const { mockEventListCardModals } = vi.hoisted(() => ({
+  mockEventListCardModals: vi.fn(),
+}));
+
+mockEventListCardModals.mockImplementation(() => (
+  <div data-testid="event-list-card-modals" />
+));
+
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
-      default: () => <div data-testid="event-list-card-modals" />,
+      default: mockEventListCardModals,
     }));
   });
 
@@ -440,5 +450,44 @@ describe('Testing Event Dashboard Screen', () => {
       expect(queryByTestId('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
     });
+  });
+  it('Should default isInviteOnly to false when undefined', async () => {
+    const mockUndefinedInviteOnly = new StaticMockLink(
+      MOCKS_UNDEFINED_INVITE_ONLY,
+      true,
+    );
+    const { getByTestId } = renderEventDashboard(mockUndefinedInviteOnly);
+    await wait();
+
+    expect(getByTestId('event-details')).toBeInTheDocument();
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props).toEqual(
+      expect.objectContaining({
+        eventListCardProps: expect.objectContaining({
+          isInviteOnly: false,
+        }),
+      }),
+    );
+  });
+
+  it('Should handle empty date strings by defaulting to 08:00', async () => {
+    const mockEmptyDates = new StaticMockLink(MOCKS_EMPTY_DATE_STRINGS, true);
+    const { getByTestId } = renderEventDashboard(mockEmptyDates);
+    await wait();
+
+    // Covers formatTimeFromDateTime fallback to '08:00' when startAt/endAt are empty strings
+    // (exercised via eventListCardProps.startTime/endTime construction)
+    expect(getByTestId('event-details')).toBeInTheDocument();
+
+    // Assert the fallback time was passed to the modal component
+    expect(mockEventListCardModals).toHaveBeenCalled();
+    const props = mockEventListCardModals.mock.lastCall?.[0];
+    expect(props?.eventListCardProps?.startTime).toBe('08:00');
+    expect(props?.eventListCardProps?.endTime).toBe('08:00');
+
+    // Assert that the date containers are rendered even if content is empty (strict coverage)
+    expect(getByTestId('start-date')).toBeInTheDocument();
+    expect(getByTestId('end-date')).toBeInTheDocument();
   });
 });

@@ -16,6 +16,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'test-utils/I18nextProviderMock';
 import dayjs from 'dayjs';
 import userEvent from '@testing-library/user-event';
+import { IDENTIFIER_ID, IDENTIFIER_USER_ID } from 'Constant/common';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockNotificationToast } = vi.hoisted(() => ({
@@ -38,7 +39,7 @@ const routerMocks = vi.hoisted(() => ({
 
 // Hoisted localStorage mock
 const localStorageMocks = vi.hoisted(() => ({
-  getItem: vi.fn((): string | null => 'user-123'),
+  getItem: vi.fn((_key?: string): string | null => 'user-123'),
 }));
 
 vi.mock('react-router', async () => {
@@ -52,6 +53,8 @@ vi.mock('utils/useLocalstorage', () => ({
     getItem: localStorageMocks.getItem,
     setItem: vi.fn(),
     removeItem: vi.fn(),
+    clearAllItems: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
   }),
 }));
 
@@ -550,6 +553,7 @@ describe('PostsPage Component', () => {
   beforeEach(() => {
     nextId = 1;
     vi.clearAllMocks();
+    localStorageMocks.getItem.mockReturnValue('user-123');
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -1489,10 +1493,101 @@ describe('FetchMore Success Coverage', () => {
   });
 });
 
+describe('UserId Fallback Logic', () => {
+  const orgId = '123';
+
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    // Reset localStorage mock to default behavior
+    localStorageMocks.getItem.mockReturnValue('user-123');
+  });
+
+  const createOrgPostMock = (userId: string | null): MockedResponse => ({
+    request: {
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
+      variables: {
+        input: { id: orgId },
+        userId: userId,
+        after: null,
+        before: null,
+        first: 6,
+        last: null,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: orgId,
+          name: 'Test Organization',
+          postsCount: 0,
+          posts: {
+            edges: [],
+            totalCount: 0,
+            pageInfo: {
+              startCursor: null,
+              endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  it('retrieves userId from "userId" if it exists', async () => {
+    const testUserId = 'test-user-from-userId';
+    localStorageMocks.getItem.mockImplementation((key?: string) => {
+      if (key === IDENTIFIER_USER_ID) return testUserId;
+      if (key === IDENTIFIER_ID) return 'wrong-id';
+      return null;
+    });
+
+    renderComponent([createOrgPostMock(testUserId), emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+  });
+
+  it('falls back to "id" if "userId" does not exist', async () => {
+    const testId = 'test-user-from-id';
+    localStorageMocks.getItem.mockImplementation((key?: string) => {
+      if (key === IDENTIFIER_USER_ID) return null;
+      if (key === IDENTIFIER_ID) return testId;
+      return null;
+    });
+
+    renderComponent([createOrgPostMock(testId), emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+  });
+
+  it('returns null when both "userId" and "id" are absent', async () => {
+    localStorageMocks.getItem.mockImplementation(() => null);
+
+    // No mocks needed if queries are correctly skipped when userId is missing
+    renderComponent([]);
+
+    await waitFor(() => {
+      expect(screen.getByText('No posts available.')).toBeInTheDocument();
+    });
+  });
+});
+
 describe('LoadingState Wrapper', () => {
   beforeEach(() => {
     nextId = 1;
     vi.clearAllMocks();
+    localStorageMocks.getItem.mockReturnValue('user-123');
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
