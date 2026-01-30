@@ -8,7 +8,17 @@ import ts from 'typescript';
 
 const CSS_EXTENSION_REGEX = /\.css$/;
 const TS_EXTENSION_REGEX = /\.(ts|tsx)$/i;
-const EXEMPT_FILES = [path.resolve('src/index.tsx')];
+const CSS_MODULE_REGEX = /\.module\.css$/i;
+
+const EXEMPT_TS_FILES = [path.resolve('src/index.tsx')];
+const EXEMPT_CSS_FILES = new Set([
+  path.resolve('src/style/app-fixed.module.css'),
+]);
+const EXEMPT_CSS_DIR_PREFIXES = [
+  'src/style/tokens/',
+  'src/assets/css/',
+  'src/assets/scss/',
+];
 const red = (text) => `\u001b[31m${text}\u001b[0m`;
 const bold = (text) => `\u001b[1m${text}\u001b[0m`;
 
@@ -28,6 +38,73 @@ const parseArgs = (argv) => {
   }
 
   return [...new Set(rawFiles.map((file) => path.resolve(file)))];
+};
+
+const shouldSkipCssFile = (filePath) => {
+  if (EXEMPT_CSS_FILES.has(filePath)) return true;
+
+  const normalized = path
+    .relative(process.cwd(), filePath)
+    .split(path.sep)
+    .join('/');
+
+  return EXEMPT_CSS_DIR_PREFIXES.some((prefix) =>
+    normalized.startsWith(prefix),
+  );
+};
+
+const isLocalCssModule = (baseDir, targetPath) => {
+  const relative = path.relative(baseDir, targetPath);
+  return relative && !relative.startsWith('..') && !path.isAbsolute(relative);
+};
+
+const collectComposeViolations = (filePath, content) => {
+  const violations = [];
+  const baseDir = path.dirname(filePath);
+  const composeRegex =
+    /composes\s*:[^;{]*\bfrom\s+(?:['"]([^'"]+)['"]|(global))\b/gi;
+  for (const match of content.matchAll(composeRegex)) {
+    const matchIndex = match.index ?? 0;
+    const line = content.slice(0, matchIndex).split(/\r?\n/).length;
+    const importPath = match[1] ?? match[2];
+
+    if (importPath === 'global') {
+      violations.push({
+        filePath,
+        line,
+        importedPath: 'global',
+        reason:
+          'composes from global is disallowed. Define styles locally instead.',
+      });
+      continue;
+    }
+
+    if (!importPath.startsWith('.')) {
+      violations.push({
+        filePath,
+        line,
+        importedPath: importPath,
+        reason:
+          'composes must use a relative path within the component. Non-relative targets are disallowed.',
+      });
+      continue;
+    }
+
+    const resolvedImport = path.resolve(baseDir, importPath);
+    const isLocal = isLocalCssModule(baseDir, resolvedImport);
+
+    if (!isLocal) {
+      violations.push({
+        filePath,
+        line,
+        importedPath: importPath,
+        reason:
+          'composes from a non-local stylesheet. Define styles locally instead.',
+      });
+    }
+  }
+
+  return violations;
 };
 
 const collectCssImports = (filePath, content) => {
@@ -55,7 +132,7 @@ const collectCssImports = (filePath, content) => {
   return imports;
 };
 
-const validateFile = (filePath, content) => {
+const validateTsFile = (filePath, content) => {
   const fileName = path.basename(filePath);
   const baseName = fileName
     .replace(TS_EXTENSION_REGEX, '')
@@ -86,16 +163,15 @@ const main = () => {
     return;
   }
 
-  const violations = [];
+  const tsImportViolations = [];
+  const cssComposeViolations = [];
 
   for (const inputFile of files) {
     const filePath = path.resolve(inputFile);
 
-    if (EXEMPT_FILES.includes(filePath)) {
+    if (EXEMPT_TS_FILES.includes(filePath)) {
       continue;
     }
-
-    if (!TS_EXTENSION_REGEX.test(filePath)) continue;
 
     if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
       console.error(`Skipping missing file: ${filePath}`);
@@ -111,22 +187,44 @@ const main = () => {
       continue;
     }
 
-    violations.push(...validateFile(filePath, content));
+    if (TS_EXTENSION_REGEX.test(filePath)) {
+      tsImportViolations.push(...validateTsFile(filePath, content));
+      continue;
+    }
+
+    if (CSS_MODULE_REGEX.test(filePath)) {
+      if (shouldSkipCssFile(filePath)) continue;
+      cssComposeViolations.push(...collectComposeViolations(filePath, content));
+    }
   }
 
-  if (!violations.length) {
+  if (!tsImportViolations.length && !cssComposeViolations.length) {
     console.log('✓ CSS import check passed.');
     return;
   }
 
-  console.error(`\n${red('CSS import policy violations found:')}`);
-  for (const violation of violations) {
-    const relPath = path.relative(process.cwd(), violation.filePath);
-    console.error(
-      `- ${bold(relPath)}:${violation.line} imported ${red(
-        `"${violation.importedPath}"`,
-      )} expected ${bold(`"${violation.expectedPath}"`)}`,
-    );
+  if (tsImportViolations.length) {
+    console.error(`\n${red('CSS import policy violations found:')}`);
+    for (const violation of tsImportViolations) {
+      const relPath = path.relative(process.cwd(), violation.filePath);
+      console.error(
+        `- ${bold(relPath)}:${violation.line} imported ${red(
+          `"${violation.importedPath}"`,
+        )} expected ${bold(`"${violation.expectedPath}"`)}`,
+      );
+    }
+  }
+
+  if (cssComposeViolations.length) {
+    console.error(`\n${red('CSS compose policy violations found:')}`);
+    for (const violation of cssComposeViolations) {
+      const relPath = path.relative(process.cwd(), violation.filePath);
+      console.error(
+        `- ${bold(relPath)}:${violation.line} composes from ${red(
+          `"${violation.importedPath}"`,
+        )} ${violation.reason}`,
+      );
+    }
   }
 
   process.exitCode = 1;
