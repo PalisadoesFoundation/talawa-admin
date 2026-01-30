@@ -1060,7 +1060,7 @@ describe('PledgeModal', () => {
 
       // Verify the autocomplete is still there after selection
       await waitFor(() => {
-         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
       });
     });
   });
