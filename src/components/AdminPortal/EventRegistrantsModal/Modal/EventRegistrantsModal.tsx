@@ -59,10 +59,12 @@ import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 
-export const EventRegistrantsModal = (
-  props: InterfaceEventRegistrantsModalProps,
-): JSX.Element => {
-  const { eventId, orgId, handleClose, show } = props;
+export const EventRegistrantsModal = ({
+  eventId,
+  orgId,
+  handleClose,
+  show,
+}: InterfaceEventRegistrantsModalProps): JSX.Element => {
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);

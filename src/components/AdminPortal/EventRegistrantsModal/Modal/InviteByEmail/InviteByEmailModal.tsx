@@ -250,7 +250,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             placeholder={t('messagePlaceholder', {
               defaultValue: 'You are invited to attend this event.',
             })}
-            inputProps={{ 'data-testid': 'invite-message' }}
+            data-testid="invite-message"
           />
         </FormFieldGroup>
 
