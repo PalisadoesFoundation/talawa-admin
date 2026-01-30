@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -100,6 +101,32 @@ describe('TimePicker', () => {
 
     const input = screen.getByRole('textbox');
     expect(input).toBeInTheDocument();
+  });
+
+  it('enforces minTime/maxTime constraints on time selection', async () => {
+    const user = userEvent.setup();
+    const minTime = dayjs().hour(9).minute(0);
+    const maxTime = dayjs().hour(17).minute(0);
+    const onChange = vi.fn();
+
+    renderWithProvider(
+      <TimePicker
+        label="Select Time"
+        minTime={minTime}
+        maxTime={maxTime}
+        onChange={onChange}
+        value={dayjs().hour(12).minute(0)}
+      />,
+    );
+
+    const input = screen.getByRole('textbox');
+    await user.clear(input);
+    await user.type(input, '08:00:00'); // Before minTime
+
+    // Verify constraint enforcement
+    expect(onChange).not.toHaveBeenCalledWith(
+      expect.objectContaining({ $H: 8 }),
+    );
   });
 
   it('applies custom className', () => {

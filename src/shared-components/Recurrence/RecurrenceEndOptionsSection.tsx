@@ -11,24 +11,9 @@ import {
   endsOn,
   recurrenceEndOptions,
 } from '../../utils/recurrenceUtils';
-import type {
-  InterfaceRecurrenceRule,
-  RecurrenceEndOptionType,
-} from '../../utils/recurrenceUtils';
 import styles from './RecurrenceEndOptionsSection.module.css';
 
-interface InterfaceRecurrenceEndOptionsSectionProps {
-  frequency: Frequency;
-  selectedRecurrenceEndOption: RecurrenceEndOptionType;
-  recurrenceRuleState: InterfaceRecurrenceRule;
-  localCount: number | string;
-  onRecurrenceEndOptionChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onCountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  setRecurrenceRuleState: (
-    state: React.SetStateAction<InterfaceRecurrenceRule>,
-  ) => void;
-  t: (key: string) => string;
-}
+import { InterfaceRecurrenceEndOptionsSectionProps } from 'types/shared-components/Recurrence/interface';
 
 /**
  * Recurrence end options section (never, on date, after count)

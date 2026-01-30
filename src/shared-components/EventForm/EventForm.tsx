@@ -403,12 +403,11 @@ const EventForm: React.FC<IEventFormProps> = ({
         </div>
         <div className={styles.checkboxdivEvents}>
           <div className={styles.dispflexEvents}>
-            <label htmlFor="allday">{t('allDay')}?</label>
             <FormCheckField
               className={`me-4 ${styles.switch}`}
               id="allday"
               name="allDay"
-              label=""
+              label={`${t('allDay')}?`}
               type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
@@ -417,12 +416,11 @@ const EventForm: React.FC<IEventFormProps> = ({
           </div>
           {showRecurrenceToggle && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="recurring">{t('recurring')}:</label>
               <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
                 name="recurring"
-                label=""
+                label={`${t('recurring')}:`}
                 type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
@@ -432,12 +430,11 @@ const EventForm: React.FC<IEventFormProps> = ({
           )}
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="registrable">{t('registerable')}?</label>
               <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
                 name="registrable"
-                label=""
+                label={`${t('registerable')}?`}
                 type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
@@ -452,12 +449,11 @@ const EventForm: React.FC<IEventFormProps> = ({
           )}
           {showCreateChat && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="createChat">{t('createChat')}?</label>
               <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="chat"
                 name="createChat"
-                label=""
+                label={`${t('createChat')}?`}
                 type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}

@@ -1,6 +1,7 @@
-.wrapper {
-  display: flex !important;
-  position: relative !important;
+/* Increase specificity to override potential conflicts */
+.wrapper.wrapper {
+  display: flex;
+  position: relative;
   width: 100%;
 }
 
@@ -12,10 +13,11 @@
   padding-right: calc(40px + 0.75rem);
 }
 
-.adornment {
-  position: absolute !important;
-  right: 0 !important;
-  top: 50% !important;
-  transform: translateY(-50%) !important;
-  padding-right: 0.5rem !important;
+/* Increase specificity for positioning overrides */
+.adornment.adornment {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 0.5rem;
 }

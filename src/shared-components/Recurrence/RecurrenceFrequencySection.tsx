@@ -4,14 +4,7 @@ import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { Frequency, frequencies } from '../../utils/recurrenceUtils';
 import styles from './RecurrenceFrequencySection.module.css';
 
-interface InterfaceRecurrenceFrequencySectionProps {
-  frequency: Frequency;
-  localInterval: number | string;
-  onIntervalChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFrequencyChange: (newFrequency: Frequency) => void;
-  t: (key: string) => string;
-}
-
+import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-components/Recurrence/interface';
 /**
  * Frequency and interval selection section
  */

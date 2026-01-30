@@ -95,8 +95,8 @@
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover, #1778f2) !important;
+.addButton.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover, #1778f2);
   border-color: var(--addButton-border-hover, #555555);
 }
 
