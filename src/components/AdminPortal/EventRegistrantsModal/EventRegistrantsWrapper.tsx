@@ -7,12 +7,8 @@
  * @param eventId - The unique identifier for the event.
  * @param orgId - The unique identifier for the organization.
  * @param onUpdate - Optional callback function to be executed
- * @param eventId - The unique identifier for the event.
- * @param orgId - The unique identifier for the organization.
- * @param onUpdate - Optional callback function to be executed
  * after the modal is closed.
  *
- * @returns A button to open the modal and the modal itself when visible.
  * @returns A button to open the modal and the modal itself when visible.
  *
  * @example
@@ -27,7 +23,7 @@
  * @remarks
  * - The modal is displayed conditionally based on the `showModal` state.
  * - The `onUpdate` callback is invoked after the modal is closed, if provided.
- * - The button uses a custom style from `app-fixed.module.css`.
+ * - The button uses a custom style from EventRegistrantsWrapper.module.css.
  */
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
@@ -35,14 +31,13 @@ import Button from 'shared-components/Button';
 import style from './EventRegistrantsWrapper.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
-
-type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
+import type { InterfaceEventRegistrantsWrapperProps } from 'types/AdminPortal/EventRegistrantsWrapper/interface';
 
 export const EventRegistrantsWrapper = ({
   eventId,
   orgId,
   onUpdate,
-}: PropType): JSX.Element => {
+}: InterfaceEventRegistrantsWrapperProps): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventRegistrantsModal',
