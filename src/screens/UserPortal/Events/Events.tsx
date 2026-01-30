@@ -25,7 +25,7 @@
  *
  * Methods:
  * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
- * - `closeCreateEventModal`: Toggles the visibility of the event creation modal.
+ * - `closeCreateEventModal`: Closes the event creation modal.
  * - `showInviteModal`: Opens the event creation modal.
  * - `handleChangeView`: Updates the calendar view type.
  *
