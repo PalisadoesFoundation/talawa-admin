@@ -69,6 +69,7 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
 import { formatPostForCard } from './helperFunctions';
+import { IDENTIFIER_ID, IDENTIFIER_USER_ID } from 'Constant/common';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -86,7 +87,10 @@ export default function PostsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
-  const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
+  const userId =
+    getItem<string>(IDENTIFIER_USER_ID) ??
+    getItem<string>(IDENTIFIER_ID) ??
+    null;
   const [showPostViewModal, setShowPostViewModal] = useState(false);
   const [searchParams] = useSearchParams();
 
@@ -408,7 +412,7 @@ export default function PostsPage() {
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
                 <Box sx={{ py: 4 }}>
-                  <Typography color="text.secondary">
+                  <Typography className="text-secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
                 </Box>
@@ -435,7 +439,7 @@ export default function PostsPage() {
                   endMessage={
                     postsToDisplay.length > 0 && (
                       <Box sx={{ py: 2 }}>
-                        <Typography color="text.secondary">
+                        <Typography className="text-secondary">
                           {t('noMorePosts')}
                         </Typography>
                       </Box>
@@ -461,7 +465,7 @@ export default function PostsPage() {
                 !orgPostListLoading &&
                 !isFiltering && (
                   <Box sx={{ py: 4 }}>
-                    <Typography color="text.secondary">
+                    <Typography className="text-secondary">
                       {t('noPosts')}
                     </Typography>
                   </Box>

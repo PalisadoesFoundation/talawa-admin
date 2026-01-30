@@ -8,9 +8,9 @@ Defined in: [src/types/Event/interface.ts:149](https://github.com/PalisadoesFoun
 
 ## Properties
 
-### alldaychecked
+### allDayChecked
 
-> **alldaychecked**: `boolean`
+> **allDayChecked**: `boolean`
 
 Defined in: [src/types/Event/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L162)
 
@@ -66,9 +66,9 @@ Defined in: [src/types/Event/interface.ts:170](https://github.com/PalisadoesFoun
 
 > **endTime**: `string`
 
-#### eventdescrip
+#### eventDescription
 
-> **eventdescrip**: `string`
+> **eventDescription**: `string`
 
 #### location
 
@@ -136,9 +136,9 @@ Defined in: [src/types/Event/interface.ts:186](https://github.com/PalisadoesFoun
 
 ***
 
-### publicchecked
+### publicChecked
 
-> **publicchecked**: `boolean`
+> **publicChecked**: `boolean`
 
 Defined in: [src/types/Event/interface.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L164)
 
@@ -152,6 +152,14 @@ Defined in: [src/types/Event/interface.ts:187](https://github.com/PalisadoesFoun
 
 ***
 
+### registerableChecked
+
+> **registerableChecked**: `boolean`
+
+Defined in: [src/types/Event/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L166)
+
+***
+
 ### registerEventHandler()
 
 > **registerEventHandler**: () => `Promise`\<`void`\>
@@ -161,14 +169,6 @@ Defined in: [src/types/Event/interface.ts:184](https://github.com/PalisadoesFoun
 #### Returns
 
 `Promise`\<`void`\>
-
-***
-
-### registrablechecked
-
-> **registrablechecked**: `boolean`
-
-Defined in: [src/types/Event/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L166)
 
 ***
 
@@ -218,7 +218,7 @@ Defined in: [src/types/Event/interface.ts:177](https://github.com/PalisadoesFoun
 
 `string`
 
-###### eventdescrip
+###### eventDescription
 
 `string`
 
@@ -264,9 +264,9 @@ Defined in: [src/types/Event/interface.ts:188](https://github.com/PalisadoesFoun
 
 ***
 
-### setRegistrableChecked
+### setRegisterableChecked
 
-> **setRegistrableChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+> **setRegisterableChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
 Defined in: [src/types/Event/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L167)
 
@@ -274,7 +274,7 @@ Defined in: [src/types/Event/interface.ts:167](https://github.com/PalisadoesFoun
 
 ### t()
 
-> **t**: (`key`) => `string`
+> **t**: (`key`, `options?`) => `string`
 
 Defined in: [src/types/Event/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L154)
 
@@ -283,6 +283,10 @@ Defined in: [src/types/Event/interface.ts:154](https://github.com/PalisadoesFoun
 ##### key
 
 `string`
+
+##### options?
+
+`Record`\<`string`, `unknown`\>
 
 #### Returns
 
