@@ -32,12 +32,13 @@ vi.mock('utils/i18n', () => ({
 }));
 
 // Mock react-toastify
-const mockToast = {
+// Mock react-toastify
+const mockToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
   warn: vi.fn(),
   warning: vi.fn(),
-};
+}));
 
 vi.mock('react-toastify', () => ({
   toast: mockToast,
@@ -836,7 +837,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
-    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await userEvent.click(screen.getByTestId('edit-comment-save-btn'));
     await wait();
     expect(defaultProps.refetchComments).toHaveBeenCalled();
     expect(mockToast.success).toHaveBeenCalledWith(
@@ -866,7 +867,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, ' ');
-    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await userEvent.click(screen.getByTestId('edit-comment-save-btn'));
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
       'Please enter a comment before submitting.',
@@ -900,7 +901,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
-    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await userEvent.click(screen.getByTestId('edit-comment-save-btn'));
     await wait();
     expect(mockToast.error).toHaveBeenCalledWith(
       'Failed to update comment',
@@ -1043,8 +1044,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
 
-    // Get the edit input element by explicitly querying the aria-label
-    const editInput = screen.getByLabelText('Edit comment');
+    // Get the edit input element
+    const editInput = screen.getByTestId('edit-comment-input');
     expect(editInput).toBeInTheDocument();
+
+    // Verify the aria-label attribute is set correctly
+    expect(editInput).toHaveAttribute('aria-label', 'Edit Comment');
   });
 });
