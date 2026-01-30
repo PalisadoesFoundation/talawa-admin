@@ -15,6 +15,11 @@ export type DirectMessage = {
   updatedAt: Date;
 };
 
+/**
+ * @deprecated Use NewChatType from 'types/UserPortal/Chat/interface' instead.
+ * This type uses legacy fields (_id, users, image) that are not queried by the GraphQL layer.
+ * Only kept for test mocks compatibility - should not be used in production code.
+ */
 export type GroupChat = {
   _id: string;
   isGroup: boolean;

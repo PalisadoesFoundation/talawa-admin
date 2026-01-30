@@ -20,7 +20,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:74]
 
 ### chats
 
-[`GroupChat`](../../../../../types/UserPortal/Chat/type/type-aliases/GroupChat.md)[]
+[`NewChatType`](../../../../../types/UserPortal/Chat/interface/type-aliases/NewChatType.md)[]
 
 ### t
 

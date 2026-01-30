@@ -1,12 +1,16 @@
 import type { ApolloQueryResult } from '@apollo/client';
 
+/**
+ * Chat type aligned with GraphQL schema.
+ * This is the canonical chat type - use this instead of the legacy GroupChat type.
+ */
 export type NewChatType = {
   id: string;
   name: string;
   description?: string;
   avatarMimeType?: string;
   avatarURL?: string;
-  isGroup: boolean;
+  isGroup?: boolean;
   createdAt: string;
   updatedAt: string | null;
   // Optional unread/computed fields (provided by unreadChats or when opting-in)
@@ -51,8 +55,8 @@ export type NewChatType = {
     avatarMimeType?: string;
     avatarURL?: string;
   };
-  members: {
-    edges: Array<{
+  members?: {
+    edges?: Array<{
       cursor: string;
       node: {
         user: {

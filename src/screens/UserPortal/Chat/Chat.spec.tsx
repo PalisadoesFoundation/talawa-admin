@@ -565,27 +565,29 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should filter for legacy group chats by user count', async () => {
-    const legacyGroupMock = {
+  test('should filter for group chats by member count (implicit group)', async () => {
+    const implicitGroupMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-group',
-              id: 'legacy-group',
-              name: 'Legacy Group',
+              id: 'implicit-group',
+              name: 'Implicit Group',
               isGroup: false,
-              users: [{}, {}, {}],
+              members: {
+                edges: Array(3).fill({ node: { user: { id: 'test' } } }),
+              },
               image: '',
               __typename: 'Chat',
             },
             {
-              _id: 'legacy-direct',
-              id: 'legacy-direct',
-              name: 'Legacy Direct',
+              id: 'direct-chat',
+              name: 'Direct Chat',
               isGroup: false,
-              users: [{}, {}],
+              members: {
+                edges: Array(2).fill({ node: { user: { id: 'test' } } }),
+              },
               image: '',
               __typename: 'Chat',
             },
@@ -595,25 +597,25 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     const customMocks = [
-      legacyGroupMock,
-      legacyGroupMock,
-      legacyGroupMock,
+      implicitGroupMock,
+      implicitGroupMock,
+      implicitGroupMock,
       mockUnreadChats,
     ];
 
     renderComponent(customMocks);
 
-    await screen.findByTestId('contact-card-legacy-group');
+    await screen.findByTestId('contact-card-implicit-group');
 
     const groupButton = screen.getByTestId('groupChat');
     await user.click(groupButton);
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('contact-card-legacy-group'),
+        screen.getByTestId('contact-card-implicit-group'),
       ).toBeInTheDocument();
       expect(
-        screen.queryByTestId('contact-card-legacy-direct'),
+        screen.queryByTestId('contact-card-direct-chat'),
       ).not.toBeInTheDocument();
     });
   });

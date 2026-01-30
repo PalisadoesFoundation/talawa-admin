@@ -42,13 +42,7 @@ import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/Crea
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
 // import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
-import type { GroupChat } from 'types/UserPortal/Chat/type';
 import type { NewChatType } from 'types/UserPortal/Chat/interface';
-
-// Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
-const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {
-  return 'id' in chat && !('_id' in chat);
-};
 interface InterfaceContactCardProps {
   id: string;
   title: string;
@@ -66,7 +60,7 @@ export default function chat(): JSX.Element {
   const { getItem, setItem } = useLocalStorage();
   const { orgId } = useParams<{ orgId: string }>();
 
-  const [chats, setChats] = useState<Array<GroupChat | NewChatType>>([]);
+  const [chats, setChats] = useState<NewChatType[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -118,51 +112,36 @@ export default function chat(): JSX.Element {
     async function getChats(): Promise<void> {
       if (filterType === 'all') {
         const { data } = await chatsListRefetch();
-        if (data && data.chatsByUser) {
+        if (data?.chatsByUser) {
           const filteredChats = orgId
-            ? data.chatsByUser.filter((chat: GroupChat | NewChatType) => {
-                if (isNewChatType(chat)) {
-                  return chat.organization?.id === orgId;
-                }
-                const legacy = chat as GroupChat;
-                return legacy.organization?._id === orgId;
-              })
+            ? data.chatsByUser.filter(
+                (chat: NewChatType) => chat.organization?.id === orgId,
+              )
             : data.chatsByUser;
           setChats(filteredChats);
         }
       } else if (filterType === 'unread') {
         const { data } = await unreadChatListRefetch();
-        if (data && data.unreadChats) {
+        if (data?.unreadChats) {
           const filteredChats = orgId
-            ? data.unreadChats.filter((chat: GroupChat | NewChatType) => {
-                if (isNewChatType(chat)) {
-                  return chat.organization?.id === orgId;
-                }
-                const legacy = chat as GroupChat;
-                return legacy.organization?._id === orgId;
-              })
+            ? data.unreadChats.filter(
+                (chat: NewChatType) => chat.organization?.id === orgId,
+              )
             : data.unreadChats;
           setChats(filteredChats);
         }
       } else if (filterType === 'group') {
         const { data } = await chatsListRefetch();
-        const list: Array<GroupChat | NewChatType> =
-          (data && data.chatsByUser) || [];
-        const groups = list.filter((chat: GroupChat | NewChatType) => {
-          if (isNewChatType(chat)) {
-            return (chat.members?.edges?.length || 0) > 2;
-          }
-          const legacy = chat as GroupChat;
-          return !!legacy.isGroup || (legacy.users?.length || 0) > 2;
-        });
+        const list: NewChatType[] = data?.chatsByUser || [];
+        // A chat is a group if it has more than 2 members or isGroup is true
+        const groups = list.filter(
+          (chat: NewChatType) =>
+            chat.isGroup || (chat.members?.edges?.length || 0) > 2,
+        );
         const filteredGroups = orgId
-          ? groups.filter((chat: GroupChat | NewChatType) => {
-              if (isNewChatType(chat)) {
-                return chat.organization?.id === orgId;
-              }
-              const legacy = chat as GroupChat;
-              return legacy.organization?._id === orgId;
-            })
+          ? groups.filter(
+              (chat: NewChatType) => chat.organization?.id === orgId,
+            )
           : groups;
         setChats(filteredGroups);
       }
@@ -173,13 +152,9 @@ export default function chat(): JSX.Element {
   React.useEffect(() => {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
       const filteredChats = orgId
-        ? chatsListData.chatsByUser.filter((chat: GroupChat | NewChatType) => {
-            if (isNewChatType(chat)) {
-              return chat.organization?.id === orgId;
-            }
-            const legacy = chat as GroupChat;
-            return legacy.organization?._id === orgId;
-          })
+        ? chatsListData.chatsByUser.filter(
+            (chat: NewChatType) => chat.organization?.id === orgId,
+          )
         : chatsListData.chatsByUser;
       setChats(filteredChats);
     }
@@ -189,9 +164,7 @@ export default function chat(): JSX.Element {
     if (chats.length === 0) return;
     const stored = getItem('selectedChatId') as string | null;
     if (stored && !selectedContact) {
-      const exists = chats.some((c) =>
-        isNewChatType(c) ? c.id === stored : c._id === stored,
-      );
+      const exists = chats.some((c) => c.id === stored);
       if (exists) {
         setSelectedContact(stored);
         return;
@@ -199,10 +172,7 @@ export default function chat(): JSX.Element {
     }
     if (!selectedContact) {
       const firstChat = chats[0];
-      const firstChatId = isNewChatType(firstChat)
-        ? firstChat.id
-        : firstChat._id;
-      setSelectedContact(firstChatId);
+      setSelectedContact(firstChat.id);
     }
   }, [chats, selectedContact, getItem]);
 
@@ -307,35 +277,20 @@ export default function chat(): JSX.Element {
                     className={`${styles.contactCardContainer} ${styles.contactCardList}`}
                   >
                     {!!chats.length &&
-                      chats.map((chat: GroupChat | NewChatType) => {
-                        const unreadCount = isNewChatType(chat)
-                          ? (chat.unreadMessagesCount ?? 0)
-                          : 0;
-                        const lastMsgBody = isNewChatType(chat)
-                          ? (chat.lastMessage?.body ?? '')
-                          : '';
-
+                      chats.map((chat: NewChatType) => {
                         const cardProps: InterfaceContactCardProps = {
-                          id: isNewChatType(chat) ? chat.id : chat._id,
+                          id: chat.id,
                           title: chat.name || 'Chat',
-                          image: isNewChatType(chat)
-                            ? chat.avatarURL || ''
-                            : chat.image || '',
+                          image: chat.avatarURL || '',
                           setSelectedContact,
                           selectedContact,
-                          isGroup: isNewChatType(chat)
-                            ? (chat.members?.edges?.length || 0) > 2
-                            : (chat as GroupChat).isGroup ||
-                              ((chat as GroupChat).users?.length || 0) > 2,
-                          unseenMessages: unreadCount,
-                          lastMessage: lastMsgBody,
+                          isGroup:
+                            chat.isGroup ||
+                            (chat.members?.edges?.length || 0) > 2,
+                          unseenMessages: chat.unreadMessagesCount ?? 0,
+                          lastMessage: chat.lastMessage?.body ?? '',
                         };
-                        return (
-                          <ContactCard
-                            {...cardProps}
-                            key={isNewChatType(chat) ? chat.id : chat._id}
-                          />
-                        );
+                        return <ContactCard {...cardProps} key={chat.id} />;
                       })}
                   </div>
                 </>
@@ -362,7 +317,7 @@ export default function chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
-          chats={chats.filter((c) => !isNewChatType(c)) as GroupChat[]}
+          chats={chats}
         ></CreateDirectChat>
       )}
     </>

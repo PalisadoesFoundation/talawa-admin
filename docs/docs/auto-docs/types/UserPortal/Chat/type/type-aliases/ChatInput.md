@@ -6,7 +6,7 @@
 
 > **ChatInput** = `object`
 
-Defined in: [src/types/UserPortal/Chat/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L35)
+Defined in: [src/types/UserPortal/Chat/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L40)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/UserPortal/Chat/type.ts:35](https://github.com/Palisadoes
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L36)
+Defined in: [src/types/UserPortal/Chat/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L41)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/UserPortal/Chat/type.ts:36](https://github.com/Palisadoes
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/UserPortal/Chat/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L39)
+Defined in: [src/types/UserPortal/Chat/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L44)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortal/Chat/type.ts:39](https://github.com/Palisadoes
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/types/UserPortal/Chat/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L37)
+Defined in: [src/types/UserPortal/Chat/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L42)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/UserPortal/Chat/type.ts:37](https://github.com/Palisadoes
 
 > **userIds**: `string`[]
 
-Defined in: [src/types/UserPortal/Chat/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L38)
+Defined in: [src/types/UserPortal/Chat/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/type.ts#L43)
