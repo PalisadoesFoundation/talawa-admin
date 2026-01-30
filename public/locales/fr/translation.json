@@ -1895,7 +1895,7 @@
     "confirmRemoveMember": "Confirmer la suppression du membre",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
     "userAddedSuccessfully": "Utilisateur ajouté avec succès",
-    "directChatExists": "A conversation with {{name}} already exists!"
+    "directChatExists": "Une conversation avec {{name}} existe déjà !"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

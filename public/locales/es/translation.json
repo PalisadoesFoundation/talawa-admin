@@ -1878,7 +1878,7 @@
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
     "next": "Siguiente",
-    "directChatExists": "A conversation with {{name}} already exists!"
+    "directChatExists": "¡Ya existe una conversación con {{name}}!"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

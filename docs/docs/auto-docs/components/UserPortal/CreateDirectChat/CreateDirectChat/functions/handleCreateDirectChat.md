@@ -6,7 +6,7 @@
 
 > **handleCreateDirectChat**(`id`, `userName`, `chats`, `t`, `tCommon`, `createChat`, `createChatMembership`, `organizationId`, `userId`, `currentUserName`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L77)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L79)
 
 Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
 
@@ -34,11 +34,13 @@ Array of existing chats to check for duplicates.
 
 `TFunction`\<`"translation"`, `"userChat"`\>
 
-i18n translation function.
+i18n translation function for userChat namespace.
 
 ### tCommon
 
 `TFunction`\<`"common"`, `undefined`\>
+
+i18n translation function for common namespace.
 
 ### createChat
 
@@ -62,9 +64,13 @@ The ID of the current organization.
 
 `string`
 
+The ID of the current user.
+
 ### currentUserName
 
 `string`
+
+The name of the current user.
 
 ### chatsListRefetch
 

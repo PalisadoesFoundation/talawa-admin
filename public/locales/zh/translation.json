@@ -1895,7 +1895,7 @@
     "failedToAddUser": "添加用户失败",
     "userAddedSuccessfully": "用户添加成功",
     "next": "下一步",
-    "directChatExists": "A conversation with {{name}} already exists!"
+    "directChatExists": "与 {{name}} 的对话已存在！"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

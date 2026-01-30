@@ -1890,7 +1890,7 @@
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
     "next": "अगला",
-    "directChatExists": "A conversation with {{name}} already exists!"
+    "directChatExists": "{{name}} के साथ बातचीत पहले से मौजूद है!"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

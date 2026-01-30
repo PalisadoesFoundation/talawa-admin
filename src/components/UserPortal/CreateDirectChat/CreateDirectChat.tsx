@@ -66,13 +66,15 @@ const { getItem } = useLocalStorage();
  * @param id - The ID of the user to chat with.
  * @param userName - The name of the user to chat with.
  * @param chats - Array of existing chats to check for duplicates.
- * @param t - i18n translation function.
+ * @param t - i18n translation function for userChat namespace.
+ * @param tCommon - i18n translation function for common namespace.
  * @param createChat - Mutation function to create a new chat.
  * @param createChatMembership - Mutation function to add members to the chat.
- * @param navigate - Function to navigate to the chat page.
- * @param toggleCreateDirectChatModal - Function to close the modal.
  * @param organizationId - The ID of the current organization.
+ * @param userId - The ID of the current user.
+ * @param currentUserName - The name of the current user.
  * @param chatsListRefetch - Function to refetch the list of chats.
+ * @param toggleCreateDirectChatModal - Function to close the modal.
  */
 export const handleCreateDirectChat = async (
   id: string,
@@ -141,7 +143,7 @@ export const handleCreateDirectChat = async (
     return (
       !chat.isGroup &&
       edges?.length === 2 &&
-      edges.some((edge) => edge.node.user.id === id)
+      edges?.some((edge) => edge.node.user.id === id)
     );
   });
   if (existingChat) {
