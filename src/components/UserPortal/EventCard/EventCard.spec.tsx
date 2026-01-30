@@ -303,17 +303,10 @@ describe('Testing Event Card In User portal', () => {
     // First click to trigger it while isRegistered is false
     await user.click(registerBtn);
 
-    // We can't easily trigger it when it's true from UI.
-    // So this test might not actually hit the 'else' branch if React hid the button.
-    // But let's see if we can trigger it fast.
-    // Actually, to hit the 'else', isRegistered must be true.
-    // If we wait for the first one to finish:
+    // After registration completes, verify state transition
     await waitFor(() =>
       expect(screen.getByText('Already registered')).toBeInTheDocument(),
     );
-
-    // Now isRegistered is true. But the button is gone.
-    // So we can't click it.
   });
 
   it('shows Invite Only button when event is invite-only', async () => {
