@@ -1756,7 +1756,13 @@
     "customRecurrence": "Recurrencia Personalizada",
     "repeatsEvery": "Se repite cada",
     "noEventAvailable": "¡No hay eventos disponibles!",
-    "eventDetails": "Detalles del evento"
+    "eventDetails": "Detalles del evento",
+    "presetToday": "Hoy",
+    "presetThisWeek": "Esta Semana",
+    "presetThisMonth": "Este Mes",
+    "presetNext7Days": "Próximos 7 Días",
+    "presetNext30Days": "Próximos 30 Días",
+    "presetNextMonth": "Próximo Mes"
   },
   "userEventCard": {
     "failedToRegister": "Error al registrarse para el evento",
@@ -2341,7 +2347,9 @@
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
-    "errorInstalling": "Error al cargar los detalles del plugin"
+    "errorInstalling": "Error al cargar los detalles del plugin",
+    "failedToParsePluginZip": "Error al analizar el archivo ZIP del plugin",
+    "pluginUploadedSuccess": "¡Plugin subido exitosamente! (componentes {{components}}) - Ahora puedes instalarlo desde la lista de plugins."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin No Encontrado o Deshabilitado",

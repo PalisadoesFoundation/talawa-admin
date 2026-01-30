@@ -1380,6 +1380,11 @@ describe('HandleSorting Edge Case', () => {
     // Verify hasMore is now false because hasNextPage is false
     infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+
+    // Verify endMessage is displayed when hasMore is false
+    expect(
+      screen.getByText(i18nForTest.t('posts.noMorePosts')),
+    ).toBeInTheDocument();
   });
 });
 

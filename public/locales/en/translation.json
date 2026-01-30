@@ -1756,7 +1756,13 @@
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
     "noEventAvailable": "No Event Available!",
-    "eventDetails": "Event Details"
+    "eventDetails": "Event Details",
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",
@@ -2341,7 +2347,9 @@
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details"
+    "errorInstalling": "Failed to load plugin details",
+    "failedToParsePluginZip": "Failed to parse plugin ZIP",
+    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

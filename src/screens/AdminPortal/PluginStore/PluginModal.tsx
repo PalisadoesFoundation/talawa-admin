@@ -74,8 +74,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           const pluginDetails =
             await AdminPluginFileService.getPluginDetails(pluginId);
           setDetails(pluginDetails);
-        } catch (error) {
-          console.error('Failed to load plugin details:', error);
+        } catch {
           NotificationToast.error(t('errorInstalling'));
           setDetails(null);
         } finally {

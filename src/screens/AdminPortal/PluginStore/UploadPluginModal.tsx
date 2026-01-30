@@ -85,7 +85,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         setManifest(structure.adminManifest || structure.apiManifest || null);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to parse plugin ZIP',
+          err instanceof Error ? err.message : t('failedToParsePluginZip'),
         );
         setManifest(null);
         setPluginStructure(null);
@@ -110,15 +110,12 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
       if (result.success) {
         const components = result.installedComponents.join(' and ');
-        NotificationToast.success(
-          `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
-        );
+        NotificationToast.success(t('pluginUploadedSuccess', { components }));
         onHide();
       } else {
-        NotificationToast.error(result.error || 'Failed to upload plugin');
+        NotificationToast.error(result.error || t('failedToUploadPlugin'));
       }
-    } catch (error) {
-      console.error('Failed to upload plugin:', error);
+    } catch {
       NotificationToast.error(t('failedToUploadPlugin'));
     } finally {
       setIsInstalling(false);

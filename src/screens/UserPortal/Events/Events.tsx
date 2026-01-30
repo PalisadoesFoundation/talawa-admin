@@ -57,7 +57,10 @@ import {
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React from 'react';
+
+dayjs.extend(utc);
 import {
   CRUDModalTemplate,
   useModalState,
@@ -114,7 +117,7 @@ export default function Events(): JSX.Element {
     () => [
       {
         key: 'today',
-        label: tCommon('userEvents.presetToday'),
+        label: t('presetToday'),
         getRange: () => ({
           startDate: dayjs().startOf('day').toDate(),
           endDate: dayjs().endOf('day').toDate(),
@@ -122,7 +125,7 @@ export default function Events(): JSX.Element {
       },
       {
         key: 'thisWeek',
-        label: tCommon('userEvents.presetThisWeek'),
+        label: t('presetThisWeek'),
         getRange: () => ({
           startDate: dayjs().startOf('week').toDate(),
           endDate: dayjs().endOf('week').toDate(),
@@ -130,7 +133,7 @@ export default function Events(): JSX.Element {
       },
       {
         key: 'thisMonth',
-        label: tCommon('userEvents.presetThisMonth'),
+        label: t('presetThisMonth'),
         getRange: () => ({
           startDate: dayjs().startOf('month').toDate(),
           endDate: dayjs().endOf('month').toDate(),
@@ -138,7 +141,7 @@ export default function Events(): JSX.Element {
       },
       {
         key: 'next7Days',
-        label: tCommon('userEvents.presetNext7Days'),
+        label: t('presetNext7Days'),
         getRange: () => ({
           startDate: dayjs().startOf('day').toDate(),
           endDate: dayjs().add(7, 'days').endOf('day').toDate(),
@@ -146,7 +149,7 @@ export default function Events(): JSX.Element {
       },
       {
         key: 'next30Days',
-        label: tCommon('userEvents.presetNext30Days'),
+        label: t('presetNext30Days'),
         getRange: () => ({
           startDate: dayjs().startOf('day').toDate(),
           endDate: dayjs().add(30, 'days').endOf('day').toDate(),
@@ -154,14 +157,14 @@ export default function Events(): JSX.Element {
       },
       {
         key: 'nextMonth',
-        label: tCommon('userEvents.presetNextMonth'),
+        label: t('presetNextMonth'),
         getRange: () => ({
           startDate: dayjs().add(1, 'month').startOf('month').toDate(),
           endDate: dayjs().add(1, 'month').endOf('month').toDate(),
         }),
       },
     ],
-    [tCommon],
+    [t],
   );
 
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
