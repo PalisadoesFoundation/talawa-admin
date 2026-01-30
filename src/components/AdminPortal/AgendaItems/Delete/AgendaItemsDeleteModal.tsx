@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaItemsDeleteModal.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/AdminPortal/Agenda/interface';
 
 /**

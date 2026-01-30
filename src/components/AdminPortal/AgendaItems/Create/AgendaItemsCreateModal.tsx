@@ -377,7 +377,7 @@ const AgendaItemsCreateModal: React.FC<
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Button onClick={handleAddUrl} data-testid="linkBtn">
+            <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
               {t('link')}
             </Button>
           </div>
@@ -393,6 +393,7 @@ const AgendaItemsCreateModal: React.FC<
                 {url.length > 50 ? `${url.substring(0, 50)}...` : url}
               </a>
               <Button
+                type="button"
                 variant="danger"
                 size="sm"
                 className={styles.deleteButtonAgendaItems}

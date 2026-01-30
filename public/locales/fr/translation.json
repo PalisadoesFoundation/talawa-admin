@@ -794,7 +794,6 @@
     "agendaItemDetails": "Détails du point de l'ordre du jour",
     "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
     "fileUploadFailed": "Échec du téléversement du fichier",
-    "invalidFileType": "Type de fichier non valide",
     "title": "Titre",
     "enterTitle": "Entrer le titre",
     "sequence": "Ordre",

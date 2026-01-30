@@ -70,10 +70,11 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   const handleAddUrl = (): void => {
-    if (newUrl.trim() !== '' && isValidUrl(newUrl.trim())) {
+    const trimmedUrl = newUrl.trim();
+    if (trimmedUrl !== '' && isValidUrl(trimmedUrl)) {
       setItemFormState({
         ...itemFormState,
-        url: [...itemFormState.url.filter((u) => u.trim() !== ''), newUrl],
+        url: [...itemFormState.url.filter((u) => u.trim() !== ''), trimmedUrl],
       });
       setNewUrl('');
     } else {

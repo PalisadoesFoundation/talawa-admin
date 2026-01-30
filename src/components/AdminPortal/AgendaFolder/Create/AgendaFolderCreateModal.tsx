@@ -21,6 +21,10 @@ const AgendaFolderCreateModal: React.FC<
   refetchAgendaFolder,
 }) => {
   const { orgId } = useParams();
+  if (!orgId) {
+    NotificationToast.error(t('organizationRequired'));
+    return;
+  }
   // Mutation for creating an agenda item
   const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
   // State to manage form values

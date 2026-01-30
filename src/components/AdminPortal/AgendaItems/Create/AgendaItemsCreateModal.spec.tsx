@@ -7,7 +7,7 @@ import { vi } from 'vitest';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 import type {
@@ -20,7 +20,7 @@ const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 
