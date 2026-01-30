@@ -8,7 +8,7 @@ import {
   clearAllItems,
   useLocalStorage,
 } from './useLocalstorage';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('Storage Helper Functions', () => {
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Storage Helper Functions', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('generates correct storage key', () => {
@@ -44,6 +44,24 @@ describe('Storage Helper Functions', () => {
     const retrievedValue = getItem(prefix, key);
 
     expect(retrievedValue).toBeNull();
+  });
+
+  it('returns null and logs error when parsing invalid JSON', () => {
+    const key = 'testKey';
+    const prefix = 'TestPrefix';
+    const invalidJson = 'invalid-json';
+    const prefixedKey = getStorageKey(prefix, key);
+
+    localStorage.setItem(prefixedKey, invalidJson);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const retrievedValue = getItem(prefix, key);
+
+    expect(retrievedValue).toBeNull();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      `Failed to parse localStorage key: ${prefixedKey}`,
+    );
+    consoleSpy.mockRestore();
   });
 
   it('sets item in local storage', () => {

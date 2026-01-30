@@ -10,19 +10,17 @@ import { MOCKS } from './UserPasswordUpdateMocks';
 import { vi } from 'vitest';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 
-vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-    dismiss: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  error: vi.fn(),
+  success: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
 }));
 
-// Import after mock to get the mocked version
-const { NotificationToast } =
-  await import('shared-components/NotificationToast/NotificationToast');
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
+}));
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -94,7 +92,7 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       `Password can't be empty`,
     );
   });
@@ -127,7 +125,7 @@ describe('Testing User Password Update', () => {
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
-    expect(NotificationToast.error).toHaveBeenCalledWith(
+    expect(mockNotificationToast.error).toHaveBeenCalledWith(
       'New and Confirm password do not match.',
     );
   });
@@ -155,7 +153,7 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         'Password updated Successfully',
       );
     });
@@ -198,7 +196,7 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() =>
-      expect(NotificationToast.error).toHaveBeenCalledWith(
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
         'ApolloError: Invalid previous password',
       ),
     );
@@ -244,7 +242,7 @@ describe('Testing User Password Update', () => {
 
     await waitFor(
       () => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
           'ApolloError: Network error',
         );
       },

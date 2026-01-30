@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { Button } from 'shared-components/Button';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
@@ -10,9 +9,10 @@ import styles from './PledgeModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
+import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
@@ -199,7 +199,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         errorHandler(t, error);
       }
     },
-    [formState, pledge, t],
+    [pledgeAmount, pledge, t, updatePledge, refetchPledge, hide],
   );
 
   /**
@@ -251,135 +251,123 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     ],
   );
 
-  return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
-      className={styles.pledgeModal}
-      headerContent={
-        <>
-          <p className={styles.titleModal}>
-            {t(mode === 'edit' ? 'editPledge' : 'createPledge')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="pledgeModalCloseBtn"
-            aria-label={t('close')}
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </>
-      }
-      showCloseButton={false}
-    >
-      <form
-        data-testid="pledgeForm"
-        onSubmit={(e: FormEvent<HTMLFormElement>) => {
-          e.preventDefault();
-          if (mode === 'edit') {
-            updatePledgeHandler(e);
-          } else {
-            createPledgeHandler(e);
-          }
-        }}
-        className="p-3"
-      >
-        {userData?.user?.role !== 'regular' && (
-          <div className="d-flex mb-3 w-100">
-            <Autocomplete
-              className={`${styles.noOutline} w-100`}
-              data-testid="pledgerSelect"
-              options={[...pledgers, ...pledgeUsers].filter(
-                (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
-              )}
-              value={pledgeUsers[0] || null}
-              readOnly={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                `${member.firstName} ${member.lastName}`
-              }
-              onChange={(_, newPledger): void => {
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newPledger ? [newPledger] : [],
-                });
-              }}
-              renderInput={(params) => (
-                <div ref={params.InputProps.ref} className="position-relative">
-                  <input
-                    {...params.inputProps}
-                    type="text"
-                    placeholder={t('pledgers')}
-                    aria-label={t('pledgers')}
-                    className={`form-control ${styles.noOutline}`}
-                  />
-                  {params.InputProps.endAdornment}
-                </div>
-              )}
-            />
-          </div>
-        )}
-        <div className="d-flex gap-3 mb-4">
-          <div className="flex-grow-1">
-            <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
-            <Select
-              labelId="currency-select-label"
-              value={pledgeCurrency}
-              label={t('currency')}
-              data-testid="currencySelect"
-              fullWidth
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  pledgeCurrency: e.target.value,
-                });
-              }}
-            >
-              {currencyOptions.map((currency) => (
-                <MenuItem key={currency.label} value={currency.value}>
-                  {currency.label} ({currencySymbols[currency.value]})
-                </MenuItem>
-              ))}
-            </Select>
-          </div>
-          <div className="flex-grow-1">
-            <FormTextField
-              name="amount"
-              label={t('amount')}
-              type="number"
-              value={String(pledgeAmount)}
-              onChange={(value) => {
-                if (value === '' || value.trim() === '') {
-                  setFormState({
-                    ...formState,
-                    pledgeAmount: 0,
-                  });
-                  return;
-                }
-                const numValue = parseInt(value);
-                if (!isNaN(numValue) && numValue > 0) {
-                  setFormState({
-                    ...formState,
-                    pledgeAmount: numValue,
-                  });
-                }
-              }}
-              className={styles.noOutline}
-            />
-          </div>
+  // Form content shared between create and edit modes
+  const formContent = (
+    <>
+      {userData?.user?.role !== 'regular' && (
+        <div className="d-flex mb-3 w-100">
+          <Autocomplete
+            className={`${styles.noOutline} w-100`}
+            data-testid="pledgerSelect"
+            options={[...pledgers, ...pledgeUsers].filter(
+              (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+            )}
+            value={pledgeUsers[0] || null}
+            readOnly={mode === 'edit'}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            filterSelectedOptions={true}
+            getOptionLabel={(member: InterfaceUserInfoPG): string =>
+              getMemberLabel(member)
+            }
+            onChange={(_, newPledger): void => {
+              setFormState({
+                ...formState,
+                pledgeUsers: newPledger ? [newPledger] : [],
+              });
+            }}
+            renderInput={(params) => (
+              <div ref={params.InputProps.ref} className="position-relative">
+                <input
+                  {...params.inputProps}
+                  type="text"
+                  placeholder={t('pledgers')}
+                  aria-label={t('pledgers')}
+                  className={`form-control ${styles.noOutline}`}
+                />
+                {params.InputProps.endAdornment}
+              </div>
+            )}
+          />
         </div>
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="submitPledgeBtn"
-        >
-          {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
-        </Button>
-      </form>
-    </BaseModal>
+      )}
+      <div className="d-flex gap-3 mb-4">
+        <div className="flex-grow-1">
+          <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
+          <Select
+            labelId="currency-select-label"
+            value={pledgeCurrency}
+            label={t('currency')}
+            data-testid="currencySelect"
+            fullWidth
+            onChange={(e) => {
+              setFormState({
+                ...formState,
+                pledgeCurrency: e.target.value,
+              });
+            }}
+          >
+            {currencyOptions.map((currency) => (
+              <MenuItem key={currency.label} value={currency.value}>
+                {currency.label} ({currencySymbols[currency.value]})
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="flex-grow-1">
+          <FormTextField
+            name="amount"
+            label={t('amount')}
+            type="number"
+            value={String(pledgeAmount)}
+            onChange={(value) => {
+              if (value === '' || value.trim() === '') {
+                setFormState({
+                  ...formState,
+                  pledgeAmount: 0,
+                });
+                return;
+              }
+              const numValue = parseInt(value);
+              if (!isNaN(numValue) && numValue >= 0) {
+                setFormState({
+                  ...formState,
+                  pledgeAmount: numValue,
+                });
+              }
+            }}
+            className={styles.noOutline}
+          />
+        </div>
+      </div>
+    </>
+  );
+
+  if (mode === 'edit') {
+    return (
+      <EditModal
+        open={isOpen}
+        title={t('editPledge')}
+        onClose={hide}
+        onSubmit={updatePledgeHandler}
+        className={styles.pledgeModal}
+        data-testid="pledgeModal"
+      >
+        <div data-testid="pledgeForm">{formContent}</div>
+      </EditModal>
+    );
+  }
+
+  return (
+    <CreateModal
+      open={isOpen}
+      title={t('createPledge')}
+      onClose={hide}
+      onSubmit={createPledgeHandler}
+      className={styles.pledgeModal}
+      data-testid="pledgeModal"
+    >
+      <div data-testid="pledgeForm">{formContent}</div>
+    </CreateModal>
   );
 };
 export default PledgeModal;

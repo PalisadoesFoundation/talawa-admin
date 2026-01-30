@@ -5,7 +5,7 @@
  * location, start and end times, and the creator's name. It also provides functionality for users
  * to register for the event.
  *
- * @param props - The event details passed as props, adhering to the `InterfaceEventCardProps` type.
+ * @param props - The event details passed as props, adhering to the `InterfaceEvent` type.
  *
  * @remarks
  * - The component uses the `useTranslation` hook for internationalization.
@@ -54,21 +54,22 @@ import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
+import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
 
 function EventCard({
   id,
   name,
-  creator,
-  attendees,
+  description,
+  location,
   startAt,
   endAt,
   startTime,
   endTime,
-  location,
-  description,
+  creator,
+  attendees,
   isInviteOnly,
-}: InterfaceEventCardProps): JSX.Element {
+}: InterfaceEvent): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
@@ -77,11 +78,7 @@ function EventCard({
 
   // Get user ID from local storage
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
-
-  // Date prefix for parsing time strings with dayjs
-  // This is a technical constant, not user-visible text
-  const DATE_PREFIX = '2015-03-04T';
+  const userId = getItem(IDENTIFIER_USER_ID);
 
   // Create a full name for the event creator
   const creatorName = creator.name;
@@ -140,22 +137,18 @@ function EventCard({
         {`${t('starts')} `}
         {startTime ? (
           <b data-testid="startTime">
-            {dayjs(DATE_PREFIX + startTime).format('h:mm:ss A')}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${startTime}`).format('h:mm:ss A')}
           </b>
-        ) : (
-          <></>
-        )}
+        ) : null}
         <b> {dayjs(startAt).format('D MMMM YYYY')}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
         {endTime ? (
           <b data-testid="endTime">
-            {dayjs(DATE_PREFIX + endTime).format('h:mm:ss A')}
+            {dayjs(`${DUMMY_DATE_TIME_PREFIX}${endTime}`).format('h:mm:ss A')}
           </b>
-        ) : (
-          <></>
-        )}{' '}
+        ) : null}
         <b> {dayjs(endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>
