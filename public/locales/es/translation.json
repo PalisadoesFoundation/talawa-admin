@@ -958,6 +958,7 @@
     "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
+    "createFailed": "Error al crear el compromiso",
     "title": "Compromisos de Campaña de Financiamiento",
     "startDate": "Fecha de Inicio",
     "endDate": "Fecha de Finalización",
@@ -1138,7 +1139,7 @@
     "getOtp": "Obtener OTP",
     "enterOtp": "Ingresar OTP",
     "enterNewPassword": "Ingrese nueva clave",
-    "cofirmNewPassword": "Confirmar nueva contraseña",
+    "confirmNewPassword": "Confirmar nueva contraseña",
     "changePassword": "Cambia la contraseña",
     "backToLogin": "Volver al inicio de sesión",
     "userOtp": "por ejemplo 12345",
