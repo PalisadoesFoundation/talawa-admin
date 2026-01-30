@@ -2,22 +2,13 @@
 
 .agendaFolderModal {
   max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+  margin: 2vh auto;
 }
 
 @media (max-width: 768px) {
   .agendaFolderModal {
     margin: 10vh auto;
     max-width: 90%;
-  }
-
-  .titlemodalAgendaFolder {
-    width: 90%;
-  }
-
-  .greenregbtnAgendaFolder {
-    width: 90%;
   }
 }
 

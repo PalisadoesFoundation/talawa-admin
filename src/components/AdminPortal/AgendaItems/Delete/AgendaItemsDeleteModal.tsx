@@ -39,7 +39,6 @@ const AgendaItemsDeleteModal: React.FC<
           <Button
             type="button"
             className="btn btn-danger"
-            data-dismiss="modal"
             onClick={toggleDeleteItemModal}
             data-testid="deleteAgendaItemCloseBtn"
           >
