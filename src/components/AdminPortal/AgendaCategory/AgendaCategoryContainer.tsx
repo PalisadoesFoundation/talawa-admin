@@ -95,17 +95,17 @@ function agendaCategoryContainer({
   };
 
   /**
-   * Toggles the visibility of the update modal.
+   * Opens the update modal.
    */
   const showUpdateModal = (): void => {
-    updateModal.toggle();
+    updateModal.open();
   };
 
   /**
-   * Toggles the visibility of the update modal.
+   * Closes the update modal.
    */
   const hideUpdateModal = (): void => {
-    updateModal.toggle();
+    updateModal.close();
   };
 
   /**

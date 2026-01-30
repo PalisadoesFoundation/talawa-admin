@@ -252,7 +252,7 @@ function EventListCardModals({
         hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
         t,
         hideViewModal,
-        setEventUpdateModalIsOpen: eventUpdateModal.close,
+        setEventUpdateModalIsOpen: () => eventUpdateModal.close(),
         refetchEvents,
       });
     }
@@ -415,7 +415,7 @@ function EventListCardModals({
         recurrence={recurrence}
         setRecurrence={setRecurrence}
         customRecurrenceModalIsOpen={customRecurrenceModal.isOpen}
-        setCustomRecurrenceModalIsOpen={customRecurrenceModal.open}
+        setCustomRecurrenceModalIsOpen={customRecurrenceModal.toggle}
       />
 
       <EventListCardDeleteModal
@@ -466,7 +466,7 @@ function EventListCardModals({
                   hasRecurrenceChanged: hasRecurrenceChanged(),
                   t,
                   hideViewModal,
-                  setEventUpdateModalIsOpen: eventUpdateModal.close,
+                  setEventUpdateModalIsOpen: () => eventUpdateModal.close(),
                   refetchEvents,
                 })
               }
