@@ -137,7 +137,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           />
         </div>
       ) : (
-        <p>{t('deleteEventMsg')}</p>
+         <p>{t('deleteEventMsg')}</p>
       )}
     </BaseModal>
   );
