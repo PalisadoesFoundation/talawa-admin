@@ -484,7 +484,7 @@ describe('UploadPluginModal Component', () => {
           pluginId: 'test-plugin',
         },
         installedComponents: [],
-        error: 'Failed to upload plugin',
+        error: i18nForTest.t('pluginStore.failedToUploadPlugin'),
       });
 
       render(
@@ -509,7 +509,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -844,7 +844,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });

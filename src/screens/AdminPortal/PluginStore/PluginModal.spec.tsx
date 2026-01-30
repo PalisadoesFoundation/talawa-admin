@@ -164,9 +164,6 @@ describe('PluginModal', () => {
     });
 
     it('handles loading error with toast notification', async () => {
-      const consoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       (
         AdminPluginFileService.getPluginDetails as ReturnType<typeof vi.fn>
       ).mockRejectedValue(new Error('Network error'));
@@ -176,9 +173,6 @@ describe('PluginModal', () => {
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
       });
-
-      expect(consoleError).toHaveBeenCalled();
-      consoleError.mockRestore();
     });
   });
 

@@ -60,7 +60,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React from 'react';
 
-dayjs.extend(utc);
 import {
   CRUDModalTemplate,
   useModalState,
@@ -83,6 +82,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 
 import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
+dayjs.extend(utc);
 
 export function computeCalendarFromStartDate(
   startDate: Date | null,
