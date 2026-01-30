@@ -9,7 +9,7 @@
 import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaFolderDeleteModal.module.css';
 import type { InterfaceAgendaFolderDeleteModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
@@ -38,7 +38,7 @@ const AgendaFolderDeleteModal: React.FC<
     <BaseModal
       size="sm"
       dataTestId={`deleteAgendaFolderModal`}
-      className={styles.agendaItemModal}
+      className={styles.agendaFolderModal}
       show={agendaFolderDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"

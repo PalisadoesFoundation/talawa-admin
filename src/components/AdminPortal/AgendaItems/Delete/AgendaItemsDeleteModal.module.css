@@ -1,0 +1,37 @@
+/* -- AgendaItemsDeleteModal.tsx -- */
+
+.agendaItemModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+@media (max-width: 768px) {
+  .agendaItemModal {
+    margin: 10vh auto;
+    max-width: 90%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 90%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .agendaItemModal {
+    margin: 5vh auto;
+    max-width: 95%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 100%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 100%;
+  }
+}

@@ -7,7 +7,7 @@ import {
 } from '@hello-pangea/dnd';
 import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaDragAndDrop.module.css';
 import type { InterfaceAgendaDragAndDropProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection

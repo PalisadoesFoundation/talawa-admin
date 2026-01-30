@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import Button from 'shared-components/Button/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaFolderCreateModal.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';

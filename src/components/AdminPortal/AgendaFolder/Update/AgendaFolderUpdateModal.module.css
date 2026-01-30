@@ -1,0 +1,24 @@
+.campaignModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.regBtn {
+  margin-top: 1rem;
+  border: 1px solid var(--regBtn-border);
+  box-shadow: 0 2px 2px var(--regBtn-box-shadow);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--regBtn-bg);
+  width: 100%;
+  font-size: 16px;
+  color: var(--regBtn-color);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+  width: 100%;
+}

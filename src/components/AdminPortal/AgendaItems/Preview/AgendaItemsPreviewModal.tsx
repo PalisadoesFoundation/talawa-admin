@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'shared-components/Button/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaItemsPreviewModal.module.css';
 import { FaLink } from 'react-icons/fa';
 import { BaseModal } from 'shared-components/BaseModal';
 import { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Agenda/interface';

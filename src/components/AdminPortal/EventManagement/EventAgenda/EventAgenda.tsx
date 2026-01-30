@@ -50,7 +50,7 @@ import AgendaFolderContainer from 'components/AdminPortal/AgendaFolder/AgendaFol
 import AgendaFolderCreateModal from 'components/AdminPortal/AgendaFolder/Create/AgendaFolderCreateModal';
 import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventAgenda.module.css';
 
 function EventAgenda(props: { eventId: string }): JSX.Element {
   const { eventId } = props;

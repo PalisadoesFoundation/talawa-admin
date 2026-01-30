@@ -13,7 +13,7 @@ import {
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaItemsUpdateModal.module.css';
 
 import type {
   InterfaceAgendaItemCategoryInfo,

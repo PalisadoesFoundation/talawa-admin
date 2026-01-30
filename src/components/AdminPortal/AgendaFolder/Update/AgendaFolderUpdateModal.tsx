@@ -3,7 +3,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Button from 'shared-components/Button/Button';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaFolderUpdateModal.module.css';
 import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
