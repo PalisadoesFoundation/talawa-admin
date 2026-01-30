@@ -36,7 +36,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams, mockErrorHandler } = vi.hoisted(() => ({
   mockToast: {
@@ -48,7 +48,7 @@ const { mockToast, mockUseParams, mockErrorHandler } = vi.hoisted(() => ({
   mockErrorHandler: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
 
@@ -896,8 +896,8 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Close modal using Escape key
-    await userEvent.keyboard('{Escape}');
+    // Close modal using close button
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
       expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
     });

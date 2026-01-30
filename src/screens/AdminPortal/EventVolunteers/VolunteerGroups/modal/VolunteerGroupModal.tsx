@@ -1,7 +1,7 @@
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
+  InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import type { InterfaceCreateVolunteerGroupData } from 'types/Volunteer/interface';
 import styles from './VolunteerGroupModal.module.css';
@@ -10,8 +10,9 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
+import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   CREATE_VOLUNTEER_GROUP,
@@ -46,7 +47,6 @@ export interface InterfaceVolunteerGroupModal {
  *
  * @returns A modal that handles create and edit flows for volunteer groups.
  */
-
 const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   isOpen,
   hide,
@@ -91,13 +91,21 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       description: group?.description ?? '',
       leader: group?.leader ?? null,
       volunteerUsers:
-        group?.volunteers.map((volunteer) => volunteer.user) ?? [],
+        group?.volunteers?.map((volunteer) => volunteer.user) ?? [],
       volunteersRequired: group?.volunteersRequired ?? null,
     });
   }, [group]);
 
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
+
+  // Filter out the leader from available volunteers
+  const availableVolunteers = useMemo(() => {
+    if (!leader) return members;
+    return members.filter(
+      (member: InterfaceUserInfoPG) => member.id !== leader.id,
+    );
+  }, [members, leader]);
 
   const { isSubmitting: isUpdating, execute: executeUpdate } = useMutationModal<
     Record<string, never>
@@ -149,13 +157,22 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         throw new Error('Base event is required for recurring events');
       }
 
+      // Get unique volunteer IDs, ensuring leader is included first
+      const volunteerIds = volunteerUsers.map((user) => user.id);
+      const leaderIdToAdd = leader?.id;
+
+      // Create final list with leader FIRST, then volunteers (excluding duplicate leader)
+      const uniqueVolunteerIds = leaderIdToAdd
+        ? [leaderIdToAdd, ...volunteerIds.filter((id) => id !== leaderIdToAdd)]
+        : volunteerIds;
+
       const mutationData: InterfaceCreateVolunteerGroupData = {
         eventId: isRecurring && baseEvent ? baseEvent.id : eventId,
         leaderId: leader?.id,
         name,
         description,
         volunteersRequired,
-        volunteerUserIds: volunteerUsers.map((user) => user.id),
+        volunteerUserIds: uniqueVolunteerIds,
       };
 
       if (isRecurring) {
@@ -268,48 +285,47 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       />
 
       <div className="d-flex mb-3 w-100">
-        <Autocomplete
-          className={`${styles.noOutline} w-100`}
-          limitTags={2}
-          data-testid="leaderSelect"
-          options={members}
-          value={leader}
-          disabled={mode === 'edit'}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
-          aria-label={t('leader')}
-          onChange={(_, newLeader): void => {
-            if (newLeader) {
+        <FormFieldGroup
+          name="leaderSelect"
+          label={t('leader')}
+          required
+          touched={false}
+        >
+          <Autocomplete
+            className={`${styles.noOutline} w-100`}
+            limitTags={2}
+            data-testid="leaderSelect"
+            options={members}
+            value={leader}
+            disabled={mode === 'edit'}
+            isOptionEqualToValue={(option, value) => option.id === value.id}
+            filterSelectedOptions={true}
+            getOptionLabel={(member: InterfaceUserInfoPG): string =>
+              getMemberLabel(member)
+            }
+            onChange={(_, newLeader): void => {
               setFormState({
                 ...formState,
                 leader: newLeader,
-                volunteerUsers: [...volunteerUsers, newLeader],
               });
-            } else {
-              setFormState({
-                ...formState,
-                leader: null,
-                volunteerUsers: volunteerUsers.filter(
-                  (user) => user.id !== leader?.id,
-                ),
-              });
-            }
-          }}
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <label htmlFor="leader-input" className="form-label">
-                {t('leader')} <span aria-label={tCommon('required')}>*</span>
-              </label>
-              <input
-                {...params.inputProps}
-                id="leader-input"
-                className="form-control"
-                placeholder={`${t('leader')} *`}
-              />
-            </div>
-          )}
-        />
+            }}
+            renderInput={(params) => (
+              <div ref={params.InputProps.ref} className="w-100">
+                <div className="d-flex align-items-center gap-2">
+                  {params.InputProps.startAdornment}
+                  <input
+                    {...params.inputProps}
+                    id="leaderSelect"
+                    className={`form-control ${styles.noOutline}`}
+                    placeholder={t('leader')}
+                    aria-label={t('leader')}
+                  />
+                  {params.InputProps.endAdornment}
+                </div>
+              </div>
+            )}
+          />
+        </FormFieldGroup>
       </div>
 
       <div className="d-flex mb-3 w-100">
@@ -318,11 +334,13 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           className={`${styles.noOutline} w-100`}
           limitTags={2}
           data-testid="volunteerSelect"
-          options={members}
+          options={availableVolunteers}
           value={volunteerUsers}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
+          isOptionEqualToValue={areOptionsEqual}
           filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
+          getOptionLabel={(member: InterfaceUserInfoPG): string =>
+            getMemberLabel(member)
+          }
           disabled={mode === 'edit'}
           aria-label={t('volunteers')}
           onChange={(_, newUsers): void => {
@@ -332,18 +350,21 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             });
           }}
           renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <label htmlFor="volunteers-input" className="form-label">
-                {t('volunteers')}
-                <span aria-label={tCommon('required')}>*</span>
-              </label>
-              <input
-                {...params.inputProps}
-                id="volunteers-input"
-                className="form-control"
-                placeholder={`${t('volunteers')} *`}
-              />
-            </div>
+            <FormFieldGroup name="volunteers" label={t('volunteers')} required>
+              <div
+                ref={params.InputProps.ref}
+                className="d-flex align-items-center w-100"
+              >
+                {params.InputProps.startAdornment}
+                <input
+                  {...params.inputProps}
+                  id="volunteers"
+                  className="form-control"
+                  data-testid="volunteersInput"
+                />
+                {params.InputProps.endAdornment}
+              </div>
+            </FormFieldGroup>
           )}
         />
       </div>
@@ -365,6 +386,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               setFormState({
                 ...formState,
                 volunteersRequired: parsed,
+              });
+            } else {
+              setFormState({
+                ...formState,
+                volunteersRequired: null,
               });
             }
           }
@@ -404,4 +430,5 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     </CreateModal>
   );
 };
+
 export default VolunteerGroupModal;
