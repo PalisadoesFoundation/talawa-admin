@@ -7,8 +7,8 @@
  * options to update or delete the agenda item.
  */
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button/Button';
+import styles from './AgendaItemsPreviewModal.module.css';
 import { FaLink } from 'react-icons/fa';
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -95,7 +95,7 @@ const AgendaItemsPreviewModal: React.FC<
           </>
         }
       >
-        <Form>
+        <div>
           <div>
             <div className={styles.preview}>
               <p>{t('category')}</p>
@@ -149,7 +149,7 @@ const AgendaItemsPreviewModal: React.FC<
               <i className="fas fa-trash"></i>
             </Button>
           </div>
-        </Form>
+        </div>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );
