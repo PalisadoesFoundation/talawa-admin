@@ -1208,8 +1208,6 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
 
   describe('Additional Error Handling Coverage', () => {
     it('should show error toast when updating a group without an ID (client-side check)', async () => {
-      // const user = userEvent.setup(); // Unused in this test
-
       // Clone props and remove ID from group to simulate the error condition
       const propsNoId = {
         ...modalProps[1],
@@ -1225,7 +1223,8 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
       const { getByTestId } = renderGroupModal(successLink, propsNoId);
       const submitBtn = getByTestId('modal-submit-btn');
 
-      // Force click even if disabled
+      // Force click even if disabled.
+
       await act(async () => {
         submitBtn.removeAttribute('disabled');
         submitBtn.click();
@@ -1246,7 +1245,8 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
       const { getByTestId } = renderGroupModal(successLink, propsNoBase);
       const submitBtn = getByTestId('modal-submit-btn');
 
-      // Force click
+      // Force click even if disabled.
+
       await act(async () => {
         submitBtn.removeAttribute('disabled');
         submitBtn.click();
@@ -1256,14 +1256,7 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           t.baseEventRequired,
         );
-        // The throw is caught by useMutationModal's onError or internal catch?
-        // useMutationModal calls onError(error).
-        // We verify the toast.
       });
-    });
-
-    it('should throw error when Group ID is missing inside executeUpdate (Line 115)', async () => {
-      console.log('Line 115 is unreachable via UI due to guard at Line 214.');
     });
   });
 });
