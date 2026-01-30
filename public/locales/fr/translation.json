@@ -795,7 +795,12 @@
     "event": "Événement",
     "attachmentPreview": "Aperçu de la pièce jointe",
     "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
-    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
+    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour",
+    "deleteAttachment": "Supprimer la pièce jointe",
+    "fileUploadError": "Erreur lors du téléchargement du fichier",
+    "selectCategory": "Veuillez sélectionner une catégorie de l'ordre du jour",
+    "tooManyAttachments": "Maximum 10 pièces jointes autorisées",
+    "invalidFileType": "Type de fichier invalide. Seules les images et vidéos sont autorisées."
   },
   "eventListCard": {
     "dogsCare": "Soins des Chiens",
@@ -1247,7 +1252,11 @@
     "enterOrganizationDescription": "Entrez la description de l'organisation",
     "userRegistrationRequired": "Inscription utilisateur requise",
     "nameDescriptionRequired": "Le nom et la description sont requis",
-    "updateFailed": "Échec de la mise à jour de l'organisation"
+    "updateFailed": "Échec de la mise à jour de l'organisation",
+    "errorLoadingOrganizationData": "Erreur lors du chargement des données de l’organisation",
+    "enterOrganizationLocation": "Saisir l’emplacement de l’organisation",
+    "imageSizeTooLarge": "La taille de l’image est trop grande. Veuillez télécharger un fichier plus petit.",
+    "invalidImageType": "Type d’image invalide. Veuillez télécharger un fichier image valide."
   },
   "public": {
     "invitation": {

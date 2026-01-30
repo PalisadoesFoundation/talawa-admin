@@ -795,7 +795,12 @@
     "attachmentPreview": "附件預覽",
     "event": "活动",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
-    "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
+    "errorLoadingAgendaItems": "加载议程项目数据时发生错误",
+    "deleteAttachment": "删除附件",
+    "fileUploadError": "文件上传错误",
+    "selectCategory": "请选择议程类别",
+    "tooManyAttachments": "最多允许10个附件",
+    "invalidFileType": "文件类型无效。仅允许图片和视频"
   },
   "eventListCard": {
     "dogsCare": "狗狗护理",
@@ -1247,7 +1252,11 @@
     "enterOrganizationDescription": "输入组织描述",
     "userRegistrationRequired": "需要用户注册",
     "nameDescriptionRequired": "名称和描述为必填项",
-    "updateFailed": "更新组织失败"
+    "updateFailed": "更新组织失败",
+    "errorLoadingOrganizationData": "加载组织数据时出错",
+    "enterOrganizationLocation": "请输入组织位置",
+    "imageSizeTooLarge": "图片大小过大，请上传较小的文件。",
+    "invalidImageType": "无效的图片类型，请上传有效的图片文件。"
   },
   "public": {
     "invitation": {

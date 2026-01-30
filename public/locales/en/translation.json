@@ -795,7 +795,12 @@
     "event": "Event",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
-    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
+    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data",
+    "deleteAttachment": "Delete attachment",
+    "fileUploadError": "Error uploading file",
+    "selectCategory": "Please select an agenda category",
+    "tooManyAttachments": "Maximum 10 attachments allowed",
+    "invalidFileType": "Invalid file type. Only images and videos are allowed"
   },
   "eventListCard": {
     "dogsCare": "Dogs Care",
@@ -1291,7 +1296,11 @@
     "enterOrganizationDescription": "Enter Organization Description",
     "userRegistrationRequired": "User registration required",
     "nameDescriptionRequired": "Name and description are required",
-    "updateFailed": "Failed to update organization"
+    "updateFailed": "Failed to update organization",
+    "errorLoadingOrganizationData": "Error loading organization data",
+    "enterOrganizationLocation": "Enter Organization location",
+    "imageSizeTooLarge": "Image size is too large. Please upload a smaller file.",
+    "invalidImageType": "Invalid image type. Please upload a valid image file."
   },
   "public": {
     "invitation": {

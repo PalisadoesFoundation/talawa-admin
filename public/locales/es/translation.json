@@ -790,7 +790,12 @@
     "attachmentPreview": "Vista previa del adjunto",
     "event": "Evento",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
-    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
+    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda",
+    "deleteAttachment": "Eliminar adjunto",
+    "fileUploadError": "Error al subir archivo",
+    "selectCategory": "Por favor seleccione una categoría del orden del día",
+    "tooManyAttachments": "Máximo 10 adjuntos permitidos",
+    "invalidFileType": "Tipo de archivo no válido. Solo se permiten imágenes y videos"
   },
   "eventListCard": {
     "dogsCare": "Cuidado de Perros",
@@ -1225,7 +1230,11 @@
     "enterOrganizationDescription": "Ingrese la descripción de la organización",
     "userRegistrationRequired": "Se requiere registro de usuario",
     "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
-    "updateFailed": "Error al actualizar la organización"
+    "updateFailed": "Error al actualizar la organización",
+    "errorLoadingOrganizationData": "Error al cargar los datos de la organización",
+    "enterOrganizationLocation": "Ingrese la ubicación de la organización",
+    "imageSizeTooLarge": "El tamaño de la imagen es demasiado grande. Por favor, sube un archivo más pequeño.",
+    "invalidImageType": "Tipo de imagen no válido. Por favor, sube un archivo de imagen válido."
   },
   "public": {
     "invitation": {
