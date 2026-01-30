@@ -8,6 +8,12 @@
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
+  "frequency": "Fréquence",
+  "repeatsEvery": "Répète chaque",
+  "day": "Jour",
+  "week": "Semaine",
+  "month": "Mois",
+  "year": "Année",
   "role": {
     "member": "Membre"
   },
