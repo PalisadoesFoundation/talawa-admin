@@ -9,12 +9,13 @@ import {
   stripId,
   securityRestrictions,
   searchInputRestrictions,
+  modalStateRestrictions,
 } from './rules.ts';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-describe('ESLint Search Input Restrictions', () => {
+describe('ESLint Syntax Restrictions', () => {
   const createLinter = async () => {
     const eslint = new ESLint({
       overrideConfigFile: path.resolve(dirname, '../../../eslint.config.js'),
@@ -192,7 +193,7 @@ describe('ESLint Search Input Restrictions', () => {
     it('should not allow search inputs in other DataTable components', async () => {
       const code = `
         import React from 'react';
-        
+
         function DataTable() {
           return <input placeholder="Search table..." />;
         }
@@ -209,6 +210,130 @@ describe('ESLint Search Input Restrictions', () => {
       );
 
       expect(searchError).not.toBeUndefined();
+    });
+  });
+
+  describe('Modal state restrictions', () => {
+    it('should error on useState with modalState variable name', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [modalState, setModalState] = useState(false);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeDefined();
+    });
+
+    it('should error on useState with showModal variable name', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [showModal, setShowModal] = useState(false);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeDefined();
+    });
+
+    it('should error on useState with show*Modal pattern (e.g., showUploadModal)', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [showUploadModal, setShowUploadModal] = useState(false);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeDefined();
+    });
+
+    it('should error on useState with *ModalIsOpen pattern', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [editUserTagModalIsOpen, setEditUserTagModalIsOpen] = useState(false);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeDefined();
+    });
+
+    it('should error on useState with *modalisOpen pattern (lowercase variant)', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeDefined();
+    });
+
+    it('should allow useState with non-modal-related variable names', async () => {
+      const code = `
+        import React, { useState } from 'react';
+
+        function TestComponent() {
+          const [isOpen, setIsOpen] = useState(false);
+          const [modalMode, setModalMode] = useState('create');
+          const [count, setCount] = useState(0);
+          return <div />;
+        }
+      `;
+
+      const messages = await lintCode(code);
+      const modalError = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('useModalState'),
+      );
+
+      expect(modalError).toBeUndefined();
     });
   });
 
@@ -380,6 +505,33 @@ describe('ESLint Search Input Restrictions', () => {
           expect(restriction.selector).toBeDefined();
           expect(restriction.message).toBeDefined();
           expect(restriction.message.toLowerCase()).toContain('search');
+        });
+      });
+    });
+
+    describe('modalStateRestrictions data integrity', () => {
+      it('should have modal state related restrictions', () => {
+        expect(modalStateRestrictions.length).toBe(5);
+
+        modalStateRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toBeDefined();
+          expect(restriction.message).toBeDefined();
+          expect(restriction.message).toContain('useModalState');
+        });
+      });
+
+      it('should target useState calls for modal visibility patterns', () => {
+        modalStateRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toContain('useState');
+          expect(restriction.selector).toContain('VariableDeclarator');
+        });
+      });
+
+      it('should have proper message guiding to useModalState hook', () => {
+        modalStateRestrictions.forEach((restriction) => {
+          expect(restriction.message).toContain(
+            'shared-components/CRUDModalTemplate/hooks/useModalState',
+          );
         });
       });
     });
