@@ -30,11 +30,11 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 
   const renderControl = () => (
     <Form.Control
-      type={type}
+      {...(props.as !== 'textarea' && { type })}
       placeholder={placeholder}
       value={value}
       onChange={(e) => {
-        onChange(e.target.value);
+        onChange?.(e.target.value);
       }}
       isInvalid={isInvalid}
       disabled={disabled}
@@ -42,7 +42,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       {...props}
     />
   );
-
   return (
     <FormFieldGroup
       name={name}
