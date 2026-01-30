@@ -15,20 +15,19 @@
  * Integrates with `react-toastify` for user notifications.
  */
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import {
   FormFieldGroup,
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
-import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from './InviteByEmail.module.css';
+import styles from './InviteByEmailModal.module.css';
 import type { InterfaceInviteByEmailModalProps } from 'types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface';
 
 const validateEmails = (emails: string[]): string[] => {
@@ -171,34 +170,28 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
         >
           {recipients.map((r) => (
             <div key={r.id} className="d-flex align-items-center mb-2">
-              <TextField
+              <FormTextField
+                name={`recipient-email-${r.id}`}
                 label={t('email', { defaultValue: 'Email' })}
-                variant="outlined"
-                size="small"
-                value={r.email}
-                onChange={(e) => {
+                value={r.email || ''}
+                onChange={(v: string) => {
                   setRecipients((prev) =>
                     prev.map((item) =>
-                      item.id === r.id
-                        ? { ...item, email: e.target.value }
-                        : item,
+                      item.id === r.id ? { ...item, email: v } : item,
                     ),
                   );
                 }}
                 className={styles.emailField}
               />
 
-              <TextField
+              <FormTextField
+                name={`recipient-name-${r.id}`}
                 label={t('name', { defaultValue: 'Name' })}
-                variant="outlined"
-                size="small"
-                value={r.name}
-                onChange={(e) => {
+                value={r.name || ''}
+                onChange={(v: string) => {
                   setRecipients((prev) =>
                     prev.map((item) =>
-                      item.id === r.id
-                        ? { ...item, name: e.target.value }
-                        : item,
+                      item.id === r.id ? { ...item, name: v } : item,
                     ),
                   );
                 }}
@@ -209,8 +202,9 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
                 <Button
                   variant="link"
                   onClick={() => {
-                    const copy = recipients.filter((item) => item.id !== r.id);
-                    setRecipients(copy);
+                    setRecipients((prev) =>
+                      prev.filter((item) => item.id !== r.id),
+                    );
                   }}
                   className={styles.removeButton}
                 >
@@ -246,15 +240,16 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
           name="message"
           label={t('messageLabel', { defaultValue: 'Message (optional)' })}
         >
-          <TextField
-            fullWidth
+          <FormTextField
+            name="message"
+            label={t('messageLabel', { defaultValue: 'Message (optional)' })} // required
+            value={message || ''}
+            onChange={(v: string) => setMessage(v)}
             multiline
             minRows={2}
             placeholder={t('messagePlaceholder', {
               defaultValue: 'You are invited to attend this event.',
             })}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
             inputProps={{ 'data-testid': 'invite-message' }}
           />
         </FormFieldGroup>

@@ -59,7 +59,6 @@ export const EventRegistrantsWrapper = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      {}
       <Button
         data-testid="filter-button"
         className={style.createButton}

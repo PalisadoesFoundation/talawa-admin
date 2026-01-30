@@ -31,7 +31,8 @@
  * ```
  *
  * Dependencies:
- * - `react-bootstrap` for modal and button components.
+ * - shared-components/Button for button components.
+ * - shared-components/BaseModal for modal components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
  * - `NotificationToast` for toast notifications.
@@ -56,15 +57,11 @@ import styles from './EventRegistrantsModal.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 
-type ModalPropType = {
-  show: boolean;
-  eventId: string;
-  orgId: string;
-  handleClose: () => void;
-};
-
-export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
+export const EventRegistrantsModal = (
+  props: InterfaceEventRegistrantsModalProps,
+): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);

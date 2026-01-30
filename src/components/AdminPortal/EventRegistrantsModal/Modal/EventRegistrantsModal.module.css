@@ -12,3 +12,11 @@
   border-color: var(--addButton-bg);
   --bs-btn-focus-box-shadow: none;
 }
+
+.underlineText {
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
