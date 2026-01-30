@@ -795,7 +795,12 @@
     "event": "Événement",
     "attachmentPreview": "Aperçu de la pièce jointe",
     "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
-    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
+    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour",
+    "deleteAttachment": "Supprimer la pièce jointe",
+    "fileUploadError": "Erreur lors du téléchargement du fichier",
+    "selectCategory": "Veuillez sélectionner une catégorie de l'ordre du jour",
+    "tooManyAttachments": "Maximum 10 pièces jointes autorisées",
+    "invalidFileType": "Type de fichier invalide. Seules les images et vidéos sont autorisées."
   },
   "eventListCard": {
     "dogsCare": "Soins des Chiens",
@@ -847,6 +852,32 @@
     "description": "Description",
     "startDate": "Date de début",
     "endDate": "Date de fin",
+    "sunday": "dimanche",
+    "monday": "lundi",
+    "tuesday": "mardi",
+    "wednesday": "mercredi",
+    "thursday": "jeudi",
+    "friday": "vendredi",
+    "saturday": "samedi",
+    "january": "janvier",
+    "february": "février",
+    "march": "mars",
+    "april": "avril",
+    "may": "mai",
+    "june": "juin",
+    "july": "juillet",
+    "august": "août",
+    "september": "septembre",
+    "october": "octobre",
+    "november": "novembre",
+    "december": "décembre",
+    "daily": "Quotidien",
+    "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOnDay": "Mensuel le jour {{day}}",
+    "annuallyOn": "Annuel le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour de semaine (lun–ven)",
+    "customOption": "Personnalisé…",
+    "selectRecurrencePattern": "Sélectionner un modèle de récurrence",
     "registerEvent": "Inscrire à l'événement",
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
@@ -1247,7 +1278,11 @@
     "enterOrganizationDescription": "Entrez la description de l'organisation",
     "userRegistrationRequired": "Inscription utilisateur requise",
     "nameDescriptionRequired": "Le nom et la description sont requis",
-    "updateFailed": "Échec de la mise à jour de l'organisation"
+    "updateFailed": "Échec de la mise à jour de l'organisation",
+    "errorLoadingOrganizationData": "Erreur lors du chargement des données de l’organisation",
+    "enterOrganizationLocation": "Saisir l’emplacement de l’organisation",
+    "imageSizeTooLarge": "La taille de l’image est trop grande. Veuillez télécharger un fichier plus petit.",
+    "invalidImageType": "Type d’image invalide. Veuillez télécharger un fichier image valide."
   },
   "public": {
     "invitation": {
@@ -1737,7 +1772,14 @@
     "after": "Après",
     "customRecurrence": "Récurrence Personnalisée",
     "repeatsEvery": "Se répète tous les",
-    "noEventAvailable": "Aucun événement disponible !"
+    "noEventAvailable": "Aucun événement disponible !",
+    "eventDetails": "Détails de l'événement",
+    "presetToday": "Aujourd'hui",
+    "presetThisWeek": "Cette Semaine",
+    "presetThisMonth": "Ce Mois",
+    "presetNext7Days": "7 Prochains Jours",
+    "presetNext30Days": "30 Prochains Jours",
+    "presetNextMonth": "Mois Prochain"
   },
   "userEventCard": {
     "failedToRegister": "Échec de l'inscription à l'événement",
@@ -2322,7 +2364,9 @@
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
-    "errorInstalling": "Échec du chargement des détails du plugin"
+    "errorInstalling": "Échec du chargement des détails du plugin",
+    "failedToParsePluginZip": "Échec de l'analyse du fichier ZIP du plugin",
+    "pluginUploadedSuccess": "Plugin téléchargé avec succès ! (composants {{components}}) - Vous pouvez maintenant l'installer depuis la liste des plugins."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",

@@ -74,8 +74,6 @@ const mockUseLocalStorage = useLocalStorage as Mock;
 const MockPreviewModal = EventListCardPreviewModal as Mock;
 const MockDeleteModal = EventListCardDeleteModal as Mock;
 
-const mockT = (key: string) => key;
-
 type MockEventListCardProps = InterfaceEvent & {
   refetchEvents?: Mock;
 };
@@ -213,8 +211,8 @@ describe('EventListCardModals', () => {
       eventListCardProps: mockEventListCardProps,
       eventModalIsOpen: true,
       hideViewModal: vi.fn(),
-      t: mockT,
-      tCommon: mockT,
+      t: i18nForTest.t, // Use the actual t function from i18nForTest
+      tCommon: i18nForTest.t, // Use the actual t function from i18nForTest
       ...props,
     };
     return render(
@@ -308,7 +306,7 @@ describe('EventListCardModals', () => {
     act(() => {
       initialPreviewProps.setFormState({
         ...initialPreviewProps.formState,
-        eventdescrip: 'Updated Description',
+        eventDescription: 'Updated Description',
       });
     });
     const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
@@ -372,7 +370,7 @@ describe('EventListCardModals', () => {
     renderComponent();
     const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
     act(() => {
-      initialPreviewProps.setRegistrableChecked(false);
+      initialPreviewProps.setRegisterableChecked(false);
     });
     const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
     await act(async () => {
@@ -615,7 +613,7 @@ describe('EventListCardModals', () => {
       previewProps.setFormState({
         ...previewProps.formState,
         name: 'Updated Series',
-        eventdescrip: 'Updated Series Description',
+        eventDescription: 'Updated Series Description',
       });
     });
 
@@ -683,7 +681,7 @@ describe('EventListCardModals', () => {
     act(() => {
       previewProps.setFormState({
         ...previewProps.formState,
-        eventdescrip: 'Updated Series Event Description',
+        eventDescription: 'Updated Series Event Description',
       });
     });
 
