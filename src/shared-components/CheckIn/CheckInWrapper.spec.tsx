@@ -36,6 +36,11 @@ describe('Testing CheckIn Wrapper', () => {
   beforeAll(async () => {
     ({ CheckInWrapper } = await import('./CheckInWrapper'));
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const props = {
     eventId: 'event123',
   };
@@ -138,40 +143,6 @@ describe('CheckInWrapper callback behavior', () => {
 
     const { CheckInWrapper } = await import('./CheckInWrapper');
 
-    const user = userEvent.setup();
-    const mockOnCheckInUpdate = vi.fn();
-
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <CheckInWrapper
-                  eventId="event123"
-                  onCheckInUpdate={mockOnCheckInUpdate}
-                />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await user.click(screen.getByLabelText('Check In Members'));
-    await user.click(screen.getByTestId('mock-checkin-update'));
-
-    expect(mockOnCheckInUpdate).toHaveBeenCalledTimes(1);
-  });
-});
-describe('CheckInWrapper onCheckInUpdate callback', () => {
-  let CheckInWrapper: typeof import('./CheckInWrapper').CheckInWrapper;
-
-  beforeAll(async () => {
-    ({ CheckInWrapper } = await import('./CheckInWrapper'));
-  });
-
-  it('should call onCheckInUpdate callback when check-in is updated', async () => {
     const user = userEvent.setup();
     const mockOnCheckInUpdate = vi.fn();
 
