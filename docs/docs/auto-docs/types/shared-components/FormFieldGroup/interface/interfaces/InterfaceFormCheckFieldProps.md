@@ -88,7 +88,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 > `optional` **hideLabel**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
 
 #### Inherited from
 
@@ -120,7 +120,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:24](https:/
 
 > `optional` **inputId**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
+Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L17)
 
 #### Inherited from
 
@@ -137,6 +137,18 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 #### Inherited from
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`label`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#label)
+
+***
+
+### labelClassName?
+
+> `optional` **labelClassName**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`labelClassName`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#labelclassname)
 
 ***
 

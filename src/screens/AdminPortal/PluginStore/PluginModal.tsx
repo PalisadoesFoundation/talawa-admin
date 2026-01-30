@@ -4,8 +4,6 @@
  * with options to install, uninstall, or toggle the plugin's status.
  */
 import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import {
   FaPowerOff,
   FaTrash,
@@ -18,9 +16,10 @@ import styles from './PluginModal.module.css';
 import { useInstallTimer } from './hooks/useInstallTimer';
 import LoadingState from '../../../shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
-import { X } from '@mui/icons-material';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { Button } from 'shared-components/Button';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -75,8 +74,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           const pluginDetails =
             await AdminPluginFileService.getPluginDetails(pluginId);
           setDetails(pluginDetails);
-        } catch (error) {
-          console.error('Failed to load plugin details:', error);
+        } catch {
           NotificationToast.error(t('errorInstalling'));
           setDetails(null);
         } finally {
@@ -172,186 +170,201 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
   }, [screenshotViewer.open]);
 
   return (
-    <Modal show={show} onHide={onHide} centered dialogClassName="modal-xl">
-      <div className={styles.modalContainer}>
-        {/* Close Button */}
-        <button
-          type="button"
-          aria-label={tCommon('close')}
-          onClick={onHide}
-          className={styles.closeButton}
-        >
-          <X />
-        </button>
-        {/* Sidebar */}
-        <div className={styles.sidebar}>
-          <img
-            src={plugin?.icon}
-            alt={t('pluginIcon')}
-            className={styles.pluginIcon}
-          />
-          <div className={styles.pluginName}>{plugin?.name}</div>
-          <div className={styles.pluginAuthor}>{plugin?.author}</div>
-          {details && (
-            <div className={styles.pluginVersion}>v{details.version}</div>
+    <CRUDModalTemplate
+      open={show}
+      onClose={onHide}
+      title={t('details')}
+      size="xl"
+      showFooter={false}
+      className={styles.modalContainer}
+    >
+      {/* Sidebar */}
+      <div className={styles.sidebar}>
+        <img
+          src={plugin?.icon}
+          alt={t('pluginIcon')}
+          className={styles.pluginIcon}
+        />
+        <div className={styles.pluginName}>{plugin?.name}</div>
+        <div className={styles.pluginAuthor}>{plugin?.author}</div>
+        {details && (
+          <div className={styles.pluginVersion}>v{details.version}</div>
+        )}
+        {plugin && isInstalled(plugin.name) && (
+          <div className="mb-2 d-flex justify-content-center">
+            <StatusBadge
+              variant={isPluginActive ? 'active' : 'inactive'}
+              size="md"
+              dataTestId="plugin-status-badge"
+              ariaLabel={isPluginActive ? 'active' : 'inactive'}
+            />
+          </div>
+        )}
+
+        <div className={styles.actionButtons}>
+          {plugin && isInstalled(plugin.name) && meta && (
+            <>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="light"
+                  className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${styles.actionButton}`}
+                  onClick={() =>
+                    togglePluginStatus(
+                      meta,
+                      isPluginActive ? 'inactive' : 'active',
+                    )
+                  }
+                >
+                  <FaPowerOff />
+                  {isPluginActive ? t('deactivate') : t('activate')}
+                </Button>
+              </LoadingState>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="light"
+                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                  onClick={() => uninstallPlugin(meta)}
+                >
+                  <FaTrash className={styles.iconTrash} />
+                  {t('uninstall')}
+                </Button>
+              </LoadingState>
+            </>
           )}
-          {plugin && isInstalled(plugin.name) && (
-            <div className="mb-2 d-flex justify-content-center">
-              <StatusBadge
-                variant={isPluginActive ? 'active' : 'inactive'}
-                size="md"
-                dataTestId="plugin-status-badge"
-                ariaLabel={isPluginActive ? 'active' : 'inactive'}
+          {plugin && !isInstalled(plugin.name) && meta && (
+            <>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="primary"
+                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  onClick={() => installPlugin(meta)}
+                >
+                  {loading
+                    ? t('installing', { elapsed: installElapsed })
+                    : t('install')}
+                </Button>
+              </LoadingState>
+            </>
+          )}
+        </div>
+      </div>
+      {/* Main Content */}
+      <div className={styles.mainContent}>
+        {screenshotViewer.open ? (
+          /* Screenshot Viewer */
+          <div className={styles.screenshotViewer}>
+            {/* Header with back button */}
+            <div className={styles.screenshotHeader}>
+              <button
+                type="button"
+                onClick={closeScreenshotViewer}
+                className={styles.backButton}
+                aria-label={t('backToDetails')}
+              >
+                {t('backToDetails')}
+              </button>
+
+              {screenshotViewer.screenshots.length > 1 && (
+                <div className={styles.screenshotCounter}>
+                  {t('screenshotCounter', {
+                    current: screenshotViewer.currentIndex + 1,
+                    total: screenshotViewer.screenshots.length,
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Navigation buttons */}
+            {screenshotViewer.screenshots.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={previousScreenshot}
+                  className={styles.navigationButtonLeft}
+                  title={`${t('previousImage')}`}
+                  aria-label={`${t('previousImage')}`}
+                >
+                  <FaChevronLeft />
+                </button>
+                <button
+                  type="button"
+                  onClick={nextScreenshot}
+                  className={styles.navigationButtonRight}
+                  title={`${t('nextImage')}`}
+                  aria-label={`${t('nextImage')}`}
+                >
+                  <FaChevronRight />
+                </button>
+              </>
+            )}
+
+            {/* Image */}
+            <div className={styles.screenshotImageContainer}>
+              <img
+                key={screenshotViewer.currentIndex}
+                src={
+                  screenshotViewer.screenshots[screenshotViewer.currentIndex]
+                }
+                alt={`${t('ss')} ${screenshotViewer.currentIndex + 1}`}
+                className={styles.screenshotImage}
               />
             </div>
-          )}
 
-          <div className={styles.actionButtons}>
-            {plugin && isInstalled(plugin.name) && meta && (
-              <>
-                <LoadingState isLoading={loading} variant="inline">
-                  <Button
-                    variant="light"
-                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${styles.actionButton}`}
-                    onClick={() =>
-                      togglePluginStatus(
-                        meta,
-                        isPluginActive ? 'inactive' : 'active',
-                      )
-                    }
-                  >
-                    <FaPowerOff />
-                    {isPluginActive ? t('deactivate') : t('activate')}
-                  </Button>
-                </LoadingState>
-                <LoadingState isLoading={loading} variant="inline">
-                  <Button
-                    variant="light"
-                    className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                    onClick={() => uninstallPlugin(meta)}
-                  >
-                    <FaTrash className={styles.iconTrash} />
-                    {t('uninstall')}
-                  </Button>
-                </LoadingState>
-              </>
-            )}
-            {plugin && !isInstalled(plugin.name) && meta && (
-              <>
-                <LoadingState isLoading={loading} variant="inline">
-                  <Button
-                    variant="primary"
-                    className="w-100 d-flex align-items-center justify-content-center gap-2"
-                    onClick={() => installPlugin(meta)}
-                  >
-                    {loading
-                      ? t('installing', { elapsed: installElapsed })
-                      : t('install')}
-                  </Button>
-                </LoadingState>
-              </>
-            )}
-          </div>
-        </div>
-        {/* Main Content */}
-        <div className={styles.mainContent}>
-          {screenshotViewer.open ? (
-            /* Screenshot Viewer */
-            <div className={styles.screenshotViewer}>
-              {/* Header with back button */}
-              <div className={styles.screenshotHeader}>
-                <button
-                  onClick={closeScreenshotViewer}
-                  className={styles.backButton}
-                >
-                  {t('backToDetails')}
-                </button>
-
-                {screenshotViewer.screenshots.length > 1 && (
-                  <div className={styles.screenshotCounter}>
-                    {t('screenshotCounter', {
-                      current: screenshotViewer.currentIndex + 1,
-                      total: screenshotViewer.screenshots.length,
-                    })}
-                  </div>
-                )}
-              </div>
-
-              {/* Navigation buttons */}
-              {screenshotViewer.screenshots.length > 1 && (
-                <>
-                  <button
-                    onClick={previousScreenshot}
-                    className={styles.navigationButtonLeft}
-                    title={`${t('previousImage')}`}
-                  >
-                    <FaChevronLeft />
-                  </button>
-                  <button
-                    onClick={nextScreenshot}
-                    className={styles.navigationButtonRight}
-                    title={`${t('nextImage')}`}
-                  >
-                    <FaChevronRight />
-                  </button>
-                </>
+            {/* Dot indicators */}
+            {screenshotViewer.screenshots.length > 1 &&
+              screenshotViewer.screenshots.length <= 5 && (
+                <div className={styles.dotIndicators}>
+                  {screenshotViewer.screenshots.map((_, index) => (
+                    <button
+                      type="button"
+                      key={index}
+                      onClick={() => {
+                        setScreenshotViewer((prev) => ({
+                          ...prev,
+                          currentIndex: index,
+                        }));
+                      }}
+                      className={
+                        index === screenshotViewer.currentIndex
+                          ? styles.dotIndicatorActive
+                          : styles.dotIndicator
+                      }
+                      title={`${t('screenshot', { number: index + 1 })}`}
+                      aria-label={`${t('screenshot', { number: index + 1 })}`}
+                    />
+                  ))}
+                </div>
               )}
-
-              {/* Image */}
-              <div className={styles.screenshotImageContainer}>
-                <img
-                  key={screenshotViewer.currentIndex}
-                  src={
-                    screenshotViewer.screenshots[screenshotViewer.currentIndex]
-                  }
-                  alt={`${t('ss')} ${screenshotViewer.currentIndex + 1}`}
-                  className={styles.screenshotImage}
-                />
-              </div>
-
-              {/* Dot indicators */}
-              {screenshotViewer.screenshots.length > 1 &&
-                screenshotViewer.screenshots.length <= 5 && (
-                  <div className={styles.dotIndicators}>
-                    {screenshotViewer.screenshots.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setScreenshotViewer((prev) => ({
-                            ...prev,
-                            currentIndex: index,
-                          }));
-                        }}
-                        className={
-                          index === screenshotViewer.currentIndex
-                            ? styles.dotIndicatorActive
-                            : styles.dotIndicator
-                        }
-                        title={`${t('screenshot', { number: index + 1 })}`}
-                      />
-                    ))}
-                  </div>
-                )}
+          </div>
+        ) : (
+          /* Plugin Details Content */
+          <>
+            {/* Tabs */}
+            <div className={styles.tabsContainer} role="tablist">
+              {TABS.map((tName) => (
+                <button
+                  key={tName}
+                  id={`tab-${tName}`}
+                  type="button"
+                  role="tab"
+                  aria-selected={tab === tName}
+                  aria-controls={`panel-${tName}`}
+                  onClick={() => setTab(tName)}
+                  className={tab === tName ? styles.tabActive : styles.tab}
+                >
+                  {t(tName)}
+                </button>
+              ))}
             </div>
-          ) : (
-            /* Plugin Details Content */
-            <>
-              {/* Tabs */}
-              <div className={styles.tabsContainer}>
-                {TABS.map((tName) => (
-                  <button
-                    key={tName}
-                    type="button"
-                    onClick={() => setTab(tName)}
-                    className={tab === tName ? styles.tabActive : styles.tab}
-                  >
-                    {t(tName)}
-                  </button>
-                ))}
-              </div>
 
-              {/* Tab Content */}
-              <div className={styles.tabContent}>
+            {/* Tab Content */}
+            <div className={styles.tabContent}>
+              <div
+                role="tabpanel"
+                id="panel-details"
+                aria-labelledby="tab-details"
+                hidden={tab !== 'details'}
+              >
                 {tab === 'details' && (
                   <>
                     <div className={styles.sectionTitle}>
@@ -403,6 +416,13 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                     )}
                   </>
                 )}
+              </div>
+              <div
+                role="tabpanel"
+                id="panel-features"
+                aria-labelledby="tab-features"
+                hidden={tab !== 'features'}
+              >
                 {tab === 'features' && (
                   <>
                     <div className={styles.sectionTitleLarge}>
@@ -428,6 +448,13 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                     )}
                   </>
                 )}
+              </div>
+              <div
+                role="tabpanel"
+                id="panel-changelog"
+                aria-labelledby="tab-changelog"
+                hidden={tab !== 'changelog'}
+              >
                 {tab === 'changelog' && (
                   <>
                     <div className={styles.sectionTitleLarge}>
@@ -453,11 +480,11 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                   </>
                 )}
               </div>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </div>
-    </Modal>
+    </CRUDModalTemplate>
   );
 };
 

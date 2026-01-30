@@ -981,6 +981,7 @@
     "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
+    "createFailed": "प्रतिज्ञा बनाने में विफल",
     "title": "निधि अभियान प्रतिज्ञाएँ",
     "pledgeAmount": "प्रतिज्ञा राशि",
     "pledgeOptions": "विकल्प",
@@ -1160,7 +1161,7 @@
     "getOtp": "ओटीपी प्राप्त करें",
     "enterOtp": "ओटीपी दर्ज करें",
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
-    "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
     "backToLogin": "लॉगिन पर वापस जाएं",
     "userOtp": "जैसे ",
@@ -1773,7 +1774,14 @@
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
     "repeatsEvery": "हर बार दोहराता है",
-    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!",
+    "eventDetails": "कार्यक्रम विवरण",
+    "presetToday": "आज",
+    "presetThisWeek": "इस सप्ताह",
+    "presetThisMonth": "इस महीने",
+    "presetNext7Days": "अगले 7 दिन",
+    "presetNext30Days": "अगले 30 दिन",
+    "presetNextMonth": "अगले महीने"
   },
   "userEventCard": {
     "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
@@ -2363,7 +2371,9 @@
     "uploading": "अपलोड हो रहा है...",
     "screenshotCounter": "{{current}} में से {{total}}",
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
-    "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
+    "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
+    "failedToParsePluginZip": "प्लगइन ZIP फ़ाइल पार्स करने में विफल",
+    "pluginUploadedSuccess": "प्लगइन सफलतापूर्वक अपलोड हो गया! ({{components}} घटक) - अब आप इसे प्लगइन सूची से इंस्टॉल कर सकते हैं।"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",

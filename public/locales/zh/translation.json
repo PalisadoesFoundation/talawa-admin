@@ -969,6 +969,7 @@
     "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
+    "createFailed": "创建认捐失败",
     "title": "基金活动承诺",
     "pledgeAmount": "质押金额",
     "pledgeOptions": "选项",
@@ -1165,7 +1166,7 @@
     "getOtp": "获取一次性密码",
     "enterOtp": "输入一次性密码",
     "enterNewPassword": "输入新密码",
-    "cofirmNewPassword": "确认新密码",
+    "confirmNewPassword": "确认新密码",
     "changePassword": "更改密码",
     "backToLogin": "回到登入",
     "userOtp": "例如",
@@ -1778,7 +1779,14 @@
     "after": "之后",
     "customRecurrence": "自定义重复",
     "repeatsEvery": "重复周期",
-    "noEventAvailable": "沒有可用的活動！"
+    "noEventAvailable": "没有可用的活动！",
+    "eventDetails": "活动详情",
+    "presetToday": "今天",
+    "presetThisWeek": "本周",
+    "presetThisMonth": "本月",
+    "presetNext7Days": "未来 7 天",
+    "presetNext30Days": "未来 30 天",
+    "presetNextMonth": "下个月"
   },
   "userEventCard": {
     "failedToRegister": "无法注册该活动",
@@ -2363,7 +2371,9 @@
     "uploading": "上传中...",
     "screenshotCounter": "{{current}} / {{total}}",
     "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
-    "errorInstalling": "加载插件详情失败"
+    "errorInstalling": "加载插件详情失败",
+    "failedToParsePluginZip": "解析插件 ZIP 文件失败",
+    "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "插件未找到或已禁用",
