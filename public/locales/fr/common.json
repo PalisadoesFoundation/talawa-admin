@@ -231,8 +231,8 @@
   "enterName": "Entrez le nom",
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
-  "paginationPrev": "Préc \u2039",
-  "paginationNext": "Suiv \u203a",
+  "paginationPrev": "Préc ‹",
+  "paginationNext": "Suiv ›",
   "tablePagination": "Pagination du tableau",
   "paginationPrevLabel": "Page précédente",
   "paginationNextLabel": "Page suivante",
@@ -296,5 +296,6 @@
   "unavailable": "Indisponible",
   "clearSelection": "Effacer la sélection",
   "toggleSidebar": "Basculer la barre latérale",
-  "picture": "Image de {{name}}"
+  "picture": "Image de {{name}}",
+  "unknownUser": "Unknown user"
 }

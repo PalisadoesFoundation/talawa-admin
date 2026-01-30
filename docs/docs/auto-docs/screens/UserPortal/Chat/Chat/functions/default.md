@@ -6,7 +6,10 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Chat/Chat.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Chat/Chat.tsx#L57)
+Defined in: [src/screens/UserPortal/Chat/Chat.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Chat/Chat.tsx#L54)
+
+Chat component that lists all chats and displays the selected chat room.
+Supports filtering by All, Unread, and Group chats.
 
 ## Returns
 

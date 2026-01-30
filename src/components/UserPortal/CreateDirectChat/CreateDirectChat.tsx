@@ -79,6 +79,7 @@ export const handleCreateDirectChat = async (
   userName: string,
   chats: NewChatType[],
   t: TFunction<'translation', 'userChat'>,
+  tCommon: TFunction<'common', undefined>,
   createChat: {
     (
       options?:
@@ -134,12 +135,15 @@ export const handleCreateDirectChat = async (
   toggleCreateDirectChatModal: { (): void; (): void },
 ): Promise<void> => {
   // Check if a direct chat with this user already exists
-  // Direct chats have exactly 2 members
-  const existingChat = chats.find(
-    (chat) =>
-      chat.members?.edges?.length === 2 &&
-      chat.members.edges.some((edge) => edge.node.user.id === id),
-  );
+  // Direct chats have exactly 2 members & are NOT groups
+  const existingChat = chats.find((chat) => {
+    const edges = chat.members?.edges;
+    return (
+      !chat.isGroup &&
+      edges?.length === 2 &&
+      edges.some((edge) => edge.node.user.id === id)
+    );
+  });
   if (existingChat) {
     const existingUser = existingChat.members?.edges?.find(
       (edge) => edge.node.user.id === id,
@@ -147,7 +151,9 @@ export const handleCreateDirectChat = async (
     errorHandler(
       t,
       new Error(
-        `A conversation with ${existingUser?.name || 'this user'} already exists!`,
+        t('directChatExists', {
+          name: existingUser?.name ?? tCommon('unknownUser'),
+        }),
       ),
     );
   } else {
@@ -336,6 +342,7 @@ export default function createDirectChatModal({
                                     userDetails.name,
                                     chats,
                                     t,
+                                    tCommon,
                                     createChat,
                                     createChatMembership,
                                     organizationId,

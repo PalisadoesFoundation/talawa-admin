@@ -351,4 +351,46 @@ describe('CreateDirectChatModal', () => {
     expect(chatsListRefetch).not.toHaveBeenCalled();
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
   });
+
+  test('should allow creating a new direct chat even if a group with same members exists', async () => {
+    const user = userEvent.setup();
+    const existingGroupChat: NewChatType[] = [
+      {
+        id: 'existing-group-chat',
+        isGroup: true,
+        name: 'Group Chat',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        members: {
+          edges: [
+            {
+              cursor: 'cursor-1',
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'admin',
+              },
+            },
+            {
+              cursor: 'cursor-2',
+              node: {
+                user: { id: 'user-2', name: 'Test User 2' },
+                role: 'member',
+              },
+            },
+          ],
+        },
+        messages: { edges: [] },
+      },
+    ];
+
+    renderComponent({ chats: existingGroupChat });
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    await user.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(chatsListRefetch).toHaveBeenCalled();
+    });
+    expect(toggleCreateDirectChatModal).toHaveBeenCalled();
+  });
 });

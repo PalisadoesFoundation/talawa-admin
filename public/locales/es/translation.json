@@ -223,7 +223,7 @@
     "avatar": "Avatar de {{title}}",
     "eventLocation": "Ubicación del evento",
     "eventDate": "Fecha del evento",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Publicado el:",
     "author": "Autor:"
   },
@@ -1877,7 +1877,8 @@
     "confirmRemoveMember": "Confirmar eliminar miembro",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "directChatExists": "A conversation with {{name}} already exists!"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

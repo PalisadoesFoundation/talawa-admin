@@ -223,7 +223,7 @@
     "avatar": "{{title}} अवतार",
     "eventLocation": "कार्यक्रम स्थान",
     "eventDate": "कार्यक्रम तिथि",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "प्रकाशित:",
     "author": "लेखक:"
   },
@@ -1889,7 +1889,8 @@
     "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
-    "next": "अगला"
+    "next": "अगला",
+    "directChatExists": "A conversation with {{name}} already exists!"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

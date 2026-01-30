@@ -397,7 +397,7 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
+    "loadingPlaceholder": " ",
     "postedOn": "Posted on:",
     "author": "Author:"
   },
@@ -1877,7 +1877,8 @@
     "confirmRemoveMember": "Confirm Remove Member",
     "failedToAddUser": "Failed to Add User",
     "userAddedSuccessfully": "User Added Successfully",
-    "next": "Next"
+    "next": "Next",
+    "directChatExists": "A conversation with {{name}} already exists!"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",

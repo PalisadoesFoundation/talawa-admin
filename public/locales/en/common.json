@@ -232,8 +232,8 @@
   "enterName": "Enter name",
   "imageUploadError": "Failed to upload image",
   "imageUploadSuccess": "Image uploaded successfully",
-  "paginationPrev": "Prev \u2039",
-  "paginationNext": "Next \u203a",
+  "paginationPrev": "Prev ‹",
+  "paginationNext": "Next ›",
   "tablePagination": "Table pagination",
   "paginationPrevLabel": "Previous page",
   "paginationNextLabel": "Next page",
@@ -296,5 +296,6 @@
   "unavailable": "Unavailable",
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
-  "picture": "{{name}} Picture"
+  "picture": "{{name}} Picture",
+  "unknownUser": "Unknown user"
 }

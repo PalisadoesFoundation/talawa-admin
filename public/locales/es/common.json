@@ -229,8 +229,8 @@
   "imageUploadSuccess": "Imagen subida con éxito",
   "postalCode": "Código Postal",
   "state": "Estado",
-  "paginationPrev": "Anterior \u2039",
-  "paginationNext": "Siguiente \u203a",
+  "paginationPrev": "Anterior ‹",
+  "paginationNext": "Siguiente ›",
   "tablePagination": "Paginación de la tabla",
   "paginationPrevLabel": "Página anterior",
   "paginationNextLabel": "Página siguiente",
@@ -296,5 +296,6 @@
   "unavailable": "No disponible",
   "clearSelection": "Limpiar selección",
   "toggleSidebar": "Alternar barra lateral",
-  "picture": "Imagen de {{name}}"
+  "picture": "Imagen de {{name}}",
+  "unknownUser": "Unknown user"
 }

@@ -226,8 +226,8 @@
   "imageUploadSuccess": "图片上传成功",
   "postalCode": "邮政编码",
   "state": "省/州",
-  "paginationPrev": "上一页 \u2039",
-  "paginationNext": "下一页 \u203a",
+  "paginationPrev": "上一页 ‹",
+  "paginationNext": "下一页 ›",
   "tablePagination": "表格分页",
   "paginationPrevLabel": "上一页",
   "paginationNextLabel": "下一页",
@@ -296,5 +296,6 @@
   "unavailable": "不可用",
   "clearSelection": "清除选择",
   "toggleSidebar": "切换侧边栏",
-  "picture": "{{name}}的图片"
+  "picture": "{{name}}的图片",
+  "unknownUser": "Unknown user"
 }
