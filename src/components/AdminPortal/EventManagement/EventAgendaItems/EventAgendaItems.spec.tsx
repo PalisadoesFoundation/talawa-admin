@@ -43,7 +43,7 @@ vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
 
-vi.mock('components/AgendaItems/AgendaItemsContainer', () => ({
+vi.mock('components/AdminPortal/AgendaItems/AgendaItemsContainer', () => ({
   __esModule: true,
   default: vi.fn(() => null),
 }));
