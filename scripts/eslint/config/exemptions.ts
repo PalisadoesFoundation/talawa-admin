@@ -86,6 +86,13 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+  {
+    files: [
+      'src/shared-components/DropDownButton/**/*.{ts,tsx}',
+      'src/types/shared-components/DropDownButton/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-dropdown', 'rb-dropdown-path']),
+  },
 ];
 
 export const avatarExemption = createWrapperExemption({

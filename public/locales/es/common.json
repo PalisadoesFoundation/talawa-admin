@@ -296,5 +296,6 @@
   "unavailable": "No disponible",
   "clearSelection": "Limpiar selección",
   "toggleSidebar": "Alternar barra lateral",
-  "picture": "Imagen de {{name}}"
+  "picture": "Imagen de {{name}}",
+  "optionsSuffix": "opciones"
 }
