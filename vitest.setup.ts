@@ -2,6 +2,10 @@ import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+
+loadDevMessages();
+loadErrorMessages();
 import { setupLocalStorageMock } from './src/test-utils/localStorageMock';
 
 // Setup localStorage mock globally for all tests
