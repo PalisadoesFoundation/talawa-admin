@@ -270,14 +270,6 @@
   "imageNotFound": "未找到图片",
   "changeLanguage": "更改语言",
   "selectField": "选择 {{fieldName}}",
-  "userEvents": {
-    "presetToday": "今天",
-    "presetThisWeek": "本周",
-    "presetThisMonth": "本月",
-    "presetNext7Days": "未来 7 天",
-    "presetNext30Days": "未来 30 天",
-    "presetNextMonth": "下个月"
-  },
   "ascending": "升序",
   "descending": "降序",
   "noRegistrations": "报名人数",

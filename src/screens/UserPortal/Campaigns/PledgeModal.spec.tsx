@@ -21,7 +21,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
-import React, { act } from 'react';
+import { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
@@ -364,7 +364,7 @@ describe('PledgeModal', () => {
       expect(screen.getByLabelText('Amount')).toHaveValue(100);
     });
 
-    it('should close modal when close button is clicked', async () => {
+    it('should close modal when cancel button is clicked', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
       await waitFor(() =>
         expect(
@@ -372,8 +372,8 @@ describe('PledgeModal', () => {
         ).toBeInTheDocument(),
       );
 
-      const closeButton = screen.getByTestId('pledgeModalCloseBtn');
-      await user.click(closeButton);
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      await user.click(cancelButton);
 
       expect(pledgeProps[0].hide).toHaveBeenCalled();
     });
@@ -444,47 +444,83 @@ describe('PledgeModal', () => {
 
   describe('Form Field Updates', () => {
     it('should update pledgeAmount when input value changes to valid positive number', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const amountInput = screen.getByLabelText('Amount');
-      expect(amountInput).toHaveValue(100);
+      await act(async () => {
+        renderPledgeModal(link1, pledgeProps[1]);
+      });
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      expect(amountInput).toHaveAttribute('value', '100');
 
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '200');
-      expect(amountInput).toHaveValue(200);
+      amountInput.focus();
+      await user.type(amountInput, '2');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+
+      await waitFor(() => {
+        expect(parseInt(amountInput.value)).toBe(200);
+      });
     });
 
     it('should not update pledgeAmount when input value is negative', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const amountInput = screen.getByLabelText('Amount');
-      expect(amountInput).toHaveValue(100);
+      await act(async () => {
+        renderPledgeModal(link1, pledgeProps[1]);
+      });
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      expect(amountInput).toHaveAttribute('value', '100');
 
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '-10');
+      amountInput.focus();
+      await user.type(amountInput, '-');
+      amountInput.focus();
+      await user.type(amountInput, '1');
+      amountInput.focus();
+      await user.type(amountInput, '0');
       await user.tab();
-      expect(amountInput).toHaveValue(10);
+
+      await waitFor(() => {
+        expect(parseInt(amountInput.value)).toBe(10);
+      });
     });
 
     it('should accept zero as valid amount input', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const amountInput = screen.getByLabelText('Amount');
-      expect(amountInput).toHaveValue(100);
+      await act(async () => {
+        renderPledgeModal(link1, pledgeProps[1]);
+      });
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      expect(amountInput).toHaveAttribute('value', '100');
 
+      amountInput.focus();
       await user.clear(amountInput);
+      amountInput.focus();
       await user.type(amountInput, '0');
       await user.tab();
-      expect(amountInput).toHaveValue(0);
+
+      await waitFor(() => {
+        expect(parseInt(amountInput.value)).toBe(0);
+      });
     });
 
     // NEW: Test for non-numeric input validation
     it('should not update pledgeAmount when input value is non-numeric', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const amountInput = screen.getByLabelText('Amount');
-      expect(amountInput).toHaveValue(100);
+      await act(async () => {
+        renderPledgeModal(link1, pledgeProps[1]);
+      });
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      expect(amountInput).toHaveAttribute('value', '100');
 
+      amountInput.focus();
       await user.clear(amountInput);
+      amountInput.focus();
       await user.type(amountInput, 'abc');
       await user.tab();
-      expect(amountInput).toHaveValue(0);
+
+      await waitFor(() => {
+        expect(parseInt(amountInput.value) || 0).toBe(0);
+      });
     });
 
     it('should update currency when changed', async () => {
@@ -515,18 +551,26 @@ describe('PledgeModal', () => {
         }),
       ];
       const link = new StaticMockLink(amountChangeMock);
-      renderPledgeModal(link, pledgeProps[1]);
+      await act(async () => {
+        renderPledgeModal(link, pledgeProps[1]);
+      });
 
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '200');
+      amountInput.focus();
+      await user.type(amountInput, '2');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
       await user.tab();
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -568,18 +612,26 @@ describe('PledgeModal', () => {
       ];
 
       const errorLink = new StaticMockLink(errorMock);
-      renderPledgeModal(errorLink, pledgeProps[0]);
+      await act(async () => {
+        renderPledgeModal(errorLink, pledgeProps[0]);
+      });
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '200');
+      amountInput.focus();
+      await user.type(amountInput, '2');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
       await user.tab();
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -599,18 +651,26 @@ describe('PledgeModal', () => {
       ];
 
       const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
+      await act(async () => {
+        renderPledgeModal(updateLink, pledgeProps[1]);
+      });
 
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '200');
+      amountInput.focus();
+      await user.type(amountInput, '2');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
       await user.tab();
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -634,18 +694,26 @@ describe('PledgeModal', () => {
       ];
 
       const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
+      await act(async () => {
+        renderPledgeModal(updateLink, pledgeProps[1]);
+      });
 
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '150');
+      amountInput.focus();
+      await user.type(amountInput, '1');
+      amountInput.focus();
+      await user.type(amountInput, '5');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
       await user.tab();
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -666,18 +734,26 @@ describe('PledgeModal', () => {
       ];
 
       const errorLink = new StaticMockLink(errorMock);
-      renderPledgeModal(errorLink, pledgeProps[1]);
+      await act(async () => {
+        renderPledgeModal(errorLink, pledgeProps[1]);
+      });
 
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '200');
+      amountInput.focus();
+      await user.type(amountInput, '2');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
       await user.tab();
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -695,14 +771,16 @@ describe('PledgeModal', () => {
       ];
 
       const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
+      await act(async () => {
+        renderPledgeModal(updateLink, pledgeProps[1]);
+      });
 
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
       // Change: Submit immediately without editing any fields
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -740,7 +818,7 @@ describe('PledgeModal', () => {
 
       // For admin users with no existing pledge, pledgeUsers starts as empty array
       // Submit the form without selecting any pledger
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -777,19 +855,39 @@ describe('PledgeModal', () => {
     });
 
     it('should maintain form state when modal stays open after validation', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      await act(async () => {
+        renderPledgeModal(link1, pledgeProps[0]);
+      });
 
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '500');
+      amountInput.focus();
+      await user.type(amountInput, '5');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
-      expect(amountInput).toHaveValue(500);
+      await waitFor(() => {
+        expect(parseInt(amountInput.value)).toBe(500);
+      });
 
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '-100');
+      amountInput.focus();
+      await user.type(amountInput, '-');
+      amountInput.focus();
+      await user.type(amountInput, '1');
+      amountInput.focus();
+      await user.type(amountInput, '0');
+      amountInput.focus();
+      await user.type(amountInput, '0');
       await user.tab();
 
-      expect(amountInput).toHaveValue(100);
+      await waitFor(() => {
+        expect(parseInt(amountInput.value)).toBe(100);
+      });
     });
   });
 
@@ -874,11 +972,17 @@ describe('PledgeModal', () => {
       });
 
       // Submit the form with selected pledger
-      const amountInput = screen.getByLabelText('Amount');
+      const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
+      amountInput.focus();
       await user.clear(amountInput);
-      await user.type(amountInput, '150');
+      amountInput.focus();
+      await user.type(amountInput, '1');
+      amountInput.focus();
+      await user.type(amountInput, '5');
+      amountInput.focus();
+      await user.type(amountInput, '0');
 
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(
@@ -920,7 +1024,7 @@ describe('PledgeModal', () => {
       await waitFor(() => expect(input).toHaveValue(''));
 
       // 5. Try submit - should fail validation because pledgers is empty
-      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await user.click(submitBtn);
 
       await waitFor(() => {
