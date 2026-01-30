@@ -104,3 +104,10 @@ export interface InterfaceChatHeaderProps {
   isGroup?: boolean;
   onGroupClick?: () => void;
 }
+
+/**
+ * Props interface for the EmptyChatState component.
+ */
+export interface InterfaceEmptyChatStateProps {
+  message: string;
+}

@@ -19,14 +19,11 @@
 
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import styles from './EmptyChatState.module.css';
-
-interface IEmptyChatStateProps {
-  message: string;
-}
+import type { InterfaceEmptyChatStateProps } from './types';
 
 export default function EmptyChatState({
   message,
-}: IEmptyChatStateProps): JSX.Element {
+}: InterfaceEmptyChatStateProps): JSX.Element {
   return (
     <div
       className={`d-flex flex-column justify-content-center align-items-center w-100 h-100 gap-2 ${styles.container}`}

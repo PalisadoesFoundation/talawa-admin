@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/ChatRoom/EmptyChatState.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/EmptyChatState.tsx#L27)
+Defined in: [src/components/UserPortal/ChatRoom/EmptyChatState.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/EmptyChatState.tsx#L24)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`IEmptyChatStateProps`
+[`InterfaceEmptyChatStateProps`](../../types/interfaces/InterfaceEmptyChatStateProps.md)
 
 ## Returns
 
