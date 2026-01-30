@@ -20,8 +20,8 @@
  *
  * @example
  * ```tsx
- * <IconComponent name="Dashboard" fill="#000" />
- * <IconComponent name="Volunteer" height="24px" width="24px" />
+ * <IconComponent name="dashboard" fill="#000" />
+ * <IconComponent name="volunteer" height="24px" width="24px" />
  * ```
  *
  * @defaultValue
@@ -57,6 +57,8 @@ import { MdOutlineVolunteerActivism } from 'react-icons/md';
 import type { JSX } from 'react';
 
 import type { InterfaceIconComponentProps } from 'types/shared-components/IconComponent/interface';
+
+import styles from './IconComponent.module.css';
 
 const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
   switch (props.name) {
@@ -157,21 +159,24 @@ const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
     case 'campaigns':
       return (
         <NewspaperOutlined
-          sx={{ color: props.fill || 'currentColor' }}
+          className={styles.iconColor}
+          style={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-Campaigns"
         />
       );
     case 'myPledges':
       return (
         <ContactPageOutlined
-          sx={{ color: props.fill || 'currentColor' }}
+          className={styles.iconColor}
+          style={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-My-Pledges"
         />
       );
     case 'leaveOrganization':
       return (
         <ExitToAppIcon
-          sx={{ color: props.fill || 'currentColor' }}
+          className={styles.iconColor}
+          style={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-Leave-Organization"
         />
       );
@@ -189,7 +194,7 @@ const iconComponent = (props: InterfaceIconComponentProps): JSX.Element => {
       return (
         <QuestionMarkOutlined
           {...props}
-          fontSize="large"
+          className={styles.iconLarge}
           data-testid="Icon-Component-DefaultIcon"
         />
       );

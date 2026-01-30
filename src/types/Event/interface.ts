@@ -119,12 +119,6 @@ export interface ICalendarProps {
   currentYear?: number;
 }
 
-export interface IEventHeaderProps {
-  viewType: ViewType;
-  handleChangeView: (item: string | null) => void;
-  showInviteModal: () => void;
-}
-
 /**
  * Props for EventListCard component.
  *
@@ -298,7 +292,7 @@ export type InterfaceEvent = IEvent;
 export type InterfaceIOrgList = IOrgList;
 export type InterfaceStatsModal = IStatsModal;
 export type InterfaceCalendarProps = ICalendarProps;
-export type InterfaceEventHeaderProps = IEventHeaderProps;
+
 export type InterfaceDeleteEventModalProps = IDeleteEventModalProps;
 export type InterfacePreviewEventModalProps = IPreviewEventModalProps;
 export type InterfaceEventEdge = IEventEdge;

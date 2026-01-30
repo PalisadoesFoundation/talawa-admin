@@ -35,7 +35,7 @@ import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEve
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import type { InterfaceEventHeaderProps } from 'types/Event/interface';
+import type { InterfaceEventHeaderProps } from 'types/shared-components/EventCalender/interface';
 
 function EventHeader({
   viewType,

@@ -4,18 +4,19 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @component
- * @param {ISidebarNavItemProps} props - The props for the component
- * @param {string} props.to - Navigation target URL
- * @param {React.ReactNode} props.icon - Icon component or element
- * @param {string} props.label - Display label for the navigation item
- * @param {string} props.testId - Test ID for testing purposes
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {() => void} [props.onClick] - Optional click handler
- * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
- * @param {'react-icon' | 'svg'} [props.iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @param props - The props for the component
+ * @param to - Navigation target URL
+ * @param icon - Icon component or element
+ * @param label - Display label for the navigation item
+ * @param testId - Test ID for testing purposes
+ * @param hideDrawer - Whether the drawer is hidden/collapsed
+ * @param onClick - Optional click handler
+ * @param useSimpleButton - Use simple button style (for org drawers)
+ * @param iconType - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @param dataCy - specific data-cy attribute for cypress testing
+ * @param isActive - function to determine if the link is active
  *
- * @returns {React.ReactElement} The rendered SidebarNavItem component
+ * @returns The rendered SidebarNavItem component
  *
  * @example
  * ```tsx
@@ -23,7 +24,7 @@
  * <SidebarNavItem
  *   to="/dashboard"
  *   icon={<DashboardIcon />}
- *   label="Dashboard"
+ *   label="dashboard"
  *   testId="dashboardBtn"
  *   hideDrawer={false}
  * />

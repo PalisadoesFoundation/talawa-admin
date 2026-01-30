@@ -118,8 +118,7 @@ describe('IconComponent sx color handling', () => {
     render(<IconComponent name="campaigns" fill="#FF0000" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
-    // Material-UI applies sx color via inline style or class
-    // The icon should have the color applied
+    // Material-UI applies style prop to the root element
     expect(icon).toHaveStyle({ color: 'rgb(255, 0, 0)' });
   });
 

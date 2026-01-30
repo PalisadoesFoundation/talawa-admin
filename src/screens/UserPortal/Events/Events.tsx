@@ -55,7 +55,7 @@ import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
-import EventHeader from 'components/EventCalender/Header/EventHeader';
+import EventHeader from 'shared-components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React from 'react';

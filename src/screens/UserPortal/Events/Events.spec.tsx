@@ -153,7 +153,7 @@ vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
   },
 }));
 
-vi.mock('components/EventCalender/Header/EventHeader', () => ({
+vi.mock('shared-components/EventCalender/Header/EventHeader', () => ({
   __esModule: true,
   default: ({
     viewType,
@@ -1454,7 +1454,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(
@@ -1484,7 +1484,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const cache = new InMemoryCache({ addTypename: false });
     render(

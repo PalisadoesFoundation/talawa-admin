@@ -18,7 +18,7 @@
  * @example
  * ```tsx
  * <LeftDrawerOrg
- *   targets={[{ name: 'Dashboard', url: '/dashboard' }]}
+ *   targets={[{ name: 'dashboard', url: '/dashboard' }]}
  *   orgId="12345"
  *   hideDrawer={false}
  *   setHideDrawer={setHideDrawerFunction}

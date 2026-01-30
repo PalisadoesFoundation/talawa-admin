@@ -41,6 +41,13 @@ vi.mock('./UserSidebar.module.css', () => ({
   },
 }));
 
+vi.mock('./IconComponent.module.css', () => ({
+  default: {
+    iconColor: 'iconColor',
+    iconLarge: 'iconLarge',
+  },
+}));
+
 dayjs.extend(utc);
 
 // Mock the dependencies
