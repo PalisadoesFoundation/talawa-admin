@@ -64,8 +64,8 @@ const UserSidebar = ({
       <>
         <SidebarNavItem
           to="/user/organizations"
-          icon={<IconComponent name="My Organizations" />}
-          label={t('my organizations')}
+          icon={<IconComponent name="myOrganizations" />}
+          label={t('myOrganizations')}
           testId="orgsBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
@@ -84,8 +84,8 @@ const UserSidebar = ({
 
         <SidebarNavItem
           to="/user/settings"
-          icon={<IconComponent name="Settings" />}
-          label={tCommon('Settings')}
+          icon={<IconComponent name="settings" />}
+          label={tCommon('settings')}
           testId="settingsBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}

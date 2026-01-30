@@ -45,24 +45,24 @@ export type ComponentType = {
 
 // Note: Routes with names appear on NavBar
 const components: ComponentType[] = [
-  { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
-  { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
-  { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
-  { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },
-  { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
-  { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
-  { name: 'Tags', comp_id: 'orgtags', component: 'OrganizationTags' },
-  { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
-  { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
+  { name: 'myOrganizations', comp_id: 'orglist', component: 'OrgList' },
+  { name: 'dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
+  { name: 'posts', comp_id: 'orgpost', component: 'OrgPost' },
+  { name: 'chat', comp_id: 'orgchat', component: 'Chat' },
+  { name: 'events', comp_id: 'orgevents', component: 'OrganizationEvents' },
+  { name: 'people', comp_id: 'orgpeople', component: 'OrganizationPeople' },
+  { name: 'tags', comp_id: 'orgtags', component: 'OrganizationTags' },
+  { name: 'advertisement', comp_id: 'orgads', component: 'Advertisements' },
+  { name: 'funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
   {
-    name: 'Transactions',
+    name: 'transactions',
     comp_id: 'orgtransactions',
     component: 'OrganizationTransactions',
   },
-  { name: 'Membership Requests', comp_id: 'requests', component: 'Requests' },
-  { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
-  { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
-  { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
+  { name: 'membershipRequests', comp_id: 'requests', component: 'Requests' },
+  { name: 'blockUnblock', comp_id: 'blockuser', component: 'BlockUser' },
+  { name: 'venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
+  { name: 'settings', comp_id: 'orgsetting', component: 'OrgSettings' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];
 

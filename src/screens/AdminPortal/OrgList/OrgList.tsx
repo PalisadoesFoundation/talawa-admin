@@ -141,8 +141,8 @@ function OrgList(): JSX.Element {
   const [typedValue, setTypedValue] = useState('');
   const [filterName, setFilterName] = useState('');
   const [sortingState, setSortingState] = useState({
-    option: 'Latest',
-    selectedOption: 'Latest',
+    option: 'latest',
+    selectedOption: 'latest',
   });
 
   const [searchByName, setSearchByName] = useState('');
@@ -236,13 +236,13 @@ function OrgList(): JSX.Element {
 
     // Apply sorting
     if (
-      sortingState.option === 'Latest' ||
-      sortingState.option === 'Earliest'
+      sortingState.option === 'latest' ||
+      sortingState.option === 'earliest'
     ) {
       result.sort((a: InterfaceOrgInfoTypePG, b: InterfaceOrgInfoTypePG) => {
         const dateA = new Date(a.createdAt).getTime();
         const dateB = new Date(b.createdAt).getTime();
-        return sortingState.option === 'Latest' ? dateB - dateA : dateA - dateB;
+        return sortingState.option === 'latest' ? dateB - dateA : dateA - dateB;
       });
     }
 
@@ -411,8 +411,8 @@ function OrgList(): JSX.Element {
               label: tCommon('sort'),
               type: 'sort',
               options: [
-                { label: t('Latest'), value: 'Latest' },
-                { label: t('Earliest'), value: 'Earliest' },
+                { label: t('latest'), value: 'latest' },
+                { label: t('earliest'), value: 'earliest' },
               ],
               selectedOption: sortingState.selectedOption,
               onOptionChange: (value) => handleSortChange(value.toString()),

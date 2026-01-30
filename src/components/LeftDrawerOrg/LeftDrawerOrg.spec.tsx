@@ -109,11 +109,12 @@ const mockTImplementation = (key: string) => {
     adminPortal: 'Admin Portal',
     menu: 'Menu',
     plugins: 'Plugins',
-    Dashboard: 'Dashboard',
-    Members: 'Members',
-    Events: 'Events',
-    'Action Items': 'Action Items',
-    Posts: 'Posts',
+    dashboard: 'Dashboard',
+    members: 'Members',
+    people: 'People',
+    events: 'Events',
+    actionItems: 'Action Items',
+    posts: 'Posts',
     switchToUserPortal: 'Switch to User Portal',
   };
   return translations[key] || key;
@@ -291,11 +292,11 @@ describe('LeftDrawerOrg', () => {
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
     targets: [
-      { name: 'Dashboard', url: '/admin/orgdash/org-123' },
-      { name: 'Members', url: '/admin/orgpeople/org-123' },
-      { name: 'Events', url: '/admin/orgevents/org-123' },
+      { name: 'dashboard', url: '/admin/orgdash/org-123' },
+      { name: 'people', url: '/admin/orgpeople/org-123' },
+      { name: 'events', url: '/admin/orgevents/org-123' },
       {
-        name: 'Action Items',
+        name: 'actionItems',
         url: undefined,
         subTargets: [
           {
@@ -369,7 +370,7 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
-      expect(screen.getByText('Members')).toBeInTheDocument();
+      expect(screen.getByText('People')).toBeInTheDocument();
       expect(screen.getByText('Events')).toBeInTheDocument();
     });
 
@@ -378,7 +379,7 @@ describe('LeftDrawerOrg', () => {
 
       expect(screen.getByTestId('collapsible-dropdown')).toBeInTheDocument();
       expect(
-        screen.getByText('CollapsibleDropdown: Action Items'),
+        screen.getByText('CollapsibleDropdown: actionItems'),
       ).toBeInTheDocument();
     });
   });
@@ -563,7 +564,7 @@ describe('LeftDrawerOrg', () => {
 
       renderComponent();
 
-      const membersLink = screen.getByText('Members');
+      const membersLink = screen.getByText('People');
       const user = userEvent.setup();
       await user.click(membersLink);
 
@@ -594,7 +595,7 @@ describe('LeftDrawerOrg', () => {
       const dashboardLink = screen.getByText('Dashboard').closest('a');
       expect(dashboardLink).toHaveAttribute('href', '/admin/orgdash/org-123');
 
-      const membersLink = screen.getByText('Members').closest('a');
+      const membersLink = screen.getByText('People').closest('a');
       expect(membersLink).toHaveAttribute('href', '/admin/orgpeople/org-123');
 
       const eventsLink = screen.getByText('Events').closest('a');
@@ -604,14 +605,14 @@ describe('LeftDrawerOrg', () => {
     it('should apply active styles when on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
-      const membersLink = screen.getByText('Members').closest('a');
+      const membersLink = screen.getByText('People').closest('a');
       expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
-      const membersLink = screen.getByText('Members').closest('a');
+      const membersLink = screen.getByText('People').closest('a');
       expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
@@ -620,9 +621,9 @@ describe('LeftDrawerOrg', () => {
 
       const iconComponents = screen.getAllByTestId('icon-component');
       const dashboardIcon = iconComponents.find(
-        (icon) => icon.getAttribute('data-name') === 'Dashboard',
+        (icon) => icon.getAttribute('data-name') === 'dashboard',
       );
-      expect(dashboardIcon).toHaveAttribute('data-name', 'Dashboard');
+      expect(dashboardIcon).toHaveAttribute('data-name', 'dashboard');
       expect(dashboardIcon).toHaveAttribute('data-fill', 'var(--bs-black)');
     });
 
@@ -636,18 +637,18 @@ describe('LeftDrawerOrg', () => {
       expect(inactiveIcon).toBeInTheDocument();
     });
 
-    it('should handle special icon name mapping for Membership Requests', () => {
+    it('should handle Membership Requests using standard icon mapping', () => {
       const propsWithRequests = {
         ...defaultProps,
         targets: [
-          { name: 'Membership Requests', url: '/admin/requests/org-123' },
+          { name: 'membershipRequests', url: '/admin/requests/org-123' },
         ],
       };
 
       renderComponent(propsWithRequests);
 
       const requestsIcon = screen.getByTestId('icon-component');
-      expect(requestsIcon).toHaveAttribute('data-name', 'Requests');
+      expect(requestsIcon).toHaveAttribute('data-name', 'membershipRequests');
     });
   });
 
@@ -859,9 +860,9 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       expect(mockT).toHaveBeenCalledWith('adminPortal');
-      expect(mockT).toHaveBeenCalledWith('Dashboard');
-      expect(mockT).toHaveBeenCalledWith('Members');
-      expect(mockT).toHaveBeenCalledWith('Events');
+      expect(mockT).toHaveBeenCalledWith('dashboard');
+      expect(mockT).toHaveBeenCalledWith('people');
+      expect(mockT).toHaveBeenCalledWith('events');
     });
 
     it('should use error translation for loading errors', async () => {

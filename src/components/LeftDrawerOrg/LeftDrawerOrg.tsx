@@ -118,12 +118,7 @@ const LeftDrawerOrg = ({
             <SidebarNavItem
               key={name}
               to={url}
-              icon={
-                <IconComponent
-                  name={name === 'Membership Requests' ? 'Requests' : name}
-                  fill="var(--bs-black)"
-                />
-              }
+              icon={<IconComponent name={name} fill="var(--bs-black)" />}
               label={tCommon(name)}
               testId={name}
               dataCy={'leftDrawerButton-' + name}

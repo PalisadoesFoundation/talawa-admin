@@ -14,7 +14,7 @@ import type React from 'react';
 export interface InterfaceSortingOption {
   /**
    * The display text shown to the user in the dropdown menu.
-   * @example "Latest", "Oldest", "Most Hours"
+   * @example "latest", "oldest", "Most Hours"
    */
   label: string;
 
@@ -59,8 +59,8 @@ export interface InterfaceDropdownConfig {
    * @example
    * ```ts
    * [
-   *   { label: 'Latest', value: 'DESCENDING' },
-   *   { label: 'Oldest', value: 'ASCENDING' }
+   *   { label: 'latest', value: 'DESCENDING' },
+   *   { label: 'oldest', value: 'ASCENDING' }
    * ]
    * ```
    */

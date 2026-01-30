@@ -67,27 +67,27 @@ const props: InterfaceUserSidebarOrgProps = {
   orgId: '123',
   targets: [
     {
-      name: 'Posts',
+      name: 'posts',
       url: '/user/organization/123',
     },
     {
-      name: 'People',
+      name: 'people',
       url: '/user/people/123',
     },
     {
-      name: 'Events',
+      name: 'events',
       url: '/user/events/123',
     },
     {
-      name: 'Donations',
+      name: 'donate',
       url: '/user/donate/123',
     },
     {
-      name: 'Settings',
+      name: 'settings',
       url: '/user/settings',
     },
     {
-      name: 'All Organizations',
+      name: 'myOrganizations',
       url: '/user/organizations/',
     },
   ],
@@ -250,8 +250,8 @@ const defaultScreens = [
   'People',
   'Events',
   'Posts',
-  'Donations',
-  'All Organizations',
+  'Donate',
+  'My Organizations',
 ];
 
 vi.mock('react-toastify', () => ({

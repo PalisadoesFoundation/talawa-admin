@@ -65,33 +65,33 @@ export interface IIconComponent {
 
 const iconComponent = (props: IIconComponent): JSX.Element => {
   switch (props.name) {
-    case 'ActionItem':
+    case 'actionItems':
       return (
         <ActionItemIcon
           stroke={props.fill}
           data-testid="Icon-Component-ActionItemIcon"
         />
       );
-    case 'My Organizations':
+    case 'myOrganizations':
       return (
         <OrganizationsIcon
           stroke={props.fill}
           data-testid="Icon-Component-MyOrganizationsIcon"
         />
       );
-    case 'Dashboard':
+    case 'dashboard':
       return (
         <DashboardIcon {...props} data-testid="Icon-Component-DashboardIcon" />
       );
-    case 'People':
+    case 'people':
       return <PeopleIcon {...props} data-testid="Icon-Component-PeopleIcon" />;
-    case 'Tags':
+    case 'tags':
       return <TagsIcon {...props} data-testid="Icon-Component-TagsIcon" />;
-    case 'Tag':
+    case 'tag':
       return <TagIcon {...props} data-testid="Icon-Component-TagIcon" />;
-    case 'Chat':
+    case 'chat':
       return <ChatIcon {...props} data-testid="Icon-Component-ChatIcon" />;
-    case 'Requests':
+    case 'membershipRequests':
       return (
         <RequestsIcon
           width={20}
@@ -100,87 +100,88 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
           data-testid="Icon-Component-RequestsIcon"
         />
       );
-    case 'Events':
+    case 'events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
 
-    case 'Posts':
+    case 'posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
-    case 'Block/Unblock':
+    case 'blockUnblock':
       return (
         <BlockUserIcon
           {...props}
           data-testid="Block/Icon-Component-UnblockIcon"
         />
       );
-    case 'Settings':
+    case 'settings':
       return (
         <SettingsIcon
           stroke={props.fill}
           data-testid="Icon-Component-SettingsIcon"
         />
       );
-    case 'List Event Registrants':
+    case 'listEventRegistrants':
       return (
         <ListEventRegistrantsIcon
           data-testid="Icon-Component-List-Event-Registrants"
           stroke={props.fill}
         />
       );
-    case 'Check In Registrants':
+    case 'checkInRegistrants':
       return (
         <CheckInRegistrantsIcon
           data-testid="Icon-Component-Check-In-Registrants"
           stroke={props.fill}
         />
       );
-    case 'Advertisement':
+    case 'advertisement':
       return (
         <PostsIcon
           data-testid="Icon-Component-Advertisement"
           stroke={props.fill}
         />
       );
-    case 'Funds':
+    case 'funds':
       return (
         <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
       );
-    case 'Donate':
+    case 'donate':
       return (
         <FundsIcon data-testid="Icon-Component-Donate" stroke={props.fill} />
       );
-    case 'Transactions':
+    case 'transactions':
       return (
         <FundsIcon
           data-testid="Icon-Component-Transactions"
           stroke={props.fill}
         />
       );
-    case 'Venues':
+    case 'venues':
       return (
         <VenueIcon data-testid="Icon-Component-Venues" stroke={props.fill} />
       );
-    case 'Campaigns':
+    case 'campaigns':
       return (
         <NewspaperOutlined
           sx={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-Campaigns"
         />
       );
-    case 'My Pledges':
+    case 'myPledges':
       return (
         <ContactPageOutlined
           sx={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-My-Pledges"
         />
       );
-    case 'Leave Organization':
+    case 'leaveOrganization':
       return (
         <ExitToAppIcon
           sx={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-Leave-Organization"
         />
       );
-    case 'Volunteer':
+    case 'volunteer':
+    case 'volunteers':
       return (
         <MdOutlineVolunteerActivism
           fill={props.fill}
