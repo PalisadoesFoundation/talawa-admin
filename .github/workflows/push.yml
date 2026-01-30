@@ -82,6 +82,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Enforce CSS import policy
+        run: |
+          FILES=$(git ls-files '*.ts' '*.tsx' '*.css')
+          if [ -n "$FILES" ]; then
+            pnpm exec tsx scripts/check-css-imports.js --files $FILES
+          else
+            echo "No matching files to check."
+          fi
+
       - name: Run Vitest Tests
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
