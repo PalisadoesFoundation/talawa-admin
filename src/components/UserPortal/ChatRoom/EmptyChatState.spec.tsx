@@ -1,9 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import EmptyChatState from './EmptyChatState';
 import styles from './EmptyChatState.module.css';
 
 describe('EmptyChatState Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Container Structure', () => {
     it('renders outer container with expected flexbox classes', () => {
       render(<EmptyChatState message="Test message" />);

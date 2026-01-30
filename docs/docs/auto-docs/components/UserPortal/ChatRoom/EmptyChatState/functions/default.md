@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/ChatRoom/EmptyChatState.tsx:24](https://g
 
 ### \_\_namedParameters
 
-[`InterfaceEmptyChatStateProps`](../../types/interfaces/InterfaceEmptyChatStateProps.md)
+[`InterfaceEmptyChatStateProps`](../../../../../types/UserPortal/EmptyChatState/interface/interfaces/InterfaceEmptyChatStateProps.md)
 
 ## Returns
 

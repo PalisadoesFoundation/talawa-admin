@@ -19,7 +19,7 @@
 
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import styles from './EmptyChatState.module.css';
-import type { InterfaceEmptyChatStateProps } from './types';
+import type { InterfaceEmptyChatStateProps } from 'types/UserPortal/EmptyChatState/interface';
 
 export default function EmptyChatState({
   message,
