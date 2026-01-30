@@ -30,8 +30,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 
   const renderControl = () => (
     <Form.Control
-      {...(props.as !== 'textarea' && { type })} // ✅ Only set type for non-textarea
-      type={type}
+      {...(props.as !== 'textarea' && { type })}
       placeholder={placeholder}
       value={value}
       onChange={(e) => {
