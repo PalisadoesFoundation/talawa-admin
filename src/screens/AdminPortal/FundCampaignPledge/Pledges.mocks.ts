@@ -449,8 +449,6 @@ const membersListPgResult = {
             node: {
               __typename: 'User',
               id: '1',
-              firstName: 'John',
-              lastName: 'Doe',
               name: 'John Doe',
               avatarURL: null,
               createdAt: dayjs.utc().toISOString(),
@@ -461,8 +459,6 @@ const membersListPgResult = {
             node: {
               __typename: 'User',
               id: '2',
-              firstName: 'Jane',
-              lastName: 'Smith',
               name: 'Jane Smith',
               avatarURL: null,
               createdAt: dayjs.utc().toISOString(),

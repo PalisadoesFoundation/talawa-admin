@@ -259,8 +259,6 @@ const MEMBERS_MOCK = {
               node: {
                 __typename: 'User',
                 id: '1',
-                firstName: 'John',
-                lastName: 'Doe',
                 name: 'John Doe',
                 avatarURL: null,
                 createdAt: dayjs.utc().toISOString(),
