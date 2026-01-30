@@ -30,8 +30,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 const link = new StaticMockLink(checkInQueryMock, true);
 
-describe('Testing CheckIn Wrapper', async () => {
-  const { CheckInWrapper } = await import('./CheckInWrapper');
+describe('Testing CheckIn Wrapper', () => {
+  let CheckInWrapper: typeof import('./CheckInWrapper').CheckInWrapper;
+
+  beforeAll(async () => {
+    ({ CheckInWrapper } = await import('./CheckInWrapper'));
+  });
   const props = {
     eventId: 'event123',
   };
@@ -119,6 +123,7 @@ describe('CheckInWrapper callback behavior', () => {
     vi.doMock('./Modal/CheckInModal', () => ({
       CheckInModal: ({ onCheckInUpdate }: { onCheckInUpdate?: () => void }) => (
         <button
+          type="button"
           data-testid="mock-checkin-update"
           onClick={() => onCheckInUpdate?.()}
         >
