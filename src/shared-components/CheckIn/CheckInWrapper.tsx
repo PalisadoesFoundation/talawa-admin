@@ -27,16 +27,12 @@ import { CheckInModal } from './Modal/CheckInModal';
 import Button from 'shared-components/Button';
 import style from './CheckInWrapper.module.css';
 import { useTranslation } from 'react-i18next';
-
-type PropType = {
-  eventId: string;
-  onCheckInUpdate?: () => void;
-};
+import type { InterfaceCheckInWrapperProps } from 'types/shared-components/CheckInWrapper/interface';
 
 export const CheckInWrapper = ({
   eventId,
   onCheckInUpdate,
-}: PropType): JSX.Element => {
+}: InterfaceCheckInWrapperProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
   const { t: tCommon } = useTranslation('common');
   const [showModal, setShowModal] = useState(false);
