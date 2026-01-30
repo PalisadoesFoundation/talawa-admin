@@ -88,6 +88,7 @@ export default function PostsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
+  // i18n-ignore-next-line
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
   const [searchParams] = useSearchParams();
 
