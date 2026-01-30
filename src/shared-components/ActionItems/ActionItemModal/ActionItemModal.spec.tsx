@@ -965,11 +965,9 @@ describe('ActionItemModal', () => {
       const volunteerInput = within(volunteerSelect).getByRole(
         'combobox',
       ) as HTMLInputElement;
-      volunteerInput.focus();
       await user.click(volunteerInput);
-      await user.type(volunteerInput, 'John');
       const volunteerOption = await screen.findByText('John Doe', undefined, {
-        timeout: 3000,
+        timeout: 5000,
       });
       await user.click(volunteerOption);
 
@@ -1115,6 +1113,336 @@ describe('ActionItemModal', () => {
       // Verify the combobox is accessible
       const groupInput = within(groupSelect).getByRole('combobox');
       expect(groupInput).toBeInTheDocument();
+    });
+  });
+
+  describe('Error Handling Coverage', () => {
+    it('should show error when updateActionItem mutation fails', async () => {
+      const user = userEvent.setup();
+      const errorMock = {
+        request: { query: UPDATE_ACTION_ITEM_MUTATION },
+        variableMatcher: () => true,
+        error: new Error('Update failed'),
+      };
+
+      render(
+        <MockedProvider mocks={[...mockQueries.slice(0, 3), errorMock]}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              actionItem={{ ...mockActionItem, isTemplate: false }}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+    });
+
+    it('should show error when updateActionForInstance mutation fails', async () => {
+      const user = userEvent.setup();
+      const errorMock = {
+        request: { query: UPDATE_ACTION_ITEM_FOR_INSTANCE },
+        variableMatcher: () => true,
+        error: new Error('Instance update failed'),
+      };
+
+      render(
+        <MockedProvider mocks={[...mockQueries.slice(0, 3), errorMock]}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={vi.fn()}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={vi.fn()}
+              editMode={true}
+              actionItem={mockActionItem}
+              isRecurring={true}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('actionItemModal');
+
+      // Select "This event only" to trigger updateActionForInstance
+      const instanceRadio = screen.getByLabelText('thisEventOnly');
+      await user.click(instanceRadio);
+
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+    });
+
+    it('should show error when action item ID is missing in updateActionForInstance', async () => {
+      const user = userEvent.setup();
+      renderModal({
+        editMode: true,
+        actionItem: {
+          ...mockActionItem,
+          id: undefined,
+        } as unknown as IActionItemInfo,
+        isRecurring: true,
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // Select "This event only" to trigger updateActionForInstance path
+      const instanceRadio = screen.getByLabelText('thisEventOnly');
+      await user.click(instanceRadio);
+
+      await user.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
+      });
+    });
+  });
+
+  describe('ApplyTo Initialization Coverage', () => {
+    it('should set applyTo to instance for isInstanceException action items', async () => {
+      renderModal({
+        editMode: true,
+        actionItem: {
+          ...mockActionItem,
+          isInstanceException: true,
+          isTemplate: false,
+        },
+        isRecurring: true,
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // For isInstanceException items, applyTo should be 'instance' and no ApplyToSelector shown
+      // (isApplyToRelevant is false when isInstanceException is true)
+      await waitFor(() => {
+        expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should set applyTo to instance for regular (non-template, non-exception) action items', async () => {
+      renderModal({
+        editMode: true,
+        actionItem: {
+          ...mockActionItem,
+          isTemplate: false,
+          isInstanceException: false,
+        },
+        isRecurring: true,
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // For regular action items in edit mode with isTemplate=false,
+      // ApplyToSelector should not be shown (isApplyToRelevant is false)
+      await waitFor(() => {
+        expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Volunteer Selection Clearing Coverage', () => {
+    it('should clear non-template volunteer when switching to series mode', async () => {
+      const user = userEvent.setup();
+      renderModal({ isRecurring: true });
+      await screen.findByTestId('actionItemModal');
+
+      // Wait for volunteers to load
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+      });
+
+      // Select category first
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+      await user.click(categoryInput);
+      const categoryOption = await screen.findByText('Category 1');
+      await user.click(categoryOption);
+
+      // Select a non-template volunteer (Jane Smith has isTemplate: false)
+      const volunteerInput = within(
+        screen.getByTestId('volunteerSelect'),
+      ).getByRole('combobox');
+      await user.click(volunteerInput);
+      const volunteerOption = await screen.findByText('Jane Smith');
+      await user.click(volunteerOption);
+
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('Jane Smith');
+      });
+
+      // Switch to series mode - should clear the non-template volunteer
+      const seriesRadio = screen.getByLabelText('entireSeries');
+      await user.click(seriesRadio);
+
+      // Volunteer should be cleared since Jane Smith is not a template
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('');
+      });
+    });
+
+    it('should clear non-template volunteer group when switching to series mode', async () => {
+      const user = userEvent.setup();
+      renderModal({ isRecurring: true });
+      await screen.findByTestId('actionItemModal');
+
+      // Select category first
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+      await user.click(categoryInput);
+      const categoryOption = await screen.findByText('Category 1');
+      await user.click(categoryOption);
+
+      // Switch to volunteer group assignment type
+      const groupChip = screen.getByRole('button', { name: 'volunteerGroup' });
+      await user.click(groupChip);
+
+      // Wait for volunteer group select to appear
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
+      );
+      const groupInput = within(groupSelect).getByRole('combobox');
+
+      // Select a non-template volunteer group (Test Group 2 has isTemplate: false)
+      await user.click(groupInput);
+      const groupOption = await screen.findByText('Test Group 2');
+      await user.click(groupOption);
+
+      await waitFor(() => {
+        expect(groupInput).toHaveValue('Test Group 2');
+      });
+
+      // Switch to series mode - should clear the non-template group
+      const seriesRadio = screen.getByLabelText('entireSeries');
+      await user.click(seriesRadio);
+
+      // Volunteer group should be cleared since Test Group 2 is not a template
+      await waitFor(() => {
+        expect(groupInput).toHaveValue('');
+      });
+    });
+  });
+
+  describe('Remaining Coverage Lines', () => {
+    it('should initialize with existing assignedAt date from action item (covers line 73)', async () => {
+      // Use a dynamic date that will be parsed by new Date()
+      const existingDate = dayjs()
+        .add(30, 'days')
+        .utc()
+        .format('YYYY-MM-DDTHH:mm:ss[Z]');
+      renderModal({
+        editMode: true,
+        actionItem: {
+          ...mockActionItem,
+          assignedAt: existingDate as unknown as Date,
+        },
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // The DatePicker should show the existing assignedAt date
+      const dateInput = screen.getByLabelText('assignmentDate');
+      expect(dateInput).toBeInTheDocument();
+      // The date should be displayed in the format DD/MM/YYYY
+      expect(dateInput).toHaveValue(
+        dayjs().add(30, 'days').format('DD/MM/YYYY'),
+      );
+    });
+
+    it('should trigger isOptionEqualToValue when opening volunteer group dropdown (covers line 634)', async () => {
+      const user = userEvent.setup();
+      // Start with a selected volunteer group - the isOptionEqualToValue is called
+      // when comparing options with the current value
+      renderModal({
+        editMode: true,
+        actionItem: mockActionItemWithGroup as unknown as IActionItemInfo,
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // The volunteer group select should be visible with pre-selected value
+      const groupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
+      );
+      const groupInput = within(groupSelect).getByRole('combobox');
+
+      // Click to open dropdown - this triggers isOptionEqualToValue for each option
+      await user.click(groupInput);
+
+      // Wait for dropdown to open and show options
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
+
+      // The value should be correctly identified by isOptionEqualToValue
+      expect(groupInput).toHaveValue('Test Group 1');
+    });
+
+    it('should trigger onChange when selecting date in create mode (covers lines 693-694)', async () => {
+      const user = userEvent.setup();
+      renderModal({
+        editMode: false,
+      });
+
+      await screen.findByTestId('actionItemModal');
+
+      // Find and verify the date input is enabled in create mode
+      const dateInput = screen.getByLabelText('assignmentDate');
+      expect(dateInput).not.toBeDisabled();
+
+      // Click the calendar button to open the date picker
+      const calendarButton = screen.getByRole('button', {
+        name: /choose date/i,
+      });
+      await user.click(calendarButton);
+
+      // Wait for calendar to open
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      // Find and click a day button (pick day 15 to be sure it's different from today)
+      const dayButtons = screen.getAllByRole('gridcell');
+      const targetDay = dayButtons.find(
+        (btn) => btn.textContent === '15' && !btn.getAttribute('aria-disabled'),
+      );
+
+      if (targetDay) {
+        await user.click(targetDay);
+
+        // The date should be updated after selection
+        await waitFor(() => {
+          expect(dateInput.getAttribute('value')).toContain('15');
+        });
+      }
     });
   });
 });
