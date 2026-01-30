@@ -1059,7 +1059,10 @@ describe('Advanced Component Functionality Tests', () => {
     )?.set;
 
     // Try setting as Select first, then Input
-    if (nativeSelectValueSetter && rowsPerPageSelect instanceof HTMLSelectElement) {
+    if (
+      nativeSelectValueSetter &&
+      rowsPerPageSelect instanceof HTMLSelectElement
+    ) {
       nativeSelectValueSetter.call(rowsPerPageSelect, '0');
     } else if (nativeInputValueSetter) {
       nativeInputValueSetter.call(rowsPerPageSelect, '0');
