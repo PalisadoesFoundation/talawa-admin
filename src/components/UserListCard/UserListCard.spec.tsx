@@ -218,4 +218,58 @@ describe('Testing User List Card', () => {
     expect(button.tagName).toBe('BUTTON');
     expect(button.className).toContain('memberfontcreatedbtnUserListCard');
   });
+
+  it('Should clear existing timeout when clicking Add Admin twice rapidly', async () => {
+    const multiClickMocks = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: { userid: '456', orgid: '554' },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: { _id: '456' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: { userid: '456', orgid: '554' },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: { _id: '456' },
+            },
+          },
+        },
+      },
+    ];
+
+    const multiClickLink = new StaticMockLink(multiClickMocks, true);
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={multiClickLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={123} id="456" />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    const button = screen.getByRole('button', { name: /Add Admin/i });
+
+    // Click button twice rapidly to trigger the timeout clearing logic
+    await userEvent.click(button);
+    await userEvent.click(button);
+
+    // The second click should clear the first timeout and set a new one
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
+  });
 });
