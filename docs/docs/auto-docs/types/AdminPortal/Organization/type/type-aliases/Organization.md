@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:28](https://github.com/P
 
 ### agendaCategories?
 
-> `optional` **agendaCategories**: [`AgendaCategory`](../../../../Agenda/type/type-aliases/AgendaCategory.md)[]
+> `optional` **agendaCategories**: [`AgendaCategory`](../../../Agenda/type/type-aliases/AgendaCategory.md)[]
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L29)
 

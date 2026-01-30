@@ -1,0 +1,54 @@
+/**
+ * AgendaItemsContainer.module.css
+ * Component-specific styles for AgendaItemsContainer
+ *
+ */
+
+/* Increased specificity to override Bootstrap without !important */
+.tableHeadAgendaItems.tableHeadAgendaItems {
+  background-color: var(--color-green-500);
+  color: var(--color-white);
+  border-radius: 20px 20px 0px 0px;
+  padding: 20px;
+}
+
+.agendaItemRow {
+  border: 1px solid var(--color-gray-200);
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+  background-color: var(--color-white);
+}
+
+.agendaItemRow:hover {
+  background-color: var(--color-gray-50);
+}
+
+.dragging {
+  box-shadow: 0 4px 8px var(--color-gray-300);
+  z-index: 1000;
+  background-color: var(--color-gray-100);
+}
+
+.categoryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--color-gray-100);
+  border-radius: 16px;
+  padding: 0 12px;
+  font-size: 14px;
+  height: 32px;
+  margin: 5px;
+}
+
+.agendaCategoryOptionsButton,
+.agendaItemsOptionsButton {
+  width: 24px;
+  height: 24px;
+}

@@ -26,10 +26,10 @@ const path = require('path');
  * These will be removed incrementally as migrations land.
  */
 const LEGACY_EXCEPTIONS = new Set([
-  'src/components/AgendaItems/Create/AgendaItemsCreateModal.tsx',
-  'src/components/AgendaItems/Create/AgendaItemsCreateModal.spec.tsx',
-  'src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx',
-  'src/components/AgendaItems/Update/AgendaItemsUpdateModal.spec.tsx',
+  'src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.tsx',
+  'src/components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal.spec.tsx',
+  'src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.tsx',
+  'src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.spec.tsx',
   'src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.spec.tsx',
   'src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx',
   'src/screens/AdminPortal/CommunityProfile/CommunityProfile.spec.tsx',

@@ -21,7 +21,7 @@
  * ```
  */
 
-import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
+import LeftDrawer from 'components/AdminPortal/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router';

@@ -1,7 +1,7 @@
 import type { Address, AddressInput } from 'types/AdminPortal/address';
 import type { User } from 'types/shared-components/User/type';
 import type { ActionItemCategory } from 'types/AdminPortal/actionItem';
-import type { AgendaCategory } from 'types/Agenda/type';
+import type { AgendaCategory } from 'types/AdminPortal/Agenda/type';
 import type { MembershipRequest } from 'types/AdminPortal/membership';
 import type { Post } from 'types/Post/type';
 import type { Venue } from 'types/AdminPortal/venue';

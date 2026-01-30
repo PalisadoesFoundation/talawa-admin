@@ -14,7 +14,7 @@ import styles from './SuperAdminScreen.module.css';
 const { clearAllItems } = useLocalStorage();
 
 // Mock LeftDrawer to prevent router-related errors from NavLink, useLocation, etc.
-vi.mock('components/LeftDrawer/LeftDrawer', () => ({
+vi.mock('components/AdminPortal/LeftDrawer/LeftDrawer', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
     <div
       data-testid="leftDrawerContainer"
