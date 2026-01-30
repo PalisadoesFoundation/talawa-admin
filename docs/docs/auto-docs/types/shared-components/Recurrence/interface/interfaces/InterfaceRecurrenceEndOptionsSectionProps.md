@@ -4,7 +4,9 @@
 
 # Interface: InterfaceRecurrenceEndOptionsSectionProps
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L8)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L11)
+
+Props for the RecurrenceEndOptionsSection component.
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:8](https://gith
 
 > **frequency**: [`Frequency`](../../../../../utils/recurrenceUtils/recurrenceTypes/enumerations/Frequency.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L9)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L13)
+
+The frequency of the recurrence (e.g., DAILY, WEEKLY).
 
 ***
 
@@ -20,7 +24,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:9](https://gith
 
 > **localCount**: `string` \| `number`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L12)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L19)
+
+The local count value for "End after X occurrences".
 
 ***
 
@@ -28,7 +34,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:12](https://git
 
 > **onCountChange**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L14)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L23)
+
+Callback when the occurrence count changes.
 
 #### Parameters
 
@@ -46,7 +54,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:14](https://git
 
 > **onRecurrenceEndOptionChange**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L13)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L21)
+
+Callback when the end option selection changes.
 
 #### Parameters
 
@@ -64,7 +74,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:13](https://git
 
 > **recurrenceRuleState**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L11)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L17)
+
+The current state of the recurrence rule being built.
 
 ***
 
@@ -72,7 +84,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:11](https://git
 
 > **selectedRecurrenceEndOption**: [`RecurrenceEndOptionType`](../../../../../utils/recurrenceUtils/recurrenceTypes/type-aliases/RecurrenceEndOptionType.md)
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L10)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L15)
+
+The currently selected end option (NEVER, ON_DATE, AFTER_OCCURRENCES).
 
 ***
 
@@ -80,7 +94,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:10](https://git
 
 > **setRecurrenceRuleState**: (`state`) => `void`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L15)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L25)
+
+State setter for the recurrence rule.
 
 #### Parameters
 
@@ -98,7 +114,9 @@ Defined in: [src/types/shared-components/Recurrence/interface.ts:15](https://git
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/Recurrence/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L18)
+Defined in: [src/types/shared-components/Recurrence/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Recurrence/interface.ts#L29)
+
+Translation function.
 
 #### Parameters
 

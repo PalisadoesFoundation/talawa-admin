@@ -54,6 +54,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
         label={label || ''}
         required={required}
         error={showError ? error : undefined}
+        touched={touched}
         helpText={helpText}
         className={className}
         disabled={disabled}
