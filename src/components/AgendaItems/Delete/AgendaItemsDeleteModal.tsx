@@ -9,12 +9,16 @@
  * @param t - Translation function for agenda-specific text.
  * @param tCommon - Translation function for common text (e.g., "yes", "no").
  *
- * @returns - A modal dialog with options to confirm or cancel the deletion of an agenda item.
+ * @param agendaItemDeleteModalIsOpen - Determines whether the modal is open or closed.
+ * @param toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param deleteAgendaItemHandler - Function to handle the deletion of the agenda item.
+ * @param t - Translation function for agenda-specific text.
+ * @param tCommon - Translation function for common text (e.g., "yes", "no").
+ * @returns A modal dialog with options to confirm or cancel the deletion of an agenda item.
  *
  * @remarks
- * - The modal uses BaseModal from shared-components for styling and functionality.
+ * - The modal uses BaseModal from shared-components.
  * - The `t` and `tCommon` props are used for internationalization (i18n).
- * - The modal is styled using a CSS module (AgendaItemsDeleteModal.module.css).
  *
  * @example
  * ```tsx
@@ -29,12 +33,9 @@
  */
 // translation-check-keyPrefix: agendaItems
 import React from 'react';
-import { BaseModal } from 'shared-components/BaseModal';
-import Button from 'shared-components/Button';
-import styles from './AgendaItemsDeleteModal.module.css';
+import Button from 'shared-components/Button/Button';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
-
-// translation-check-keyPrefix: agendaItems
 
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
@@ -49,35 +50,27 @@ const AgendaItemsDeleteModal: React.FC<
     <BaseModal
       show={agendaItemDeleteModalIsOpen}
       onHide={toggleDeleteModal}
-      size="sm"
-      className={styles.agendaItemModal}
       title={t('deleteAgendaItem')}
-      keyboard={false}
-      backdrop="static"
       showCloseButton={true}
-      headerClassName="bg-primary text-white"
-      footer={
-        <>
-          <Button
-            type="button"
-            variant="danger"
-            onClick={toggleDeleteModal}
-            data-testid="deleteAgendaItemCloseBtn"
-          >
-            {tCommon('no')}
-          </Button>
-          <Button
-            type="button"
-            variant="success"
-            onClick={deleteAgendaItemHandler}
-            data-testid="deleteAgendaItemBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </>
-      }
+      dataTestId="deleteAgendaItemModal"
     >
       <p>{t('deleteAgendaItemMsg')}</p>
+      <div className="d-flex justify-content-end gap-2">
+        <Button
+          variant="danger"
+          onClick={toggleDeleteModal}
+          data-testid="deleteAgendaItemCloseBtn"
+        >
+          {tCommon('no')}
+        </Button>
+        <Button
+          variant="success"
+          onClick={deleteAgendaItemHandler}
+          data-testid="deleteAgendaItemBtn"
+        >
+          {tCommon('yes')}
+        </Button>
+      </div>
     </BaseModal>
   );
 };
