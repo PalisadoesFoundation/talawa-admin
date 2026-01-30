@@ -3,7 +3,6 @@ import {
   TimePicker as MuiTimePicker,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { FormControl } from 'react-bootstrap';
 import styles from './TimePicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormFieldGroup } from '../FormFieldGroup/FormFieldGroup';
@@ -83,7 +82,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                   <div
                     className={`${styles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
                   >
-                    <FormControl
+                    <input
                       {...inputProps}
                       {...other}
                       id={dataTestId}

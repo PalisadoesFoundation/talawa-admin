@@ -23,15 +23,26 @@ beforeAll(() => {
   };
 
   // Mock selectionStart to avoid "Cannot read properties of null (reading 'selectionStart')" error
-  // which happens in some MUI DatePicker internal hooks during testing
+  // Mock selectionStart and selectionEnd to avoid "Cannot read properties of null" error
+  // which happens in some MUI DatePicker internal hooks during testing, especially when input is unmounted
   Object.defineProperty(HTMLInputElement.prototype, 'selectionStart', {
+    configurable: true,
     get: function () {
-      return this._selectionStart || 0;
+      return this ? this._selectionStart || 0 : 0;
     },
     set: function (value) {
-      this._selectionStart = value;
+      if (this) this._selectionStart = value;
     },
+  });
+
+  Object.defineProperty(HTMLInputElement.prototype, 'selectionEnd', {
     configurable: true,
+    get: function () {
+      return this ? this._selectionEnd || 0 : 0;
+    },
+    set: function (value) {
+      if (this) this._selectionEnd = value;
+    },
   });
 });
 
