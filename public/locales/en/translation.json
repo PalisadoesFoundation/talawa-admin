@@ -398,7 +398,7 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": " ",
+    "loadingPlaceholder": "\u00A0",
     "postedOn": "Posted on:",
     "author": "Author:"
   },
@@ -792,7 +792,6 @@
     "deleteFolder": "Delete Folder",
     "itemPreview": "Item Preview",
     "fileUploadFailed": "File upload failed",
-    "invalidFileType": "Invalid File Type",
     "title": "Title",
     "enterTitle": "Enter Title",
     "sequence": "Sequence",

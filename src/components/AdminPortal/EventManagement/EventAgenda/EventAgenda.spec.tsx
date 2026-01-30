@@ -72,6 +72,7 @@ vi.mock(
     }) =>
       agendaItemCreateModalIsOpen ? (
         <button
+          type="button"
           data-testid="closeAgendaItemModal"
           onClick={hideItemCreateModal}
         />

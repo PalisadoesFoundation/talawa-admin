@@ -172,6 +172,9 @@ export interface InterfaceFormStateType {
   folder?: string;
 }
 
+/**
+ * Props for the AgendaItemsCreateModal component.
+ */
 export interface InterfaceAgendaItemsCreateModalProps {
   agendaItemCreateModalIsOpen: boolean;
   hideItemCreateModal: () => void;

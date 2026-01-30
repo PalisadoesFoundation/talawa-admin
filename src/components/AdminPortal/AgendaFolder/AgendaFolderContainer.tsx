@@ -305,7 +305,7 @@ function AgendaFolderContainer({
       attachments: attachmentsWithPreview,
       category: agendaItem.category?.id ?? '',
       folder: agendaItem.folder?.id,
-      url: agendaItem.url.map((u) => u.url) ?? [],
+      url: agendaItem.url?.map((u) => u.url) ?? [],
     });
 
     setAgendaItemId(agendaItem.id);
@@ -355,7 +355,7 @@ function AgendaFolderContainer({
             name: t('noCategory'),
             description: '',
           },
-      url: agendaItem.url.map((u) => u.url),
+      url: agendaItem.url?.map((u) => u.url) ?? [],
       creator: {
         id: agendaItem.creator.id,
         name: agendaItem.creator.name,

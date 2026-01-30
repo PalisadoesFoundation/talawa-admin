@@ -93,7 +93,7 @@ export function useAgendaMutations({
             attachments: itemFormState.attachments.map((att) => ({
               name: att.name,
               fileHash: att.fileHash,
-              mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType],
+              mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType] ?? att.mimeType,
               objectName: att.objectName,
             })),
           },

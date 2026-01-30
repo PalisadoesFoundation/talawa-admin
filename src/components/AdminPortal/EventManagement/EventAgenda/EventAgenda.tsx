@@ -17,7 +17,7 @@
  *
  * @example
  * ```tsx
- * <EventAgendaFolder eventId="12345" />
+ * <EventAgenda eventId="12345" />
  * ```
  *
  * @remarks

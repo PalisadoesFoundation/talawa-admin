@@ -12,9 +12,9 @@ import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 
-import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   FormFieldGroup,
   FormTextField,
@@ -80,14 +80,8 @@ const AgendaItemsCreateModal: React.FC<
       creator: {
         name: '',
       },
-      urls: [] as string[],
-      attachments: [] as {
-        id: string;
-        name: string;
-        mimeType: string;
-        fileHash: string;
-        objectName: string;
-      }[],
+      urls: [],
+      attachments: [],
       folderId: '',
       categoryId: '',
     });
@@ -288,6 +282,7 @@ const AgendaItemsCreateModal: React.FC<
                   {...params.inputProps}
                   className="form-control"
                   placeholder={t('folderName')}
+                  data-testid="folderInput"
                 />
                 {params.InputProps.endAdornment}
               </div>
