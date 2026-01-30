@@ -18,3 +18,85 @@
   display: flex;
   align-items: center;
 }
+
+.sidebarBtn {
+  background-color: transparent;
+  color: var(--sidebar-option-text-inactive);
+  font-weight: normal;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.sidebarBtn:hover {
+  background-color: var(--sidebar-option-bg-hover);
+  color: var(--sidebar-option-text-active);
+}
+
+.sidebarBtnActive {
+  background-color: var(--sidebar-option-bg);
+  color: var(--sidebar-option-text-active);
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  margin-inline-end: 8px;
+  margin-inline-start: 0;
+}
+
+.leftDrawerActiveButton,
+.leftDrawerInactiveButton {
+  position: relative;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+
+.leftDrawerActiveButton:active,
+.leftDrawerInactiveButton:active {
+  transform: scale(0.98);
+}
+
+.leftDrawerActiveButton {
+  background-color: var(--leftDrawer-active-button-bg);
+  color: black;
+  font-weight: bold;
+}
+
+.leftDrawerActiveButton:hover .arrowIndicator {
+  transform: translateY(-50%) scale(1.1);
+  opacity: 1;
+}
+
+.leftDrawerInactiveButton {
+  background-color: var(--leftDrawer-inactive-button-bg);
+  color: black;
+}
+
+.leftDrawerInactiveButton:hover {
+  background-color: var(--leftDrawer-inactive-button-hover-bg);
+}

@@ -41,7 +41,7 @@ vi.mock('./UserSidebar.module.css', () => ({
   },
 }));
 
-vi.mock('./IconComponent.module.css', () => ({
+vi.mock('components/IconComponent/IconComponent.module.css', () => ({
   default: {
     iconColor: 'iconColor',
     iconLarge: 'iconLarge',

@@ -739,7 +739,6 @@ const REFETCH_FAILURE_MOCKS = [
         input.location === 'New Test Location' &&
         input.isPublic === false &&
         input.isRegisterable === true &&
-        input.isRegisterable === true &&
         input.isInviteOnly === true
       );
     },
@@ -2633,7 +2632,5 @@ describe('Testing Events Screen [User Portal]', () => {
         }),
       );
     });
-
-    vi.useRealTimers();
   });
 });

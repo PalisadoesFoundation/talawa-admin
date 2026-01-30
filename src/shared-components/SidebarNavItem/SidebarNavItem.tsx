@@ -4,7 +4,7 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @param props - Object containing the properties for the IconComponent:
+ * @param props - Object containing the properties for the SidebarNavItem:
  * @param to - Navigation target URL
  * @param icon - Icon component or element
  * @param label - Display label for the navigation item
@@ -42,7 +42,6 @@
 
 import React, { useCallback } from 'react';
 import { NavLink } from 'react-router-dom';
-import appStyles from '../../style/app-fixed.module.css';
 import styles from './SidebarNavItem.module.css';
 import type { ISidebarNavItemProps } from '../../types/SidebarNavItem/interface';
 
@@ -68,12 +67,14 @@ const SidebarNavItem = ({
 
       if (isReactIcon) {
         // Handle React Icons with style prop
+        const existingClassName =
+          (icon.props as { className?: string }).className ?? '';
         return React.cloneElement(
           icon as React.ReactElement<{ className?: string }>,
           {
-            className: `${styles.iconReact} ${
+            className: `${existingClassName} ${styles.iconReact} ${
               isActive ? styles.iconReactActive : styles.iconReactInactive
-            }`,
+            }`.trim(),
           },
         );
       }
@@ -110,17 +111,17 @@ const SidebarNavItem = ({
         `${
           useSimpleButton
             ? navData.isActive
-              ? appStyles.leftDrawerActiveButton
-              : appStyles.leftDrawerInactiveButton
+              ? styles.leftDrawerActiveButton
+              : styles.leftDrawerInactiveButton
             : navData.isActive
-              ? appStyles.sidebarBtnActive
-              : appStyles.sidebarBtn
+              ? styles.sidebarBtnActive
+              : styles.sidebarBtn
         } ${useSimpleButton ? styles.simpleButtonHeight : ''}`
       }
     >
       {({ isActive }) => (
         <div className={styles.contentWrapper}>
-          <div className={appStyles.iconWrapper}>{renderIcon(isActive)}</div>
+          <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
           {!hideDrawer && label}
         </div>
       )}

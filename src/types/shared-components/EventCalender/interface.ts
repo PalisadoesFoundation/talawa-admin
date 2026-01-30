@@ -1,5 +1,5 @@
 /**
- * Props for EventHeader component.
+ * View type options for the EventCalendar component.
  */
 export enum ViewType {
   DAY = 'Day',

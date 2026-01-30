@@ -10,11 +10,10 @@
  * dashboard, people, events, and more. If the `name` prop does not match any
  * predefined case, a default "Question Mark" icon is rendered.
  *
- * @param props - Object containing the properties for the IconComponent:
- * - `name`: The name of the icon to render.
- * - `fill`: (Optional) The fill color for the icon (used for SVG icons).
- * - `height`: (Optional) The height of the icon (used for SVG icons).
- * - `width`: (Optional) The width of the icon (used for SVG icons).
+ * @param name - The name of the icon to render.
+ * @param fill - Optional fill color for SVG icons.
+ * @param height - Optional height for SVG icons.
+ * @param width - Optional width for SVG icons.
  *
  * @returns A JSX element representing the requested icon.
  *
