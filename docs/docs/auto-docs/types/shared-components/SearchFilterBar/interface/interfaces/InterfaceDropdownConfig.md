@@ -123,8 +123,8 @@ Each option contains a label (display text) and a value (underlying data).
 
 ```ts
 [
-  { label: 'Latest', value: 'DESCENDING' },
-  { label: 'Oldest', value: 'ASCENDING' }
+  { label: 'latest', value: 'DESCENDING' },
+  { label: 'oldest', value: 'ASCENDING' }
 ]
 ```
 

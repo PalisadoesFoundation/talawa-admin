@@ -55,7 +55,7 @@ function EventHeader({
         <div className={styles.calendar__search}>
           <SearchBar
             placeholder={t('searchEventName')}
-            onSearch={() => { }}
+            onSearch={() => {}}
             inputTestId="searchEvent"
             buttonTestId="searchButton"
             showSearchButton={true}
@@ -86,7 +86,7 @@ function EventHeader({
               { label: t('Workshops'), value: 'Workshops' },
             ]}
             selectedOption={t('eventType')}
-            onSortChange={() => { }}
+            onSortChange={() => {}}
             dataTestIdPrefix="eventType"
             className={styles.dropdown}
             buttonLabel={t('eventType')}
