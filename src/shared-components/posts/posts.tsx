@@ -47,7 +47,8 @@ import {
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import {
   InterfaceOrganizationPostListData,
   InterfacePost,
@@ -69,7 +70,6 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
 import { formatPostForCard } from './helperFunctions';
-import { IDENTIFIER_ID, IDENTIFIER_USER_ID } from 'Constant/common';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -81,36 +81,25 @@ export default function PostsPage() {
   const [allPosts, setAllPosts] = useState<InterfacePost[]>([]);
   const [after, setAfter] = useState<string | null>(null);
   const first = 6;
-  const [postModalIsOpen, setPostModalIsOpen] = useState(false);
+  const createPostModal = useModalState();
+  const postViewModal = useModalState();
   const [selectedViewPost, setSelectedViewPost] =
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
-  const userId =
-    getItem<string>(IDENTIFIER_USER_ID) ??
-    getItem<string>(IDENTIFIER_ID) ??
-    null;
-  const [showPostViewModal, setShowPostViewModal] = useState(false);
+  // i18n-ignore-next-line
+  const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
   const [searchParams] = useSearchParams();
-
-  const showCreatePostModal = (): void => {
-    setPostModalIsOpen(true);
-  };
-
-  const hideCreatePostModal = (): void => {
-    setPostModalIsOpen(false);
-  };
 
   const handleStoryClick = (post: InterfacePost) => {
     setSelectedViewPost(post);
-    setShowPostViewModal(true);
+    postViewModal.open();
   };
 
   const handleClosePostViewModal = () => {
-    setShowPostViewModal(false);
+    postViewModal.close();
     setSelectedViewPost(null);
-    // Remove previewPostID from url
     const params = new URLSearchParams(window.location.search);
     params.delete('previewPostID');
     const query = params.toString();
@@ -205,7 +194,7 @@ export default function PostsPage() {
     const previewPostID = searchParams.get('previewPostID');
     if (previewPostID && previewPostData?.post) {
       setSelectedViewPost(previewPostData.post);
-      setShowPostViewModal(true);
+      postViewModal.open();
     }
   }, [searchParams, previewPostData]);
 
@@ -372,7 +361,7 @@ export default function PostsPage() {
             actions={
               <Button
                 variant="success"
-                onClick={showCreatePostModal}
+                onClick={createPostModal.open}
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
@@ -412,7 +401,7 @@ export default function PostsPage() {
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
                 <Box sx={{ py: 4 }}>
-                  <Typography className="text-secondary">
+                  <Typography color="text.secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
                 </Box>
@@ -439,7 +428,7 @@ export default function PostsPage() {
                   endMessage={
                     postsToDisplay.length > 0 && (
                       <Box sx={{ py: 2 }}>
-                        <Typography className="text-secondary">
+                        <Typography color="text.secondary">
                           {t('noMorePosts')}
                         </Typography>
                       </Box>
@@ -465,7 +454,7 @@ export default function PostsPage() {
                 !orgPostListLoading &&
                 !isFiltering && (
                   <Box sx={{ py: 4 }}>
-                    <Typography className="text-secondary">
+                    <Typography color="text.secondary">
                       {t('noPosts')}
                     </Typography>
                   </Box>
@@ -477,8 +466,8 @@ export default function PostsPage() {
       {userId && (
         <div>
           <CreatePostModal
-            show={postModalIsOpen}
-            onHide={hideCreatePostModal}
+            show={createPostModal.isOpen}
+            onHide={createPostModal.close}
             refetch={refetch}
             orgId={currentUrl}
             type="create"
@@ -488,7 +477,7 @@ export default function PostsPage() {
 
       {/* Pinned Post Modal */}
       <PostViewModal
-        show={showPostViewModal}
+        show={postViewModal.isOpen}
         onHide={handleClosePostViewModal}
         post={selectedViewPost}
         refetch={refetch}

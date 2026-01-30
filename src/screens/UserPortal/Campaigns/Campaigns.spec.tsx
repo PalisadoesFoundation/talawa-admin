@@ -254,7 +254,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
-    const closeButton = screen.getByTestId('pledgeModalCloseBtn');
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await user.click(closeButton);
 
     await waitFor(() => {

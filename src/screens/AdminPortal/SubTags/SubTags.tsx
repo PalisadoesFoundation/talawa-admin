@@ -17,10 +17,13 @@ import type { FormEvent } from 'react';
 import React, { useState } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import {
+  CreateModal,
+  useModalState,
+} from 'shared-components/CRUDModalTemplate';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper';
@@ -44,7 +47,7 @@ function SubTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [addSubTagModalIsOpen, setAddSubTagModalIsOpen] = useState(false);
+  const addSubTagModal = useModalState();
 
   const { orgId, tagId: parentTagId } = useParams();
 
@@ -57,12 +60,13 @@ function SubTags(): JSX.Element {
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
 
   const showAddSubTagModal = (): void => {
-    setAddSubTagModalIsOpen(true);
+    addSubTagModal.open();
   };
 
   const hideAddSubTagModal = (): void => {
-    setAddSubTagModalIsOpen(false);
+    addSubTagModal.close();
     setTagName('');
+    setTagNameTouched(false);
   };
 
   const {
@@ -131,7 +135,7 @@ function SubTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
         setTagName('');
-        setAddSubTagModalIsOpen(false);
+        addSubTagModal.close();
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -426,52 +430,32 @@ function SubTags(): JSX.Element {
       </Row>
 
       {/* Create Tag Modal */}
-      <BaseModal
-        show={addSubTagModalIsOpen}
-        onHide={hideAddSubTagModal}
-        backdrop="static"
-        centered
+      <CreateModal
+        open={addSubTagModal.isOpen}
+        onClose={hideAddSubTagModal}
         title={t('tagDetails')}
+        onSubmit={addSubTag}
+        loading={createUserTagLoading}
+        submitDisabled={!tagName}
+        data-testid="addSubTagModal"
       >
-        <form onSubmit={addSubTag}>
-          <FormTextField
-            name="tagName"
-            label={t('tagName')}
-            placeholder={t('tagNamePlaceholder')}
-            value={tagName}
-            onChange={(val) => {
-              setTagName(val);
-              if (!tagNameTouched) setTagNameTouched(true);
-            }}
-            onBlur={() => setTagNameTouched(true)}
-            touched={tagNameTouched}
-            error={tagNameTouched && !tagName ? tCommon('required') : undefined}
-            required
-            data-testid="modalTitle"
-            autoComplete="off"
-          />
-
-          <div className="d-flex justify-content-end gap-2 mt-3">
-            <Button
-              variant="secondary"
-              onClick={(): void => hideAddSubTagModal()}
-              data-testid="addSubTagModalCloseBtn"
-              className={styles.removeButton}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="add"
-              data-testid="addSubTagSubmitBtn"
-              className={styles.addButton}
-              disabled={createUserTagLoading}
-            >
-              {createUserTagLoading ? tCommon('creating') : tCommon('create')}
-            </Button>
-          </div>
-        </form>
-      </BaseModal>
+        <FormTextField
+          name="tagName"
+          label={t('tagName')}
+          placeholder={t('tagNamePlaceholder')}
+          value={tagName}
+          onChange={(val) => {
+            setTagName(val);
+            if (!tagNameTouched) setTagNameTouched(true);
+          }}
+          onBlur={() => setTagNameTouched(true)}
+          touched={tagNameTouched}
+          error={tagNameTouched && !tagName ? tCommon('required') : undefined}
+          required
+          data-testid="modalTitle"
+          autoComplete="off"
+        />
+      </CreateModal>
     </>
   );
 }
