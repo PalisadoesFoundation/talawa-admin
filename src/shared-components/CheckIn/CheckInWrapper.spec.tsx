@@ -2,14 +2,12 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
-import { CheckInWrapper } from './CheckInWrapper';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
-
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -32,7 +30,8 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 const link = new StaticMockLink(checkInQueryMock, true);
 
-describe('Testing CheckIn Wrapper', () => {
+describe('Testing CheckIn Wrapper', async () => {
+  const { CheckInWrapper } = await import('./CheckInWrapper');
   const props = {
     eventId: 'event123',
   };
@@ -76,7 +75,8 @@ describe('Testing CheckIn Wrapper', () => {
   });
 });
 
-describe('CheckInWrapper CSS Tests', () => {
+describe('CheckInWrapper CSS Tests', async () => {
+  const { CheckInWrapper } = await import('./CheckInWrapper');
   const props = {
     eventId: 'event123',
   };
@@ -104,5 +104,54 @@ describe('CheckInWrapper CSS Tests', () => {
     expect(image).toHaveAttribute('src', '/images/svg/options-outline.svg');
     expect(image).toHaveAttribute('width', '30.63');
     expect(image).toHaveAttribute('height', '30.63');
+  });
+});
+
+describe('CheckInWrapper callback behavior', () => {
+  afterEach(() => {
+    vi.resetModules();
+    vi.clearAllMocks();
+  });
+
+  it('should call onCheckInUpdate callback when check-in is updated', async () => {
+    vi.resetModules();
+
+    vi.doMock('./Modal/CheckInModal', () => ({
+      CheckInModal: ({ onCheckInUpdate }: { onCheckInUpdate?: () => void }) => (
+        <button
+          data-testid="mock-checkin-update"
+          onClick={() => onCheckInUpdate?.()}
+        >
+          Mock Check-In Update
+        </button>
+      ),
+    }));
+
+    const { CheckInWrapper } = await import('./CheckInWrapper');
+
+    const user = userEvent.setup();
+    const mockOnCheckInUpdate = vi.fn();
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <CheckInWrapper
+                  eventId="event123"
+                  onCheckInUpdate={mockOnCheckInUpdate}
+                />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.click(screen.getByLabelText('Check In Members'));
+    await user.click(screen.getByTestId('mock-checkin-update'));
+
+    expect(mockOnCheckInUpdate).toHaveBeenCalledTimes(1);
   });
 });

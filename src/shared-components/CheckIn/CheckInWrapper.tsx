@@ -6,10 +6,10 @@
  * using a local state to toggle its visibility.
  *
 
- * @param props - Component props.
+ * @param props - Component props of type InterfaceCheckInWrapperProps.
  * @param eventId - The unique identifier of the event for which members are being checked in.
  * @param onCheckInUpdate - Optional callback invoked after check-in updates.
- * @returns JSX.Element
+ * @returns The rendered CheckInWrapper component.
  *
  * @remarks
  * - The `CheckInModal` component is used to handle the modal functionality.

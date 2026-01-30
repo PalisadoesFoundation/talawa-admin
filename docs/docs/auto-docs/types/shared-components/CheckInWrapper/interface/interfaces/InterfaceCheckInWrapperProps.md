@@ -14,7 +14,9 @@ Props for CheckInWrapper component.
 
 > **eventId**: `string`
 
-Defined in: [src/types/shared-components/CheckInWrapper/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckInWrapper/interface.ts#L5)
+Defined in: [src/types/shared-components/CheckInWrapper/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckInWrapper/interface.ts#L6)
+
+The unique identifier of the event for which members are being checked in.
 
 ***
 
@@ -22,7 +24,9 @@ Defined in: [src/types/shared-components/CheckInWrapper/interface.ts:5](https://
 
 > `optional` **onCheckInUpdate**: () => `void`
 
-Defined in: [src/types/shared-components/CheckInWrapper/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckInWrapper/interface.ts#L6)
+Defined in: [src/types/shared-components/CheckInWrapper/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckInWrapper/interface.ts#L8)
+
+Optional callback invoked after check-in updates.
 
 #### Returns
 
