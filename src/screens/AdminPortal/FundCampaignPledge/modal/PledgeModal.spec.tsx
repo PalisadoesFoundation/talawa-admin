@@ -922,7 +922,7 @@ describe('PledgeModal', () => {
     const submitButton = screen.getByTestId('modal-submit-btn');
     await user.click(submitButton);
 
-    // Button should be disabled while mutation is in flight (mock delays 500ms)
+    // Button should be disabled while mutation is in flight (mock delays 2000ms)
     await waitFor(
       () => {
         expect(submitButton).toBeDisabled();
