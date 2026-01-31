@@ -1,0 +1,122 @@
+/* -- Loader.tsx -- */
+
+.spinner_wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerXl {
+  width: 6rem;
+  height: 6rem;
+  border-width: 0.5rem;
+}
+
+.spinnerLg {
+  height: 4rem;
+  width: 4rem;
+  border-width: 0.3rem;
+}
+
+.spinnerSm {
+  height: 2rem;
+  width: 2rem;
+  border-width: 0.2rem;
+}
+
+/* -- LoadingState.tsx -- */
+
+/* Container for spinner variant - provides relative positioning context */
+.loadingContainer {
+  position: relative;
+  min-height: 200px;
+}
+
+/* Overlay that blocks interactions during loading */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dimmed content underneath the overlay */
+.loadingContent {
+  opacity: 0.5;
+}
+
+/* Skeleton loading styles */
+.skeletonContainer {
+  padding: 1rem;
+  width: 100%;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.skeletonItem {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e0e0e0) 25%,
+    var(--skeleton-highlight, #f0f0f0) 50%,
+    var(--skeleton-base, #e0e0e0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeletonTitle {
+  height: 2rem;
+  width: 40%;
+}
+
+.skeletonButton {
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 6px;
+}
+
+.skeletonCell {
+  height: 3rem;
+  flex: 1;
+}
+
+.skeletonCellSmall {
+  height: 2rem;
+  width: 6rem;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
