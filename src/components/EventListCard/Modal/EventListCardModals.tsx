@@ -1,5 +1,4 @@
 /**
- * Component: EventListCardModals
  *
  * This component manages the modals for event list cards, including preview and delete modals.
  * It handles event updates, deletions, and user registration for events.
@@ -21,13 +20,14 @@
 // translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
+import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/interface';
 import {
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
@@ -50,25 +50,13 @@ import styles from './EventListCardModals.module.css';
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
-
-interface IEventListCardModalProps {
-  eventListCardProps: IEventListCard;
-  eventModalIsOpen: boolean;
-  hideViewModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
-}
-
 function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
   t,
   tCommon,
-}: IEventListCardModalProps): JSX.Element {
+}: InterfaceEventListCardModalsProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
@@ -77,11 +65,11 @@ function EventListCardModals({
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  const [alldaychecked, setAllDayChecked] = useState(eventListCardProps.allDay);
-  const [publicchecked, setPublicChecked] = useState(
+  const [allDayChecked, setAllDayChecked] = useState(eventListCardProps.allDay);
+  const [publicChecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
   );
-  const [registrablechecked, setRegistrableChecked] = useState(
+  const [registerableChecked, setRegisterableChecked] = useState(
     eventListCardProps.isRegisterable,
   );
   const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
@@ -165,14 +153,14 @@ function EventListCardModals({
   const hasOnlyNameOrDescriptionChanged = (): boolean => {
     const nameChanged = formState.name !== eventListCardProps.name;
     const descriptionChanged =
-      formState.eventdescrip !== eventListCardProps.description;
+      formState.eventDescription !== eventListCardProps.description;
     const locationChanged = formState.location !== eventListCardProps.location;
-    const publicChanged = publicchecked !== eventListCardProps.isPublic;
+    const publicChanged = publicChecked !== eventListCardProps.isPublic;
     const registrableChanged =
-      registrablechecked !== eventListCardProps.isRegisterable;
+      registerableChecked !== eventListCardProps.isRegisterable;
     const inviteOnlyChanged =
       inviteOnlyChecked !== Boolean(eventListCardProps.isInviteOnly);
-    const allDayChanged = alldaychecked !== eventListCardProps.allDay;
+    const allDayChanged = allDayChecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
     // Return true if only name/description changed, and no other fields changed
@@ -192,7 +180,7 @@ function EventListCardModals({
 
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
-    eventdescrip: eventListCardProps.description,
+    eventDescription: eventListCardProps.description,
     location: eventListCardProps.location,
     startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
     endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
@@ -218,10 +206,10 @@ function EventListCardModals({
   }, [
     recurrence,
     formState,
-    publicchecked,
-    registrablechecked,
+    publicChecked,
+    registerableChecked,
     inviteOnlyChecked,
-    alldaychecked,
+    allDayChecked,
     eventStartDate,
     eventEndDate,
   ]);
@@ -253,9 +241,9 @@ function EventListCardModals({
       await updateEventHandler({
         eventListCardProps,
         formState,
-        alldaychecked,
-        publicchecked,
-        registrablechecked,
+        allDayChecked,
+        publicChecked,
+        registerableChecked,
         inviteOnlyChecked,
         eventStartDate,
         eventEndDate,
@@ -411,12 +399,12 @@ function EventListCardModals({
         eventEndDate={eventEndDate}
         setEventStartDate={setEventStartDate}
         setEventEndDate={setEventEndDate}
-        alldaychecked={alldaychecked}
+        allDayChecked={allDayChecked}
         setAllDayChecked={setAllDayChecked}
-        publicchecked={publicchecked}
+        publicChecked={publicChecked}
         setPublicChecked={setPublicChecked}
-        registrablechecked={registrablechecked}
-        setRegistrableChecked={setRegistrableChecked}
+        registerableChecked={registerableChecked}
+        setRegisterableChecked={setRegisterableChecked}
         inviteOnlyChecked={inviteOnlyChecked}
         setInviteOnlyChecked={setInviteOnlyChecked}
         formState={formState}
@@ -430,7 +418,6 @@ function EventListCardModals({
         setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
       />
 
-      {/* delete modal */}
       <EventListCardDeleteModal
         eventListCardProps={eventListCardProps}
         eventDeleteModalIsOpen={eventDeleteModalIsOpen}
@@ -440,18 +427,16 @@ function EventListCardModals({
         deleteEventHandler={deleteEventHandler}
       />
 
-      {/* update modal */}
       <BaseModal
         size="lg"
-        // i18n-ignore-next-line
-        dataTestId={`updateEventModal${eventListCardProps.id}`}
+        dataTestId={TEST_ID_UPDATE_EVENT_MODAL(eventListCardProps.id)}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
         keyboard={false}
         centered
         title={t('updateEvent')}
-        headerClassName={`${styles.modalHeader} text-white`}
+        headerClassName={`${styles.modalHeader}`}
         footer={
           <>
             <Button
@@ -470,15 +455,15 @@ function EventListCardModals({
                 updateEventHandler({
                   eventListCardProps,
                   formState,
-                  alldaychecked,
-                  publicchecked,
-                  registrablechecked,
+                  allDayChecked,
+                  publicChecked,
+                  registerableChecked,
                   inviteOnlyChecked,
                   eventStartDate,
                   eventEndDate,
                   recurrence,
                   updateOption,
-                  hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
+                  hasRecurrenceChanged: hasRecurrenceChanged(),
                   t,
                   hideViewModal,
                   setEventUpdateModalIsOpen,
@@ -495,7 +480,6 @@ function EventListCardModals({
         <div>
           <p>{t('updateRecurringEventMsg')}</p>
           <div>
-            {/* Only show "update this instance" option if recurrence rule hasn't changed */}
             {availableUpdateOptions.single && (
               <FormCheckField
                 type="radio"
@@ -506,6 +490,7 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('single')}
                 label={t('updateThisInstance')}
                 className="mb-2"
+                data-testid="update-single-radio"
               />
             )}
             {availableUpdateOptions.following && (
@@ -518,9 +503,9 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('following')}
                 label={t('updateThisAndFollowing')}
                 className="mb-2"
+                data-testid="update-following-radio"
               />
             )}
-            {/* Show "update entire series" option only when only name/description changed */}
             {availableUpdateOptions.entireSeries && (
               <FormCheckField
                 type="radio"
@@ -531,6 +516,7 @@ function EventListCardModals({
                 onChange={() => setUpdateOption('entireSeries')}
                 label={t('updateEntireSeries')}
                 className="mb-2"
+                data-testid="update-entire-series-radio"
               />
             )}
           </div>

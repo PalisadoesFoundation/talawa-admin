@@ -13,6 +13,12 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "frequency": "Frequency",
+  "repeatsEvery": "Repeats Every",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "role": {
     "member": "Member"
   },
@@ -795,7 +801,12 @@
     "event": "Event",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
-    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
+    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data",
+    "deleteAttachment": "Delete attachment",
+    "fileUploadError": "Error uploading file",
+    "selectCategory": "Please select an agenda category",
+    "tooManyAttachments": "Maximum 10 attachments allowed",
+    "invalidFileType": "Invalid file type. Only images and videos are allowed"
   },
   "eventListCard": {
     "dogsCare": "Dogs Care",
@@ -848,6 +859,32 @@
     "description": "description",
     "startDate": "startDate",
     "endDate": "endDate",
+    "sunday": "Sunday",
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "january": "January",
+    "february": "February",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "customOption": "Custom...",
+    "selectRecurrencePattern": "Select recurrence pattern",
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
@@ -933,6 +970,7 @@
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
+    "createFailed": "Failed to create pledge",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -1172,7 +1210,7 @@
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
     "enterNewPassword": "Enter New Password",
-    "cofirmNewPassword": "Confirm New Password",
+    "confirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
     "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",
@@ -1291,7 +1329,11 @@
     "enterOrganizationDescription": "Enter Organization Description",
     "userRegistrationRequired": "User registration required",
     "nameDescriptionRequired": "Name and description are required",
-    "updateFailed": "Failed to update organization"
+    "updateFailed": "Failed to update organization",
+    "errorLoadingOrganizationData": "Error loading organization data",
+    "enterOrganizationLocation": "Enter Organization location",
+    "imageSizeTooLarge": "Image size is too large. Please upload a smaller file.",
+    "invalidImageType": "Invalid image type. Please upload a valid image file."
   },
   "public": {
     "invitation": {
@@ -1720,7 +1762,14 @@
     "after": "After",
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
-    "noEventAvailable": "No Event Available!"
+    "noEventAvailable": "No Event Available!",
+    "eventDetails": "Event Details",
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",
@@ -2305,7 +2354,9 @@
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details"
+    "errorInstalling": "Failed to load plugin details",
+    "failedToParsePluginZip": "Failed to parse plugin ZIP",
+    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

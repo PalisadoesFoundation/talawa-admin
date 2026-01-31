@@ -2,6 +2,7 @@ import { mkdir, copyFile, access } from 'fs/promises';
 import { constants } from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
+import { FILE_NAME_TEMPLATE_BACKUP_ENV } from '../../Constant/common';
 
 /**
  * Prompts the user to back up the current .env file before setup modifications.
@@ -28,7 +29,9 @@ export const backupEnvFile = async (): Promise<string | null> => {
 
       // Generate epoch timestamp
       const epochTimestamp = Math.floor(Date.now() / 1000);
-      const backupFileName = `.env.${epochTimestamp}`;
+      const backupFileName = FILE_NAME_TEMPLATE_BACKUP_ENV(
+        String(epochTimestamp),
+      );
       const backupFilePath = path.join(backupDir, backupFileName);
 
       // Copy .env to backup location

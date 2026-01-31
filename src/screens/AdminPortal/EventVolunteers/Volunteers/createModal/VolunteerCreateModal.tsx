@@ -24,6 +24,7 @@
  * />
  * ```
  */
+
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useState, useMemo } from 'react';
@@ -31,6 +32,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import {
   CreateModal,
   useMutationModal,
@@ -182,25 +184,31 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           limitTags={2}
           data-testid="membersSelect"
           options={members}
+          value={
+            members.find((m: InterfaceUserInfo) => m.id === userId) || null
+          }
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfo): string => member.name}
-          aria-label={tCommon('members')}
           onChange={(_, newVolunteer): void => {
             setUserId(newVolunteer?.id ?? '');
           }}
           renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <label htmlFor="members-input" className="form-label">
-                {tCommon('members')}
-              </label>
-              <input
-                {...params.inputProps}
-                id="members-input"
-                className="form-control"
-                placeholder={tCommon('members')}
-              />
-            </div>
+            <FormFieldGroup name="members" label={tCommon('members')}>
+              <div
+                ref={params.InputProps.ref}
+                className="d-flex w-100 align-items-center"
+              >
+                {params.InputProps.startAdornment}
+                <input
+                  {...params.inputProps}
+                  id="members"
+                  className="form-control"
+                  data-testid="membersInput"
+                />
+                {params.InputProps.endAdornment}
+              </div>
+            </FormFieldGroup>
           )}
         />
       </div>

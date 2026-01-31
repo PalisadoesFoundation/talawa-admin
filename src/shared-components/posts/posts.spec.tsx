@@ -27,7 +27,7 @@ const { mockNotificationToast } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 
@@ -549,7 +549,6 @@ beforeEach(() => {
 describe('PostsPage Component', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -862,7 +861,6 @@ describe('PostsPage Component', () => {
 describe('Sorting Functionality', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -967,7 +965,6 @@ describe('Sorting Functionality', () => {
 describe('Create Post Modal', () => {
   beforeEach(() => {
     nextId = 1;
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
@@ -1383,6 +1380,11 @@ describe('HandleSorting Edge Case', () => {
     // Verify hasMore is now false because hasNextPage is false
     infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+
+    // Verify endMessage is displayed when hasMore is false
+    expect(
+      screen.getByText(i18nForTest.t('posts.noMorePosts')),
+    ).toBeInTheDocument();
   });
 });
 
