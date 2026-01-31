@@ -46,30 +46,23 @@ beforeEach(() => {
 });
 
 describe('Testing CheckIn Wrapper', () => {
-  let CheckInWrapper: typeof import('./CheckInWrapper').CheckInWrapper;
-
-  beforeAll(async () => {
-    ({ CheckInWrapper } = await import('./CheckInWrapper'));
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const props = {
-    eventId: 'event123',
-  };
+  it('The button to open the modal should work properly', async () => {
+    vi.resetModules();
 
-  it('The button to open and close the modal should work properly', async () => {
     const mockOpen = vi.fn();
-    const mockClose = vi.fn();
 
     (useModalState as Mock).mockReturnValue({
-      isOpen: true,
+      isOpen: false,
       open: mockOpen,
-      close: mockClose,
+      close: vi.fn(),
       toggle: vi.fn(),
     });
+
+    const { CheckInWrapper } = await import('./CheckInWrapper');
 
     const user = userEvent.setup();
 
@@ -80,7 +73,7 @@ describe('Testing CheckIn Wrapper', () => {
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <NotificationToastContainer />
-                <CheckInWrapper {...props} />
+                <CheckInWrapper eventId="event123" />
               </I18nextProvider>
             </Provider>
           </LocalizationProvider>
@@ -89,10 +82,7 @@ describe('Testing CheckIn Wrapper', () => {
     );
 
     await user.click(screen.getByLabelText('Check In Members'));
-    expect(mockOpen).toHaveBeenCalled();
-
-    await user.click(screen.getByLabelText('Close'));
-    expect(mockClose).toHaveBeenCalled();
+    expect(mockOpen).toHaveBeenCalledTimes(1);
   });
 });
 

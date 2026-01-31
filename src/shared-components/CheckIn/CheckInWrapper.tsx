@@ -17,6 +17,9 @@
  * - The `style.createButton` class is applied to the button for styling.
  *
  * @example
+ * ```tsx
+ * <CheckInWrapper eventId="12345" />
+ * ```
  */
 import React from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
@@ -41,6 +44,7 @@ export const CheckInWrapper = ({
         data-testid="stats-modal"
         className={style.createButton}
         aria-label={t('checkInMembers')}
+        type="button"
         onClick={open}
       >
         <img
