@@ -58,8 +58,6 @@ import type {
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-const { getItem } = useLocalStorage();
-
 /**
  * Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
  *
@@ -213,6 +211,7 @@ export default function createDirectChatModal({
   const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
   const { orgId: organizationId } = useParams();
+  const { getItem } = useLocalStorage();
 
   // Support both 'userId' (for regular users) and 'id' (for admins)
   const userId: string | null = getItem('userId') || getItem('id');
