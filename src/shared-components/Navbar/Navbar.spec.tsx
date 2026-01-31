@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi, afterEach } from 'vitest';
 
 afterEach(() => {
@@ -14,7 +15,8 @@ describe('PageHeader Component', () => {
     expect(screen.getByText('Test Title')).toBeInTheDocument();
   });
 
-  it('renders search bar when search props are provided', () => {
+  it('renders search bar when search props are provided', async () => {
+    const user = userEvent.setup();
     const TestInterfaceMockSearch = vi.fn();
     render(
       <PageHeader
@@ -32,8 +34,8 @@ describe('PageHeader Component', () => {
     expect(input).toBeInTheDocument();
     expect(button).toBeInTheDocument();
 
-    fireEvent.change(input, { target: { value: 'hello' } });
-    fireEvent.click(button);
+    await user.type(input, 'hello');
+    await user.click(button);
     expect(TestInterfaceMockSearch).toHaveBeenCalled();
   });
 
@@ -58,7 +60,7 @@ describe('PageHeader Component', () => {
 
   it('renders event type filter when showEventTypeFilter is true', () => {
     render(<PageHeader showEventTypeFilter={true} />);
-    expect(screen.getByText('eventType')).toBeInTheDocument();
+    expect(screen.getByTestId('eventType')).toBeInTheDocument();
   });
 
   it('renders actions when provided', () => {
@@ -90,7 +92,8 @@ describe('PageHeader Component', () => {
     expect(screen.getByTitle('Sort 2')).toBeInTheDocument();
   });
 
-  it('renders event type options and allows selection', () => {
+  it('renders event type options and allows selection', async () => {
+    const user = userEvent.setup();
     render(<PageHeader showEventTypeFilter={true} />);
 
     // 1. Check if the main button exists
@@ -98,13 +101,53 @@ describe('PageHeader Component', () => {
     expect(eventTypeButton).toBeInTheDocument();
 
     // 2. Click it to open the menu
-    fireEvent.click(eventTypeButton);
+    await user.click(eventTypeButton);
 
-    // 3. Check if the "Workshops" option appears
-    const workshopsOption = screen.getByText('Workshops');
+    // 3. Check if the "workshops" option appears (using translation key)
+    const workshopsOption = screen.getByText('workshops');
     expect(workshopsOption).toBeInTheDocument();
 
     // 4. Click the option (to ensure no errors occur)
-    fireEvent.click(workshopsOption);
+    await user.click(workshopsOption);
+  });
+
+  it('resolves buttonLabel correctly from sorting options', () => {
+    const mockSort = vi.fn();
+    const sortingProps = [
+      {
+        title: 'Sort by Date',
+        options: [
+          { label: 'Newest', value: 'new' },
+          { label: 'Oldest', value: 'old' },
+        ],
+        selected: 'new',
+        onChange: mockSort,
+        testIdPrefix: 'sort-by-date',
+      },
+    ];
+
+    render(<PageHeader sorting={sortingProps} />);
+    expect(screen.getByTestId('sort-by-date')).toHaveTextContent('Newest');
+  });
+
+  it('falls back to title when selected option is not found', () => {
+    const mockSort = vi.fn();
+    const sortingProps = [
+      {
+        title: 'Sort by Date',
+        options: [
+          { label: 'Newest', value: 'new' },
+          { label: 'Oldest', value: 'old' },
+        ],
+        selected: 'unknown_value',
+        onChange: mockSort,
+        testIdPrefix: 'sort-fallback',
+      },
+    ];
+
+    render(<PageHeader sorting={sortingProps} />);
+    expect(screen.getByTestId('sort-fallback')).toHaveTextContent(
+      'Sort by Date',
+    );
   });
 });

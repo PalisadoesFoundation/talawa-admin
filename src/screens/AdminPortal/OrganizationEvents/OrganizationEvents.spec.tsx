@@ -25,6 +25,7 @@ import {
 import { MOCKS } from './OrganizationEventsMocks';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { green } from '@mui/material/colors';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 
 const mockGetItem = vi.fn((key: string): string | null => {
   if (key === 'role') return 'administrator';
@@ -834,12 +835,14 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year" option
-    const yearOption = await screen.findByText('Year');
+    // Find and click the year option (using ViewType value for resilience)
+    const yearOption = await screen.findByTestId(ViewType.YEAR);
     await userEvent.click(yearOption);
 
+    // Verify year view is rendered by checking for YearlyEventCalender-specific elements
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year');
+      expect(screen.getByTestId('prevYear')).toBeInTheDocument();
+      expect(screen.getByTestId('nextYear')).toBeInTheDocument();
     });
   });
 

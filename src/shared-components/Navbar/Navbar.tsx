@@ -50,25 +50,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './Navbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
-
-interface InterfacePageHeaderProps {
-  title?: string;
-  search?: {
-    placeholder: string;
-    onSearch: (value: string) => void;
-    inputTestId?: string;
-    buttonTestId?: string;
-  };
-  sorting?: Array<{
-    title: string;
-    options: { label: string; value: string | number }[];
-    selected: string | number;
-    onChange: (value: string | number) => void;
-    testIdPrefix: string;
-  }>;
-  showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
-}
+import type { InterfacePageHeaderProps } from 'types/shared-components/PageHeader/interface';
 
 export default function PageHeader({
   title,
@@ -103,6 +85,10 @@ export default function PageHeader({
         {/* ===== Sorting Props ===== */}
         {sorting &&
           sorting.map((sort, idx) => {
+            const selectedOption = sort.options.find(
+              (opt) => opt.value === sort.selected,
+            );
+            const buttonLabel = selectedOption?.label ?? sort.title;
             return (
               <div key={idx} className={styles.space}>
                 <SortingButton
@@ -112,10 +98,7 @@ export default function PageHeader({
                   onSortChange={sort.onChange}
                   dataTestIdPrefix={sort.testIdPrefix}
                   className={styles.dropdown}
-                  buttonLabel={
-                    sort.options.find((opt) => opt.value === sort.selected)
-                      ?.label
-                  }
+                  buttonLabel={buttonLabel}
                 />
               </div>
             );
@@ -127,14 +110,14 @@ export default function PageHeader({
             <SortingButton
               title={t('eventType')}
               sortingOptions={[
-                { label: 'Events', value: 'Events' },
-                { label: 'Workshops', value: 'Workshops' },
+                { label: t('events'), value: 'events' },
+                { label: t('workshops'), value: 'workshops' },
               ]}
-              selectedOption={'Events'}
+              selectedOption={'events'}
               onSortChange={() => {}}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
-              buttonLabel={t('eventType')}
+              buttonLabel={t('events')}
             />
           </div>
         )}

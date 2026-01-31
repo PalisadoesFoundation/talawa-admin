@@ -249,6 +249,7 @@ const mockOrgData = {
     members: { id: 'members_conn', edges: [] },
     addressLine1: 'Test Address',
     isMember: false,
+    __typename: 'Organization',
   })),
   manyOrgs: [
     {
@@ -897,10 +898,7 @@ describe('Organisations Page testing as Admin', () => {
 
     const mockWithMultipleOrgsAdmin = [
       ...MOCKS_ADMIN.filter(
-        (m) =>
-          m.request.query !== ORGANIZATION_FILTER_LIST &&
-          // User query is already in MOCKS_ADMIN, no need to touch it
-          true,
+        (m) => m.request.query !== ORGANIZATION_FILTER_LIST,
       ),
       {
         request: {
@@ -1092,29 +1090,8 @@ describe('Advanced Component Functionality Tests', () => {
     const paginationElement = screen.getByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
-    // Test pagination with rowsPerPage = 0 edge case
-    const rowsPerPageSelect = screen.getByDisplayValue('5');
-    // Manually trigger change since '0' might not be a selectable option in the UI
-    const nativeSelectValueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLSelectElement.prototype,
-      'value',
-    )?.set;
-    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
-      window.HTMLInputElement.prototype,
-      'value',
-    )?.set;
-
-    // Try setting as Select first, then Input
-    if (
-      nativeSelectValueSetter &&
-      rowsPerPageSelect instanceof HTMLSelectElement
-    ) {
-      nativeSelectValueSetter.call(rowsPerPageSelect, '0');
-    } else if (nativeInputValueSetter) {
-      nativeInputValueSetter.call(rowsPerPageSelect, '0');
-    }
-
-    rowsPerPageSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    // Verify pagination renders correctly with single organization
+    // Edge case of rowsPerPage = 0 is not user-achievable via UI
     await wait();
   });
 

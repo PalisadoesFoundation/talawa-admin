@@ -378,7 +378,7 @@ function OrgList(): JSX.Element {
         >
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <strong>{tLogin('emailNotVerified')}</strong>
+              <strong>{tLogin('loginPage.emailNotVerified')}</strong>
             </div>
             <RBButton
               variant="outline-primary"
@@ -389,7 +389,7 @@ function OrgList(): JSX.Element {
             >
               {resendLoading
                 ? tCommon('loading')
-                : tLogin('resendVerification')}
+                : tLogin('loginPage.resendVerification')}
             </RBButton>
           </div>
         </Alert>

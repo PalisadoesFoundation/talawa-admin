@@ -275,7 +275,7 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *       dataTestIdPrefix: 'sort'
  *     },
  *     {
- *       label: 'time Frame',
+ *       label: 'time frame',
  *       type: 'filter',
  *       options: [
  *         { label: 'all time', value: 'allTime' },
