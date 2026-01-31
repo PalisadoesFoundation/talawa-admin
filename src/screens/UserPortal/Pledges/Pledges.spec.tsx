@@ -716,11 +716,9 @@ describe('Testing User Pledge Screen', () => {
       ).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('pledgeModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 

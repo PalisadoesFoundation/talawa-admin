@@ -154,7 +154,7 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स",
+  "pluginSettings": "प्लगइन्स सेटिंग्स",
   "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
   "birthDate": "जन्म तिथि",
   "contactInfoHeading": "संपर्क जानकारी",
@@ -270,14 +270,6 @@
   "imageNotFound": "छवि नहीं मिली",
   "changeLanguage": "भाषा बदलें",
   "selectField": "{{fieldName}} चुनें",
-  "userEvents": {
-    "presetToday": "आज",
-    "presetThisWeek": "इस सप्ताह",
-    "presetThisMonth": "इस महीने",
-    "presetNext7Days": "अगले 7 दिन",
-    "presetNext30Days": "अगले 30 दिन",
-    "presetNextMonth": "अगले महीने"
-  },
   "ascending": "आरोही",
   "descending": "अवरोही",
   "noRegistrations": "पंजीकरण संख्या",

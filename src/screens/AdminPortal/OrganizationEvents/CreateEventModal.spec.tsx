@@ -107,6 +107,81 @@ vi.mock('@mui/x-date-pickers', () => ({
   ),
 }));
 
+vi.mock('shared-components/DatePicker', () => ({
+  default: vi.fn(
+    ({
+      _label,
+      value,
+      onChange,
+      'data-testid': dataTestId,
+    }: {
+      _label?: string;
+      value?: unknown;
+      onChange?: (date: unknown) => void;
+      'data-testid'?: string;
+    }) => {
+      let formattedValue = '';
+      if (value) {
+        if (dayjs.isDayjs(value)) {
+          formattedValue = value.format('YYYY-MM-DD');
+        } else if (value instanceof Date) {
+          formattedValue = dayjs(value).format('YYYY-MM-DD');
+        } else {
+          formattedValue = String(value);
+        }
+      }
+      return React.createElement('input', {
+        'data-testid': dataTestId || 'date-picker',
+        type: 'date',
+        value: formattedValue,
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (onChange) {
+            onChange(dayjs(e.target.value));
+          }
+        },
+      });
+    },
+  ),
+}));
+
+// Mock shared TimePicker component
+vi.mock('shared-components/TimePicker', () => ({
+  default: vi.fn(
+    ({
+      _label,
+      value,
+      onChange,
+      'data-testid': dataTestId,
+    }: {
+      _label?: string;
+      value?: unknown;
+      onChange?: (time: unknown) => void;
+      'data-testid'?: string;
+    }) => {
+      let formattedValue = '';
+      if (value) {
+        if (dayjs.isDayjs(value)) {
+          formattedValue = value.format('HH:mm:ss');
+        } else if (value instanceof Date) {
+          formattedValue = dayjs(value).format('HH:mm:ss');
+        } else {
+          formattedValue = String(value);
+        }
+      }
+      return React.createElement('input', {
+        'data-testid': dataTestId || 'time-picker',
+        type: 'time',
+        value: formattedValue,
+        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+          if (onChange) {
+            onChange(dayjs(e.target.value, 'HH:mm:ss'));
+          }
+        },
+      });
+    },
+  ),
+}));
+
 // Mock toast functions with hoisted variables
 const { mockToastError, mockToastSuccess } = vi.hoisted(() => ({
   mockToastError: vi.fn(),
