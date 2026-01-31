@@ -16,7 +16,7 @@ import LoadingState from './LoadingState';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
 // Mock TableLoader component
-vi.mock('components/TableLoader/TableLoader', () => ({
+vi.mock('shared-components/TableLoader/TableLoader', () => ({
   default: ({
     noOfRows,
     headerTitles,
