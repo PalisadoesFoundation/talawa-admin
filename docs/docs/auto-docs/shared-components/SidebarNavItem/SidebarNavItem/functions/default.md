@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `ReactElement`
 
-Defined in: [src/shared-components/SidebarNavItem/SidebarNavItem.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarNavItem/SidebarNavItem.tsx#L48)
+Defined in: [src/shared-components/SidebarNavItem/SidebarNavItem.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarNavItem/SidebarNavItem.tsx#L47)
 
 ## Parameters
 

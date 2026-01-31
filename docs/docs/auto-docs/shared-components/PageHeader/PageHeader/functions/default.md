@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/PageHeader/PageHeader.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PageHeader/PageHeader.tsx#L55)
+Defined in: [src/shared-components/PageHeader/PageHeader.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PageHeader/PageHeader.tsx#L57)
 
 ## Parameters
 
