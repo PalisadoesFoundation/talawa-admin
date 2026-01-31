@@ -1,0 +1,57 @@
+.containerAdvertisements {
+  background-color: var(--containerAdvertisemens-bg);
+  border-radius: 20px;
+  width: auto;
+  margin-inline-start: 12px;
+}
+
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 24px;
+}
+
+.justifyspAdvertisements {
+  display: grid;
+  width: 100%;
+  margin-top: 30px;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
+
+@media (max-width: 1024px) {
+  .justifyspAdvertisements {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.rowAdvertisements {
+  margin-top: 20px;
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  /* grid-template-columns: repeat(2, 1fr); */
+  grid-gap: 0.8rem 0.4rem;
+  overflow: hidden;
+}
+
+.colAdvertisements {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.listBoxAdvertisements {
+  display: grid;
+  width: 100%;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 0.8rem 0.4rem;
+}
