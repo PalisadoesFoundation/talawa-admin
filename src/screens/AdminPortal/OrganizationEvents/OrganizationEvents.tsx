@@ -95,8 +95,8 @@ function organizationEvents(): JSX.Element {
     document.title = t('title');
   }, [t]);
   const {
-    isOpen: createEventmodalisOpen,
-    open: showInviteModal,
+    isOpen: createEventModalIsOpen,
+    open: showCreateEventModal,
     close: hideCreateEventModal,
   } = useModalState();
 
@@ -261,7 +261,7 @@ function organizationEvents(): JSX.Element {
               actions={
                 <Button
                   className={styles.dropdown}
-                  onClick={showInviteModal}
+                  onClick={showCreateEventModal}
                   data-testid="createEventModalBtn"
                   data-cy="createEventModalBtn"
                 >
@@ -287,7 +287,7 @@ function organizationEvents(): JSX.Element {
         />
 
         <CreateEventModal
-          isOpen={createEventmodalisOpen}
+          isOpen={createEventModalIsOpen}
           onClose={hideCreateEventModal}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}

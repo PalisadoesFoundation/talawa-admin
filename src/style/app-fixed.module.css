@@ -507,7 +507,7 @@
   --banIcon-color-hover: #ffffff;
   --unbanIcon-color: #555555;
   --unbanIcon-color-hover: #ffffff;
-  --containerAdvertisemens-bg: #ffffff;
+  --containerAdvertisements-bg: #ffffff;
   --orgCard-bg: #fff;
   --orgCard-bg: #fff;
   --orgCard-outline: #e9ecef;
@@ -2116,7 +2116,7 @@ form label,
 /* -- Advertisement.tsx -- */
 
 .containerAdvertisements {
-  background-color: var(--containerAdvertisemens-bg);
+  background-color: var(--containerAdvertisements-bg);
   border-radius: 20px;
   width: auto;
   margin-inline-start: 12px;
@@ -2825,6 +2825,7 @@ form label,
   align-items: center;
   color: grey;
 }
+
 .peopleTabEventHeader:hover {
   color: var(--groupsLabel-color);
 }
@@ -2834,11 +2835,13 @@ form label,
   height: 40px;
   border-radius: 50%;
 }
+
 .flexCenter {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .flexColumn {
   display: flex;
   flex-direction: column;
@@ -2855,10 +2858,12 @@ form label,
   justify-content: center;
   margin-top: 6px;
 }
+
 .avatarPlaceholderSize {
   width: 40px;
   height: 40px;
 }
+
 .calendar__header {
   display: flex;
   align-items: stretch;
@@ -4400,6 +4405,7 @@ form label,
   align-items: baseline;
   justify-content: space-between;
 }
+
 .peopleTabUserEventDate {
   display: flex;
   align-items: baseline;
@@ -6142,7 +6148,8 @@ form {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 6px; /* space between icon & text */
+  margin-right: 6px;
+  /* space between icon & text */
 }
 
 .dropdownItemButton {
@@ -10785,6 +10792,7 @@ form {
   border-radius: 4px;
   animation: datatable-loading 1.2s ease-in-out infinite;
 }
+
 @keyframes datatable-loading {
   0% {
     background-position: -200px 0;
@@ -11050,6 +11058,7 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+
   .tagActionsDivider {
     border-color: var(--grey-border-box-color);
     border-style: solid;
