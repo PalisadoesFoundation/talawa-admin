@@ -25,13 +25,14 @@
  * - The `onUpdate` callback is invoked after the modal is closed, if provided.
  * - The button uses a custom style from EventRegistrantsWrapper.module.css.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import Button from 'shared-components/Button';
 import style from './EventRegistrantsWrapper.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceEventRegistrantsWrapperProps } from 'types/AdminPortal/EventRegistrantsWrapper/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 export const EventRegistrantsWrapper = ({
   eventId,
@@ -42,11 +43,10 @@ export const EventRegistrantsWrapper = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventRegistrantsModal',
   });
-  // State to control the visibility of the modal
-  const [showModal, setShowModal] = useState(false);
+  const modalState = useModalState();
+
   const handleClose = (): void => {
-    setShowModal(false);
-    // Call onUpdate after modal is closed
+    modalState.close();
     if (onUpdate) {
       onUpdate();
     }
@@ -63,19 +63,18 @@ export const EventRegistrantsWrapper = ({
         data-testid="filter-button"
         className={style.createButton}
         aria-label={t('registerMember')}
-        onClick={() => setShowModal(true)}
+        onClick={modalState.open}
       >
         {t('registerMember')}
       </Button>
+
       {/* Render the EventRegistrantsModal if showModal is true */}
-      {showModal && (
-        <EventRegistrantsModal
-          show={showModal}
-          handleClose={handleClose}
-          eventId={eventId}
-          orgId={orgId}
-        />
-      )}
+      <EventRegistrantsModal
+        show={modalState.isOpen}
+        handleClose={handleClose}
+        eventId={eventId}
+        orgId={orgId}
+      />
     </ErrorBoundaryWrapper>
   );
 };

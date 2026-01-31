@@ -231,8 +231,7 @@ describe('InviteByEmailModal', () => {
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
       await user.type(screen.getByLabelText('Name'), 'Test User');
-      const messageInput = screen.getByTestId('invite-message');
-      await user.type(messageInput, 'Test Message');
+      await user.type(screen.getByTestId('invite-message'), 'Test Message');
 
       const sendButton = screen.getByTestId('invite-submit');
       expect(sendButton).not.toBeDisabled();
