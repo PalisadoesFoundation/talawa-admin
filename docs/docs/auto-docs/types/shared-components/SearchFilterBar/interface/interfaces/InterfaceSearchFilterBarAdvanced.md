@@ -24,8 +24,8 @@ sorting/filtering dropdowns.
       label: 'Filter plugins',
       type: 'filter',
       options: [
-        { label: 'All Plugins', value: 'all' },
-        { label: 'Installed Plugins', value: 'installed' }
+        { label: 'all plugins', value: 'all' },
+        { label: 'installed plugins', value: 'installed' }
       ],
       selectedOption: filterState.selectedOption,
       onOptionChange: handleFilterChange,
@@ -43,22 +43,22 @@ sorting/filtering dropdowns.
   onSearchChange={setSearchTerm}
   dropdowns={[
     {
-      label: 'Sort',
+      label: 'sort',
       type: 'sort',
       options: [
-        { label: 'Most Hours', value: 'hours_DESC' },
-        { label: 'Least Hours', value: 'hours_ASC' }
+        { label: 'most hours', value: 'hours_DESC' },
+        { label: 'least hours', value: 'hours_ASC' }
       ],
       selectedOption: sortBy,
       onOptionChange: (value) => setSortBy(value as 'hours_DESC' | 'hours_ASC'),
       dataTestIdPrefix: 'sort'
     },
     {
-      label: 'Time Frame',
+      label: 'time frame',
       type: 'filter',
       options: [
-        { label: 'All Time', value: 'allTime' },
-        { label: 'Weekly', value: 'weekly' }
+        { label: 'all time', value: 'allTime' },
+        { label: 'weekly', value: 'weekly' }
       ],
       selectedOption: timeFrame,
       onOptionChange: (value) => setTimeFrame(value as TimeFrame),
@@ -157,7 +157,7 @@ The order of dropdowns in this array determines their visual order in the UI.
 ```ts
 dropdowns={[
   {
-    label: 'Sort',
+    label: 'sort',
     type: 'sort',
     options: [...],
     selectedOption: sortBy,

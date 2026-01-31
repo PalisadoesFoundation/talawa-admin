@@ -75,7 +75,7 @@ This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
 #### Example
 
 ```ts
-"Sort", "Filter plugins", "Time Frame"
+"sort", "filter plugins", "time frame"
 ```
 
 ***

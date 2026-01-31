@@ -92,6 +92,6 @@ Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoun
 
 ### viewType?
 
-> `optional` **viewType**: [`ViewType`](../../../../screens/AdminPortal/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
+> `optional` **viewType**: [`ViewType`](../../../shared-components/EventCalender/interface/enumerations/ViewType.md)
 
 Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L116)

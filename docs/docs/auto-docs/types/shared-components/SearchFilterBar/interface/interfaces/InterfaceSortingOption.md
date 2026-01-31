@@ -22,7 +22,7 @@ The display text shown to the user in the dropdown menu.
 #### Example
 
 ```ts
-"latest", "oldest", "Most Hours"
+"latest", "oldest", "most hours"
 ```
 
 ***
