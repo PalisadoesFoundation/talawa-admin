@@ -39,8 +39,7 @@ vi.setConfig({ testTimeout: 30000 });
 const { mockPaginationFactory } = vi.hoisted(() => ({
   mockPaginationFactory: {
     useMock: false,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    MockComponent: null as any,
+    MockComponent: null as unknown,
   },
 }));
 
@@ -75,7 +74,9 @@ vi.mock(
           mockPaginationFactory.useMock &&
           mockPaginationFactory.MockComponent
         ) {
-          return <mockPaginationFactory.MockComponent {...props} />;
+          const MockComponent =
+            mockPaginationFactory.MockComponent as React.ComponentType<unknown>;
+          return <MockComponent {...props} />;
         }
         return <actual.default {...props} />;
       },
@@ -3006,6 +3007,7 @@ test('should render all organizations when rowsPerPage is 0 (Line 492)', async (
     <div data-testid="mock-pagination">
       <button
         data-testid="set-rows-0"
+        type="button"
         onClick={() => onRowsPerPageChange({ target: { value: '0' } })}
       >
         Set 0
@@ -3014,26 +3016,28 @@ test('should render all organizations when rowsPerPage is 0 (Line 492)', async (
     </div>
   );
 
-  renderWithMocks([
-    mockOrgsResponse,
-    ...MOCKS.filter((m) => m.request.query !== ORGANIZATION_FILTER_LIST),
-  ]);
+  try {
+    renderWithMocks([
+      mockOrgsResponse,
+      ...MOCKS.filter((m) => m.request.query !== ORGANIZATION_FILTER_LIST),
+    ]);
 
-  // Initial load, default 5
-  await waitFor(() => {
-    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
-  });
+    // Initial load, default 5
+    await waitFor(() => {
+      expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
+    });
 
-  // Set rows 0
-  const set0Btn = screen.getByTestId('set-rows-0');
-  await userEvent.click(set0Btn);
+    // Set rows 0
+    const set0Btn = screen.getByTestId('set-rows-0');
+    await userEvent.click(set0Btn);
 
-  // Should see all 6
-  await waitFor(() => {
-    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(6);
-  });
-
-  // Cleanup mock
-  mockPaginationFactory.useMock = false;
-  mockPaginationFactory.MockComponent = null;
+    // Should see all 6
+    await waitFor(() => {
+      expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(6);
+    });
+  } finally {
+    // Cleanup mock even if test fails
+    mockPaginationFactory.useMock = false;
+    mockPaginationFactory.MockComponent = null;
+  }
 });

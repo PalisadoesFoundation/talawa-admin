@@ -11,10 +11,8 @@ import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropd
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { useQuery } from '@apollo/client';
-
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
@@ -24,14 +22,8 @@ import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import type { InterfaceUserSidebarOrgProps } from 'types/UserPortal/UserSidebarOrg/interface';
 import styles from './UserSidebarOrg.module.css';
-
-export interface InterfaceUserSidebarOrgProps {
-  orgId: string;
-  targets: TargetsType[];
-  hideDrawer: boolean;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
 const UserSidebarOrg = ({
   targets,

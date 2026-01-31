@@ -98,7 +98,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   },
 };
 
-describe('Testing Collapsible Dropdown component', () => {
+describe('IconComponent rendering', () => {
   it('Renders the correct icon according to the component', () => {
     for (const component in screenTestIdMap) {
       render(<IconComponent name={screenTestIdMap[component].name} />);
@@ -181,5 +181,16 @@ describe('IconComponent Volunteer icon', () => {
     // For MdOutlineVolunteerActivism (and other react-icons), size usually sets width and height attributes directly.
     expect(icon).toHaveAttribute('width', '24');
     expect(icon).toHaveAttribute('height', '24');
+  });
+  it('renders Volunteer icon with only width prop', () => {
+    render(<IconComponent name="volunteer" width={32} />);
+    const icon = screen.getByTestId('Icon-Component-Volunteer');
+    expect(icon).toHaveAttribute('width', '32');
+  });
+
+  it('renders Volunteer icon with only height prop', () => {
+    render(<IconComponent name="volunteer" height={32} />);
+    const icon = screen.getByTestId('Icon-Component-Volunteer');
+    expect(icon).toHaveAttribute('height', '32');
   });
 });

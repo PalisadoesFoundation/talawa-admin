@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
+import type { InterfaceUserSidebarOrgProps } from 'types/UserPortal/UserSidebarOrg/interface';
 import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
@@ -848,12 +848,13 @@ describe('Plugin System Integration', () => {
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
     setItem('SuperAdmin', true);
 
-    // Mock mobile view
+    const previousWidth = window.innerWidth;
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
       configurable: true,
       value: 800,
     });
+    window.dispatchEvent(new Event('resize'));
 
     const setHideDrawer = vi.fn();
     render(
@@ -869,9 +870,17 @@ describe('Plugin System Integration', () => {
     );
 
     const pluginLink = screen.getByRole('link', { name: /Mobile Plugin/i });
-    await userEvent.click(pluginLink);
-
-    expect(setHideDrawer).toHaveBeenCalledWith(true);
+    try {
+      await userEvent.click(pluginLink);
+      expect(setHideDrawer).toHaveBeenCalledWith(true);
+    } finally {
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: previousWidth,
+      });
+      window.dispatchEvent(new Event('resize'));
+    }
   });
 
   it('should call usePluginDrawerItems with correct parameters', () => {

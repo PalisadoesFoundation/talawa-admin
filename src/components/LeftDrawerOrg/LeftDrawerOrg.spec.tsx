@@ -10,7 +10,7 @@ import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
-import type { ILeftDrawerProps } from './LeftDrawerOrg';
+import type { InterfaceLeftDrawerOrgProps } from 'types/AdminPortal/LeftDrawerOrg/interface';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 // Mock CSS modules
 vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
@@ -299,7 +299,7 @@ describe('LeftDrawerOrg', () => {
   const originalInnerWidth = window.innerWidth;
   const mockSetHideDrawer = vi.fn();
 
-  const defaultProps: ILeftDrawerProps = {
+  const defaultProps: InterfaceLeftDrawerOrgProps = {
     orgId: 'org-123',
     targets: [
       { name: 'dashboard', url: '/admin/orgdash/org-123' },
@@ -350,7 +350,7 @@ describe('LeftDrawerOrg', () => {
   });
 
   const renderComponent = (
-    props: Partial<ILeftDrawerProps> = {},
+    props: Partial<InterfaceLeftDrawerOrgProps> = {},
     mocks: IMockedResponse[] = successMocks,
     initialRoute = '/admin/orgdash/org-123',
   ) => {
