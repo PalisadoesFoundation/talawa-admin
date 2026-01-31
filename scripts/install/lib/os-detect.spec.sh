@@ -218,7 +218,7 @@ test_wsl_unknown_detection() {
     
     detect_os
     
-    assert_equals "wsl-unknown" "$OS_TYPE" "OS_TYPE should be wsl-unknown" && \
+    assert_equals "unknown" "$OS_TYPE" "OS_TYPE should be unknown for unrecognized WSL distro" && \
     assert_equals "WSL (Unknown)" "$OS_DISPLAY_NAME" "OS_DISPLAY_NAME should be WSL (Unknown)" && \
     assert_equals "true" "$IS_WSL" "IS_WSL should be true"
 }

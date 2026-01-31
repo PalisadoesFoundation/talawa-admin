@@ -129,7 +129,7 @@ detect_os() {
             OS_TYPE="wsl-redhat"
             OS_DISPLAY_NAME="WSL (RHEL/CentOS/Fedora)"
         else
-            OS_TYPE="wsl-unknown"
+            OS_TYPE="unknown"
             OS_DISPLAY_NAME="WSL (Unknown)"
         fi
     # Check for native macOS
