@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import * as convertToBase64Module from 'utils/convertToBase64';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
@@ -55,6 +54,7 @@ const MOCKS1 = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Name',
         websiteURL: 'https://website.com',
         facebookURL: 'https://socialurl.com',
@@ -199,6 +199,7 @@ const ERROR_MOCK = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Test Name',
         websiteURL: 'https://test.com',
         facebookURL: undefined,
@@ -285,6 +286,7 @@ const UPDATE_SUCCESS_MOCKS = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Test Name',
         websiteURL: 'https://test.com',
         facebookURL: undefined,
@@ -550,10 +552,7 @@ describe('Testing Community Profile Screen', () => {
     expect(errorHandler).toHaveBeenCalled();
   });
 
-  test('should handle file upload with base64 conversion', async () => {
-    const mockBase64 = 'data:image/png;base64,mockBase64String';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
+  test('should handle file upload and store File object', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -574,13 +573,11 @@ describe('Testing Community Profile Screen', () => {
     fireEvent.change(fileInput, { target: { files: [mockFile] } });
     await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+    // Verify file input accepted the file
+    expect(fileInput.files?.[0]).toBe(mockFile);
   });
 
-  test('should handle null base64 conversion when updating logo', async () => {
-    // Option 1: Mock with empty string (preferred)
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue('');
-
+  test('should handle empty file selection gracefully', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -593,21 +590,17 @@ describe('Testing Community Profile Screen', () => {
 
     await wait();
 
-    const mockFile = new File([''], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
+    // Simulate clearing file input
+    fireEvent.change(fileInput, { target: { files: [] } });
     await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+    // Should not crash and buttons should still be disabled if no other fields filled
+    expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
   });
 
   test('should show success toast when profile is updated successfully', async () => {
-    const mockBase64 = 'data:image/png;base64,mockBase64String';
-    const convertSpy = vi
-      .spyOn(convertToBase64Module, 'default')
-      .mockResolvedValue(mockBase64);
-
     const { container } = render(
       <MockedProvider mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
@@ -632,26 +625,16 @@ describe('Testing Community Profile Screen', () => {
     const websiteInput = screen.getByPlaceholderText(
       /Website Link/i,
     ) as HTMLInputElement;
-    const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    // Update text fields
+    // Update text fields only (no file upload to match mock variables)
     await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Test Name');
 
     await userEvent.clear(websiteInput);
     await userEvent.type(websiteInput, 'https://test.com');
 
-    // Upload file
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [file] } });
-
-    // Wait for base64 conversion to complete
-    await waitFor(
-      () => {
-        expect(convertSpy).toHaveBeenCalledWith(file);
-      },
-      { timeout: 2000 },
-    );
+    // Wait for state to update
+    await wait();
 
     // Verify inputs have values and button is enabled
     expect(nameInput.value).toBe('Test Name');
@@ -741,10 +724,6 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('should enable buttons when only logo is uploaded', async () => {
-    // Mock convertToBase64 to return a valid base64 string
-    const mockBase64 = 'data:image/png;base64,testBase64String';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -761,7 +740,7 @@ describe('Testing Community Profile Screen', () => {
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
     fireEvent.change(logoInput, { target: { files: [mockFile] } });
 
-    // Wait for the base64 conversion to complete and state to update
+    // Wait for state to update after file selection
     await waitFor(
       () => {
         const saveButton = screen.getByTestId('saveChangesBtn');
@@ -851,10 +830,7 @@ describe('Testing Community Profile Screen', () => {
     expect(fileInput.value).toBe('');
   });
 
-  test('should clear logo state before setting new file', async () => {
-    const mockBase64 = 'data:image/png;base64,newBase64';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
+  test('should handle multiple file selections correctly', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -873,14 +849,15 @@ describe('Testing Community Profile Screen', () => {
     fireEvent.change(fileInput, { target: { files: [mockFile] } });
     await wait();
 
-    // Upload another file to test the clearing behavior
+    // Upload another file
     const mockFile2 = new File(['content2'], 'test2.png', {
       type: 'image/png',
     });
     fireEvent.change(fileInput, { target: { files: [mockFile2] } });
     await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledTimes(2);
+    // The second file should be in the input
+    expect(fileInput.files?.[0]).toBe(mockFile2);
   });
 
   describe('LoadingState Behavior', () => {

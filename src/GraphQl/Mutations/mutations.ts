@@ -570,6 +570,7 @@ export const UPDATE_POST_VOTE = gql`
 
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
+    $logo: Upload
     $facebookURL: String
     $githubURL: String
     $instagramURL: String
@@ -584,6 +585,7 @@ export const UPDATE_COMMUNITY_PG = gql`
   ) {
     updateCommunity(
       input: {
+        logo: $logo
         facebookURL: $facebookURL
         githubURL: $githubURL
         inactivityTimeoutDuration: $inactivityTimeoutDuration
@@ -598,6 +600,8 @@ export const UPDATE_COMMUNITY_PG = gql`
       }
     ) {
       id
+      logoMimeType
+      logoURL
     }
   }
 `;
