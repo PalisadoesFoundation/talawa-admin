@@ -1,5 +1,5 @@
 import js from '@eslint/js';
-import type { Linter } from 'eslint';
+import type { Linter, ESLint } from 'eslint';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import imports from 'eslint-plugin-import';
@@ -42,12 +42,12 @@ export const baseTypeScriptConfig: Linter.Config = {
     },
   },
   plugins: {
-    react: react as any,
-    '@typescript-eslint': ts as any,
-    vitest: vitest as any,
-    import: imports as any,
-    prettier: prettier as any,
-    tsdoc: tsdoc as any,
+    react: react as unknown as ESLint.Plugin,
+    '@typescript-eslint': ts as unknown as ESLint.Plugin,
+    vitest: vitest as unknown as ESLint.Plugin,
+    import: imports as unknown as ESLint.Plugin,
+    prettier: prettier as unknown as ESLint.Plugin,
+    tsdoc: tsdoc as unknown as ESLint.Plugin,
   },
   settings: {
     react: {
