@@ -3,7 +3,7 @@ import path from 'node:path';
 
 type MessageIds = 'preferCrud';
 
-interface InterfaceRuleOptions {
+export interface InterfaceRuleOptions {
   keywords?: string[];
   variants?: string[];
   ignorePaths?: string[];
@@ -15,7 +15,7 @@ type Options = [InterfaceRuleOptions?];
 const DEFAULT_KEYWORDS = ['onSubmit', 'onConfirm', 'onPrimary', 'onSave'];
 const DEFAULT_VARIANTS = ['BaseModal'];
 const CRUD_IMPORT_PATH =
-  'src/shared-components/CRUDModalTemplate/CRUDModalTemplate';
+  'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 /**
  * Simple glob matcher for file paths and patterns
@@ -48,7 +48,7 @@ const matchesGlob = (str: string, pattern: string): boolean => {
  * - ignorePaths: Array of glob patterns for files to ignore
  * - importPathPatterns: Array of import path patterns to match
  */
-const rule: TSESLint.RuleModule<MessageIds, Options> = {
+const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -384,4 +384,4 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
   },
 };
 
-export default rule;
+export default preferCrudModalTemplate;
