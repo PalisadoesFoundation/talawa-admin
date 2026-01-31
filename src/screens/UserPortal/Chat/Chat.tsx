@@ -66,6 +66,7 @@ export default function Chat(): JSX.Element {
   const { orgId } = useParams<{ orgId: string }>();
 
   const [chats, setChats] = useState<NewChatType[]>([]);
+  const [allChats, setAllChats] = useState<NewChatType[]>([]);
   const [selectedContact, setSelectedContact] = useState('');
   const [filterType, setFilterType] = useState('all');
 
@@ -111,6 +112,7 @@ export default function Chat(): JSX.Element {
                 (chat: NewChatType) => chat.organization?.id === orgId,
               )
             : data.chatsByUser;
+          setAllChats(filteredChats);
           setChats(filteredChats);
         }
       } else if (filterType === 'unread') {
@@ -124,29 +126,34 @@ export default function Chat(): JSX.Element {
           setChats(filteredChats);
         }
       } else if (filterType === 'group') {
-        const { data } = await chatsListRefetch();
-        const list: NewChatType[] = data?.chatsByUser || [];
-        // A chat is a group if it has more than 2 members or isGroup is true
-        const groups = list.filter((chat: NewChatType) => isGroupChat(chat));
-        const filteredGroups = orgId
-          ? groups.filter(
-              (chat: NewChatType) => chat.organization?.id === orgId,
-            )
-          : groups;
-        setChats(filteredGroups);
+        if (chatsListData?.chatsByUser) {
+          const list: NewChatType[] = chatsListData.chatsByUser;
+          const allFiltered = orgId
+            ? list.filter(
+                (chat: NewChatType) => chat.organization?.id === orgId,
+              )
+            : list;
+          const groups = allFiltered.filter((chat: NewChatType) =>
+            isGroupChat(chat),
+          );
+          setChats(groups);
+        }
       }
     }
     getChats();
   }, [filterType, orgId]);
 
   React.useEffect(() => {
-    if (filterType === 'all' && chatsListData?.chatsByUser) {
+    if (chatsListData?.chatsByUser) {
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter(
             (chat: NewChatType) => chat.organization?.id === orgId,
           )
         : chatsListData.chatsByUser;
-      setChats(filteredChats);
+      setAllChats(filteredChats);
+      if (filterType === 'all') {
+        setChats(filteredChats);
+      }
     }
   }, [chatsListData, filterType, orgId]);
 
@@ -305,7 +312,7 @@ export default function Chat(): JSX.Element {
           toggleCreateDirectChatModal={toggleCreateDirectChatModal}
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
-          chats={chats}
+          chats={allChats}
         ></CreateDirectChat>
       )}
     </>

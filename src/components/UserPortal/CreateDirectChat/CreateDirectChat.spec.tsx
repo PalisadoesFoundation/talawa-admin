@@ -495,4 +495,52 @@ describe('CreateDirectChatModal', () => {
     expect(chatsListRefetch).not.toHaveBeenCalled();
     expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
   });
+
+  test('should detect duplicate chat even when full chat list is provided', async () => {
+    const user = userEvent.setup();
+    const fullChatList: NewChatType[] = [
+      {
+        id: 'existing-direct-chat',
+        isGroup: false,
+        name: 'Current User & Test User 2',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        members: {
+          edges: [
+            {
+              cursor: 'cursor-1',
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              cursor: 'cursor-2',
+              node: {
+                user: { id: 'user-2', name: 'Test User 2' },
+                role: 'regular',
+              },
+            },
+          ],
+        },
+        messages: { edges: [] },
+      },
+    ];
+
+    renderComponent({ chats: fullChatList });
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    await user.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.objectContaining({
+          message: expect.stringContaining('Test User 2'),
+        }),
+      );
+    });
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
+  });
 });
