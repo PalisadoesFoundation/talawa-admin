@@ -21,7 +21,7 @@
  * ```
  *
  * @remarks
- * - The modal is displayed conditionally based on the `showModal` state.
+ * - The modal visibility is derived from `modalState.isOpen` via `useModalState`.
  * - The `onUpdate` callback is invoked after the modal is closed, if provided.
  * - The button uses a custom style from EventRegistrantsWrapper.module.css.
  */
