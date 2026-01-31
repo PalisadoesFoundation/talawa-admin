@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import IconComponent from './IconComponent';
 import { describe, it, expect } from 'vitest';
 
@@ -88,6 +88,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     name: 'volunteer',
     testId: 'Icon-Component-Volunteer',
   },
+  Volunteers: {
+    name: 'volunteers',
+    testId: 'Icon-Component-Volunteer',
+  },
   Transactions: {
     name: 'transactions',
     testId: 'Icon-Component-Transactions',
@@ -105,6 +109,7 @@ describe('IconComponent rendering', () => {
       expect(
         screen.getByTestId(screenTestIdMap[component].testId),
       ).toBeInTheDocument();
+      cleanup();
     }
   });
 });

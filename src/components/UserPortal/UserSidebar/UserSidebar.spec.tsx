@@ -6,7 +6,7 @@ import type { FetchResult } from '@apollo/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { type MockedResponse } from '@apollo/client/testing';
 import UserSidebar from './UserSidebar';
-import type { InterfaceUserSidebarProps } from './UserSidebar';
+import type { InterfaceUserSidebarProps } from 'types/UserPortal/UserSidebar/interface';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';

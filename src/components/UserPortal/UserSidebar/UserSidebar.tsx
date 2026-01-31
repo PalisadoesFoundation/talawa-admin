@@ -3,7 +3,8 @@
  *
  * This component renders the sidebar for the user portal.
  *
- * @param props - The props for the UserSidebar component.
+ * @param hideDrawer - Whether the drawer is hidden.
+ * @param setHideDrawer - Setter for drawer visibility.
  * @returns The rendered UserSidebar component.
  */
 
@@ -19,11 +20,7 @@ import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './UserSidebar.module.css';
-
-export interface InterfaceUserSidebarProps {
-  hideDrawer: boolean;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { InterfaceUserSidebarProps } from 'types/UserPortal/UserSidebar/interface';
 
 const UserSidebar = ({
   hideDrawer,

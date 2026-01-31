@@ -1,3 +1,5 @@
+import type { InterfaceCalendarProps } from 'types/Event/interface';
+
 /**
  * View type options for the EventCalendar component.
  */
@@ -17,3 +19,12 @@ export interface IEventHeaderProps {
 }
 
 export type InterfaceEventHeaderProps = IEventHeaderProps;
+
+/**
+ * Props for EventCalendar component.
+ */
+export interface InterfaceEventCalenderProps extends InterfaceCalendarProps {
+  onMonthChange: (month: number, year: number) => void;
+  currentMonth: number;
+  currentYear: number;
+}

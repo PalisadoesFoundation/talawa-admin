@@ -43,22 +43,13 @@ import { ViewType } from 'types/shared-components/EventCalender/interface';
 import HolidayCard from '../../HolidayCards/HolidayCard';
 import { holidays, months, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
-import type {
-  InterfaceEvent,
-  InterfaceCalendarProps,
-  InterfaceIOrgList,
-} from 'types/Event/interface';
+import type { InterfaceEvent, InterfaceIOrgList } from 'types/Event/interface';
+import type { InterfaceEventCalenderProps } from 'types/shared-components/EventCalender/interface';
 import { UserRole } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-const Calendar: React.FC<
-  InterfaceCalendarProps & {
-    onMonthChange: (month: number, year: number) => void;
-    currentMonth: number;
-    currentYear: number;
-  }
-> = ({
+const Calendar: React.FC<InterfaceEventCalenderProps> = ({
   eventData,
   refetchEvents,
   orgData,
