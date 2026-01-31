@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
-import styles from '../../style/app-fixed.module.css';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import {
   Days,
   Frequency,
@@ -312,73 +309,57 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   };
 
   return (
-    <>
-      <BaseModal
-        show={customRecurrenceModalIsOpen}
-        onHide={hideCustomRecurrenceModal}
-        centered
-        title={t('customRecurrence')}
-        bodyClassName="pb-2"
-        showCloseButton={true}
-        closeButtonVariant="danger"
-        dataTestId="customRecurrenceModal"
-      >
-        <RecurrenceFrequencySection
-          frequency={frequency}
-          localInterval={localInterval}
-          onIntervalChange={handleIntervalChange}
-          onFrequencyChange={handleFrequencyChange}
-          t={t}
-        />
+    <CRUDModalTemplate
+      open={customRecurrenceModalIsOpen}
+      onClose={hideCustomRecurrenceModal}
+      centered
+      title={t('customRecurrence')}
+      data-testid="customRecurrenceModal"
+      onPrimary={handleCustomRecurrenceSubmit}
+      primaryText={t('done')}
+      hideSecondary
+    >
+      <RecurrenceFrequencySection
+        frequency={frequency}
+        localInterval={localInterval}
+        onIntervalChange={handleIntervalChange}
+        onFrequencyChange={handleFrequencyChange}
+        t={t}
+      />
 
-        <RecurrenceWeeklySection
-          frequency={frequency}
-          byDay={byDay}
-          onDayClick={handleDayClick}
-          onWeekdayKeyDown={handleWeekdayKeyDown}
-          t={t}
-        />
+      <RecurrenceWeeklySection
+        frequency={frequency}
+        byDay={byDay}
+        onDayClick={handleDayClick}
+        onWeekdayKeyDown={handleWeekdayKeyDown}
+        t={t}
+      />
 
-        <RecurrenceMonthlySection
-          frequency={frequency}
-          recurrenceRuleState={recurrenceRuleState}
-          setRecurrenceRuleState={setRecurrenceRuleState}
-          startDate={startDate}
-          t={t}
-        />
+      <RecurrenceMonthlySection
+        frequency={frequency}
+        recurrenceRuleState={recurrenceRuleState}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        startDate={startDate}
+        t={t}
+      />
 
-        <RecurrenceYearlySection
-          frequency={frequency}
-          startDate={startDate}
-          t={t}
-        />
+      <RecurrenceYearlySection
+        frequency={frequency}
+        startDate={startDate}
+        t={t}
+      />
 
-        <RecurrenceEndOptionsSection
-          frequency={frequency}
-          selectedRecurrenceEndOption={selectedRecurrenceEndOption}
-          recurrenceRuleState={recurrenceRuleState}
-          localCount={localCount}
-          onRecurrenceEndOptionChange={handleRecurrenceEndOptionChange}
-          onCountChange={handleCountChange}
-          setRecurrenceRuleState={setRecurrenceRuleState}
-          t={t}
-        />
-
-        <hr className="mt-4 mb-2 mx-2" />
-
-        <div className="mx w-100 position-relative">
-          <Button
-            className={styles.recurrenceRuleSubmitBtn}
-            data-testid="customRecurrenceSubmitBtn"
-            data-cy="customRecurrenceSubmitBtn"
-            onClick={handleCustomRecurrenceSubmit}
-            aria-label={t('done')}
-          >
-            {t('done')}
-          </Button>
-        </div>
-      </BaseModal>
-    </>
+      <RecurrenceEndOptionsSection
+        frequency={frequency}
+        selectedRecurrenceEndOption={selectedRecurrenceEndOption}
+        recurrenceRuleState={recurrenceRuleState}
+        localCount={localCount}
+        onRecurrenceEndOptionChange={handleRecurrenceEndOptionChange}
+        onCountChange={handleCountChange}
+        setRecurrenceRuleState={setRecurrenceRuleState}
+        t={t}
+      />
+    </CRUDModalTemplate>
   );
 };
 

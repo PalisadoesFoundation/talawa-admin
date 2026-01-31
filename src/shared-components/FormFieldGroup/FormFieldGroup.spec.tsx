@@ -372,6 +372,39 @@ describe('FormTextField', () => {
     expect(input.maxLength).toBe(50);
     expect(input.autocomplete).toBe('email');
   });
+
+  test('does not spread type attribute when as="textarea"', () => {
+    render(
+      <FormTextField
+        name="notes"
+        label="Notes"
+        value="test notes"
+        onChange={() => {}}
+        as="textarea"
+      />,
+    );
+
+    const textarea = screen.getByDisplayValue('test notes');
+    expect(textarea.tagName).toBe('TEXTAREA');
+    expect(textarea).not.toHaveAttribute('type');
+  });
+
+  test('handles undefined onChange handler gracefully', async () => {
+    const user = userEvent.setup();
+    render(
+      <FormTextField
+        name="notes"
+        label="Notes"
+        value=""
+        onChange={undefined}
+      />,
+    );
+
+    const input = screen.getByRole('textbox');
+    // Should not throw
+    await user.type(input, 'test');
+    expect(input).toBeInTheDocument();
+  });
 });
 
 describe('FormSelectField', () => {

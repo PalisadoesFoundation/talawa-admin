@@ -8,8 +8,10 @@ import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import styles from './EventForm.module.css';
 import type {
   IEventFormProps,
   IEventFormSubmitPayload,
@@ -251,58 +253,46 @@ const EventForm: React.FC<IEventFormProps> = ({
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <label htmlFor="eventTitle">{t('eventName')}</label>
-        <Form.Control
-          type="text"
-          id="eventTitle"
+      <form onSubmit={handleSubmit}>
+        <FormTextField
+          name="eventTitle"
+          label={t('eventName')}
           placeholder={t('enterName')}
-          autoComplete="off"
           required
           value={formState.name}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, name: e.target.value });
-          }}
+          onChange={(value) => setFormState({ ...formState, name: value })}
           data-testid="eventTitleInput"
           data-cy="eventTitleInput"
-          aria-label={t('eventName')}
         />
-        <label htmlFor="eventDescription">{tCommon('description')}</label>
-        <Form.Control
-          as="textarea"
-          id="eventDescription"
+        <FormTextField
+          name="eventDescription"
+          label={tCommon('description')}
           placeholder={t('enterDescription')}
-          autoComplete="off"
           required
           value={formState.description}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, description: e.target.value });
-          }}
+          onChange={(value) =>
+            setFormState({ ...formState, description: value })
+          }
           data-testid="eventDescriptionInput"
           data-cy="eventDescriptionInput"
-          aria-label={tCommon('description')}
         />
-        <label htmlFor="eventLocation">{tCommon('location')}</label>
-        <Form.Control
-          type="text"
-          id="eventLocation"
+        <FormTextField
+          name="eventLocation"
+          label={tCommon('location')}
           placeholder={tCommon('enterLocation')}
-          autoComplete="off"
           required
           value={formState.location}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, location: e.target.value });
-          }}
+          onChange={(value) => setFormState({ ...formState, location: value })}
           data-testid="eventLocationInput"
           data-cy="eventLocationInput"
-          aria-label={tCommon('location')}
         />
         <div className={styles.datedivEvents}>
           <div>
             <DatePicker
+              name="startDate"
               label={tCommon('startDate')}
               className={styles.dateboxEvents}
               value={dayjs(formState.startDate)}
@@ -328,6 +318,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           </div>
           <div>
             <DatePicker
+              name="endDate"
               label={tCommon('endDate')}
               className={styles.dateboxEvents}
               value={dayjs(formState.endDate)}
@@ -412,38 +403,39 @@ const EventForm: React.FC<IEventFormProps> = ({
         </div>
         <div className={styles.checkboxdivEvents}>
           <div className={styles.dispflexEvents}>
-            <label htmlFor="allday">{t('allDay')}?</label>
-            <Form.Switch
+            <FormCheckField
               className={`me-4 ${styles.switch}`}
               id="allday"
-              type="checkbox"
+              name="allDay"
+              label={`${t('allDay')}?`}
+              type="switch"
               checked={formState.allDay}
               data-testid="allDayEventCheck"
               onChange={toggleAllDay}
-              aria-label={t('allDay')}
             />
           </div>
           {showRecurrenceToggle && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="recurring">{t('recurring')}:</label>
-              <Form.Switch
+              <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="recurring"
-                type="checkbox"
+                name="recurring"
+                label={`${t('recurring')}:`}
+                type="switch"
                 checked={recurrenceEnabled}
                 data-testid="recurringEventCheck"
                 onChange={toggleRecurrence}
-                aria-label={t('recurring')}
               />
             </div>
           )}
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="registrable">{t('registerable')}?</label>
-              <Form.Switch
+              <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="registrable"
-                type="checkbox"
+                name="registrable"
+                label={`${t('registerable')}?`}
+                type="switch"
                 checked={formState.isRegisterable}
                 data-testid="registerableEventCheck"
                 onChange={(): void =>
@@ -452,17 +444,17 @@ const EventForm: React.FC<IEventFormProps> = ({
                     isRegisterable: !prev.isRegisterable,
                   }))
                 }
-                aria-label={t('registerable')}
               />
             </div>
           )}
           {showCreateChat && (
             <div className={styles.dispflexEvents}>
-              <label htmlFor="createChat">{t('createChat')}?</label>
-              <Form.Switch
+              <FormCheckField
                 className={`me-4 ${styles.switch}`}
                 id="chat"
-                type="checkbox"
+                name="createChat"
+                label={`${t('createChat')}?`}
+                type="switch"
                 data-testid="createChatCheck"
                 checked={formState.createChat}
                 onChange={(): void =>
@@ -471,7 +463,6 @@ const EventForm: React.FC<IEventFormProps> = ({
                     createChat: !prev.createChat,
                   }))
                 }
-                aria-label={t('createChat')}
               />
             </div>
           )}
@@ -513,7 +504,7 @@ const EventForm: React.FC<IEventFormProps> = ({
             {tCommon('cancel')}
           </Button>
         )}
-      </Form>
+      </form>
 
       {recurrenceEnabled && formState.recurrenceRule && (
         <CustomRecurrenceModal

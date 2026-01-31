@@ -167,7 +167,7 @@
   "contactInfoHeading": "Contact Information",
   "educationGrade": "Educational Grade",
   "employmentStatus": "Employment Status",
-  "fileTooLarge": "File is too large. Maximum size is 5MB.",
+  "fileTooLarge": "File is too large. Maximum size is {{size}}MB.",
   "homePhoneNumber": "Home Phone Number",
   "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
   "maritalStatus": "Marital Status",
@@ -271,14 +271,6 @@
   "imageNotFound": "Image not found",
   "changeLanguage": "Change Language",
   "selectField": "Select {{fieldName}}",
-  "userEvents": {
-    "presetToday": "Today",
-    "presetThisWeek": "This Week",
-    "presetThisMonth": "This Month",
-    "presetNext7Days": "Next 7 Days",
-    "presetNext30Days": "Next 30 Days",
-    "presetNextMonth": "Next Month"
-  },
   "ascending": "Ascending",
   "descending": "Descending",
   "noRegistrations": "No of Registrations",

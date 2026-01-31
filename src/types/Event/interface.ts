@@ -139,7 +139,7 @@ export interface IDeleteEventModalProps {
   eventListCardProps: IEventListCard;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   deleteEventHandler: (
     deleteOption?: 'single' | 'following' | 'all',
@@ -151,7 +151,7 @@ export interface IPreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   isRegistered?: boolean;
   userId: string;
@@ -159,24 +159,24 @@ export interface IPreviewEventModalProps {
   eventEndDate: Date;
   setEventStartDate: Dispatch<SetStateAction<Date>>;
   setEventEndDate: Dispatch<SetStateAction<Date>>;
-  alldaychecked: boolean;
+  allDayChecked: boolean;
   setAllDayChecked: Dispatch<SetStateAction<boolean>>;
-  publicchecked: boolean;
+  publicChecked: boolean;
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
-  registrablechecked: boolean;
-  setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
+  registerableChecked: boolean;
+  setRegisterableChecked: Dispatch<SetStateAction<boolean>>;
   inviteOnlyChecked: boolean;
   setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
     name: string;
-    eventdescrip: string;
+    eventDescription: string;
     location: string;
     startTime: string;
     endTime: string;
@@ -194,7 +194,7 @@ export interface IUpdateEventModalProps {
   eventListCardProps: IEventListCard;
   recurringEventUpdateModalIsOpen: boolean;
   toggleRecurringEventUpdateModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
   updateEventHandler: () => Promise<void>;
 }
@@ -208,7 +208,7 @@ export interface IAttendanceStatisticsModalProps {
     attendanceRate: number;
   };
   memberData: IMember[];
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
 }
 
 export interface IEventsAttendedMemberModalProps {
