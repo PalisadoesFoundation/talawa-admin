@@ -28,6 +28,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const filePath = path.join(__dirname, '../public/locales/en/common.json');
+const localesDir = path.join(__dirname, '../public/locales');
+const localeFilePaths = fs
+  .readdirSync(localesDir, { withFileTypes: true })
+  .filter((dirent) => dirent.isDirectory())
+  .flatMap((dirent) =>
+    ['common.json', 'translation.json'].map((file) =>
+      path.join(localesDir, dirent.name, file),
+    ),
+  );
 
 /**
  * Checks if a string follows camelCase convention.
@@ -134,8 +143,9 @@ const findInvalidKeys = (obj, content, prefix = '') => {
       });
     }
 
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      invalid.push(...findInvalidKeys(obj[key], content, fullPath));
+    const value = obj[key];
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      invalid.push(...findInvalidKeys(value, content, fullPath));
     }
   }
   return invalid;
@@ -149,30 +159,38 @@ const runValidation = () => {
   console.log('Checking i18n key naming conventions...\n');
 
   try {
-    if (!fs.existsSync(filePath)) {
-      console.error(`❌ File not found: ${filePath}`);
+    const filesToCheck = localeFilePaths.length ? localeFilePaths : [filePath];
+    const missing = filesToCheck.filter((file) => !fs.existsSync(file));
+    if (missing.length > 0) {
+      missing.forEach((file) => console.error(`❌ File not found: ${file}`));
       process.exit(1);
     }
 
-    const content = fs.readFileSync(filePath, 'utf8');
-    const json = JSON.parse(content);
-
-    const invalidKeys = findInvalidKeys(json, content);
+    const invalidKeys = filesToCheck.flatMap((file) => {
+      const content = fs.readFileSync(file, 'utf8');
+      const json = JSON.parse(content);
+      return findInvalidKeys(json, content).map((violation) => ({
+        ...violation,
+        file,
+      }));
+    });
 
     if (invalidKeys.length > 0) {
-      const relPath = path.relative(process.cwd(), filePath);
-      console.error(
-        `❌ Found ${invalidKeys.length} non-camelCase key(s) in ${relPath}:\n`,
-      );
+      console.error(`❌ Found ${invalidKeys.length} non-camelCase key(s):\n`);
 
-      invalidKeys.forEach(({ key, lineNumber, violations, suggestion }) => {
-        console.error(`  • ${key}${lineNumber ? ` (line ${lineNumber})` : ''}`);
-        violations.forEach((v) => console.error(`    ❌ ${v}`));
-        if (suggestion !== key) {
-          console.error(`    ✅ Suggested: ${suggestion}`);
-        }
-        console.error('');
-      });
+      invalidKeys.forEach(
+        ({ file, key, lineNumber, violations, suggestion }) => {
+          const relPath = path.relative(process.cwd(), file);
+          console.error(
+            `  • ${relPath}: ${key}${lineNumber ? ` (line ${lineNumber})` : ''}`,
+          );
+          violations.forEach((v) => console.error(`    ❌ ${v}`));
+          if (suggestion !== key) {
+            console.error(`    ✅ Suggested: ${suggestion}`);
+          }
+          console.error('');
+        },
+      );
 
       process.exit(1);
     } else {
