@@ -234,13 +234,10 @@ test_wsl_env_var_detection() {
     
     detect_os
     
-    local result=$?
     unset WSL_DISTRO_NAME
     
     assert_equals "wsl-debian" "$OS_TYPE" "OS_TYPE should be wsl-debian with WSL_DISTRO_NAME" && \
     assert_equals "true" "$IS_WSL" "IS_WSL should be true with WSL_DISTRO_NAME"
-    
-    return $result
 }
 
 test_unknown_os_detection() {
@@ -335,11 +332,16 @@ test_exported_variables() {
     
     detect_os
     
-    bash -c "[[ -n \$OS_TYPE ]]" && \
-    bash -c "[[ -n \$OS_DISPLAY_NAME ]]" && \
-    bash -c "[[ -n \$IS_WSL ]]" && \
-    bash -c "[[ -n \$_OS_DETECTED ]]" && \
-    assert_equals "true" "true" "Variables should be exported to subshells"
+    local expected_OS_TYPE="$OS_TYPE"
+    local expected_OS_DISPLAY_NAME="$OS_DISPLAY_NAME"
+    local expected_IS_WSL="$IS_WSL"
+    local expected_OS_DETECTED="$_OS_DETECTED"
+    
+    bash -c "[[ \"\$OS_TYPE\" == \"$expected_OS_TYPE\" ]]" && \
+    bash -c "[[ \"\$OS_DISPLAY_NAME\" == \"$expected_OS_DISPLAY_NAME\" ]]" && \
+    bash -c "[[ \"\$IS_WSL\" == \"$expected_IS_WSL\" ]]" && \
+    bash -c "[[ \"\$_OS_DETECTED\" == \"$expected_OS_DETECTED\" ]]" && \
+    assert_equals "true" "true" "Variables should be exported to subshells with correct values"
 }
 
 test_is_wsl_reset() {
