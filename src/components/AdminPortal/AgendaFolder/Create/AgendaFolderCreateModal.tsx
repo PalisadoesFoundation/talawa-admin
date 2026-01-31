@@ -11,6 +11,31 @@ import styles from './AgendaFolderCreateModal.module.css';
 
 import type { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
 
+/**
+ * AgendaFolderCreateModal
+ *
+ * A modal component for creating a new agenda folder within an event.
+ * It uses `CRUDModalTemplate` to provide a consistent CRUD-style UI and
+ * handles folder creation via a GraphQL mutation.
+ *
+ * Responsibilities:
+ * - Renders a form to capture agenda folder name and description
+ * - Computes the next folder sequence based on existing folders
+ * - Executes the `CREATE_AGENDA_FOLDER_MUTATION`
+ * - Displays success and error notifications
+ * - Refetches agenda folder data after successful creation
+ * - Prevents rendering when organization context is missing
+ *
+ * @param isOpen - Controls whether the modal is visible
+ * @param hide - Callback to close the modal
+ * @param eventId - ID of the event for which the folder is being created
+ * @param agendaFolderData - Existing agenda folder data used to calculate sequence
+ * @param t - i18n translation function for agenda section
+ * @param refetchAgendaFolder - Callback to refetch agenda folder data after creation
+ *
+ * @returns A JSX element rendering the agenda folder creation modal,
+ *          or `null` if the organization ID is unavailable
+ */
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
