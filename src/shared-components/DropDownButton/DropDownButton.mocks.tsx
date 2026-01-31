@@ -1,3 +1,11 @@
+/**
+ * Mocks and test props for DropDownButton component
+ *
+ * @remarks
+ * This file contains various mock data and test properties for the DropDownButton component.
+ * It is used in unit tests and storybook stories to simulate different scenarios and states of the component.
+ */
+
 import type {
   InterfaceDropDownButtonProps,
   InterfaceDropDownOption,
