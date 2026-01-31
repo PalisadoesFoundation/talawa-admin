@@ -86,6 +86,10 @@ pnpm run check-mock-cleanup || exit 1
 pnpm run check-route-prefix || exit 1
 pnpm run check-localstorage || exit 1
 
+# Design token validation (check for hardcoded values in staged files)
+echo "Running design token validation..."
+pnpm exec tsx scripts/validate-tokens.ts --staged --all || exit 1
+
 git add docs/docs/auto-docs
 
 echo "Node.js checks completed successfully."
