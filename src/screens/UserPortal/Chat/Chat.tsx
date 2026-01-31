@@ -25,7 +25,7 @@
  *
  * @returns  The rendered `chat` component.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +40,6 @@ import styles from './Chat.module.css';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
-// TODO: Update markChatMessagesAsRead to match new schema
 
 import type {
   NewChatType,
@@ -101,10 +100,6 @@ export default function Chat(): JSX.Element {
     variables: { first: 10, after: cursor },
   });
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
-
-  useEffect(() => {
-    // TODO: Update markChatMessagesAsRead to match new schema
-  }, [selectedContact]);
 
   React.useEffect(() => {
     async function getChats(): Promise<void> {
