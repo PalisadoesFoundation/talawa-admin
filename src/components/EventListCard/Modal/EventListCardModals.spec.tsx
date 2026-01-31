@@ -1172,7 +1172,7 @@ describe('EventListCardModals', () => {
 
   test('setCustomRecurrenceModalIsOpen handles direct boolean value true', () => {
     renderComponent();
-    const previewProps = MockPreviewModal.mock.calls[0][0];
+    const previewProps = MockPreviewModal.mock.calls.at(-1)?.[0];
 
     // Check initial state is false
     expect(previewProps.customRecurrenceModalIsOpen).toBe(false);
@@ -1182,51 +1182,51 @@ describe('EventListCardModals', () => {
       previewProps.setCustomRecurrenceModalIsOpen(true);
     });
 
-    // Check state is now true
-    const updatedProps = MockPreviewModal.mock.calls[1][0];
+    // Check state is now true - use latest call
+    const updatedProps = MockPreviewModal.mock.calls.at(-1)?.[0];
     expect(updatedProps.customRecurrenceModalIsOpen).toBe(true);
   });
 
   test('setCustomRecurrenceModalIsOpen handles direct boolean value false', () => {
     renderComponent();
-    const previewProps = MockPreviewModal.mock.calls[0][0];
+    let latestProps = MockPreviewModal.mock.calls.at(-1)?.[0];
 
     // Open first
     act(() => {
-      previewProps.setCustomRecurrenceModalIsOpen(true);
+      latestProps.setCustomRecurrenceModalIsOpen(true);
     });
 
-    // Then close with false
+    // Then close with false - get latest props
+    latestProps = MockPreviewModal.mock.calls.at(-1)?.[0];
     act(() => {
-      const updatedProps = MockPreviewModal.mock.calls[1][0];
-      updatedProps.setCustomRecurrenceModalIsOpen(false);
+      latestProps.setCustomRecurrenceModalIsOpen(false);
     });
 
-    // Check state is now false
-    const finalProps = MockPreviewModal.mock.calls[2][0];
+    // Check state is now false - use latest call
+    const finalProps = MockPreviewModal.mock.calls.at(-1)?.[0];
     expect(finalProps.customRecurrenceModalIsOpen).toBe(false);
   });
 
   test('setCustomRecurrenceModalIsOpen handles functional updater', () => {
     renderComponent();
-    const previewProps = MockPreviewModal.mock.calls[0][0];
+    let latestProps = MockPreviewModal.mock.calls.at(-1)?.[0];
 
     // Use functional updater to toggle from false to true
     act(() => {
-      previewProps.setCustomRecurrenceModalIsOpen((prev: boolean) => !prev);
+      latestProps.setCustomRecurrenceModalIsOpen((prev: boolean) => !prev);
     });
 
-    // Check state is now true
-    const updatedProps = MockPreviewModal.mock.calls[1][0];
-    expect(updatedProps.customRecurrenceModalIsOpen).toBe(true);
+    // Check state is now true - use latest call
+    latestProps = MockPreviewModal.mock.calls.at(-1)?.[0];
+    expect(latestProps.customRecurrenceModalIsOpen).toBe(true);
 
     // Use functional updater again to toggle back to false
     act(() => {
-      updatedProps.setCustomRecurrenceModalIsOpen((prev: boolean) => !prev);
+      latestProps.setCustomRecurrenceModalIsOpen((prev: boolean) => !prev);
     });
 
-    // Check state is now false
-    const finalProps = MockPreviewModal.mock.calls[2][0];
+    // Check state is now false - use latest call
+    const finalProps = MockPreviewModal.mock.calls.at(-1)?.[0];
     expect(finalProps.customRecurrenceModalIsOpen).toBe(false);
   });
 });
