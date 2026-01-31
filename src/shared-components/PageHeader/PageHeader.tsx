@@ -47,7 +47,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './Navbar.module.css';
+import styles from './PageHeader.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import type { InterfacePageHeaderProps } from 'types/shared-components/PageHeader/interface';
@@ -57,6 +57,8 @@ export default function PageHeader({
   search,
   sorting,
   showEventTypeFilter = false,
+  selectedEventType = 'events',
+  onEventTypeChange,
   actions,
 }: InterfacePageHeaderProps) {
   const { t } = useTranslation('translation');
@@ -113,11 +115,13 @@ export default function PageHeader({
                 { label: t('events'), value: 'events' },
                 { label: t('workshops'), value: 'workshops' },
               ]}
-              selectedOption={'events'}
-              onSortChange={() => {}}
+              selectedOption={selectedEventType}
+              onSortChange={(value) => onEventTypeChange?.(value.toString())}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
-              buttonLabel={t('events')}
+              buttonLabel={
+                selectedEventType === 'workshops' ? t('workshops') : t('events')
+              }
             />
           </div>
         )}

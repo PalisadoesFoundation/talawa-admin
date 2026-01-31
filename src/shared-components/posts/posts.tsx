@@ -60,7 +60,7 @@ import Row from 'react-bootstrap/Row';
 import { Add } from '@mui/icons-material';
 import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/PageHeader/PageHeader';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
 import styles from './posts.module.css';

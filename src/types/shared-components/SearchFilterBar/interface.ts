@@ -305,7 +305,7 @@ export interface InterfaceSearchFilterBarAdvanced extends InterfaceSearchFilterB
    * ```ts
    * dropdowns={[
    *   {
-   *     label: 'Sort',
+   *     label: 'sort',
    *     type: 'sort',
    *     options: [...],
    *     selectedOption: sortBy,

@@ -7,7 +7,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.clearAllMocks();
 });
-import PageHeader from './Navbar';
+import PageHeader from './PageHeader';
 
 describe('PageHeader Component', () => {
   it('renders title when provided', () => {

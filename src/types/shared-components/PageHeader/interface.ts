@@ -1,3 +1,4 @@
+import type React from 'react';
 /**
  * Props for PageHeader component.
  */
@@ -17,5 +18,7 @@ export interface InterfacePageHeaderProps {
     testIdPrefix: string;
   }>;
   showEventTypeFilter?: boolean;
+  selectedEventType?: string;
+  onEventTypeChange?: (value: string) => void;
   actions?: React.ReactNode;
 }

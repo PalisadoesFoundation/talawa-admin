@@ -144,7 +144,7 @@ vi.mock('@mui/material', async (importOriginal) => {
 });
 
 // Mock PageHeader to expose sorting options
-vi.mock('shared-components/Navbar/Navbar', () => ({
+vi.mock('shared-components/PageHeader/PageHeader', () => ({
   default: ({
     sorting,
   }: {

@@ -128,7 +128,7 @@ vi.mock('shared-components/pinnedPosts/pinnedPostsLayout', () => ({
 }));
 
 // Mock PageHeader component
-vi.mock('shared-components/Navbar/Navbar', () => ({
+vi.mock('shared-components/PageHeader/PageHeader', () => ({
   default: ({
     search,
     sorting,
