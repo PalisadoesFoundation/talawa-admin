@@ -48,6 +48,7 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.id = 'creator1';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.name = 'John Doe';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.emailAddress =
   'john.doe@example.com';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.isRecurringEventTemplate = false;
 MOCKS_WITH_FIXED_TIME[0].result.data.event.organization = {
   _id: 'orgId',
   id: 'orgId',
