@@ -40,7 +40,7 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-export function debounceInput<T extends (...args: never[]) => unknown>(
+export function debounceInput<T extends (...args: unknown[]) => unknown>(
   fn: T,
   wait = 300,
   options?: InterfaceDebounceInputOptions,
