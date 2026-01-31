@@ -78,8 +78,7 @@ describe('SidebarNavItem Component', () => {
       const user = userEvent.setup();
       renderComponent();
       const button = screen.getByTestId('testBtn');
-      await user.click(button);
-      // No assertion needed as we just check it doesn't throw, which userEvent.click shouldn't either unless element is disabled etc.
+      await expect(user.click(button)).resolves.toBeUndefined();
     });
   });
 

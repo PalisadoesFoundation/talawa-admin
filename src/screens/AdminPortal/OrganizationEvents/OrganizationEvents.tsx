@@ -38,6 +38,7 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
+import { ViewType } from 'types/shared-components/EventCalender/interface';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -82,8 +83,6 @@ interface IEventEdge {
   };
   cursor: string;
 }
-
-import { ViewType } from 'types/shared-components/EventCalender/interface';
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {

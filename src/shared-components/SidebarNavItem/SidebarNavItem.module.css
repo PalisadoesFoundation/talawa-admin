@@ -83,7 +83,7 @@
 
 .leftDrawerActiveButton {
   background-color: var(--leftDrawer-active-button-bg);
-  color: black;
+  color: var(--bs-black);
   font-weight: bold;
 }
 
@@ -94,7 +94,7 @@
 
 .leftDrawerInactiveButton {
   background-color: var(--leftDrawer-inactive-button-bg);
-  color: black;
+  color: var(--bs-black);
 }
 
 .leftDrawerInactiveButton:hover {

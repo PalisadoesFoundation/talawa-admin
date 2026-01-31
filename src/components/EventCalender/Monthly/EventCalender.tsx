@@ -5,7 +5,6 @@
  * (day, month, and year) and displays events and holidays. It provides
  * navigation between dates and months, and allows users to view event details.
  *
- * @param props - The props for the Calendar component.
  * @param eventData - Array of event data to display.
  * @param refetchEvents - Function to refetch events.
  * @param orgData - Organization data for filtering events.
@@ -321,7 +320,7 @@ const Calendar: React.FC<
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
                 >
-                  {expanded === -100 ? 'View less' : 'View all'}
+                  {expanded === -100 ? t('viewLess') : t('viewAll')}
                 </button>
               )}
             </div>
@@ -493,7 +492,7 @@ const Calendar: React.FC<
                   data-testid="more"
                   onClick={() => toggleExpand(index)}
                 >
-                  {expanded === index ? 'View less' : 'View all'}
+                  {expanded === index ? t('viewLess') : t('viewAll')}
                 </button>
               )}
             </div>

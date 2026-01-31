@@ -7,6 +7,9 @@ export enum ViewType {
   YEAR = 'Year View',
 }
 
+/**
+ * Props for EventHeader component.
+ */
 export interface IEventHeaderProps {
   viewType: ViewType;
   handleChangeView: (item: string | null) => void;

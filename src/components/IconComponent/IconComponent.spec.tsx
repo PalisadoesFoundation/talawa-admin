@@ -175,3 +175,15 @@ describe('IconComponent Chat icon', () => {
     expect(icon).toBeInTheDocument();
   });
 });
+describe('IconComponent Volunteer icon', () => {
+  it('renders Volunteer icon with size prop when width/height is provided', () => {
+    // MdOutlineVolunteerActivism uses 'size' prop. We expect the component to use width or height for it.
+    render(<IconComponent name="volunteer" width={24} height={24} />);
+    const icon = screen.getByTestId('Icon-Component-Volunteer');
+    expect(icon).toBeInTheDocument();
+    // React Icons (react-icons) renders an SVG. The size prop sets width and height attributes or style.
+    // For MdOutlineVolunteerActivism (and other react-icons), size usually sets width and height attributes directly.
+    expect(icon).toHaveAttribute('width', '24');
+    expect(icon).toHaveAttribute('height', '24');
+  });
+});

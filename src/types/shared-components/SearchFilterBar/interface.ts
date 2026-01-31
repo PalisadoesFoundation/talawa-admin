@@ -14,7 +14,7 @@ import type React from 'react';
 export interface InterfaceSortingOption {
   /**
    * The display text shown to the user in the dropdown menu.
-   * @example "latest", "oldest", "Most Hours"
+   * @example "latest", "oldest", "most hours"
    */
   label: string;
 
@@ -42,7 +42,7 @@ export interface InterfaceDropdownConfig {
   /**
    * The label/title displayed on the dropdown button.
    * This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
-   * @example "Sort", "Filter plugins", "Time Frame"
+   * @example "sort", "filter plugins", "time frame"
    */
   label: string;
 
@@ -244,8 +244,8 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *       label: 'Filter plugins',
  *       type: 'filter',
  *       options: [
- *         { label: 'All Plugins', value: 'all' },
- *         { label: 'Installed Plugins', value: 'installed' }
+ *         { label: 'all plugins', value: 'all' },
+ *         { label: 'installed plugins', value: 'installed' }
  *       ],
  *       selectedOption: filterState.selectedOption,
  *       onOptionChange: handleFilterChange,
@@ -267,8 +267,8 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *       label: 'Sort',
  *       type: 'sort',
  *       options: [
- *         { label: 'Most Hours', value: 'hours_DESC' },
- *         { label: 'Least Hours', value: 'hours_ASC' }
+ *         { label: 'most hours', value: 'hours_DESC' },
+ *         { label: 'least hours', value: 'hours_ASC' }
  *       ],
  *       selectedOption: sortBy,
  *       onOptionChange: (value) => setSortBy(value as 'hours_DESC' | 'hours_ASC'),
@@ -278,8 +278,8 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *       label: 'Time Frame',
  *       type: 'filter',
  *       options: [
- *         { label: 'All Time', value: 'allTime' },
- *         { label: 'Weekly', value: 'weekly' }
+ *         { label: 'all time', value: 'allTime' },
+ *         { label: 'weekly', value: 'weekly' }
  *       ],
  *       selectedOption: timeFrame,
  *       onOptionChange: (value) => setTimeFrame(value as TimeFrame),

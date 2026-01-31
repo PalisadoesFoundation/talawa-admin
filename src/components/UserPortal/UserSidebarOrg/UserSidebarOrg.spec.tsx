@@ -576,7 +576,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       ...props,
       targets: [
         {
-          name: 'Posts',
+          name: 'posts',
           url: '/user/organization/123',
         },
       ],

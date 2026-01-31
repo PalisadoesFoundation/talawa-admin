@@ -183,23 +183,35 @@ const IconComponent = ({
         />
       );
     case 'volunteer':
-    case 'volunteers':
+    case 'volunteers': {
+      const iconSize = width ?? height;
       return (
         <MdOutlineVolunteerActivism
           fill={fill}
-          height={height}
-          width={width}
+          size={iconSize}
           data-testid="Icon-Component-Volunteer"
         />
       );
-    default:
+    }
+    default: {
+      // Separate known SVG props that might conflict with MUI Icon props or are not valid for MUI icons.
+      // MUI icons accept some standard HTML attributes but have specific 'color' and 'fontSize' prop types.
+      // We extract them to avoid type conflicts if passed as incompatible types (e.g. string vs specific union).
+      const { color, fontSize, ...muiCompatibleProps } = rest;
+
       return (
         <QuestionMarkOutlined
-          {...rest}
+          {...muiCompatibleProps}
           className={styles.iconColor}
+          style={
+            {
+              '--icon-color': fill || 'currentColor',
+            } as React.CSSProperties
+          }
           data-testid="Icon-Component-DefaultIcon"
         />
       );
+    }
   }
 };
 
