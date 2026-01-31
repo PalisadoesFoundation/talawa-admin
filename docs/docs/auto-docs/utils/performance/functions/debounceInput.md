@@ -4,9 +4,9 @@
 
 # Function: debounceInput()
 
-> **debounceInput**\<`T`\>(`fn`, `wait`, `options?`): `T` & `object`
+> **debounceInput**\<`TArgs`, `TReturn`\>(`fn`, `wait`, `options?`): (...`args`) => `TReturn` & `object`
 
-Defined in: [src/utils/performance.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L44)
+Defined in: [src/utils/performance.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L43)
 
 Creates a debounced function tailored for input handlers.
 
@@ -20,15 +20,19 @@ The returned function is the same shape as the function returned by
 
 ## Type Parameters
 
-### T
+### TArgs
 
-`T` *extends* (...`args`) => `unknown`
+`TArgs` *extends* `unknown`[]
+
+### TReturn
+
+`TReturn`
 
 ## Parameters
 
 ### fn
 
-`T`
+(...`args`) => `TReturn`
 
 The function to debounce
 
@@ -46,6 +50,6 @@ Optional override for leading/trailing/maxWait
 
 ## Returns
 
-`T` & `object`
+(...`args`) => `TReturn` & `object`
 
 Debounced function with `cancel` and `flush` methods

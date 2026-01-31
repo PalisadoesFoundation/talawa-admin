@@ -147,10 +147,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   });
 
   const debouncedSearch = useMemo(
-    () =>
-      debounceInput<(value: string) => void>((value: string) =>
-        setSearchTerm(value),
-      ),
+    () => debounceInput((value: string) => setSearchTerm(value)),
     [],
   );
 
