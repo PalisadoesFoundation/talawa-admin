@@ -9,7 +9,6 @@ import { useMutation } from '@apollo/client';
 import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-// translation-check-keyPrefix: agendaSection
 /**
  * AgendaFolderUpdateModal Component
  *
@@ -26,6 +25,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
  *
  * @returns A JSX element that renders the agenda folder update modal.
  */
+// translation-check-keyPrefix: agendaSection
 const AgendaFolderUpdateModal: React.FC<
   InterfaceAgendaFolderUpdateModalProps
 > = ({

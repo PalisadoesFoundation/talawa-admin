@@ -59,7 +59,7 @@ const AgendaItemsUpdateModal: React.FC<
 }) => {
   const [newUrl, setNewUrl] = useState('');
   const { orgId } = useParams();
-  const organizationId = orgId ?? 'organization';
+  const organizationId = orgId ?? '';
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
   const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);
@@ -110,6 +110,10 @@ const AgendaItemsUpdateModal: React.FC<
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
+    if (!organizationId) {
+      NotificationToast.error(t('organizationRequired'));
+      return;
+    }
     const target = e.target;
     if (!target.files || target.files.length === 0) return;
 
@@ -209,7 +213,7 @@ const AgendaItemsUpdateModal: React.FC<
     >
       <form onSubmit={updateAgendaItemHandler}>
         {/* Folder */}
-        <FormFieldGroup name="folder" label={t('folder')}>
+        <FormFieldGroup name="folder" label={t('folder')} inputId="folder">
           <Autocomplete
             options={agendaFolderData ?? []}
             getOptionLabel={(folder) => folder.name}
@@ -228,6 +232,7 @@ const AgendaItemsUpdateModal: React.FC<
               <div ref={params.InputProps.ref} className="position-relative">
                 <input
                   {...params.inputProps}
+                  id="folder"
                   className="form-control"
                   placeholder={t('folderName')}
                 />
@@ -238,7 +243,11 @@ const AgendaItemsUpdateModal: React.FC<
         </FormFieldGroup>
 
         {/* Category */}
-        <FormFieldGroup name="category" label={t('category')}>
+        <FormFieldGroup
+          name="category"
+          label={t('category')}
+          inputId="category"
+        >
           <Autocomplete
             options={agendaItemCategories || []}
             getOptionLabel={(
@@ -259,6 +268,7 @@ const AgendaItemsUpdateModal: React.FC<
               <div ref={params.InputProps.ref} className="position-relative">
                 <input
                   {...params.inputProps}
+                  id="category"
                   className="form-control"
                   placeholder={t('categoryName')}
                 />

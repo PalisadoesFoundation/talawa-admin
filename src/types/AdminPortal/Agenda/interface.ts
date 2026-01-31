@@ -54,10 +54,6 @@ export interface InterfaceAgendaItemInfo {
     id: string;
     name: string;
   } | null;
-  // organization: {
-  //   _id: string;
-  //   name: string;
-  // };
   event: {
     id: string;
     name: string;
@@ -160,13 +156,7 @@ export interface InterfaceFormStateType {
   description: string;
   duration: string;
   category: string;
-  attachments: {
-    name: string;
-    objectName: string;
-    mimeType: string;
-    fileHash: string;
-    previewUrl?: string;
-  }[];
+  attachments: InterfaceAttachment[];
   url: string[];
   folder?: string;
 }
@@ -265,7 +255,7 @@ export interface InterfaceAgendaFolderUpdateModalProps {
   t: (key: string) => string;
 }
 
-interface InterfaceItemFormStateType {
+export interface InterfaceItemFormStateType {
   id: string;
   name: string;
   description: string;

@@ -113,8 +113,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -165,8 +165,8 @@ describe('AgendaItemsCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -233,8 +233,8 @@ describe('AgendaItemsCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -263,8 +263,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -294,8 +294,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -342,8 +342,8 @@ describe('AgendaItemsCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -369,8 +369,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -401,8 +401,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -424,15 +424,15 @@ describe('AgendaItemsCreateModal', () => {
     });
   });
 
-  it('calls hideItemCreateModal on close', async () => {
+  it('calls hide on close', async () => {
     const hideMock = vi.fn();
 
     render(
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={hideMock}
+            isOpen={true}
+            hide={hideMock}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -455,8 +455,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -515,8 +515,8 @@ describe('AgendaItemsCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -549,8 +549,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -579,8 +579,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -601,8 +601,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -635,8 +635,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -672,8 +672,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -709,8 +709,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}
@@ -743,8 +743,8 @@ describe('AgendaItemsCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            agendaItemCreateModalIsOpen
-            hideItemCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             t={t}
             agendaItemCategories={categories}

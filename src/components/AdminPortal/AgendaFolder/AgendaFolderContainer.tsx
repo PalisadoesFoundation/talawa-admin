@@ -77,6 +77,8 @@ function AgendaFolderContainer({
   useEffect(() => {
     if (agendaFolderData) {
       setFolder([...agendaFolderData].sort((a, b) => a.sequence - b.sequence));
+    } else {
+      setFolder([]);
     }
   }, [agendaFolderData]);
   const [folderFormState, setFolderFormState] = useState<{

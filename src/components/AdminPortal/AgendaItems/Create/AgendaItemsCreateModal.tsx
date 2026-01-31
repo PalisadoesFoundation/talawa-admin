@@ -59,7 +59,7 @@ const AgendaItemsCreateModal: React.FC<
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
   const { orgId } = useParams();
-  const organizationId = orgId ?? 'organization';
+  const organizationId = orgId ?? '';
 
   const isSafeUrl = (url: string): boolean => {
     try {
@@ -193,6 +193,10 @@ const AgendaItemsCreateModal: React.FC<
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
+    if (!organizationId) {
+      NotificationToast.error(t('organizationRequired'));
+      return;
+    }
     const target = e.target as HTMLInputElement;
     if (!target.files || target.files.length === 0) return;
 
@@ -261,7 +265,7 @@ const AgendaItemsCreateModal: React.FC<
     >
       <form onSubmit={createAgendaItemHandler}>
         {/* Folder */}
-        <FormFieldGroup name="folder" label={t('folder')}>
+        <FormFieldGroup name="folder" label={t('folder')} inputId="folder">
           <Autocomplete
             options={agendaFolderData ?? []}
             getOptionLabel={(folder) => folder.name}
@@ -280,6 +284,7 @@ const AgendaItemsCreateModal: React.FC<
               <div ref={params.InputProps.ref} className="position-relative">
                 <input
                   {...params.inputProps}
+                  id="folder"
                   className="form-control"
                   placeholder={t('folderName')}
                   data-testid="folderInput"
@@ -291,7 +296,11 @@ const AgendaItemsCreateModal: React.FC<
         </FormFieldGroup>
 
         {/* Category */}
-        <FormFieldGroup name="category" label={t('category')}>
+        <FormFieldGroup
+          name="category"
+          label={t('category')}
+          inputId="category"
+        >
           <Autocomplete
             options={agendaItemCategories || []}
             getOptionLabel={(category) => category.name}
@@ -310,6 +319,7 @@ const AgendaItemsCreateModal: React.FC<
               <div ref={params.InputProps.ref} className="position-relative">
                 <input
                   {...params.inputProps}
+                  id="category"
                   className="form-control"
                   placeholder={t('categoryName')}
                 />

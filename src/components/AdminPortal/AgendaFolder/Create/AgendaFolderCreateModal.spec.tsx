@@ -45,8 +45,8 @@ describe('AgendaFolderCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -98,8 +98,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -158,8 +158,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{
               agendaFoldersByEventId: [
@@ -210,8 +210,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -268,8 +268,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={undefined}
             t={t}
@@ -295,8 +295,8 @@ describe('AgendaFolderCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={hideMock}
+            isOpen={true}
+            hide={hideMock}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -349,8 +349,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -374,13 +374,13 @@ describe('AgendaFolderCreateModal', () => {
     });
   });
 
-  it('does not render modal when agendaFolderCreateModalIsOpen is false', () => {
+  it('does not show modal when isOpen is false', () => {
     render(
       <MockedProvider>
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={false}
-            hideCreateModal={vi.fn()}
+            isOpen={false}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -390,9 +390,7 @@ describe('AgendaFolderCreateModal', () => {
       </MockedProvider>,
     );
 
-    expect(
-      screen.queryByTestId('createAgendaFolderModal'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('correctly calculates sequence when folders have mixed sequence values', async () => {
@@ -433,8 +431,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{
               agendaFoldersByEventId: [
@@ -497,8 +495,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -560,8 +558,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -613,8 +611,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen={true}
-            hideCreateModal={hideMock}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
@@ -683,8 +681,8 @@ describe('AgendaFolderCreateModal', () => {
       >
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{
               agendaFoldersByEventId: [
@@ -717,8 +715,8 @@ describe('AgendaFolderCreateModal', () => {
       <MockedProvider>
         <BrowserRouter>
           <AgendaFolderCreateModal
-            agendaFolderCreateModalIsOpen
-            hideCreateModal={vi.fn()}
+            isOpen={true}
+            hide={vi.fn()}
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: {} as never }}
             t={t}
@@ -729,5 +727,97 @@ describe('AgendaFolderCreateModal', () => {
     );
 
     expect(screen.getByTestId('createAgendaFolderModal')).toBeInTheDocument();
+  });
+
+  it('handles mutation error without crashing when error message is missing', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider
+        link={
+          new StaticMockLink([
+            {
+              request: {
+                query: CREATE_AGENDA_FOLDER_MUTATION,
+                variables: {
+                  input: {
+                    name: 'Weird Error',
+                    description: 'Desc',
+                    eventId: 'event-1',
+                    sequence: 1,
+                    organizationId: 'org-123',
+                  },
+                },
+              },
+              // Apollo-compatible "no message" error
+              error: new Error(),
+            },
+          ])
+        }
+      >
+        <BrowserRouter>
+          <AgendaFolderCreateModal
+            isOpen={true}
+            hide={vi.fn()}
+            eventId="event-1"
+            agendaFolderData={{ agendaFoldersByEventId: [] }}
+            t={t}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/folderName/i), 'Weird Error');
+    await user.type(screen.getByLabelText(/description/i), 'Desc');
+    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Error message not found.',
+      );
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('shows error and renders nothing when orgId is missing', async () => {
+    vi.resetModules();
+
+    vi.doMock('react-router', async () => {
+      const actual = await vi.importActual('react-router');
+      return {
+        ...actual,
+        useParams: () => ({}), // orgId missing
+      };
+    });
+
+    const { default: AgendaFolderCreateModalNoOrg } =
+      await import('./AgendaFolderCreateModal');
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaFolderCreateModalNoOrg
+            isOpen={true}
+            hide={vi.fn()}
+            eventId="event-1"
+            agendaFolderData={{ agendaFoldersByEventId: [] }}
+            t={t}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'organizationRequired',
+      );
+    });
+
+    // component must render nothing
+    expect(
+      screen.queryByTestId('createAgendaFolderModal'),
+    ).not.toBeInTheDocument();
   });
 });

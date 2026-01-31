@@ -14,15 +14,6 @@ const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
 > = ({ isOpen, hide, eventId, agendaFolderData, t, refetchAgendaFolder }) => {
   const { orgId } = useParams();
-  useEffect(() => {
-    if (!orgId) {
-      NotificationToast.error(t('organizationRequired'));
-    }
-  }, [orgId, t]);
-
-  if (!orgId) {
-    return null;
-  }
   // Mutation for creating an agenda item
   const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
   // State to manage form values
@@ -34,6 +25,15 @@ const AgendaFolderCreateModal: React.FC<
       name: '',
     },
   });
+  useEffect(() => {
+    if (!orgId) {
+      NotificationToast.error(t('organizationRequired'));
+    }
+  }, [orgId, t]);
+
+  if (!orgId) {
+    return null;
+  }
 
   /**
    * Handler for creating a new agenda item.

@@ -49,32 +49,20 @@ vi.mock('components/AdminPortal/AgendaFolder/AgendaFolderContainer', () => ({
 vi.mock(
   'components/AdminPortal/AgendaFolder/Create/AgendaFolderCreateModal',
   () => ({
-    default: ({
-      agendaFolderCreateModalIsOpen,
-    }: {
-      agendaFolderCreateModalIsOpen: boolean;
-    }) =>
-      agendaFolderCreateModalIsOpen ? (
-        <div data-testid="agendaFolderCreateModal" />
-      ) : null,
+    default: ({ isOpen }: { isOpen: boolean }) =>
+      isOpen ? <div data-testid="agendaFolderCreateModal" /> : null,
   }),
 );
 
 vi.mock(
   'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal',
   () => ({
-    default: ({
-      agendaItemCreateModalIsOpen,
-      hideItemCreateModal,
-    }: {
-      agendaItemCreateModalIsOpen: boolean;
-      hideItemCreateModal: () => void;
-    }) =>
-      agendaItemCreateModalIsOpen ? (
+    default: ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) =>
+      isOpen ? (
         <button
           type="button"
           data-testid="closeAgendaItemModal"
-          onClick={hideItemCreateModal}
+          onClick={hide}
         />
       ) : null,
   }),
@@ -248,13 +236,21 @@ describe('EventAgenda', () => {
     it('closes agenda item modal when hide handler is called', async () => {
       renderEventAgenda();
 
+      // open modal
       await userEvent.click(await screen.findByTestId('createAgendaItemBtn'));
 
-      await userEvent.click(screen.getByTestId('closeAgendaItemModal'));
+      // modal should exist
+      const closeBtn = await screen.findByTestId('closeAgendaItemModal');
 
-      expect(
-        screen.queryByTestId('agendaItemCreateModal'),
-      ).not.toBeInTheDocument();
+      // close modal
+      await userEvent.click(closeBtn);
+
+      // modal should disappear
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('closeAgendaItemModal'),
+        ).not.toBeInTheDocument();
+      });
     });
 
     it('renders agenda folder container when data is loaded', async () => {
@@ -280,10 +276,11 @@ describe('EventAgenda', () => {
     it('opens agenda folder create modal when button clicked', async () => {
       renderEventAgenda();
 
-      const btn = await screen.findByTestId('createAgendaFolderBtn');
-      await userEvent.click(btn);
+      await userEvent.click(await screen.findByTestId('createAgendaFolderBtn'));
 
-      expect(screen.getByTestId('agendaFolderCreateModal')).toBeInTheDocument();
+      expect(
+        await screen.findByTestId('agendaFolderCreateModal'),
+      ).toBeInTheDocument();
     });
   });
 
