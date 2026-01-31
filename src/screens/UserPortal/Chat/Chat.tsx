@@ -43,22 +43,15 @@ import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirec
 // TODO: Update markChatMessagesAsRead to match new schema
 // import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/UserPortal/Chat/type';
-import type { NewChatType } from 'types/UserPortal/Chat/interface';
+import type {
+  NewChatType,
+  InterfaceContactCardProps,
+} from 'types/UserPortal/Chat/interface';
 
 // Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
 const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {
   return 'id' in chat && !('_id' in chat);
 };
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
 
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });

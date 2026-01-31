@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/ChatRoom/EmptyChatState.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/EmptyChatState.tsx#L24)
+Defined in: [src/components/UserPortal/ChatRoom/EmptyChatState.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/EmptyChatState.tsx#L19)
 
 ## Parameters
 

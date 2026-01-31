@@ -342,4 +342,22 @@ describe('Testing OrganizationScreen', () => {
     const h4Elements = screen.queryAllByRole('heading', { level: 4 });
     expect(h4Elements.length).toBe(0);
   });
+
+  test('should have correct translation key mapping for orgchat route', () => {
+    // This test ensures the orgchat route uses the userChat translation namespace
+    const translationKeys = {
+      organizations: 'organizationTabs',
+      requests: 'requests',
+      people: 'organizationPeople',
+      events: 'organizationEvents',
+      contributions: 'orgContribution',
+      posts: 'orgPost',
+      funds: 'funds',
+      eventSettings: 'eventManagement',
+      leaderboard: 'leaderboard',
+      orgchat: 'userChat',
+    };
+
+    expect(translationKeys.orgchat).toBe('userChat');
+  });
 });

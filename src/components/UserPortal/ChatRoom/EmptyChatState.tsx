@@ -1,20 +1,15 @@
 /**
  * EmptyChatState Component
  *
- * This component displays an empty state when no chat is selected. It shows a calendar icon
- * and a message instructing the user to select a contact.
+ * This component displays an empty state when no chat is selected. It shows a chat bubble icon
+ * and a message instructing the user to click the + icon to start a new chat.
  *
  * @remarks
- * - Uses Material UI's PermContactCalendarIcon for the visual element.
+ * - Uses Material UI's ChatBubbleOutlineIcon for the visual element.
  * - Centered layout using flexbox utilities from react-bootstrap.
  *
- * @param props - The props for the EmptyChatState component.
+ * @param props - The component props containing the message to display.
  * @returns The rendered EmptyChatState component.
- *
- * @example
- * ```tsx
- * <EmptyChatState message="Select a contact to start chatting" />
- * ```
  */
 
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';

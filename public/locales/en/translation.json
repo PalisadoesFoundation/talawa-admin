@@ -1885,7 +1885,7 @@
     "next": "Next"
   },
   "userChatRoom": {
-    "selectContact": "Select a contact to start conversation",
+    "selectContact": "Click the + icon to start a new chat",
     "sendMessage": "Send Message",
     "loading": "Loading...",
     "loadOlderMessages": "Load older messages",

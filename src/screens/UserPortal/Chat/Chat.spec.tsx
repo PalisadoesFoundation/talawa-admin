@@ -383,6 +383,14 @@ describe('Chat Component - Comprehensive Coverage', () => {
     expect(screen.getByTestId('groupChat')).toBeInTheDocument();
   });
 
+  test('should have accessible aria-label on new chat dropdown', async () => {
+    renderComponent();
+    await screen.findByTestId('contact-card-chat-1');
+
+    const dropdown = screen.getByTestId('dropdown');
+    expect(dropdown).toHaveAttribute('aria-label', 'New Chat');
+  });
+
   // ==================== CHAT LIST RENDERING ====================
 
   test('should render loading state and then the list of chats', async () => {
