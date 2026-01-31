@@ -20,6 +20,7 @@ import {
   ReportingTableColumn,
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import {
   PAGE_SIZE,
   ROW_HEIGHT,
@@ -110,7 +111,7 @@ const organizationFunds = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const { isOpen, open, close } = useModalState();
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -121,7 +122,7 @@ const organizationFunds = (): JSX.Element => {
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(fund);
       setFundModalMode(mode);
-      setModalState(true);
+      open();
     },
     [],
   );
@@ -431,8 +432,8 @@ const organizationFunds = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={isOpen}
+        hide={close}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

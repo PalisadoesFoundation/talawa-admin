@@ -7,6 +7,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -87,7 +88,7 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const { isOpen, open, close } = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -96,7 +97,7 @@ const orgFundCampaign = (): JSX.Element => {
     (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
       setCampaign(campaign);
       setCampaignModalMode(mode);
-      setModalState(true);
+      open();
     },
     [],
   );
@@ -468,8 +469,8 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={isOpen}
+        hide={close}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}
