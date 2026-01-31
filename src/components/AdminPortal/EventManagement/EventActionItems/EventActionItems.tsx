@@ -26,6 +26,7 @@ import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 import { WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
@@ -83,10 +84,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -98,20 +95,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
-  });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+  const sameModal = useModalState();
+  const viewModal = useModalState();
+  const deleteModal = useModalState();
+  const statusModal = useModalState();
 
   const handleModalClick = useCallback(
     (actionItem: IActionItemInfo | null, modal: ModalState): void => {
@@ -119,9 +107,24 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         setModalMode(actionItem ? 'edit' : 'create');
       }
       setActionItem(actionItem);
-      openModal(modal);
+      switch (modal) {
+        case ModalState.SAME:
+          sameModal.open();
+          break;
+        case ModalState.VIEW:
+          viewModal.open();
+          break;
+        case ModalState.DELETE:
+          deleteModal.open();
+          break;
+        case ModalState.STATUS:
+          statusModal.open();
+          break;
+        default:
+          break;
+      }
     },
-    [openModal],
+    [sameModal, viewModal, deleteModal, statusModal],
   );
 
   const {
@@ -212,6 +215,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       setBaseEvent(eventData.event.baseEvent);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   if (eventInfoLoading) {
     return (
@@ -533,8 +540,8 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       />
 
       <ItemModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
+        isOpen={sameModal.isOpen}
+        hide={sameModal.close}
         orgId={orgId}
         eventId={eventId}
         actionItemsRefetch={eventActionItemsRefetch}
@@ -548,23 +555,23 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       {actionItem && (
         <>
           <ItemViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
+            isOpen={viewModal.isOpen}
+            hide={viewModal.close}
             item={actionItem}
           />
 
           <ItemUpdateStatusModal
             actionItem={actionItem}
-            isOpen={modalState[ModalState.STATUS]}
-            hide={() => closeModal(ModalState.STATUS)}
+            isOpen={statusModal.isOpen}
+            hide={statusModal.close}
             actionItemsRefetch={eventActionItemsRefetch}
             isRecurring={isRecurring}
             eventId={eventId}
           />
 
           <ItemDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
+            isOpen={deleteModal.isOpen}
+            hide={deleteModal.close}
             actionItem={actionItem}
             actionItemsRefetch={eventActionItemsRefetch}
             eventId={eventId}
