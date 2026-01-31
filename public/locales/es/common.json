@@ -246,6 +246,7 @@
   "nextPage": "Siguiente página",
   "pageNumber": "Página {{page}}",
   "tags": "Etiquetas",
+  "viewSubTagsOf": "Ver subetiquetas de {{tagName}}",
   "loadMoreItems": "Cargar más elementos",
   "loadMore": "Cargar Más",
   "loadOlderMessages": "Cargar mensajes más antiguos",

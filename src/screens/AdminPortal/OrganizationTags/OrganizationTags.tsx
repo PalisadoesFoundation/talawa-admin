@@ -23,15 +23,15 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
-import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
 import {
@@ -56,7 +56,11 @@ function OrganizationTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  const {
+    isOpen: createTagModalIsOpen,
+    open: showCreateTagModal,
+    close: hideCreateTagModal,
+  } = useModalState();
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -65,15 +69,6 @@ function OrganizationTags(): JSX.Element {
   const navigate = useNavigate();
 
   const [tagName, setTagName] = useState<string>('');
-
-  const showCreateTagModal = (): void => {
-    setTagName('');
-    setCreateTagModalIsOpen(true);
-  };
-
-  const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
-  };
 
   const {
     data: orgUserTagsData,
@@ -121,16 +116,21 @@ function OrganizationTags(): JSX.Element {
     });
   };
 
-  const [create, { loading: createTagLoading }] = useMutation(CREATE_USER_TAG);
+  const [create] = useMutation(CREATE_USER_TAG);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const createTag = async (e: FormEvent<HTMLFormElement>) => {
+  const createTag = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     e.preventDefault();
+    if (isSubmitting) return;
 
     if (!tagName.trim()) {
       NotificationToast.error(t('enterTagName'));
       return;
     }
 
+    setIsSubmitting(true);
     try {
       const { data } = await create({
         variables: { name: tagName, organizationId: orgId },
@@ -139,12 +139,14 @@ function OrganizationTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        hideCreateTagModal();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
       }
     } catch (error: unknown) {
       NotificationToast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -223,7 +225,7 @@ function OrganizationTags(): JSX.Element {
                   data-text={tag.name}
                 >
                   {tag.name}
-                  <i className={'mx-2 fa fa-caret-right'} />
+                  <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
                 </div>
               ))}
 
@@ -231,9 +233,20 @@ function OrganizationTags(): JSX.Element {
               className={styles.subTagsLink}
               data-testid="tagName"
               onClick={() => redirectToSubTags(params.row.id)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  redirectToSubTags(params.row.id);
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={tCommon('viewSubTagsOf', {
+                tagName: params.row.name,
+              })}
             >
               {params.row.name}
-              <i className={'ms-2 fa fa-caret-right'} />
+              <i className={'ms-2 fa fa-caret-right'} aria-hidden="true" />
             </div>
           </div>
         );
@@ -335,7 +348,10 @@ function OrganizationTags(): JSX.Element {
               ]}
               additionalButtons={
                 <Button
-                  onClick={showCreateTagModal}
+                  onClick={() => {
+                    setTagName('');
+                    showCreateTagModal();
+                  }}
                   data-testid="createTagBtn"
                   className={styles.createButton}
                   aria-label={t('createTag')}
@@ -391,7 +407,7 @@ function OrganizationTags(): JSX.Element {
                   <DataGridWrapper<InterfaceTagDataPG>
                     rows={userTagsList}
                     columns={columns}
-                    loading={orgUserTagsLoading || createTagLoading}
+                    loading={orgUserTagsLoading}
                     error={undefined}
                     emptyStateProps={{
                       message: t('noTagsFound'),
@@ -404,54 +420,27 @@ function OrganizationTags(): JSX.Element {
         </div>
       </Row>
 
-      {/* Create Tag Modal */}
-      <BaseModal
-        show={createTagModalIsOpen}
-        onHide={hideCreateTagModal}
-        backdrop="static"
-        centered
+      <CreateModal
+        open={createTagModalIsOpen}
         title={t('tagDetails')}
-        headerClassName={styles.tableHeader}
-        headerTestId="modalOrganizationHeader"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={(): void => hideCreateTagModal()}
-              data-testid="closeCreateTagModal"
-              className={styles.removeButton}
-              aria-label={tCommon('cancel')}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              form="create-tag-form"
-              value="invite"
-              data-testid="createTagSubmitBtn"
-              className={styles.addButton}
-              disabled={createTagLoading}
-              aria-label={tCommon('create')}
-            >
-              {tCommon('create')}
-            </Button>
-          </>
-        }
+        onClose={hideCreateTagModal}
+        onSubmit={createTag}
+        loading={isSubmitting}
+        submitDisabled={!tagName.trim()}
+        data-testid="createTagModal"
       >
-        <form id="create-tag-form" onSubmit={createTag}>
-          <FormTextField
-            name="tagName"
-            label={t('tagName')}
-            placeholder={t('tagNamePlaceholder')}
-            value={tagName}
-            onChange={setTagName}
-            required
-            autoComplete="off"
-            data-testid="tagNameInput"
-            className={styles.inputField}
-          />
-        </form>
-      </BaseModal>
+        <FormTextField
+          name="tagName"
+          label={t('tagName')}
+          placeholder={t('tagNamePlaceholder')}
+          value={tagName}
+          onChange={setTagName}
+          required
+          autoComplete="off"
+          data-testid="tagNameInput"
+          className={styles.inputField}
+        />
+      </CreateModal>
     </>
   );
 }

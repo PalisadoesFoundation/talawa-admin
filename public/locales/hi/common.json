@@ -243,6 +243,7 @@
   "nextPage": "अगला पृष्ठ",
   "pageNumber": "पृष्ठ {{page}}",
   "tags": "टैग",
+  "viewSubTagsOf": "{{tagName}} के उप-टैग देखें",
   "loadMoreItems": "और चीज़ें लोड करें",
   "loadMore": "और लोड करें",
   "loadOlderMessages": "पुराने संदेश लोड करें",

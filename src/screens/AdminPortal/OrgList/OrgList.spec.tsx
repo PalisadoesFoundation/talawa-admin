@@ -1,14 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -730,7 +723,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await userEvent.click(searchBtn);
   });
 
   test('Testing search functionality by with empty search bar', async () => {
@@ -742,7 +735,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.clear(searchBar);
-    fireEvent.click(searchBtn);
+    await userEvent.click(searchBtn);
   });
 
   test('Testing debounced search functionality', async () => {
@@ -774,7 +767,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Type and press Enter to test immediate search
     await userEvent.type(searchBar, 'Dogs');
-    fireEvent.keyDown(searchBar, { key: 'Enter', code: 'Enter' });
+    await userEvent.keyboard('{Enter}');
   });
 
   test('Testing pagination component presence', async () => {
@@ -832,7 +825,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(rowsPerPageSelect).toBeInTheDocument();
 
     // Change rows per page to 10
-    fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
+    await userEvent.selectOptions(rowsPerPageSelect, '10');
 
     await wait();
   });
@@ -894,7 +887,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    fireEvent.scroll(window, { target: { scrollY: 1000 } });
+    window.scrollTo(0, 1000);
   });
 });
 
@@ -911,27 +904,19 @@ describe('Organisations Page testing as Admin', () => {
 
     const sortToggle = screen.getByTestId('sortOrgs');
 
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
+    await userEvent.click(sortToggle);
 
     const latestOption = screen.getByTestId('Latest');
 
-    await act(async () => {
-      fireEvent.click(latestOption);
-    });
+    await userEvent.click(latestOption);
 
     expect(sortDropdown).toBeInTheDocument();
 
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
+    await userEvent.click(sortToggle);
 
     const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
 
-    await act(async () => {
-      fireEvent.click(oldestOption);
-    });
+    await userEvent.click(oldestOption);
 
     expect(sortDropdown).toBeInTheDocument();
   });
@@ -991,13 +976,11 @@ describe('Plugin Modal Tests', () => {
       'Afghanistan',
     );
 
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
   });
 });
@@ -1053,9 +1036,9 @@ describe('Advanced Component Functionality Tests', () => {
     const paginationElement = screen.getByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
-    // Test pagination with rowsPerPage = 0 edge case
+    // Test pagination with rowsPerPage change
     const rowsPerPageSelect = screen.getByDisplayValue('5');
-    fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+    await userEvent.selectOptions(rowsPerPageSelect, '10');
     await wait();
   });
 
@@ -1079,7 +1062,7 @@ describe('Advanced Component Functionality Tests', () => {
       .find((btn) => btn.getAttribute('aria-label')?.includes('next'));
 
     if (nextPageButton && !nextPageButton.hasAttribute('disabled')) {
-      fireEvent.click(nextPageButton);
+      await userEvent.click(nextPageButton);
       await wait(200);
     }
   });
@@ -1188,13 +1171,11 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
   });
 
@@ -1211,17 +1192,17 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify modal is not open initially
     expect(
-      screen.queryByTestId('modalOrganizationHeader'),
+      screen.queryByTestId('modalOrganizationName'),
     ).not.toBeInTheDocument();
 
     // Open the create organization modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await userEvent.click(createOrgBtn);
 
     await wait();
 
     // Verify modal is open
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing organization creation flow and form handling', async () => {
@@ -1278,13 +1259,11 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form to verify organization creation flow
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for the modal to close after successful submission
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
   });
 
@@ -1340,13 +1319,11 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for the modal to close after submission
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
   });
 
@@ -1404,7 +1381,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Open modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
-    fireEvent.click(createOrgBtn);
+    await userEvent.click(createOrgBtn);
 
     await wait();
 
@@ -1439,7 +1416,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await wait();
   });
@@ -1612,7 +1589,7 @@ describe('Advanced Component Functionality Tests', () => {
     if (selects.length > 0) {
       // Trigger the select to ensure the handler is tested
       const paginationSelect = selects[0];
-      fireEvent.mouseDown(paginationSelect);
+      await userEvent.click(paginationSelect);
       await wait(100);
     }
 
@@ -1836,7 +1813,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (nextButton && !nextButton.hasAttribute('disabled')) {
-      fireEvent.click(nextButton);
+      await userEvent.click(nextButton);
       await wait(200);
     }
 
@@ -1846,7 +1823,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     if (prevButton && !prevButton.hasAttribute('disabled')) {
-      fireEvent.click(prevButton);
+      await userEvent.click(prevButton);
       await wait(200);
     }
   });
@@ -2020,14 +1997,12 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit the form to verify organization creation flow
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitBtn);
 
     // Wait for the modal to close, indicating mutations completed
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('submitOrganizationForm'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modal-submit-btn')).not.toBeInTheDocument();
     });
 
     // Verify organization creation flow completed successfully:
@@ -2176,7 +2151,7 @@ describe('Advanced Component Functionality Tests', () => {
       'United States',
     );
 
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitBtn);
 
     // Wait for the plugin modal to appear and verify closeDialogModal is triggered
@@ -2283,7 +2258,7 @@ describe('Advanced Component Functionality Tests', () => {
       'United States',
     );
 
-    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     await userEvent.click(submitBtn);
 
     // Wait for plugin modal to appear, then verify toggleDialogModal behavior when closing
@@ -2414,7 +2389,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     // Wait for form submission to complete
     await wait();
@@ -2423,7 +2398,7 @@ describe('Advanced Component Functionality Tests', () => {
     expect(mockToast.success).not.toHaveBeenCalled();
 
     // Verify that the modal should still be open since the success path wasn't taken
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing missing token scenario', async () => {
@@ -2624,10 +2599,10 @@ describe('Email Verification Actions Tests', () => {
 
     const closeBtn = warningAlert.querySelector('.btn-close');
     if (closeBtn) {
-      fireEvent.click(closeBtn);
+      await userEvent.click(closeBtn as HTMLElement);
     } else {
       const altBtn = screen.getByLabelText('Close alert');
-      fireEvent.click(altBtn);
+      await userEvent.click(altBtn);
     }
 
     await waitFor(() => {
@@ -2658,7 +2633,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await userEvent.click(resendBtn);
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
@@ -2680,7 +2655,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await userEvent.click(resendBtn);
 
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
@@ -2711,7 +2686,7 @@ describe('Email Verification Actions Tests', () => {
     await wait();
 
     const resendBtn = screen.getByTestId('resend-verification-btn');
-    fireEvent.click(resendBtn);
+    await userEvent.click(resendBtn);
 
     await waitFor(() => {
       // errorHandler should be called

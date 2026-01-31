@@ -33,9 +33,8 @@ import {
 import styles from './OrgList.module.css';
 
 import OrganizationModal from './modal/OrganizationModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -43,7 +42,8 @@ import { Group, Search } from '@mui/icons-material';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -146,7 +146,12 @@ function OrgList(): JSX.Element {
   });
 
   const [searchByName, setSearchByName] = useState('');
-  const [showModal, setShowModal] = useState(false);
+
+  const {
+    isOpen: showModal,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
 
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
@@ -160,7 +165,13 @@ function OrgList(): JSX.Element {
     state: '',
   });
 
-  const toggleModal = (): void => setShowModal(!showModal);
+  const toggleModal = (): void => {
+    if (showModal) {
+      closeModal();
+    } else {
+      openModal();
+    }
+  };
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -253,7 +264,7 @@ function OrgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createOrg = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {
@@ -316,7 +327,7 @@ function OrgList(): JSX.Element {
           postalCode: '',
           state: '',
         });
-        toggleModal();
+        closeModal();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -531,7 +542,7 @@ function OrgList(): JSX.Element {
 
       <OrganizationModal
         showModal={showModal}
-        toggleModal={toggleModal}
+        toggleModal={closeModal}
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}
@@ -539,13 +550,13 @@ function OrgList(): JSX.Element {
         tCommon={tCommon}
       />
       {/* Plugin Notification Modal after Org is Created */}
-      <BaseModal
-        show={dialogModalisOpen}
-        onHide={toggleDialogModal}
+      <CRUDModalTemplate
+        open={dialogModalisOpen}
+        onClose={toggleDialogModal}
         title={t('manageFeatures')}
-        headerClassName={styles.modalHeader}
-        headerTestId="pluginNotificationHeader"
-        dataTestId="pluginNotificationModal"
+        className={styles.modalHeader}
+        data-testid="pluginNotificationModal"
+        showFooter={false}
       >
         <section id={styles.grid_wrapper}>
           <div>
@@ -573,7 +584,7 @@ function OrgList(): JSX.Element {
             </div>
           </div>
         </section>
-      </BaseModal>
+      </CRUDModalTemplate>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import AddMember from './AddMember';
 import i18nForTest from 'utils/i18nForTest';
@@ -28,7 +28,7 @@ const sharedMocks = vi.hoisted(() => ({
 import React from 'react';
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
 }));
 
@@ -900,7 +900,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -954,7 +954,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -999,7 +999,7 @@ describe('AddMember Screen', () => {
       target: { value: 'password124' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
+    const createButton = screen.getByTestId('modal-submit-btn');
     fireEvent.click(createButton);
 
     await waitFor(() => {
@@ -1007,7 +1007,7 @@ describe('AddMember Screen', () => {
     });
   });
 
-  test('shows error when required fields are missing', async () => {
+  test('disables submit button when required fields are missing', async () => {
     const orgId = 'org123';
 
     const registerMock = createRegisterMutationMock({
@@ -1032,6 +1032,10 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
     const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
@@ -1044,11 +1048,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    const createButton = screen.getByTestId('createBtn');
-    fireEvent.click(createButton);
-
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      const createButton = screen.getByTestId('modal-submit-btn');
+      expect(createButton).toBeDisabled();
     });
   });
 

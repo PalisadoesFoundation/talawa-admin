@@ -7,7 +7,7 @@ import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -92,7 +92,7 @@ async function wait(ms = 500): Promise<void> {
 
 const loadingOverlaySpy = vi.fn();
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -194,15 +194,13 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('closeCreateTagModal'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('closeCreateTagModal'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('closeCreateTagModal'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
   test('navigates to sub tags screen after clicking on a tag', async () => {
@@ -420,7 +418,7 @@ describe('Organisation Tags Page', () => {
       'userTag 12',
     );
 
-    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -440,7 +438,7 @@ describe('Organisation Tags Page', () => {
       'userTagE',
     );
 
-    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -507,7 +505,7 @@ describe('Organisation Tags Page', () => {
       'userTag 13',
     );
 
-    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -516,7 +514,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('shows error toast when trying to create tag with whitespace-only name', async () => {
+  test('disables submit button when tag name is empty or whitespace-only', async () => {
     renderOrganizationTags(link);
 
     await wait();
@@ -526,18 +524,22 @@ describe('Organisation Tags Page', () => {
     });
     await userEvent.click(screen.getByTestId('createTagBtn'));
 
+    // Initially button should be disabled (empty input)
+    await waitFor(() => {
+      const submitButton = screen.getByTestId('modal-submit-btn');
+      expect(submitButton).toBeDisabled();
+    });
+
     // Type only whitespace in tag name
     await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       '   ',
     );
 
-    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
-
+    // Button should still be disabled (whitespace-only input)
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        translations.enterTagName,
-      );
+      const submitButton = screen.getByTestId('modal-submit-btn');
+      expect(submitButton).toBeDisabled();
     });
   });
 

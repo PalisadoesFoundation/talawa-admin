@@ -15,7 +15,6 @@
  * @returns \{JSX.Element\} The rendered `AddMember` component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -38,7 +37,7 @@ import { InputGroup, FormControl } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
@@ -47,9 +46,9 @@ import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
-
-// Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
@@ -58,7 +57,18 @@ function AddMember(): JSX.Element {
   const { t: translateAddMember } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   document.title = translateOrgPeople('title');
-  const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
+
+  const {
+    isOpen: addUserModalIsOpen,
+    open: openAddUserModal,
+    close: closeAddUserModal,
+  } = useModalState();
+
+  const {
+    isOpen: createNewUserModalIsOpen,
+    open: openCreateNewUserModal,
+    close: closeCreateNewUserModal,
+  } = useModalState();
   const PAGE_SIZE = 10;
   const [page, setPage] = useState(0);
   const [paginationMeta, setPaginationMeta] = useState({
@@ -82,17 +92,9 @@ function AddMember(): JSX.Element {
     variables: { first: PAGE_SIZE, after: null, last: null, before: null },
   });
 
-  const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
     setUserName('');
-  }, [addUserModalisOpen]);
-  const toggleDialogModal = (): void =>
-    setAddUserModalIsOpen(!addUserModalisOpen);
-
-  const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
-    useState(false);
-  const openCreateNewUserModal = () => setCreateNewUserModalIsOpen(true);
-  const closeCreateNewUserModal = () => setCreateNewUserModalIsOpen(false);
+  }, [addUserModalIsOpen]);
   const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
   const createMember = async (userId: string): Promise<void> => {
     try {
@@ -133,7 +135,14 @@ function AddMember(): JSX.Element {
     ADMIN = 'administrator',
     REGULAR = 'regular',
   }
-  const handleCreateUser = async (): Promise<void> => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleCreateUser = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
     if (
       !(
         createUserVariables.email &&
@@ -144,33 +153,38 @@ function AddMember(): JSX.Element {
       NotificationToast.error(
         translateOrgPeople('invalidDetailsMessage') as string,
       );
-    } else if (
-      createUserVariables.password !== createUserVariables.confirmPassword
-    ) {
+      return;
+    }
+
+    if (createUserVariables.password !== createUserVariables.confirmPassword) {
       NotificationToast.error(translateOrgPeople('passwordNotMatch') as string);
-    } else {
-      try {
-        const registeredUser = await registerMutation({
-          variables: {
-            name: createUserVariables.name,
-            email: createUserVariables.email,
-            password: createUserVariables.password,
-            role: OrganizationMembershipRole.REGULAR,
-            isEmailAddressVerified: true,
-          },
-        });
-        const createdUserId = registeredUser?.data.createUser.user.id;
-        await createMember(createdUserId);
-        closeCreateNewUserModal();
-        setCreateUserVariables({
-          name: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-        });
-      } catch (error: unknown) {
-        errorHandler(translateOrgPeople, error);
-      }
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const registeredUser = await registerMutation({
+        variables: {
+          name: createUserVariables.name,
+          email: createUserVariables.email,
+          password: createUserVariables.password,
+          role: OrganizationMembershipRole.REGULAR,
+          isEmailAddressVerified: true,
+        },
+      });
+      const createdUserId = registeredUser?.data.createUser.user.id;
+      await createMember(createdUserId);
+      closeCreateNewUserModal();
+      setCreateUserVariables({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+      });
+    } catch (error: unknown) {
+      errorHandler(translateOrgPeople, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -210,13 +224,13 @@ function AddMember(): JSX.Element {
     }
   };
   useEffect(() => {
-    if (addUserModalisOpen) {
+    if (addUserModalIsOpen) {
       resetPagination();
       fetchUsers({
         variables: { first: PAGE_SIZE, after: null, last: null, before: null },
       });
     }
-  }, [currentUrl, addUserModalisOpen]);
+  }, [currentUrl, addUserModalIsOpen]);
   useEffect(() => {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
@@ -281,8 +295,8 @@ function AddMember(): JSX.Element {
       <BaseModal
         dataTestId="addExistingUserModal"
         title={translateOrgPeople('addMembers')}
-        show={addUserModalisOpen}
-        onHide={toggleDialogModal}
+        show={addUserModalIsOpen}
+        onHide={closeAddUserModal}
         className={styles.modalContent}
       >
         <div className={styles.input}>
@@ -431,34 +445,19 @@ function AddMember(): JSX.Element {
           }
         />
       </BaseModal>
-      <BaseModal
-        dataTestId="addNewUserModal"
+      <CreateModal
+        open={createNewUserModalIsOpen}
         title={translateOrgPeople('createUser')}
-        headerClassName={styles.headers}
-        show={createNewUserModalisOpen}
-        onHide={closeCreateNewUserModal}
-        footer={
-          <div>
-            <Button
-              className={`${styles.removeButton}`}
-              variant="danger"
-              onClick={closeCreateNewUserModal}
-              data-testid="closeBtn"
-            >
-              <Close />
-              {translateOrgPeople('cancel')}
-            </Button>
-            <Button
-              className={`${styles.addButton}`}
-              variant="success"
-              onClick={handleCreateUser}
-              data-testid="createBtn"
-            >
-              <Check />
-              {translateOrgPeople('create')}
-            </Button>
-          </div>
+        onClose={closeCreateNewUserModal}
+        onSubmit={handleCreateUser}
+        loading={isSubmitting}
+        submitDisabled={
+          !createUserVariables.name ||
+          !createUserVariables.email ||
+          !createUserVariables.password ||
+          !createUserVariables.confirmPassword
         }
+        data-testid="addNewUserModal"
       >
         <div className="my-3">
           <div className="row">
@@ -488,7 +487,10 @@ function AddMember(): JSX.Element {
             <InputGroup.Text
               className={`${styles.colorPrimary} ${styles.borderNone}`}
             >
-              <EmailOutlinedIcon className={`${styles.colorWhite}`} />
+              <EmailOutlinedIcon
+                className={`${styles.colorWhite}`}
+                aria-hidden="true"
+              />
             </InputGroup.Text>
           </InputGroup>
           <h6>{translateOrgPeople('enterPassword')}</h6>
@@ -504,12 +506,25 @@ function AddMember(): JSX.Element {
             <InputGroup.Text
               className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
               onClick={togglePassword}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  togglePassword();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={
+                showPassword
+                  ? translateOrgPeople('hidePassword')
+                  : translateOrgPeople('showPassword')
+              }
               data-testid="showPassword"
             >
               {showPassword ? (
-                <i className="fas fa-eye"></i>
+                <i className="fas fa-eye" aria-hidden="true"></i>
               ) : (
-                <i className="fas fa-eye-slash"></i>
+                <i className="fas fa-eye-slash" aria-hidden="true"></i>
               )}
             </InputGroup.Text>
           </InputGroup>
@@ -526,12 +541,25 @@ function AddMember(): JSX.Element {
             <InputGroup.Text
               className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
               onClick={toggleConfirmPassword}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  toggleConfirmPassword();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={
+                showConfirmPassword
+                  ? translateOrgPeople('hidePassword')
+                  : translateOrgPeople('showPassword')
+              }
               data-testid="showConfirmPassword"
             >
               {showConfirmPassword ? (
-                <i className="fas fa-eye"></i>
+                <i className="fas fa-eye" aria-hidden="true"></i>
               ) : (
-                <i className="fas fa-eye-slash"></i>
+                <i className="fas fa-eye-slash" aria-hidden="true"></i>
               )}
             </InputGroup.Text>
           </InputGroup>
@@ -545,7 +573,7 @@ function AddMember(): JSX.Element {
             />
           </InputGroup>
         </div>
-      </BaseModal>
+      </CreateModal>
     </>
   );
 }

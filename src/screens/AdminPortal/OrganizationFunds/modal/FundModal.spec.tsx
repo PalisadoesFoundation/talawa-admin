@@ -10,14 +10,14 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -36,36 +36,7 @@ const fundProps: InterfaceFundModal[] = [
   {
     isOpen: true,
     hide: vi.fn(),
-    fund: {
-      id: 'fundId',
-      name: 'Fund 1',
-      refrenceNumber: '1111',
-      isTaxDeductible: true,
-      isArchived: false,
-      isDefault: false,
-      createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
-      organizationId: 'orgId',
-      creator: {
-        name: 'John Doe',
-      },
-      organization: {
-        name: 'Organization 1',
-      },
-      updater: {
-        name: 'John Doe',
-      },
-      edges: {
-        node: {
-          id: 'nodeId',
-          name: 'Node Name',
-          fundingGoal: 1000,
-          startDate: dayjs().format('YYYY-MM-DD'),
-          endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
-          currency: 'USD',
-          createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
-        },
-      },
-    },
+    fund: null,
     refetchFunds: vi.fn(),
     orgId: 'orgId',
     mode: 'create',
@@ -165,10 +136,18 @@ describe('PledgeModal', () => {
     renderFundModal(link1, fundProps[1]);
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
-    });
+    }) as HTMLInputElement;
     expect(fundIdInput).toHaveValue('1111');
+    fundIdInput.focus();
     await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
     expect(fundIdInput).toHaveValue('2222');
   });
 
@@ -252,7 +231,7 @@ describe('PledgeModal', () => {
     await userEvent.click(archivedSwitch);
     await userEvent.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -266,23 +245,30 @@ describe('PledgeModal', () => {
 
     const fundNameInput = screen.getByLabelText(translations.fundName, {
       exact: false,
-    });
+    }) as HTMLInputElement;
+    fundNameInput.focus();
     await userEvent.clear(fundNameInput);
+    fundNameInput.focus();
     await userEvent.type(fundNameInput, 'Fund 2');
 
     const fundIdInput = screen.getByLabelText(translations.fundId, {
       exact: false,
-    });
+    }) as HTMLInputElement;
+    fundIdInput.focus();
     await userEvent.clear(fundIdInput);
-    await userEvent.type(fundIdInput, '2222');
-
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
-    await userEvent.click(taxDeductibleSwitch);
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
+    fundIdInput.focus();
+    await userEvent.type(fundIdInput, '2');
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
     await userEvent.click(defaultSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -315,7 +301,7 @@ describe('PledgeModal', () => {
     const archivedSwitch = screen.getByTestId('archivedSwitch');
     await userEvent.click(archivedSwitch);
 
-    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+    await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
