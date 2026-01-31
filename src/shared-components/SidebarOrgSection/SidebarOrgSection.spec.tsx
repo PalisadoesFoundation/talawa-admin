@@ -329,7 +329,6 @@ describe('SidebarOrgSection Component', () => {
       renderComponent();
       const container = screen.getByTestId('orgBtn').parentElement;
       expect(container?.className).toContain('organizationContainer');
-      expect(container?.className).toContain('pe-3');
     });
 
     it('has correct profile container class in success state', async () => {
@@ -356,6 +355,34 @@ describe('SidebarOrgSection Component', () => {
         // Verify both name and city are present
         expect(screen.getByText('Test Organization')).toBeInTheDocument();
         expect(screen.getByText('Test City')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Title Attribute for Truncation', () => {
+    it('displays full organization name and city in title attribute', async () => {
+      renderComponent();
+      await waitFor(() => {
+        const profileRightContainer = screen
+          .getByText('Test Organization')
+          .closest('div[title]');
+        expect(profileRightContainer).toHaveAttribute(
+          'title',
+          'Test Organization — Test City',
+        );
+      });
+    });
+
+    it('displays only organization name in title when city is null', async () => {
+      renderComponent({}, noCityMocks);
+      await waitFor(() => {
+        const profileRightContainer = screen
+          .getByText('Test Organization')
+          .closest('div[title]');
+        expect(profileRightContainer).toHaveAttribute(
+          'title',
+          'Test Organization',
+        );
       });
     });
   });

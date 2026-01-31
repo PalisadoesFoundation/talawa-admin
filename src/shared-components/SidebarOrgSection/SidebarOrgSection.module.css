@@ -3,16 +3,16 @@
 /* Extracted from .leftDrawer .organizationContainer button and .profileContainer */
 .profileContainer {
   position: relative;
-  margin: 0.7rem 0;
-  padding: 2.5rem 0.1rem;
-  border-radius: 16px;
+  margin: var(--space-4) var(--space-0);
+  padding: var(--space-9) var(--space-1);
+  border-radius: var(--radius-xl);
   background-color: var(--LeftDrawer-org-profileContainer-bg) !important;
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: var(--space-3);
+  padding-left: var(--space-3);
 
   border: none;
   width: 100%;
-  height: 52px;
+  height: var(--space-10);
   display: flex;
   align-items: center;
   outline: none;
@@ -24,29 +24,29 @@
 }
 
 .profileContainer:focus-visible {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--primary-color);
+  outline-offset: var(--border-2);
 }
 
 .imageContainer {
-  width: 68px;
-  margin-right: 8px;
-  margin-bottom: 1px;
+  margin-right: var(--space-3);
+  margin-bottom: var(--space-0-5);
   /* adjusted from 10px to align better? app-fixed had 10px */
 }
 
 .imageContainer img {
-  height: 52px;
-  width: 52px;
-  border-radius: 50%;
+  height: var(--space-10);
+  width: var(--space-10);
+  border-radius: var(--radius-full);
 }
 
 .ProfileRightContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: var(--space-5);
   flex: 1;
+  min-width: 0;
 }
 
 .profileText {
@@ -58,35 +58,35 @@
 }
 
 .primaryText {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  word-wrap: break-word;
-  white-space: normal;
+  white-space: nowrap;
+  display: block;
+  text-overflow: ellipsis;
   color: var(--bs-emphasis-color, var(--primaryText-color));
 }
 
 .secondaryText {
-  font-size: 0.8rem;
-  font-weight: 400;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
   color: var(--leftDrawer-secondaryText-color);
   display: block;
   text-transform: capitalize;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .ArrowIcon {
-  margin-right: 5px;
+  margin-right: var(--space-2);
 }
 
 .avatarContainer {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  font-size: 1.5rem;
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-2xl);
 }
 
 .bgDanger {
@@ -96,41 +96,40 @@
 /* Responsive styles from app-fixed.module.css */
 @media (max-height: 900px) {
   .profileContainer {
-    margin: 0.6rem 0;
-    padding: 2.2rem 0.1rem;
+    margin: var(--space-3) var(--space-0);
   }
 
   .primaryText {
-    font-size: 1rem;
+    font-size: var(--font-size-md);
   }
 
   .secondaryText {
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
   }
 }
 
 @media (max-height: 650px) {
   .profileContainer {
-    margin: 0.2rem 0;
-    padding: 1.6rem 0rem;
+    margin: var(--space-2) var(--space-0);
+    padding: var(--space-7) var(--space-0);
   }
 
   .primaryText {
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
   }
 
   .secondaryText {
-    font-size: 0.6rem;
+    font-size: var(--font-size-xs);
   }
 
   .imageContainer {
-    width: 40px;
-    margin-left: 5px;
-    margin-right: 10px;
+    width: var(--space-9);
+    margin-left: var(--space-2);
+    margin-right: var(--space-3);
   }
 
   .imageContainer img {
-    width: 40px;
+    width: var(--space-9);
     height: 100%;
   }
 }

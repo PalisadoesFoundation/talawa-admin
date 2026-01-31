@@ -65,8 +65,15 @@ const SidebarOrgSection = ({
     return null;
   }
 
+  // build tooltip title with org name and optional city (dynamic data, not translatable)
+  const orgTitle = data?.organization
+    ? [data.organization.name, data.organization.city]
+        .filter(Boolean)
+        .join(' — ')
+    : '';
+
   return (
-    <div className={`${styles.organizationContainer} pe-3`}>
+    <div className={`${styles.organizationContainer}`}>
       {loading ? (
         <button
           className={`${styles.profileContainer} shimmer`}
@@ -111,7 +118,7 @@ const SidebarOrgSection = ({
               />
             )}
           </div>
-          <div className={styles.ProfileRightContainer}>
+          <div className={styles.ProfileRightContainer} title={orgTitle}>
             <div className={styles.profileText}>
               <span className={styles.primaryText}>
                 {data.organization.name}
