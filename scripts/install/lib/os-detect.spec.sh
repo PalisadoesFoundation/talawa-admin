@@ -22,6 +22,7 @@
 
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEST_TEMP_DIR=""
 TESTS_RUN=0
 TESTS_PASSED=0
@@ -75,117 +76,17 @@ create_redhat_release() {
 source_with_fixture() {
     local fixture_dir="$1"
     
-    unset TALAWA_OS_DETECT_SOURCED
-    unset OS_TYPE
-    unset OS_DISPLAY_NAME
-    unset IS_WSL
-    unset _OS_DETECTED
+    export OS_TYPE=""
+    export OS_DISPLAY_NAME=""
+    export IS_WSL=false
+    export _OS_DETECTED=false
     
-    export _TEST_FIXTURE_DIR="$fixture_dir"
+    export _OS_DETECT_TEST_MODE=1
+    export _OS_DETECT_ROOT="$fixture_dir"
     
-    cat > "$TEST_TEMP_DIR/test-wrapper.sh" << 'WRAPPER_EOF'
-#!/bin/bash
-
-is_wsl() {
-    if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
-        return 0
-    fi
+    local os_detect_path="$SCRIPT_DIR/os-detect.sh"
     
-    if [[ -f "$_TEST_FIXTURE_DIR/proc/version" ]]; then
-        if grep -qi "microsoft\|wsl" "$_TEST_FIXTURE_DIR/proc/version" 2>/dev/null; then
-            return 0
-        fi
-    fi
-    
-    return 1
-}
-
-is_macos() {
-    [[ "${_TEST_OS_OVERRIDE:-}" == "Darwin" ]]
-}
-
-is_debian() {
-    if [[ -f "$_TEST_FIXTURE_DIR/etc/debian_version" ]]; then
-        return 0
-    fi
-    
-    if [[ -f "$_TEST_FIXTURE_DIR/etc/os-release" ]]; then
-        if grep -qiE 'debian|ubuntu' "$_TEST_FIXTURE_DIR/etc/os-release" 2>/dev/null; then
-            return 0
-        fi
-    fi
-    
-    return 1
-}
-
-is_redhat() {
-    if [[ -f "$_TEST_FIXTURE_DIR/etc/redhat-release" ]]; then
-        return 0
-    fi
-    
-    if [[ -f "$_TEST_FIXTURE_DIR/etc/os-release" ]]; then
-        if grep -qiE 'rhel|centos|fedora|red hat' "$_TEST_FIXTURE_DIR/etc/os-release" 2>/dev/null; then
-            return 0
-        fi
-    fi
-    
-    return 1
-}
-
-export OS_TYPE=""
-export OS_DISPLAY_NAME=""
-export IS_WSL=false
-_OS_DETECTED=false
-
-detect_os() {
-    [[ "$_OS_DETECTED" == "true" ]] && return 0
-    
-    IS_WSL=false
-    
-    if is_wsl; then
-        IS_WSL=true
-        
-        if is_debian; then
-            OS_TYPE="wsl-debian"
-            OS_DISPLAY_NAME="WSL (Debian/Ubuntu)"
-        elif is_redhat; then
-            OS_TYPE="wsl-redhat"
-            OS_DISPLAY_NAME="WSL (RHEL/CentOS/Fedora)"
-        else
-            OS_TYPE="wsl-unknown"
-            OS_DISPLAY_NAME="WSL (Unknown)"
-        fi
-    elif is_macos; then
-        OS_TYPE="macos"
-        OS_DISPLAY_NAME="macOS"
-    elif is_debian; then
-        OS_TYPE="debian"
-        OS_DISPLAY_NAME="Debian/Ubuntu"
-    elif is_redhat; then
-        OS_TYPE="redhat"
-        OS_DISPLAY_NAME="RHEL/CentOS/Fedora"
-    else
-        OS_TYPE="unknown"
-        OS_DISPLAY_NAME="Unknown OS"
-    fi
-    
-    _OS_DETECTED=true
-    
-    export OS_TYPE
-    export OS_DISPLAY_NAME
-    export IS_WSL
-    export _OS_DETECTED
-    
-    return 0
-}
-
-get_os_display_name() {
-    detect_os
-    printf "%s\n" "$OS_DISPLAY_NAME"
-}
-WRAPPER_EOF
-    
-    source "$TEST_TEMP_DIR/test-wrapper.sh"
+    source "$os_detect_path"
 }
 
 assert_equals() {
@@ -442,20 +343,34 @@ test_exported_variables() {
 }
 
 test_is_wsl_reset() {
-    local fixture_dir1
+    local fixture_dir1 fixture_dir2
     fixture_dir1=$(create_fixture "wsl-reset-1")
+    fixture_dir2=$(create_fixture "wsl-reset-2")
     
     write_proc_version "$fixture_dir1" "Linux version 5.15.0-Microsoft-WSL2"
     write_os_release "$fixture_dir1" "ID=ubuntu\nNAME=\"Ubuntu\""
+    create_debian_version "$fixture_dir1" "12.0"
+    
+    write_os_release "$fixture_dir2" "ID=ubuntu\nNAME=\"Ubuntu\""
+    create_debian_version "$fixture_dir2" "12.0"
     
     unset _TEST_OS_OVERRIDE
+    source_with_fixture "$fixture_dir2"
+    detect_os
+    
+    local non_wsl_is_wsl="$IS_WSL"
+    local non_wsl_detected="$_OS_DETECTED"
+    
     source_with_fixture "$fixture_dir1"
     detect_os
     
-    local first_wsl="$IS_WSL"
+    local wsl_is_wsl="$IS_WSL"
+    local wsl_detected="$_OS_DETECTED"
     
-    assert_equals "true" "$first_wsl" "IS_WSL should be true for WSL" && \
-    assert_equals "true" "$_OS_DETECTED" "_OS_DETECTED should be true after detection"
+    assert_equals "false" "$non_wsl_is_wsl" "IS_WSL should be false for non-WSL" && \
+    assert_equals "true" "$non_wsl_detected" "_OS_DETECTED should be true after first detection" && \
+    assert_equals "true" "$wsl_is_wsl" "IS_WSL should be true for WSL after reset" && \
+    assert_equals "true" "$wsl_detected" "_OS_DETECTED should be true after second detection"
 }
 
 main() {

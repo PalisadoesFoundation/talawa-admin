@@ -18,8 +18,8 @@
 # ==============================================================================
 # SOURCE GUARD - Prevent multiple sourcing
 # ==============================================================================
-[[ -n "${TALAWA_OS_DETECT_SOURCED:-}" ]] && return 0
-readonly TALAWA_OS_DETECT_SOURCED=1
+[[ -n "${TALAWA_OS_DETECT_SOURCED:-}" ]] && [[ -z "${_OS_DETECT_TEST_MODE:-}" ]] && return 0
+TALAWA_OS_DETECT_SOURCED=1
 
 # ==============================================================================
 # EXPORTED VARIABLES
@@ -33,20 +33,25 @@ export IS_WSL=false
 _OS_DETECTED=false
 
 # ==============================================================================
+# CONFIGURATION VARIABLES
+# ==============================================================================
+# Root path for file system operations - can be overridden for testing
+# Default to empty string (uses real filesystem paths)
+# For testing: set _OS_DETECT_ROOT="/path/to/fixture" before sourcing
+export _OS_DETECT_ROOT="${_OS_DETECT_ROOT:-}"
+
+# ==============================================================================
 # INTERNAL DETECTION HELPERS
 # ==============================================================================
 
-# Check if running in WSL (Windows Subsystem for Linux)
-# Returns: 0 if WSL, 1 otherwise
 is_wsl() {
-    # Check WSL_DISTRO_NAME environment variable (set by WSL)
     if [[ -n "${WSL_DISTRO_NAME:-}" ]]; then
         return 0
     fi
     
-    # Check /proc/version for Microsoft or WSL indicators
-    if [[ -f /proc/version ]]; then
-        if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then
+    local proc_version="${_OS_DETECT_ROOT}/proc/version"
+    if [[ -f "$proc_version" ]]; then
+        if grep -qi "microsoft\|wsl" "$proc_version" 2>/dev/null; then
             return 0
         fi
     fi
@@ -54,23 +59,25 @@ is_wsl() {
     return 1
 }
 
-# Check if running on macOS
-# Returns: 0 if macOS, 1 otherwise
 is_macos() {
-    [[ "$(uname -s)" == "Darwin" ]]
+    if [[ -n "${_OS_DETECT_ROOT:-}" ]]; then
+        [[ "${_TEST_OS_OVERRIDE:-}" == "Darwin" ]]
+    else
+        [[ "$(uname -s)" == "Darwin" ]]
+    fi
 }
 
 # Check if running on Debian-based system (Debian/Ubuntu)
 # Returns: 0 if Debian-based, 1 otherwise
 is_debian() {
-    # Check for debian_version file
-    if [[ -f /etc/debian_version ]]; then
+    local debian_version="${_OS_DETECT_ROOT}/etc/debian_version"
+    if [[ -f "$debian_version" ]]; then
         return 0
     fi
     
-    # Check os-release for Debian/Ubuntu indicators
-    if [[ -f /etc/os-release ]]; then
-        if grep -qiE 'debian|ubuntu' /etc/os-release 2>/dev/null; then
+    local os_release="${_OS_DETECT_ROOT}/etc/os-release"
+    if [[ -f "$os_release" ]]; then
+        if grep -qiE 'debian|ubuntu' "$os_release" 2>/dev/null; then
             return 0
         fi
     fi
@@ -81,14 +88,14 @@ is_debian() {
 # Check if running on RHEL-based system (RHEL/CentOS/Fedora)
 # Returns: 0 if RHEL-based, 1 otherwise
 is_redhat() {
-    # Check for redhat-release file
-    if [[ -f /etc/redhat-release ]]; then
+    local redhat_release="${_OS_DETECT_ROOT}/etc/redhat-release"
+    if [[ -f "$redhat_release" ]]; then
         return 0
     fi
     
-    # Check os-release for RHEL/CentOS/Fedora indicators
-    if [[ -f /etc/os-release ]]; then
-        if grep -qiE 'rhel|centos|fedora|red hat' /etc/os-release 2>/dev/null; then
+    local os_release="${_OS_DETECT_ROOT}/etc/os-release"
+    if [[ -f "$os_release" ]]; then
+        if grep -qiE 'rhel|centos|fedora|red hat' "$os_release" 2>/dev/null; then
             return 0
         fi
     fi
