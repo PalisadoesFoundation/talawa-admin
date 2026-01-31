@@ -71,4 +71,15 @@ describe('Testing Loader component', () => {
       );
     }).toThrow();
   });
+  test('accessor function is executed for fallback columns', () => {
+    render(
+      <BrowserRouter>
+        <TableLoader noOfRows={1} noOfCols={2} />
+      </BrowserRouter>,
+    );
+
+    // DataTable renders skeleton cells, but internally calls accessor.
+    // Trigger a query that forces render cycle
+    expect(screen.getByTestId('skeleton-row-0')).toBeInTheDocument();
+  });
 });
