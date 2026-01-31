@@ -1,27 +1,26 @@
-/**
- * AgendaItemsCreateModal Component
- *
- * This component renders a modal for creating agenda items. It includes
- * form fields for entering details such as title, duration, description,
- * categories, URLs, and attachments. The modal also provides functionality
- * for validating URLs, managing attachments, and submitting the form.
- */
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
+import { useMutation } from '@apollo/client';
 
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import Button from 'shared-components/Button/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   FormFieldGroup,
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
+
 import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
+
+import {
+  AGENDA_ITEM_ALLOWED_MIME_TYPES,
+  AGENDA_ITEM_MIME_TYPE,
+} from 'Constant/fileUpload';
 
 import styles from './AgendaItemsCreateModal.module.css';
 
@@ -30,11 +29,6 @@ import type {
   InterfaceAttachment,
   InterfaceCreateFormStateType,
 } from 'types/AdminPortal/Agenda/interface';
-import {
-  AGENDA_ITEM_ALLOWED_MIME_TYPES,
-  AGENDA_ITEM_MIME_TYPE,
-} from 'Constant/fileUpload';
-import { useMutation } from '@apollo/client';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
@@ -49,17 +43,30 @@ const AgendaItemsCreateModal: React.FC<
   refetchAgendaFolder,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { orgId } = useParams();
+  const organizationId = orgId ?? '';
 
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
-  // Mutation for creating an agenda item
-  const [createAgendaItem] = useMutation(CREATE_AGENDA_ITEM_MUTATION);
 
-  const MAX_FILE_SIZE_MB = 10;
-  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+  const [createAgendaItem, { loading }] = useMutation(
+    CREATE_AGENDA_ITEM_MUTATION,
+  );
 
-  const { orgId } = useParams();
-  const organizationId = orgId ?? '';
+  const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+
+  const [agendaItemFormState, setAgendaItemFormState] =
+    useState<InterfaceCreateFormStateType>({
+      id: '',
+      title: '',
+      description: '',
+      duration: '',
+      creator: { name: '' },
+      urls: [],
+      attachments: [],
+      folderId: '',
+      categoryId: '',
+    });
 
   const isSafeUrl = (url: string): boolean => {
     try {
@@ -70,48 +77,25 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
-  // State to manage form values
-  const [agendaItemFormState, setAgendaItemFormState] =
-    useState<InterfaceCreateFormStateType>({
-      id: '',
-      title: '',
-      description: '',
-      duration: '',
-      creator: {
-        name: '',
-      },
-      urls: [],
-      attachments: [],
-      folderId: '',
-      categoryId: '',
-    });
-
-  /**
-   * Handler for creating a new agenda item.
-   *
-   * @param  e - The form submit event.
-   */
-  const createAgendaItemHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
+  const createAgendaItemHandler = async (): Promise<void> => {
     const selectedFolder = agendaFolderData?.find(
-      (folder) => folder.id === agendaItemFormState.folderId,
+      (f) => f.id === agendaItemFormState.folderId,
     );
+
     const folderItems = selectedFolder?.items?.edges ?? [];
     const maxSequence = folderItems.reduce(
       (max, edge) => Math.max(max, edge.node.sequence ?? 0),
       0,
     );
-    const nextSequence = maxSequence + 1;
+
     try {
       await createAgendaItem({
         variables: {
           input: {
             name: agendaItemFormState.title,
             description: agendaItemFormState.description,
-            eventId: eventId,
-            sequence: nextSequence, // Assign sequence based on current length
+            eventId,
+            sequence: maxSequence + 1,
             duration: agendaItemFormState.duration,
             folderId: agendaItemFormState.folderId,
             categoryId: agendaItemFormState.categoryId,
@@ -125,41 +109,30 @@ const AgendaItemsCreateModal: React.FC<
                   }))
                 : undefined,
             type: 'general',
-            //key:
             url:
               agendaItemFormState.urls.length > 0
-                ? agendaItemFormState.urls.map((u) => ({
-                    url: u,
-                  }))
+                ? agendaItemFormState.urls.map((u) => ({ url: u }))
                 : undefined,
           },
         },
       });
 
-      // Reset form state and hide modal
       setAgendaItemFormState({
         id: '',
         title: '',
         description: '',
         duration: '',
         folderId: '',
-        attachments: [] as {
-          id: string;
-          name: string;
-          mimeType: string;
-          fileHash: string;
-          objectName: string;
-        }[],
-        urls: [] as string[],
-        creator: {
-          name: '',
-        },
         categoryId: '',
+        urls: [],
+        attachments: [],
+        creator: { name: '' },
       });
+
       hide();
       refetchAgendaFolder();
-      NotificationToast.success(t('agendaItemCreated') as string);
-    } catch (error: unknown) {
+      NotificationToast.success(t('agendaItemCreated'));
+    } catch (error) {
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }
@@ -167,27 +140,35 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   const handleAddUrl = (): void => {
-    const trimmedUrl = newUrl.trim();
+    const trimmed = newUrl.trim();
 
-    if (trimmedUrl !== '' && isSafeUrl(trimmedUrl)) {
-      setAgendaItemFormState({
-        ...agendaItemFormState,
-        urls: [
-          ...agendaItemFormState.urls.filter((url) => url.trim() !== ''),
-          trimmedUrl,
-        ],
-      });
-      setNewUrl('');
-    } else {
+    if (!trimmed || !isSafeUrl(trimmed)) {
       NotificationToast.error(t('invalidUrl'));
+      return;
     }
+
+    setAgendaItemFormState((prev) => ({
+      ...prev,
+      urls: [...prev.urls.filter((u) => u.trim()), trimmed],
+    }));
+
+    setNewUrl('');
   };
 
   const handleRemoveUrl = (url: string): void => {
-    setAgendaItemFormState({
-      ...agendaItemFormState,
-      urls: agendaItemFormState.urls.filter((item) => item !== url),
-    });
+    setAgendaItemFormState((prev) => ({
+      ...prev,
+      urls: prev.urls.filter((u) => u !== url),
+    }));
+  };
+
+  const handleRemoveAttachment = (objectName: string): void => {
+    setAgendaItemFormState((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter(
+        (att) => att.objectName !== objectName,
+      ),
+    }));
   };
 
   const handleFileChange = async (
@@ -197,13 +178,12 @@ const AgendaItemsCreateModal: React.FC<
       NotificationToast.error(t('organizationRequired'));
       return;
     }
-    const target = e.target as HTMLInputElement;
-    if (!target.files || target.files.length === 0) return;
 
-    const files = Array.from(target.files);
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
 
     try {
-      const uploadedAttachments: InterfaceAttachment[] = [];
+      const uploaded: InterfaceAttachment[] = [];
 
       for (const file of files) {
         if (file.size > MAX_FILE_SIZE_BYTES) {
@@ -223,7 +203,7 @@ const AgendaItemsCreateModal: React.FC<
 
         const previewUrl = await getFileFromMinio(objectName, organizationId);
 
-        uploadedAttachments.push({
+        uploaded.push({
           name: file.name,
           mimeType: file.type,
           objectName,
@@ -232,252 +212,190 @@ const AgendaItemsCreateModal: React.FC<
         });
       }
 
-      if (uploadedAttachments.length > 0) {
+      if (uploaded.length) {
         setAgendaItemFormState((prev) => ({
           ...prev,
-          attachments: [...prev.attachments, ...uploadedAttachments],
+          attachments: [...prev.attachments, ...uploaded],
         }));
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
       NotificationToast.error(t('fileUploadFailed'));
     } finally {
-      target.value = '';
+      e.target.value = '';
     }
   };
 
-  const handleRemoveAttachment = (objectName: string): void => {
-    setAgendaItemFormState({
-      ...agendaItemFormState,
-      attachments: agendaItemFormState.attachments.filter(
-        (item) => item.objectName !== objectName,
-      ),
-    });
-  };
-
   return (
-    <BaseModal
-      className={styles.AgendaItemsModal}
-      show={isOpen}
-      onHide={hide}
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
       title={t('agendaItemDetails')}
-      dataTestId="createAgendaItemModal"
+      onPrimary={createAgendaItemHandler}
+      primaryText={t('createAgendaItem')}
+      loading={loading}
+      className={styles.AgendaItemsModal}
+      data-testid="createAgendaItemModal"
     >
-      <form onSubmit={createAgendaItemHandler}>
-        {/* Folder */}
-        <FormFieldGroup name="folder" label={t('folder')} inputId="folder">
-          <Autocomplete
-            options={agendaFolderData ?? []}
-            getOptionLabel={(folder) => folder.name}
-            value={
-              agendaFolderData?.find(
-                (folder) => folder.id === agendaItemFormState.folderId,
-              ) ?? null
-            }
-            onChange={(_, folder): void => {
-              setAgendaItemFormState({
-                ...agendaItemFormState,
-                folderId: folder?.id ?? null,
-              });
-            }}
-            renderInput={(params) => (
-              <div ref={params.InputProps.ref} className="position-relative">
-                <input
-                  {...params.inputProps}
-                  id="folder"
-                  className="form-control"
-                  placeholder={t('folderName')}
-                  data-testid="folderInput"
-                />
-                {params.InputProps.endAdornment}
-              </div>
-            )}
-          />
-        </FormFieldGroup>
-
-        {/* Category */}
-        <FormFieldGroup
-          name="category"
-          label={t('category')}
-          inputId="category"
-        >
-          <Autocomplete
-            options={agendaItemCategories || []}
-            getOptionLabel={(category) => category.name}
-            value={
-              agendaItemCategories?.find(
-                (category) => category.id === agendaItemFormState.categoryId,
-              ) ?? null
-            }
-            onChange={(_, category): void => {
-              setAgendaItemFormState({
-                ...agendaItemFormState,
-                categoryId: category?.id ?? '',
-              });
-            }}
-            renderInput={(params) => (
-              <div ref={params.InputProps.ref} className="position-relative">
-                <input
-                  {...params.inputProps}
-                  id="category"
-                  className="form-control"
-                  placeholder={t('categoryName')}
-                />
-                {params.InputProps.endAdornment}
-              </div>
-            )}
-          />
-        </FormFieldGroup>
-
-        <Row className="mb-3">
-          <Col>
-            <FormTextField
-              name="title"
-              label={t('title')}
-              placeholder={t('enterTitle')}
-              value={agendaItemFormState.title}
-              required
-              onChange={(value) =>
-                setAgendaItemFormState({
-                  ...agendaItemFormState,
-                  title: value,
-                })
-              }
-            />
-          </Col>
-          <Col>
-            <FormTextField
-              name="duration"
-              label={t('duration')}
-              placeholder={t('enterDuration')}
-              value={agendaItemFormState.duration}
-              required
-              onChange={(value) =>
-                setAgendaItemFormState({
-                  ...agendaItemFormState,
-                  duration: value,
-                })
-              }
-            />
-          </Col>
-        </Row>
-
-        <FormTextField
-          name="description"
-          label={t('description')}
-          placeholder={t('enterDescription')}
-          value={agendaItemFormState.description}
-          required
-          onChange={(value) =>
-            setAgendaItemFormState({
-              ...agendaItemFormState,
-              description: value,
-            })
+      {/* Folder */}
+      <FormFieldGroup name="folder" label={t('folder')}>
+        <Autocomplete
+          options={agendaFolderData ?? []}
+          getOptionLabel={(f) => f.name}
+          value={
+            agendaFolderData?.find(
+              (f) => f.id === agendaItemFormState.folderId,
+            ) ?? null
           }
-        />
-
-        {/* URLs */}
-        <FormFieldGroup name="url" label={t('url')}>
-          <div className="d-flex">
-            <input
-              type="text"
-              className="form-control"
-              placeholder={t('enterUrl')}
-              data-testid="urlInput"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
-            />
-            <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
-              {t('link')}
-            </Button>
-          </div>
-
-          {agendaItemFormState.urls.map((url, index) => (
-            <li key={index} className={styles.urlListItem}>
-              <FaLink className={styles.urlIcon} />
-              <a
-                href={encodeURI(url)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {url.length > 50 ? `${url.substring(0, 50)}...` : url}
-              </a>
-              <Button
-                type="button"
-                variant="danger"
-                size="sm"
-                className={styles.deleteButtonAgendaItems}
-                data-testid="deleteUrl"
-                onClick={() => handleRemoveUrl(url)}
-                aria-label={t('removeUrl')}
-              >
-                <FaTrash />
-              </Button>
-            </li>
-          ))}
-        </FormFieldGroup>
-
-        {/* Attachments */}
-        <FormFieldGroup name="attachments" label={t('attachments')}>
-          <input
-            type="file"
-            accept="image/*, video/*"
-            multiple
-            data-testid="attachment"
-            className="form-control"
-            onChange={handleFileChange}
-          />
-          <small className="text-muted">{t('attachmentLimit')}</small>
-        </FormFieldGroup>
-
-        {agendaItemFormState.attachments
-          .filter(
-            (att): att is InterfaceAttachment =>
-              typeof att === 'object' &&
-              !!att.mimeType &&
-              !!att.objectName &&
-              !!att.previewUrl,
-          )
-          .map((attachment, index) => (
-            <div key={index} className={styles.previewFile}>
-              {attachment.mimeType.startsWith('video') ? (
-                <video muted autoPlay loop playsInline>
-                  <source
-                    src={attachment.previewUrl}
-                    type={attachment.mimeType}
-                  />
-                </video>
-              ) : (
-                <img
-                  src={attachment.previewUrl}
-                  alt={t('attachmentPreviewAlt')}
-                />
-              )}
-              <button
-                type="button"
-                aria-label={t('removeAttachment')}
-                className={styles.closeButtonFile}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleRemoveAttachment(attachment.objectName);
-                }}
-                data-testid="deleteAttachment"
-              >
-                <i className="fa fa-times" />
-              </button>
+          onChange={(_, folder) =>
+            setAgendaItemFormState((prev) => ({
+              ...prev,
+              folderId: folder?.id ?? '',
+            }))
+          }
+          renderInput={(params) => (
+            <div ref={params.InputProps.ref}>
+              <input
+                {...params.inputProps}
+                className="form-control"
+                data-testid="folderInput"
+                placeholder={t('folderName')}
+              />
+              {params.InputProps.endAdornment}
             </div>
-          ))}
+          )}
+        />
+      </FormFieldGroup>
 
-        <Button
-          type="submit"
-          className={styles.greenregbtnAgendaItems}
-          value="createAgendaItem"
-          data-testid="createAgendaItemFormBtn"
-        >
-          {t('createAgendaItem')}
-        </Button>
-      </form>
-    </BaseModal>
+      {/* Category */}
+      <FormFieldGroup name="category" label={t('category')}>
+        <Autocomplete
+          options={agendaItemCategories || []}
+          getOptionLabel={(c) => c.name}
+          value={
+            agendaItemCategories?.find(
+              (c) => c.id === agendaItemFormState.categoryId,
+            ) ?? null
+          }
+          onChange={(_, category) =>
+            setAgendaItemFormState((prev) => ({
+              ...prev,
+              categoryId: category?.id ?? '',
+            }))
+          }
+          renderInput={(params) => (
+            <div ref={params.InputProps.ref}>
+              <input
+                {...params.inputProps}
+                className="form-control"
+                placeholder={t('categoryName')}
+              />
+              {params.InputProps.endAdornment}
+            </div>
+          )}
+        />
+      </FormFieldGroup>
+
+      <Row className="mb-3">
+        <Col>
+          <FormTextField
+            name="title"
+            label={t('title')}
+            value={agendaItemFormState.title}
+            required
+            onChange={(v) =>
+              setAgendaItemFormState((prev) => ({ ...prev, title: v }))
+            }
+          />
+        </Col>
+        <Col>
+          <FormTextField
+            name="duration"
+            label={t('duration')}
+            value={agendaItemFormState.duration}
+            required
+            onChange={(v) =>
+              setAgendaItemFormState((prev) => ({ ...prev, duration: v }))
+            }
+          />
+        </Col>
+      </Row>
+
+      <FormTextField
+        name="description"
+        label={t('description')}
+        value={agendaItemFormState.description}
+        required
+        onChange={(v) =>
+          setAgendaItemFormState((prev) => ({ ...prev, description: v }))
+        }
+      />
+
+      {/* URLs */}
+      <FormFieldGroup name="url" label={t('url')}>
+        <div className="d-flex">
+          <input
+            className="form-control"
+            data-testid="urlInput"
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+          />
+          <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
+            {t('link')}
+          </Button>
+        </div>
+
+        {agendaItemFormState.urls.map((url) => (
+          <li key={url} className={styles.urlListItem}>
+            <FaLink />
+            <a href={encodeURI(url)} target="_blank" rel="noopener noreferrer">
+              {url.length > 50 ? `${url.slice(0, 50)}...` : url}
+            </a>
+            <Button
+              variant="danger"
+              size="sm"
+              data-testid="deleteUrl"
+              onClick={() => handleRemoveUrl(url)}
+            >
+              <FaTrash />
+            </Button>
+          </li>
+        ))}
+      </FormFieldGroup>
+
+      {/* Attachments */}
+      <FormFieldGroup name="attachments" label={t('attachments')}>
+        <input
+          type="file"
+          multiple
+          accept="image/*, video/*"
+          data-testid="attachment"
+          className="form-control"
+          onChange={handleFileChange}
+        />
+        <small className="text-muted">{t('attachmentLimit')}</small>
+      </FormFieldGroup>
+
+      {agendaItemFormState.attachments.map((att) => (
+        <div key={att.objectName} className={styles.previewFile}>
+          {att.mimeType.startsWith('video') ? (
+            <video muted autoPlay loop playsInline>
+              <source src={att.previewUrl} type={att.mimeType} />
+            </video>
+          ) : (
+            <img src={att.previewUrl} alt={t('attachmentPreviewAlt')} />
+          )}
+
+          <button
+            type="button"
+            className={styles.closeButtonFile}
+            data-testid="deleteAttachment"
+            onClick={() => handleRemoveAttachment(att.objectName)}
+          >
+            <i className="fa fa-times" />
+          </button>
+        </div>
+      ))}
+    </CRUDModalTemplate>
   );
 };
 

@@ -1,22 +1,26 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import Button from 'shared-components/Button/Button';
-import styles from './AgendaFolderCreateModal.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { CREATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import React, { useEffect, useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { useParams } from 'react-router';
+
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+
+import { CREATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
+import styles from './AgendaFolderCreateModal.module.css';
+
+import type { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Agenda/interface';
 
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
 > = ({ isOpen, hide, eventId, agendaFolderData, t, refetchAgendaFolder }) => {
   const { orgId } = useParams();
-  // Mutation for creating an agenda item
-  const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
-  // State to manage form values
+
+  const [createAgendaFolder, { loading }] = useMutation(
+    CREATE_AGENDA_FOLDER_MUTATION,
+  );
+
   const [formState, setFormState] = useState({
     id: '',
     name: '',
@@ -25,6 +29,7 @@ const AgendaFolderCreateModal: React.FC<
       name: '',
     },
   });
+
   useEffect(() => {
     if (!orgId) {
       NotificationToast.error(t('organizationRequired'));
@@ -35,39 +40,33 @@ const AgendaFolderCreateModal: React.FC<
     return null;
   }
 
-  /**
-   * Handler for creating a new agenda item.
-   *
-   * @param  e - The form submit event.
-   */
-  const createAgendaFolderHandler = async (
-    e: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
+  const createAgendaFolderHandler = async (): Promise<void> => {
     const agendaFolders = Array.isArray(
       agendaFolderData?.agendaFoldersByEventId,
     )
-      ? agendaFolderData?.agendaFoldersByEventId
+      ? agendaFolderData.agendaFoldersByEventId
       : [];
+
     const maxSequence = agendaFolders.reduce((max, folder) => {
       const sequence = Number.isFinite(folder.sequence) ? folder.sequence : 0;
       return Math.max(max, sequence);
     }, 0);
+
     const nextSequence = maxSequence + 1;
+
     try {
       await createAgendaFolder({
         variables: {
           input: {
             name: formState.name,
             description: formState.description,
-            eventId: eventId,
-            sequence: nextSequence, // Assign sequence based on current length
+            eventId,
+            sequence: nextSequence,
             organizationId: orgId,
           },
         },
       });
 
-      // Reset form state and hide modal
       setFormState({
         id: '',
         name: '',
@@ -76,10 +75,11 @@ const AgendaFolderCreateModal: React.FC<
           name: '',
         },
       });
+
       hide();
       refetchAgendaFolder();
       NotificationToast.success(t('agendaFolderCreated') as string);
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }
@@ -87,54 +87,46 @@ const AgendaFolderCreateModal: React.FC<
   };
 
   return (
-    <BaseModal
-      className={`mt-5 ${styles.campaignModal}`}
-      show={isOpen}
-      onHide={hide}
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
       title={t('agendaFolderDetails')}
-      dataTestId="createAgendaFolderModal"
+      onPrimary={createAgendaFolderHandler}
+      primaryText={t('createAgendaFolder')}
+      loading={loading}
+      className={`mt-5 ${styles.campaignModal}`}
+      data-testid="createAgendaFolderModal"
     >
-      <form onSubmit={createAgendaFolderHandler}>
-        <FormTextField
-          name="folderName"
+      <FormTextField
+        name="folderName"
+        type="text"
+        label={t('folderName')}
+        placeholder={t('folderNamePlaceholder')}
+        value={formState.name}
+        onChange={(val) => setFormState({ ...formState, name: val })}
+        required
+      />
+
+      <div className="mb-3">
+        <label htmlFor="description" className="form-label">
+          {t('description')}
+        </label>
+        <input
+          id="description"
           type="text"
-          label={t('folderName')}
-          placeholder={t('folderNamePlaceholder')}
-          value={formState.name}
-          onChange={(val) => setFormState({ ...formState, name: val })}
+          className="form-control"
+          placeholder={t('description')}
+          value={formState.description}
           required
+          onChange={(e) =>
+            setFormState({
+              ...formState,
+              description: e.target.value,
+            })
+          }
         />
-
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">
-            {t('description')}
-          </label>
-          <input
-            id="description"
-            type="text"
-            className="form-control"
-            placeholder={t('description')}
-            value={formState.description}
-            required
-            onChange={(e) =>
-              setFormState({
-                ...formState,
-                description: e.target.value,
-              })
-            }
-          />
-        </div>
-
-        <Button
-          type="submit"
-          className={styles.regBtn}
-          value="createAgendaFolder"
-          data-testid="createAgendaFolderFormSubmitBtn"
-        >
-          {t('createAgendaFolder')}
-        </Button>
-      </form>
-    </BaseModal>
+      </div>
+    </CRUDModalTemplate>
   );
 };
 

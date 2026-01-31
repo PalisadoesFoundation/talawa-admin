@@ -1,13 +1,14 @@
 import React from 'react';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Button from 'shared-components/Button/Button';
-
-import styles from './AgendaFolderUpdateModal.module.css';
-import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
 import { useMutation } from '@apollo/client';
-import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
+
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+
+import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
+import styles from './AgendaFolderUpdateModal.module.css';
+
+import type { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
 
 /**
  * AgendaFolderUpdateModal Component
@@ -37,13 +38,11 @@ const AgendaFolderUpdateModal: React.FC<
   refetchAgendaFolder,
   t,
 }) => {
-  const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
+  const [updateAgendaFolder, { loading }] = useMutation(
+    UPDATE_AGENDA_FOLDER_MUTATION,
+  );
 
-  const updateAgendaFolderHandler = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-
+  const updateAgendaFolderHandler = async (): Promise<void> => {
     try {
       await updateAgendaFolder({
         variables: {
@@ -66,52 +65,45 @@ const AgendaFolderUpdateModal: React.FC<
   };
 
   return (
-    <BaseModal
-      show={isOpen}
-      onHide={onClose}
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={onClose}
       title={t('updateAgendaFolder')}
+      onPrimary={updateAgendaFolderHandler}
+      primaryText={t('update')}
+      loading={loading}
       className={styles.campaignModal}
-      dataTestId="updateAgendaFolderModal"
+      data-testid="updateAgendaFolderModal"
     >
-      <form onSubmit={updateAgendaFolderHandler}>
-        <FormTextField
-          name="folderName"
-          type="text"
-          label={t('folderName')}
-          placeholder={t('folderNamePlaceholder')}
-          value={folderFormState.name}
-          onChange={(val) =>
-            setFolderFormState({
-              ...folderFormState,
-              name: val,
-            })
-          }
-          required
-        />
+      <FormTextField
+        name="folderName"
+        type="text"
+        label={t('folderName')}
+        placeholder={t('folderNamePlaceholder')}
+        value={folderFormState.name}
+        onChange={(val) =>
+          setFolderFormState({
+            ...folderFormState,
+            name: val,
+          })
+        }
+        required
+      />
 
-        <FormTextField
-          name="folderDescription"
-          type="text"
-          label={t('description')}
-          placeholder={t('description')}
-          value={folderFormState.description}
-          onChange={(e) =>
-            setFolderFormState({
-              ...folderFormState,
-              description: e,
-            })
-          }
-        />
-
-        <Button
-          type="submit"
-          className={styles.regBtn}
-          data-testid="editAgendaFolderBtn"
-        >
-          {t('update')}
-        </Button>
-      </form>
-    </BaseModal>
+      <FormTextField
+        name="folderDescription"
+        type="text"
+        label={t('description')}
+        placeholder={t('description')}
+        value={folderFormState.description}
+        onChange={(val) =>
+          setFolderFormState({
+            ...folderFormState,
+            description: val,
+          })
+        }
+      />
+    </CRUDModalTemplate>
   );
 };
 
