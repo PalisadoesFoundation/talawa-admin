@@ -436,7 +436,9 @@ describe('CreateDirectChatModal', () => {
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
-        expect.any(Error),
+        expect.objectContaining({
+          message: expect.stringContaining('Unknown user'),
+        }),
       );
     });
     expect(chatsListRefetch).not.toHaveBeenCalled();
@@ -485,7 +487,9 @@ describe('CreateDirectChatModal', () => {
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
-        expect.any(Error),
+        expect.objectContaining({
+          message: expect.stringContaining('Unknown user'),
+        }),
       );
     });
     expect(chatsListRefetch).not.toHaveBeenCalled();

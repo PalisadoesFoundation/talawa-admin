@@ -60,7 +60,7 @@ const isGroupChat = (chat: NewChatType): boolean =>
  * Supports filtering by All, Unread, and Group chats.
  * @returns The rendered chat component with contact list and chat room.
  */
-export default function chat(): JSX.Element {
+export default function Chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
   const { getItem, setItem } = useLocalStorage();
