@@ -19,7 +19,7 @@ export const i18nCamelCaseRestrictions = [
   },
   {
     selector:
-      "CallExpression[callee.name='t'] > Literal[value=/[^a-zA-Z0-9.:]/]",
+      "CallExpression[callee.name='t'] > Literal[value=/[^a-zA-Z0-9.:_\\s-]/]",
     message:
       'i18n Convention Violation: Translation keys should only contain alphanumeric characters, dots, or colons.',
   },

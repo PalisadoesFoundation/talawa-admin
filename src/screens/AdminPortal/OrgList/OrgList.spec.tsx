@@ -2886,7 +2886,7 @@ describe('Email Verification Actions Tests', () => {
 });
 
 describe('Line Coverage Tests', () => {
-  test('should show default error message when resend verification fails without server message (Line 125)', async () => {
+  test('should show default error message when resend verification fails without server message', async () => {
     // Setup for resend test
     setupUser('basic');
     // Ensure local storage matches logic
@@ -2981,7 +2981,7 @@ describe('Line Coverage Tests', () => {
     });
   });
 
-  test('should render all organizations when rowsPerPage is 0 (Line 492)', async () => {
+  test('should render all organizations when rowsPerPage is 0 (edge case)', async () => {
     setupUser('basic');
     const orgs6 = Array.from({ length: 6 }, (_, i) => ({
       id: `org-${i + 1}`,

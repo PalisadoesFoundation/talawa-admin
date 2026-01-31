@@ -63,7 +63,7 @@ export default function PageHeader({
   onEventTypeChange,
   actions,
 }: InterfacePageHeaderProps) {
-  const { t } = useTranslation('translation');
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className={styles.calendarEventHeader}
@@ -112,17 +112,19 @@ export default function PageHeader({
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
             <SortingButton
-              title={t('eventType')}
+              title={tCommon('eventType')}
               sortingOptions={[
-                { label: t('events'), value: 'events' },
-                { label: t('workshops'), value: 'workshops' },
+                { label: tCommon('events'), value: 'events' },
+                { label: tCommon('workshops'), value: 'workshops' },
               ]}
               selectedOption={selectedEventType}
               onSortChange={(value) => onEventTypeChange?.(value.toString())}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
               buttonLabel={
-                selectedEventType === 'workshops' ? t('workshops') : t('events')
+                selectedEventType === 'workshops'
+                  ? tCommon('workshops')
+                  : tCommon('events')
               }
             />
           </div>

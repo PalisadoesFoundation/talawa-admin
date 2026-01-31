@@ -100,6 +100,30 @@ const SidebarNavItem = ({
     [icon, useSimpleButton, iconType],
   );
 
+  /**
+   * Determines the appropriate CSS classes for the button based on its state.
+   *
+   * @param isActive - Whether the navigation item is currently active
+   * @param useSimpleButton - Whether to use simple button styling
+   * @returns The computed CSS class names
+   */
+  const getButtonClassName = (
+    isActive: boolean,
+    useSimpleButton: boolean,
+  ): string => {
+    const baseClass = useSimpleButton
+      ? isActive
+        ? styles.leftDrawerActiveButton
+        : styles.leftDrawerInactiveButton
+      : isActive
+        ? styles.sidebarBtnActive
+        : styles.sidebarBtn;
+
+    const heightClass = useSimpleButton ? styles.simpleButtonHeight : '';
+
+    return `${baseClass} ${heightClass}`;
+  };
+
   return (
     <NavLink
       to={to}
@@ -107,15 +131,7 @@ const SidebarNavItem = ({
       data-testid={testId}
       data-cy={dataCy}
       className={(navData) =>
-        `${
-          useSimpleButton
-            ? navData.isActive
-              ? styles.leftDrawerActiveButton
-              : styles.leftDrawerInactiveButton
-            : navData.isActive
-              ? styles.sidebarBtnActive
-              : styles.sidebarBtn
-        } ${useSimpleButton ? styles.simpleButtonHeight : ''}`
+        getButtonClassName(navData.isActive, useSimpleButton)
       }
     >
       {({ isActive }) => (
