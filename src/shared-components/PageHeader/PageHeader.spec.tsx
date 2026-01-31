@@ -111,6 +111,72 @@ describe('PageHeader Component', () => {
     await user.click(workshopsOption);
   });
 
+  it('displays correct buttonLabel when selectedEventType is "events"', () => {
+    render(
+      <PageHeader showEventTypeFilter={true} selectedEventType="events" />,
+    );
+
+    const eventTypeButton = screen.getByTestId('eventType');
+    expect(eventTypeButton).toHaveTextContent('events');
+  });
+
+  it('displays correct buttonLabel when selectedEventType is "workshops"', () => {
+    render(
+      <PageHeader showEventTypeFilter={true} selectedEventType="workshops" />,
+    );
+
+    const eventTypeButton = screen.getByTestId('eventType');
+    expect(eventTypeButton).toHaveTextContent('workshops');
+  });
+
+  it('calls onEventTypeChange with correct value when selecting "workshops"', async () => {
+    const user = userEvent.setup();
+    const mockOnEventTypeChange = vi.fn();
+
+    render(
+      <PageHeader
+        showEventTypeFilter={true}
+        selectedEventType="events"
+        onEventTypeChange={mockOnEventTypeChange}
+      />,
+    );
+
+    // Open the dropdown
+    const eventTypeButton = screen.getByTestId('eventType');
+    await user.click(eventTypeButton);
+
+    // Select "workshops" option
+    const workshopsOption = screen.getByText('workshops');
+    await user.click(workshopsOption);
+
+    // Verify the callback was called with the correct value
+    expect(mockOnEventTypeChange).toHaveBeenCalledWith('workshops');
+  });
+
+  it('calls onEventTypeChange with correct value when selecting "events"', async () => {
+    const user = userEvent.setup();
+    const mockOnEventTypeChange = vi.fn();
+
+    render(
+      <PageHeader
+        showEventTypeFilter={true}
+        selectedEventType="workshops"
+        onEventTypeChange={mockOnEventTypeChange}
+      />,
+    );
+
+    // Open the dropdown
+    const eventTypeButton = screen.getByTestId('eventType');
+    await user.click(eventTypeButton);
+
+    // Select "events" option
+    const eventsOption = screen.getByText('events');
+    await user.click(eventsOption);
+
+    // Verify the callback was called with the correct value
+    expect(mockOnEventTypeChange).toHaveBeenCalledWith('events');
+  });
+
   it('resolves buttonLabel correctly from sorting options', () => {
     const mockSort = vi.fn();
     const sortingProps = [

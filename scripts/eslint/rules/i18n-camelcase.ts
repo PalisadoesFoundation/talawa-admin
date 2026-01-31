@@ -8,7 +8,7 @@ export const i18nCamelCaseRestrictions = [
       'i18n Convention Violation: Translation keys should not contain spaces. Use camelCase (e.g., "myOrganizations").',
   },
   {
-    selector: "CallExpression[callee.name='t'] > Literal[value=/^[A-Z]/]",
+    selector: "CallExpression[callee.name='t'] > Literal[value=/^(?![a-z])/]",
     message:
       'i18n Convention Violation: Translation keys should start with a lowercase letter (camelCase).',
   },
@@ -19,7 +19,7 @@ export const i18nCamelCaseRestrictions = [
   },
   {
     selector:
-      "CallExpression[callee.name='t'] > Literal[value=/[^a-zA-Z0-9.:_\\s-]/]",
+      "CallExpression[callee.name='t'] > Literal[value=/[^a-zA-Z0-9.:]/]",
     message:
       'i18n Convention Violation: Translation keys should only contain alphanumeric characters, dots, or colons.',
   },

@@ -4,6 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
+import styles from './SidebarNavItem.module.css';
 
 afterEach(() => {
   vi.clearAllMocks();
@@ -17,6 +18,11 @@ const mockSvgElement = (
   <svg data-testid="mock-svg-icon" width="20" height="20">
     <circle cx="10" cy="10" r="5" />
   </svg>
+);
+
+// Mock React Icon component for testing className merging
+const MockReactIcon = ({ className }: { className?: string }) => (
+  <div data-testid="react-icon" className={className} />
 );
 
 describe('SidebarNavItem Component', () => {
@@ -215,6 +221,53 @@ describe('SidebarNavItem Component', () => {
     it('handles special characters in testId', () => {
       renderComponent({ testId: 'test-btn-123' });
       expect(screen.getByTestId('test-btn-123')).toBeInTheDocument();
+    });
+
+    it('renders with dataCy attribute when provided', () => {
+      renderComponent({ dataCy: 'custom-cypress-id' });
+      const button = screen.getByTestId('testBtn');
+      expect(button).toHaveAttribute('data-cy', 'custom-cypress-id');
+    });
+
+    it('applies correct className to React icon in inactive state', () => {
+      // Navigate away to ensure inactive state
+      window.history.pushState({}, '', '/different-route');
+
+      renderComponent({
+        icon: <MockReactIcon className="existing-class" />,
+        iconType: 'react-icon',
+      });
+
+      const icon = screen.getByTestId('react-icon');
+      expect(icon).toBeInTheDocument();
+
+      // Check that all classes are present in the className
+      const classNames = icon.className.split(' ');
+      expect(classNames).toContain('existing-class');
+      expect(classNames).toContain(styles.iconReact);
+      expect(classNames).toContain(styles.iconReactInactive);
+      expect(classNames).not.toContain(styles.iconReactActive);
+    });
+
+    it('applies correct className to React icon in active state', () => {
+      // Navigate to the route to ensure active state
+      window.history.pushState({}, '', '/test-route');
+
+      renderComponent({
+        to: '/test-route',
+        icon: <MockReactIcon className="existing-class" />,
+        iconType: 'react-icon',
+      });
+
+      const icon = screen.getByTestId('react-icon');
+      expect(icon).toBeInTheDocument();
+
+      // Check that all classes are present in the className
+      const classNames = icon.className.split(' ');
+      expect(classNames).toContain('existing-class');
+      expect(classNames).toContain(styles.iconReact);
+      expect(classNames).toContain(styles.iconReactActive);
+      expect(classNames).not.toContain(styles.iconReactInactive);
     });
   });
 

@@ -64,6 +64,12 @@ export default function PageHeader({
   actions,
 }: InterfacePageHeaderProps) {
   const { t: tCommon } = useTranslation('common');
+
+  const eventTypeOptions = [
+    { label: tCommon('events'), value: 'events' },
+    { label: tCommon('workshops'), value: 'workshops' },
+  ];
+
   return (
     <div
       className={styles.calendarEventHeader}
@@ -80,8 +86,8 @@ export default function PageHeader({
             onSearch={search.onSearch}
             inputTestId={search.inputTestId}
             buttonTestId={search.buttonTestId}
-            showSearchButton={true} //  true
-            showLeadingIcon={true} //  true (Magnifying glass)
+            showSearchButton={true}
+            showLeadingIcon={true}
             showClearButton={true}
           />
         )}
@@ -113,18 +119,14 @@ export default function PageHeader({
           <div className={styles.btnsBlock}>
             <SortingButton
               title={tCommon('eventType')}
-              sortingOptions={[
-                { label: tCommon('events'), value: 'events' },
-                { label: tCommon('workshops'), value: 'workshops' },
-              ]}
+              sortingOptions={eventTypeOptions}
               selectedOption={selectedEventType}
               onSortChange={(value) => onEventTypeChange?.(value.toString())}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
               buttonLabel={
-                selectedEventType === 'workshops'
-                  ? tCommon('workshops')
-                  : tCommon('events')
+                eventTypeOptions.find((opt) => opt.value === selectedEventType)
+                  ?.label ?? tCommon('events')
               }
             />
           </div>
