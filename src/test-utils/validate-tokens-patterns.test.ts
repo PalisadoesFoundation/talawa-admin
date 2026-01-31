@@ -64,31 +64,48 @@ describe('CSS_PATTERNS', () => {
   });
 
   describe('spacingPx', () => {
-    test('matches padding with px values', () => {
-      expect('padding: 8px'.match(CSS_PATTERNS.spacingPx)).toEqual([
-        'padding: 8px',
+    test('matches width with px values', () => {
+      expect('width: 8px'.match(CSS_PATTERNS.spacingPx)).toEqual([
+        'width: 8px',
       ]);
     });
 
-    test('matches margin with rem values', () => {
-      expect('margin: 1rem'.match(CSS_PATTERNS.spacingPx)).toEqual([
-        'margin: 1rem',
+    test('matches height with rem values', () => {
+      expect('height: 1rem'.match(CSS_PATTERNS.spacingPx)).toEqual([
+        'height: 1rem',
       ]);
     });
 
-    test('matches multiple values', () => {
-      expect('padding: 8px 16px'.match(CSS_PATTERNS.spacingPx)).toEqual([
-        'padding: 8px 16px',
+    test('matches gap with multiple values', () => {
+      expect('gap: 8px 16px'.match(CSS_PATTERNS.spacingPx)).toEqual([
+        'gap: 8px 16px',
       ]);
+    });
+
+    test('does not match padding or margin (handled by spacingShorthand)', () => {
+      expect('padding: 8px'.match(CSS_PATTERNS.spacingPx)).toBeNull();
+      expect('margin: 1rem'.match(CSS_PATTERNS.spacingPx)).toBeNull();
     });
 
     test('does not match invalid spacing values', () => {
-      expect('padding: auto'.match(CSS_PATTERNS.spacingPx)).toBeNull();
-      expect('padding: inherit'.match(CSS_PATTERNS.spacingPx)).toBeNull();
+      expect('width: auto'.match(CSS_PATTERNS.spacingPx)).toBeNull();
+      expect('height: inherit'.match(CSS_PATTERNS.spacingPx)).toBeNull();
     });
   });
 
   describe('spacingShorthand', () => {
+    test('matches padding with single value', () => {
+      expect('padding: 8px'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
+        'padding: 8px',
+      ]);
+    });
+
+    test('matches margin with single value', () => {
+      expect('margin: 1rem'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
+        'margin: 1rem',
+      ]);
+    });
+
     test('matches padding shorthand with 2 values', () => {
       expect('padding: 8px 16px'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
         'padding: 8px 16px',

@@ -205,46 +205,123 @@ const ALLOWLIST_PATTERNS = [
 const normalizePath = (file: string): string => file.split(path.sep).join('/');
 
 /**
- * Check if a line should be skipped based on allowlist patterns
+ * Check if a match is enclosed within var() or calc() parentheses.
+ * Finds the nearest preceding "var(" or "calc(" and verifies its closing ")" occurs after the match.
  */
-const isAllowlisted = (line: string, match: string): boolean => {
-  // Check if the match is inside a var() or calc() expression
-  const matchIndex = line.indexOf(match);
-  if (matchIndex === -1) return false;
+const isInsideVarOrCalc = (
+  line: string,
+  matchIndex: number,
+  matchEnd: number,
+): boolean => {
+  // Find the nearest preceding var( or calc(
+  const varIndex = line.lastIndexOf('var(', matchIndex);
+  const calcIndex = line.lastIndexOf('calc(', matchIndex);
+  const openerIndex = Math.max(varIndex, calcIndex);
 
-  // Get context around the match
-  const contextBefore = line.slice(Math.max(0, matchIndex - 50), matchIndex);
-  const contextAfter = line.slice(matchIndex, matchIndex + match.length + 20);
-  const context = contextBefore + contextAfter;
-
-  // Check against allowlist patterns
-  for (const pattern of ALLOWLIST_PATTERNS) {
-    if (pattern.test(context)) {
-      return true;
-    }
+  if (openerIndex === -1) {
+    return false;
   }
 
-  // Check if match is inside var()
-  if (
-    /var\([^)]*$/.test(contextBefore) &&
-    /^[^)]*\)/.test(line.slice(matchIndex + match.length))
-  ) {
-    return true;
+  // Find the closing parenthesis for this opener
+  // We need to handle nested parentheses
+  let depth = 1;
+  const openerEnd =
+    openerIndex + (line.slice(openerIndex).startsWith('var(') ? 4 : 5);
+
+  for (let i = openerEnd; i < line.length; i++) {
+    if (line[i] === '(') {
+      depth++;
+    } else if (line[i] === ')') {
+      depth--;
+      if (depth === 0) {
+        // Found the closing parenthesis - check if match is inside
+        return matchEnd <= i;
+      }
+    }
   }
 
   return false;
 };
 
 /**
+ * Check if a line should be skipped based on allowlist patterns
+ */
+const isAllowlisted = (line: string, match: string): boolean => {
+  const matchIndex = line.indexOf(match);
+  if (matchIndex === -1) return false;
+
+  const matchEnd = matchIndex + match.length;
+
+  // Check if the match is inside a var() or calc() expression
+  if (isInsideVarOrCalc(line, matchIndex, matchEnd)) {
+    return true;
+  }
+
+  // Check against allowlist patterns using the full line
+  for (const pattern of ALLOWLIST_PATTERNS) {
+    // Reset lastIndex for global patterns
+    pattern.lastIndex = 0;
+
+    // Find all matches of the pattern in the line
+    let patternMatch;
+    while ((patternMatch = pattern.exec(line)) !== null) {
+      const patternStart = patternMatch.index;
+      const patternEnd = patternStart + patternMatch[0].length;
+
+      // Check if the violation match overlaps with or is contained in this allowlist pattern match
+      // i18n-ignore-next-line
+      if (matchIndex >= patternStart && matchEnd <= patternEnd) {
+        return true;
+      }
+
+      // For non-global patterns, break after first match
+      if (!pattern.global) break;
+    }
+  }
+
+  return false;
+};
+
+/**
+ * Strip inline comment fragments from a line, returning only the code portion.
+ * Removes trailing single-line comments, self-contained block comments,
+ * HTML comments, and content after an unclosed block comment start.
+ */
+const stripInlineComments = (line: string): string => {
+  let result = line;
+
+  // Remove trailing // comments (but not inside strings)
+  // Simple approach: find // not preceded by : (to avoid URLs like http://)
+  const singleLineCommentIndex = result.search(/(?<!:)\/\//);
+  if (singleLineCommentIndex !== -1) {
+    result = result.slice(0, singleLineCommentIndex);
+  }
+
+  // Remove self-contained /* ... */ fragments
+  result = result.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, '');
+
+  // Remove self-contained <!-- ... --> fragments
+  result = result.replace(/<!--[\s\S]*?-->/g, '');
+
+  // If a block comment starts but doesn't close, keep only the part before /*
+  const blockStartIndex = result.indexOf('/*');
+  if (blockStartIndex !== -1 && !result.includes('*/')) {
+    result = result.slice(0, blockStartIndex);
+  }
+
+  return result;
+};
+
+/**
  * Check if a line is a comment based on line content and block comment state.
  * @param line - The line content to check
  * @param inBlockComment - Whether we're currently inside a block comment
- * @returns Object with isComment flag and updated inBlockComment state
+ * @returns Object with isComment flag, updated inBlockComment state, and code portion to validate
  */
 const checkCommentState = (
   line: string,
   inBlockComment: boolean,
-): { isComment: boolean; inBlockComment: boolean } => {
+): { isComment: boolean; inBlockComment: boolean; codePortion: string } => {
   const trimmed = line.trim();
 
   // If we're inside a block comment, check for end
@@ -252,16 +329,23 @@ const checkCommentState = (
     if (trimmed.includes('*/')) {
       // Line contains end of block comment
       // Check if there's code after the closing */
-      const afterClose = trimmed.slice(trimmed.indexOf('*/') + 2).trim();
+      const closeIndex = trimmed.indexOf('*/') + 2;
+      const afterClose = trimmed.slice(closeIndex).trim();
       if (afterClose.length > 0) {
-        // There's code after the comment ends - treat as code line
-        return { isComment: false, inBlockComment: false };
+        // There's code after the comment ends - return only that code portion
+        const lineCloseIndex = line.indexOf('*/') + 2;
+        const codeAfter = stripInlineComments(line.slice(lineCloseIndex));
+        return {
+          isComment: false,
+          inBlockComment: false,
+          codePortion: codeAfter,
+        };
       }
       // Only comment content on this line
-      return { isComment: true, inBlockComment: false };
+      return { isComment: true, inBlockComment: false, codePortion: '' };
     }
     // Still inside block comment
-    return { isComment: true, inBlockComment: true };
+    return { isComment: true, inBlockComment: true, codePortion: '' };
   }
 
   // Check for single-line comments
@@ -270,7 +354,7 @@ const checkCommentState = (
     trimmed.startsWith('<!--') ||
     trimmed.endsWith('-->')
   ) {
-    return { isComment: true, inBlockComment: false };
+    return { isComment: true, inBlockComment: false, codePortion: '' };
   }
 
   // Check for block comment start
@@ -279,23 +363,27 @@ const checkCommentState = (
       // Self-contained block comment on this line
       // Only treat as comment if the entire line is a comment (starts with /*)
       if (trimmed.startsWith('/*')) {
-        return { isComment: true, inBlockComment: false };
+        return { isComment: true, inBlockComment: false, codePortion: '' };
       }
       // There's code before or around the comment (e.g., "color: #fff; /* note */")
-      // Treat as code so the validator can check the code portion
-      return { isComment: false, inBlockComment: false };
+      // Strip the comment and return the code portion
+      const codePortion = stripInlineComments(line);
+      return { isComment: false, inBlockComment: false, codePortion };
     }
     // Block comment starts but doesn't end on this line
     // Check if there's code before the /* (e.g., "color: #fff; /*")
     if (trimmed.startsWith('/*')) {
       // Entire line starts with comment
-      return { isComment: true, inBlockComment: true };
+      return { isComment: true, inBlockComment: true, codePortion: '' };
     }
-    // There's code before the block comment starts - validate the code portion
-    return { isComment: false, inBlockComment: true };
+    // There's code before the block comment starts - return only the code before /*
+    const codePortion = stripInlineComments(line);
+    return { isComment: false, inBlockComment: true, codePortion };
   }
 
-  return { isComment: false, inBlockComment: false };
+  // No comments - strip any trailing // comments just in case
+  const codePortion = stripInlineComments(line);
+  return { isComment: false, inBlockComment: false, codePortion };
 };
 
 /**
@@ -763,9 +851,12 @@ export async function validateFiles(
       const commentState = checkCommentState(line, inBlockComment);
       inBlockComment = commentState.inBlockComment;
 
+      // Use the code portion (with comments stripped) for validation
+      const lineToValidate = commentState.codePortion;
+
       if (isCss) {
         validateCssLine(
-          line,
+          lineToValidate,
           file,
           lineNumber,
           results,
@@ -773,7 +864,7 @@ export async function validateFiles(
         );
       } else if (isTs) {
         validateTsxLine(
-          line,
+          lineToValidate,
           file,
           lineNumber,
           results,
