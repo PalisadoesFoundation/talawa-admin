@@ -228,6 +228,11 @@ describe('userUpdateUtils', () => {
 });
 
 describe('validateImageFile (single allowed type)', () => {
+  afterEach(() => {
+    vi.resetModules();
+    vi.clearAllMocks();
+  });
+
   it('formats allowed types correctly when only one type is allowed', async () => {
     vi.resetModules();
 
@@ -237,6 +242,8 @@ describe('validateImageFile (single allowed type)', () => {
     }));
 
     const { validateImageFile } = await import('./userUpdateUtils');
+    const { NotificationToast } =
+      await import('components/NotificationToast/NotificationToast');
 
     const mockTCommon = vi
       .fn()
@@ -253,5 +260,8 @@ describe('validateImageFile (single allowed type)', () => {
     expect(mockTCommon).toHaveBeenCalledWith('invalidFileType', {
       types: 'JPEG',
     });
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'Invalid file type. Please use JPEG.',
+    );
   });
 });
