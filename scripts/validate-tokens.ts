@@ -34,6 +34,14 @@ import { execSync, spawnSync } from 'child_process';
 import { glob } from 'glob';
 import { fileURLToPath } from 'url';
 
+/**
+ * Allowed validation categories for design token checks.
+ * - CSS categories: 'color' (hex/rgb/hsl), 'spacing' (margin/padding/gap),
+ *   'font-size', 'font-weight', 'line-height', 'border-radius', 'border',
+ *   'box-shadow', 'outline'
+ * - TSX categories (inline styles): 'tsx-color', 'tsx-spacing', 'tsx-font-size',
+ *   'tsx-font-weight', 'tsx-line-height', 'tsx-border-radius', 'tsx-outline'
+ */
 export type ValidationResultType =
   | 'color'
   | 'spacing'
@@ -52,6 +60,10 @@ export type ValidationResultType =
   | 'tsx-border-radius'
   | 'tsx-outline';
 
+/**
+ * Models a single validation finding with file path, line number,
+ * matched text, and violation type.
+ */
 interface IValidationResult {
   file: string;
   line: number;
@@ -108,10 +120,10 @@ export const CSS_PATTERNS = {
 export const TSX_PATTERNS = {
   // Spacing camelCase properties with numeric or string px/rem/em values
   spacingCamelCase:
-    /(?:margin|padding)(?:Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?!\s*[,}]))/gi,
+    /(?:margin|padding)(?:Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
   // Width/height with hardcoded values
   dimensionsCamelCase:
-    /(?:width|height|minWidth|minHeight|maxWidth|maxHeight|gap|rowGap|columnGap|top|right|bottom|left):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?!\s*[,}]))/gi,
+    /(?:width|height|minWidth|minHeight|maxWidth|maxHeight|gap|rowGap|columnGap|top|right|bottom|left):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
 
   // Font size in TSX
   fontSizeCamelCase:
@@ -287,6 +299,7 @@ export const shouldSkipFile = (file: string): boolean => {
     normalized === 'src/style/app-fixed.module.css' ||
     normalized === 'src/assets/css/app.css' ||
     normalized === 'src/style/app-fixed.module.css' ||
+    normalized.startsWith('src/test-utils/validate-tokens') ||
     normalized.startsWith('src/style/tokens/')
   );
 };
@@ -635,7 +648,14 @@ const validateTsxLine = (
 
   // Also check for CSS patterns in template literals and style objects
   // Hex colors are common in TSX files
-  addMatches(line, CSS_PATTERNS.hexColor, 'color', file, lineNumber, results);
+  addMatches(
+    line,
+    CSS_PATTERNS.hexColor,
+    'tsx-color',
+    file,
+    lineNumber,
+    results,
+  );
 };
 
 export async function validateFiles(
