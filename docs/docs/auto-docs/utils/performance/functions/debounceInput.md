@@ -6,7 +6,7 @@
 
 > **debounceInput**\<`T`\>(`fn`, `wait`, `options?`): `T` & `object`
 
-Defined in: [src/utils/performance.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L43)
+Defined in: [src/utils/performance.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/performance.ts#L44)
 
 Creates a debounced function tailored for input handlers.
 
