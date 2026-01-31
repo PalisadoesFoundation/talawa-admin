@@ -56,6 +56,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
  * Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
  *
  * @param params - The parameters object containing user info, chat data, and mutation functions.
+ * @returns Resolves when the direct chat check/creation completes.
  */
 
 export const handleCreateDirectChat = async (

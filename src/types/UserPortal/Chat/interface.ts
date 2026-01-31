@@ -159,6 +159,10 @@ export interface InterfaceCreateDirectChatProps {
   chats: NewChatType[];
 }
 
+/**
+ * Parameters for creating a direct chat with another user.
+ * Encapsulates user info, chat data, mutation functions, and UI handlers.
+ */
 export interface InterfaceHandleCreateDirectChatParams {
   id: string;
   userName: string;

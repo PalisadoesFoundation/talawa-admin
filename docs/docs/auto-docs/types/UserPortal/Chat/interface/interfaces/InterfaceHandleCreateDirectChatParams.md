@@ -4,7 +4,10 @@
 
 # Interface: InterfaceHandleCreateDirectChatParams
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L162)
+Defined in: [src/types/UserPortal/Chat/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L166)
+
+Parameters for creating a direct chat with another user.
+Encapsulates user info, chat data, mutation functions, and UI handlers.
 
 ## Properties
 
@@ -12,7 +15,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:162](https://github.com/Pali
 
 > **chats**: [`NewChatType`](../type-aliases/NewChatType.md)[]
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L165)
+Defined in: [src/types/UserPortal/Chat/interface.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L169)
 
 ***
 
@@ -20,7 +23,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:165](https://github.com/Pali
 
 > **chatsListRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L191)
+Defined in: [src/types/UserPortal/Chat/interface.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L195)
 
 #### Parameters
 
@@ -38,7 +41,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:191](https://github.com/Pali
 
 > **createChat**: (`options?`) => `Promise`\<`FetchResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L168)
+Defined in: [src/types/UserPortal/Chat/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L172)
 
 #### Parameters
 
@@ -56,7 +59,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:168](https://github.com/Pali
 
 > **createChatMembership**: (`options?`) => `Promise`\<`FetchResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L178)
+Defined in: [src/types/UserPortal/Chat/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L182)
 
 #### Parameters
 
@@ -74,7 +77,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:178](https://github.com/Pali
 
 > **currentUserName**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L190)
+Defined in: [src/types/UserPortal/Chat/interface.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L194)
 
 ***
 
@@ -82,7 +85,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:190](https://github.com/Pali
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L163)
+Defined in: [src/types/UserPortal/Chat/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L167)
 
 ***
 
@@ -90,7 +93,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:163](https://github.com/Pali
 
 > **organizationId**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L188)
+Defined in: [src/types/UserPortal/Chat/interface.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L192)
 
 ***
 
@@ -98,7 +101,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:188](https://github.com/Pali
 
 > **t**: `TFunction`\<`"translation"`, `"userChat"`\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L166)
+Defined in: [src/types/UserPortal/Chat/interface.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L170)
 
 ***
 
@@ -106,7 +109,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:166](https://github.com/Pali
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L167)
+Defined in: [src/types/UserPortal/Chat/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L171)
 
 ***
 
@@ -114,7 +117,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:167](https://github.com/Pali
 
 > **toggleCreateDirectChatModal**: () => `void`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L194)
+Defined in: [src/types/UserPortal/Chat/interface.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L198)
 
 #### Returns
 
@@ -126,7 +129,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:194](https://github.com/Pali
 
 > **userId**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L189)
+Defined in: [src/types/UserPortal/Chat/interface.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L193)
 
 ***
 
@@ -134,4 +137,4 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:189](https://github.com/Pali
 
 > **userName**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L164)
+Defined in: [src/types/UserPortal/Chat/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L168)
