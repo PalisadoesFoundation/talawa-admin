@@ -5,7 +5,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
-const isSharded = !!process.env.SHARD_INDEX || !!process.env.SHARD_COUNT;
 const cpuCount = cpus().length;
 
 const MAX_CI_THREADS = 12; // Reduced to leave headroom
@@ -26,10 +25,7 @@ const baseTestInclude = [
 const eslintTestInclude = [
   'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}',
 ];
-
-const testInclude = isSharded
-  ? baseTestInclude
-  : [...baseTestInclude, ...eslintTestInclude];
+const testInclude = [...baseTestInclude, ...eslintTestInclude];
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
