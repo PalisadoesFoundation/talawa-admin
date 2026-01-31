@@ -54,7 +54,7 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
     docs: {
       description: 'Prefer CRUDModalTemplate over BaseModal in CRUD contexts',
       //docs does not exists yet
-      url: 'docs/developer-resources/linting.md',
+      url: 'docs/docs/docs/developer-resources/linting.md',
     },
     messages: {
       preferCrud:
