@@ -1,0 +1,86 @@
+.leftDrawer .optionList {
+  /* height: 75%; */
+  overflow-y: hidden;
+  overflow-x: hidden !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
+  transition: overflow 0.3s ease-in-out;
+}
+
+.leftDrawer .optionList:hover {
+  overflow-y: auto;
+}
+
+.leftDrawer .optionList::-webkit-scrollbar {
+  width: 1px;
+}
+
+.leftDrawer .optionList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.leftDrawer .optionList::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 30px;
+}
+
+.leftDrawer .optionList::-webkit-scrollbar-thumb:hover {
+  background-color: var(--leftDrawer-optionList-bg);
+}
+
+.leftDrawer .optionList button,
+.leftDrawer .optionList a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  text-align: start;
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  border-radius: 12px;
+  font-size: 16px;
+  padding: 0.6rem;
+  padding-left: 0.8rem;
+  outline: none;
+  border: none;
+  overflow: hidden;
+}
+
+.leftDrawer button .iconWrapper,
+.leftDrawer a .iconWrapper {
+  width: 36px;
+  min-width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leftDrawer .optionList .collapseBtn {
+  height: 48px;
+  border: none;
+}
+
+.profileCardWrapper {
+  display: flex;
+}
+
+.profileCardHidden {
+  display: none;
+}
+
+.switchPortalWrapper :global(a) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  text-align: start;
+  text-decoration: none;
+  margin-bottom: 0.8rem;
+  border-radius: 12px;
+  font-size: 16px;
+  padding: 0.6rem;
+  padding-left: 0.8rem;
+  outline: none;
+  border: none;
+  overflow: hidden;
+}

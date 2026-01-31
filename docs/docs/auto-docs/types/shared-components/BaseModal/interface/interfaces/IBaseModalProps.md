@@ -4,7 +4,7 @@
 
 # Interface: IBaseModalProps
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L29)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L30)
 
 BaseModal component props.
 
@@ -33,6 +33,7 @@ Props:
 - bodyClassName: Additional CSS classes for the modal body.
 - footerClassName: Additional CSS classes for the modal footer.
 - dataTestId: Test ID for automated testing.
+- id: Optional HTML id attribute for the modal container element.
 
 ## Properties
 
@@ -40,7 +41,7 @@ Props:
 
 > `optional` **backdrop**: `boolean` \| `"static"`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L38)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L39)
 
 ***
 
@@ -48,7 +49,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:38](https://gith
 
 > `optional` **bodyClassName**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L45)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L46)
 
 ***
 
@@ -56,7 +57,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:45](https://gith
 
 > `optional` **centered**: `boolean`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L37)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L38)
 
 ***
 
@@ -64,7 +65,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:37](https://gith
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L34)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L35)
 
 ***
 
@@ -72,7 +73,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:34](https://gith
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L40)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L41)
 
 ***
 
@@ -80,7 +81,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:40](https://gith
 
 > `optional` **closeButtonVariant**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L42)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L43)
 
 ***
 
@@ -88,7 +89,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:42](https://gith
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L47)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L49)
 
 ***
 
@@ -96,7 +97,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:47](https://gith
 
 > `optional` **footer**: `ReactNode`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L35)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L36)
 
 ***
 
@@ -104,7 +105,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:35](https://gith
 
 > `optional` **footerClassName**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L46)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L47)
 
 ***
 
@@ -112,7 +113,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:46](https://gith
 
 > `optional` **headerClassName**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L43)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L44)
 
 ***
 
@@ -120,7 +121,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:43](https://gith
 
 > `optional` **headerContent**: `ReactNode`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L33)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L34)
 
 ***
 
@@ -128,7 +129,15 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:33](https://gith
 
 > `optional` **headerTestId**: `string`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L44)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L45)
+
+***
+
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/types/shared-components/BaseModal/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L48)
 
 ***
 
@@ -136,7 +145,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:44](https://gith
 
 > `optional` **keyboard**: `boolean`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L39)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L40)
 
 ***
 
@@ -144,7 +153,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:39](https://gith
 
 > **onHide**: () => `void`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L31)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L32)
 
 #### Returns
 
@@ -156,7 +165,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:31](https://gith
 
 > **show**: `boolean`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L30)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L31)
 
 ***
 
@@ -164,7 +173,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:30](https://gith
 
 > `optional` **showCloseButton**: `boolean`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L41)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L42)
 
 ***
 
@@ -172,7 +181,7 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:41](https://gith
 
 > `optional` **size**: `"sm"` \| `"lg"` \| `"xl"`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L36)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L37)
 
 ***
 
@@ -180,4 +189,4 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:36](https://gith
 
 > `optional` **title**: `ReactNode`
 
-Defined in: [src/types/shared-components/BaseModal/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L32)
+Defined in: [src/types/shared-components/BaseModal/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L33)

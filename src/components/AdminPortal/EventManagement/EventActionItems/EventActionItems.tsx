@@ -213,12 +213,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 
-  // Force refetch when eventId changes to ensure exception logic is applied
-  // This fixes the caching issue where template data is shown instead of exception data
-  useEffect(() => {
-    eventActionItemsRefetch();
-  }, [eventId, eventActionItemsRefetch]);
-
   if (eventInfoLoading) {
     return (
       <LoadingState isLoading={eventInfoLoading} variant="spinner">

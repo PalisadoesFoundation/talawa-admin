@@ -9,6 +9,7 @@ import {
 } from './imports.ts';
 import { securityRestrictions } from './security.ts';
 import { searchInputRestrictions } from './search-input.ts';
+import { modalStateRestrictions } from './modal-state.ts';
 
 export {
   restrictedImports,
@@ -17,4 +18,5 @@ export {
   stripId,
   securityRestrictions,
   searchInputRestrictions,
+  modalStateRestrictions,
 };

@@ -1,5 +1,5 @@
-import { useMutation } from '@apollo/client';
 // translation-check-keyPrefix: eventListCard
+import { useMutation } from '@apollo/client';
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -10,57 +10,21 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type {
+  InterfaceEventUpdateInput,
+  InterfaceUpdateEventHandlerProps,
+} from 'types/EventListCard/interface';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import { DATE_FORMAT_ISO_DATE, DATE_TIME_SEPARATOR } from 'Constant/common';
 
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
-
-interface IEventUpdateInput {
-  id: string;
-  name?: string;
-  description?: string;
-  location?: string;
-  isPublic?: boolean;
-  isRegisterable?: boolean;
-  isInviteOnly?: boolean;
-  allDay?: boolean;
-  startAt?: string;
-  endAt?: string;
-  recurrenceRule?: InterfaceRecurrenceRule | null;
-  recurrence?: InterfaceRecurrenceRule | null;
-}
-
-interface IFormState {
-  name: string;
-  eventdescrip: string;
-  location: string;
-  startTime: string;
-  endTime: string;
-}
-
-interface IUpdateEventHandlerProps {
-  eventListCardProps: IEventListCard;
-  formState: IFormState;
-  alldaychecked: boolean;
-  publicchecked: boolean;
-  registrablechecked: boolean;
-  inviteOnlyChecked: boolean;
-  eventStartDate: Date;
-  eventEndDate: Date;
-  recurrence: InterfaceRecurrenceRule | null;
-  updateOption: 'single' | 'following' | 'entireSeries';
-  hasRecurrenceChanged?: boolean; // Add this parameter
-  t: (key: string) => string;
-  hideViewModal: () => void;
-  setEventUpdateModalIsOpen: (isOpen: boolean) => void;
-  refetchEvents?: () => void;
-}
-
+/**
+ * Creates the update handler for EventListCard modal edits, managing mutations for standalone and recurring events.
+ *
+ * @returns An object containing the update logic:
+ * - updateEventHandler: `(args: IUpdateEventHandlerProps) => Promise<void>` - Asynchronous function that handles the event update process, including validation and mutation execution.
+ */
 export const useUpdateEventHandler = () => {
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [updateSingleRecurringEventInstance] = useMutation(
@@ -76,9 +40,9 @@ export const useUpdateEventHandler = () => {
   const updateEventHandler = async ({
     eventListCardProps,
     formState,
-    alldaychecked,
-    publicchecked,
-    registrablechecked,
+    allDayChecked,
+    publicChecked,
+    registerableChecked,
     inviteOnlyChecked,
     eventStartDate,
     eventEndDate,
@@ -89,62 +53,64 @@ export const useUpdateEventHandler = () => {
     hideViewModal,
     setEventUpdateModalIsOpen,
     refetchEvents,
-  }: IUpdateEventHandlerProps): Promise<void> => {
+  }: InterfaceUpdateEventHandlerProps): Promise<void> => {
     const isRecurringInstance =
       !eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id;
 
     try {
       let data;
-      const updateInput: IEventUpdateInput = { id: eventListCardProps.id };
+      const updateInput: InterfaceEventUpdateInput = {
+        id: eventListCardProps.id,
+      };
 
       // Only include fields that have actually changed
       if (formState.name !== eventListCardProps.name) {
         updateInput.name = formState.name;
       }
-      if (formState.eventdescrip !== eventListCardProps.description) {
-        updateInput.description = formState.eventdescrip;
+      if (formState.eventDescription !== eventListCardProps.description) {
+        updateInput.description = formState.eventDescription;
       }
       if (formState.location !== eventListCardProps.location) {
         updateInput.location = formState.location;
       }
-      if (publicchecked !== eventListCardProps.isPublic) {
-        updateInput.isPublic = publicchecked;
+      if (publicChecked !== eventListCardProps.isPublic) {
+        updateInput.isPublic = publicChecked;
       }
-      if (registrablechecked !== eventListCardProps.isRegisterable) {
-        updateInput.isRegisterable = registrablechecked;
+      if (registerableChecked !== eventListCardProps.isRegisterable) {
+        updateInput.isRegisterable = registerableChecked;
       }
       if (inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)) {
         updateInput.isInviteOnly = inviteOnlyChecked;
       }
-      if (alldaychecked !== eventListCardProps.allDay) {
-        updateInput.allDay = alldaychecked;
+      if (allDayChecked !== eventListCardProps.allDay) {
+        updateInput.allDay = allDayChecked;
       }
 
-      const newStartAt = alldaychecked
+      const newStartAt = allDayChecked
         ? dayjs.utc(eventStartDate).isValid()
           ? dayjs.utc(eventStartDate).startOf('day').toISOString()
           : ''
         : dayjs.utc(eventStartDate).isValid()
           ? dayjs
               .utc(eventStartDate)
-              .hour(parseInt(formState.startTime.split(':')[0]))
-              .minute(parseInt(formState.startTime.split(':')[1]))
-              .second(parseInt(formState.startTime.split(':')[2]))
+              .hour(parseInt(formState.startTime.split(':')[0], 10) || 0)
+              .minute(parseInt(formState.startTime.split(':')[1], 10) || 0)
+              .second(parseInt(formState.startTime.split(':')[2], 10) || 0)
               .millisecond(0)
               .toISOString()
           : '';
 
-      const newEndAt = alldaychecked
+      const newEndAt = allDayChecked
         ? dayjs.utc(eventEndDate).isValid()
           ? dayjs.utc(eventEndDate).endOf('day').toISOString()
           : ''
         : dayjs.utc(eventEndDate).isValid()
           ? dayjs
               .utc(eventEndDate)
-              .hour(parseInt(formState.endTime.split(':')[0]))
-              .minute(parseInt(formState.endTime.split(':')[1]))
-              .second(parseInt(formState.endTime.split(':')[2]))
+              .hour(parseInt(formState.endTime.split(':')[0], 10) || 0)
+              .minute(parseInt(formState.endTime.split(':')[1], 10) || 0)
+              .second(parseInt(formState.endTime.split(':')[2], 10) || 0)
               .millisecond(0)
               .toISOString()
           : '';
@@ -154,7 +120,7 @@ export const useUpdateEventHandler = () => {
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : (() => {
-            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
+            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.startTime}`;
             return dayjs.utc(dateTimeStr).isValid()
               ? dayjs.utc(dateTimeStr).toISOString()
               : '';
@@ -164,17 +130,13 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .isValid()
-          ? dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .toISOString()
-          : '';
+        : (() => {
+            const endDateTimeStr = `${dayjs.utc(eventListCardProps.endAt).format(DATE_FORMAT_ISO_DATE)}${DATE_TIME_SEPARATOR}${eventListCardProps.endTime}`;
+
+            return dayjs.utc(endDateTimeStr).isValid()
+              ? dayjs.utc(endDateTimeStr).toISOString()
+              : '';
+          })();
 
       // Only include timing changes if they actually changed
       if (newStartAt !== originalStartAt) {
@@ -227,7 +189,7 @@ export const useUpdateEventHandler = () => {
             break;
           }
           case 'entireSeries': {
-            const entireSeriesInput: IEventUpdateInput = {
+            const entireSeriesInput: InterfaceEventUpdateInput = {
               id: eventListCardProps.id,
             };
 
@@ -235,25 +197,25 @@ export const useUpdateEventHandler = () => {
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }
-            if (formState.eventdescrip !== eventListCardProps.description) {
-              entireSeriesInput.description = formState.eventdescrip;
+            if (formState.eventDescription !== eventListCardProps.description) {
+              entireSeriesInput.description = formState.eventDescription;
             }
             if (formState.location !== eventListCardProps.location) {
               entireSeriesInput.location = formState.location;
             }
-            if (publicchecked !== eventListCardProps.isPublic) {
-              entireSeriesInput.isPublic = publicchecked;
+            if (publicChecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicChecked;
             }
-            if (registrablechecked !== eventListCardProps.isRegisterable) {
-              entireSeriesInput.isRegisterable = registrablechecked;
+            if (registerableChecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registerableChecked;
             }
             if (
               inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
             ) {
               entireSeriesInput.isInviteOnly = inviteOnlyChecked;
             }
-            if (alldaychecked !== eventListCardProps.allDay) {
-              entireSeriesInput.allDay = alldaychecked;
+            if (allDayChecked !== eventListCardProps.allDay) {
+              entireSeriesInput.allDay = allDayChecked;
             }
 
             // Only include timing changes if they actually changed
@@ -274,7 +236,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        NotificationToast.success(t('eventUpdated') as string);
+        NotificationToast.success(t('eventUpdated'));
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

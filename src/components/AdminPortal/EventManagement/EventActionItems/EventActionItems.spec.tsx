@@ -708,7 +708,8 @@ describe('EventActionItems', () => {
                     id: 'g1',
                     name: 'Group Search',
                     description: 'desc',
-                    leaderUser: {
+                    volunteersRequired: 5,
+                    leader: {
                       id: 'leader1',
                       name: 'Leader One',
                       avatarURL: '',
@@ -1392,7 +1393,8 @@ describe('EventActionItems', () => {
                     id: 'groupId1',
                     name: 'Volunteer Group A',
                     description: 'Test group',
-                    leaderUser: {
+                    volunteersRequired: 10,
+                    leader: {
                       id: 'leaderId1',
                       name: 'Group Leader',
                       avatarURL: '',
@@ -1443,7 +1445,8 @@ describe('EventActionItems', () => {
                     id: 'groupId1',
                     name: 'Test Group',
                     description: 'Test',
-                    leaderUser: {
+                    volunteersRequired: 5,
+                    leader: {
                       id: 'leaderId',
                       name: 'Leader',
                       avatarURL: '',

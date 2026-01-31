@@ -383,8 +383,11 @@ const ItemModal: FC<IItemModalProps> = ({
   };
 
   useEffect(() => {
+    if (!isOpen) return;
     setFormState(initializeFormState(actionItem));
+  }, [isOpen, actionItem?.id]);
 
+  useEffect(() => {
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
@@ -432,13 +435,18 @@ const ItemModal: FC<IItemModalProps> = ({
         );
       setSelectedVolunteerGroup(foundGroup || null);
       setAssignmentType('volunteerGroup');
-    } else if (!actionItem) {
+    }
+  }, [actionItem, volunteersData, volunteerGroupsData, isOpen]);
+
+  // Separate useEffect for resetting selections when opening in Create Mode
+  useEffect(() => {
+    if (isOpen && !actionItem) {
       // For new action items, reset selections
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
       setAssignmentType('volunteer');
     }
-  }, [actionItem, volunteersData, volunteerGroupsData, isOpen]);
+  }, [isOpen, actionItem]);
 
   // Clear volunteer/volunteer group selections when applyTo changes
   useEffect(() => {
