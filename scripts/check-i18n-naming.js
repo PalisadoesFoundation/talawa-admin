@@ -3,9 +3,9 @@
 /**
  * i18n Translation Key Naming Convention Checker
  *
- * This script validates that all translation keys in the common.json file
- * follow the camelCase naming convention. It scans the JSON file and identifies
- * keys that violate the convention by:
+ * This script validates that all translation keys in common.json and
+ * translation.json across all locales follow the camelCase naming convention.
+ * It scans the JSON files and identifies keys that violate the convention by:
  * - Starting with uppercase letters
  * - Containing spaces, underscores, or dashes
  * - Using special characters
