@@ -16,7 +16,6 @@ interface IMockColumn {
 
 vi.mock('../DataTable/DataTable', () => ({
   default: ({ columns }: { columns: IMockColumn[] }) => {
-    // Execute all accessors to satisfy coverage
     columns.forEach((col) => {
       if (typeof col.accessor === 'function') {
         col.accessor({});
