@@ -86,6 +86,7 @@ source_with_fixture() {
     
     local os_detect_path="$SCRIPT_DIR/os-detect.sh"
     
+    # shellcheck source=scripts/install/lib/os-detect.sh
     source "$os_detect_path"
 }
 
