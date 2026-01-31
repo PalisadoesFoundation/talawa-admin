@@ -393,4 +393,102 @@ describe('CreateDirectChatModal', () => {
     });
     expect(toggleCreateDirectChatModal).toHaveBeenCalled();
   });
+
+  test('should use unknownUser fallback when existing chat member has undefined name', async () => {
+    const user = userEvent.setup();
+    const existingChatsWithMissingName: NewChatType[] = [
+      {
+        id: 'existing-chat-missing-name',
+        isGroup: false,
+        name: 'Chat with unknown',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        members: {
+          edges: [
+            {
+              cursor: 'cursor-1',
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              cursor: 'cursor-2',
+              node: {
+                user: { id: 'user-2', name: undefined as unknown as string },
+                role: 'regular',
+              },
+            },
+          ],
+        },
+        messages: { edges: [] },
+      },
+    ];
+
+    renderComponent({ chats: existingChatsWithMissingName });
+
+    const userRows = await screen.findAllByTestId('user');
+    expect(userRows[0]).toHaveTextContent('Test User 2');
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    await user.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Error),
+      );
+    });
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
+  });
+
+  test('should use unknownUser fallback when existing chat member has null name', async () => {
+    const user = userEvent.setup();
+    const existingChatsWithNullName: NewChatType[] = [
+      {
+        id: 'existing-chat-null-name',
+        isGroup: false,
+        name: 'Chat with null name',
+        createdAt: new Date().toISOString(),
+        updatedAt: null,
+        members: {
+          edges: [
+            {
+              cursor: 'cursor-1',
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              cursor: 'cursor-2',
+              node: {
+                user: { id: 'user-2', name: null as unknown as string },
+                role: 'regular',
+              },
+            },
+          ],
+        },
+        messages: { edges: [] },
+      },
+    ];
+
+    renderComponent({ chats: existingChatsWithNullName });
+
+    const userRows = await screen.findAllByTestId('user');
+    expect(userRows[0]).toHaveTextContent('Test User 2');
+
+    const addButtons = await screen.findAllByTestId('addBtn');
+    await user.click(addButtons[0]);
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Error),
+      );
+    });
+    expect(chatsListRefetch).not.toHaveBeenCalled();
+    expect(toggleCreateDirectChatModal).not.toHaveBeenCalled();
+  });
 });

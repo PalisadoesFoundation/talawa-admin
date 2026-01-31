@@ -58,6 +58,7 @@ const isGroupChat = (chat: NewChatType): boolean =>
 /**
  * Chat component that lists all chats and displays the selected chat room.
  * Supports filtering by All, Unread, and Group chats.
+ * @returns The rendered chat component with contact list and chat room.
  */
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
@@ -152,7 +153,7 @@ export default function chat(): JSX.Element {
   }, [filterType]);
 
   React.useEffect(() => {
-    if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
+    if (filterType === 'all' && chatsListData?.chatsByUser) {
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter(
             (chat: NewChatType) => chat.organization?.id === orgId,
