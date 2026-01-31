@@ -3,7 +3,10 @@
  *
  * This component represents the sidebar for the user portal with organization-specific navigation.
  *
- * @param props - The props for the component.
+ * @param targets - Navigation targets to render in the sidebar.
+ * @param orgId - Organization ID for the current context.
+ * @param hideDrawer - Whether the drawer is currently hidden.
+ * @param setHideDrawer - Callback to toggle drawer visibility.
  * @returns The rendered UserSidebarOrg component.
  */
 

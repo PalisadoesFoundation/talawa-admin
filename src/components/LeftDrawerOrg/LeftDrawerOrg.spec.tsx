@@ -310,10 +310,10 @@ describe('LeftDrawerOrg', () => {
         url: undefined,
         subTargets: [
           {
-            name: 'Action Item Categories',
+            name: 'actionItemCategories',
             url: '/orgactionitemcategory/org-123',
           },
-          { name: 'Action Items', url: '/orgactionitems/org-123' },
+          { name: 'actionItems', url: '/orgactionitems/org-123' },
         ],
       },
     ],

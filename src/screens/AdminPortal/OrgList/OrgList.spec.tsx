@@ -2870,174 +2870,173 @@ describe('Email Verification Actions Tests', () => {
   });
 });
 
-test('should show default error message when resend verification fails without server message (Line 125)', async () => {
-  // Setup for resend test
-  setupUser('basic');
-  // Ensure local storage matches logic
-  setItem('emailNotVerified', 'true');
-  setItem('unverifiedEmail', 'basic@example.com');
+describe('Line Coverage Tests', () => {
+  test('should show default error message when resend verification fails without server message (Line 125)', async () => {
+    // Setup for resend test
+    setupUser('basic');
+    // Ensure local storage matches logic
+    setItem('emailNotVerified', 'true');
+    setItem('unverifiedEmail', 'basic@example.com');
 
-  const currentUserUnverifiedMock = {
-    request: {
-      query: CURRENT_USER,
-      context: { headers: { authorization: 'Bearer mock-token' } },
-    },
-    result: {
-      data: {
-        user: {
-          id: '123',
-          name: 'John Doe',
-          isEmailAddressVerified: false, // Critical: must be false
-          emailAddress: 'basic@example.com',
-          role: 'administrator',
-          adminFor: [],
-          __typename: 'User',
-          addressLine1: null,
-          addressLine2: null,
-          avatarMimeType: null,
-          avatarURL: null,
-          birthDate: null,
-          city: null,
-          countryCode: null,
-          createdAt: dayjs().subtract(1, 'year').toISOString(),
-          description: null,
-          educationGrade: null,
-          employmentStatus: null,
-          homePhoneNumber: null,
-          maritalStatus: null,
-          mobilePhoneNumber: null,
-          natalSex: null,
-          naturalLanguageCode: null,
-          postalCode: null,
-          state: null,
-          updatedAt: null,
-          workPhoneNumber: null,
-          eventsAttended: [],
+    const currentUserUnverifiedMock = {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'John Doe',
+            isEmailAddressVerified: false, // Critical: must be false
+            emailAddress: 'basic@example.com',
+            role: 'administrator',
+            adminFor: [],
+            __typename: 'User',
+            addressLine1: null,
+            addressLine2: null,
+            avatarMimeType: null,
+            avatarURL: null,
+            birthDate: null,
+            city: null,
+            countryCode: null,
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            description: null,
+            educationGrade: null,
+            employmentStatus: null,
+            homePhoneNumber: null,
+            maritalStatus: null,
+            mobilePhoneNumber: null,
+            natalSex: null,
+            naturalLanguageCode: null,
+            postalCode: null,
+            state: null,
+            updatedAt: null,
+            workPhoneNumber: null,
+            eventsAttended: [],
+          },
         },
       },
-    },
-  };
+    };
 
-  const resendFailureNoMessageMock = {
-    request: {
-      query: RESEND_VERIFICATION_EMAIL_MUTATION,
-    },
-    result: {
-      data: {
-        sendVerificationEmail: {
-          success: false,
-          message: null,
-          __typename: 'SendVerificationEmailPayload',
+    const resendFailureNoMessageMock = {
+      request: {
+        query: RESEND_VERIFICATION_EMAIL_MUTATION,
+      },
+      result: {
+        data: {
+          sendVerificationEmail: {
+            success: false,
+            message: null,
+            __typename: 'SendVerificationEmailPayload',
+          },
         },
       },
-    },
-  };
+    };
 
-  const mocks = [
-    currentUserUnverifiedMock,
-    resendFailureNoMessageMock,
-    ...createOrgMock(mockOrgData.singleOrg),
-  ];
+    const mocks = [
+      currentUserUnverifiedMock,
+      resendFailureNoMessageMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ];
 
-  render(
-    <MockedProvider mocks={mocks}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <ThemeProvider theme={createTheme()}>
-              <OrgList />
-            </ThemeProvider>
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ThemeProvider theme={createTheme()}>
+                <OrgList />
+              </ThemeProvider>
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  await waitFor(() => {
-    expect(
-      screen.getByTestId('email-verification-warning'),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    await userEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalled();
+    });
   });
 
-  const resendBtn = screen.getByTestId('resend-verification-btn');
-  await userEvent.click(resendBtn);
+  test('should render all organizations when rowsPerPage is 0 (Line 492)', async () => {
+    setupUser('basic');
+    const orgs6 = Array.from({ length: 6 }, (_, i) => ({
+      id: `org-${i + 1}`,
+      name: `Org ${i + 1}`,
+      avatarURL: '',
+      description: 'Description',
+      createdAt: new Date().toISOString(),
+      members: { id: 'members_conn', edges: [] },
+      addressLine1: 'Test Address',
+      isMember: false,
+      __typename: 'Organization',
+    }));
 
-  await waitFor(() => {
-    expect(mockToast.error).toHaveBeenCalled();
-  });
-});
-
-test('should render all organizations when rowsPerPage is 0 (Line 492)', async () => {
-  setupUser('basic');
-  const orgs6 = Array.from({ length: 6 }, (_, i) => ({
-    _id: `${i + 1}`,
-    name: `Org ${i + 1}`,
-    description: 'desc',
-    image: null,
-    isPublic: true,
-    url: 'url',
-    location: 'loc',
-    createdAt: new Date().toISOString(),
-    creator: { name: 'Creator', _id: 'c1', image: '' },
-    members: [],
-    admins: [],
-  }));
-
-  const mockOrgsResponse = {
-    request: {
-      query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: orgs6,
+    const mockOrgsResponse = {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: '' },
       },
-    },
-  };
+      result: {
+        data: {
+          organizations: orgs6,
+        },
+      },
+    };
 
-  // Use mock pagination to trigger 0 rows per page
-  mockPaginationFactory.useMock = true;
-  mockPaginationFactory.MockComponent = ({
-    onRowsPerPageChange,
-    count,
-  }: {
-    onRowsPerPageChange: (event: { target: { value: string } }) => void;
-    count: number;
-  }) => (
-    <div data-testid="mock-pagination">
-      <button
-        data-testid="set-rows-0"
-        type="button"
-        onClick={() => onRowsPerPageChange({ target: { value: '0' } })}
-      >
-        Set 0
-      </button>
-      <span data-testid="count">{count}</span>
-    </div>
-  );
+    // Use mock pagination to trigger 0 rows per page
+    mockPaginationFactory.useMock = true;
+    mockPaginationFactory.MockComponent = ({
+      onRowsPerPageChange,
+      count,
+    }: {
+      onRowsPerPageChange: (event: { target: { value: string } }) => void;
+      count: number;
+    }) => (
+      <div data-testid="mock-pagination">
+        <button
+          data-testid="set-rows-0"
+          type="button"
+          onClick={() => onRowsPerPageChange({ target: { value: '0' } })}
+        >
+          Set 0
+        </button>
+        <span data-testid="count">{count}</span>
+      </div>
+    );
 
-  try {
-    renderWithMocks([
-      mockOrgsResponse,
-      ...MOCKS.filter((m) => m.request.query !== ORGANIZATION_FILTER_LIST),
-    ]);
+    try {
+      renderWithMocks([
+        mockOrgsResponse,
+        ...MOCKS.filter((m) => m.request.query !== ORGANIZATION_FILTER_LIST),
+      ]);
 
-    // Initial load, default 5
-    await waitFor(() => {
-      expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
-    });
+      // Initial load, default 5
+      await waitFor(() => {
+        expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
+      });
 
-    // Set rows 0
-    const set0Btn = screen.getByTestId('set-rows-0');
-    await userEvent.click(set0Btn);
+      // Set rows 0
+      const set0Btn = screen.getByTestId('set-rows-0');
+      await userEvent.click(set0Btn);
 
-    // Should see all 6
-    await waitFor(() => {
-      expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(6);
-    });
-  } finally {
-    // Cleanup mock even if test fails
-    mockPaginationFactory.useMock = false;
-    mockPaginationFactory.MockComponent = null;
-  }
+      // Should see all 6
+      await waitFor(() => {
+        expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(6);
+      });
+    } finally {
+      // Cleanup mock even if test fails
+      mockPaginationFactory.useMock = false;
+      mockPaginationFactory.MockComponent = null;
+    }
+  });
 });
