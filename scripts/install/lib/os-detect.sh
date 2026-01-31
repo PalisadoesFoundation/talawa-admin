@@ -29,6 +29,9 @@ export OS_TYPE=""
 export OS_DISPLAY_NAME=""
 export IS_WSL=false
 
+# Internal cache flag - DO NOT USE DIRECTLY
+_OS_DETECTED=false
+
 # ==============================================================================
 # INTERNAL DETECTION HELPERS
 # ==============================================================================
@@ -102,7 +105,10 @@ is_redhat() {
 # Returns: 0 always (sets exported variables)
 detect_os() {
     # Return immediately if already detected (cached)
-    [[ -n "$OS_TYPE" ]] && return 0
+    [[ "$_OS_DETECTED" == "true" ]] && return 0
+    
+    # Reset IS_WSL to ensure clean detection
+    IS_WSL=false
     
     # Detect WSL first
     if is_wsl; then
@@ -137,10 +143,14 @@ detect_os() {
         OS_DISPLAY_NAME="Unknown OS"
     fi
     
+    # Mark detection as complete
+    _OS_DETECTED=true
+    
     # Export all variables for use in calling scripts
     export OS_TYPE
     export OS_DISPLAY_NAME
     export IS_WSL
+    export _OS_DETECTED
     
     return 0
 }
