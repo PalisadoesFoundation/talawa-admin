@@ -121,8 +121,8 @@ export default function chat(): JSX.Element {
         if (data?.chatsByUser) {
           const filteredChats = orgId
             ? data.chatsByUser.filter(
-                (chat: NewChatType) => chat.organization?.id === orgId,
-              )
+              (chat: NewChatType) => chat.organization?.id === orgId,
+            )
             : data.chatsByUser;
           setChats(filteredChats);
         }
@@ -131,8 +131,8 @@ export default function chat(): JSX.Element {
         if (data?.unreadChats) {
           const filteredChats = orgId
             ? data.unreadChats.filter(
-                (chat: NewChatType) => chat.organization?.id === orgId,
-              )
+              (chat: NewChatType) => chat.organization?.id === orgId,
+            )
             : data.unreadChats;
           setChats(filteredChats);
         }
@@ -143,25 +143,25 @@ export default function chat(): JSX.Element {
         const groups = list.filter((chat: NewChatType) => isGroupChat(chat));
         const filteredGroups = orgId
           ? groups.filter(
-              (chat: NewChatType) => chat.organization?.id === orgId,
-            )
+            (chat: NewChatType) => chat.organization?.id === orgId,
+          )
           : groups;
         setChats(filteredGroups);
       }
     }
     getChats();
-  }, [filterType]);
+  }, [filterType, orgId]);
 
   React.useEffect(() => {
     if (filterType === 'all' && chatsListData?.chatsByUser) {
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter(
-            (chat: NewChatType) => chat.organization?.id === orgId,
-          )
+          (chat: NewChatType) => chat.organization?.id === orgId,
+        )
         : chatsListData.chatsByUser;
       setChats(filteredChats);
     }
-  }, [chatsListData, filterType]);
+  }, [chatsListData, filterType, orgId]);
 
   React.useEffect(() => {
     if (chats.length === 0) return;
