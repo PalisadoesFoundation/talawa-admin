@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import availableFieldTypes from './fieldTypes';
 
 describe('availableFieldTypes', () => {
@@ -10,7 +11,7 @@ describe('availableFieldTypes', () => {
     ]);
   });
 
-  it('is immutable at runtime', () => {
+  it('is mutable at runtime', () => {
     expect(Object.isFrozen(availableFieldTypes)).toBe(false);
   });
 });
