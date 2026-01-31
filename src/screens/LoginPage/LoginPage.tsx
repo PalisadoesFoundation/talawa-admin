@@ -10,7 +10,11 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
-import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+  BACKEND_URL,
+} from 'Constant/constant';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   GET_COMMUNITY_DATA_PG,
@@ -61,6 +65,19 @@ const LoginPage = (): JSX.Element => {
   useEffect(() => {
     refetch();
   }, [data]);
+
+  useEffect(() => {
+    const fetchServerUrl = async (): Promise<void> => {
+      try {
+        const response = await fetch(BACKEND_URL || '');
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error('Error fetching server URL:', error);
+      }
+    };
+    fetchServerUrl();
+  }, []);
 
   useEffect(() => {
     const isRegister = location.pathname === '/register';
