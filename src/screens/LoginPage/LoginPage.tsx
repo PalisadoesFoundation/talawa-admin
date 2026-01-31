@@ -69,7 +69,7 @@ const LoginPage = (): JSX.Element => {
   useEffect(() => {
     const fetchServerUrl = async (): Promise<void> => {
       try {
-        const response = await fetch(BACKEND_URL || '');
+        const response = await fetch(BACKEND_URL as string);
         const data = await response.json();
         console.log(data);
       } catch (error) {
@@ -226,6 +226,32 @@ const LoginPage = (): JSX.Element => {
                   showTab === 'REGISTER' && styles.marginTopForReg
                 }`}
               />
+
+              {/* Tab Navigation */}
+              <div className={styles.tab_container} role="tablist">
+                <button
+                  role="tab"
+                  aria-selected={showTab === 'LOGIN'}
+                  className={`${styles.tab_button} ${
+                    showTab === 'LOGIN' ? styles.active_tab_button : ''
+                  }`}
+                  onClick={() => setShowTab('LOGIN')}
+                  data-testid="login-tab"
+                >
+                  {t('login')}
+                </button>
+                <button
+                  role="tab"
+                  aria-selected={showTab === 'REGISTER'}
+                  className={`${styles.tab_button} ${
+                    showTab === 'REGISTER' ? styles.active_tab_button : ''
+                  }`}
+                  onClick={() => setShowTab('REGISTER')}
+                  data-testid="register-tab"
+                >
+                  {t('register')}
+                </button>
+              </div>
 
               {/* Component Orchestration */}
               <div

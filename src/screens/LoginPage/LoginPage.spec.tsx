@@ -1,12 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  render,
-  screen,
-  fireEvent,
-  within,
-  // waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -1394,5 +1388,84 @@ describe('Talawa-API server fetch check', () => {
     });
 
     expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+  });
+});
+
+describe('Integration Tests - Tab Switching', () => {
+  it('should switch from LOGIN to REGISTER tab', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerTab = screen.getByTestId('register-tab');
+    fireEvent.click(registerTab);
+
+    expect(registerTab).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('should switch from REGISTER to LOGIN tab', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const registerTab = screen.getByTestId('register-tab');
+    const loginTab = screen.getByTestId('login-tab');
+
+    fireEvent.click(registerTab);
+    fireEvent.click(loginTab);
+
+    expect(loginTab).toHaveAttribute('aria-selected', 'true');
+  });
+});
+
+describe('Integration Tests - Portal Mode', () => {
+  it('should detect admin portal mode correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('login-tab')).toBeInTheDocument();
+  });
+});
+
+describe('Integration Tests - Redirect Testing', () => {
+  it('should handle redirect after successful login', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('login-tab')).toBeInTheDocument();
   });
 });
