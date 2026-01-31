@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceCalendarProps`](../../../../../types/Event/interface/type-aliases/InterfaceCalendarProps.md) & `object`\>
+> `const` **default**: `React.FC`\<[`InterfaceEventCalenderProps`](../../../../../types/shared-components/EventCalender/interface/interfaces/InterfaceEventCalenderProps.md)\>
 
-Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L55)
+Defined in: [src/components/EventCalender/Monthly/EventCalender.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Monthly/EventCalender.tsx#L52)

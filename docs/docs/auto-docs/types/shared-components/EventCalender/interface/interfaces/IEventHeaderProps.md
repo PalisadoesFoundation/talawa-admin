@@ -4,7 +4,7 @@
 
 # Interface: IEventHeaderProps
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L13)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L15)
 
 Props for EventHeader component.
 
@@ -14,13 +14,13 @@ Props for EventHeader component.
 
 > **handleChangeView**: (`item`) => `void`
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L15)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L17)
 
 #### Parameters
 
 ##### item
 
-`string`
+[`ViewType`](../enumerations/ViewType.md)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/EventCalender/interface.ts:15](https://
 
 > **showInviteModal**: () => `void`
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L16)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L18)
 
 #### Returns
 
@@ -44,4 +44,4 @@ Defined in: [src/types/shared-components/EventCalender/interface.ts:16](https://
 
 > **viewType**: [`ViewType`](../enumerations/ViewType.md)
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L14)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L16)

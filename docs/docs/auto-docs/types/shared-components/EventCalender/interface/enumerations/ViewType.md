@@ -4,7 +4,7 @@
 
 # Enumeration: ViewType
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L4)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L6)
 
 View type options for the EventCalendar component.
 
@@ -14,7 +14,7 @@ View type options for the EventCalendar component.
 
 > **DAY**: `"day"`
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L5)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/EventCalender/interface.ts:5](https://g
 
 > **MONTH**: `"monthView"`
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L6)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L8)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/shared-components/EventCalender/interface.ts:6](https://g
 
 > **YEAR**: `"yearView"`
 
-Defined in: [src/types/shared-components/EventCalender/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L7)
+Defined in: [src/types/shared-components/EventCalender/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventCalender/interface.ts#L9)
