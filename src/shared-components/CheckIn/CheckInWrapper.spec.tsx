@@ -14,6 +14,14 @@ import {
 } from 'shared-components/DateRangePicker';
 import { checkInQueryMock } from './CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import { vi, type Mock } from 'vitest';
+
+vi.mock('shared-components/CRUDModalTemplate/hooks/useModalState', () => ({
+  useModalState: vi.fn(),
+}));
+
+const link = new StaticMockLink(checkInQueryMock, true);
 
 /**
  * This file contains unit tests for the CheckInWrapper component.
@@ -28,11 +36,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
  * when opening and closing modals, and correctly integrates with its dependencies.
  */
 
-const link = new StaticMockLink(checkInQueryMock, true);
-import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
-
-import type { Mock } from 'vitest';
-
 beforeEach(() => {
   (useModalState as Mock).mockReturnValue({
     isOpen: false,
@@ -41,10 +44,6 @@ beforeEach(() => {
     toggle: vi.fn(),
   });
 });
-
-vi.mock('shared-components/CRUDModalTemplate/hooks/useModalState', () => ({
-  useModalState: vi.fn(),
-}));
 
 describe('Testing CheckIn Wrapper', () => {
   let CheckInWrapper: typeof import('./CheckInWrapper').CheckInWrapper;
@@ -62,9 +61,6 @@ describe('Testing CheckIn Wrapper', () => {
   };
 
   it('The button to open and close the modal should work properly', async () => {
-    const { useModalState } =
-      await import('shared-components/CRUDModalTemplate/hooks/useModalState');
-
     const mockOpen = vi.fn();
     const mockClose = vi.fn();
 
@@ -106,6 +102,11 @@ describe('CheckInWrapper CSS Tests', () => {
   beforeAll(async () => {
     ({ CheckInWrapper } = await import('./CheckInWrapper'));
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const props = {
     eventId: 'event123',
   };
