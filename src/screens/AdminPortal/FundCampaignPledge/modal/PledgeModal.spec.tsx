@@ -351,14 +351,8 @@ describe('PledgeModal', () => {
     const amountInput = screen.getByLabelText('Amount') as HTMLInputElement;
     expect(amountInput).toHaveAttribute('value', '100');
 
-    amountInput.focus();
     await user.clear(amountInput);
-    amountInput.focus();
-    await user.type(amountInput, '2');
-    amountInput.focus();
-    await user.type(amountInput, '0');
-    amountInput.focus();
-    await user.type(amountInput, '0');
+    await user.type(amountInput, '200');
 
     await waitFor(() => {
       expect(parseInt(amountInput.value)).toBe(200);

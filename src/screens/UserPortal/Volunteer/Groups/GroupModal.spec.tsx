@@ -606,9 +606,9 @@ describe('Testing GroupModal', () => {
     expect(userName).toHaveLength(1);
     expect(userName[0]).toHaveTextContent('John Doe');
 
-    // Verify Avatar component is rendered by checking for the testid passed to it
-    const avatarComponents = screen.getAllByTestId('avatar');
-    expect(avatarComponents).toHaveLength(1);
+    // Verify ProfileAvatarDisplay component is rendered with the correct test ID
+    const avatarElement = screen.queryByTestId('image-userId1');
+    expect(avatarElement).toBeInTheDocument();
   });
 
   it('should display image when user has avatarURL', async () => {
