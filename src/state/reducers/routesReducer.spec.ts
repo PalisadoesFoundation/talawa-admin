@@ -1,9 +1,5 @@
-import { expect, afterEach, vi } from 'vitest';
+import { expect } from 'vitest';
 import reducer, { ComponentType, generateRoutes } from './routesReducer';
-
-afterEach(() => {
-  vi.clearAllMocks();
-});
 
 describe('Testing Routes reducer', () => {
   it('should return the initial state', () => {

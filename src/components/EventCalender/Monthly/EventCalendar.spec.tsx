@@ -1865,7 +1865,7 @@ describe('Calendar', () => {
     });
   });
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
-    it('should toggle "View all" and "View less" specifically in DAY View', async () => {
+    it('should toggle "View All" and "View Less" specifically in DAY View', async () => {
       const today = new Date();
       const year = today.getFullYear();
       const month = String(today.getMonth() + 1).padStart(2, '0');

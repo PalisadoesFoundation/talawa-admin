@@ -57,6 +57,8 @@ interface InterfaceMockEventInput {
   isPublic: boolean;
   isRegisterable: boolean;
   isInviteOnly: boolean;
+  startAt?: string;
+  endAt?: string;
 }
 
 vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
@@ -186,7 +188,7 @@ vi.mock('shared-components/EventCalender/Header/EventHeader', () => ({
             <button
               type="button"
               data-testid="selectViewType"
-              onClick={() => handleChangeView?.('Month View')}
+              onClick={() => handleChangeView?.('monthView')}
             >
               Month View
             </button>
@@ -194,14 +196,14 @@ vi.mock('shared-components/EventCalender/Header/EventHeader', () => ({
               <button
                 type="button"
                 data-testid="selectDay"
-                onClick={() => handleChangeView?.('Day')}
+                onClick={() => handleChangeView?.('day')}
               >
                 Select Day
               </button>
               <button
                 type="button"
                 data-testid="selectYear"
-                onClick={() => handleChangeView?.('Year View')}
+                onClick={() => handleChangeView?.('yearView')}
               >
                 Select Year
               </button>
@@ -1676,7 +1678,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Verify view changed
     await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('Day');
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('day');
     });
   });
 
@@ -1710,7 +1712,7 @@ describe('Testing Events Screen [User Portal]', () => {
     const dayViewButton = screen.getByTestId('selectDay');
     await userEvent.click(dayViewButton);
     await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('Day');
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('day');
     });
 
     // Now call handleChangeView(null)
@@ -1720,7 +1722,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
     // View type should remain DAY
     await waitFor(() => {
-      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('Day');
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('day');
     });
   });
 
@@ -2233,8 +2235,8 @@ describe('Testing Events Screen [User Portal]', () => {
         const expectedStart = newStartDate.startOf('day');
         const expectedEnd = newEndDate.endOf('day'); // End date logic in component usually sets end of day
 
-        // Check if dates are within 24 hours to account for timezone shifts
-        // or strictly same day in local time
+        // Check if dates match at the day level (ignoring time component)
+        // to handle timezone differences in test environments
         return (
           variables.id === 'org123' &&
           varStart.isSame(expectedStart, 'day') &&

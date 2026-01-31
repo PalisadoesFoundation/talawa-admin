@@ -9,7 +9,11 @@ import UserSidebarOrg from './UserSidebarOrg';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
-import { CURRENT_USER, ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  CURRENT_USER,
+  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_BASIC_DATA,
+} from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
@@ -175,6 +179,31 @@ const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: '123' },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '123',
+          name: 'Test Organization',
+          description: 'Testing this organization',
+          addressLine1: '123 Random Street',
+          addressLine2: 'Apartment 456',
+          city: 'Delhi',
+          state: 'Delhi',
+          postalCode: '110001',
+          countryCode: 'IN',
+          avatarURL: null,
+          createdAt: '4567890234',
+          isUserRegistrationRequired: true,
+          __typename: 'Organization',
+        },
+      },
+    },
+  },
 ];
 
 const MOCKS_WITH_IMAGE = [
@@ -239,6 +268,32 @@ const MOCKS_WITH_IMAGE = [
             blockedUsers: [],
           },
         ],
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: '123' },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '123',
+          name: 'Test Organization',
+          description: 'Testing this organization',
+          addressLine1: '123 Random Street',
+          addressLine2: 'Apartment 456',
+          city: 'Delhi',
+          state: 'Delhi',
+          postalCode: '110001',
+          countryCode: 'IN',
+          avatarURL:
+            'https://api.dicebear.com/5.x/initials/svg?seed=Test%20Organization',
+          createdAt: '4567890234',
+          isUserRegistrationRequired: true,
+          __typename: 'Organization',
+        },
       },
     },
   },
@@ -405,9 +460,14 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
       </MockedProvider>,
     );
     await wait();
+    const orgImage = screen.getByRole('img', { name: /test organization/i });
+    expect(orgImage).toHaveAttribute(
+      'src',
+      'https://api.dicebear.com/5.x/initials/svg?seed=Test%20Organization',
+    );
   });
 
-  it('Testing Drawer when hideDrawer is null', () => {
+  it('Testing Drawer when hideDrawer is false', async () => {
     setItem('UserImage', '');
     setItem('SuperAdmin', true);
     setItem('FirstName', 'John');
@@ -423,6 +483,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    await wait();
+    // Add assertion for expected drawer visibility
+    expect(screen.getByTestId('toggleBtn')).toBeInTheDocument();
   });
 
   it('Testing Drawer when hideDrawer is true', () => {
@@ -441,6 +504,9 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+    // Verify drawer is hidden or has appropriate styling
+    const signOut = screen.getByTestId('sign-out-component');
+    expect(signOut).toHaveAttribute('hidden');
   });
 
   it('Testing toggle button click functionality', async () => {

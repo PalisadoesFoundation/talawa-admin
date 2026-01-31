@@ -1,11 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import IconComponent from './IconComponent';
-import { describe, it, expect, afterEach, vi } from 'vitest';
-
-afterEach(() => {
-  vi.clearAllMocks();
-});
+import { describe, it, expect } from 'vitest';
 
 const screenTestIdMap: Record<string, Record<string, string>> = {
   MyOrganizations: {

@@ -36,6 +36,14 @@ import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface
 
 vi.setConfig({ testTimeout: 30000 });
 
+const { mockPaginationFactory } = vi.hoisted(() => ({
+  mockPaginationFactory: {
+    useMock: false,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    MockComponent: null as any,
+  },
+}));
+
 const mockToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
@@ -53,6 +61,27 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
     <div data-testid="organization-card-mock">{data.name}</div>
   ),
 }));
+
+vi.mock(
+  'shared-components/PaginationList/PaginationList',
+  async (importOriginal) => {
+    const actual = await importOriginal<{
+      default: React.ComponentType<unknown>;
+    }>();
+    return {
+      ...actual,
+      default: (props: Record<string, unknown>) => {
+        if (
+          mockPaginationFactory.useMock &&
+          mockPaginationFactory.MockComponent
+        ) {
+          return <mockPaginationFactory.MockComponent {...props} />;
+        }
+        return <actual.default {...props} />;
+      },
+    };
+  },
+);
 
 type LSApi = ReturnType<typeof useLocalStorage>;
 let setItem: LSApi['setItem'];
@@ -72,6 +101,7 @@ const mockLinks = {
   superAdmin: new StaticMockLink(MOCKS, true),
   admin: new StaticMockLink(MOCKS_ADMIN, true),
   empty: new StaticMockLink(MOCKS_EMPTY, true),
+  basic: new StaticMockLink(MOCKS, true),
 };
 
 // Common test user configurations
@@ -493,6 +523,8 @@ const mockConfigurations = {
               createdAt: dayjs().subtract(1, 'year').toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: false,
+              __typename: 'Organization',
             },
             {
               id: 'xyz3',
@@ -505,6 +537,8 @@ const mockConfigurations = {
                 .toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: false,
+              __typename: 'Organization',
             },
             {
               id: 'xyz5',
@@ -517,6 +551,8 @@ const mockConfigurations = {
                 .toISOString(),
               members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: false,
+              __typename: 'Organization',
             },
           ],
         },
@@ -2277,7 +2313,8 @@ describe('Advanced Component Functionality Tests', () => {
       await userEvent.click(enableEverythingBtn);
       await wait(200);
     } catch {
-      // If button doesn't appear, test still passes
+      // Plugin modal is timing-dependent; test passes if modal doesn't appear
+      // Uncomment for debugging: console.debug('Plugin modal did not appear');
     }
   });
 
@@ -2830,4 +2867,173 @@ describe('Email Verification Actions Tests', () => {
       ).toBeInTheDocument();
     });
   });
+});
+
+test('should show default error message when resend verification fails without server message (Line 125)', async () => {
+  // Setup for resend test
+  setupUser('basic');
+  // Ensure local storage matches logic
+  setItem('emailNotVerified', 'true');
+  setItem('unverifiedEmail', 'basic@example.com');
+
+  const currentUserUnverifiedMock = {
+    request: {
+      query: CURRENT_USER,
+      context: { headers: { authorization: 'Bearer mock-token' } },
+    },
+    result: {
+      data: {
+        user: {
+          id: '123',
+          name: 'John Doe',
+          isEmailAddressVerified: false, // Critical: must be false
+          emailAddress: 'basic@example.com',
+          role: 'administrator',
+          adminFor: [],
+          __typename: 'User',
+          addressLine1: null,
+          addressLine2: null,
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: null,
+          city: null,
+          countryCode: null,
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          description: null,
+          educationGrade: null,
+          employmentStatus: null,
+          homePhoneNumber: null,
+          maritalStatus: null,
+          mobilePhoneNumber: null,
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: null,
+          state: null,
+          updatedAt: null,
+          workPhoneNumber: null,
+          eventsAttended: [],
+        },
+      },
+    },
+  };
+
+  const resendFailureNoMessageMock = {
+    request: {
+      query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    },
+    result: {
+      data: {
+        sendVerificationEmail: {
+          success: false,
+          message: null,
+          __typename: 'SendVerificationEmailPayload',
+        },
+      },
+    },
+  };
+
+  const mocks = [
+    currentUserUnverifiedMock,
+    resendFailureNoMessageMock,
+    ...createOrgMock(mockOrgData.singleOrg),
+  ];
+
+  render(
+    <MockedProvider mocks={mocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <ThemeProvider theme={createTheme()}>
+              <OrgList />
+            </ThemeProvider>
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(
+      screen.getByTestId('email-verification-warning'),
+    ).toBeInTheDocument();
+  });
+
+  const resendBtn = screen.getByTestId('resend-verification-btn');
+  await userEvent.click(resendBtn);
+
+  await waitFor(() => {
+    expect(mockToast.error).toHaveBeenCalled();
+  });
+});
+
+test('should render all organizations when rowsPerPage is 0 (Line 492)', async () => {
+  setupUser('basic');
+  const orgs6 = Array.from({ length: 6 }, (_, i) => ({
+    _id: `${i + 1}`,
+    name: `Org ${i + 1}`,
+    description: 'desc',
+    image: null,
+    isPublic: true,
+    url: 'url',
+    location: 'loc',
+    createdAt: new Date().toISOString(),
+    creator: { name: 'Creator', _id: 'c1', image: '' },
+    members: [],
+    admins: [],
+  }));
+
+  const mockOrgsResponse = {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: orgs6,
+      },
+    },
+  };
+
+  // Use mock pagination to trigger 0 rows per page
+  mockPaginationFactory.useMock = true;
+  mockPaginationFactory.MockComponent = ({
+    onRowsPerPageChange,
+    count,
+  }: {
+    onRowsPerPageChange: (event: { target: { value: string } }) => void;
+    count: number;
+  }) => (
+    <div data-testid="mock-pagination">
+      <button
+        data-testid="set-rows-0"
+        onClick={() => onRowsPerPageChange({ target: { value: '0' } })}
+      >
+        Set 0
+      </button>
+      <span data-testid="count">{count}</span>
+    </div>
+  );
+
+  renderWithMocks([
+    mockOrgsResponse,
+    ...MOCKS.filter((m) => m.request.query !== ORGANIZATION_FILTER_LIST),
+  ]);
+
+  // Initial load, default 5
+  await waitFor(() => {
+    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(5);
+  });
+
+  // Set rows 0
+  const set0Btn = screen.getByTestId('set-rows-0');
+  await userEvent.click(set0Btn);
+
+  // Should see all 6
+  await waitFor(() => {
+    expect(screen.getAllByTestId('organization-card-mock')).toHaveLength(6);
+  });
+
+  // Cleanup mock
+  mockPaginationFactory.useMock = false;
+  mockPaginationFactory.MockComponent = null;
 });

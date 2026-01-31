@@ -41,6 +41,8 @@
  *
  * @param showEventTypeFilter - Whether to show the event type dropdown.
  *
+ * @param selectedEventType - Currently selected event type key.
+ * @param onEventTypeChange - Callback invoked when the event type changes.
  * @param actions - Action buttons/elements rendered on the right side.
  *
  * @returns - The rendered PageHeader component.

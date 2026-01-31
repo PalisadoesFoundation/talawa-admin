@@ -4,7 +4,6 @@
  * A reusable navigation item component for sidebars with icon and label support.
  * Handles active/inactive states and adapts to drawer visibility.
  *
- * @param props - Object containing the properties for the SidebarNavItem:
  * @param to - Navigation target URL
  * @param icon - Icon component or element
  * @param label - Display label for the navigation item

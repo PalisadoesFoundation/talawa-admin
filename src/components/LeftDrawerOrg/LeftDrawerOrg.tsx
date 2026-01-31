@@ -1,7 +1,6 @@
 /**
  * Component representing the left drawer for organization-related navigation and actions.
  *
- * @param props - The props for the component.
  * @param targets - List of navigation targets with names and URLs.
  * @param orgId - The ID of the organization to fetch data for.
  * @param hideDrawer - State indicating whether the drawer is hidden.
@@ -35,7 +34,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { useLocation } from 'react-router-dom';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './LeftDrawerOrg.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
@@ -45,13 +43,7 @@ import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
-
-export interface ILeftDrawerProps {
-  orgId: string;
-  targets: TargetsType[];
-  hideDrawer: boolean;
-  setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import type { InterfaceLeftDrawerOrgProps } from 'types/AdminPortal/LeftDrawerOrg/interface';
 
 /**
  * LeftDrawerOrg component for displaying organization details and options.
@@ -67,7 +59,7 @@ const LeftDrawerOrg = ({
   orgId,
   hideDrawer,
   setHideDrawer,
-}: ILeftDrawerProps): React.ReactElement => {
+}: InterfaceLeftDrawerOrgProps): React.ReactElement => {
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
   const { getItem } = useLocalStorage();

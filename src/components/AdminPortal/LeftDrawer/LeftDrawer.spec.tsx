@@ -114,7 +114,7 @@ describe('LeftDrawer Component', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   const TestWrapper = ({
     initialHideDrawer = false,
