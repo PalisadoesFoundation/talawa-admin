@@ -428,6 +428,36 @@ describe('Talawa Admin Setup', () => {
     expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
   });
 
+  it('should handle errors when inquirer.prompt rejects in askAndSetLogErrors', async () => {
+    const mockError = new Error('Prompt failure');
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(mockError);
+
+    await expect(askAndSetLogErrors()).rejects.toThrow('Prompt failure');
+
+    // Verify updateEnvFile was not called when prompt fails
+    expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  it('should handle errors when updateEnvFile throws in askAndSetLogErrors', async () => {
+    const mockError = new Error('Failed to update environment file');
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: true,
+    });
+
+    vi.mocked(updateEnvFile).mockImplementationOnce(() => {
+      throw mockError;
+    });
+
+    await expect(askAndSetLogErrors()).rejects.toThrow(
+      'Failed to update environment file',
+    );
+
+    // Verify updateEnvFile was called before throwing
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+  });
+
   it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {
     let sigintHandler: (() => void) | undefined;
 
