@@ -834,12 +834,12 @@ describe('Organisation Events Page', () => {
     const viewTypeDropdown = screen.getByTestId('selectViewType');
     await userEvent.click(viewTypeDropdown);
 
-    // Find and click the "Year View" option
-    const yearOption = await screen.findByText('Year View');
+    // Find and click the "Year" option
+    const yearOption = await screen.findByText('Year');
     await userEvent.click(yearOption);
 
     await waitFor(() => {
-      expect(container.textContent).toMatch('Year View');
+      expect(container.textContent).toMatch('Year');
     });
   });
 

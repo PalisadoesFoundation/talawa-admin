@@ -895,7 +895,27 @@ describe('Organisations Page testing as Admin', () => {
   test('Testing sort latest and oldest toggle', async () => {
     setupUser('admin');
 
-    renderWithProviders(mockLinks.admin);
+    const mockWithMultipleOrgsAdmin = [
+      ...MOCKS_ADMIN.filter(
+        (m) =>
+          m.request.query !== ORGANIZATION_FILTER_LIST &&
+          // User query is already in MOCKS_ADMIN, no need to touch it
+          true,
+      ),
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: mockOrgData.multipleOrgs,
+          },
+        },
+      },
+    ];
+
+    renderWithMocks(mockWithMultipleOrgsAdmin);
 
     await wait();
 
@@ -916,6 +936,19 @@ describe('Organisations Page testing as Admin', () => {
 
     expect(sortDropdown).toBeInTheDocument();
 
+    // Verify Latest (Descending) order
+    await waitFor(() => {
+      const orgCardsLatest = screen.getAllByTestId('organization-card-mock');
+      const orgNamesLatest = orgCardsLatest.map((card) => card.textContent);
+      expect(orgNamesLatest).toEqual([
+        'Horse Care',
+        'Rabbit Care',
+        'Fish Care',
+        'Birds Care',
+        'Cats Care',
+      ]);
+    });
+
     await act(async () => {
       await userEvent.click(sortToggle);
     });
@@ -927,6 +960,19 @@ describe('Organisations Page testing as Admin', () => {
     });
 
     expect(sortDropdown).toBeInTheDocument();
+
+    // Verify Earliest (Ascending) order
+    await waitFor(() => {
+      const orgCardsEarliest = screen.getAllByTestId('organization-card-mock');
+      const orgNamesEarliest = orgCardsEarliest.map((card) => card.textContent);
+      expect(orgNamesEarliest).toEqual([
+        'Dogs Care',
+        'Cats Care',
+        'Birds Care',
+        'Fish Care',
+        'Rabbit Care',
+      ]);
+    });
   });
 });
 
@@ -1120,6 +1166,19 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify the sort was applied
     expect(sortButton).toHaveTextContent('Sort');
+
+    // Verify Latest (Descending) order
+    await waitFor(() => {
+      const orgCards = screen.getAllByTestId('organization-card-mock');
+      const orgNames = orgCards.map((card) => card.textContent);
+      expect(orgNames).toEqual([
+        'Horse Care',
+        'Rabbit Care',
+        'Fish Care',
+        'Birds Care',
+        'Cats Care',
+      ]);
+    });
   });
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
@@ -1145,6 +1204,19 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify the sort was applied
     expect(sortButton).toHaveTextContent('Sort');
+
+    // Verify Earliest (Ascending) order
+    await waitFor(() => {
+      const orgCards = screen.getAllByTestId('organization-card-mock');
+      const orgNames = orgCards.map((card) => card.textContent);
+      expect(orgNames).toEqual([
+        'Dogs Care',
+        'Cats Care',
+        'Birds Care',
+        'Fish Care',
+        'Rabbit Care',
+      ]);
+    });
   });
 
   test('Testing successful organization creation with membership', async () => {
@@ -1590,11 +1662,37 @@ describe('Advanced Component Functionality Tests', () => {
     await userEvent.click(latestOption);
     await wait(200);
 
+    // Verify Latest order
+    await waitFor(() => {
+      const orgCards = screen.getAllByTestId('organization-card-mock');
+      const orgNames = orgCards.map((card) => card.textContent);
+      expect(orgNames).toEqual([
+        'Horse Care',
+        'Rabbit Care',
+        'Fish Care',
+        'Birds Care',
+        'Cats Care',
+      ]);
+    });
+
     // Test Earliest sorting (dateA - dateB path)
     await userEvent.click(sortDropdown);
     const earliestOption = screen.getByTestId('earliest');
     await userEvent.click(earliestOption);
     await wait(200);
+
+    // Verify Earliest order
+    await waitFor(() => {
+      const orgCards = screen.getAllByTestId('organization-card-mock');
+      const orgNames = orgCards.map((card) => card.textContent);
+      expect(orgNames).toEqual([
+        'Dogs Care',
+        'Cats Care',
+        'Birds Care',
+        'Fish Care',
+        'Rabbit Care',
+      ]);
+    });
   });
 
   test('Testing handleChangeRowsPerPage functionality', async () => {

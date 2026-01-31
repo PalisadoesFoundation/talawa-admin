@@ -39,6 +39,7 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import { ViewType } from 'types/shared-components/EventCalender/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -93,15 +94,17 @@ function organizationEvents(): JSX.Element {
   useEffect(() => {
     document.title = t('title');
   }, [t]);
-  const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+  const {
+    isOpen: createEventmodalisOpen,
+    open: showInviteModal,
+    close: hideCreateEventModal,
+  } = useModalState();
+
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
-
-  const showInviteModal = (): void => setCreateEventmodalisOpen(true);
-  const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -246,9 +249,9 @@ function organizationEvents(): JSX.Element {
                   title: t('viewType'),
                   selected: viewType,
                   options: [
-                    { label: ViewType.MONTH, value: ViewType.MONTH },
-                    { label: ViewType.DAY, value: ViewType.DAY },
-                    { label: ViewType.YEAR, value: ViewType.YEAR },
+                    { label: t('month'), value: ViewType.MONTH },
+                    { label: t('day'), value: ViewType.DAY },
+                    { label: t('year'), value: ViewType.YEAR },
                   ],
                   onChange: (value) => handleChangeView(value.toString()),
                   testIdPrefix: 'selectViewType',

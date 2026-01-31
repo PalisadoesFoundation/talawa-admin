@@ -70,7 +70,7 @@ describe('EventHeader Component', () => {
 
     await user.click(getByTestId('selectViewType'));
 
-    await user.click(getByTestId('Month View'));
+    await user.click(getByTestId(ViewType.MONTH));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.MONTH);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -89,7 +89,7 @@ describe('EventHeader Component', () => {
 
     await user.click(getByTestId('selectViewType'));
 
-    await user.click(getByTestId('Day'));
+    await user.click(getByTestId(ViewType.DAY));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -108,7 +108,7 @@ describe('EventHeader Component', () => {
 
     await user.click(getByTestId('selectViewType'));
 
-    await user.click(getByTestId('Year View'));
+    await user.click(getByTestId(ViewType.YEAR));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.YEAR);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -293,7 +293,7 @@ describe('EventHeader Component', () => {
 
     // Change view type
     await user.click(getByTestId('selectViewType'));
-    await user.click(getByTestId('Day'));
+    await user.click(getByTestId(ViewType.DAY));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
 

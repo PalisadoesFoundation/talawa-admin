@@ -44,6 +44,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -77,9 +78,7 @@ function OrgList(): JSX.Element {
   );
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t: tLogin } = useTranslation('translation');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
@@ -119,10 +118,11 @@ function OrgList(): JSX.Element {
       const { data } = await resendVerificationEmail();
 
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(tLogin('loginPage.emailResent'));
       } else {
         NotificationToast.error(
-          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+          data?.sendVerificationEmail?.message ||
+            tLogin('loginPage.resendFailed'),
         );
       }
     } catch (error: unknown) {
@@ -146,7 +146,7 @@ function OrgList(): JSX.Element {
   });
 
   const [searchByName, setSearchByName] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const { isOpen: showModal, toggle: toggleModal } = useModalState();
 
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
@@ -160,7 +160,6 @@ function OrgList(): JSX.Element {
     state: '',
   });
 
-  const toggleModal = (): void => setShowModal(!showModal);
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,

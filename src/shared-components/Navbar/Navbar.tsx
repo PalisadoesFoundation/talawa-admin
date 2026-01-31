@@ -102,18 +102,24 @@ export default function PageHeader({
 
         {/* ===== Sorting Props ===== */}
         {sorting &&
-          sorting.map((sort, idx) => (
-            <div key={idx} className={styles.space}>
-              <SortingButton
-                title={sort.title}
-                sortingOptions={sort.options}
-                selectedOption={sort.selected}
-                onSortChange={sort.onChange}
-                dataTestIdPrefix={sort.testIdPrefix}
-                className={styles.dropdown}
-              />
-            </div>
-          ))}
+          sorting.map((sort, idx) => {
+            return (
+              <div key={idx} className={styles.space}>
+                <SortingButton
+                  title={sort.title}
+                  sortingOptions={sort.options}
+                  selectedOption={sort.selected}
+                  onSortChange={sort.onChange}
+                  dataTestIdPrefix={sort.testIdPrefix}
+                  className={styles.dropdown}
+                  buttonLabel={
+                    sort.options.find((opt) => opt.value === sort.selected)
+                      ?.label
+                  }
+                />
+              </div>
+            );
+          })}
 
         {/*  Optional Event Type dropdown */}
         {showEventTypeFilter && (

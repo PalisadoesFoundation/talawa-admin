@@ -46,6 +46,7 @@ function EventHeader({
     keyPrefix: 'organizationEvents',
   });
   const { t: tCommon } = useTranslation('common');
+
   return (
     <div
       className={styles.calendarEventHeader}

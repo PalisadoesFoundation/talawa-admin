@@ -2,9 +2,9 @@
  * View type options for the EventCalendar component.
  */
 export enum ViewType {
-  DAY = 'Day',
-  MONTH = 'Month View',
-  YEAR = 'Year View',
+  DAY = 'day',
+  MONTH = 'monthView',
+  YEAR = 'yearView',
 }
 
 /**

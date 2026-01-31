@@ -264,7 +264,7 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *   onSearchChange={setSearchTerm}
  *   dropdowns={[
  *     {
- *       label: 'Sort',
+ *       label: 'sort',
  *       type: 'sort',
  *       options: [
  *         { label: 'most hours', value: 'hours_DESC' },
@@ -275,7 +275,7 @@ export interface InterfaceSearchFilterBarSimple extends InterfaceSearchFilterBar
  *       dataTestIdPrefix: 'sort'
  *     },
  *     {
- *       label: 'Time Frame',
+ *       label: 'time Frame',
  *       type: 'filter',
  *       options: [
  *         { label: 'all time', value: 'allTime' },

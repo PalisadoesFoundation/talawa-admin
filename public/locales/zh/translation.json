@@ -2400,7 +2400,9 @@
     "holidays": "节假日",
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
-    "today": "今天"
+    "today": "今天",
+    "viewAll": "查看全部",
+    "viewLess": "收起"
   },
   "contact": {
     "card_aria": "联系人卡片"
