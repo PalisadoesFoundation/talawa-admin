@@ -36,11 +36,26 @@ import { fileURLToPath } from 'url';
 
 /**
  * Allowed validation categories for design token checks.
- * - CSS categories: 'color' (hex/rgb/hsl), 'spacing' (margin/padding/gap),
- *   'font-size', 'font-weight', 'line-height', 'border-radius', 'border',
- *   'box-shadow', 'outline'
- * - TSX categories (inline styles): 'tsx-color', 'tsx-spacing', 'tsx-font-size',
- *   'tsx-font-weight', 'tsx-line-height', 'tsx-border-radius', 'tsx-outline'
+ *
+ * **CSS categories** (for .css/.scss files):
+ * - `'color'` - Hex colors (#fff, #ffffff), RGB/RGBA, and HSL/HSLA color values
+ * - `'spacing'` - Margin, padding, gap, width, height, and positional properties with px/rem/em units
+ * - `'font-size'` - Font size declarations with px/rem/em units
+ * - `'font-weight'` - Numeric font weight values (100-900)
+ * - `'line-height'` - Line height with px/rem/em units
+ * - `'border-radius'` - Border radius with px/rem/em units
+ * - `'border'` - Border width and full border declarations with hardcoded values
+ * - `'box-shadow'` - Box shadow with hardcoded offset/blur/spread values and colors
+ * - `'outline'` - Outline width and full outline declarations
+ *
+ * **TSX categories** (for inline styles in .ts/.tsx files):
+ * - `'tsx-color'` - Color values in camelCase style properties (color, backgroundColor, etc.)
+ * - `'tsx-spacing'` - Spacing in camelCase (marginTop, paddingLeft, width, height, gap, etc.)
+ * - `'tsx-font-size'` - fontSize property with hardcoded values
+ * - `'tsx-font-weight'` - fontWeight property with numeric values
+ * - `'tsx-line-height'` - lineHeight property with px/rem/em units
+ * - `'tsx-border-radius'` - borderRadius property with hardcoded values
+ * - `'tsx-outline'` - outline/outlineWidth properties with hardcoded values
  */
 export type ValidationResultType =
   | 'color'
@@ -61,13 +76,17 @@ export type ValidationResultType =
   | 'tsx-outline';
 
 /**
- * Models a single validation finding with file path, line number,
- * matched text, and violation type.
+ * Models a single validation finding representing a hardcoded value
+ * that should be replaced with a design token.
  */
 interface IValidationResult {
+  /** Absolute or relative path to the file containing the violation */
   file: string;
+  /** 1-based line number where the violation was found */
   line: number;
+  /** The matched text that triggered the violation (e.g., "padding: 8px", "#ffffff") */
   match: string;
+  /** Category of the violation indicating which design token type should be used */
   type: ValidationResultType;
 }
 
@@ -85,11 +104,12 @@ export const CSS_PATTERNS = {
     /hsla?\(\s*\d{1,3}\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*(,\s*[\d.]+)?\s*\)/gi,
 
   // Spacing patterns - matches px, rem, em values
+  // Note: padding and margin are handled exclusively by spacingShorthand to avoid double-counting
   spacingPx:
-    /(?:padding|margin|width|height|gap|top|right|bottom|left|inset):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
-  // Shorthand spacing (padding: 8px 16px 8px 16px)
+    /(?:width|height|gap|top|right|bottom|left|inset):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
+  // Shorthand spacing - handles all padding/margin patterns (single and multi-value)
   spacingShorthand:
-    /(?:padding|margin):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em)){1,3}/gi,
+    /(?:padding|margin):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
 
   // Typography patterns
   fontSize: /font-size:\s*[\d.]+(px|rem|em)/gi,
@@ -160,8 +180,8 @@ const ALLOWLIST_PATTERNS = [
   /calc\([^)]+\)/,
   // CSS custom property definitions (in :root or token files)
   /--[\w-]+:\s*/,
-  // 0 values without units are valid CSS
-  /:\s*0(?:px|rem|em)?(?:\s|;|$)/,
+  // 0 values without units are valid CSS (allow whitespace, semicolon, comma, or end-of-line)
+  /:\s*0(?:px|rem|em)?(?:\s|;|,|$)/,
   // Percentage values
   /:\s*[\d.]+%/,
   // Common allowed numeric values in specific contexts
@@ -230,7 +250,14 @@ const checkCommentState = (
   // If we're inside a block comment, check for end
   if (inBlockComment) {
     if (trimmed.includes('*/')) {
-      // Line contains end of block comment - treat as comment
+      // Line contains end of block comment
+      // Check if there's code after the closing */
+      const afterClose = trimmed.slice(trimmed.indexOf('*/') + 2).trim();
+      if (afterClose.length > 0) {
+        // There's code after the comment ends - treat as code line
+        return { isComment: false, inBlockComment: false };
+      }
+      // Only comment content on this line
       return { isComment: true, inBlockComment: false };
     }
     // Still inside block comment
@@ -249,11 +276,23 @@ const checkCommentState = (
   // Check for block comment start
   if (trimmed.includes('/*')) {
     if (trimmed.includes('*/')) {
-      // Single-line block comment like /* comment */
-      return { isComment: true, inBlockComment: false };
+      // Self-contained block comment on this line
+      // Only treat as comment if the entire line is a comment (starts with /*)
+      if (trimmed.startsWith('/*')) {
+        return { isComment: true, inBlockComment: false };
+      }
+      // There's code before or around the comment (e.g., "color: #fff; /* note */")
+      // Treat as code so the validator can check the code portion
+      return { isComment: false, inBlockComment: false };
     }
     // Block comment starts but doesn't end on this line
-    return { isComment: true, inBlockComment: true };
+    // Check if there's code before the /* (e.g., "color: #fff; /*")
+    if (trimmed.startsWith('/*')) {
+      // Entire line starts with comment
+      return { isComment: true, inBlockComment: true };
+    }
+    // There's code before the block comment starts - validate the code portion
+    return { isComment: false, inBlockComment: true };
   }
 
   return { isComment: false, inBlockComment: false };
@@ -328,7 +367,6 @@ export const shouldSkipFile = (file: string): boolean => {
     normalized.includes('/tokens/') ||
     normalized === 'src/style/app-fixed.module.css' ||
     normalized === 'src/assets/css/app.css' ||
-    normalized === 'src/style/app-fixed.module.css' ||
     normalized.startsWith('src/test-utils/validate-tokens') ||
     normalized.startsWith('src/style/tokens/')
   );
