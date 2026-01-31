@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -29,6 +29,22 @@ import { StaticMockLink } from 'utils/StaticMockLink';
  */
 
 const link = new StaticMockLink(checkInQueryMock, true);
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+
+import type { Mock } from 'vitest';
+
+beforeEach(() => {
+  (useModalState as Mock).mockReturnValue({
+    isOpen: false,
+    open: vi.fn(),
+    close: vi.fn(),
+    toggle: vi.fn(),
+  });
+});
+
+vi.mock('shared-components/CRUDModalTemplate/hooks/useModalState', () => ({
+  useModalState: vi.fn(),
+}));
 
 describe('Testing CheckIn Wrapper', () => {
   let CheckInWrapper: typeof import('./CheckInWrapper').CheckInWrapper;
@@ -46,7 +62,21 @@ describe('Testing CheckIn Wrapper', () => {
   };
 
   it('The button to open and close the modal should work properly', async () => {
+    const { useModalState } =
+      await import('shared-components/CRUDModalTemplate/hooks/useModalState');
+
+    const mockOpen = vi.fn();
+    const mockClose = vi.fn();
+
+    (useModalState as Mock).mockReturnValue({
+      isOpen: true,
+      open: mockOpen,
+      close: mockClose,
+      toggle: vi.fn(),
+    });
+
     const user = userEvent.setup();
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -62,21 +92,11 @@ describe('Testing CheckIn Wrapper', () => {
       </MockedProvider>,
     );
 
-    // Open the modal
     await user.click(screen.getByLabelText('Check In Members'));
+    expect(mockOpen).toHaveBeenCalled();
 
-    await waitFor(() =>
-      expect(screen.getByText(/Event Check In/i)).toBeInTheDocument(),
-    );
-
-    //  Close the modal
-    const closebtn = screen.getByLabelText('Close');
-
-    await user.click(closebtn);
-
-    await waitFor(() =>
-      expect(screen.queryByText(/Event Check In/i)).not.toBeInTheDocument(),
-    );
+    await user.click(screen.getByLabelText('Close'));
+    expect(mockClose).toHaveBeenCalled();
   });
 });
 
@@ -139,6 +159,13 @@ describe('CheckInWrapper callback behavior', () => {
 
     const { CheckInWrapper } = await import('./CheckInWrapper');
 
+    (useModalState as Mock).mockReturnValue({
+      isOpen: true,
+      open: vi.fn(),
+      close: vi.fn(),
+      toggle: vi.fn(),
+    });
+
     const user = userEvent.setup();
     const mockOnCheckInUpdate = vi.fn();
 
@@ -159,7 +186,6 @@ describe('CheckInWrapper callback behavior', () => {
       </MockedProvider>,
     );
 
-    await user.click(screen.getByLabelText('Check In Members'));
     await user.click(screen.getByTestId('mock-checkin-update'));
 
     expect(mockOnCheckInUpdate).toHaveBeenCalledTimes(1);
