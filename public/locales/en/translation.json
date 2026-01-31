@@ -13,6 +13,12 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "frequency": "Frequency",
+  "repeatsEvery": "Repeats Every",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "role": {
     "member": "Member"
   },
@@ -964,6 +970,7 @@
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
+    "createFailed": "Failed to create pledge",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -1203,7 +1210,7 @@
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
     "enterNewPassword": "Enter New Password",
-    "cofirmNewPassword": "Confirm New Password",
+    "confirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
     "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",
@@ -1755,7 +1762,14 @@
     "after": "After",
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
-    "noEventAvailable": "No Event Available!"
+    "noEventAvailable": "No Event Available!",
+    "eventDetails": "Event Details",
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
   },
   "userEventCard": {
     "failedToRegister": "Failed to register for the event",
@@ -2340,7 +2354,9 @@
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details"
+    "errorInstalling": "Failed to load plugin details",
+    "failedToParsePluginZip": "Failed to parse plugin ZIP",
+    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",
