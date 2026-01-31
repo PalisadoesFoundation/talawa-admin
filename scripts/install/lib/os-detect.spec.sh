@@ -22,7 +22,6 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 TEST_TEMP_DIR=""
 TESTS_RUN=0
 TESTS_PASSED=0
@@ -443,9 +442,8 @@ test_exported_variables() {
 }
 
 test_is_wsl_reset() {
-    local fixture_dir1 fixture_dir2
+    local fixture_dir1
     fixture_dir1=$(create_fixture "wsl-reset-1")
-    fixture_dir2=$(create_fixture "wsl-reset-2")
     
     write_proc_version "$fixture_dir1" "Linux version 5.15.0-Microsoft-WSL2"
     write_os_release "$fixture_dir1" "ID=ubuntu\nNAME=\"Ubuntu\""
