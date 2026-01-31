@@ -31,6 +31,7 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.organization = {
   id: 'orgId',
   name: 'Test Organization',
 };
+MOCKS_WITH_FIXED_TIME[0].result.data.event.isRecurringEventTemplate = false;
 MOCKS_WITH_FIXED_TIME[0].result.data.event.updater = {
   _id: 'updater1',
   id: 'updater1',
