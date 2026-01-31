@@ -162,7 +162,9 @@ const runValidation = () => {
     const filesToCheck = localeFilePaths.length ? localeFilePaths : [filePath];
     const missing = filesToCheck.filter((file) => !fs.existsSync(file));
     if (missing.length > 0) {
-      missing.forEach((file) => console.error(`❌ File not found: ${file}`));
+      missing.forEach((file) => {
+        console.error(`❌ File not found: ${file}`);
+      });
       process.exit(1);
     }
 
@@ -184,7 +186,9 @@ const runValidation = () => {
           console.error(
             `  • ${relPath}: ${key}${lineNumber ? ` (line ${lineNumber})` : ''}`,
           );
-          violations.forEach((v) => console.error(`    ❌ ${v}`));
+          violations.forEach((v) => {
+            console.error(`    ❌ ${v}`);
+          });
           if (suggestion !== key) {
             console.error(`    ✅ Suggested: ${suggestion}`);
           }
