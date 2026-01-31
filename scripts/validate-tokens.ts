@@ -285,7 +285,7 @@ const isAllowlisted = (line: string, match: string): boolean => {
 /**
  * Strip inline comment fragments from a line, returning only the code portion.
  * Removes trailing single-line comments, self-contained block comments,
- * HTML comments, and content after an unclosed block comment start.
+ * and content after an unclosed block comment start.
  */
 const stripInlineComments = (line: string): string => {
   let result = line;
@@ -299,9 +299,6 @@ const stripInlineComments = (line: string): string => {
 
   // Remove self-contained /* ... */ fragments
   result = result.replace(/\/\*[^*]*\*+(?:[^/*][^*]*\*+)*\//g, '');
-
-  // Remove self-contained <!-- ... --> fragments
-  result = result.replace(/<!--[\s\S]*?-->/g, '');
 
   // If a block comment starts but doesn't close, keep only the part before /*
   const blockStartIndex = result.indexOf('/*');
