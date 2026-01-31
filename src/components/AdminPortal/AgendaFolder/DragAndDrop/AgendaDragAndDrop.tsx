@@ -254,7 +254,7 @@ export default function AgendaDragAndDrop({
                                             lg={2}
                                             className="text-center d-none d-md-block"
                                           >
-                                            {agendaItem.duration || '-'}
+                                            {agendaItem.duration ?? '-'}
                                           </Col>
 
                                           <Col
