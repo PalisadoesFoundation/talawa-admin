@@ -5,13 +5,27 @@
  * Verifies no hardcoded values remain after migration
  * For more details, see docs/docs/docs/developer-resources/design-token-system.md
  *
- * Usage: npx tsx scripts/validate-tokens.ts
+ * Usage: pnpm exec tsx scripts/validate-tokens.ts
  * Options:
- *   --files <file...>     Validate specific files (space-separated list); checks added lines unless --all is set
+ *   --files \<file...\>    Validate specific files (space-separated list); checks added lines unless --all is set
  *   --staged              Validate staged files only; checks added lines unless --all is set
  *   --all                 When used with --files or --staged, scan entire files
  *   --scan-entire-repo    Ignore file lists and scan all source files
  *   --warn                Log warnings without failing
+ *
+ * Detected patterns:
+ *   - Hex colors (#fff, #ffffff, #ffffffaa)
+ *   - RGB/RGBA colors (rgb(0,0,0), rgba(0,0,0,0.5))
+ *   - HSL/HSLA colors (hsl(0,0%,0%), hsla(0,0%,0%,0.5))
+ *   - CSS spacing properties with px/rem/em values
+ *   - CSS font-size with px/rem/em values
+ *   - CSS font-weight with numeric values (100-900)
+ *   - CSS line-height with px values
+ *   - CSS border-radius with px/rem/em values
+ *   - CSS border with px values and colors
+ *   - CSS box-shadow with hardcoded values
+ *   - TSX inline styles with camelCase properties (marginTop, paddingLeft, fontSize, etc.)
+ *   - MUI sx prop patterns
  */
 
 import fs from 'fs';
@@ -20,24 +34,204 @@ import { execSync, spawnSync } from 'child_process';
 import { glob } from 'glob';
 import { fileURLToPath } from 'url';
 
+export type ValidationResultType =
+  | 'color'
+  | 'spacing'
+  | 'font-size'
+  | 'font-weight'
+  | 'line-height'
+  | 'border-radius'
+  | 'border'
+  | 'box-shadow'
+  | 'outline'
+  | 'tsx-spacing'
+  | 'tsx-font-size'
+  | 'tsx-font-weight'
+  | 'tsx-color'
+  | 'tsx-line-height'
+  | 'tsx-border-radius'
+  | 'tsx-outline';
+
 interface IValidationResult {
   file: string;
   line: number;
   match: string;
-  type: 'color' | 'spacing' | 'font-size' | 'font-weight';
+  type: ValidationResultType;
 }
 
 type LineFilter = (file: string, lineNumber: number) => boolean;
 
-export const PATTERNS = {
-  color: /#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?/g,
+/**
+ * CSS Patterns for detecting hardcoded values
+ */
+export const CSS_PATTERNS = {
+  // Color patterns
+  hexColor: /#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?/g,
+  rgbColor:
+    /rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+)?\s*\)/gi,
+  hslColor:
+    /hsla?\(\s*\d{1,3}\s*,\s*[\d.]+%\s*,\s*[\d.]+%\s*(,\s*[\d.]+)?\s*\)/gi,
+
+  // Spacing patterns - matches px, rem, em values
   spacingPx:
-    /(?:padding|margin|width|height|gap|top|right|bottom|left):\s*(?:\d+px\s*)+/g,
-  fontSize: /font-size:\s*\d+px/g,
+    /(?:padding|margin|width|height|gap|top|right|bottom|left|inset):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em))*/gi,
+  // Shorthand spacing (padding: 8px 16px 8px 16px)
+  spacingShorthand:
+    /(?:padding|margin):\s*-?[\d.]+(px|rem|em)(\s+-?[\d.]+(px|rem|em)){1,3}/gi,
+
+  // Typography patterns
+  fontSize: /font-size:\s*[\d.]+(px|rem|em)/gi,
   fontWeight: /font-weight:\s*[1-9]00/g,
+  lineHeightPx: /line-height:\s*[\d.]+(px|rem|em)/gi,
+
+  // Border patterns
+  borderRadius: /border-radius:\s*[\d.]+(px|rem|em)(\s+[\d.]+(px|rem|em))*/gi,
+  borderWidth:
+    /border(-top|-right|-bottom|-left)?(-width)?:\s*[\d.]+(px|rem|em)/gi,
+  borderFull:
+    /border(-top|-right|-bottom|-left)?:\s*[\d.]+(px|rem|em)\s+\w+\s+#[0-9a-fA-F]{3,8}/gi,
+
+  // Box shadow with hardcoded values
+  boxShadow:
+    /box-shadow:\s*(-?[\d.]+(px|rem|em)\s*){2,4}(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
+
+  // Outline patterns
+  outlineWidth: /outline(-width)?:\s*[\d.]+(px|rem|em)/gi,
+  outlineFull:
+    /outline:\s*[\d.]+(px|rem|em)\s+\w+\s+(#[0-9a-fA-F]{3,8}|rgba?\([^)]+\)|hsla?\([^)]+\))/gi,
 };
 
+/**
+ * TSX/JS Patterns for detecting hardcoded values in inline styles
+ * Matches patterns like: marginTop: 8, marginTop: '8px', fontSize: 16
+ */
+export const TSX_PATTERNS = {
+  // Spacing camelCase properties with numeric or string px/rem/em values
+  spacingCamelCase:
+    /(?:margin|padding)(?:Top|Right|Bottom|Left|Inline|Block|InlineStart|InlineEnd|BlockStart|BlockEnd)?:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?!\s*[,}]))/gi,
+  // Width/height with hardcoded values
+  dimensionsCamelCase:
+    /(?:width|height|minWidth|minHeight|maxWidth|maxHeight|gap|rowGap|columnGap|top|right|bottom|left):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?!\s*[,}]))/gi,
+
+  // Font size in TSX
+  fontSizeCamelCase:
+    /fontSize:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+
+  // Font weight in TSX (numeric values)
+  fontWeightCamelCase: /fontWeight:\s*(?:'?[1-9]00'?|"[1-9]00"|[1-9]00)/gi,
+
+  // Line height in TSX
+  lineHeightCamelCase:
+    /lineHeight:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+(?:px|rem|em))/gi,
+
+  // Border radius in TSX
+  borderRadiusCamelCase:
+    /borderRadius:\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+
+  // Colors in TSX (hex, rgb, hsl)
+  colorCamelCase:
+    /(?:color|backgroundColor|borderColor|background):\s*(?:'#[0-9a-fA-F]{3,8}'|"#[0-9a-fA-F]{3,8}"|'rgba?\([^']+\)'|"rgba?\([^"]+\)"|'hsla?\([^']+\)'|"hsla?\([^"]+\)")/gi,
+
+  // Outline in TSX
+  outlineCamelCase:
+    /(?:outline|outlineWidth):\s*(?:'[^']*(?:px|rem|em)'|"[^"]*(?:px|rem|em)"|[\d.]+)/gi,
+};
+
+/**
+ * Allowlist patterns - values that should NOT be flagged
+ * These are valid CSS values that happen to match our patterns
+ */
+const ALLOWLIST_PATTERNS = [
+  // CSS var() usage is always allowed
+  /var\(--[^)]+\)/,
+  // calc() expressions are allowed (they may contain tokens)
+  /calc\([^)]+\)/,
+  // CSS custom property definitions (in :root or token files)
+  /--[\w-]+:\s*/,
+  // 0 values without units are valid CSS
+  /:\s*0(?:px|rem|em)?(?:\s|;|$)/,
+  // Percentage values
+  /:\s*[\d.]+%/,
+  // Common allowed numeric values in specific contexts
+  /z-index:\s*\d+/,
+  /opacity:\s*[\d.]+/,
+  /flex:\s*[\d.]+/,
+  /flex-grow:\s*[\d.]+/,
+  /flex-shrink:\s*[\d.]+/,
+  /order:\s*-?\d+/,
+  /animation-duration:\s*[\d.]+m?s/,
+  /animation-delay:\s*[\d.]+m?s/,
+  /transition:\s*[^;]+[\d.]+m?s/,
+  /transition-duration:\s*[\d.]+m?s/,
+  /transition-delay:\s*[\d.]+m?s/,
+  // Media query breakpoints - hardcoded values are allowed
+  /@media[^{]*\(\s*(?:min|max)-(?:width|height):\s*[\d.]+(px|rem|em)\s*\)/,
+  /@media[^{]*\(\s*width:\s*[\d.]+(px|rem|em)\s*\)/,
+  /@media[^{]*\(\s*height:\s*[\d.]+(px|rem|em)\s*\)/,
+];
+
 const normalizePath = (file: string): string => file.split(path.sep).join('/');
+
+/**
+ * Check if a line should be skipped based on allowlist patterns
+ */
+const isAllowlisted = (line: string, match: string): boolean => {
+  // Check if the match is inside a var() or calc() expression
+  const matchIndex = line.indexOf(match);
+  if (matchIndex === -1) return false;
+
+  // Get context around the match
+  const contextBefore = line.slice(Math.max(0, matchIndex - 50), matchIndex);
+  const contextAfter = line.slice(matchIndex, matchIndex + match.length + 20);
+  const context = contextBefore + contextAfter;
+
+  // Check against allowlist patterns
+  for (const pattern of ALLOWLIST_PATTERNS) {
+    if (pattern.test(context)) {
+      return true;
+    }
+  }
+
+  // Check if match is inside var()
+  if (
+    /var\([^)]*$/.test(contextBefore) &&
+    /^[^)]*\)/.test(line.slice(matchIndex + match.length))
+  ) {
+    return true;
+  }
+
+  return false;
+};
+
+/**
+ * Check if a line is a comment
+ */
+const isComment = (line: string): boolean => {
+  const trimmed = line.trim();
+  return (
+    trimmed.startsWith('//') ||
+    trimmed.startsWith('/*') ||
+    trimmed.startsWith('*') ||
+    trimmed.startsWith('<!--') ||
+    trimmed.endsWith('-->')
+  );
+};
+
+/**
+ * Check if file is a TypeScript/TSX file
+ */
+const isTsxFile = (file: string): boolean => {
+  const ext = path.extname(file).toLowerCase();
+  return ext === '.ts' || ext === '.tsx';
+};
+
+/**
+ * Check if file is a CSS/SCSS file
+ */
+const isCssFile = (file: string): boolean => {
+  const ext = path.extname(file).toLowerCase();
+  return ext === '.css' || ext === '.scss' || ext === '.sass';
+};
 
 const getFlagValues = (args: string[], flag: string): string[] => {
   const values: string[] = [];
@@ -97,8 +291,11 @@ export const shouldSkipFile = (file: string): boolean => {
   );
 };
 
-export const isSrcFile = (file: string): boolean =>
-  normalizePath(file).startsWith('src/');
+export const isSrcFile = (file: string): boolean => {
+  const normalized = normalizePath(file);
+  // Handle both relative paths (src/...) and absolute paths (..../src/...)
+  return normalized.startsWith('src/') || normalized.includes('/src/');
+};
 
 export const getStagedFiles = (): string[] => {
   try {
@@ -206,6 +403,241 @@ export const getAddedLinesByFile = (
 export const formatCount = (count: number, label: string): string =>
   `${count} ${label}${count === 1 ? '' : 's'}`;
 
+/**
+ * Helper to add matches from a pattern to results
+ */
+const addMatches = (
+  line: string,
+  pattern: RegExp,
+  type: ValidationResultType,
+  file: string,
+  lineNumber: number,
+  results: IValidationResult[],
+): void => {
+  // Reset regex lastIndex for global patterns
+  pattern.lastIndex = 0;
+  const matches = line.match(pattern);
+  if (matches) {
+    matches.forEach((match) => {
+      if (!isAllowlisted(line, match)) {
+        results.push({
+          file,
+          line: lineNumber,
+          match,
+          type,
+        });
+      }
+    });
+  }
+};
+
+/**
+ * Validate CSS files for hardcoded values
+ */
+const validateCssLine = (
+  line: string,
+  file: string,
+  lineNumber: number,
+  results: IValidationResult[],
+): void => {
+  // Skip comments
+  if (isComment(line)) return;
+
+  // Color patterns
+  addMatches(line, CSS_PATTERNS.hexColor, 'color', file, lineNumber, results);
+  addMatches(line, CSS_PATTERNS.rgbColor, 'color', file, lineNumber, results);
+  addMatches(line, CSS_PATTERNS.hslColor, 'color', file, lineNumber, results);
+
+  // Spacing patterns
+  addMatches(
+    line,
+    CSS_PATTERNS.spacingPx,
+    'spacing',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.spacingShorthand,
+    'spacing',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // Typography patterns
+  addMatches(
+    line,
+    CSS_PATTERNS.fontSize,
+    'font-size',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.fontWeight,
+    'font-weight',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.lineHeightPx,
+    'line-height',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // Border patterns
+  addMatches(
+    line,
+    CSS_PATTERNS.borderRadius,
+    'border-radius',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.borderWidth,
+    'border',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.borderFull,
+    'border',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // Box shadow
+  addMatches(
+    line,
+    CSS_PATTERNS.boxShadow,
+    'box-shadow',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // Outline patterns
+  addMatches(
+    line,
+    CSS_PATTERNS.outlineWidth,
+    'outline',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    CSS_PATTERNS.outlineFull,
+    'outline',
+    file,
+    lineNumber,
+    results,
+  );
+};
+
+/**
+ * Validate TSX/TS files for hardcoded values in inline styles
+ */
+const validateTsxLine = (
+  line: string,
+  file: string,
+  lineNumber: number,
+  results: IValidationResult[],
+): void => {
+  // Skip comments
+  if (isComment(line)) return;
+
+  // TSX spacing patterns (marginTop, paddingLeft, etc.)
+  addMatches(
+    line,
+    TSX_PATTERNS.spacingCamelCase,
+    'tsx-spacing',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    TSX_PATTERNS.dimensionsCamelCase,
+    'tsx-spacing',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // TSX typography patterns
+  addMatches(
+    line,
+    TSX_PATTERNS.fontSizeCamelCase,
+    'tsx-font-size',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    TSX_PATTERNS.fontWeightCamelCase,
+    'tsx-font-weight',
+    file,
+    lineNumber,
+    results,
+  );
+  addMatches(
+    line,
+    TSX_PATTERNS.lineHeightCamelCase,
+    'tsx-line-height',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // TSX border radius
+  addMatches(
+    line,
+    TSX_PATTERNS.borderRadiusCamelCase,
+    'tsx-border-radius',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // TSX color patterns
+  addMatches(
+    line,
+    TSX_PATTERNS.colorCamelCase,
+    'tsx-color',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // TSX outline
+  addMatches(
+    line,
+    TSX_PATTERNS.outlineCamelCase,
+    'tsx-outline',
+    file,
+    lineNumber,
+    results,
+  );
+
+  // Also check for CSS patterns in template literals and style objects
+  // Hex colors are common in TSX files
+  addMatches(line, CSS_PATTERNS.hexColor, 'color', file, lineNumber, results);
+};
+
 export async function validateFiles(
   pattern: string,
   files?: string[],
@@ -227,6 +659,8 @@ export async function validateFiles(
       continue;
     }
     const lines = content.split('\n');
+    const isTs = isTsxFile(file);
+    const isCss = isCssFile(file);
 
     lines.forEach((line, index) => {
       const lineNumber = index + 1;
@@ -234,52 +668,10 @@ export async function validateFiles(
         return;
       }
 
-      const colorMatches = line.match(PATTERNS.color);
-      if (colorMatches) {
-        colorMatches.forEach((match) => {
-          results.push({
-            file,
-            line: lineNumber,
-            match,
-            type: 'color',
-          });
-        });
-      }
-
-      const spacingMatches = line.match(PATTERNS.spacingPx);
-      if (spacingMatches) {
-        spacingMatches.forEach((match) => {
-          results.push({
-            file,
-            line: lineNumber,
-            match,
-            type: 'spacing',
-          });
-        });
-      }
-
-      const fontSizeMatches = line.match(PATTERNS.fontSize);
-      if (fontSizeMatches) {
-        fontSizeMatches.forEach((match) => {
-          results.push({
-            file,
-            line: lineNumber,
-            match,
-            type: 'font-size',
-          });
-        });
-      }
-
-      const fontWeightMatches = line.match(PATTERNS.fontWeight);
-      if (fontWeightMatches) {
-        fontWeightMatches.forEach((match) => {
-          results.push({
-            file,
-            line: lineNumber,
-            match,
-            type: 'font-weight',
-          });
-        });
+      if (isCss) {
+        validateCssLine(line, file, lineNumber, results);
+      } else if (isTs) {
+        validateTsxLine(line, file, lineNumber, results);
       }
     });
   }
@@ -353,13 +745,36 @@ export async function main() {
   const heading = warnOnly
     ? 'Design token validation warnings'
     : 'Design token validation failed';
-  log(heading);
+  log(`\n${heading}`);
+  log('='.repeat(heading.length));
   log(
     `Found ${formatCount(allResults.length, 'hardcoded value')} across ${formatCount(
       fileCount,
       'file',
-    )}.`,
+    )}.\n`,
   );
+
+  // Group results by category (CSS vs TSX) and then by type
+  const cssTypes = [
+    'color',
+    'spacing',
+    'font-size',
+    'font-weight',
+    'line-height',
+    'border-radius',
+    'border',
+    'box-shadow',
+    'outline',
+  ];
+  const tsxTypes = [
+    'tsx-color',
+    'tsx-spacing',
+    'tsx-font-size',
+    'tsx-font-weight',
+    'tsx-line-height',
+    'tsx-border-radius',
+    'tsx-outline',
+  ];
 
   const byType = allResults.reduce(
     (acc, result) => {
@@ -370,15 +785,42 @@ export async function main() {
     {} as Record<string, IValidationResult[]>,
   );
 
-  Object.entries(byType).forEach(([type, results]) => {
-    log(`- ${type.toUpperCase()} (${results.length} instances):`);
-    results.slice(0, 10).forEach((result) => {
-      log(`  ${result.file}:${result.line} -> ${result.match}`);
+  // Display CSS violations
+  const cssViolations = cssTypes.filter((type) => byType[type]?.length > 0);
+  if (cssViolations.length > 0) {
+    log('📄 CSS/SCSS Violations:');
+    log('-'.repeat(40));
+    cssViolations.forEach((type) => {
+      const results = byType[type];
+      log(`  ${type.toUpperCase()} (${results.length} instances):`);
+      results.slice(0, 5).forEach((result) => {
+        log(`    ${result.file}:${result.line} -> ${result.match}`);
+      });
+      if (results.length > 5) {
+        log(`    ... and ${results.length - 5} more`);
+      }
     });
-    if (results.length > 10) {
-      log(`  ... and ${results.length - 10} more`);
-    }
-  });
+    log('');
+  }
+
+  // Display TSX violations
+  const tsxViolations = tsxTypes.filter((type) => byType[type]?.length > 0);
+  if (tsxViolations.length > 0) {
+    log('⚛️  TSX/TS Inline Style Violations:');
+    log('-'.repeat(40));
+    tsxViolations.forEach((type) => {
+      const results = byType[type];
+      const displayType = type.replace('tsx-', '').toUpperCase();
+      log(`  ${displayType} (${results.length} instances):`);
+      results.slice(0, 5).forEach((result) => {
+        log(`    ${result.file}:${result.line} -> ${result.match}`);
+      });
+      if (results.length > 5) {
+        log(`    ... and ${results.length - 5} more`);
+      }
+    });
+    log('');
+  }
 
   log('\nFix the values above and re-run the check.\n');
   log('Replace hardcoded values with tokens from src/style/tokens.\n');
