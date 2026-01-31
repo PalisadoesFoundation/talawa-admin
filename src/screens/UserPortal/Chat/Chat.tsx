@@ -277,7 +277,7 @@ export default function chat(): JSX.Element {
                       chats.map((chat: NewChatType) => {
                         const cardProps: InterfaceContactCardProps = {
                           id: chat.id,
-                          title: chat.name || 'Chat',
+                          title: chat.name || t('chat'),
                           image: chat.avatarURL || '',
                           setSelectedContact,
                           selectedContact,
