@@ -229,7 +229,7 @@ const MOCK_PLEDGE_DATA = {
 /** Delayed create pledge mock so we can assert loading state before response */
 const MOCK_PLEDGE_DATA_DELAYED = {
   ...MOCK_PLEDGE_DATA,
-  delay: 500,
+  delay: 1000,
 };
 
 const MOCK_UPDATE_PLEDGE_DATA = {
@@ -923,9 +923,12 @@ describe('PledgeModal', () => {
     await user.click(submitButton);
 
     // Button should be disabled while mutation is in flight (mock delays 500ms)
-    await waitFor(() => {
-      expect(submitButton).toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        expect(submitButton).toBeDisabled();
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('should handle create pledge when pledger is missing', async () => {

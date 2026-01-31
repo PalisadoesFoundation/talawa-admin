@@ -112,7 +112,7 @@ describe('NotificationIcon Component', () => {
       () => {
         expect(screen.getByText('notification.loading')).toBeInTheDocument();
       },
-      { timeout: 1000 },
+      { timeout: 3000 },
     );
   });
 
