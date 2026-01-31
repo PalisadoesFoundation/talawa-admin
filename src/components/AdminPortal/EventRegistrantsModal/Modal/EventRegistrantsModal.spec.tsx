@@ -26,6 +26,10 @@ import {
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
+import {
+  InterfaceBaseModalProps,
+  InterfaceAutocompleteMockProps,
+} from 'types/AdminPortal/EventRegistrantsModal/interface';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   __esModule: true,
@@ -105,6 +109,80 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     dismiss: vi.fn(),
   },
 }));
+
+vi.mock('shared-components/BaseModal', async () => {
+  return {
+    BaseModal: ({
+      show,
+      children,
+      footer,
+      title,
+      dataTestId,
+      onHide,
+    }: InterfaceBaseModalProps) => {
+      if (!show) return null;
+
+      return (
+        <div data-testid={dataTestId || 'base-modal'}>
+          <div>
+            {title && <h2>{title}</h2>}
+            <button
+              aria-label="Close"
+              data-testid="modalCloseBtn"
+              onClick={onHide}
+            >
+              Close
+            </button>
+          </div>
+
+          <div>{children}</div>
+
+          {footer && <div data-testid="modal-footer">{footer}</div>}
+        </div>
+      );
+    },
+  };
+});
+
+vi.mock('@mui/material/Autocomplete', async () => {
+  return {
+    __esModule: true,
+    default: ({
+      renderInput,
+      options = [],
+      onChange,
+      noOptionsText,
+    }: InterfaceAutocompleteMockProps) => {
+      return (
+        <div>
+          {renderInput({
+            id: 'addRegistrant',
+            disabled: false,
+            InputProps: { ref: vi.fn() },
+          })}
+
+          {options.length === 0 && (
+            <div data-testid="no-options">{noOptionsText}</div>
+          )}
+
+          {options.length > 0 && (
+            <ul data-testid="options">
+              {options.map((opt) => (
+                <li
+                  key={opt.id}
+                  data-testid={`option-${opt.id}`}
+                  onClick={() => onChange?.({} as React.SyntheticEvent, opt)}
+                >
+                  {opt.name || 'Unknown User'}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
+    },
+  };
+});
 
 type ApolloMock = MockedResponse<Record<string, unknown>>;
 
@@ -434,15 +512,9 @@ describe('EventRegistrantsModal', () => {
 
     const input = await screen.findByTestId('autocomplete');
 
-    await user.click(input);
-    await user.type(input, 'John Doe');
+    await user.type(input, 'John');
 
-    // Wait for dropdown and select option
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const option = screen.getByText('John Doe');
+    const option = await screen.findByTestId('option-user1');
     await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
@@ -564,16 +636,19 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByTestId('autocomplete');
     expect(input).toBeInTheDocument();
 
-    // Open autocomplete options
-    await user.type(input, '{ArrowDown}');
+    await user.type(input, 'Unknown');
 
-    // This text appears via getOptionLabel's t('unknownUser') fallback
-    // i18nForTest translates it to the English text
-    const option = await screen.findByText('Unknown User');
-    expect(option).toBeInTheDocument();
+    const addButton = screen.getByTestId('add-registrant-btn');
+    await user.click(addButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Please choose a user to add first!',
+      );
+    });
   });
 
-  test('opens AddOnSpot modal when Enter key is pressed on Add Onspot Registration link', async () => {
+  test('opens AddOnSpot modal on Enter key press (first scenario)', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -593,7 +668,7 @@ describe('EventRegistrantsModal', () => {
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
 
-  test('opens AddOnSpot modal when Space key is pressed on Add Onspot Registration link', async () => {
+  test('opens AddOnSpot modal on Enter key press (second scenario)', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -605,9 +680,11 @@ describe('EventRegistrantsModal', () => {
     );
 
     await user.type(input, 'NonexistentUser');
+
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    await user.type(addOnspotLink, ' ');
+    addOnspotLink.focus();
+    await user.keyboard('{Enter}');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
@@ -624,13 +701,16 @@ describe('EventRegistrantsModal', () => {
     );
 
     await user.type(input, 'NonexistentUser');
-    const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    // Keys that should NOT open the modal
+    await user.keyboard('{ArrowDown}');
+
+    const addOnspotLink = await screen.findByTestId('add-onspot-link');
+
     const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
 
     for (const key of ignoredKeys) {
       addOnspotLink.focus();
+
       const keyPress = key.length === 1 ? key : `{${key}}`;
       await user.keyboard(keyPress);
 

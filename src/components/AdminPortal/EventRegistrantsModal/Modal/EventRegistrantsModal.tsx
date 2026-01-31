@@ -181,6 +181,7 @@ export const EventRegistrantsModal = ({
           }
         >
           <Autocomplete
+            disablePortal
             id="addRegistrant"
             onChange={(_, newMember): void => {
               setMember(newMember);
@@ -194,6 +195,12 @@ export const EventRegistrantsModal = ({
                   className={`underline ${styles.underlineText}`}
                   onClick={() => setOpen(true)}
                   onMouseDown={(e) => e.preventDefault()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setOpen(true);
+                    }
+                  }}
                 >
                   {t('addOnspotRegistrationLink')}
                 </button>
