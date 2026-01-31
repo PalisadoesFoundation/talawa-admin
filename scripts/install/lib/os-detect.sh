@@ -51,7 +51,7 @@ is_wsl() {
     
     local proc_version="${_OS_DETECT_ROOT}/proc/version"
     if [[ -f "$proc_version" ]]; then
-        if grep -qi "microsoft\|wsl" "$proc_version" 2>/dev/null; then
+        if grep -qiE "microsoft|wsl" "$proc_version" 2>/dev/null; then
             return 0
         fi
     fi
