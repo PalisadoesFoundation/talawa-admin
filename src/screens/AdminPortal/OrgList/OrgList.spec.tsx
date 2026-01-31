@@ -735,6 +735,8 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
+  mockPaginationFactory.useMock = false;
+  mockPaginationFactory.MockComponent = null;
   vi.clearAllMocks();
   localStorage.clear();
 });
@@ -924,15 +926,21 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    const originalScrollY = window.scrollY;
+    const originalScrollYDescriptor = Object.getOwnPropertyDescriptor(
+      window,
+      'scrollY',
+    );
     try {
-      Object.defineProperty(window, 'scrollY', { value: 1000, writable: true });
+      Object.defineProperty(window, 'scrollY', {
+        value: 1000,
+        writable: true,
+        configurable: true,
+      });
       window.dispatchEvent(new Event('scroll'));
     } finally {
-      Object.defineProperty(window, 'scrollY', {
-        value: originalScrollY,
-        writable: true,
-      });
+      if (originalScrollYDescriptor) {
+        Object.defineProperty(window, 'scrollY', originalScrollYDescriptor);
+      }
     }
   });
 });
