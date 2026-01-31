@@ -279,6 +279,11 @@ const isAllowlisted = (line: string, match: string): boolean => {
     }
   }
 
+  const zeroValuePattern = /:\s*0(?:px|rem|em)?$/;
+  if (zeroValuePattern.test(match)) {
+    return true;
+  }
+
   return false;
 };
 
