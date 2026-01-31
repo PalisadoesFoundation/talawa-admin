@@ -11058,13 +11058,13 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+}
 
-  .tagActionsDivider {
-    border-color: var(--grey-border-box-color);
-    border-style: solid;
-    border-width: 2px;
-    width: 85%;
-  }
+.tagActionsDivider {
+  border-color: var(--grey-border-box-color);
+  border-style: solid;
+  border-width: 2px;
+  width: 85%;
 }
 
 /* DataTable Pagination Styles */

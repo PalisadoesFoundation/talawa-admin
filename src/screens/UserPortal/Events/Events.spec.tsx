@@ -1702,7 +1702,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
-        'Month View',
+        'monthView',
       );
     });
 

@@ -43,9 +43,19 @@ vi.mock('style/app-fixed.module.css', () => ({
     optionList: 'optionList',
     leftDrawerActiveButton: 'leftDrawerActiveButton',
     leftDrawerInactiveButton: 'leftDrawerInactiveButton',
+    simpleButtonHeight: 'simpleButtonHeight',
     iconWrapper: 'iconWrapper',
     avatarContainer: 'avatarContainer',
     userSidebarOrgFooter: 'userSidebarOrgFooter',
+  },
+}));
+
+vi.mock('shared-components/SidebarNavItem/SidebarNavItem.module.css', () => ({
+  default: {
+    leftDrawerActiveButton: 'leftDrawerActiveButton',
+    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
+    simpleButtonHeight: 'simpleButtonHeight',
+    iconWrapper: 'iconWrapper',
   },
 }));
 
@@ -606,14 +616,20 @@ describe('LeftDrawerOrg', () => {
       renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('People').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerActiveButton');
+      expect(membersLink).toHaveClass(
+        'leftDrawerActiveButton',
+        'simpleButtonHeight',
+      );
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('People').closest('a');
-      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
+      expect(membersLink).toHaveClass(
+        'leftDrawerInactiveButton',
+        'simpleButtonHeight',
+      );
     });
 
     it('should render icon components with correct props', () => {
