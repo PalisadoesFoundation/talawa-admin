@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { removeEmptyFields, validateImageFile } from './userUpdateUtils';
+
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Mock NotificationToast
@@ -222,6 +223,35 @@ describe('userUpdateUtils', () => {
       expect(result).toBe(true);
       expect(mockTCommon).not.toHaveBeenCalled();
       expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+  });
+});
+
+describe('validateImageFile (single allowed type)', () => {
+  it('formats allowed types correctly when only one type is allowed', async () => {
+    vi.resetModules();
+
+    vi.doMock('../Constant/fileUpload', () => ({
+      FILE_UPLOAD_MAX_SIZE_MB: 5,
+      FILE_UPLOAD_ALLOWED_TYPES: ['image/jpeg'],
+    }));
+
+    const { validateImageFile } = await import('./userUpdateUtils');
+
+    const mockTCommon = vi
+      .fn()
+      .mockReturnValue('Invalid file type. Please use JPEG.');
+
+    const invalidFile = new File(['test'], 'test.png', {
+      type: 'image/png',
+    });
+    Object.defineProperty(invalidFile, 'size', { value: 1024 });
+
+    const result = validateImageFile(invalidFile, mockTCommon);
+
+    expect(result).toBe(false);
+    expect(mockTCommon).toHaveBeenCalledWith('invalidFileType', {
+      types: 'JPEG',
     });
   });
 });
