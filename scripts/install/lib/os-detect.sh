@@ -29,7 +29,7 @@ export OS_TYPE=""
 export OS_DISPLAY_NAME=""
 export IS_WSL=false
 
-# Internal cache flag - DO NOT USE DIRECTLY
+# Internal cache flag - DO NOT USE DIRECTLY (exported for test verification)
 _OS_DETECTED=false
 
 # ==============================================================================
