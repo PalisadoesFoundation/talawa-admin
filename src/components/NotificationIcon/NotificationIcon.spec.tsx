@@ -99,17 +99,21 @@ describe('NotificationIcon Component', () => {
   });
 
   it('should render loading state', async () => {
+    // Use a long delay so loading state is visible before mock resolves
     render(
-      <MockedProvider mocks={mocks([], false, 300)}>
+      <MockedProvider mocks={mocks([], false, 2000)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
       </MockedProvider>,
     );
     await user.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.getByText('notification.loading')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('notification.loading')).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
   });
 
   it('should render error state', async () => {
