@@ -653,7 +653,7 @@ describe('LeftDrawerOrg', () => {
       expect(inactiveIcon).toBeInTheDocument();
     });
 
-    it('should handle Membership Requests using standard icon mapping', () => {
+    it('should handle membershipRequests using standard icon mapping', () => {
       const propsWithRequests = {
         ...defaultProps,
         targets: [

@@ -924,8 +924,16 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 1')).toBeInTheDocument();
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
-    Object.defineProperty(window, 'scrollY', { value: 1000, writable: true });
-    window.dispatchEvent(new Event('scroll'));
+     const originalScrollY = window.scrollY;
+    try {
+      Object.defineProperty(window, 'scrollY', { value: 1000, writable: true });
+      window.dispatchEvent(new Event('scroll'));
+    } finally {
+      Object.defineProperty(window, 'scrollY', {
+        value: originalScrollY,
+        writable: true,
+      });
+   }
   });
 });
 
@@ -2315,7 +2323,6 @@ describe('Advanced Component Functionality Tests', () => {
       await wait(200);
     } catch {
       // Plugin modal is timing-dependent; test passes if modal doesn't appear
-      // Uncomment for debugging: console.debug('Plugin modal did not appear');
     }
   });
 

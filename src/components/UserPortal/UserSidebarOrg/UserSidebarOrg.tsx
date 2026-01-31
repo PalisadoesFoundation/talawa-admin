@@ -1,15 +1,3 @@
-/**
- * UserSidebarOrg Component
- *
- * This component represents the sidebar for the user portal with organization-specific navigation.
- *
- * @param targets - Navigation targets to render in the sidebar.
- * @param orgId - Organization ID for the current context.
- * @param hideDrawer - Whether the drawer is currently hidden.
- * @param setHideDrawer - Callback to toggle drawer visibility.
- * @returns The rendered UserSidebarOrg component.
- */
-
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
@@ -27,7 +15,17 @@ import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSec
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import type { InterfaceUserSidebarOrgProps } from 'types/UserPortal/UserSidebarOrg/interface';
 import styles from './UserSidebarOrg.module.css';
-
+/**
+ * UserSidebarOrg Component
+ *
+ * This component represents the sidebar for the user portal with organization-specific navigation.
+ *
+ * @param targets - Navigation targets to render in the sidebar.
+ * @param orgId - Organization ID for the current context.
+ * @param hideDrawer - Whether the drawer is currently hidden.
+ * @param setHideDrawer - Callback to toggle drawer visibility.
+ * @returns The rendered UserSidebarOrg component.
+ */
 const UserSidebarOrg = ({
   targets,
   orgId,
