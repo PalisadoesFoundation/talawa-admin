@@ -1,4 +1,4 @@
-[**talawa-admin**](../../README.md)
+[Admin Docs](/)
 
 ***
 
