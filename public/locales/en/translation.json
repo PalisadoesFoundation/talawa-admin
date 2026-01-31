@@ -13,6 +13,12 @@
   "ends": "Ends",
   "occurrences": "Occurrences",
   "customRecurrence": "Custom Recurrence",
+  "frequency": "Frequency",
+  "repeatsEvery": "Repeats Every",
+  "day": "Day",
+  "week": "Week",
+  "month": "Month",
+  "year": "Year",
   "role": {
     "member": "Member"
   },
@@ -964,6 +970,7 @@
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
+    "createFailed": "Failed to create pledge",
     "pledgeAmount": "Pledge Amount",
     "pledgeOptions": "Options",
     "pledgeCreated": "Pledge created successfully",
@@ -1203,7 +1210,7 @@
     "getOtp": "Get OTP",
     "enterOtp": "Enter OTP",
     "enterNewPassword": "Enter New Password",
-    "cofirmNewPassword": "Confirm New Password",
+    "confirmNewPassword": "Confirm New Password",
     "changePassword": "Change Password",
     "backToLogin": "Back to Login",
     "userOtp": "e.g. 12345",

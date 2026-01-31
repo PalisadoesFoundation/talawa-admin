@@ -6,6 +6,7 @@
  * The component uses ReportingTable for consistent table display.
  */
 import React, { useCallback, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
@@ -70,7 +71,11 @@ const Campaigns = (): JSX.Element => {
   const [searchText, setSearchText] = useState('');
   const [selectedCampaign, setSelectedCampaign] =
     useState<InterfaceUserCampaign | null>(null);
-  const [modalState, setModalState] = useState<boolean>(false);
+  const {
+    isOpen: modalState,
+    open: openModalState,
+    close: closeModalState,
+  } = useModalState();
 
   const {
     data: campaignData,
@@ -85,15 +90,18 @@ const Campaigns = (): JSX.Element => {
     skip: !orgId || !userId,
   });
 
-  const openModal = useCallback((campaign: InterfaceUserCampaign): void => {
-    setSelectedCampaign(campaign);
-    setModalState(true);
-  }, []);
+  const openModal = useCallback(
+    (campaign: InterfaceUserCampaign): void => {
+      setSelectedCampaign(campaign);
+      openModalState();
+    },
+    [openModalState],
+  );
 
   const closeModal = useCallback((): void => {
-    setModalState(false);
+    closeModalState();
     setSelectedCampaign(null);
-  }, []);
+  }, [closeModalState]);
 
   const campaigns = useMemo((): CampaignWithStatus[] => {
     if (!campaignData?.organization?.funds?.edges) {

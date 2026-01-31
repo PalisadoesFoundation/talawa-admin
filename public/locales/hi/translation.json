@@ -8,6 +8,12 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "frequency": "आवृत्ति",
+  "repeatsEvery": "हर बार दोहराता है",
+  "day": "दिन",
+  "week": "सप्ताह",
+  "month": "महीना",
+  "year": "वर्ष",
   "role": {
     "member": "सदस्य"
   },
@@ -975,6 +981,7 @@
     "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
+    "createFailed": "प्रतिज्ञा बनाने में विफल",
     "title": "निधि अभियान प्रतिज्ञाएँ",
     "pledgeAmount": "प्रतिज्ञा राशि",
     "pledgeOptions": "विकल्प",
@@ -1154,7 +1161,7 @@
     "getOtp": "ओटीपी प्राप्त करें",
     "enterOtp": "ओटीपी दर्ज करें",
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
-    "cofirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "changePassword": "पासवर्ड बदलें",
     "backToLogin": "लॉगिन पर वापस जाएं",
     "userOtp": "जैसे ",

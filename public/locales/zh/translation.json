@@ -8,6 +8,12 @@
   "ends": "结束",
   "occurrences": "次",
   "customRecurrence": "自定义重复",
+  "frequency": "频率",
+  "repeatsEvery": "每重复一次",
+  "day": "天",
+  "week": "周",
+  "month": "月",
+  "year": "年",
   "role": {
     "member": "成员"
   },
@@ -963,6 +969,7 @@
     "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
+    "createFailed": "创建认捐失败",
     "title": "基金活动承诺",
     "pledgeAmount": "质押金额",
     "pledgeOptions": "选项",
@@ -1159,7 +1166,7 @@
     "getOtp": "获取一次性密码",
     "enterOtp": "输入一次性密码",
     "enterNewPassword": "输入新密码",
-    "cofirmNewPassword": "确认新密码",
+    "confirmNewPassword": "确认新密码",
     "changePassword": "更改密码",
     "backToLogin": "回到登入",
     "userOtp": "例如",

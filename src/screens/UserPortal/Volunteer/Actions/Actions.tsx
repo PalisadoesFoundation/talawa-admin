@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
@@ -20,11 +21,6 @@ import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdat
 import useLocalStorage from 'utils/useLocalstorage';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-
-enum ModalState {
-  VIEW = 'view',
-  STATUS = 'status',
-}
 
 /**
  * Component for displaying and managing action items assigned to the current volunteer.
@@ -53,25 +49,31 @@ function Actions(): JSX.Element {
     'dueDate_DESC',
   );
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
-  const [modalState, setModalState] = useState<Record<ModalState, boolean>>({
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
-  });
+  const {
+    isOpen: isViewModalOpen,
+    open: openViewModal,
+    close: closeViewModal,
+  } = useModalState();
+  const {
+    isOpen: isStatusModalOpen,
+    open: openStatusModal,
+    close: closeStatusModal,
+  } = useModalState();
 
-  const openModal = (modal: ModalState): void => {
-    setModalState((p) => ({ ...p, [modal]: true }));
-  };
-
-  const closeModal = (modal: ModalState): void => {
-    setModalState((p) => ({ ...p, [modal]: false }));
-  };
-
-  const handleModalClick = useCallback(
-    (item: IActionItemInfo, modal: ModalState): void => {
+  const handleViewClick = useCallback(
+    (item: IActionItemInfo): void => {
       setActionItem(item);
-      openModal(modal);
+      openViewModal();
     },
-    [],
+    [openViewModal],
+  );
+
+  const handleStatusClick = useCallback(
+    (item: IActionItemInfo): void => {
+      setActionItem(item);
+      openStatusModal();
+    },
+    [openStatusModal],
   );
 
   const { data, loading, error, refetch } = useQuery(ACTION_ITEM_LIST, {
@@ -191,7 +193,7 @@ function Actions(): JSX.Element {
         <Button
           size="sm"
           data-testid="viewItemBtn"
-          onClick={() => handleModalClick(p.row, ModalState.VIEW)}
+          onClick={() => handleViewClick(p.row)}
           aria-label={tCommon('viewDetails')}
         >
           <i className="fa fa-info" />
@@ -207,7 +209,7 @@ function Actions(): JSX.Element {
           type="checkbox"
           data-testid="statusCheckbox"
           checked={p.row.isCompleted}
-          onChange={() => handleModalClick(p.row, ModalState.STATUS)}
+          onChange={() => handleStatusClick(p.row)}
           aria-label={tCommon('markComplete')}
         />
       ),
@@ -271,14 +273,14 @@ function Actions(): JSX.Element {
         {actionItem && (
           <>
             <ItemViewModal
-              isOpen={modalState.view}
-              hide={() => closeModal(ModalState.VIEW)}
+              isOpen={isViewModalOpen}
+              hide={closeViewModal}
               item={actionItem}
             />
             <ItemUpdateStatusModal
               actionItem={actionItem}
-              isOpen={modalState.status}
-              hide={() => closeModal(ModalState.STATUS)}
+              isOpen={isStatusModalOpen}
+              hide={closeStatusModal}
               actionItemsRefetch={refetch}
             />
           </>

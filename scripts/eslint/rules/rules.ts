@@ -10,6 +10,7 @@ import {
 import { securityRestrictions } from './security.ts';
 import { searchInputRestrictions } from './search-input.ts';
 import preferCrudModalTemplate from './prefer-crud-modal-template.ts';
+import { modalStateRestrictions } from './modal-state.ts';
 
 export {
   restrictedImports,
@@ -19,4 +20,5 @@ export {
   securityRestrictions,
   searchInputRestrictions,
   preferCrudModalTemplate,
+  modalStateRestrictions,
 };
