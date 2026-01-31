@@ -4,85 +4,19 @@
 
 # Function: handleCreateDirectChat()
 
-> **handleCreateDirectChat**(`id`, `userName`, `chats`, `t`, `tCommon`, `createChat`, `createChatMembership`, `organizationId`, `userId`, `currentUserName`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
+> **handleCreateDirectChat**(`params`): `Promise`\<`void`\>
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L77)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L61)
 
 Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
 
 ## Parameters
 
-### id
+### params
 
-`string`
+[`InterfaceHandleCreateDirectChatParams`](../../../../../types/UserPortal/Chat/interface/interfaces/InterfaceHandleCreateDirectChatParams.md)
 
-The ID of the user to chat with.
-
-### userName
-
-`string`
-
-The name of the user to chat with.
-
-### chats
-
-[`NewChatType`](../../../../../types/UserPortal/Chat/interface/type-aliases/NewChatType.md)[]
-
-Array of existing chats to check for duplicates.
-
-### t
-
-`TFunction`\<`"translation"`, `"userChat"`\>
-
-i18n translation function for userChat namespace.
-
-### tCommon
-
-`TFunction`\<`"common"`, `undefined`\>
-
-i18n translation function for common namespace.
-
-### createChat
-
-\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
-
-Mutation function to create a new chat.
-
-### createChatMembership
-
-\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
-
-Mutation function to add members to the chat.
-
-### organizationId
-
-`string`
-
-The ID of the current organization.
-
-### userId
-
-`string`
-
-The ID of the current user.
-
-### currentUserName
-
-`string`
-
-The name of the current user.
-
-### chatsListRefetch
-
-\{(`variables?`): `Promise`\<`ApolloQueryResult`\<`unknown`\>\>; (): `Promise`\<`ApolloQueryResult`\<`unknown`\>\>; \}
-
-Function to refetch the list of chats.
-
-### toggleCreateDirectChatModal
-
-\{(): `void`; (): `void`; \}
-
-Function to close the modal.
+The parameters object containing user info, chat data, and mutation functions.
 
 ## Returns
 

@@ -23,14 +23,7 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import Button from 'shared-components/Button';
-import type {
-  ApolloCache,
-  ApolloQueryResult,
-  DefaultContext,
-  FetchResult,
-  MutationFunctionOptions,
-  OperationVariables,
-} from '@apollo/client';
+
 import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -49,91 +42,40 @@ import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import type { TFunction } from 'i18next';
+
 import type {
-  NewChatType,
   InterfaceOrganizationMember,
   InterfaceCreateDirectChatProps,
+  InterfaceHandleCreateDirectChatParams,
 } from 'types/UserPortal/Chat/interface';
+
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 /**
  * Handles the logic for checking existing chats and creating a new direct chat if one doesn't exist.
  *
- * @param id - The ID of the user to chat with.
- * @param userName - The name of the user to chat with.
- * @param chats - Array of existing chats to check for duplicates.
- * @param t - i18n translation function for userChat namespace.
- * @param tCommon - i18n translation function for common namespace.
- * @param createChat - Mutation function to create a new chat.
- * @param createChatMembership - Mutation function to add members to the chat.
- * @param organizationId - The ID of the current organization.
- * @param userId - The ID of the current user.
- * @param currentUserName - The name of the current user.
- * @param chatsListRefetch - Function to refetch the list of chats.
- * @param toggleCreateDirectChatModal - Function to close the modal.
+ * @param params - The parameters object containing user info, chat data, and mutation functions.
  */
+
 export const handleCreateDirectChat = async (
-  id: string,
-  userName: string,
-  chats: NewChatType[],
-  t: TFunction<'translation', 'userChat'>,
-  tCommon: TFunction<'common', undefined>,
-  createChat: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          organizationId: string;
-          name: string;
-          description: string;
-          avatar: null;
-        };
-      };
-    }): unknown;
-  },
-  createChatMembership: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          memberId: string;
-          chatId: string;
-          role: string;
-        };
-      };
-    }): unknown;
-  },
-  organizationId: string | undefined,
-  userId: string | null,
-  currentUserName: string,
-  chatsListRefetch: {
-    (
-      variables?: Partial<{ id: string }> | undefined,
-    ): Promise<ApolloQueryResult<unknown>>;
-    (): Promise<ApolloQueryResult<unknown>>;
-  },
-  toggleCreateDirectChatModal: { (): void; (): void },
+  params: InterfaceHandleCreateDirectChatParams,
 ): Promise<void> => {
+  const {
+    id,
+    userName,
+    chats,
+    t,
+    tCommon,
+    createChat,
+    createChatMembership,
+    organizationId,
+    userId,
+    currentUserName,
+    chatsListRefetch,
+    toggleCreateDirectChatModal,
+  } = params;
+
   // Check if a direct chat with this user already exists
   // Direct chats have exactly 2 members & are NOT groups
   const existingChat = chats.find((chat) => {
@@ -338,9 +280,9 @@ export default function createDirectChatModal({
                             <TableCell align="center">
                               <Button
                                 onClick={() => {
-                                  handleCreateDirectChat(
-                                    userDetails.id,
-                                    userDetails.name,
+                                  handleCreateDirectChat({
+                                    id: userDetails.id,
+                                    userName: userDetails.name,
                                     chats,
                                     t,
                                     tCommon,
@@ -351,7 +293,7 @@ export default function createDirectChatModal({
                                     currentUserName,
                                     chatsListRefetch,
                                     toggleCreateDirectChatModal,
-                                  );
+                                  });
                                 }}
                                 data-testid="addBtn"
                               >

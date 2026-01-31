@@ -6,7 +6,7 @@
 
 > **NewChatType** = `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L7)
+Defined in: [src/types/UserPortal/Chat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L15)
 
 Chat type aligned with GraphQL schema.
 This is the canonical chat type - use this instead of the legacy GroupChat type.
@@ -17,7 +17,7 @@ This is the canonical chat type - use this instead of the legacy GroupChat type.
 
 > `optional` **avatarMimeType**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L11)
+Defined in: [src/types/UserPortal/Chat/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L19)
 
 ***
 
@@ -25,7 +25,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:11](https://github.com/Palis
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L12)
+Defined in: [src/types/UserPortal/Chat/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L20)
 
 ***
 
@@ -33,7 +33,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:12](https://github.com/Palis
 
 > **createdAt**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L14)
+Defined in: [src/types/UserPortal/Chat/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L22)
 
 ***
 
@@ -41,7 +41,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:14](https://github.com/Palis
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L46)
+Defined in: [src/types/UserPortal/Chat/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L54)
 
 #### avatarMimeType?
 
@@ -65,7 +65,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:46](https://github.com/Palis
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L10)
+Defined in: [src/types/UserPortal/Chat/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L18)
 
 ***
 
@@ -73,7 +73,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:10](https://github.com/Palis
 
 > `optional` **firstUnreadMessageId**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L19)
+Defined in: [src/types/UserPortal/Chat/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L27)
 
 ***
 
@@ -81,7 +81,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:19](https://github.com/Palis
 
 > `optional` **hasUnread**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L18)
+Defined in: [src/types/UserPortal/Chat/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L26)
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:18](https://github.com/Palis
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L8)
+Defined in: [src/types/UserPortal/Chat/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L16)
 
 ***
 
@@ -97,7 +97,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:8](https://github.com/Palisa
 
 > `optional` **isGroup**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L13)
+Defined in: [src/types/UserPortal/Chat/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L21)
 
 ***
 
@@ -105,7 +105,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:13](https://github.com/Palis
 
 > `optional` **lastMessage**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L20)
+Defined in: [src/types/UserPortal/Chat/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L28)
 
 #### body
 
@@ -177,7 +177,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:20](https://github.com/Palis
 
 > `optional` **members**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L58)
+Defined in: [src/types/UserPortal/Chat/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L66)
 
 #### edges?
 
@@ -189,7 +189,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:58](https://github.com/Palis
 
 > **messages**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L72)
+Defined in: [src/types/UserPortal/Chat/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L80)
 
 #### edges
 
@@ -201,7 +201,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:72](https://github.com/Palis
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L9)
+Defined in: [src/types/UserPortal/Chat/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L17)
 
 ***
 
@@ -209,7 +209,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:9](https://github.com/Palisa
 
 > `optional` **organization**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L41)
+Defined in: [src/types/UserPortal/Chat/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L49)
 
 #### countryCode?
 
@@ -229,7 +229,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:41](https://github.com/Palis
 
 > `optional` **unreadMessagesCount**: `number`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L17)
+Defined in: [src/types/UserPortal/Chat/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L25)
 
 ***
 
@@ -237,7 +237,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:17](https://github.com/Palis
 
 > **updatedAt**: `string` \| `null`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L15)
+Defined in: [src/types/UserPortal/Chat/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L23)
 
 ***
 
@@ -245,7 +245,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:15](https://github.com/Palis
 
 > `optional` **updater**: `object`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L52)
+Defined in: [src/types/UserPortal/Chat/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L60)
 
 #### avatarMimeType?
 

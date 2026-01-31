@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGroupChatDetailsProps
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L104)
+Defined in: [src/types/UserPortal/Chat/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L112)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:104](https://github.com/Pali
 
 > **chat**: [`NewChatType`](../type-aliases/NewChatType.md)
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L107)
+Defined in: [src/types/UserPortal/Chat/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L115)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:107](https://github.com/Pali
 
 > **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L108)
+Defined in: [src/types/UserPortal/Chat/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L116)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:108](https://github.com/Pali
 
 > **groupChatDetailsModalisOpen**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L106)
+Defined in: [src/types/UserPortal/Chat/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L114)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:106](https://github.com/Pali
 
 > **toggleGroupChatDetailsModal**: () => `void`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L105)
+Defined in: [src/types/UserPortal/Chat/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L113)
 
 #### Returns
 

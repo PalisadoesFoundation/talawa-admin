@@ -1,4 +1,12 @@
-import type { ApolloQueryResult } from '@apollo/client';
+import type {
+  ApolloQueryResult,
+  ApolloCache,
+  DefaultContext,
+  FetchResult,
+  MutationFunctionOptions,
+  OperationVariables,
+} from '@apollo/client';
+import type { TFunction } from 'i18next';
 
 /**
  * Chat type aligned with GraphQL schema.
@@ -149,4 +157,39 @@ export interface InterfaceCreateDirectChatProps {
     variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
   chats: NewChatType[];
+}
+
+export interface InterfaceHandleCreateDirectChatParams {
+  id: string;
+  userName: string;
+  chats: NewChatType[];
+  t: TFunction<'translation', 'userChat'>;
+  tCommon: TFunction<'common', undefined>;
+  createChat: (
+    options?:
+      | MutationFunctionOptions<
+          unknown,
+          OperationVariables,
+          DefaultContext,
+          ApolloCache<unknown>
+        >
+      | undefined,
+  ) => Promise<FetchResult<unknown>>;
+  createChatMembership: (
+    options?:
+      | MutationFunctionOptions<
+          unknown,
+          OperationVariables,
+          DefaultContext,
+          ApolloCache<unknown>
+        >
+      | undefined,
+  ) => Promise<FetchResult<unknown>>;
+  organizationId: string | undefined;
+  userId: string | null;
+  currentUserName: string;
+  chatsListRefetch: (
+    variables?: Partial<{ id: string }> | undefined,
+  ) => Promise<ApolloQueryResult<unknown>>;
+  toggleCreateDirectChatModal: () => void;
 }

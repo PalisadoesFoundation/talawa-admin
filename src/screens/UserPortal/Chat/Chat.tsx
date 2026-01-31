@@ -41,7 +41,7 @@ import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 // TODO: Update markChatMessagesAsRead to match new schema
-// import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
+
 import type {
   NewChatType,
   InterfaceContactCardProps,
@@ -102,16 +102,8 @@ export default function Chat(): JSX.Element {
   });
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
 
-  // TODO: Update markChatMessagesAsRead to match new schema
-  // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
-  //   variables: { chatId: selectedContact, userId: userId },
-  // });
-
   useEffect(() => {
     // TODO: Update markChatMessagesAsRead to match new schema
-    // markChatMessagesAsRead().then(() => {
-    //   chatsListRefetch({ id: userId });
-    // });
   }, [selectedContact]);
 
   React.useEffect(() => {

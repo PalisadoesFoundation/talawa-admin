@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateDirectChatProps
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L145)
+Defined in: [src/types/UserPortal/Chat/interface.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L153)
 
 Props for CreateDirectChat modal.
 
@@ -14,7 +14,7 @@ Props for CreateDirectChat modal.
 
 > **chats**: [`NewChatType`](../type-aliases/NewChatType.md)[]
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L151)
+Defined in: [src/types/UserPortal/Chat/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L159)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:151](https://github.com/Pali
 
 > **chatsListRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L148)
+Defined in: [src/types/UserPortal/Chat/interface.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L156)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:148](https://github.com/Pali
 
 > **createDirectChatModalisOpen**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L147)
+Defined in: [src/types/UserPortal/Chat/interface.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L155)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:147](https://github.com/Pali
 
 > **toggleCreateDirectChatModal**: () => `void`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L146)
+Defined in: [src/types/UserPortal/Chat/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L154)
 
 #### Returns
 
