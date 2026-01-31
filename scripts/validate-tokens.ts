@@ -216,17 +216,47 @@ const isAllowlisted = (line: string, match: string): boolean => {
 };
 
 /**
- * Check if a line is a comment
+ * Check if a line is a comment based on line content and block comment state.
+ * @param line - The line content to check
+ * @param inBlockComment - Whether we're currently inside a block comment
+ * @returns Object with isComment flag and updated inBlockComment state
  */
-const isComment = (line: string): boolean => {
+const checkCommentState = (
+  line: string,
+  inBlockComment: boolean,
+): { isComment: boolean; inBlockComment: boolean } => {
   const trimmed = line.trim();
-  return (
+
+  // If we're inside a block comment, check for end
+  if (inBlockComment) {
+    if (trimmed.includes('*/')) {
+      // Line contains end of block comment - treat as comment
+      return { isComment: true, inBlockComment: false };
+    }
+    // Still inside block comment
+    return { isComment: true, inBlockComment: true };
+  }
+
+  // Check for single-line comments
+  if (
     trimmed.startsWith('//') ||
-    trimmed.startsWith('/*') ||
-    trimmed.startsWith('*') ||
     trimmed.startsWith('<!--') ||
     trimmed.endsWith('-->')
-  );
+  ) {
+    return { isComment: true, inBlockComment: false };
+  }
+
+  // Check for block comment start
+  if (trimmed.includes('/*')) {
+    if (trimmed.includes('*/')) {
+      // Single-line block comment like /* comment */
+      return { isComment: true, inBlockComment: false };
+    }
+    // Block comment starts but doesn't end on this line
+    return { isComment: true, inBlockComment: true };
+  }
+
+  return { isComment: false, inBlockComment: false };
 };
 
 /**
@@ -452,9 +482,10 @@ const validateCssLine = (
   file: string,
   lineNumber: number,
   results: IValidationResult[],
+  isCommentLine: boolean,
 ): void => {
   // Skip comments
-  if (isComment(line)) return;
+  if (isCommentLine) return;
 
   // Color patterns
   addMatches(line, CSS_PATTERNS.hexColor, 'color', file, lineNumber, results);
@@ -568,9 +599,10 @@ const validateTsxLine = (
   file: string,
   lineNumber: number,
   results: IValidationResult[],
+  isCommentLine: boolean,
 ): void => {
   // Skip comments
-  if (isComment(line)) return;
+  if (isCommentLine) return;
 
   // TSX spacing patterns (marginTop, paddingLeft, etc.)
   addMatches(
@@ -682,16 +714,33 @@ export async function validateFiles(
     const isTs = isTsxFile(file);
     const isCss = isCssFile(file);
 
+    let inBlockComment = false;
+
     lines.forEach((line, index) => {
       const lineNumber = index + 1;
       if (lineFilter && !lineFilter(file, lineNumber)) {
         return;
       }
 
+      const commentState = checkCommentState(line, inBlockComment);
+      inBlockComment = commentState.inBlockComment;
+
       if (isCss) {
-        validateCssLine(line, file, lineNumber, results);
+        validateCssLine(
+          line,
+          file,
+          lineNumber,
+          results,
+          commentState.isComment,
+        );
       } else if (isTs) {
-        validateTsxLine(line, file, lineNumber, results);
+        validateTsxLine(
+          line,
+          file,
+          lineNumber,
+          results,
+          commentState.isComment,
+        );
       }
     });
   }

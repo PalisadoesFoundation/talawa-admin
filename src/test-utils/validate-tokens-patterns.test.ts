@@ -17,6 +17,12 @@ describe('CSS_PATTERNS', () => {
     test('matches 8-digit hex colors with alpha', () => {
       expect('#ffffffaa'.match(CSS_PATTERNS.hexColor)).toEqual(['#ffffffaa']);
     });
+
+    test('does not match invalid hex colors', () => {
+      expect('#gg'.match(CSS_PATTERNS.hexColor)).toBeNull();
+      expect('#12'.match(CSS_PATTERNS.hexColor)).toBeNull();
+      expect('#ghijkl'.match(CSS_PATTERNS.hexColor)).toBeNull();
+    });
   });
 
   describe('rgbColor', () => {
@@ -31,6 +37,11 @@ describe('CSS_PATTERNS', () => {
         'rgba(0, 0, 0, 0.5)',
       ]);
     });
+
+    test('does not match invalid rgb colors', () => {
+      expect('rgb(abc, def, ghi)'.match(CSS_PATTERNS.rgbColor)).toBeNull();
+      expect('rgb(255)'.match(CSS_PATTERNS.rgbColor)).toBeNull();
+    });
   });
 
   describe('hslColor', () => {
@@ -44,6 +55,11 @@ describe('CSS_PATTERNS', () => {
       expect('hsla(120, 50%, 50%, 0.5)'.match(CSS_PATTERNS.hslColor)).toEqual([
         'hsla(120, 50%, 50%, 0.5)',
       ]);
+    });
+
+    test('does not match invalid hsl colors', () => {
+      expect('hsl(abc, def, ghi)'.match(CSS_PATTERNS.hslColor)).toBeNull();
+      expect('hsl(120)'.match(CSS_PATTERNS.hslColor)).toBeNull();
     });
   });
 
@@ -65,6 +81,31 @@ describe('CSS_PATTERNS', () => {
         'padding: 8px 16px',
       ]);
     });
+
+    test('does not match invalid spacing values', () => {
+      expect('padding: auto'.match(CSS_PATTERNS.spacingPx)).toBeNull();
+      expect('padding: inherit'.match(CSS_PATTERNS.spacingPx)).toBeNull();
+    });
+  });
+
+  describe('spacingShorthand', () => {
+    test('matches padding shorthand with 2 values', () => {
+      expect('padding: 8px 16px'.match(CSS_PATTERNS.spacingShorthand)).toEqual([
+        'padding: 8px 16px',
+      ]);
+    });
+
+    test('matches margin shorthand with 4 values', () => {
+      expect(
+        'margin: 8px 16px 8px 16px'.match(CSS_PATTERNS.spacingShorthand),
+      ).toEqual(['margin: 8px 16px 8px 16px']);
+    });
+
+    test('matches padding shorthand with 3 values', () => {
+      expect(
+        'padding: 8px 16px 8px'.match(CSS_PATTERNS.spacingShorthand),
+      ).toEqual(['padding: 8px 16px 8px']);
+    });
   });
 
   describe('fontSize', () => {
@@ -79,6 +120,11 @@ describe('CSS_PATTERNS', () => {
         'font-size: 1.5rem',
       ]);
     });
+
+    test('does not match invalid font-size values', () => {
+      expect('font-size: inherit'.match(CSS_PATTERNS.fontSize)).toBeNull();
+      expect('font-size: large'.match(CSS_PATTERNS.fontSize)).toBeNull();
+    });
   });
 
   describe('fontWeight', () => {
@@ -88,6 +134,32 @@ describe('CSS_PATTERNS', () => {
       ]);
       expect('font-weight: 700'.match(CSS_PATTERNS.fontWeight)).toEqual([
         'font-weight: 700',
+      ]);
+    });
+
+    test('does not match invalid font weight values', () => {
+      expect('font-weight: bold'.match(CSS_PATTERNS.fontWeight)).toBeNull();
+      expect('font-weight: normal'.match(CSS_PATTERNS.fontWeight)).toBeNull();
+      expect('font-weight: 50'.match(CSS_PATTERNS.fontWeight)).toBeNull();
+    });
+  });
+
+  describe('lineHeightPx', () => {
+    test('matches line-height with px', () => {
+      expect('line-height: 24px'.match(CSS_PATTERNS.lineHeightPx)).toEqual([
+        'line-height: 24px',
+      ]);
+    });
+
+    test('matches line-height with rem', () => {
+      expect('line-height: 1.5rem'.match(CSS_PATTERNS.lineHeightPx)).toEqual([
+        'line-height: 1.5rem',
+      ]);
+    });
+
+    test('matches line-height with em', () => {
+      expect('line-height: 1.2em'.match(CSS_PATTERNS.lineHeightPx)).toEqual([
+        'line-height: 1.2em',
       ]);
     });
   });
@@ -103,6 +175,46 @@ describe('CSS_PATTERNS', () => {
       expect(
         'border-radius: 4px 8px 4px 8px'.match(CSS_PATTERNS.borderRadius),
       ).toEqual(['border-radius: 4px 8px 4px 8px']);
+    });
+
+    test('does not match invalid border-radius values', () => {
+      expect(
+        'border-radius: inherit'.match(CSS_PATTERNS.borderRadius),
+      ).toBeNull();
+    });
+  });
+
+  describe('borderWidth', () => {
+    test('matches border-width with px', () => {
+      expect('border-width: 2px'.match(CSS_PATTERNS.borderWidth)).toEqual([
+        'border-width: 2px',
+      ]);
+    });
+
+    test('matches border-top-width with px', () => {
+      expect('border-top-width: 1px'.match(CSS_PATTERNS.borderWidth)).toEqual([
+        'border-top-width: 1px',
+      ]);
+    });
+
+    test('matches border-left with px', () => {
+      expect('border-left: 2px'.match(CSS_PATTERNS.borderWidth)).toEqual([
+        'border-left: 2px',
+      ]);
+    });
+  });
+
+  describe('borderFull', () => {
+    test('matches border with px and hex color', () => {
+      expect('border: 2px solid #fff'.match(CSS_PATTERNS.borderFull)).toEqual([
+        'border: 2px solid #fff',
+      ]);
+    });
+
+    test('matches border-top with px and hex color', () => {
+      expect(
+        'border-top: 1px dashed #000000'.match(CSS_PATTERNS.borderFull),
+      ).toEqual(['border-top: 1px dashed #000000']);
     });
   });
 
@@ -120,6 +232,10 @@ describe('CSS_PATTERNS', () => {
       );
       expect(result).toEqual(['box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1)']);
     });
+
+    test('does not match box-shadow without color', () => {
+      expect('box-shadow: none'.match(CSS_PATTERNS.boxShadow)).toBeNull();
+    });
   });
 
   describe('outlineWidth', () => {
@@ -133,6 +249,26 @@ describe('CSS_PATTERNS', () => {
       expect('outline: 1px'.match(CSS_PATTERNS.outlineWidth)).toEqual([
         'outline: 1px',
       ]);
+    });
+
+    test('does not match outline without size', () => {
+      expect('outline: none'.match(CSS_PATTERNS.outlineWidth)).toBeNull();
+    });
+  });
+
+  describe('outlineFull', () => {
+    test('matches outline with px and hex color', () => {
+      expect('outline: 2px solid #fff'.match(CSS_PATTERNS.outlineFull)).toEqual(
+        ['outline: 2px solid #fff'],
+      );
+    });
+
+    test('matches outline with px and rgba color', () => {
+      expect(
+        'outline: 1px dashed rgba(0, 0, 0, 0.5)'.match(
+          CSS_PATTERNS.outlineFull,
+        ),
+      ).toEqual(['outline: 1px dashed rgba(0, 0, 0, 0.5)']);
     });
   });
 });
