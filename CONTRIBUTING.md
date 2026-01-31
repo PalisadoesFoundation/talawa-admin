@@ -145,6 +145,28 @@ describe('Test', () => {
 
 For comprehensive guidance, see the [Testing Guide](docs/docs/docs/developer-resources/testing.md#test-isolation-and-mock-cleanup).
 
+## 📝 i18n Translation Key Conventions
+
+### Naming Rules
+- ✅ Use camelCase for all translation keys
+- ✅ Start with lowercase letter
+- ✅ No spaces or special characters (except in values)
+
+### Examples
+✅ **Correct:**
+- `myOrganizations`
+- `blockUnblock`
+- `membershipRequests`
+
+❌ **Incorrect:**
+- `My Organizations`
+- `Block/Unblock`
+- `membership-requests`
+
+### File Structure
+- `public/locales/{locale}/common.json` - Common UI strings
+- `public/locales/{locale}/translation.json` - Feature-specific strings
+
 ## Making Contributions   
 
 1. After making changes you can add them to git locally using `git add <file_name>`(to add changes only in a particular file) or `git add .` (to add all changes).

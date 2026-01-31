@@ -14,7 +14,7 @@ export enum ViewType {
  */
 export interface IEventHeaderProps {
   viewType: ViewType;
-  handleChangeView: (item: string | null) => void;
+  handleChangeView: (item: ViewType | null) => void;
   showInviteModal: () => void;
 }
 

@@ -39,6 +39,11 @@ reviews:
     - '!*.md'
     - '!*.svg'
   path_instructions:
+    - path: "public/locales/**/*.json"
+      instructions: |
+        Ensure all translation keys use camelCase convention.
+        Keys should start with lowercase and contain no spaces.
+        Example: "myOrganizations" not "My Organizations"
     - path: '**/*'
       instructions: |
         Conduct a comprehensive review and reevaluate all resolved and dismissed items.

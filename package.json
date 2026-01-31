@@ -98,6 +98,7 @@
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
     "check-i18n": "node scripts/check-i18n.js",
+    "check-i18n-naming": "node scripts/check-i18n-naming.js",
     "build:eslint-plugin": "pnpm exec tsc --project scripts/eslint/tsconfig.json"
   },
   "eslintConfig": {
