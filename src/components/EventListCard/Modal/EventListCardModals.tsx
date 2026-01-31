@@ -415,7 +415,17 @@ function EventListCardModals({
         recurrence={recurrence}
         setRecurrence={setRecurrence}
         customRecurrenceModalIsOpen={customRecurrenceModal.isOpen}
-        setCustomRecurrenceModalIsOpen={customRecurrenceModal.toggle}
+        setCustomRecurrenceModalIsOpen={(value) => {
+          const isOpen =
+            typeof value === 'function'
+              ? value(customRecurrenceModal.isOpen)
+              : value;
+          if (isOpen) {
+            customRecurrenceModal.open();
+          } else {
+            customRecurrenceModal.close();
+          }
+        }}
       />
 
       <EventListCardDeleteModal
