@@ -40,6 +40,23 @@ _OS_DETECTED=false
 # For testing: set _OS_DETECT_ROOT="/path/to/fixture" before sourcing
 export _OS_DETECT_ROOT="${_OS_DETECT_ROOT:-}"
 
+# OS override for macOS detection - TESTING ONLY, DO NOT USE IN PRODUCTION
+# When set to "Darwin", forces is_macos() to return true (macOS detected)
+# This variable is intended for unit and integration testing only. It allows
+# test suites to simulate macOS environments without requiring actual macOS hardware.
+# 
+# Usage in tests:
+#   export _TEST_OS_OVERRIDE="Darwin"
+#   export _OS_DETECT_ROOT="/path/to/test/fixtures"
+#   source scripts/install/lib/os-detect.sh
+#   # is_macos() will now return true
+#
+# Important: This variable only takes effect when _OS_DETECT_ROOT is set (test mode).
+# In production (when _OS_DETECT_ROOT is empty), is_macos() uses uname -s directly.
+#
+# Example value: "Darwin"
+# Default: unset (uses actual uname -s output)
+
 # ==============================================================================
 # INTERNAL DETECTION HELPERS
 # ==============================================================================
