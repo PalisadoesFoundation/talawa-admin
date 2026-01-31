@@ -39,7 +39,7 @@ vi.setConfig({ testTimeout: 30000 });
 const { mockPaginationFactory } = vi.hoisted(() => ({
   mockPaginationFactory: {
     useMock: false,
-    MockComponent: null as unknown,
+    MockComponent: null as React.ComponentType<Record<string, unknown>> | null,
   },
 }));
 
@@ -2897,7 +2897,6 @@ describe('Line Coverage Tests', () => {
             isEmailAddressVerified: false, // Critical: must be false
             emailAddress: 'basic@example.com',
             role: 'administrator',
-            adminFor: [],
             __typename: 'User',
             addressLine1: null,
             addressLine2: null,
@@ -3002,7 +3001,7 @@ describe('Line Coverage Tests', () => {
 
     // Use mock pagination to trigger 0 rows per page
     mockPaginationFactory.useMock = true;
-    mockPaginationFactory.MockComponent = ({
+    mockPaginationFactory.MockComponent = (({
       onRowsPerPageChange,
       count,
     }: {
@@ -3019,7 +3018,7 @@ describe('Line Coverage Tests', () => {
         </button>
         <span data-testid="count">{count}</span>
       </div>
-    );
+    )) as unknown as React.ComponentType<Record<string, unknown>>;
 
     try {
       renderWithMocks([
