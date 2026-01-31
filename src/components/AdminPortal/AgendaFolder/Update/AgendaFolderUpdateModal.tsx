@@ -5,6 +5,9 @@ import Button from 'shared-components/Button/Button';
 
 import styles from './AgendaFolderUpdateModal.module.css';
 import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
+import { useMutation } from '@apollo/client';
+import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // translation-check-keyPrefix: agendaSection
 /**
@@ -12,7 +15,7 @@ import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/
  *
  * This component renders a modal for updating an existing agenda folder.
  * It provides form fields for editing the folder name and description
- * and submits the updated data using a provided handler.
+ * and submits the updated data using an internal GraphQL mutation.
  *
  * @remarks
  * The component:
@@ -26,17 +29,46 @@ import { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/
 const AgendaFolderUpdateModal: React.FC<
   InterfaceAgendaFolderUpdateModalProps
 > = ({
-  agendaFolderUpdateModalIsOpen,
-  hideUpdateModal,
+  isOpen,
+  onClose,
   folderFormState,
   setFolderFormState,
-  updateAgendaFolderHandler,
+  agendaFolderId,
+  refetchAgendaFolder,
   t,
 }) => {
+  const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
+
+  const updateAgendaFolderHandler = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+
+    try {
+      await updateAgendaFolder({
+        variables: {
+          input: {
+            id: agendaFolderId,
+            name: folderFormState.name?.trim() || undefined,
+            description: folderFormState.description?.trim() || undefined,
+          },
+        },
+      });
+
+      NotificationToast.success(t('agendaFolderUpdated') as string);
+      refetchAgendaFolder();
+      onClose();
+    } catch (error) {
+      if (error instanceof Error) {
+        NotificationToast.error(t('agendaFolderUpdateFailed') as string);
+      }
+    }
+  };
+
   return (
     <BaseModal
-      show={agendaFolderUpdateModalIsOpen}
-      onHide={hideUpdateModal}
+      show={isOpen}
+      onHide={onClose}
       title={t('updateAgendaFolder')}
       className={styles.campaignModal}
       dataTestId="updateAgendaFolderModal"

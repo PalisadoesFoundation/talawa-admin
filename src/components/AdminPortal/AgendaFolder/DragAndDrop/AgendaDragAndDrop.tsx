@@ -9,20 +9,108 @@ import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import styles from './AgendaDragAndDrop.module.css';
 import type { InterfaceAgendaDragAndDropProps } from 'types/AdminPortal/Agenda/interface';
+import { useMutation } from '@apollo/client';
+import {
+  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
+  UPDATE_AGENDA_FOLDER_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // translation-check-keyPrefix: agendaSection
 export default function AgendaDragAndDrop({
   folders,
+  setFolders,
   agendaFolderConnection,
   t,
-  onFolderDragEnd,
-  onItemDragEnd,
   onEditFolder,
   onDeleteFolder,
   onPreviewItem,
   onEditItem,
   onDeleteItem,
+  refetchAgendaFolder,
 }: InterfaceAgendaDragAndDropProps) {
+  const [updateAgendaItemSequence] = useMutation(
+    UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
+  );
+  const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
+
+  const onItemDragEnd = async (result: DropResult): Promise<void> => {
+    const { source, destination } = result;
+
+    if (!destination) return;
+    if (source.droppableId !== destination.droppableId) return;
+    if (source.index === destination.index) return;
+
+    const folderId = source.droppableId.replace('agenda-items-', '');
+    const targetFolder = folders.find((f) => f.id === folderId);
+    if (!targetFolder) return;
+
+    const items = [...targetFolder.items.edges]
+      .map((e) => e.node)
+      .sort((a, b) => a.sequence - b.sequence);
+
+    const [moved] = items.splice(source.index, 1);
+    items.splice(destination.index, 0, moved);
+
+    try {
+      await Promise.all(
+        items.map((item, index) =>
+          item.sequence !== index + 1
+            ? updateAgendaItemSequence({
+                variables: {
+                  input: {
+                    id: item.id,
+                    sequence: index + 1,
+                  },
+                },
+              })
+            : Promise.resolve(),
+        ),
+      );
+
+      NotificationToast.success(t('itemSequenceUpdateSuccessMsg'));
+      refetchAgendaFolder();
+    } catch (error) {
+      if (error instanceof Error) {
+        NotificationToast.error(error.message);
+      }
+    }
+  };
+
+  const onFolderDragEnd = async (result: DropResult): Promise<void> => {
+    if (!result.destination) return;
+    if (result.source.index === result.destination.index) return;
+
+    const updatedFolders = Array.from(folders);
+    const [moved] = updatedFolders.splice(result.source.index, 1);
+    updatedFolders.splice(result.destination.index, 0, moved);
+    setFolders(updatedFolders);
+
+    try {
+      await Promise.all(
+        updatedFolders.map((folder, index) =>
+          folder.sequence !== index + 1
+            ? updateAgendaFolder({
+                variables: {
+                  input: {
+                    id: folder.id,
+                    sequence: index + 1,
+                  },
+                },
+              })
+            : Promise.resolve(),
+        ),
+      );
+
+      NotificationToast.success(t('sectionSequenceUpdateSuccessMsg'));
+      refetchAgendaFolder();
+    } catch (error) {
+      if (error instanceof Error) {
+        NotificationToast.error(error.message);
+      }
+    }
+  };
+
   /**
    * Unified drag handler for both folder and item reordering.
    * Routes behavior based on droppable type.

@@ -30,7 +30,6 @@
  *
  * @throws Will display an error message if data fetching or mutation fails.
  */
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../../../shared-components/Button';
 
@@ -46,6 +45,7 @@ import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaFolderList,
 } from 'types/AdminPortal/Agenda/interface';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 import AgendaFolderContainer from 'components/AdminPortal/AgendaFolder/AgendaFolderContainer';
 import AgendaFolderCreateModal from 'components/AdminPortal/AgendaFolder/Create/AgendaFolderCreateModal';
 import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
@@ -56,13 +56,8 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
   const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
-
-  // State to manage the create agenda item modal visibility
-  const [agendaFolderCreateModalIsOpen, setAgendaFolderCreateModalIsOpen] =
-    useState<boolean>(false);
-  // State to manage the create agenda item modal visibility
-  const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
-    useState<boolean>(false);
+  const agendaFolderCreateModal = useModalState();
+  const agendaItemCreateModal = useModalState();
 
   // Query for agenda item categories
   const {
@@ -95,34 +90,6 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
     variables: { eventId },
     notifyOnNetworkStatusChange: true,
   });
-
-  /**
-   * Toggles the visibility of the create agenda folder modal.
-   */
-  const showCreateModal = (): void => {
-    setAgendaFolderCreateModalIsOpen(true);
-  };
-
-  /**
-   * Toggles the visibility of the create agenda item modal.
-   */
-  const showItemsCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(true);
-  };
-
-  /**
-   * Hides the create agenda folder modal.
-   */
-  const hideCreateModal = (): void => {
-    setAgendaFolderCreateModalIsOpen(false);
-  };
-
-  /**
-   * Hides the create agenda agenda modal.
-   */
-  const hideItemCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(false);
-  };
 
   // Show error message if there is an error loading data
   if (agendaFolderError || agendaCategoryError) {
@@ -167,14 +134,14 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
               </div>
 
               <Button
-                onClick={showItemsCreateModal}
+                onClick={agendaItemCreateModal.open}
                 data-testid="createAgendaItemBtn"
                 className={styles.createAgendaItemButton}
               >
                 {t('createAgendaItem')}
               </Button>
               <Button
-                onClick={showCreateModal}
+                onClick={agendaFolderCreateModal.open}
                 data-testid="createAgendaFolderBtn"
                 className={styles.createAgendaItemButton}
               >
@@ -196,16 +163,16 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
         </div>
 
         <AgendaFolderCreateModal
-          agendaFolderCreateModalIsOpen={agendaFolderCreateModalIsOpen}
-          hideCreateModal={hideCreateModal}
+          isOpen={agendaFolderCreateModal.isOpen}
+          hide={agendaFolderCreateModal.close}
           t={t}
           eventId={eventId}
           agendaFolderData={agendaFolderData}
           refetchAgendaFolder={refetchAgendaFolder}
         />
         <AgendaItemsCreateModal
-          agendaItemCreateModalIsOpen={agendaItemCreateModalIsOpen}
-          hideItemCreateModal={hideItemCreateModal}
+          isOpen={agendaItemCreateModal.isOpen}
+          hide={agendaItemCreateModal.close}
           t={t}
           eventId={eventId}
           refetchAgendaFolder={refetchAgendaFolder}

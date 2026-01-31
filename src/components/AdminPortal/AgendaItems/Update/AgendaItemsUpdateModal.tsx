@@ -8,6 +8,12 @@ import { useParams } from 'react-router';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { useMutation } from '@apollo/client';
+import { UPDATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  AGENDA_ITEM_MIME_TYPE,
+  AGENDA_ITEM_ALLOWED_MIME_TYPES,
+} from 'Constant/fileUpload';
 import {
   FormFieldGroup,
   FormTextField,
@@ -20,40 +26,43 @@ import type {
   InterfaceAgendaItemsUpdateModalProps,
   InterfaceAttachment,
 } from 'types/AdminPortal/Agenda/interface';
-import { AGENDA_ITEM_ALLOWED_MIME_TYPES } from 'Constant/fileUpload';
 
-// translation-check-keyPrefix: agendaSection
 /**
  * Renders the modal used to update agenda items.
  *
- * @param agendaItemUpdateModalIsOpen - Whether the modal is open.
- * @param hideUpdateItemModal - Handler to close the modal.
+ * @param isOpen - Whether the modal is open.
+ * @param onClose - Closes the modal.
+ * @param agendaItemId - ID of the agenda item being updated.
  * @param itemFormState - Current agenda item form state.
  * @param setItemFormState - Setter for agenda item form state.
- * @param updateAgendaItemHandler - Submit handler.
+ * @param refetchAgendaFolder - Refetches agenda folders after update.
  * @param t - i18n translation function.
  * @param agendaItemCategories - Available agenda item categories.
  * @param agendaFolderData - Available agenda folders.
+ *
  * @returns JSX.Element
  */
+
+// translation-check-keyPrefix: agendaSection
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
-  agendaItemUpdateModalIsOpen,
-  hideUpdateItemModal,
+  isOpen,
+  onClose,
+  agendaItemId,
   itemFormState,
   setItemFormState,
-  updateAgendaItemHandler,
   t,
   agendaItemCategories,
   agendaFolderData,
+  refetchAgendaFolder,
 }) => {
   const [newUrl, setNewUrl] = useState('');
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
-
+  const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);
   const MAX_FILE_SIZE_MB = 10;
   const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
@@ -151,11 +160,50 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
+  const updateAgendaItemHandler = async (
+    e: React.FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
+    e.preventDefault();
+
+    try {
+      await updateAgendaItem({
+        variables: {
+          input: {
+            id: agendaItemId,
+            name: itemFormState.name?.trim() || undefined,
+            description: itemFormState.description?.trim() || undefined,
+            duration: itemFormState.duration?.trim() || undefined,
+            folderId: itemFormState.folder || undefined,
+            categoryId: itemFormState.category || undefined,
+            url:
+              itemFormState.url.length > 0
+                ? itemFormState.url.map((u) => ({ url: u }))
+                : [],
+            attachments: itemFormState.attachments.map((att) => ({
+              name: att.name,
+              fileHash: att.fileHash,
+              mimeType: AGENDA_ITEM_MIME_TYPE[att.mimeType] ?? att.mimeType,
+              objectName: att.objectName,
+            })),
+          },
+        },
+      });
+
+      NotificationToast.success(t('agendaItemUpdated') as string);
+      refetchAgendaFolder();
+      onClose();
+    } catch (error) {
+      if (error instanceof Error) {
+        NotificationToast.error(error.message);
+      }
+    }
+  };
+
   return (
     <BaseModal
       className={styles.AgendaItemModal}
-      show={agendaItemUpdateModalIsOpen}
-      onHide={hideUpdateItemModal}
+      show={isOpen}
+      onHide={onClose}
       title={t('updateAgendaItem')}
       dataTestId="updateAgendaItemModal"
     >

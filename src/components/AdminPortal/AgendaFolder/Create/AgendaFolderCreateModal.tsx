@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import Button from 'shared-components/Button/Button';
 import styles from './AgendaFolderCreateModal.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -12,18 +12,16 @@ import { useParams } from 'react-router';
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
   InterfaceAgendaFolderCreateModalProps
-> = ({
-  agendaFolderCreateModalIsOpen,
-  hideCreateModal,
-  eventId,
-  agendaFolderData,
-  t,
-  refetchAgendaFolder,
-}) => {
+> = ({ isOpen, hide, eventId, agendaFolderData, t, refetchAgendaFolder }) => {
   const { orgId } = useParams();
+  useEffect(() => {
+    if (!orgId) {
+      NotificationToast.error(t('organizationRequired'));
+    }
+  }, [orgId, t]);
+
   if (!orgId) {
-    NotificationToast.error(t('organizationRequired'));
-    return;
+    return null;
   }
   // Mutation for creating an agenda item
   const [createAgendaFolder] = useMutation(CREATE_AGENDA_FOLDER_MUTATION);
@@ -78,7 +76,7 @@ const AgendaFolderCreateModal: React.FC<
           name: '',
         },
       });
-      hideCreateModal();
+      hide();
       refetchAgendaFolder();
       NotificationToast.success(t('agendaFolderCreated') as string);
     } catch (error: unknown) {
@@ -91,8 +89,8 @@ const AgendaFolderCreateModal: React.FC<
   return (
     <BaseModal
       className={`mt-5 ${styles.campaignModal}`}
-      show={agendaFolderCreateModalIsOpen}
-      onHide={hideCreateModal}
+      show={isOpen}
+      onHide={hide}
       title={t('agendaFolderDetails')}
       dataTestId="createAgendaFolderModal"
     >

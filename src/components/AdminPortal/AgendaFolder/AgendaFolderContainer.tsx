@@ -28,16 +28,15 @@
  * ```
  */
 // translation-check-keyPrefix: agendaSection
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { DropResult } from '@hello-pangea/dnd';
 import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaFolderInfo,
 } from 'types/AdminPortal/Agenda/interface';
-import { useAgendaMutations } from './Mutation/useAgendaMutation';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 import AgendaItemsPreviewModal from 'components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal';
@@ -65,34 +64,21 @@ function AgendaFolderContainer({
   const { orgId } = useParams();
   const organizationId = orgId ?? 'organization';
 
-  // State for modals
-  const [agendaItemPreviewModalIsOpen, setAgendaItemPreviewModalIsOpen] =
-    useState(false);
-  const [agendaItemUpdateModalIsOpen, setAgendaItemUpdateModalIsOpen] =
-    useState(false);
-  const [agendaItemDeleteModalIsOpen, setAgendaItemDeleteModalIsOpen] =
-    useState(false);
+  const agendaItemPreviewModal = useModalState();
+  const agendaItemUpdateModal = useModalState();
+  const agendaItemDeleteModal = useModalState();
+  const agendaFolderDeleteModal = useModalState();
+  const agendaFolderUpdateModal = useModalState();
 
   // State for current agenda item ID and form data
   const [agendaItemId, setAgendaItemId] = useState('');
   const [agendaFolderId, setAgendaFolderId] = useState('');
   const [folder, setFolder] = useState<InterfaceAgendaFolderInfo[]>([]);
-  const [agendaFolderDeleteModalIsOpen, setAgendaFolderDeleteModalIsOpen] =
-    useState<boolean>(false);
-  const [agendaFolderUpdateModalIsOpen, setAgendaFolderUpdateModalIsOpen] =
-    useState<boolean>(false);
   useEffect(() => {
     if (agendaFolderData) {
       setFolder([...agendaFolderData].sort((a, b) => a.sequence - b.sequence));
     }
   }, [agendaFolderData]);
-  const getSortedItems = useCallback(
-    (agendaFolder: InterfaceAgendaFolderInfo) =>
-      [...agendaFolder.items.edges]
-        .map((e) => e.node)
-        .sort((a, b) => a.sequence - b.sequence),
-    [],
-  );
   const [folderFormState, setFolderFormState] = useState<{
     id: string;
     name: string;
@@ -175,18 +161,6 @@ function AgendaFolderContainer({
     url: [''],
   });
 
-  const {
-    updateAgendaItemHandler,
-    deleteAgendaItemHandler,
-    updateAgendaFolderHandler,
-    deleteAgendaFolderHandler,
-    updateAgendaItemSequenceHandler,
-    updateAgendaFolderSequenceHandler,
-  } = useAgendaMutations({
-    refetchAgendaFolder,
-    t,
-  });
-
   /**
    * Shows the preview modal with the details of the selected agenda item.
    * @param agendaItem - The agenda item to preview.
@@ -195,56 +169,7 @@ function AgendaFolderContainer({
     agendaItem: InterfaceAgendaItemInfo,
   ): Promise<void> => {
     await setAgendaItemState(agendaItem);
-    setAgendaItemPreviewModalIsOpen(true);
-  };
-
-  /**
-   * Hides the preview modal.
-   */
-  const hidePreviewModal = (): void => {
-    setAgendaItemPreviewModalIsOpen(false);
-  };
-
-  /**
-   * Toggles the visibility of the update modal.
-   */
-  const showUpdateModal = (): void => {
-    setAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
-  };
-
-  /**
-   * Toggles the visibility of the update modal.
-   */
-  const hideUpdateModal = (): void => {
-    setAgendaFolderUpdateModalIsOpen(!agendaFolderUpdateModalIsOpen);
-  };
-
-  /**
-   * Toggles the visibility of the update modal of agenda item.
-   */
-  const showUpdateItemModal = (): void => {
-    setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
-  };
-
-  /**
-   * Toggles the visibility of the update modal of items.
-   */
-  const hideUpdateItemModal = (): void => {
-    setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
-  };
-
-  /**
-   * Toggles the visibility of the delete modal of folders.
-   */
-  const toggleDeleteModal = (): void => {
-    setAgendaFolderDeleteModalIsOpen(!agendaFolderDeleteModalIsOpen);
-  };
-
-  /**
-   * Toggles the visibility of the delete modal of agenda items.
-   */
-  const toggleDeleteItemModal = (): void => {
-    setAgendaItemDeleteModalIsOpen(!agendaItemDeleteModalIsOpen);
+    agendaItemPreviewModal.open();
   };
 
   /**
@@ -255,7 +180,7 @@ function AgendaFolderContainer({
     agendaFolder: InterfaceAgendaFolderInfo,
   ): void => {
     setAgendaFolderState(agendaFolder);
-    showUpdateModal();
+    agendaFolderUpdateModal.open();
   };
 
   /**
@@ -266,7 +191,7 @@ function AgendaFolderContainer({
     agendaItem: InterfaceAgendaItemInfo,
   ): Promise<void> => {
     await setAgendaUpdateItemState(agendaItem);
-    showUpdateItemModal();
+    agendaItemUpdateModal.open();
   };
 
   /**
@@ -277,7 +202,7 @@ function AgendaFolderContainer({
     agendaItem: InterfaceAgendaItemInfo,
   ): void => {
     setAgendaDeleteItemState(agendaItem);
-    toggleDeleteItemModal();
+    agendaItemDeleteModal.open();
   };
 
   /**
@@ -380,64 +305,18 @@ function AgendaFolderContainer({
     setAgendaFolderId(agendaFolder.id);
   };
 
-  /**
-   * Handles the end of a drag-and-drop operation.
-   * @param result - The result of the drag-and-drop operation.
-   */
-  const onItemDragEnd = async (result: DropResult): Promise<void> => {
-    const { source, destination } = result;
-
-    // Dropped outside
-    if (!destination) return;
-
-    if (source.droppableId !== destination.droppableId) return;
-
-    if (source.index === destination.index) return;
-
-    const folderId = source.droppableId.replace('agenda-items-', '');
-    const targetFolder = folder.find((f) => f.id === folderId);
-    if (!targetFolder) return;
-
-    const items = getSortedItems(targetFolder);
-
-    const [moved] = items.splice(source.index, 1);
-    items.splice(destination.index, 0, moved);
-
-    await updateAgendaItemSequenceHandler(items);
-  };
-
-  /**
-   * Handles the end of a drag-and-drop operation.
-   * @param result - The result of the drag-and-drop operation.
-   */
-  const onFolderDragEnd = async (result: DropResult): Promise<void> => {
-    if (!result.destination) {
-      return;
-    }
-    if (result.source.index === result.destination.index) {
-      return;
-    }
-
-    const updatedFolders = Array.from(folder);
-    const [moved] = updatedFolders.splice(result.source.index, 1);
-    updatedFolders.splice(result.destination.index, 0, moved);
-    setFolder(updatedFolders);
-
-    await updateAgendaFolderSequenceHandler(updatedFolders);
-  };
-
   return (
     <>
       <AgendaDragAndDrop
         folders={folder}
+        setFolders={setFolder}
         agendaFolderConnection={agendaFolderConnection}
+        refetchAgendaFolder={refetchAgendaFolder}
         t={t}
-        onFolderDragEnd={onFolderDragEnd}
-        onItemDragEnd={onItemDragEnd}
         onEditFolder={handleEditFolderClick}
         onDeleteFolder={(f) => {
           setAgendaFolderState(f);
-          toggleDeleteModal();
+          agendaFolderDeleteModal.open();
         }}
         onPreviewItem={showPreviewModal}
         onEditItem={handleItemsEditClick}
@@ -445,65 +324,51 @@ function AgendaFolderContainer({
       />
       {/*Agenda Folder Delete modal */}
       <AgendaFolderDeleteModal
-        agendaFolderDeleteModalIsOpen={agendaFolderDeleteModalIsOpen}
-        toggleDeleteModal={toggleDeleteModal}
-        deleteAgendaFolderHandler={() =>
-          deleteAgendaFolderHandler(agendaFolderId, toggleDeleteModal)
-        }
+        isOpen={agendaFolderDeleteModal.isOpen}
+        onClose={agendaFolderDeleteModal.close}
+        agendaFolderId={agendaFolderId}
+        refetchAgendaFolder={refetchAgendaFolder}
         t={t}
         tCommon={tCommon}
       />
       {/*Agenda Folder Update modal */}
       <AgendaFolderUpdateModal
-        agendaFolderUpdateModalIsOpen={agendaFolderUpdateModalIsOpen}
-        hideUpdateModal={hideUpdateModal}
+        isOpen={agendaFolderUpdateModal.isOpen}
+        onClose={agendaFolderUpdateModal.close}
         folderFormState={folderFormState}
         setFolderFormState={setFolderFormState}
-        updateAgendaFolderHandler={(e) =>
-          updateAgendaFolderHandler(
-            e,
-            agendaFolderId,
-            folderFormState,
-            hideUpdateModal,
-          )
-        }
+        agendaFolderId={agendaFolderId}
+        refetchAgendaFolder={refetchAgendaFolder}
         t={t}
       />
       <AgendaItemsPreviewModal
-        agendaItemPreviewModalIsOpen={agendaItemPreviewModalIsOpen}
-        hidePreviewModal={hidePreviewModal}
-        showUpdateItemModal={showUpdateItemModal}
-        toggleDeleteItemModal={toggleDeleteItemModal}
+        isOpen={agendaItemPreviewModal.isOpen}
+        hidePreviewModal={agendaItemPreviewModal.close}
+        showUpdateItemModal={agendaItemUpdateModal.open}
+        toggleDeleteItemModal={agendaItemDeleteModal.open}
         formState={formState}
         t={t}
       />
       {/*Agenda Item Update modal */}
       <AgendaItemsUpdateModal
-        agendaItemUpdateModalIsOpen={agendaItemUpdateModalIsOpen}
-        hideUpdateItemModal={hideUpdateItemModal}
+        isOpen={agendaItemUpdateModal.isOpen}
+        onClose={agendaItemUpdateModal.close}
+        agendaItemId={agendaItemId}
         itemFormState={itemFormState}
         setItemFormState={setItemFormState}
-        updateAgendaItemHandler={(e) =>
-          updateAgendaItemHandler(
-            e,
-            agendaItemId,
-            itemFormState,
-            hideUpdateItemModal,
-          )
-        }
         t={t}
         agendaItemCategories={agendaItemCategories}
         agendaFolderData={agendaFolderData}
+        refetchAgendaFolder={refetchAgendaFolder}
       />
       {/*Agenda Item Delete modal */}
       <AgendaItemsDeleteModal
-        agendaItemDeleteModalIsOpen={agendaItemDeleteModalIsOpen}
-        toggleDeleteItemModal={toggleDeleteItemModal}
-        deleteAgendaItemHandler={() =>
-          deleteAgendaItemHandler(agendaItemId, toggleDeleteItemModal)
-        }
+        isOpen={agendaItemDeleteModal.isOpen}
+        onClose={agendaItemDeleteModal.close}
+        agendaItemId={agendaItemId}
         t={t}
         tCommon={tCommon}
+        refetchAgendaFolder={refetchAgendaFolder}
       />
     </>
   );

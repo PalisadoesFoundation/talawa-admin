@@ -1,5 +1,4 @@
-import type { FormEvent } from 'react';
-import type { DropResult } from '@hello-pangea/dnd';
+import type { Dispatch, SetStateAction } from 'react';
 
 /**
  * Defines the structure for agenda item category information.
@@ -176,8 +175,8 @@ export interface InterfaceFormStateType {
  * Props for the AgendaItemsCreateModal component.
  */
 export interface InterfaceAgendaItemsCreateModalProps {
-  agendaItemCreateModalIsOpen: boolean;
-  hideItemCreateModal: () => void;
+  isOpen: boolean;
+  hide: () => void;
   eventId: string;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
@@ -189,36 +188,39 @@ export interface InterfaceAgendaItemsCreateModalProps {
  * Props for the AgendaItemsUpdateModal component.
  */
 export interface InterfaceAgendaItemsUpdateModalProps {
-  agendaItemUpdateModalIsOpen: boolean;
-  hideUpdateItemModal: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaItemId: string;
   itemFormState: InterfaceFormStateType;
   setItemFormState: (
     state: React.SetStateAction<InterfaceFormStateType>,
   ) => void;
-  updateAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
+  refetchAgendaFolder: () => void;
 }
 
 /**
  * Props for the AgendaItemsDeleteModal component.
  */
 export interface InterfaceAgendaItemsDeleteModalProps {
-  agendaItemDeleteModalIsOpen: boolean;
-  toggleDeleteItemModal: () => void;
-  deleteAgendaItemHandler: () => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaItemId: string;
   t: (key: string) => string;
   tCommon: (key: string) => string;
+  refetchAgendaFolder: () => void;
 }
 
 /**
  * Props for the AgendaFolderDeleteModal component.
  */
 export interface InterfaceAgendaFolderDeleteModalProps {
-  agendaFolderDeleteModalIsOpen: boolean;
-  toggleDeleteModal: () => void;
-  deleteAgendaFolderHandler: () => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaFolderId: string;
+  refetchAgendaFolder: () => void;
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }
@@ -233,8 +235,8 @@ export interface InterfaceAgendaFolderCreateFormStateType {
 }
 
 export interface InterfaceAgendaFolderCreateModalProps {
-  agendaFolderCreateModalIsOpen: boolean;
-  hideCreateModal: () => void;
+  isOpen: boolean;
+  hide: () => void;
   eventId: string;
   agendaFolderData: InterfaceAgendaFolderList | undefined;
   t: (key: string) => string;
@@ -252,13 +254,14 @@ export interface InterfaceAgendaFolderUpdateFormStateType {
 }
 
 export interface InterfaceAgendaFolderUpdateModalProps {
-  agendaFolderUpdateModalIsOpen: boolean;
-  hideUpdateModal: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaFolderId: string;
   folderFormState: InterfaceAgendaFolderUpdateFormStateType;
   setFolderFormState: (
     state: React.SetStateAction<InterfaceAgendaFolderUpdateFormStateType>,
   ) => void;
-  updateAgendaFolderHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  refetchAgendaFolder: () => void;
   t: (key: string) => string;
 }
 
@@ -290,7 +293,7 @@ interface InterfaceItemFormStateType {
  * such as updating or deleting an agenda item.
  */
 export interface InterfaceAgendaItemsPreviewModalProps {
-  agendaItemPreviewModalIsOpen: boolean;
+  isOpen: boolean;
   hidePreviewModal: () => void;
   showUpdateItemModal: () => void;
   toggleDeleteItemModal: () => void;
@@ -307,11 +310,9 @@ export interface InterfaceAgendaItemsPreviewModalProps {
  */
 export interface InterfaceAgendaDragAndDropProps {
   folders: InterfaceAgendaFolderInfo[];
+  setFolders: Dispatch<SetStateAction<InterfaceAgendaFolderInfo[]>>;
   agendaFolderConnection: 'Event';
   t: (key: string) => string;
-
-  onFolderDragEnd: (result: DropResult) => Promise<void>;
-  onItemDragEnd: (result: DropResult) => Promise<void>;
 
   onEditFolder: (folder: InterfaceAgendaFolderInfo) => void;
   onDeleteFolder: (folder: InterfaceAgendaFolderInfo) => void;
@@ -319,6 +320,7 @@ export interface InterfaceAgendaDragAndDropProps {
   onPreviewItem: (item: InterfaceAgendaItemInfo) => void;
   onEditItem: (item: InterfaceAgendaItemInfo) => void;
   onDeleteItem: (item: InterfaceAgendaItemInfo) => void;
+  refetchAgendaFolder: () => void;
 }
 
 export interface InterfaceUseAgendaMutationsProps {

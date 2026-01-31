@@ -40,8 +40,8 @@ import { useMutation } from '@apollo/client';
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
-  agendaItemCreateModalIsOpen,
-  hideItemCreateModal,
+  isOpen,
+  hide,
   eventId,
   t,
   agendaItemCategories,
@@ -156,7 +156,7 @@ const AgendaItemsCreateModal: React.FC<
         },
         categoryId: '',
       });
-      hideItemCreateModal();
+      hide();
       refetchAgendaFolder();
       NotificationToast.success(t('agendaItemCreated') as string);
     } catch (error: unknown) {
@@ -254,8 +254,8 @@ const AgendaItemsCreateModal: React.FC<
   return (
     <BaseModal
       className={styles.AgendaItemsModal}
-      show={agendaItemCreateModalIsOpen}
-      onHide={hideItemCreateModal}
+      show={isOpen}
+      onHide={hide}
       title={t('agendaItemDetails')}
       dataTestId="createAgendaItemModal"
     >

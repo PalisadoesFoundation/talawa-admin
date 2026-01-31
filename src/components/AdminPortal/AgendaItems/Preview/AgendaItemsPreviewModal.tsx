@@ -20,7 +20,7 @@ import { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Agenda/
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
-  agendaItemPreviewModalIsOpen,
+  isOpen,
   hidePreviewModal,
   showUpdateItemModal,
   toggleDeleteItemModal,
@@ -75,7 +75,7 @@ const AgendaItemsPreviewModal: React.FC<
 
   return (
     <BaseModal
-      show={agendaItemPreviewModalIsOpen}
+      show={isOpen}
       onHide={hidePreviewModal}
       title={t('agendaItemDetails')}
       className={styles.agendaItemModal}
