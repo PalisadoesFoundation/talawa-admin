@@ -2,13 +2,13 @@
  * EmptyChatState Component
  *
  * This component displays an empty state when no chat is selected. It shows a chat bubble icon
- * and a message instructing the user to click the + icon to start a new chat.
+ * and the provided message.
  *
  * @remarks
  * - Uses Material UI's ChatBubbleOutlineIcon for the visual element.
  * - Centered layout using flexbox utilities from react-bootstrap.
  *
- * @param props - The component props containing the message to display.
+ * @param message - The message to display in the empty state.
  * @returns The rendered EmptyChatState component.
  */
 

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import OrganizationScreen from './OrganizationScreen';
+import OrganizationScreen, { translationKeyMap } from './OrganizationScreen';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './OrganizationScreen.module.css';
@@ -345,19 +345,7 @@ describe('Testing OrganizationScreen', () => {
 
   test('should have correct translation key mapping for orgchat route', () => {
     // This test ensures the orgchat route uses the userChat translation namespace
-    const translationKeys = {
-      organizations: 'organizationTabs',
-      requests: 'requests',
-      people: 'organizationPeople',
-      events: 'organizationEvents',
-      contributions: 'orgContribution',
-      posts: 'orgPost',
-      funds: 'funds',
-      eventSettings: 'eventManagement',
-      leaderboard: 'leaderboard',
-      orgchat: 'userChat',
-    };
-
-    expect(translationKeys.orgchat).toBe('userChat');
+    // by asserting against the actual exported translationKeyMap
+    expect(translationKeyMap.orgchat).toBe('userChat');
   });
 });

@@ -1015,15 +1015,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'group-1',
               id: 'group-1',
               name: 'Group in Org 1',
-              isGroup: true,
               description: '',
               createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
               image: '',
-              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
+              organization: { id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [
                   {
@@ -1058,15 +1055,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
               __typename: 'Chat',
             },
             {
-              _id: 'group-2',
               id: 'group-2',
               name: 'Group in Org 2',
-              isGroup: true,
               description: '',
               createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
               image: '',
-              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
+              organization: { id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [
                   {
@@ -1275,6 +1269,133 @@ describe('Chat Component - Comprehensive Coverage', () => {
       expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
       expect(
         screen.queryByTestId('contact-card-legacy-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('should filter legacy GroupChat types in unread filter by orgId', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+
+    // Create legacy unread chats with _id (not id) to trigger the legacy branch
+    const mockLegacyUnreadChats = {
+      request: { query: UNREAD_CHATS, variables: {} },
+      result: {
+        data: {
+          unreadChats: [
+            {
+              _id: 'legacy-unread-1',
+              name: 'Legacy Unread Chat Org 1',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+            {
+              _id: 'legacy-unread-2',
+              name: 'Legacy Unread Chat Org 2',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-2' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    const mockChatsListForLegacy = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'legacy-unread-1',
+              name: 'Legacy Unread Chat Org 1',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockChatsListForLegacy,
+      mockChatsListForLegacy,
+      mockLegacyUnreadChats,
+      mockLegacyUnreadChats,
+    ]);
+
+    await screen.findByTestId('contact-card-legacy-unread-1');
+
+    const unreadButton = screen.getByTestId('unreadChat');
+    await user.click(unreadButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('contact-card-legacy-unread-1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('contact-card-legacy-unread-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('should filter legacy GroupChat types in group filter by orgId', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+
+    // Create legacy group chats with isGroup true and _id (not id)
+    const mockLegacyGroupChats = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'legacy-group-1',
+              name: 'Legacy Group Chat Org 1',
+              isGroup: true,
+              users: [{}, {}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+            {
+              _id: 'legacy-group-2',
+              name: 'Legacy Group Chat Org 2',
+              isGroup: true,
+              users: [{}, {}, {}],
+              image: '',
+              organization: { _id: 'org-2' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockLegacyGroupChats,
+      mockLegacyGroupChats,
+      mockLegacyGroupChats,
+      mockUnreadChats,
+    ]);
+
+    await screen.findByTestId('contact-card-legacy-group-1');
+
+    const groupButton = screen.getByTestId('groupChat');
+    await user.click(groupButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('contact-card-legacy-group-1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('contact-card-legacy-group-2'),
       ).not.toBeInTheDocument();
     });
   });

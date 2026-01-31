@@ -1897,7 +1897,7 @@
     "next": "अगला"
   },
   "userChatRoom": {
-    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
     "sendMessage": "मेसेज भेजें",
     "loading": "लोड हो रहा है...",
     "loadOlderMessages": "पुराने संदेश लोड करें",
