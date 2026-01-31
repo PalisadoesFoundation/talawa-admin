@@ -229,6 +229,7 @@ describe('userUpdateUtils', () => {
 
 describe('validateImageFile (single allowed type)', () => {
   afterEach(() => {
+    vi.doUnmock('../Constant/fileUpload');
     vi.resetModules();
     vi.clearAllMocks();
   });
