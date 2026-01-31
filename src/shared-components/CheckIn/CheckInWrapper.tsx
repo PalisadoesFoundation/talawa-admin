@@ -5,7 +5,6 @@
  * checking in members for a specific event. The modal is controlled
  * using a local state to toggle its visibility.
  *
-
  * @param props - Component props of type InterfaceCheckInWrapperProps.
  * The props include:
  * - eventId: The unique identifier of the event for which members are being checked in.
@@ -18,10 +17,6 @@
  * - The `style.createButton` class is applied to the button for styling.
  *
  * @example
- * ```tsx
- * <CheckInWrapper eventId="12345" />
- * ```
- *
  */
 import React from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
