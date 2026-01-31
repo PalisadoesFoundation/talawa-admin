@@ -40,7 +40,8 @@ export interface InterfaceDebounceInputOptions {
  * @param options - Optional override for leading/trailing/maxWait
  * @returns Debounced function with `cancel` and `flush` methods
  */
-export function debounceInput<T extends (...args: unknown[]) => unknown>(
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function debounceInput<T extends (...args: any[]) => unknown>(
   fn: T,
   wait = 300,
   options?: InterfaceDebounceInputOptions,
