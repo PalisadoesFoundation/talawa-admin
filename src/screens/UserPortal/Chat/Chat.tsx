@@ -48,6 +48,14 @@ import type {
 } from 'types/UserPortal/Chat/interface';
 
 /**
+ * Determines if a chat is a group chat based on isGroup flag or member count.
+ * @param chat - The chat to check
+ * @returns true if the chat is a group chat
+ */
+const isGroupChat = (chat: NewChatType): boolean =>
+  chat.isGroup || (chat.members?.edges?.length || 0) > 2;
+
+/**
  * Chat component that lists all chats and displays the selected chat room.
  * Supports filtering by All, Unread, and Group chats.
  */
@@ -112,8 +120,8 @@ export default function chat(): JSX.Element {
         if (data?.chatsByUser) {
           const filteredChats = orgId
             ? data.chatsByUser.filter(
-                (chat: NewChatType) => chat.organization?.id === orgId,
-              )
+              (chat: NewChatType) => chat.organization?.id === orgId,
+            )
             : data.chatsByUser;
           setChats(filteredChats);
         }
@@ -122,8 +130,8 @@ export default function chat(): JSX.Element {
         if (data?.unreadChats) {
           const filteredChats = orgId
             ? data.unreadChats.filter(
-                (chat: NewChatType) => chat.organization?.id === orgId,
-              )
+              (chat: NewChatType) => chat.organization?.id === orgId,
+            )
             : data.unreadChats;
           setChats(filteredChats);
         }
@@ -131,14 +139,11 @@ export default function chat(): JSX.Element {
         const { data } = await chatsListRefetch();
         const list: NewChatType[] = data?.chatsByUser || [];
         // A chat is a group if it has more than 2 members or isGroup is true
-        const groups = list.filter(
-          (chat: NewChatType) =>
-            chat.isGroup || (chat.members?.edges?.length || 0) > 2,
-        );
+        const groups = list.filter((chat: NewChatType) => isGroupChat(chat));
         const filteredGroups = orgId
           ? groups.filter(
-              (chat: NewChatType) => chat.organization?.id === orgId,
-            )
+            (chat: NewChatType) => chat.organization?.id === orgId,
+          )
           : groups;
         setChats(filteredGroups);
       }
@@ -150,8 +155,8 @@ export default function chat(): JSX.Element {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter(
-            (chat: NewChatType) => chat.organization?.id === orgId,
-          )
+          (chat: NewChatType) => chat.organization?.id === orgId,
+        )
         : chatsListData.chatsByUser;
       setChats(filteredChats);
     }
@@ -281,9 +286,7 @@ export default function chat(): JSX.Element {
                           image: chat.avatarURL || '',
                           setSelectedContact,
                           selectedContact,
-                          isGroup:
-                            chat.isGroup ||
-                            (chat.members?.edges?.length || 0) > 2,
+                          isGroup: isGroupChat(chat),
                           unseenMessages: chat.unreadMessagesCount ?? 0,
                           lastMessage: chat.lastMessage?.body ?? '',
                         };
