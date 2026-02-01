@@ -8,6 +8,12 @@
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "customRecurrence": "Récurrence personnalisée",
+  "frequency": "Fréquence",
+  "repeatsEvery": "Répète chaque",
+  "day": "Jour",
+  "week": "Semaine",
+  "month": "Mois",
+  "year": "Année",
   "role": {
     "member": "Membre"
   },
@@ -86,6 +92,7 @@
     "userEditProfilePicture": "Modifier la photo de profil",
     "communityLogo": "Logo de la Communauté",
     "organizations": "Organisations",
+    "clickToSelectOrg": "Cliquez pour sélectionner l'organisation",
     "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
     "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s).",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
