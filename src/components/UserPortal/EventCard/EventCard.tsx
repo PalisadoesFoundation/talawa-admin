@@ -56,6 +56,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
+import UserPortalCard from '../UserPortalCard/UserPortalCard';
 
 function EventCard({
   id,
@@ -119,21 +120,39 @@ function EventCard({
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className="d-flex flex-row justify-content-between align-items-center">
-        <div className={styles.orgName}>
-          <b>{name}</b>
-        </div>
-        <div>
-          <CalendarMonthIcon />
-        </div>
+    <UserPortalCard
+      imageSlot={<CalendarMonthIcon fontSize="large" />}
+      actionsSlot={
+        loading ? (
+          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
+        ) : isRegistered ? (
+          <Button size="sm" disabled>
+            {t('alreadyRegistered')}
+          </Button>
+        ) : isInviteOnly ? (
+          <Button size="sm" disabled>
+            {tCommon('inviteOnlyEvent')}
+          </Button>
+        ) : (
+          <Button size="sm" onClick={handleRegister}>
+            {tCommon('register')}
+          </Button>
+        )
+      }
+      variant="standard"
+      ariaLabel={t('eventCardAriaLabel', { name })}
+      dataTestId="event-card"
+      className={styles.mainContainer}
+    >
+      <div className={styles.orgName}>
+        <b>{name}</b>
       </div>
       {description}
       <span>
         {`${tCommon('location')} `}
         <b>{location}</b>
       </span>
-      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+      <div className={styles.eventDetails}>
         {`${t('starts')} `}
         {startTime ? (
           <b data-testid="startTime">
@@ -144,7 +163,7 @@ function EventCard({
         )}
         <b> {dayjs(startAt).format('D MMMM YYYY')}</b>
       </div>
-      <div className={`d-flex flex-row ${styles.eventDetails}`}>
+      <div className={styles.eventDetails}>
         {`${t('ends')} `}
         {endTime ? (
           <b data-testid="endTime">
@@ -159,25 +178,7 @@ function EventCard({
         {`${t('creator')} `}
         <b>{creatorName}</b>
       </span>
-
-      <div className={`d-flex flex-row ${styles.eventActions}`}>
-        {loading ? (
-          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
-        ) : isRegistered ? (
-          <Button size="sm" disabled>
-            {t('alreadyRegistered')}
-          </Button>
-        ) : isInviteOnly ? (
-          <Button size="sm" disabled>
-            {tCommon('inviteOnlyEvent')}
-          </Button>
-        ) : (
-          <Button size="sm" onClick={handleRegister}>
-            {tCommon('register')}
-          </Button>
-        )}
-      </div>
-    </div>
+    </UserPortalCard>
   );
 }
 

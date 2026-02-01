@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
@@ -30,15 +30,6 @@ interface InterfaceGraphQLErrorWithCode extends Error {
 // Mock utils/i18n to use the test i18n instance for NotificationToast
 vi.mock('utils/i18n', () => ({
   default: i18nForTest,
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-    warning: vi.fn(),
-  },
 }));
 
 async function wait(ms = 100): Promise<void> {
@@ -316,7 +307,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
 
   it('should handle unlike mutation error correctly', async () => {
@@ -351,7 +342,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
 
   it('should show loading state while mutation is in progress', async () => {
@@ -537,7 +528,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.warning).toHaveBeenCalledWith(
+    expect(NotificationToast.warning).toHaveBeenCalledWith(
       'Please sign in to like comments.',
       expect.any(Object),
     );
@@ -606,7 +597,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'You have already liked this comment.',
       expect.any(Object),
     );
@@ -653,7 +644,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'No associated vote found to remove.',
       expect.any(Object),
     );
@@ -730,7 +721,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Network error occurred',
       expect.any(Object),
     );
@@ -773,7 +764,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Could not find an existing like to remove.',
       expect.any(Object),
     );
@@ -802,7 +793,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('delete-comment-button'));
     await wait();
     expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment deleted successfully',
       expect.any(Object),
     );
@@ -837,7 +828,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
     expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment updated successfully',
       expect.any(Object),
     );
@@ -866,7 +857,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.type(textArea, ' ');
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a comment before submitting.',
       expect.any(Object),
     );
@@ -900,7 +891,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Failed to update comment',
       expect.any(Object),
     );
@@ -928,7 +919,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('delete-comment-button'));
     await wait();
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Failed to delete comment',
       expect.any(Object),
     );
