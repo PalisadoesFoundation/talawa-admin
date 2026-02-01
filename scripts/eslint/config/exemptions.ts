@@ -86,6 +86,15 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+  createWrapperExemption({
+    componentName: 'Tooltip',
+    allowedIds: [
+      'mui-tooltip',
+      'mui-tooltip-path',
+      'rb-tooltip',
+      'react-tooltip',
+    ],
+  }),
 ];
 
 export const avatarExemption = createWrapperExemption({

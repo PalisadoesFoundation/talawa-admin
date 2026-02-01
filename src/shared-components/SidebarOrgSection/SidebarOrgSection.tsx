@@ -27,6 +27,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Avatar from 'shared-components/Avatar/Avatar';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
@@ -65,12 +66,13 @@ const SidebarOrgSection = ({
     return null;
   }
 
-  // build tooltip title with org name and optional city (dynamic data, not translatable)
-  const orgTitle = data?.organization
-    ? [data.organization.name, data.organization.city]
-        .filter(Boolean)
-        .join(' — ')
-    : '';
+  // build tooltip content with org name and optional city on separate lines
+  const orgTooltipContent = data?.organization ? (
+    <>
+      <div>{data.organization.name}</div>
+      {data.organization.city && <div>{data.organization.city}</div>}
+    </>
+  ) : null;
 
   return (
     <div className={`${styles.organizationContainer}`}>
@@ -118,19 +120,21 @@ const SidebarOrgSection = ({
               />
             )}
           </div>
-          <div className={styles.ProfileRightContainer} title={orgTitle}>
-            <div className={styles.profileText}>
-              <span className={styles.primaryText}>
-                {data.organization.name}
-              </span>
-              <span className={styles.secondaryText}>
-                {data.organization.city || 'N/A'}
-              </span>
+          <Tooltip content={orgTooltipContent} placement="right">
+            <div className={styles.profileRightContainer}>
+              <div className={styles.profileText}>
+                <span className={styles.primaryText}>
+                  {data.organization.name}
+                </span>
+                <span className={styles.secondaryText}>
+                  {data.organization.city || 'N/A'}
+                </span>
+              </div>
+              <div className={styles.arrowIcon}>
+                <AngleRightIcon fill={'var(--bs-secondary)'} />
+              </div>
             </div>
-            <div className={styles.ArrowIcon}>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
-            </div>
-          </div>
+          </Tooltip>
         </button>
       )}
     </div>

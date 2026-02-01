@@ -144,6 +144,32 @@ const restrictedImports = [
     message:
       'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
   },
+  {
+    id: 'mui-tooltip',
+    name: '@mui/material',
+    importNames: ['Tooltip'],
+    message:
+      'Do not import Tooltip from @mui/material. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
+  },
+  {
+    id: 'mui-tooltip-path',
+    name: '@mui/material/Tooltip',
+    message:
+      'Do not import Tooltip from @mui/material. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
+  },
+  {
+    id: 'rb-tooltip',
+    name: 'react-bootstrap',
+    importNames: ['Tooltip', 'OverlayTrigger'],
+    message:
+      'Do not import Tooltip/OverlayTrigger from react-bootstrap. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
+  },
+  {
+    id: 'react-tooltip',
+    name: 'react-tooltip',
+    message:
+      'Do not import from react-tooltip. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
+  },
 ];
 
 // Helper functions for rule processing

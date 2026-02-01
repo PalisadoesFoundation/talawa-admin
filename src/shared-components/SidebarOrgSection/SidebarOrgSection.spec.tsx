@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, vi, expect } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
@@ -231,14 +231,18 @@ describe('SidebarOrgSection Component', () => {
     it('renders organization name', async () => {
       renderComponent();
       await waitFor(() => {
-        expect(screen.getByText('Test Organization')).toBeInTheDocument();
+        const button = screen.getByTestId('OrgBtn');
+        expect(
+          within(button).getByText('Test Organization'),
+        ).toBeInTheDocument();
       });
     });
 
     it('renders organization city', async () => {
       renderComponent();
       await waitFor(() => {
-        expect(screen.getByText('Test City')).toBeInTheDocument();
+        const button = screen.getByTestId('OrgBtn');
+        expect(within(button).getByText('Test City')).toBeInTheDocument();
       });
     });
 
@@ -352,37 +356,32 @@ describe('SidebarOrgSection Component', () => {
     it('has profile text container', async () => {
       renderComponent();
       await waitFor(() => {
-        // Verify both name and city are present
-        expect(screen.getByText('Test Organization')).toBeInTheDocument();
-        expect(screen.getByText('Test City')).toBeInTheDocument();
+        const button = screen.getByTestId('OrgBtn');
+        expect(
+          within(button).getByText('Test Organization'),
+        ).toBeInTheDocument();
+        expect(within(button).getByText('Test City')).toBeInTheDocument();
       });
     });
   });
 
-  describe('Title Attribute for Truncation', () => {
-    it('displays full organization name and city in title attribute', async () => {
+  describe('Tooltip for Truncation', () => {
+    it('displays organization name and city on separate lines in tooltip', async () => {
       renderComponent();
       await waitFor(() => {
-        const profileRightContainer = screen
-          .getByText('Test Organization')
-          .closest('div[title]');
-        expect(profileRightContainer).toHaveAttribute(
-          'title',
-          'Test Organization — Test City',
-        );
+        // Find the tooltip element by role (it's rendered via portal to body)
+        const tooltip = screen.getByRole('tooltip', { hidden: true });
+        expect(tooltip).toHaveTextContent('Test Organization');
+        expect(tooltip).toHaveTextContent('Test City');
       });
     });
 
-    it('displays only organization name in title when city is null', async () => {
+    it('displays only organization name in tooltip when city is null', async () => {
       renderComponent({}, noCityMocks);
       await waitFor(() => {
-        const profileRightContainer = screen
-          .getByText('Test Organization')
-          .closest('div[title]');
-        expect(profileRightContainer).toHaveAttribute(
-          'title',
-          'Test Organization',
-        );
+        const tooltip = screen.getByRole('tooltip', { hidden: true });
+        expect(tooltip).toHaveTextContent('Test Organization');
+        expect(tooltip).not.toHaveTextContent('N/A');
       });
     });
   });

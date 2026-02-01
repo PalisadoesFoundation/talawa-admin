@@ -4,11 +4,9 @@
 .profileContainer {
   position: relative;
   margin: var(--space-4) var(--space-0);
-  padding: var(--space-9) var(--space-1);
+  padding: var(--space-9) var(--space-3);
   border-radius: var(--radius-xl);
   background-color: var(--color-blue-100) !important;
-  padding-right: var(--space-3);
-  padding-left: var(--space-3);
 
   border: none;
   width: 100%;
@@ -31,7 +29,6 @@
 .imageContainer {
   margin-right: var(--space-3);
   margin-bottom: var(--space-0-5);
-  /* adjusted from 10px to align better? app-fixed had 10px */
 }
 
 .imageContainer img {
@@ -40,11 +37,11 @@
   border-radius: var(--radius-full);
 }
 
-.ProfileRightContainer {
+.profileRightContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-5);
+  gap: var(--space-3);
   flex: 1;
   min-width: 0;
 }
@@ -78,7 +75,7 @@
   text-overflow: ellipsis;
 }
 
-.ArrowIcon {
+.arrowIcon {
   margin-right: var(--space-2);
 }
 
