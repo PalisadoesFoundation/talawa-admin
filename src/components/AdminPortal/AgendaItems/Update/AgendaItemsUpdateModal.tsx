@@ -36,7 +36,7 @@ import {
   FormFieldGroup,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { FaLink, FaTrash } from 'react-icons/fa';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMinioUpload } from 'utils/MinioUpload';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './AgendaItemsUpdateModal.module.css';
@@ -200,7 +200,6 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   return (
-    // eslint-disable-next-line custom-rules/prefer-crud-modal-template -- Complex modal with file uploads, URL validation, and dynamic attachment previews that don't fit standard CRUD template
     <BaseModal
       className={styles.AgendaItemModal}
       show={agendaItemUpdateModalIsOpen}
