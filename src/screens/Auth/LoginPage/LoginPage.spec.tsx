@@ -1457,27 +1457,11 @@ describe('Organization Autocomplete Component', () => {
   });
 
   it('should have full width input as per w-100 class', async () => {
-    render(
-      <MockedProvider>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
 
-    await wait();
-
-    await waitFor(() => {
-      const autocomplete = screen.getByTestId('selectOrg');
-      const input = within(autocomplete).getByRole('combobox');
-
-      expect(input).toHaveClass('w-100');
-      expect(input).toHaveClass('form-control');
-    });
+    expect(input).toHaveClass('w-100');
+    expect(input).toHaveClass('form-control');
   });
   it('clears selected organization using clear icon', async () => {
     const autocomplete = await setupRegistrationForm();
