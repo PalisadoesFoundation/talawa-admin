@@ -1,11 +1,11 @@
 .mainContainer {
   width: auto;
   overflow: hidden;
-  background-color: white;
-  margin-top: 1rem;
-  padding: 0.5rem;
-  border: 1px solid #dddddd;
-  border-radius: 10px;
+  background-color: var(--color-white);
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-md);
 }
 
 .personDetails {
@@ -15,37 +15,37 @@
 }
 
 .personImage {
-  border-radius: 50%;
-  margin-right: 20px;
+  border-radius: var(--radius-full);
+  margin-right: var(--space-6);
 }
 
 .cardActions {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
-  margin-top: 10px;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
 }
 
 .cardActionBtn {
-  background-color: rgba(0, 0, 0, 0);
+  background-color: transparent;
   border: none;
-  color: black;
+  color: var(--color-black);
 }
 
 .cardActionBtn:hover {
-  background-color: ghostwhite;
+  background-color: var(--color-gray-50);
   border: none;
-  color: green !important;
+  color: var(--color-green-500) !important;
 }
 
 .likeIcon {
-  width: 20px;
+  width: var(--space-6);
 }
 
 .iconSmall {
-  font-size: 1.25rem;
-  margin-right: 0.5rem;
+  font-size: var(--font-size-xl);
+  margin-right: var(--space-3);
 }
 
 .editModalContent {
@@ -54,39 +54,39 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90%;
-  max-width: 500px;
-  background-color: white;
-  border-radius: 8px;
-  padding: 24px;
+  max-width: var(--space-25);
+  background-color: var(--color-white);
+  border-radius: var(--radius-md);
+  padding: var(--space-7);
 }
 
 .editModalContent h3 {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-5);
 }
 
 .modalActions {
   display: flex;
   justify-content: space-between;
-  margin-top: 16px;
+  margin-top: var(--space-5);
 }
 
 .rightModalActions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 /* User avatar styling for comment cards */
 .userImageUserComment {
   display: flex;
-  width: 32px;
-  height: 32px;
-  margin-left: 1rem;
+  width: var(--space-8);
+  height: var(--space-8);
+  margin-left: var(--space-5);
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   position: relative;
-  border: 2px solid var(--userImage-border, #dddddd);
+  border: var(--border-2) solid var(--userImage-border, var(--color-gray-200));
 }
 
 .userImageUserComment img {

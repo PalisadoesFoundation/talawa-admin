@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:72](https://githu
 
 ### \_\_namedParameters
 
-[`IEvent`](../../../../../types/Event/interface/interfaces/IEvent.md)
+[`InterfaceEventCardProps`](../../../../../types/UserPortal/EventCard/interface/interfaces/InterfaceEventCardProps.md)
 
 ## Returns
 

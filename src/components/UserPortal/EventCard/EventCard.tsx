@@ -65,7 +65,7 @@ import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
 import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
 
@@ -81,7 +81,7 @@ function EventCard({
   creator,
   attendees,
   isInviteOnly,
-}: InterfaceEvent): JSX.Element {
+}: InterfaceEventCardProps): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
     keyPrefix: 'userEventCard',
