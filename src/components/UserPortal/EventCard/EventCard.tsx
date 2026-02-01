@@ -5,7 +5,17 @@
  * location, start and end times, and the creator's name. It also provides functionality for users
  * to register for the event.
  *
- * @param props - The event details passed as props, adhering to the `InterfaceEvent` type.
+ * @param id - Event identifier.
+ * @param name - Event name.
+ * @param description - Event description.
+ * @param location - Event location.
+ * @param startAt - Event start date (ISO string).
+ * @param endAt - Event end date (ISO string).
+ * @param startTime - Event start time (HH:mm:ss).
+ * @param endTime - Event end time (HH:mm:ss).
+ * @param creator - Event creator info.
+ * @param attendees - Current attendee list.
+ * @param isInviteOnly - Whether the event is invite-only.
  *
  * @remarks
  * - The component uses the `useTranslation` hook for internationalization.
@@ -53,7 +63,7 @@ import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
 import UserPortalCard from '../UserPortalCard/UserPortalCard';

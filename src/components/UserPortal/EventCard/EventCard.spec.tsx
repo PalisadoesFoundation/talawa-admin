@@ -208,6 +208,26 @@ describe('Testing Event Card In User portal', () => {
     expect(screen.queryByText('Register')).not.toBeInTheDocument();
   });
 
+  it('should set aria-label with event name for accessibility', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const eventCard = screen.getByTestId('event-card');
+    expect(eventCard).toHaveAttribute(
+      'aria-label',
+      `Event card for ${props.name}`,
+    );
+  });
+
   it('should handle combined scenario with isPublic: false and isInviteOnly: true', () => {
     const combinedProps = { ...props, isPublic: false, isInviteOnly: true };
 

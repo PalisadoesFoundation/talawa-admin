@@ -1,18 +1,3 @@
-/**
- * CommentCard Component
- *
- * This component represents a card displaying a comment with the ability to like or dislike it.
- * It shows the comment creator's details, the comment text, and the like/dislike counts.
- *
- * @param id - The unique identifier of the comment.
- * @param creator - The creator of the comment, including their ID, name, and optional avatar URL.
- * @param hasUserVoted - Object indicating if current user has voted and the vote type.
- * @param upVoteCount - The number of upvotes (likes) on the comment.
- * @param text - The text content of the comment.
- * @param refetchComments - Optional callback to refresh comments after modifications.
- *
- * @returns A JSX element representing the comment card.
- */
 import React from 'react';
 import {
   IconButton,
@@ -69,6 +54,21 @@ const VoteCount = styled(Typography)(() => ({
   textAlign: 'center',
 }));
 
+/**
+ * CommentCard Component
+ *
+ * This component represents a card displaying a comment with the ability to like or dislike it.
+ * It shows the comment creator's details, the comment text, and the like/dislike counts.
+ *
+ * @param id - The unique identifier of the comment.
+ * @param creator - The creator of the comment, including their ID, name, and optional avatar URL.
+ * @param hasUserVoted - Object indicating if current user has voted and the vote type.
+ * @param upVoteCount - The number of upvotes (likes) on the comment.
+ * @param text - The text content of the comment.
+ * @param refetchComments - Optional callback to refresh comments after modifications.
+ *
+ * `@returns` A JSX element representing the comment card.
+ */
 function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
     props;
@@ -230,6 +230,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                   onClick={handleMenuOpen}
                   size="small"
                   data-testid="more-options-button"
+                  aria-label={t('commentCard.moreOptionsAriaLabel')}
                 >
                   <MoreHoriz />
                 </IconButton>
