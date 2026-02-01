@@ -200,6 +200,7 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   return (
+    // eslint-disable-next-line custom-rules/prefer-crud-modal-template -- Complex modal with file uploads, URL validation, and dynamic attachment previews that don't fit standard CRUD template
     <BaseModal
       className={styles.AgendaItemModal}
       show={agendaItemUpdateModalIsOpen}
