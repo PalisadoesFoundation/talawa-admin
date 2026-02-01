@@ -48,6 +48,9 @@ vi.mock('@mui/material', async () => {
   const actual = await vi.importActual('@mui/material');
   return {
     ...actual,
+    // Mock Autocomplete that simulates selection when user types 'John'
+    // - typing text ending with 'John' selects { id: '1', name: 'John Doe' }
+    // - clearing the input (empty string) deselects the option
     Autocomplete: (props: Record<string, unknown>) => {
       const { value, onChange, getOptionLabel, renderInput, ...otherProps } =
         props;
@@ -205,14 +208,28 @@ const MOCK_PLEDGE_DATA = {
   },
   result: {
     data: {
-      createPledge: {
+      createFundCampaignPledge: {
         __typename: 'Pledge',
         id: '1',
         amount: 100,
-        currency: 'USD',
+        note: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        campaign: {
+          __typename: 'FundCampaign',
+          id: 'campaignId',
+          name: 'Campaign',
+        },
+        pledger: { __typename: 'User', id: '1', name: 'John Doe' },
       },
     },
   },
+};
+
+/** Delayed create pledge mock so we can assert loading state before response */
+const MOCK_PLEDGE_DATA_DELAYED = {
+  ...MOCK_PLEDGE_DATA,
+  delay: 1000,
 };
 
 const MOCK_UPDATE_PLEDGE_DATA = {
@@ -244,6 +261,7 @@ const MEMBERS_MOCK = {
     data: {
       organization: {
         __typename: 'Organization',
+        id: 'orgId',
         members: {
           __typename: 'UserConnection',
           edges: [
@@ -252,9 +270,9 @@ const MEMBERS_MOCK = {
               node: {
                 __typename: 'User',
                 id: '1',
-                firstName: 'John',
-                lastName: 'Doe',
                 name: 'John Doe',
+                avatarURL: null,
+                createdAt: dayjs.utc().toISOString(),
               },
             },
           ],
@@ -305,7 +323,7 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render edit pledge modal with correct title', async () => {
@@ -344,7 +362,7 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledgeAmount when input value changes', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     await act(async () => {
       renderPledgeModal(link1, pledgeProps[1]);
     });
@@ -392,23 +410,31 @@ describe('PledgeModal', () => {
   });
 
   it('should handle create pledge error', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     renderPledgeModal(errorLink, pledgeProps[0]);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+    });
+
+    const pledgerInput = within(screen.getByTestId('pledgerSelect')).getByRole(
+      'combobox',
+    );
+    await user.type(pledgerInput, 'John');
+
+    await waitFor(() => {
+      expect(pledgerInput).toHaveValue('John Doe');
+    });
+
     const amountInput = screen.getByLabelText('Amount');
-    await act(async () => {
-      await user.clear(amountInput);
-    });
-    await act(async () => {
-      await user.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
+
+    await waitFor(() => {
+      expect((amountInput as HTMLInputElement).value).toBe('100');
     });
 
-    const form = document.getElementById('crud-create-form') as HTMLFormElement;
-    expect(form).not.toBeNull();
-
-    await act(async () => {
-      await user.click(screen.getByTestId('modal-submit-btn'));
-    });
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -447,7 +473,7 @@ describe('PledgeModal', () => {
     );
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
@@ -455,16 +481,14 @@ describe('PledgeModal', () => {
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await act(async () => {
-      await user.clear(amountInput);
-    });
-    await act(async () => {
-      await user.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
+
+    await waitFor(() => {
+      expect((amountInput as HTMLInputElement).value).toBe('100');
     });
 
-    await act(async () => {
-      await user.click(screen.getByTestId('modal-submit-btn'));
-    });
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -502,6 +526,7 @@ describe('PledgeModal', () => {
 
   // Coverage for Line 185: Verify error toast behavior when createPledge fails with specific error message
   it('should show specific error message from backend when createPledge fails', async () => {
+    const user = userEvent.setup({ delay: null });
     const errorMsg = 'Specific backend error';
     const ERROR_MOCK = {
       request: {
@@ -528,18 +553,18 @@ describe('PledgeModal', () => {
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
     // Type to select pledger (mocked autocomplete will handle selection)
-    await userEvent.type(pledgerInput, 'John');
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await userEvent.clear(amountInput);
-    await userEvent.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('modal-submit-btn'));
+      await user.click(screen.getByTestId('modal-submit-btn'));
     });
 
     await waitFor(() => {
@@ -609,7 +634,7 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledge amount in edit mode', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     const mockLink = new StaticMockLink([
       ...PLEDGE_MODAL_MOCKS,
       MOCK_UPDATE_PLEDGE_DATA,
@@ -689,7 +714,7 @@ describe('PledgeModal', () => {
   });
 
   it('should handle update pledge error', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
     const updateErrorMock = {
       request: {
         query: UPDATE_PLEDGE,
@@ -868,33 +893,42 @@ describe('PledgeModal', () => {
   });
 
   it('should display loading state during pledge creation', async () => {
+    const loadingMockLink = new StaticMockLink([
+      ...PLEDGE_MODAL_MOCKS,
+      MOCK_PLEDGE_DATA_DELAYED,
+      MEMBERS_MOCK,
+    ]);
     const props = { ...pledgeProps[0], refetchPledge: vi.fn(), hide: vi.fn() };
-    renderPledgeModal(mockLink, props);
+    renderPledgeModal(loadingMockLink, props);
 
     const pledgerSelect = screen.getByTestId('pledgerSelect');
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
-    // Type to select pledger (mocked autocomplete will handle selection)
-    await userEvent.type(pledgerInput, 'John');
+    const user = userEvent.setup({ delay: null });
+    await user.type(pledgerInput, 'John');
 
     await waitFor(() => {
       expect(pledgerInput).toHaveValue('John Doe');
     });
 
     const amountInput = screen.getByLabelText('Amount');
-    await userEvent.clear(amountInput);
-    await userEvent.type(amountInput, '100');
+    await user.clear(amountInput);
+    await user.type(amountInput, '100');
+
+    await waitFor(() => {
+      expect((amountInput as HTMLInputElement).value).toBe('100');
+    });
 
     const submitButton = screen.getByTestId('modal-submit-btn');
+    await user.click(submitButton);
 
-    await act(async () => {
-      await userEvent.click(submitButton);
-    });
-
-    // Button should be disabled during loading
-    await waitFor(() => {
-      expect(submitButton).toBeDisabled();
-    });
+    // Button should be disabled while mutation is in flight (mock delays 2000ms)
+    await waitFor(
+      () => {
+        expect(submitButton).toBeDisabled();
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('should handle create pledge when pledger is missing', async () => {
@@ -932,13 +966,12 @@ describe('PledgeModal', () => {
     expect(pledgerInput).toHaveValue('John Doe');
   });
 
-  it('should handle filterSelectedOptions prop', async () => {
+  it('should render pledger autocomplete input', async () => {
     renderPledgeModal(mockLink, pledgeProps[0]);
 
     const pledgerSelect = screen.getByTestId('pledgerSelect');
     const pledgerInput = within(pledgerSelect).getByRole('combobox');
 
-    // The mocked Autocomplete doesn't render a listbox, so we just verify the input exists
     await waitFor(() => {
       expect(pledgerInput).toBeInTheDocument();
     });
