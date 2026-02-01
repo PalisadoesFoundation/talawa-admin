@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
@@ -97,6 +97,7 @@ describe('InviteByEmailModal', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });

@@ -92,7 +92,6 @@ describe('EventRegistrantsWrapper Component', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
-    vi.resetModules();
   });
 
   describe('Component Rendering', () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -360,8 +360,10 @@ describe('EventRegistrantsModal', () => {
     user = userEvent.setup();
   });
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    vi.resetModules();
   });
 
   test('renders modal with basic elements', async () => {
