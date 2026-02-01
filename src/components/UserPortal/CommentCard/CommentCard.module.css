@@ -86,7 +86,7 @@
   overflow: hidden;
   border-radius: 50%;
   position: relative;
-  border: 2px solid var(--userImageUserPost-border, #dddddd);
+  border: 2px solid var(--userImage-border, #dddddd);
 }
 
 .userImageUserComment img {

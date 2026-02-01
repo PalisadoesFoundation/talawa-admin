@@ -18,3 +18,13 @@
   border-radius: 50%;
   margin-right: 20px;
 }
+
+.calendarIcon {
+  font-size: 2.1875rem;
+  /* MUI 'large' size equivalent */
+}
+
+.loadingIcon {
+  font-size: 1.25rem;
+  /* MUI 'small' size equivalent */
+}

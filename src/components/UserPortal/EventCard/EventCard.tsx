@@ -11,7 +11,7 @@
  * - The component uses the `useTranslation` hook for internationalization.
  * - It retrieves the user ID from local storage to determine if the user is already registered for the event.
  * - The `useMutation` hook from Apollo Client is used to handle event registration.
- * - The `react-toastify` library is used to display success or error messages.
+ * - The `NotificationToast` utility is used to display success or error messages.
  *
  * Component
  *
@@ -38,7 +38,7 @@
  * - `dayjs` for date and time formatting.
  * - `react-bootstrap` for UI components.
  * - `@apollo/client` for GraphQL mutations.
- * - `react-toastify` for notifications.
+ * - `NotificationToast` for notifications.
  * - `utils/useLocalstorage` for local storage handling.
  */
 import React from 'react';
@@ -121,10 +121,13 @@ function EventCard({
 
   return (
     <UserPortalCard
-      imageSlot={<CalendarMonthIcon fontSize="large" />}
+      imageSlot={<CalendarMonthIcon className={styles.calendarIcon} />}
       actionsSlot={
         loading ? (
-          <HourglassBottomIcon fontSize="small" data-testid="loadingIcon" />
+          <HourglassBottomIcon
+            className={styles.loadingIcon}
+            data-testid="loadingIcon"
+          />
         ) : isRegistered ? (
           <Button size="sm" disabled>
             {t('alreadyRegistered')}
@@ -140,7 +143,7 @@ function EventCard({
         )
       }
       variant="standard"
-      ariaLabel={t('eventCardAriaLabel', { name })}
+      ariaLabel={t('userEventCard.eventCardAriaLabel', { name })}
       dataTestId="event-card"
       className={styles.mainContainer}
     >
@@ -169,9 +172,7 @@ function EventCard({
           <b data-testid="endTime">
             {dayjs(`${DUMMY_DATE_TIME_PREFIX}${endTime}`).format('h:mm:ss A')}
           </b>
-        ) : (
-          <></>
-        )}
+        ) : null}
         <b> {dayjs(endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>

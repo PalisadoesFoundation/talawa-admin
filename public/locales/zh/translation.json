@@ -1797,7 +1797,8 @@
     "alreadyRegistered": "已经注册",
     "location": "位置",
     "register": "注册",
-    "registeredSuccessfully": "成功注册 {{eventName}}"
+    "registeredSuccessfully": "成功注册 {{eventName}}",
+    "eventCardAriaLabel": "Event card for {{name}}"
   },
   "advertisement": {
     "title": "广告",
@@ -2390,7 +2391,8 @@
     "editComment": "编辑评论",
     "deleteComment": "删除评论",
     "deleting": "删除中…",
-    "emptyCommentError": "请在提交前输入评论。"
+    "emptyCommentError": "请在提交前输入评论。",
+    "commentBy": "Comment by {{name}}"
   },
   "profileAvatar": {
     "altText": "{{name}}的个人资料图片",

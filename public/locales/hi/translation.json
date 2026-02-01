@@ -1792,7 +1792,8 @@
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
     "register": "पंजीकरण करें",
-    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया",
+    "eventCardAriaLabel": "Event card for {{name}}"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -2390,7 +2391,8 @@
     "editComment": "टिप्पणी संपादित करें",
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
-    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "commentBy": "Comment by {{name}}"
   },
   "profileAvatar": {
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",

@@ -5,13 +5,11 @@
  * It shows the comment creator's details, the comment text, and the like/dislike counts.
  *
  * @param id - The unique identifier of the comment.
- * @param creator - The creator of the comment, including their ID and name.
+ * @param creator - The creator of the comment, including their ID, name, and optional avatar URL.
+ * @param hasUserVoted - Object indicating if current user has voted and the vote type.
  * @param upVoteCount - The number of upvotes (likes) on the comment.
- * @param downVoteCount - The number of downvotes (dislikes) on the comment.
- * @param downVoters - An array of users who have disliked the comment.
  * @param text - The text content of the comment.
- * @param onVote - Callback function triggered when the comment is voted on.
- * @param fetchComments - Function to refresh comments after voting.
+ * @param refetchComments - Optional callback to refresh comments after modifications.
  *
  * @returns A JSX element representing the comment card.
  */
@@ -25,12 +23,9 @@ import {
   Modal,
   Menu,
   MenuItem,
-  // eslint-disable-next-line no-restricted-imports -- FormControl needed for edit modal
-  FormControl,
   Input,
-  // eslint-disable-next-line no-restricted-imports -- Button needed for edit modal
-  Button,
 } from '@mui/material';
+import Button from 'shared-components/Button';
 import {
   MoreHoriz,
   ThumbUp,
@@ -45,7 +40,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import commentCardStyles from './CommentCard.module.css';
-import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
 import {
   DELETE_COMMENT,
@@ -54,6 +48,7 @@ import {
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
+import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -72,19 +67,6 @@ const VoteCount = styled(Typography)(() => ({
   minWidth: 20,
   textAlign: 'center',
 }));
-interface InterfaceCommentCardProps {
-  id: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  hasUserVoted?: { voteType: VoteType } | null;
-  upVoteCount: number;
-  // downVoteCount: number;
-  text: string;
-  refetchComments?: () => void;
-}
 
 function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
@@ -316,7 +298,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2 }}>
               <Input
                 multiline
                 rows={4}
@@ -325,7 +307,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 fullWidth
                 data-testid="edit-comment-input"
               />
-            </FormControl>
+            </Box>
 
             <Box className={commentCardStyles.modalActions}>
               <Box />
@@ -350,7 +332,8 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                     }
                   }}
                   data-testid="save-comment-button"
-                  startIcon={<EditOutlined />}
+                  icon={<EditOutlined />}
+                  iconPosition="start"
                 >
                   {updatingComment ? tCommon('saving') : tCommon('save')}
                 </Button>

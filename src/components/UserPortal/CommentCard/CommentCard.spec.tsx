@@ -13,6 +13,18 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+// Mock NotificationToast methods
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
+  },
+}));
 import {
   DELETE_COMMENT,
   UPDATE_COMMENT,

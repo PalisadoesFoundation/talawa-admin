@@ -1780,7 +1780,8 @@
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
     "register": "Registro",
-    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}"
+    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}",
+    "eventCardAriaLabel": "Tarjeta de evento para {{name}}"
   },
   "advertisement": {
     "title": "Anuncios",
@@ -2390,7 +2391,8 @@
     "editComment": "Editar comentario",
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
-    "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviar.",
+    "commentBy": "Comentario de {{name}}"
   },
   "profileAvatar": {
     "altText": "Foto de perfil de {{name}}",

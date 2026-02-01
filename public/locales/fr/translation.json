@@ -1797,7 +1797,8 @@
     "alreadyRegistered": "Déjà enregistré",
     "location": "Lieu",
     "register": "S'inscrire",
-    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}"
+    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}",
+    "eventCardAriaLabel": "Carte d'événement pour {{name}}"
   },
   "advertisement": {
     "title": "Annonces",
@@ -2390,7 +2391,8 @@
     "editComment": "Modifier le commentaire",
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
-    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
+    "commentBy": "Commentaire de {{name}}"
   },
   "profileAvatar": {
     "altText": "Photo de profil de {{name}}",

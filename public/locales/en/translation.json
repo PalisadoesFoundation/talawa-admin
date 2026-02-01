@@ -1780,7 +1780,8 @@
     "alreadyRegistered": "Already registered",
     "location": "location",
     "register": "register",
-    "registeredSuccessfully": "Successfully registered for {{eventName}}"
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "eventCardAriaLabel": "Event card for {{name}}"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -2390,7 +2391,8 @@
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
-    "emptyCommentError": "Please enter a comment before submitting."
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "commentBy": "Comment by {{name}}"
   },
   "profileAvatar": {
     "altText": "Profile picture of {{name}}",
