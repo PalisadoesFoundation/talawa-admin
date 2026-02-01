@@ -62,6 +62,7 @@ describe('AgendaFolderCreateModal', () => {
 
   it('creates agenda folder with sequence = 1 when no folders exist', async () => {
     const user = userEvent.setup();
+    const refetchMock = vi.fn();
 
     render(
       <MockedProvider
@@ -103,7 +104,7 @@ describe('AgendaFolderCreateModal', () => {
             eventId="event-1"
             agendaFolderData={{ agendaFoldersByEventId: [] }}
             t={t}
-            refetchAgendaFolder={vi.fn()}
+            refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
       </MockedProvider>,
@@ -117,6 +118,7 @@ describe('AgendaFolderCreateModal', () => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         'agendaFolderCreated',
       );
+      expect(refetchMock).toHaveBeenCalled();
     });
   });
 

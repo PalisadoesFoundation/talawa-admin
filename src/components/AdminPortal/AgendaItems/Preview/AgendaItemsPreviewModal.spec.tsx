@@ -389,7 +389,7 @@ describe('AgendaItemsPreviewModal', () => {
   });
 
   it('renders exactly 50 characters plus ellipsis for URLs longer than 50 chars', () => {
-    const exactlyLongUrl = 'https://example.com/' + 'a'.repeat(35); // Total = 54 chars
+    const exactlyLongUrl = 'https://example.com/' + 'a'.repeat(35); // Total = 55 chars
     const formStateWithExactUrl = {
       ...mockFormState,
       url: [exactlyLongUrl],

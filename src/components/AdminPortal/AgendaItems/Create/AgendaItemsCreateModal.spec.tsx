@@ -1,10 +1,11 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
+import * as ReactRouter from 'react-router';
 import { vi } from 'vitest';
-
+import * as ApolloClient from '@apollo/client';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
@@ -18,18 +19,18 @@ const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: toastMocks,
-}));
-
 vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: 'org-123' }),
+    useParams: vi.fn(() => ({ orgId: 'org-123' })),
   };
 });
+
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
+}));
 
 const uploadFileToMinioMock = vi.fn();
 const getFileFromMinioMock = vi.fn();
@@ -103,6 +104,7 @@ const t = (key: string): string => key;
 
 describe('AgendaItemsCreateModal', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
@@ -125,6 +127,47 @@ describe('AgendaItemsCreateModal', () => {
 
     expect(screen.getByTestId('createAgendaItemModal')).toBeInTheDocument();
     expect(screen.getByText('agendaItemDetails')).toBeInTheDocument();
+  });
+
+  it('handles non-Error rejection gracefully', async () => {
+    const createMock = vi.fn().mockRejectedValue('boom');
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
   });
 
   it('adds and removes valid URL', async () => {
@@ -153,8 +196,6 @@ describe('AgendaItemsCreateModal', () => {
     await user.click(screen.getByText('link'));
 
     expect(screen.getByText('https://example.com')).toBeInTheDocument();
-
-    // FIX: Use the data-testid directly instead of searching for SVG attributes
     const urlDeleteButton = screen.getByTestId('deleteUrl');
     await user.click(urlDeleteButton);
 
@@ -246,6 +287,586 @@ describe('AgendaItemsCreateModal', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
     });
+  });
+
+  it('creates agenda item successfully and resets state', async () => {
+    const hideMock = vi.fn();
+    const refetchMock = vi.fn();
+
+    const createMock = vi.fn().mockResolvedValue({});
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={hideMock}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={refetchMock}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda title');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+      expect(hideMock).toHaveBeenCalled();
+      expect(refetchMock).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'agendaItemCreated',
+      );
+    });
+  });
+
+  it('shows error toast when create agenda item fails', async () => {
+    const createMock = vi.fn().mockRejectedValue(new Error('boom'));
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda title');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('boom');
+    });
+  });
+
+  it('rejects malformed URL that throws URL constructor', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.type(screen.getByTestId('urlInput'), 'http://');
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+  });
+
+  it('does not update attachments when all files are invalid', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const files = [new File(['x'], 'bad.svg', { type: 'image/svg+xml' })];
+
+    await user.upload(screen.getByTestId('attachment'), files);
+
+    await waitFor(() => {
+      expect(screen.queryAllByTestId('deleteAttachment')).toHaveLength(0);
+    });
+  });
+
+  it('shows error when organization id is missing', async () => {
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({});
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.upload(
+      screen.getByTestId('attachment'),
+      new File(['x'], 'img.png', { type: 'image/png' }),
+    );
+
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'organizationRequired',
+    );
+  });
+
+  it('computes next sequence based on selected folder items', async () => {
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-123' });
+
+    const createMock = vi.fn().mockResolvedValue({});
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const folderInput = screen.getByPlaceholderText('folderName');
+    await user.click(folderInput);
+    await user.type(folderInput, 'Folder');
+    await user.click(await screen.findByText('Folder'));
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+    });
+  });
+
+  it('sends attachments in create mutation when present', async () => {
+    uploadFileToMinioMock.mockResolvedValue({
+      objectName: 'obj',
+      fileHash: 'hash',
+    });
+    getFileFromMinioMock.mockResolvedValue('preview-url');
+
+    const createMock = vi.fn().mockResolvedValue({});
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await user.upload(
+      screen.getByTestId('attachment'),
+      new File(['img'], 'img.png', { type: 'image/png' }),
+    );
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              attachments: expect.any(Array),
+            }),
+          }),
+        }),
+      );
+    });
+  });
+
+  it('includes urls in create mutation when present', async () => {
+    vi.spyOn(ReactRouter, 'useParams').mockReturnValue({ orgId: 'org-123' });
+
+    const createMock = vi.fn().mockResolvedValue({});
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: true,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    await user.click(urlInput);
+    await user.paste('https://example.com');
+    await user.click(screen.getByTestId('linkBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteUrl')).toBeInTheDocument();
+    });
+
+    // submit
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              url: [{ url: 'https://example.com' }],
+            }),
+          }),
+        }),
+      );
+    });
+  });
+
+  it('returns early when file input has empty FileList', async () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = screen.getByTestId('attachment');
+
+    await userEvent.upload(input, []);
+
+    expect(NotificationToast.error).not.toHaveBeenCalled();
+  });
+
+  it('renders folder autocomplete safely when agendaFolderData is undefined', () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={undefined}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByPlaceholderText('folderName')).toBeInTheDocument();
+  });
+
+  it('clears folderId when folder selection is removed', async () => {
+    const createMock = vi.fn().mockResolvedValue({});
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const folderInput = screen.getByPlaceholderText('folderName');
+    await user.click(folderInput);
+    await user.click(await screen.findByText('Folder'));
+
+    // clear input
+    await user.clear(folderInput);
+
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              folderId: '',
+            }),
+          }),
+        }),
+      );
+    });
+  });
+
+  it('returns early when file input has no files', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const input = screen.getByTestId('attachment') as HTMLInputElement;
+    await user.upload(input, []);
+
+    expect(NotificationToast.error).not.toHaveBeenCalled();
+  });
+
+  it('renders category autocomplete when categories is undefined', () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={undefined}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByRole('combobox', { name: /category/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders category options and updates categoryId on selection', async () => {
+    const createMock = vi.fn().mockResolvedValue({});
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      createMock,
+      {
+        loading: false,
+        data: undefined,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+        client: {} as ApolloClient.ApolloClient<object>,
+      },
+    ]);
+
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const categoryInput = screen.getByRole('combobox', { name: /category/i });
+    const categoryField = categoryInput.closest('.MuiAutocomplete-root');
+    expect(categoryField).toBeTruthy();
+
+    const scoped = within(categoryField as HTMLElement);
+    const openButton = scoped.getByRole('button', { name: /open/i });
+    await user.click(openButton);
+
+    // 🔹 select option (pointer required by MUI)
+    const option = await screen.findByText('Category');
+    await user.pointer([{ keys: '[MouseLeft]', target: option }]);
+
+    // 🔹 commit selection
+    categoryInput.blur();
+
+    // required fields
+    await user.type(screen.getByLabelText(/title/i), 'Agenda');
+    await user.type(screen.getByLabelText(/duration/i), '10');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              categoryId: 'cat-1',
+            }),
+          }),
+        }),
+      );
+    });
+  });
+
+  it('updates description when description field changes', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    await user.click(descriptionInput);
+    await user.paste('Test description');
+    expect(descriptionInput).toHaveValue('Test description');
   });
 
   it('calls hide on close', async () => {
@@ -417,7 +1038,6 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    // wait for BOTH to be committed - look for deleteAttachment test ids
     await waitFor(() => {
       const deleteButtons = screen.getAllByTestId('deleteAttachment');
       expect(deleteButtons).toHaveLength(2);
@@ -456,7 +1076,6 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    // Wait for the valid file to be uploaded and rendered
     await waitFor(() => {
       const deleteButtons = screen.getAllByTestId('deleteAttachment');
       expect(deleteButtons).toHaveLength(1);

@@ -240,6 +240,8 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
+  console.log(agendaItemFormState);
+
   return (
     <CreateModal
       open={isOpen}
@@ -282,6 +284,7 @@ const AgendaItemsCreateModal: React.FC<
       <FormFieldGroup name="category" label={t('category')}>
         <Autocomplete
           options={agendaItemCategories || []}
+          disablePortal
           getOptionLabel={(c) => c.name}
           value={
             agendaItemCategories?.find(
@@ -299,6 +302,7 @@ const AgendaItemsCreateModal: React.FC<
               <input
                 {...params.inputProps}
                 className="form-control"
+                aria-label="category"
                 placeholder={t('categoryName')}
               />
               {params.InputProps.endAdornment}

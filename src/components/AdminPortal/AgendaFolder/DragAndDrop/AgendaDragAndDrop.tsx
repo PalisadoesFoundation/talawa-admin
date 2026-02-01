@@ -81,6 +81,7 @@ export default function AgendaDragAndDrop({
     if (!result.destination) return;
     if (result.source.index === result.destination.index) return;
 
+    const previousFolders = Array.from(folders);
     const updatedFolders = Array.from(folders);
     const [moved] = updatedFolders.splice(result.source.index, 1);
     updatedFolders.splice(result.destination.index, 0, moved);
@@ -105,6 +106,7 @@ export default function AgendaDragAndDrop({
       NotificationToast.success(t('sectionSequenceUpdateSuccessMsg'));
       refetchAgendaFolder();
     } catch (error) {
+      setFolders(previousFolders);
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }

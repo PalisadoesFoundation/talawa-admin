@@ -589,6 +589,25 @@ describe('AgendaDragAndDrop', () => {
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
 
+    it('does nothing for unknown drag type', () => {
+      renderAgendaDragAndDrop();
+
+      const dropResult: DropResult = {
+        source: { index: 0, droppableId: 'agendaFolder' },
+        destination: { index: 1, droppableId: 'agendaFolder' },
+        draggableId: 'folder1',
+        type: 'UNKNOWN',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      expect(mockSetFolders).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+    });
+
     it('handles error during item sequence update', async () => {
       renderAgendaDragAndDrop(MOCKS_ERROR_ITEM_SEQUENCE);
 
@@ -716,7 +735,96 @@ describe('AgendaDragAndDrop', () => {
     });
   });
 
-  describe('Drag and drop - handleDragEnd (Lines 119-134)', () => {
+  describe('Drag and drop - handleDragEnd', () => {
+    it('covers onItemDragEnd early return when source and destination index are same', async () => {
+      renderAgendaDragAndDrop();
+
+      const dropResult: DropResult = {
+        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        destination: { index: 0, droppableId: 'agenda-items-folder1' },
+        draggableId: 'item1',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+    });
+
+    it('executes mixed item updates and resolves without mutation for matching sequence', async () => {
+      const folders: InterfaceAgendaFolderInfo[] = [
+        {
+          ...mockFolders[0],
+          items: {
+            edges: [
+              { node: { ...mockAgendaItem1, sequence: 1 } }, // resolve
+              { node: { ...mockAgendaItem2, sequence: 5 } }, // mutation
+            ],
+          },
+        },
+      ];
+
+      renderAgendaDragAndDrop(MOCKS_SUCCESS_ITEM_SEQUENCE, folders);
+
+      const dropResult: DropResult = {
+        source: { index: 1, droppableId: 'agenda-items-folder1' },
+        destination: { index: 0, droppableId: 'agenda-items-folder1' },
+        draggableId: 'item2',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'itemSequenceUpdateSuccessMsg',
+        );
+        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+      });
+    });
+
+    it('covers both mutation and Promise.resolve paths in item sequence update', async () => {
+      const folders: InterfaceAgendaFolderInfo[] = [
+        {
+          ...mockFolders[0],
+          items: {
+            edges: [
+              { node: { ...mockAgendaItem1, sequence: 1 } }, // resolves
+              { node: { ...mockAgendaItem2, sequence: 99 } }, // mutates
+            ],
+          },
+        },
+      ];
+
+      renderAgendaDragAndDrop(MOCKS_SUCCESS_ITEM_SEQUENCE, folders);
+
+      const dropResult: DropResult = {
+        source: { index: 1, droppableId: 'agenda-items-folder1' },
+        destination: { index: 0, droppableId: 'agenda-items-folder1' },
+        draggableId: 'item2',
+        type: 'ITEM',
+        reason: 'DROP',
+        mode: 'FLUID',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'itemSequenceUpdateSuccessMsg',
+        );
+        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+      });
+    });
+
     it('returns early when destination is null in handleDragEnd', () => {
       renderAgendaDragAndDrop();
 
@@ -1144,6 +1252,66 @@ describe('AgendaDragAndDrop', () => {
   });
 
   describe('Sequence optimization paths', () => {
+    it('skips item mutation when sequence already matches index', async () => {
+      const folders: InterfaceAgendaFolderInfo[] = [
+        {
+          ...mockFolders[0],
+          items: {
+            edges: [
+              { node: { ...mockAgendaItem1, sequence: 1 } },
+              { node: { ...mockAgendaItem2, sequence: 2 } },
+            ],
+          },
+        },
+      ];
+
+      renderAgendaDragAndDrop([], folders);
+
+      const dropResult: DropResult = {
+        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        destination: { index: 1, droppableId: 'agenda-items-folder1' },
+        draggableId: 'item1',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      });
+    });
+
+    it('skips folder mutation when sequence already matches index', async () => {
+      const folders: InterfaceAgendaFolderInfo[] = [
+        { ...mockFolders[0], sequence: 1 },
+        { ...mockFolders[1], sequence: 2 },
+      ];
+
+      renderAgendaDragAndDrop([], folders);
+
+      const dropResult: DropResult = {
+        source: { index: 0, droppableId: 'agendaFolder' },
+        destination: { index: 1, droppableId: 'agendaFolder' },
+        draggableId: 'folder1',
+        type: 'FOLDER',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      capturedOnDragEnd?.(dropResult);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+      });
+    });
+
     it('skips mutation when folder sequence already matches its new position', async () => {
       const foldersWithPartialMatch: InterfaceAgendaFolderInfo[] = [
         { ...mockFolders[0], sequence: 2 },

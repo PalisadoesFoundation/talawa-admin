@@ -311,6 +311,9 @@ export interface InterfaceAgendaDragAndDropProps {
   refetchAgendaFolder: () => void;
 }
 
+/**
+ * Props for the useAgendaMutations hook.
+ */
 export interface InterfaceUseAgendaMutationsProps {
   refetchAgendaFolder: () => void;
   t: (key: string) => string;
