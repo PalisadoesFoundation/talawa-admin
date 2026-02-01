@@ -328,24 +328,6 @@ export const getWeekOfMonth = (date: Date): number => {
 };
 
 /**
- * Calculate the Nth occurrence of a weekday within its month
- * (e.g. 3rd Monday, 4th Sunday)
- */
-export const getNthWeekdayOfMonth = (date: Date): number => {
-  const targetDay = date.getDay();
-
-  // First day of the month
-  const firstOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-  const firstWeekday = firstOfMonth.getDay();
-
-  // Offset from day 1 to first occurrence of this weekday
-  const offset = (targetDay - firstWeekday + 7) % 7;
-  const firstOccurrenceDate = 1 + offset;
-
-  return Math.floor((date.getDate() - firstOccurrenceDate) / 7) + 1;
-};
-
-/**
  * Converts a number to its ordinal string representation
  * @param num - The number to convert (1-5)
  * @returns The ordinal string (e.g., "first", "second", etc.)
@@ -373,7 +355,7 @@ export const getMonthlyOptions = (startDate: Date) => {
   const eventDate = new Date(startDate);
   const dayOfMonth = eventDate.getDate();
   const dayOfWeek = eventDate.getDay();
-  const weekOfMonth = getNthWeekdayOfMonth(eventDate);
+  const weekOfMonth = getWeekOfMonth(eventDate);
 
   return {
     byDate: `Monthly on day ${dayOfMonth}`, // i18n-ignore-line
