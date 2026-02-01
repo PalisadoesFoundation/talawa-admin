@@ -97,6 +97,7 @@
     "userEditProfilePicture": "Edit profile picture",
     "communityLogo": "Community Logo",
     "organizations": "Organizations",
+    "clickToSelectOrg": "Click to select organization",
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
     "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",

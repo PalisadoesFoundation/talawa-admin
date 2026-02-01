@@ -1005,13 +1005,14 @@ const LoginPage = (): JSX.Element => {
                             >
                               <div
                                 ref={ref}
-                                className={`${className ?? ''} ${styles.selectOrgText}`}
+                                className={`${className ?? ''} ${styles.selectOrgText} d-flex align-items-center position-relative `}
                                 onMouseDown={onMouseDown}
                               >
                                 {startAdornment}
                                 <input
+                                  placeholder={t('clickToSelectOrg')}
                                   {...restInputProps}
-                                  className={`${inputClassName ?? ''} form-control`}
+                                  className={`${inputClassName ?? ''} form-control w-100`}
                                 />
                                 {endAdornment}
                               </div>
