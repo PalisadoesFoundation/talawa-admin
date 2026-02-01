@@ -1005,7 +1005,7 @@ const LoginPage = (): JSX.Element => {
                             >
                               <div
                                 ref={ref}
-                                className={`${className ?? ''} ${styles.selectOrgText} flex align-items-center position-relative `}
+                                className={`${className ?? ''} ${styles.selectOrgText} d-flex align-items-center position-relative `}
                                 onMouseDown={onMouseDown}
                               >
                                 {startAdornment}

@@ -1456,6 +1456,29 @@ describe('Organization Autocomplete Component', () => {
     });
   });
 
+  it('should have full width input as per w-100 class', async () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      const autocomplete = screen.getByTestId('selectOrg');
+      const input = within(autocomplete).getByRole('combobox');
+
+      expect(input).toHaveClass('w-100');
+      expect(input).toHaveClass('form-control');
+    });
+  });
   it('clears selected organization using clear icon', async () => {
     const autocomplete = await setupRegistrationForm();
     const input = within(autocomplete).getByRole('combobox');
@@ -1468,18 +1491,12 @@ describe('Organization Autocomplete Component', () => {
       expect(input).not.toHaveValue('');
     });
 
-    const buttons = within(autocomplete).getAllByRole('button');
-    const clearButton = buttons.find((btn) =>
-      btn.getAttribute('aria-label')?.toLowerCase().includes('clear'),
-    );
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
 
-    if (clearButton) {
-      await user.click(clearButton);
-
-      await waitFor(() => {
-        expect(input).toHaveValue('');
-      });
-    }
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   it('allows reopening list after clearing selection', async () => {
@@ -1492,24 +1509,20 @@ describe('Organization Autocomplete Component', () => {
 
     await wait();
 
-    const buttons = within(autocomplete).getAllByRole('button');
-    const clearButton = buttons.find((btn) =>
-      btn.getAttribute('aria-label')?.toLowerCase().includes('clear'),
-    );
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
 
-    if (clearButton) {
-      await user.click(clearButton);
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
 
-      await waitFor(() => {
-        expect(input).toHaveValue('');
-      });
+    // Click to reopen dropdown
+    await user.click(input);
 
-      await user.click(input);
-
-      await waitFor(() => {
-        expect(input).toHaveAttribute('aria-expanded', 'true');
-      });
-    }
+    await waitFor(() => {
+      // Dropdown should open
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
   });
 
   it('handles empty organizations list', async () => {
@@ -1600,6 +1613,14 @@ describe('Organization Autocomplete Component', () => {
 
   it('handles GraphQL error when fetching organizations', async () => {
     const ERROR_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
         error: new Error('Failed to fetch organizations'),

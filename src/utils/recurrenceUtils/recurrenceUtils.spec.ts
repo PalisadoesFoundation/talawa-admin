@@ -743,9 +743,17 @@ describe('Recurrence Utility Functions', () => {
       const dayOfMonth = thirdMonday.date();
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      expect(options.byWeekday).toBe('Monthly on the fourth Monday');
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + thirdMonday.startOf('month').day()) / 7,
+      );
+      expect(options.byWeekday).toBe(
+        `Monthly on the ${getOrdinalString(expectedWeek)} Monday`,
+      );
       expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({ week: 4, day: WeekDays.MO });
+      expect(options.weekdayValue).toEqual({
+        week: expectedWeek,
+        day: WeekDays.MO,
+      });
     });
 
     it('should return correct options for the first day of the month', () => {
@@ -823,9 +831,17 @@ describe('Recurrence Utility Functions', () => {
       const dayOfMonth = fourthSunday.date();
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      expect(options.byWeekday).toBe('Monthly on the fifth Sunday');
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + fourthSunday.startOf('month').day()) / 7,
+      );
+      expect(options.byWeekday).toBe(
+        `Monthly on the ${getOrdinalString(expectedWeek)} Sunday`,
+      );
       expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({ week: 5, day: WeekDays.SU });
+      expect(options.weekdayValue).toEqual({
+        week: expectedWeek,
+        day: WeekDays.SU,
+      });
     });
 
     it('should return correct options for a Saturday', () => {
