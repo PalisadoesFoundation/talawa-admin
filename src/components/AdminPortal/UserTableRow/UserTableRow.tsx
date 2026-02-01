@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Button, { type ButtonProps } from '@mui/material/Button';
+import Button from 'shared-components/Button/Button';
 import Tooltip from 'shared-components/Tooltip/Tooltip';
 import styles from './UserTableRow.module.css';
 import {
@@ -31,18 +31,16 @@ import {
 } from 'types/AdminPortal/UserTableRow/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
-const mapVariantToColor = (
-  v: InterfaceActionButton['variant'],
-): ButtonProps['color'] => {
+const mapVariantToBootstrap = (v: InterfaceActionButton['variant']): string => {
   switch (v) {
     case 'danger':
-      return 'error';
+      return 'outline-danger';
     case 'success':
-      return 'success';
+      return 'outline-success';
     case 'primary':
-      return 'primary';
+      return 'outline-primary';
     default:
-      return 'inherit';
+      return 'outline-secondary';
   }
 };
 
@@ -93,7 +91,7 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
       return (
         <Stack direction="row" spacing={compact ? 0.5 : 1}>
           {actions.map((action, idx) => {
-            const color = mapVariantToColor(action.variant);
+            const variant = mapVariantToBootstrap(action.variant);
             const label = action.label;
             const aria = action.ariaLabel || label;
             const key = action.testId || `${action.label}-${idx}`;
@@ -102,16 +100,16 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
               <Tooltip key={key} content={label}>
                 <span>
                   <Button
-                    size={compact ? 'small' : 'medium'}
-                    variant="outlined"
-                    color={color}
+                    size={compact ? 'sm' : 'md'}
+                    variant={variant}
                     onClick={() => action.onClick(user)}
                     disabled={action.disabled}
                     aria-label={aria}
                     data-testid={
                       action.testId || `${testIdPrefix}-action-${idx}`
                     }
-                    startIcon={action.icon}
+                    icon={action.icon}
+                    iconPosition="start"
                   >
                     {label}
                   </Button>

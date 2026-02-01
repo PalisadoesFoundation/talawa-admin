@@ -221,6 +221,9 @@ const Tooltip: React.FC<InterfaceTooltipProps> = ({
     .filter(Boolean)
     .join(' ');
 
+  const { top, left } = position;
+  const positionStyle = { top, left };
+
   return (
     <>
       <div
@@ -242,10 +245,7 @@ const Tooltip: React.FC<InterfaceTooltipProps> = ({
           id={tooltipId}
           role="tooltip"
           className={tooltipClasses}
-          style={{
-            top: position.top,
-            left: position.left,
-          }}
+          style={positionStyle}
           aria-hidden={!isVisible}
         >
           {content}
