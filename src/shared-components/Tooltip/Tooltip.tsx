@@ -8,6 +8,19 @@ import styles from './Tooltip.module.css';
 
 const TOOLTIP_OFFSET = 8;
 
+/**
+ * Calculates the position for the tooltip based on the trigger element and placement.
+ *
+ * Computes the top and left coordinates for positioning a tooltip relative to its
+ * trigger element. The tooltip is offset from the trigger by TOOLTIP_OFFSET pixels.
+ * The resulting coordinates are clamped to ensure the tooltip stays within the
+ * viewport bounds with padding to avoid edge overflow.
+ *
+ * @param triggerRect - The bounding rectangle of the trigger element
+ * @param tooltipRect - The bounding rectangle of the tooltip element
+ * @param placement - The desired placement position ('top', 'bottom', 'left', or 'right')
+ * @returns An object containing the computed top and left coordinates in pixels
+ */
 const calculatePosition = (
   triggerRect: DOMRect,
   tooltipRect: DOMRect,
@@ -35,7 +48,7 @@ const calculatePosition = (
       break;
   }
 
-  // ensure tooltip stays within viewport bounds
+  // Ensure tooltip stays within viewport bounds with padding
   const padding = 8;
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
@@ -55,6 +68,38 @@ const calculatePosition = (
   return { top, left };
 };
 
+/**
+ * Tooltip Component
+ *
+ * A lightweight, accessible tooltip component that displays additional information
+ * when users hover over or focus on an element. Uses React Portal for rendering
+ * and CSS-based positioning with fixed positioning.
+ *
+ * Features:
+ * - Keyboard accessible (shows on focus, hides on Escape)
+ * - ARIA attributes for screen reader support
+ * - Configurable show/hide delays
+ * - Viewport boundary detection
+ * - Repositions on window resize and scroll
+ *
+ * Props:
+ * - children: The trigger element that the tooltip wraps
+ * - content: The content to display inside the tooltip
+ * - placement: Position relative to trigger ('top', 'bottom', 'left', 'right')
+ * - delayShow: Milliseconds to wait before showing (default: 200)
+ * - delayHide: Milliseconds to wait before hiding (default: 0)
+ * - disabled: When true, tooltip will not appear
+ * - className: Additional CSS class for the tooltip element
+ *
+ * @returns The rendered Tooltip component with trigger and portal content
+ *
+ * @example
+ * ```tsx
+ * <Tooltip content="This is helpful information" placement="right">
+ *   <button>Hover me</button>
+ * </Tooltip>
+ * ```
+ */
 const Tooltip: React.FC<InterfaceTooltipProps> = ({
   children,
   content,
@@ -123,15 +168,39 @@ const Tooltip: React.FC<InterfaceTooltipProps> = ({
     [isVisible],
   );
 
+  // Update position when tooltip becomes visible and on resize/scroll
   useEffect(() => {
     if (isVisible) {
       // Use requestAnimationFrame to ensure the tooltip is rendered before measuring
       requestAnimationFrame(() => {
         updatePosition();
       });
+
+      // Reposition on window resize
+      const handleResize = (): void => {
+        requestAnimationFrame(() => {
+          updatePosition();
+        });
+      };
+
+      // Reposition on scroll (capture phase to catch all scroll events)
+      const handleScroll = (): void => {
+        requestAnimationFrame(() => {
+          updatePosition();
+        });
+      };
+
+      window.addEventListener('resize', handleResize);
+      window.addEventListener('scroll', handleScroll, true);
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('scroll', handleScroll, true);
+      };
     }
   }, [isVisible, updatePosition]);
 
+  // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
       clearTimeouts();
@@ -156,6 +225,7 @@ const Tooltip: React.FC<InterfaceTooltipProps> = ({
     <>
       <div
         ref={triggerRef}
+        role="presentation"
         className={styles.tooltipWrapper}
         onMouseEnter={showTooltip}
         onMouseLeave={hideTooltip}

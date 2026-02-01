@@ -17,7 +17,7 @@ describe('Tooltip component', () => {
   test('renders children correctly', () => {
     render(
       <Tooltip content="Tooltip text">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -31,7 +31,7 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={200}>
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -55,7 +55,7 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={0} delayHide={0}>
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -84,16 +84,19 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={0}>
-        <button>Focus me</button>
+        <button type="button">Focus me</button>
       </Tooltip>,
     );
 
     const button = screen.getByRole('button', { name: 'Focus me' });
     const tooltip = screen.getByRole('tooltip', { hidden: true });
 
-    // Focus the button
-    await user.click(button);
+    // Focus the button via keyboard tab navigation
+    await user.tab();
     vi.advanceTimersByTime(0);
+
+    // Verify the button received focus
+    expect(button).toHaveFocus();
 
     await waitFor(() => {
       expect(tooltip).toHaveAttribute('aria-hidden', 'false');
@@ -106,9 +109,9 @@ describe('Tooltip component', () => {
     render(
       <div>
         <Tooltip content="Tooltip text" delayShow={0} delayHide={0}>
-          <button>Focus me</button>
+          <button type="button">Focus me</button>
         </Tooltip>
-        <button>Other button</button>
+        <button type="button">Other button</button>
       </div>,
     );
 
@@ -138,7 +141,7 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={0}>
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -166,7 +169,7 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={0} disabled>
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -183,7 +186,7 @@ describe('Tooltip component', () => {
   test('applies correct placement classes', () => {
     const { rerender } = render(
       <Tooltip content="Tooltip text" placement="top">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -192,7 +195,7 @@ describe('Tooltip component', () => {
 
     rerender(
       <Tooltip content="Tooltip text" placement="bottom">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
     tooltip = screen.getByRole('tooltip', { hidden: true });
@@ -200,7 +203,7 @@ describe('Tooltip component', () => {
 
     rerender(
       <Tooltip content="Tooltip text" placement="left">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
     tooltip = screen.getByRole('tooltip', { hidden: true });
@@ -208,7 +211,7 @@ describe('Tooltip component', () => {
 
     rerender(
       <Tooltip content="Tooltip text" placement="right">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
     tooltip = screen.getByRole('tooltip', { hidden: true });
@@ -218,7 +221,7 @@ describe('Tooltip component', () => {
   test('renders just children when content is empty', () => {
     render(
       <Tooltip content="">
-        <button>No tooltip</button>
+        <button type="button">No tooltip</button>
       </Tooltip>,
     );
 
@@ -235,7 +238,7 @@ describe('Tooltip component', () => {
 
     render(
       <Tooltip content="Tooltip text" delayShow={0}>
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
@@ -260,7 +263,7 @@ describe('Tooltip component', () => {
   test('applies custom className', () => {
     render(
       <Tooltip content="Tooltip text" className="custom-tooltip">
-        <button>Hover me</button>
+        <button type="button">Hover me</button>
       </Tooltip>,
     );
 
