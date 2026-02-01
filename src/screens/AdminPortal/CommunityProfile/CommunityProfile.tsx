@@ -111,6 +111,9 @@ const CommunityProfile = (): JSX.Element => {
   // State for logo file (sent directly to mutation as Upload scalar)
   const [logoFile, setLogoFile] = React.useState<File | null>(null);
 
+  // Ref for logo file input to keep DOM and state in sync
+  const logoInputRef = React.useRef<HTMLInputElement>(null);
+
   // Query to fetch community data
   const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
 
@@ -199,6 +202,10 @@ const CommunityProfile = (): JSX.Element => {
         slackURL: '',
       });
       setLogoFile(null);
+      // Clear the file input DOM element
+      if (logoInputRef.current) {
+        logoInputRef.current.value = '';
+      }
 
       await resetPreLoginImagery({
         variables: { resetPreLoginImageryId: preLoginData?.id },
@@ -272,11 +279,10 @@ const CommunityProfile = (): JSX.Element => {
                 accept="image/*"
                 className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
+                ref={logoInputRef}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
-                  if (file) {
-                    setLogoFile(file);
-                  }
+                  setLogoFile(file || null);
                 }}
                 autoComplete="off"
                 required
