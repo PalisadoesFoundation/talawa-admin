@@ -369,10 +369,10 @@ describe('AgendaItemsPreviewModal', () => {
     expect(videos).toHaveLength(2);
   });
 
-  it('renders FaLink icon for each URL', () => {
+  it('renders a link for each URL', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
-    // FaLink icons are rendered for each URL
+    // Links are rendered for each URL
     const urlSection = screen.getByText('urls').parentElement;
     const links = urlSection?.querySelectorAll('a');
     expect(links).toHaveLength(2);

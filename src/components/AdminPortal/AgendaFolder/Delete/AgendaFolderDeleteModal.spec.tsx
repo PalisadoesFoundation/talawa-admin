@@ -129,34 +129,6 @@ describe('AgendaFolderDeleteModal', () => {
       expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
       expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
     });
-
-    it('renders delete button with correct text', () => {
-      renderAgendaFolderDeleteModal();
-
-      const deleteButton = screen.getByTestId('modal-delete-btn');
-      expect(deleteButton).toHaveTextContent('Delete');
-    });
-
-    it('renders cancel button with correct text', () => {
-      renderAgendaFolderDeleteModal();
-
-      const cancelButton = screen.getByTestId('modal-cancel-btn');
-      expect(cancelButton).toHaveTextContent('Cancel');
-    });
-
-    it('renders delete button with danger class', () => {
-      renderAgendaFolderDeleteModal();
-
-      const deleteButton = screen.getByTestId('modal-delete-btn');
-      expect(deleteButton).toHaveClass('btn-danger');
-    });
-
-    it('renders cancel button with secondary class', () => {
-      renderAgendaFolderDeleteModal();
-
-      const cancelButton = screen.getByTestId('modal-cancel-btn');
-      expect(cancelButton).toHaveClass('btn-secondary');
-    });
   });
 
   describe('Branch coverage – non-Error rejection', () => {

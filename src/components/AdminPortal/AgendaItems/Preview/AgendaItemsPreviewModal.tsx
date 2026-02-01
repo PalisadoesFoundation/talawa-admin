@@ -8,14 +8,10 @@ import type { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Ag
 
 /**
  * AgendaItemsPreviewModal
- *
- * Read-only preview modal for agenda item details.
- * Uses `ViewModal` with optional edit and delete actions.
+ * Read-only preview modal for agenda item details rendered in `ViewModal`.
  *
  * @param isOpen - Controls modal visibility
  * @param hidePreviewModal - Callback to close the preview modal
- * @param showUpdateItemModal - Opens the update modal
- * @param toggleDeleteItemModal - Opens the delete confirmation modal
  * @param formState - Agenda item data to display
  * @param t - i18n translation function
  *

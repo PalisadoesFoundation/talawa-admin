@@ -80,7 +80,7 @@ const AgendaFolderCreateModal: React.FC<
       onClose={hide}
       title={t('agendaFolderDetails')}
       onSubmit={handleCreate}
-      submitDisabled={!formState.name.trim()}
+      submitDisabled={!formState.name.trim() || !formState.description.trim()}
       data-testid="createAgendaFolderModal"
     >
       <FormTextField
