@@ -1,3 +1,5 @@
+// Add explicit imports from vitest
+import { describe, it, expect } from 'vitest';
 import { props } from './EventListCardProps';
 
 describe('EventListCardProps', () => {

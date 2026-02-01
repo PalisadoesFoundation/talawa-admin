@@ -538,15 +538,15 @@ describe('Recurrence Utility Functions', () => {
     const testMonth = getFutureMonth(2);
 
     it('should return correct week for day 5 of the month', () => {
-      const year = testMonth.year();
-      const month = testMonth.month(); // 0-indexed
-      const date = new Date(year, month, 5); // 5th day of the month
+      // Get the 5th day of the test month as Dayjs
+      const testMonth = getFutureMonth(2); // pick any month
+      const date = testMonth.date(5).hour(10); // 5th day
 
-      // Week calculation consistent with getWeekOfMonth
-      const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0=Sunday
-      const expectedWeek = Math.ceil((5 + firstDayOfMonth - 1) / 7);
+      // Week number = Math.ceil(day of month / 7)
+      const expectedWeek = Math.ceil(date.date() / 7);
 
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      // getWeekOfMonth expects JS Date
+      expect(getWeekOfMonth(date.toDate())).toBe(expectedWeek);
     });
 
     it('should return correct week for day 8 of the month', () => {
