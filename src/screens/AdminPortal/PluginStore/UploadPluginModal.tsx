@@ -3,10 +3,10 @@
  * Handles ZIP file upload, manifest validation, and plugin installation.
  */
 import React, { useRef, useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { Button } from 'shared-components/Button';
 import styles from './UploadPluginModal.module.css';
 import {
   useApolloClient,
@@ -85,7 +85,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         setManifest(structure.adminManifest || structure.apiManifest || null);
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : 'Failed to parse plugin ZIP',
+          err instanceof Error ? err.message : t('failedToParsePluginZip'),
         );
         setManifest(null);
         setPluginStructure(null);
@@ -110,15 +110,12 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
       if (result.success) {
         const components = result.installedComponents.join(' and ');
-        NotificationToast.success(
-          `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
-        );
+        NotificationToast.success(t('pluginUploadedSuccess', { components }));
         onHide();
       } else {
-        NotificationToast.error(result.error || 'Failed to upload plugin');
+        NotificationToast.error(result.error || t('failedToUploadPlugin'));
       }
-    } catch (error) {
-      console.error('Failed to upload plugin:', error);
+    } catch {
       NotificationToast.error(t('failedToUploadPlugin'));
     } finally {
       setIsInstalling(false);
@@ -136,175 +133,179 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   };
 
   return (
-    <Modal show={show} onHide={handleClose} centered dialogClassName="modal-xl">
-      <div className={styles.container}>
-        {/* Left Panel - Upload */}
-        <div className={`${styles.panel} ${styles.leftPanel}`}>
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>{t('uploadPlugin')}</h3>
-            <p className={styles.sectionDescription}>
-              {t('uploadPluginDescription')}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            className={styles.dropzone}
-            onClick={handleUploadClick}
-          >
-            <FaUpload className={styles.uploadIcon} />
-            <div className={styles.dropzoneTitle}>
-              {selectedFile ? selectedFile.name : tCommon('selectAZipFile')}
-            </div>
-            <div className={styles.dropzoneHint}>
-              {tCommon('clickToBrowseFile')}
-            </div>
-          </button>
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".zip"
-            className={styles.hiddenInput}
-            onChange={handleFileSelect}
-          />
-
-          {error && (
-            <div className={styles.errorBox}>
-              <FaExclamationTriangle className={styles.inlineIcon} />
-              {error}
-            </div>
-          )}
-
-          {manifest && pluginStructure && (
-            <div className={styles.pluginInfoSection}>
-              <h5 className={styles.pluginInfoTitle}>{t('pluginInfo')}</h5>
-              <div className={styles.pluginInfoBody}>
-                <div className={styles.infoRow}>
-                  <strong>{tCommon('name')}:</strong> {manifest.name}
-                </div>
-                <div className={styles.infoRow}>
-                  <strong>{tCommon('version')}:</strong> {manifest.version}
-                </div>
-                <div className={styles.infoRow}>
-                  <strong>{tCommon('author')}:</strong> {manifest.author}
-                </div>
-                <div className={styles.infoRow}>
-                  <strong>{tCommon('description')}:</strong>{' '}
-                  {manifest.description}
-                </div>
-                <div className={styles.infoRow}>
-                  <strong>{t('pluginId')}:</strong> {manifest.pluginId}
-                </div>
-
-                {/* Show detected components */}
-                <div className={styles.componentsSection}>
-                  <strong>{t('componentsToInstall')}</strong>
-                  <div className={styles.componentsList}>
-                    {pluginStructure.hasAdminFolder && (
-                      <div className={styles.componentRow}>
-                        <FaCheck className={styles.checkIcon} />
-                        <span>{t('adminDashboardComponents')}</span>
-                      </div>
-                    )}
-                    {pluginStructure.hasApiFolder && (
-                      <div className={styles.componentRow}>
-                        <FaCheck className={styles.checkIcon} />
-                        <span>{t('apiBackendComponents')}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className={styles.uploadButtonWrapper}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleAddPlugin}
-              disabled={!selectedFile || !manifest || isInstalling}
-              fullWidth
-              data-testid="upload-plugin-button"
-            >
-              {isInstalling ? t('uploading') : t('uploadPlugin')}
-            </Button>
-          </div>
+    <CRUDModalTemplate
+      open={show}
+      onClose={handleClose}
+      title={t('uploadPlugin')}
+      size="xl"
+      showFooter={false}
+      className={styles.container}
+    >
+      {/* Left Panel - Upload */}
+      <div className={`${styles.panel} ${styles.leftPanel}`}>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>{t('uploadPlugin')}</h3>
+          <p className={styles.sectionDescription}>
+            {t('uploadPluginDescription')}
+          </p>
         </div>
 
-        {/* Right Panel - Plugin Structure */}
-        <div className={styles.panel}>
-          <div className={styles.section}>
-            <h3 className={styles.sectionTitle}>{t('pluginStructure')}</h3>
-            <p className={styles.sectionDescription}>
-              {t('pluginStructureDescription')}
-            </p>
+        <button
+          type="button"
+          className={styles.dropzone}
+          onClick={handleUploadClick}
+        >
+          <FaUpload className={styles.uploadIcon} />
+          <div className={styles.dropzoneTitle}>
+            {selectedFile ? selectedFile.name : tCommon('selectAZipFile')}
           </div>
+          <div className={styles.dropzoneHint}>
+            {tCommon('clickToBrowseFile')}
+          </div>
+        </button>
 
-          {pluginFiles.length > 0 ? (
-            <div className={styles.codeSection}>
-              <div className={styles.codeHeading}>{t('detectedFiles')}</div>
-              <div className={styles.codeText}>
-                <pre className={styles.codeBlock}>{pluginFiles.join('\n')}</pre>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".zip"
+          className={styles.hiddenInput}
+          onChange={handleFileSelect}
+        />
+
+        {error && (
+          <div className={styles.errorBox}>
+            <FaExclamationTriangle className={styles.inlineIcon} />
+            {error}
+          </div>
+        )}
+
+        {manifest && pluginStructure && (
+          <div className={styles.pluginInfoSection}>
+            <h5 className={styles.pluginInfoTitle}>{t('pluginInfo')}</h5>
+            <div className={styles.pluginInfoBody}>
+              <div className={styles.infoRow}>
+                <strong>{tCommon('name')}:</strong> {manifest.name}
+              </div>
+              <div className={styles.infoRow}>
+                <strong>{tCommon('version')}:</strong> {manifest.version}
+              </div>
+              <div className={styles.infoRow}>
+                <strong>{tCommon('author')}:</strong> {manifest.author}
+              </div>
+              <div className={styles.infoRow}>
+                <strong>{tCommon('description')}:</strong>{' '}
+                {manifest.description}
+              </div>
+              <div className={styles.infoRow}>
+                <strong>{t('pluginId')}:</strong> {manifest.pluginId}
+              </div>
+
+              {/* Show detected components */}
+              <div className={styles.componentsSection}>
+                <strong>{t('componentsToInstall')}</strong>
+                <div className={styles.componentsList}>
+                  {pluginStructure.hasAdminFolder && (
+                    <div className={styles.componentRow}>
+                      <FaCheck className={styles.checkIcon} />
+                      <span>{t('adminDashboardComponents')}</span>
+                    </div>
+                  )}
+                  {pluginStructure.hasApiFolder && (
+                    <div className={styles.componentRow}>
+                      <FaCheck className={styles.checkIcon} />
+                      <span>{t('apiBackendComponents')}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          ) : (
-            <>
-              <div className={styles.codeSection}>
-                <div className={styles.codeHeading}>
-                  {t('expectedDirectoryStructure')}
-                </div>
-                <div className={styles.codeText}>
-                  <pre className={styles.codeBlock}>
-                    {`plugin.zip
-├── admin/ (optional)
-│   ├── manifest.json    
-│   ├── index.tsx        
-│   └── pages/           
-│       ├── ComponentA.tsx
-│       └── ComponentB.tsx
-└── api/ (optional)
-    ├── manifest.json
-    ├── index.ts
-    └── graphql/
-        └── resolvers.ts`}
-                  </pre>
-                </div>
-              </div>
+          </div>
+        )}
 
-              <div>
-                <div className={styles.codeHeading}>
-                  {t('requiredManifestFields')}
-                </div>
-                <div className={styles.codeText}>
-                  <pre className={styles.codeBlock}>
-                    {`{
-  "name": "Plugin Name",
-  "pluginId": "pluginName",
-  "version": "1.0.0",
-  "description": "Plugin description",
-  "author": "Author Name",
-  "main": "index.tsx",
-  "extensionPoints": {
-    "routes": [
-      {
-        "pluginId": "pluginName",
-        "path": "/plugin-path",
-        "component": "ComponentName",
-        "exact": true
-      }
-    ]
-  }
-}`}
-                  </pre>
-                </div>
-              </div>
-            </>
-          )}
+        <div className={styles.uploadButtonWrapper}>
+          <Button
+            variant="primary"
+            onClick={handleAddPlugin}
+            disabled={!selectedFile || !manifest || isInstalling}
+            fullWidth
+            data-testid="upload-plugin-button"
+          >
+            {isInstalling ? t('uploading') : t('uploadPlugin')}
+          </Button>
         </div>
       </div>
-    </Modal>
+
+      {/* Right Panel - Plugin Structure */}
+      <div className={styles.panel}>
+        <div className={styles.section}>
+          <h3 className={styles.sectionTitle}>{t('pluginStructure')}</h3>
+          <p className={styles.sectionDescription}>
+            {t('pluginStructureDescription')}
+          </p>
+        </div>
+
+        {pluginFiles.length > 0 ? (
+          <div className={styles.codeSection}>
+            <div className={styles.codeHeading}>{t('detectedFiles')}</div>
+            <div className={styles.codeText}>
+              <pre className={styles.codeBlock}>{pluginFiles.join('\n')}</pre>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className={styles.codeSection}>
+              <div className={styles.codeHeading}>
+                {t('expectedDirectoryStructure')}
+              </div>
+              <div className={styles.codeText}>
+                <pre className={styles.codeBlock}>
+                  {`plugin.zip
+                  ├── admin/ (optional)
+                  │   ├── manifest.json    
+                  │   ├── index.tsx        
+                  │   └── pages/           
+                  │       ├── ComponentA.tsx
+                  │       └── ComponentB.tsx
+                  └── api/ (optional)
+                      ├── manifest.json
+                      ├── index.ts
+                      └── graphql/
+                          └── resolvers.ts`}
+                </pre>
+              </div>
+            </div>
+
+            <div>
+              <div className={styles.codeHeading}>
+                {t('requiredManifestFields')}
+              </div>
+              <div className={styles.codeText}>
+                <pre className={styles.codeBlock}>
+                  {`{
+                    "name": "Plugin Name",
+                    "pluginId": "pluginName",
+                    "version": "1.0.0",
+                    "description": "Plugin description",
+                    "author": "Author Name",
+                    "main": "index.tsx",
+                    "extensionPoints": {
+                      "routes": [
+                        {
+                          "pluginId": "pluginName",
+                          "path": "/plugin-path",
+                          "component": "ComponentName",
+                          "exact": true
+                        }
+                      ]
+                    }
+                  }`}
+                </pre>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </CRUDModalTemplate>
   );
 };
 

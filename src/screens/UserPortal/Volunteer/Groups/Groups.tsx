@@ -42,6 +42,7 @@
  * ```
  */
 import React, { useCallback, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
 import { Navigate, useParams } from 'react-router';
@@ -56,14 +57,9 @@ import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapp
 import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
-import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
+import VolunteerGroupViewModal from 'shared-components/VolunteerGroupViewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
-
-enum ModalState {
-  EDIT = 'edit',
-  VIEW = 'view',
-}
 
 function Groups(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -78,9 +74,16 @@ function Groups(): JSX.Element {
     'volunteers_DESC',
   );
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({ [ModalState.EDIT]: false, [ModalState.VIEW]: false });
+  const {
+    isOpen: isEditModalOpen,
+    open: openEditModal,
+    close: closeEditModal,
+  } = useModalState();
+  const {
+    isOpen: isViewModalOpen,
+    open: openViewModal,
+    close: closeViewModal,
+  } = useModalState();
 
   const userId = getItem('userId');
 
@@ -122,12 +125,20 @@ function Groups(): JSX.Element {
     skip: !userId || !orgId,
   });
 
-  const handleModalClick = useCallback(
-    (group: InterfaceVolunteerGroupInfo | null, modal: ModalState): void => {
+  const handleEditClick = useCallback(
+    (group: InterfaceVolunteerGroupInfo | null): void => {
       setGroup(group);
-      setModalState((prevState) => ({ ...prevState, [modal]: true }));
+      openEditModal();
     },
-    [],
+    [openEditModal],
+  );
+
+  const handleViewClick = useCallback(
+    (group: InterfaceVolunteerGroupInfo | null): void => {
+      setGroup(group);
+      openViewModal();
+    },
+    [openViewModal],
   );
 
   const handleSearchChange = useCallback((term: string, _searchBy?: string) => {
@@ -141,12 +152,6 @@ function Groups(): JSX.Element {
   const groups = useMemo(
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
-  );
-
-  const closeModal = useCallback(
-    (modal: ModalState): void =>
-      setModalState((prevState) => ({ ...prevState, [modal]: false })),
-    [],
   );
 
   // Early return after all hooks
@@ -257,7 +262,7 @@ function Groups(): JSX.Element {
               size="sm"
               className={`${styles.groupsViewButton} me-2 rounded`}
               data-testid="viewGroupBtn"
-              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              onClick={() => handleViewClick(params.row)}
               aria-label={t('viewGroup')}
             >
               <i className="fa fa-info" />
@@ -268,7 +273,7 @@ function Groups(): JSX.Element {
                 size="sm"
                 className="me-2 rounded"
                 data-testid="editGroupBtn"
-                onClick={() => handleModalClick(params.row, ModalState.EDIT)}
+                onClick={() => handleEditClick(params.row)}
                 aria-label={t('editGroup')}
               >
                 <i className="fa fa-edit" />
@@ -318,15 +323,15 @@ function Groups(): JSX.Element {
       {group && (
         <>
           <GroupModal
-            isOpen={modalState[ModalState.EDIT]}
-            hide={() => closeModal(ModalState.EDIT)}
+            isOpen={isEditModalOpen}
+            hide={closeEditModal}
             refetchGroups={refetchGroups}
             group={group}
             eventId={group.event.id}
           />
           <VolunteerGroupViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
+            isOpen={isViewModalOpen}
+            hide={closeViewModal}
             group={group}
           />
         </>

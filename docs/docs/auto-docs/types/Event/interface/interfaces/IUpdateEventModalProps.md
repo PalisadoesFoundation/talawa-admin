@@ -26,7 +26,7 @@ Defined in: [src/types/Event/interface.ts:195](https://github.com/PalisadoesFoun
 
 ### t()
 
-> **t**: (`key`) => `string`
+> **t**: (`key`, `options?`) => `string`
 
 Defined in: [src/types/Event/interface.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L197)
 
@@ -35,6 +35,10 @@ Defined in: [src/types/Event/interface.ts:197](https://github.com/PalisadoesFoun
 ##### key
 
 `string`
+
+##### options?
+
+`Record`\<`string`, `unknown`\>
 
 #### Returns
 

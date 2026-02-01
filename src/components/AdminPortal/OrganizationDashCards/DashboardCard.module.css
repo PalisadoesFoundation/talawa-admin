@@ -1,0 +1,60 @@
+.cardBodyMainDiv {
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border: none;
+  height: auto;
+  width: 100%;
+}
+
+.cardBody {
+  padding: 1rem 0rem;
+  display: flex;
+  width: 100% !important;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .cardBody {
+    min-height: 120px;
+  }
+}
+
+.cardBodymain {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+
+.iconCol {
+  padding-inline-end: 0.75rem;
+}
+
+.cardbodyIcon {
+  font-size: 2rem;
+  height: 3rem;
+  color: #555555;
+  background-color: #eaebef;
+  width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.contentCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBodyNumber {
+  color: black;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.cardBodySecondaryText {
+  font-size: 0.75rem;
+  color: gray;
+}
