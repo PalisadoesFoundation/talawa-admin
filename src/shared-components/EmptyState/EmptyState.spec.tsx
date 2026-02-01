@@ -88,7 +88,7 @@ describe('EmptyState Component', () => {
   it('renders correctly with all props', async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn();
-    const { getByText, getByTestId } = renderEmptyState({
+    renderEmptyState({
       ...emptyStateWithAllPropsMock,
       action: {
         label: 'resetFilters',
@@ -101,11 +101,13 @@ describe('EmptyState Component', () => {
     expect(button).toHaveClass('btn-text');
     await user.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
-    expect(getByText('noResults')).toBeInTheDocument();
-    expect(getByText('tryAdjustingFilters')).toBeInTheDocument();
-    expect(getByTestId('custom-empty-state-icon')).toBeInTheDocument();
-    expect(getByTestId('custom-empty-state-action')).toBeInTheDocument();
-    expect(getByTestId('custom-empty-state')).toHaveClass('custom-class');
+    expect(screen.getByText('noResults')).toBeInTheDocument();
+    expect(screen.getByText('tryAdjustingFilters')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-empty-state-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-empty-state-action')).toBeInTheDocument();
+    expect(screen.getByTestId('custom-empty-state')).toHaveClass(
+      'custom-class',
+    );
   });
   it('renders action button with secondary variant', () => {
     renderEmptyState({
