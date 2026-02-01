@@ -28,7 +28,7 @@
  * @example
  * ```tsx
  * <EventCard
- *   _id="event123"
+ *   id="event123"
  *   name="Community Meetup"
  *   description="A meetup for community members."
  *   location="Community Hall"
@@ -36,8 +36,9 @@
  *   endAt={dayjs.utc().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')}
  *   startTime="10:00:00"
  *   endTime="12:00:00"
- *   creator={{ firstName: "John", lastName: "Doe" }}
+ *   creator={{ name: "John Doe" }}
  *   attendees={[{ _id: "user456" }]}
+ *   isInviteOnly={false}
  * />
  * ```
  *
