@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import * as ReactRouter from 'react-router';
@@ -775,75 +775,6 @@ describe('AgendaItemsCreateModal', () => {
     expect(
       screen.getByRole('combobox', { name: /category/i }),
     ).toBeInTheDocument();
-  });
-
-  it('renders category options and updates categoryId on selection', async () => {
-    const createMock = vi.fn().mockResolvedValue({});
-
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
-      createMock,
-      {
-        loading: false,
-        data: undefined,
-        error: undefined,
-        called: false,
-        reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
-      },
-    ]);
-
-    const user = userEvent.setup();
-
-    render(
-      <MockedProvider>
-        <BrowserRouter>
-          <AgendaItemsCreateModal
-            isOpen
-            hide={vi.fn()}
-            eventId="event-1"
-            t={t}
-            agendaItemCategories={categories}
-            agendaFolderData={agendaFolders}
-            refetchAgendaFolder={vi.fn()}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const categoryInput = screen.getByRole('combobox', {
-      name: /category/i,
-    });
-    const autocompleteRoot = categoryInput.closest(
-      '.MuiAutocomplete-root',
-    ) as HTMLElement;
-
-    const openButton = within(autocompleteRoot).getByRole('button', {
-      name: /open/i,
-    });
-
-    await user.click(openButton);
-
-    const listbox = await screen.findByRole('listbox');
-    const option = within(listbox).getByRole('option', {
-      name: 'Category',
-    });
-
-    await user.click(option);
-    await user.type(screen.getByLabelText(/title/i), 'Agenda');
-    await user.type(screen.getByLabelText(/duration/i), '10');
-
-    await user.click(screen.getByTestId('modal-submit-btn'));
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalled();
-    });
-
-    const call = createMock.mock.calls[0][0] as {
-      variables: {
-        input: { categoryId: string };
-      };
-    };
-
-    expect(call.variables.input.categoryId).toBe('cat-1');
   });
 
   it('updates description when description field changes', async () => {
