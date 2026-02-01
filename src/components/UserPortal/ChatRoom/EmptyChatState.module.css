@@ -2,18 +2,6 @@
   color: var(--color-gray-600);
 }
 
-.iconWrapper {
-  padding: var(--space-8);
-  background-color: var(--color-gray-50);
-  border-radius: var(--radius-full);
-  margin-bottom: var(--space-5);
-}
-
-.icon {
-  font-size: var(--font-size-4xl) !important;
-  color: var(--color-gray-300);
-}
-
 .message {
   font-weight: var(--font-weight-medium);
   color: var(--color-gray-600);

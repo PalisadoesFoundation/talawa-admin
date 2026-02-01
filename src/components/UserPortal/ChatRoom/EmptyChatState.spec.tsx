@@ -20,23 +20,7 @@ describe('EmptyChatState Component', () => {
       expect(container).toHaveClass('align-items-center');
       expect(container).toHaveClass('w-100');
       expect(container).toHaveClass('h-100');
-      expect(container).toHaveClass('gap-2');
       expect(container).toHaveClass(styles.container);
-    });
-  });
-
-  describe('Icon Wrapper', () => {
-    it('renders icon wrapper containing ChatBubbleOutlineIcon', () => {
-      render(<EmptyChatState message="Test message" />);
-
-      const container = screen.getByTestId('noChatSelected').parentElement;
-      const iconWrapper = container?.querySelector(`.${styles.iconWrapper}`);
-      expect(iconWrapper).toBeInTheDocument();
-
-      // ChatBubbleOutlineIcon renders as an SVG with data-testid="ChatBubbleOutlineIcon"
-      const icon = iconWrapper?.querySelector('svg');
-      expect(icon).toBeInTheDocument();
-      expect(icon).toHaveClass(styles.icon);
     });
   });
 
