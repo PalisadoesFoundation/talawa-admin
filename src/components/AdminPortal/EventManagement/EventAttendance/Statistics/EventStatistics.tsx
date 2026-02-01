@@ -38,13 +38,9 @@
  */
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import {
-  ButtonGroup,
-  Tooltip,
-  OverlayTrigger,
-  Dropdown,
-} from 'react-bootstrap';
+import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import Button from 'shared-components/Button';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 import {
@@ -482,12 +478,7 @@ export const AttendanceStatisticsModal: React.FC<
                 role="navigation"
                 aria-label={t('chartPageNavigation')}
               >
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="tooltip-prev">{t('previousPage')}</Tooltip>
-                  }
-                >
+                <Tooltip content={t('previousPage')} placement="bottom">
                   <Button
                     className="p-0"
                     onClick={handlePreviousPage}
@@ -501,7 +492,7 @@ export const AttendanceStatisticsModal: React.FC<
                       height={20}
                     />
                   </Button>
-                </OverlayTrigger>
+                </Tooltip>
                 <Button
                   data-testid="today-button"
                   className="p-1 ms-2"
@@ -510,10 +501,7 @@ export const AttendanceStatisticsModal: React.FC<
                 >
                   {t('today')}
                 </Button>
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={<Tooltip id="tooltip-next">{t('nextPage')}</Tooltip>}
-                >
+                <Tooltip content={t('nextPage')} placement="bottom">
                   <Button
                     className="p-0 ms-2"
                     onClick={handleNextPage}
@@ -527,7 +515,7 @@ export const AttendanceStatisticsModal: React.FC<
                       height={20}
                     />
                   </Button>
-                </OverlayTrigger>
+                </Tooltip>
               </div>
             </div>
           ) : (

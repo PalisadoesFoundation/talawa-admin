@@ -28,11 +28,11 @@
  *
  *
  * TODO:
- * - Improve accessibility for tooltips and dropdowns.
+ * - Improve accessibility for dropdowns.
  * - Optimize performance for large attendee lists.
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Tooltip } from '@mui/material';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import Button from 'shared-components/Button';
 import styles from './EventAttendance.module.css';
 import { useLazyQuery } from '@apollo/client';
@@ -192,31 +192,21 @@ function EventAttendance(): JSX.Element {
         align: 'left',
         renderCell: (params) => (
           <Tooltip
-            componentsProps={{
-              tooltip: {
-                sx: {
-                  backgroundColor: 'var(--bs-white)',
-                  fontSize: '2em',
-                  maxHeight: '170px',
-                  overflowY: 'scroll',
-                  scrollbarColor: 'white',
-                  border: 'var(--primary-border-solid)',
-                  borderRadius: '6px',
-                  boxShadow:
-                    'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) rgba(var(--color-black), 0.1)',
-                },
-              },
-            }}
-            title={
-              params.row.eventsAttended?.map(
-                (event: { id: string }, index: number) => (
-                  <AttendedEventList
-                    key={event.id}
-                    id={event.id}
-                    data-testid={`attendee-events-attended-${index}`}
-                  />
-                ),
-              ) || []
+            className={styles.eventsTooltip}
+            content={
+              params.row.eventsAttended?.length ? (
+                <div className={styles.eventsTooltipContent}>
+                  {params.row.eventsAttended.map(
+                    (event: { id: string }, index: number) => (
+                      <AttendedEventList
+                        key={event.id}
+                        id={event.id}
+                        data-testid={`attendee-events-attended-${index}`}
+                      />
+                    ),
+                  )}
+                </div>
+              ) : null
             }
           >
             <span className={styles.eventsAttended}>

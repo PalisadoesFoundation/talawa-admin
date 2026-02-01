@@ -41,7 +41,7 @@ import React from 'react';
 import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationCard.module.css';
-import { Tooltip } from '@mui/material';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
@@ -191,7 +191,7 @@ function OrganizationCard({
           <div className={styles.content}>
             <div>
               {/* Tooltip for the organization name */}
-              <Tooltip title={name} placement="top-end">
+              <Tooltip content={name} placement="top">
                 <h4 className={[styles.orgName, 'fw-semibold'].join(' ')}>
                   {name}
                 </h4>

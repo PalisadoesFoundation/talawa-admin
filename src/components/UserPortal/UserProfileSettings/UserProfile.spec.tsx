@@ -77,10 +77,13 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/image.jpg',
     };
 
-    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    const { getByText, getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
 
     expect(getByText('Bob')).toBeInTheDocument();
-    expect(getByText('bob@ex.com')).toBeInTheDocument();
+    const emailElement = getByTestId('userEmail');
+    expect(emailElement).toHaveTextContent('bob@ex.com');
   });
   it('renders formatted join date when createdAt is valid', () => {
     const userDetails = {

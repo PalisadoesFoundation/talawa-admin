@@ -23,7 +23,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button, { type ButtonProps } from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import styles from './UserTableRow.module.css';
 import {
   InterfaceUserTableRowProps,
@@ -99,7 +99,7 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
             const key = action.testId || `${action.label}-${idx}`;
 
             return (
-              <Tooltip key={key} title={label}>
+              <Tooltip key={key} content={label}>
                 <span>
                   <Button
                     size={compact ? 'small' : 'medium'}

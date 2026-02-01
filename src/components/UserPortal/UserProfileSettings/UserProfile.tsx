@@ -36,7 +36,7 @@ import Button from 'shared-components/Button/Button';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfile.module.css';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
+import Tooltip from 'shared-components/Tooltip/Tooltip';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 
 const joinedDate = (
@@ -85,26 +85,22 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               )}
             </div>
             <div className={styles.profileDetails}>
-              <span
-                className={styles.userProfileName}
-                data-tooltip-id="name"
-                data-tooltip-content={`${firstName} ${lastName}`}
-              >
-                {firstName && firstName.length > 10
-                  ? firstName?.slice(0, 5) + '..'
-                  : firstName}
-              </span>
-              <ReactTooltip id="name" />
-              <span
-                data-testid="userEmail"
-                data-tooltip-id="email"
-                data-tooltip-content={email}
-              >
-                {email && email.length > 10
-                  ? email?.slice(0, 4) + '..' + email?.slice(email.indexOf('@'))
-                  : email}
-              </span>
-              <ReactTooltip id="email" />
+              <Tooltip content={`${firstName} ${lastName}`}>
+                <span className={styles.userProfileName}>
+                  {firstName && firstName.length > 10
+                    ? firstName?.slice(0, 5) + '..'
+                    : firstName}
+                </span>
+              </Tooltip>
+              <Tooltip content={email}>
+                <span data-testid="userEmail">
+                  {email && email.length > 10
+                    ? email?.slice(0, 4) +
+                      '..' +
+                      email?.slice(email.indexOf('@'))
+                    : email}
+                </span>
+              </Tooltip>
               <span className="d-flex">
                 <CalendarMonthOutlinedIcon />
                 <span className="d-flex align-end">
