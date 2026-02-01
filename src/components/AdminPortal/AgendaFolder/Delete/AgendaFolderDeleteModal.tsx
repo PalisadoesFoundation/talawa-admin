@@ -52,7 +52,6 @@ const AgendaFolderDeleteModal: React.FC<
       title={t('deleteAgendaFolder')}
       onClose={onClose}
       onDelete={deleteAgendaFolderHandler}
-      entityName={t('agendaFolder')}
       data-testid="deleteAgendaFolderModal"
     >
       <p>{t('deleteAgendaFolderMsg')}</p>
