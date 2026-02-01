@@ -37,7 +37,7 @@
  *   startTime="10:00:00"
  *   endTime="12:00:00"
  *   creator={{ name: "John Doe" }}
- *   attendees={[{ _id: "user456" }]}
+ *   attendees={[{ id: "user456" }]}
  *   isInviteOnly={false}
  * />
  * ```
@@ -93,7 +93,7 @@ function EventCard({
   const userId = getItem(IDENTIFIER_USER_ID);
 
   // Create a full name for the event creator
-  const creatorName = creator.name;
+  const creatorName = creator.name ?? t('unknownCreator');
 
   // Check if the user is initially registered for the event
   const isInitiallyRegistered = attendees.some(
