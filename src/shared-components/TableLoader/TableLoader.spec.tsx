@@ -37,7 +37,7 @@ describe('Testing Loader component', () => {
   });
   test('Component should be rendered properly only headerTitles is provided', () => {
     const props: InterfaceTableLoaderProps = {
-      noOfRows: 10,
+      noOfRows: 1,
       headerTitles: ['header1', 'header2', 'header3'],
     };
     render(
