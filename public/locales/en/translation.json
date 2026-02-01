@@ -1863,6 +1863,7 @@
     "chatNameUpdatedSuccessfully": "Chat name updated successfully",
     "failedToUpdateChatName": "Failed to update chat name",
     "deleteChat": "Delete Chat",
+    "confirmDeleteChat": "Are you sure you want to delete this chat?",
     "remove": "Remove",
     "searchFullName": "Search by Full Name",
     "customizedTable": "Customized Table",

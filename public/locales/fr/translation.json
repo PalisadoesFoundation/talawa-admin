@@ -1855,6 +1855,7 @@
     "groups": "Groupes",
     "title": "Discussions",
     "deleteChat": "Supprimer le Chat",
+    "confirmDeleteChat": "Êtes-vous sûr de vouloir supprimer ce chat ?",
     "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",

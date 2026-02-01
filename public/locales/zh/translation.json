@@ -1880,6 +1880,7 @@
     "chatNameUpdatedSuccessfully": "聊天名称更新成功",
     "failedToUpdateChatName": "更新聊天名称失败",
     "deleteChat": "删除聊天",
+    "confirmDeleteChat": "您确定要删除此聊天吗？",
     "remove": "删除",
     "searchFullName": "按全名搜索",
     "customizedTable": "自定义表格",

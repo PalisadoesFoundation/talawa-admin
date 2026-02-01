@@ -1838,6 +1838,7 @@
     "groups": "Grupos",
     "title": "Chats",
     "deleteChat": "Eliminar Chat",
+    "confirmDeleteChat": "¿Estás seguro de que deseas eliminar este chat?",
     "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",

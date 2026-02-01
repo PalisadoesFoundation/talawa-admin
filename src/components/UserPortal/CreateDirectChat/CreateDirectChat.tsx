@@ -144,7 +144,7 @@ export const handleCreateDirectChat = async (
   }
 };
 
-export default function createDirectChatModal({
+export default function CreateDirectChat({
   toggleCreateDirectChatModal,
   createDirectChatModalisOpen,
   chatsListRefetch,
@@ -180,7 +180,7 @@ export default function createDirectChatModal({
     (edge: { node: InterfaceOrganizationMember }) => edge.node.id === userId,
   )?.node;
 
-  const currentUserName = currentUser?.name || 'You';
+  const currentUserName = currentUser?.name ?? tCommon('unknownUser');
 
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
