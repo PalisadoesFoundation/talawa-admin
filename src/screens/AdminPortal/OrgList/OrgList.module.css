@@ -1,5 +1,5 @@
 .orgListContainer {
-  padding-left: var(--space-9);
+  padding-left: var(--space-8);
   padding-right: var(--space-8);
 }
 
@@ -50,7 +50,7 @@
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
       var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(var(--shadow-spread-none), 0.15);
+      var(--shadow-spread-none);
   border: var(--border-1) solid var(--color-gray-700) !important;
   color: var(--color-gray-700) !important;
 }
@@ -63,8 +63,8 @@
 .createorgdropdown {
   background-color: var(--color-gray-100) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
-  height: var(--space-10);
   color: var(--color-gray-700);
+  padding: var(--space-4) var(--space-4);
 }
 
 .createorgdropdown:active,
@@ -78,7 +78,6 @@
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
       var(--color-gray-300);
 }
-
 .listBoxOrgList {
   display: flex;
   flex-wrap: wrap;

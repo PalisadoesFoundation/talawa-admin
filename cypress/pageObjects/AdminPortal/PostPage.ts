@@ -10,7 +10,7 @@ export class PostsPage {
   private readonly _editOption = '[data-testid="edit-post-menu-item"]';
   private readonly _createPostSubmit = '[data-testid="createPostBtn"]';
   private readonly _deleteOption = '[data-testid="delete-post-button"]';
-  private readonly _sortButton = '[data-testid="sortpost-toggle-toggle"]';
+  private readonly _sortButton = '[data-testid="sortpost-toggle"]';
 
   visitPostsPage() {
     cy.get(this._postsTabButton).should('be.visible').click();
@@ -33,9 +33,7 @@ export class PostsPage {
 
   sortPostsByNewest() {
     cy.get(this._sortButton).should('be.visible').click();
-    cy.get('[data-testid="sortpost-toggle-item-latest"]')
-      .should('be.visible')
-      .click();
+    cy.get('[data-testid="sortpost-item-latest"]').should('be.visible').click();
     return this;
   }
 

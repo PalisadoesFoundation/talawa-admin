@@ -36,7 +36,6 @@ import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import type { ChangeEvent } from 'react';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
@@ -44,6 +43,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
 import RBButton from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -146,7 +146,7 @@ function OrgList(): JSX.Element {
   });
 
   const [searchByName, setSearchByName] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const { isOpen, close } = useModalState();
 
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
@@ -160,7 +160,6 @@ function OrgList(): JSX.Element {
     state: '',
   });
 
-  const toggleModal = (): void => setShowModal(!showModal);
   const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -316,7 +315,7 @@ function OrgList(): JSX.Element {
           postalCode: '',
           state: '',
         });
-        toggleModal();
+        close();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -422,11 +421,10 @@ function OrgList(): JSX.Element {
           ]}
           additionalButtons={
             <>
-              <NotificationIcon />
               {role === 'administrator' && (
                 <RBButton
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                  onClick={toggleModal}
+                  onClick={close}
                   data-testid="createOrganizationBtn"
                 >
                   <i className="fa fa-plus me-2" />
@@ -530,8 +528,8 @@ function OrgList(): JSX.Element {
        */}
 
       <OrganizationModal
-        showModal={showModal}
-        toggleModal={toggleModal}
+        showModal={isOpen}
+        toggleModal={close}
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}
