@@ -29,4 +29,10 @@
   --color-yellow-100: #fff3cd;
   --color-yellow-500: #febc59;
   --color-yellow-600: #856404;
+
+  --shadow-color-xs: rgba(0, 0, 0, 0.075);
+  --shadow-color-sm: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.15);
+  --shadow-color-md: rgba(0, 0, 0, 0.25);
+  --shadow-color-lg: rgba(0, 0, 0, 0.3);
 }

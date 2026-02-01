@@ -42,7 +42,7 @@
   border: var(--border-1) solid var(--color-blue-500);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-offset-sm) var(--shadow-blur-md)
-    var(--shadow-spread-xs) rgba(0, 0, 0, 0.1);
+    var(--shadow-spread-xs) var(--shadow-color-sm);
   max-width: var(--space-20);
 }
 
