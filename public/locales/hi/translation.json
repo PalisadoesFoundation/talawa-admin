@@ -8,6 +8,12 @@
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "customRecurrence": "कस्टम पुनरावृत्ति",
+  "frequency": "आवृत्ति",
+  "repeatsEvery": "हर बार दोहराता है",
+  "day": "दिन",
+  "week": "सप्ताह",
+  "month": "महीना",
+  "year": "वर्ष",
   "role": {
     "member": "सदस्य"
   },
@@ -86,6 +92,7 @@
     "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
     "organizations": "संगठन",
+    "clickToSelectOrg": "संगठन का चयन करने के लिए क्लिक करें",
     "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
     "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",

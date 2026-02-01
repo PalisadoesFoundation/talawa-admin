@@ -8,6 +8,12 @@
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "customRecurrence": "Recurrencia personalizada",
+  "frequency": "Frecuencia",
+  "repeatsEvery": "Se repite cada",
+  "day": "Día",
+  "week": "Semana",
+  "month": "Mes",
+  "year": "Año",
   "role": {
     "member": "Miembro"
   },
@@ -85,6 +91,7 @@
     "userEditProfilePicture": "Editar foto de perfil",
     "communityLogo": "Logo de la Comunidad",
     "organizations": "Organizaciones",
+    "clickToSelectOrg": "Haga clic para seleccionar la organización",
     "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
     "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
     "backToLogin": "Volver al inicio de sesión",
