@@ -406,14 +406,14 @@ describe('ESLint Syntax Restrictions', () => {
 
     it('should error on i18n.t() with invalid characters', async () => {
       const code = `i18n.t('invalid@Key');`;
-       const messages = await lintCode(code);
+      const messages = await lintCode(code);
       const error = messages.find(
         (msg) =>
           msg.ruleId === 'no-restricted-syntax' &&
           msg.message.includes('alphanumeric'),
       );
       expect(error).toBeDefined();
-    });    
+    });
 
     it('should error on i18n.t() with PascalCase', async () => {
       const code = `i18n.t('PascalCase');`;
