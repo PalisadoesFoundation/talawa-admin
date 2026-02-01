@@ -322,9 +322,19 @@ export const formatRecurrenceForApi = (
  * @returns The week number (1-5) within the month
  */
 export const getWeekOfMonth = (date: Date): number => {
-  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  const weekNumber = Math.ceil((date.getDate() + firstDay.getDay()) / 7);
-  return weekNumber;
+  const targetDay = date.getDate();
+  const targetWeekday = date.getDay();
+  let week = 0;
+
+  // Loop through all days from 1 to targetDay
+  for (let day = 1; day <= targetDay; day++) {
+    const current = new Date(date.getFullYear(), date.getMonth(), day);
+    if (current.getDay() === targetWeekday) {
+      week++;
+    }
+  }
+
+  return week;
 };
 
 /**
