@@ -1,0 +1,63 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin: 1px;
+}
+
+.descriptionTextField {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+  resize: none;
+  height: 100px;
+}
+
+.textFields {
+  background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  margin-bottom: 1rem;
+  width: auto;
+}
+
+.customFileInput {
+  background-color: var(--inputColor-bg);
+}
+
+.resetChangesBtn {
+  border-width: 2px;
+  border-color: var(--resetbtn-border);
+  color: var(--resetbtn-color);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+}
+
+.syncIconStyle {
+  transform: rotate(135deg) scale(1.2);
+  width: 10px;
+  height: 10px;
+  stroke: var(--card-background-color);
+  stroke-width: 1;
+  fill: var(--card-background-color);
+}
+
+.saveChangesBtn {
+  color: var(--btn-primary-text-color, white);
+  border: 0;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
+  background-color: var(--card-background-color);
+}
