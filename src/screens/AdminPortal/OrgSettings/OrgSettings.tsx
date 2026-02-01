@@ -32,7 +32,7 @@ import { Navigate, useParams } from 'react-router';
 import GeneralSettings from 'components/AdminPortal/OrgSettings/General/GeneralSettings';
 import Button from 'shared-components/Button';
 
-type SettingType = 'general' | 'actionItemCategories' | 'agendaItemCategories';
+type SettingType = 'general' | 'actionItemCategories';
 
 const settingtabs: SettingType[] = ['general', 'actionItemCategories'];
 

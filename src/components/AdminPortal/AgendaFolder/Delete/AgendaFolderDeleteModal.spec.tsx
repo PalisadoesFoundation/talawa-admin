@@ -569,7 +569,8 @@ describe('AgendaFolderDeleteModal', () => {
         </MockedProvider>,
       );
 
-      expect(mockTSpy).toHaveBeenCalledWith('agendaFolder');
+      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolder');
+      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolderMsg');
     });
   });
 });

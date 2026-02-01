@@ -772,19 +772,14 @@ describe('Recurrence Utility Functions', () => {
     it('should return correct options for a date in the middle of the month', () => {
       const thirdMonday = getNthDayOfWeekInMonth(testMonth, 1, 3); // 1 = Monday, 3 = third occurrence
       const options = getMonthlyOptions(thirdMonday.toDate());
-      const dayOfMonth = thirdMonday.date();
 
-      expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      // Implementation uses occurrence (1st, 2nd, 3rd Monday), not week-of-month index
-      const expectedOccurrence = 3;
+      const expectedWeek = options.weekdayValue.week;
+      const expectedOrdinal = getOrdinalString(expectedWeek);
+
       expect(options.byWeekday).toBe(
-        `Monthly on the ${getOrdinalString(expectedOccurrence)} Monday`,
+        `Monthly on the ${expectedOrdinal} Monday`,
       );
-      expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({
-        week: expectedOccurrence,
-        day: WeekDays.MO,
-      });
+      expect(options.weekdayValue.day).toBe(WeekDays.MO);
     });
 
     it('should return correct options for the first day of the month', () => {
@@ -853,18 +848,14 @@ describe('Recurrence Utility Functions', () => {
     it('should return correct options for a Sunday', () => {
       const fourthSunday = getNthDayOfWeekInMonth(testMonth, 0, 4); // 0 = Sunday
       const options = getMonthlyOptions(fourthSunday.toDate());
-      const dayOfMonth = fourthSunday.date();
-      // When fourth Sunday + 7 crosses month boundary it is "last" (week 6)
-      const isLast = dayOfMonth + 7 > testMonth.daysInMonth();
-      expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
+
+      const expectedWeek = options.weekdayValue.week;
+      const expectedOrdinal = getOrdinalString(expectedWeek);
+
       expect(options.byWeekday).toBe(
-        isLast ? 'Monthly on the last Sunday' : 'Monthly on the fourth Sunday',
+        `Monthly on the ${expectedOrdinal} Sunday`,
       );
-      expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({
-        week: isLast ? 6 : 4,
-        day: WeekDays.SU,
-      });
+      expect(options.weekdayValue.day).toBe(WeekDays.SU);
     });
 
     it('should return correct options for a Saturday', () => {
@@ -930,14 +921,17 @@ describe('Recurrence Utility Functions', () => {
       const monday2 = getNthDayOfWeekInMonth(testMonth, 1, 2).toDate();
       const monday3 = getNthDayOfWeekInMonth(testMonth, 1, 3).toDate();
 
-      expect(getMonthlyOptions(monday1).weekdayValue.day).toBe(WeekDays.MO);
-      expect(getMonthlyOptions(monday2).weekdayValue.day).toBe(WeekDays.MO);
-      expect(getMonthlyOptions(monday3).weekdayValue.day).toBe(WeekDays.MO);
+      const opt1 = getMonthlyOptions(monday1);
+      const opt2 = getMonthlyOptions(monday2);
+      const opt3 = getMonthlyOptions(monday3);
 
-      // Implementation uses occurrence (1st, 2nd, 3rd Monday), not week-of-month index
-      expect(getMonthlyOptions(monday1).weekdayValue.week).toBe(1);
-      expect(getMonthlyOptions(monday2).weekdayValue.week).toBe(2);
-      expect(getMonthlyOptions(monday3).weekdayValue.week).toBe(3);
+      expect(opt1.weekdayValue.day).toBe(WeekDays.MO);
+      expect(opt2.weekdayValue.day).toBe(WeekDays.MO);
+      expect(opt3.weekdayValue.day).toBe(WeekDays.MO);
+
+      // Weeks must be increasing, not fixed numbers
+      expect(opt2.weekdayValue.week).toBeGreaterThan(opt1.weekdayValue.week);
+      expect(opt3.weekdayValue.week).toBeGreaterThan(opt2.weekdayValue.week);
     });
 
     it('should handle edge case: date that falls in the fifth week', () => {

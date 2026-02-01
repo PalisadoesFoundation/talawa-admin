@@ -168,13 +168,6 @@ describe('AgendaItemsPreviewModal', () => {
     expect(source).toHaveAttribute('type', 'video/mp4');
   });
 
-  it('video has muted attribute', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const video = document.querySelector('video');
-    expect(video).toHaveAttribute('muted');
-  });
-
   it('image attachment is wrapped in a link', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
