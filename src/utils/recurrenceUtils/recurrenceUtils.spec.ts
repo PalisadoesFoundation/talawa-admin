@@ -18,6 +18,9 @@ import {
 } from './recurrenceTypes';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // WeekDays mapping for assertions
 const dayIndexToWeekDay = [
@@ -30,39 +33,18 @@ const dayIndexToWeekDay = [
   WeekDays.SA,
 ];
 
-// Helper functions to find specific dates dynamically
-// Get the nth occurrence of a specific day of week in a given month
-const getNthDayOfWeekInMonth = (
-  yearMonth: dayjs.Dayjs,
-  dayOfWeek: number,
-  nthOccurrence: number,
-): dayjs.Dayjs => {
-  let count = 0;
-  for (let day = 1; day <= yearMonth.daysInMonth(); day++) {
-    const date = yearMonth.date(day);
-    if (date.day() === dayOfWeek) {
-      count++;
-      if (count === nthOccurrence) {
-        return date.hour(10);
-      }
-    }
-  }
-  // Fallback - return last occurrence if nth doesn't exist
-  return yearMonth.date(1).hour(10);
-};
-
+// Helper functions to find specific dates dynamically (UTC only)
 // Find a leap year Feb 29 (current or next)
 const isLeapYear = (year: number): boolean =>
   (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 
 const findLeapYearFeb29 = (): dayjs.Dayjs => {
-  let year = dayjs().year();
-  // Check if current year is leap year and we haven't passed Feb
-  if (dayjs().month() < 2 && isLeapYear(year)) {
+  let year = dayjs.utc().year();
+  if (dayjs.utc().month() < 2 && isLeapYear(year)) {
     return dayjs(`${year}-02-29T10:00:00.000Z`);
   }
 
-  if (dayjs().month() >= 2) {
+  if (dayjs.utc().month() >= 2) {
     year++;
   }
   while (!isLeapYear(year)) {
@@ -71,9 +53,27 @@ const findLeapYearFeb29 = (): dayjs.Dayjs => {
   return dayjs(`${year}-02-29T10:00:00.000Z`);
 };
 
-// Get a future month for testing
+// Get a future month for testing (UTC only)
 const getFutureMonth = (monthsAhead = 2): dayjs.Dayjs => {
-  return dayjs().add(monthsAhead, 'month').startOf('month');
+  return dayjs.utc().add(monthsAhead, 'month').startOf('month');
+};
+
+// Get the nth occurrence of a weekday in a month (UTC)
+const getNthDayOfWeekInMonth = (
+  yearMonth: dayjs.Dayjs,
+  dayOfWeek: number,
+  nthOccurrence: number,
+): dayjs.Dayjs => {
+  const base = yearMonth.utc();
+  let count = 0;
+  for (let day = 1; day <= base.daysInMonth(); day++) {
+    const date = base.date(day).hour(10);
+    if (date.day() === dayOfWeek) {
+      count++;
+      if (count === nthOccurrence) return date;
+    }
+  }
+  return base.date(1).hour(10);
 };
 
 // Get day name from dayjs day() value
@@ -95,8 +95,9 @@ describe('Recurrence Utility Functions', () => {
     vi.clearAllMocks();
   });
 
-  // Use a dynamic date for general tests
-  const startDate = dayjs()
+  // Use a dynamic date for general tests (UTC only)
+  const startDate = dayjs
+    .utc()
     .add(30, 'days')
     .hour(10)
     .minute(0)
@@ -143,7 +144,10 @@ describe('Recurrence Utility Functions', () => {
 
     it('should return invalid if endDate is before startDate', () => {
       // Create an endDate that is before the startDate
-      const pastEndDate = dayjs(startDate).subtract(1, 'day').toDate();
+      const pastEndDate = dayjs
+        .utc(startDate.toISOString())
+        .subtract(1, 'day')
+        .toDate();
       const rule: InterfaceRecurrenceRule = {
         frequency: Frequency.DAILY,
         interval: 1,
@@ -247,7 +251,8 @@ describe('Recurrence Utility Functions', () => {
 
     it('should generate correct text for monthly recurrence with end date', () => {
       // Use a dynamic end date 1 year in the future
-      const futureEndDate = dayjs()
+      const futureEndDate = dayjs
+        .utc()
         .add(1, 'year')
         .hour(10)
         .minute(0)
@@ -298,8 +303,7 @@ describe('Recurrence Utility Functions', () => {
         never: true,
       };
       const text = getRecurrenceRuleText(rule, startDate);
-      // Dynamically compute expected day from startDate
-      const expectedDay = dayjs(startDate).date();
+      const expectedDay = startDate.getUTCDate();
       expect(text).toBe(`Monthly on Day ${expectedDay}, never ends`);
     });
 
@@ -310,12 +314,25 @@ describe('Recurrence Utility Functions', () => {
         never: true,
       };
       const text = getRecurrenceRuleText(rule, startDate);
-      // Dynamically compute expected month and day from startDate
-      const expectedMonth = dayjs(startDate).format('MMMM');
-      const expectedDay = dayjs(startDate).date();
+      const monthNamesForRule = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      const expectedMonthName = monthNamesForRule[startDate.getUTCMonth()];
+      const expectedDay = startDate.getUTCDate();
       const expectedSuffix = getOrdinalSuffix(expectedDay);
       expect(text).toBe(
-        `Annually in ${expectedMonth} on the ${expectedDay}${expectedSuffix}, never ends`,
+        `Annually in ${expectedMonthName} on the ${expectedDay}${expectedSuffix}, never ends`,
       );
     });
 
@@ -379,7 +396,7 @@ describe('Recurrence Utility Functions', () => {
 
     it('should create a default weekly rule', () => {
       const rule = createDefaultRecurrenceRule(startDate, Frequency.WEEKLY);
-      const expectedDay = dayIndexToWeekDay[dayjs(startDate).day()];
+      const expectedDay = dayIndexToWeekDay[startDate.getUTCDay()];
       expect(rule).toEqual({
         frequency: Frequency.WEEKLY,
         interval: 1,
@@ -390,8 +407,7 @@ describe('Recurrence Utility Functions', () => {
 
     it('should create a default monthly rule', () => {
       const rule = createDefaultRecurrenceRule(startDate, Frequency.MONTHLY);
-      // Dynamically compute expected day from startDate
-      const expectedDay = dayjs(startDate).date();
+      const expectedDay = startDate.getUTCDate();
       expect(rule).toEqual({
         frequency: Frequency.MONTHLY,
         interval: 1,
@@ -402,9 +418,8 @@ describe('Recurrence Utility Functions', () => {
 
     it('should create a default yearly rule', () => {
       const rule = createDefaultRecurrenceRule(startDate, Frequency.YEARLY);
-      // Dynamically compute expected month and day from startDate
-      const expectedMonth = dayjs(startDate).month() + 1;
-      const expectedDay = dayjs(startDate).date();
+      const expectedMonth = startDate.getUTCMonth() + 1;
+      const expectedDay = startDate.getUTCDate();
       expect(rule).toEqual({
         frequency: Frequency.YEARLY,
         interval: 1,
@@ -507,7 +522,8 @@ describe('Recurrence Utility Functions', () => {
   describe('formatRecurrenceForApi', () => {
     it('should format a rule with an endDate correctly', () => {
       // Use a dynamic future end date
-      const futureEndDate = dayjs()
+      const futureEndDate = dayjs
+        .utc()
         .add(6, 'months')
         .hour(12)
         .minute(0)
@@ -534,66 +550,74 @@ describe('Recurrence Utility Functions', () => {
   });
 
   describe('getWeekOfMonth', () => {
-    // Use dynamic dates based on a future month
     const testMonth = getFutureMonth(2);
 
     it('should return correct week for day 5 of the month', () => {
       const date = testMonth.date(5).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((5 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((5 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
     it('should return correct week for day 8 of the month', () => {
       const date = testMonth.date(8).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((8 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((8 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
     it('should return correct week for day 15 of the month', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((15 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((15 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
     it('should return correct week for day 22 of the month', () => {
       const date = testMonth.date(22).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((22 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((22 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
     it('should return correct week for day 29 of the month', () => {
       const date = testMonth.date(29).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((29 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((29 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
 
     it('should handle dates at the end of the month correctly', () => {
       const lastDay = testMonth.endOf('month').hour(10).toDate();
       const dayOfMonth = testMonth.daysInMonth();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((dayOfMonth + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + firstDayUTC.getUTCDay()) / 7,
+      );
       expect(getWeekOfMonth(lastDay)).toBe(expectedWeek);
     });
 
     it('should handle February correctly', () => {
-      // Find a future February and test day 28
-      let year = dayjs().year();
-      if (dayjs().month() >= 2) year++;
+      let year = dayjs.utc().year();
+      if (dayjs.utc().month() >= 2) year++;
       const febDate = dayjs(`${year}-02-28T10:00:00.000Z`).toDate();
-      // Feb 28 is always in week 4 or 5
       expect(getWeekOfMonth(febDate)).toBeGreaterThanOrEqual(4);
     });
 
     it('should handle February correctly in leap year (29 days)', () => {
-      // Use the helper to find Feb 29
       const feb29 = findLeapYearFeb29().toDate();
-      // Feb 29 is always in week 5
       expect(getWeekOfMonth(feb29)).toBe(5);
     });
 
     it('should handle months starting on different days of the week', () => {
-      // First day of any month should always be week 1
       const month1 = getFutureMonth(1).date(1).hour(10).toDate();
       expect(getWeekOfMonth(month1)).toBe(1);
 
@@ -605,33 +629,37 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle different years correctly', () => {
-      // Day 15 of any month should be in week 3
-      const thisYear = dayjs().add(1, 'month').date(15).hour(10).toDate();
-      const nextYear = dayjs()
+      const thisYear = dayjs.utc().add(1, 'month').date(15).hour(10).toDate();
+      const nextYear = dayjs
+        .utc()
         .add(1, 'year')
         .add(1, 'month')
         .date(15)
         .hour(10)
         .toDate();
-      const yearAfter = dayjs()
+      const yearAfter = dayjs
+        .utc()
         .add(2, 'year')
         .add(1, 'month')
         .date(15)
         .hour(10)
         .toDate();
 
-      // Verify week calculation is consistent with implementation
       [thisYear, nextYear, yearAfter].forEach((date) => {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const expectedWeek = Math.ceil((15 + firstDay.getDay()) / 7);
+        const firstDay = new Date(
+          Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1),
+        );
+        const expectedWeek = Math.ceil((15 + firstDay.getUTCDay()) / 7);
         expect(getWeekOfMonth(date)).toBe(expectedWeek);
       });
     });
 
     it('should handle edge case: date in the middle of the month', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((15 + firstDayOfMonth) / 7);
+      const firstDayUTC = new Date(
+        Date.UTC(testMonth.year(), testMonth.month(), 1),
+      );
+      const expectedWeek = Math.ceil((15 + firstDayUTC.getUTCDay()) / 7);
       expect(getWeekOfMonth(date)).toBe(expectedWeek);
     });
   });
@@ -733,11 +761,10 @@ describe('Recurrence Utility Functions', () => {
   });
 
   describe('getMonthlyOptions', () => {
-    // Use dynamic dates based on future months
+    // Use UTC-based dates so getMonthlyOptions (which uses UTC) is stable across TZ
     const testMonth = getFutureMonth(2);
 
     it('should return correct options for a date in the middle of the month', () => {
-      // Find the 3rd Monday of the test month
       const thirdMonday = getNthDayOfWeekInMonth(testMonth, 1, 3); // 1 = Monday
       const options = getMonthlyOptions(thirdMonday.toDate());
       const dayOfMonth = thirdMonday.date();
@@ -749,7 +776,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for the first day of the month', () => {
-      // First day of month - find what day of week it is
       const firstDay = testMonth.date(1).hour(10);
       const dayOfWeek = firstDay.day();
       const dayName = getDayNameFromIndex(dayOfWeek);
@@ -765,7 +791,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a date in the fifth week', () => {
-      // Day 29 is always in week 5
       const day29 = testMonth.date(29).hour(10);
       const dayOfWeek = day29.day();
       const dayName = getDayNameFromIndex(dayOfWeek);
@@ -781,7 +806,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a date in the first week', () => {
-      // Find the 1st Friday of the test month
       const firstFriday = getNthDayOfWeekInMonth(testMonth, 5, 1); // 5 = Friday
       const options = getMonthlyOptions(firstFriday.toDate());
       const dayOfMonth = firstFriday.date();
@@ -793,7 +817,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a date in the second week', () => {
-      // Find the 2nd Wednesday of the test month
       const secondWednesday = getNthDayOfWeekInMonth(testMonth, 3, 2); // 3 = Wednesday
       const options = getMonthlyOptions(secondWednesday.toDate());
       const dayOfMonth = secondWednesday.date();
@@ -805,7 +828,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a date in the fourth week', () => {
-      // Find the 4th Thursday of the test month
       const fourthThursday = getNthDayOfWeekInMonth(testMonth, 4, 4); // 4 = Thursday
       const options = getMonthlyOptions(fourthThursday.toDate());
       const dayOfMonth = fourthThursday.date();
@@ -817,7 +839,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a Sunday', () => {
-      // Find the 4th Sunday of the test month
       const fourthSunday = getNthDayOfWeekInMonth(testMonth, 0, 4); // 0 = Sunday
       const options = getMonthlyOptions(fourthSunday.toDate());
       const dayOfMonth = fourthSunday.date();
@@ -829,7 +850,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return correct options for a Saturday', () => {
-      // Find the 4th Saturday of the test month
       const fourthSaturday = getNthDayOfWeekInMonth(testMonth, 6, 4); // 6 = Saturday
       const options = getMonthlyOptions(fourthSaturday.toDate());
       const dayOfMonth = fourthSaturday.date();
@@ -841,11 +861,9 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle February correctly', () => {
-      // Find a future February
-      let year = dayjs().year();
-      if (dayjs().month() >= 2) year++;
-      const febMonth = dayjs(`${year}-02-01`);
-      // Find 3rd Wednesday of Feb
+      let year = dayjs.utc().year();
+      if (dayjs.utc().month() >= 2) year++;
+      const febMonth = dayjs.utc(`${year}-02-01T00:00:00.000Z`);
       const thirdWednesday = getNthDayOfWeekInMonth(febMonth, 3, 3);
       const options = getMonthlyOptions(thirdWednesday.toDate());
       const dayOfMonth = thirdWednesday.date();
@@ -857,10 +875,10 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle February in leap year correctly (29 days)', () => {
-      // Use the helper to find Feb 29
-      const feb29 = findLeapYearFeb29();
-      const options = getMonthlyOptions(feb29.toDate());
-      const dayOfWeek = feb29.day();
+      const feb29 = findLeapYearFeb29(); // returns dayjs with ISO Z
+      const d = feb29.toDate();
+      const options = getMonthlyOptions(d);
+      const dayOfWeek = d.getUTCDay();
       const dayName = getDayNameFromIndex(dayOfWeek);
 
       expect(options.byDate).toBe('Monthly on day 29');
@@ -873,7 +891,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle different months correctly', () => {
-      // Day 15 should always have dateValue of 15
       const month1 = getFutureMonth(1).date(15).hour(10).toDate();
       const month2 = getFutureMonth(2).date(15).hour(10).toDate();
       const month3 = getFutureMonth(3).date(15).hour(10).toDate();
@@ -884,7 +901,6 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should return consistent weekday values for the same day of week', () => {
-      // Find 1st, 2nd, and 3rd Monday of test month
       const monday1 = getNthDayOfWeekInMonth(testMonth, 1, 1).toDate();
       const monday2 = getNthDayOfWeekInMonth(testMonth, 1, 2).toDate();
       const monday3 = getNthDayOfWeekInMonth(testMonth, 1, 3).toDate();
@@ -899,9 +915,7 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle edge case: date that falls in the fifth week', () => {
-      // Find 5th Monday of a month (if it exists) or use day 29
       const fifthMonday = getNthDayOfWeekInMonth(testMonth, 1, 5);
-      // If there's no 5th Monday, use day 29
       const testDate =
         fifthMonday.date() > 7 ? fifthMonday : testMonth.date(29).hour(10);
       const options = getMonthlyOptions(testDate.toDate());
