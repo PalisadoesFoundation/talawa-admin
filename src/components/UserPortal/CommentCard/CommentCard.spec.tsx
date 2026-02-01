@@ -161,10 +161,8 @@ const defaultProps = {
     name: 'test user',
   },
   upVoteCount: 1,
-  downVoteCount: 0,
   text: 'testComment',
   hasUserVoted: {
-    hasVoted: true,
     voteType: 'up_vote' as const,
   },
   refetchComments: vi.fn(),
@@ -233,7 +231,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const notVotedProps = {
       ...defaultProps,
       hasUserVoted: {
-        hasVoted: false,
         voteType: null,
       },
     };

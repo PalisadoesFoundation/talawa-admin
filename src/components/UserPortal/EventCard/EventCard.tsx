@@ -46,7 +46,7 @@
  * Dependencies
  * - `@mui/icons-material` for icons.
  * - `dayjs` for date and time formatting.
- * - `react-bootstrap` for UI components.
+ * - `shared-components/Button` for button UI.
  * - `@apollo/client` for GraphQL mutations.
  * - `NotificationToast` for notifications.
  * - `utils/useLocalstorage` for local storage handling.
