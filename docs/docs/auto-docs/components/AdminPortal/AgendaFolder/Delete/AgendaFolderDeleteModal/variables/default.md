@@ -6,35 +6,32 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaFolderDeleteModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaFolderDeleteModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx#L34)
+Defined in: [src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Delete/AgendaFolderDeleteModal.tsx#L26)
 
-Modal component for confirming deletion of an agenda folder.
+AgendaFolderDeleteModal
 
-Displays a confirmation dialog with Yes/No buttons before deleting.
-
-## Param
-
-Controls modal visibility.
+Confirmation modal for deleting an agenda folder.
+Uses `DeleteModal` to provide consistent delete confirmation UI.
 
 ## Param
 
-Closes the modal.
+Controls modal visibility
 
 ## Param
 
-ID of the agenda folder to delete.
+Callback to close the modal
 
 ## Param
 
-Refetches agenda folders after deletion.
+ID of the agenda folder to delete
 
 ## Param
 
-Agenda section i18n translator.
+Refetches agenda folder data after deletion
 
 ## Param
 
-Common i18n translator.
+i18n translation function
 
 ## Returns
 

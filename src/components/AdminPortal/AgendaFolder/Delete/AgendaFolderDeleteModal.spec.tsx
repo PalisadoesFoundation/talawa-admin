@@ -130,38 +130,36 @@ describe('AgendaFolderDeleteModal', () => {
     it('renders Yes and No buttons', () => {
       renderAgendaFolderDeleteModal();
 
-      expect(screen.getByTestId('deleteAgendaFolderBtn')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('deleteAgendaFolderCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
+      expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
     });
 
-    it('renders Yes button with correct text', () => {
+    it('renders delete button with correct text', () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
-      expect(yesButton).toHaveTextContent('yes');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      expect(deleteButton).toHaveTextContent('Delete');
     });
 
-    it('renders No button with correct text', () => {
+    it('renders cancel button with correct text', () => {
       renderAgendaFolderDeleteModal();
 
-      const noButton = screen.getByTestId('deleteAgendaFolderCloseBtn');
-      expect(noButton).toHaveTextContent('no');
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      expect(cancelButton).toHaveTextContent('Cancel');
     });
 
-    it('renders Yes button with success class', () => {
+    it('renders delete button with danger class', () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
-      expect(yesButton).toHaveClass('btn-success');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      expect(deleteButton).toHaveClass('btn-danger');
     });
 
-    it('renders No button with danger class', () => {
+    it('renders cancel button with secondary class', () => {
       renderAgendaFolderDeleteModal();
 
-      const noButton = screen.getByTestId('deleteAgendaFolderCloseBtn');
-      expect(noButton).toHaveClass('btn-danger');
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      expect(cancelButton).toHaveClass('btn-secondary');
     });
   });
 
@@ -177,7 +175,10 @@ describe('AgendaFolderDeleteModal', () => {
 
         return {
           ...actual,
-          useMutation: () => [vi.fn().mockRejectedValueOnce('Network failure')],
+          useMutation: () => [
+            vi.fn().mockRejectedValueOnce('Network failure'),
+            { loading: false, error: undefined },
+          ],
         };
       });
     });
@@ -192,19 +193,21 @@ describe('AgendaFolderDeleteModal', () => {
         await import('./AgendaFolderDeleteModal');
 
       render(
-        <I18nextProvider i18n={i18nForTest}>
-          <AgendaFolderDeleteModal
-            isOpen
-            onClose={mockOnClose}
-            agendaFolderId={mockAgendaFolderId}
-            refetchAgendaFolder={mockRefetchAgendaFolder}
-            t={mockT}
-            tCommon={mockTCommon}
-          />
-        </I18nextProvider>,
+        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaFolderDeleteModal
+              isOpen
+              onClose={mockOnClose}
+              agendaFolderId={mockAgendaFolderId}
+              refetchAgendaFolder={mockRefetchAgendaFolder}
+              t={mockT}
+              tCommon={mockTCommon}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      await userEvent.click(screen.getByTestId('deleteAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).not.toHaveBeenCalled();
@@ -219,7 +222,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls onClose when No button is clicked', async () => {
       renderAgendaFolderDeleteModal();
 
-      const noButton = screen.getByTestId('deleteAgendaFolderCloseBtn');
+      const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
       expect(mockOnClose).toHaveBeenCalledTimes(1);
@@ -228,7 +231,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not call refetchAgendaFolder when No button is clicked', async () => {
       renderAgendaFolderDeleteModal();
 
-      const noButton = screen.getByTestId('deleteAgendaFolderCloseBtn');
+      const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
@@ -237,7 +240,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not show success notification when No button is clicked', async () => {
       renderAgendaFolderDeleteModal();
 
-      const noButton = screen.getByTestId('deleteAgendaFolderCloseBtn');
+      const noButton = screen.getByTestId('modal-cancel-btn');
       await userEvent.click(noButton);
 
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -248,7 +251,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls deleteAgendaFolder mutation when Yes button is clicked', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -261,7 +264,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('shows success notification after successful deletion', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -274,7 +277,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls refetchAgendaFolder after successful deletion', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -285,7 +288,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('calls onClose after successful deletion', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -296,7 +299,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('executes deletion flow in correct order', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -310,7 +313,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not show error notification on successful deletion', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -325,7 +328,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('shows error notification when mutation fails with Error', async () => {
       renderAgendaFolderDeleteModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -338,7 +341,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not call refetchAgendaFolder when mutation fails', async () => {
       renderAgendaFolderDeleteModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -351,7 +354,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not call onClose when mutation fails', async () => {
       renderAgendaFolderDeleteModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -364,7 +367,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('does not show success notification when mutation fails', async () => {
       renderAgendaFolderDeleteModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -377,7 +380,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('handles GraphQL errors correctly', async () => {
       renderAgendaFolderDeleteModal(MOCKS_GRAPHQL_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -388,7 +391,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('displays error message from Error instance', async () => {
       renderAgendaFolderDeleteModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -426,7 +429,7 @@ describe('AgendaFolderDeleteModal', () => {
     it('handles rapid Yes button clicks gracefully', async () => {
       renderAgendaFolderDeleteModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       // Click multiple times rapidly
       await userEvent.click(yesButton);
       await userEvent.click(yesButton);
@@ -469,7 +472,7 @@ describe('AgendaFolderDeleteModal', () => {
         </MockedProvider>,
       );
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -496,7 +499,7 @@ describe('AgendaFolderDeleteModal', () => {
 
       renderAgendaFolderDeleteModal(MOCKS_NON_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaFolderBtn');
+      const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
       await waitFor(() => {
@@ -549,8 +552,8 @@ describe('AgendaFolderDeleteModal', () => {
       expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolderMsg');
     });
 
-    it('calls tCommon function for button labels', () => {
-      const mockTCommonSpy = vi.fn((key: string) => key);
+    it('calls t function for entity name', () => {
+      const mockTSpy = vi.fn((key: string) => key);
       render(
         <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
@@ -559,15 +562,14 @@ describe('AgendaFolderDeleteModal', () => {
               onClose={mockOnClose}
               agendaFolderId={mockAgendaFolderId}
               refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
-              tCommon={mockTCommonSpy}
+              t={mockTSpy}
+              tCommon={mockTCommon}
             />
           </I18nextProvider>
         </MockedProvider>,
       );
 
-      expect(mockTCommonSpy).toHaveBeenCalledWith('yes');
-      expect(mockTCommonSpy).toHaveBeenCalledWith('no');
+      expect(mockTSpy).toHaveBeenCalledWith('agendaFolder');
     });
   });
 });

@@ -1,6 +1,7 @@
-.campaignModal {
-  max-width: 80vw;
-  margin: 2vh auto;
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* or 8px if you want tighter */
 }
 
 .regBtn {

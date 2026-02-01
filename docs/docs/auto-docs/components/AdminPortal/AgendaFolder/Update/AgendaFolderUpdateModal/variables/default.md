@@ -8,20 +8,39 @@
 
 Defined in: [src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/Update/AgendaFolderUpdateModal.tsx#L30)
 
-AgendaFolderUpdateModal Component
+AgendaFolderUpdateModal
 
-This component renders a modal for updating an existing agenda folder.
-It provides form fields for editing the folder name and description
-and submits the updated data using an internal GraphQL mutation.
+Edit modal for updating an existing agenda folder.
+Uses the shared `EditModal` for consistent update behavior.
 
-## Remarks
+## Param
 
-The component:
-- Displays a modal using `BaseModal`
-- Manages controlled form inputs for folder name and description
-- Submits updated folder data via a callback function
-- Supports internationalization using `react-i18next`
+Controls modal visibility
+
+## Param
+
+Callback to close the modal
+
+## Param
+
+Current agenda folder form state
+
+## Param
+
+Setter for agenda folder form state
+
+## Param
+
+ID of the agenda folder being updated
+
+## Param
+
+Refetches agenda folder data after update
+
+## Param
+
+i18n translation function
 
 ## Returns
 
-A JSX element that renders the agenda folder update modal.
+JSX.Element

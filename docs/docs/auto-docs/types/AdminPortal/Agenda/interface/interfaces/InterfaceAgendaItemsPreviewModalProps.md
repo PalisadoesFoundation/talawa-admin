@@ -18,7 +18,7 @@ such as updating or deleting an agenda item.
 
 > **formState**: [`InterfaceItemFormStateType`](InterfaceItemFormStateType.md)
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L290)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L288)
 
 ***
 
@@ -42,23 +42,11 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:286](https://github.com/P
 
 ***
 
-### showUpdateItemModal()
-
-> **showUpdateItemModal**: () => `void`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L288)
-
-#### Returns
-
-`void`
-
-***
-
 ### t()
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L291)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L289)
 
 #### Parameters
 
@@ -69,15 +57,3 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:291](https://github.com/P
 #### Returns
 
 `string`
-
-***
-
-### toggleDeleteItemModal()
-
-> **toggleDeleteItemModal**: () => `void`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L289)
-
-#### Returns
-
-`void`

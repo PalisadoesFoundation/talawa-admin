@@ -5,7 +5,7 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import Button from 'shared-components/Button/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
@@ -33,31 +33,19 @@ import type {
 /**
  * AgendaItemsCreateModal
  *
- * A modal component for creating a new agenda item within an event.
- * It uses `CRUDModalTemplate` to provide a consistent CRUD-style UI
- * and handles form state, validation, file uploads, and submission.
+ * Create modal for adding a new agenda item.
+ * Built on `CreateModal` for consistent create UX and loading handling.
  *
- * Responsibilities:
- * - Renders form fields for agenda item details (title, duration, description)
- * - Allows selecting a folder and category via autocomplete
- * - Manages URL input with validation and add/remove actions
- * - Handles attachment uploads using MinIO with size and MIME type validation
- * - Computes the next agenda item sequence based on existing folder items
- * - Executes the `CREATE_AGENDA_ITEM_MUTATION`
- * - Displays success and error notifications
- * - Refetches agenda folder data after successful creation
- *
- * @param isOpen - Controls whether the modal is visible
+ * @param isOpen - Controls modal visibility
  * @param hide - Callback to close the modal
- * @param eventId - ID of the event for which the agenda item is being created
- * @param t - i18n translation function for the agenda section
+ * @param eventId - ID of the event
  * @param agendaItemCategories - Available agenda item categories
- * @param agendaFolderData - Available agenda folders and their items
- * @param refetchAgendaFolder - Callback to refetch agenda folder data after creation
+ * @param agendaFolderData - Available agenda folders
+ * @param refetchAgendaFolder - Refetches agenda folder data after creation
+ * @param t - i18n translation function
  *
- * @returns A JSX element rendering the agenda item creation modal
+ * @returns JSX.Element
  */
-
 // translation-check-keyPrefix: agendaSection
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
@@ -70,16 +58,15 @@ const AgendaItemsCreateModal: React.FC<
   agendaFolderData,
   refetchAgendaFolder,
 }) => {
-  const [newUrl, setNewUrl] = useState('');
   const { orgId } = useParams();
   const organizationId = orgId ?? '';
 
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
 
-  const [createAgendaItem, { loading }] = useMutation(
-    CREATE_AGENDA_ITEM_MUTATION,
-  );
+  const [createAgendaItem] = useMutation(CREATE_AGENDA_ITEM_MUTATION);
+
+  const [newUrl, setNewUrl] = useState('');
 
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
@@ -105,7 +92,7 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
-  const createAgendaItemHandler = async (): Promise<void> => {
+  const handleCreateAgendaItem = async (): Promise<void> => {
     const selectedFolder = agendaFolderData?.find(
       (f) => f.id === agendaItemFormState.folderId,
     );
@@ -160,9 +147,9 @@ const AgendaItemsCreateModal: React.FC<
       hide();
       refetchAgendaFolder();
       NotificationToast.success(t('agendaItemCreated'));
-    } catch (error) {
-      if (error instanceof Error) {
-        NotificationToast.error(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        NotificationToast.error(err.message);
       }
     }
   };
@@ -177,7 +164,7 @@ const AgendaItemsCreateModal: React.FC<
 
     setAgendaItemFormState((prev) => ({
       ...prev,
-      urls: [...prev.urls.filter((u) => u.trim()), trimmed],
+      urls: [...prev.urls.filter(Boolean), trimmed],
     }));
 
     setNewUrl('');
@@ -254,14 +241,12 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   return (
-    <CRUDModalTemplate
+    <CreateModal
       open={isOpen}
       onClose={hide}
       title={t('agendaItemDetails')}
-      onPrimary={createAgendaItemHandler}
-      primaryText={t('createAgendaItem')}
-      loading={loading}
-      className={styles.AgendaItemsModal}
+      onSubmit={handleCreateAgendaItem}
+      submitDisabled={!agendaItemFormState.title.trim()}
       data-testid="createAgendaItemModal"
     >
       {/* Folder */}
@@ -281,11 +266,10 @@ const AgendaItemsCreateModal: React.FC<
             }))
           }
           renderInput={(params) => (
-            <div ref={params.InputProps.ref}>
+            <div ref={params.InputProps.ref} className="position-relative">
               <input
                 {...params.inputProps}
                 className="form-control"
-                data-testid="folderInput"
                 placeholder={t('folderName')}
               />
               {params.InputProps.endAdornment}
@@ -311,7 +295,7 @@ const AgendaItemsCreateModal: React.FC<
             }))
           }
           renderInput={(params) => (
-            <div ref={params.InputProps.ref}>
+            <div ref={params.InputProps.ref} className="position-relative">
               <input
                 {...params.inputProps}
                 className="form-control"
@@ -328,6 +312,7 @@ const AgendaItemsCreateModal: React.FC<
           <FormTextField
             name="title"
             label={t('title')}
+            placeholder={t('enterTitle')}
             value={agendaItemFormState.title}
             required
             onChange={(v) =>
@@ -339,6 +324,7 @@ const AgendaItemsCreateModal: React.FC<
           <FormTextField
             name="duration"
             label={t('duration')}
+            placeholder={t('enterDuration')}
             value={agendaItemFormState.duration}
             required
             onChange={(v) =>
@@ -351,6 +337,7 @@ const AgendaItemsCreateModal: React.FC<
       <FormTextField
         name="description"
         label={t('description')}
+        placeholder={t('enterDescription')}
         value={agendaItemFormState.description}
         required
         onChange={(v) =>
@@ -360,9 +347,10 @@ const AgendaItemsCreateModal: React.FC<
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div className="d-flex">
+        <div className="d-flex gap-2">
           <input
             className="form-control"
+            placeholder={t('enterUrl')}
             data-testid="urlInput"
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
@@ -395,9 +383,8 @@ const AgendaItemsCreateModal: React.FC<
         <input
           type="file"
           multiple
-          accept="image/*, video/*"
-          data-testid="attachment"
           className="form-control"
+          data-testid="attachment"
           onChange={handleFileChange}
         />
         <small className="text-muted">{t('attachmentLimit')}</small>
@@ -423,7 +410,7 @@ const AgendaItemsCreateModal: React.FC<
           </button>
         </div>
       ))}
-    </CRUDModalTemplate>
+    </CreateModal>
   );
 };
 

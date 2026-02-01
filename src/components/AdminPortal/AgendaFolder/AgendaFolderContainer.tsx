@@ -346,8 +346,6 @@ function AgendaFolderContainer({
       <AgendaItemsPreviewModal
         isOpen={agendaItemPreviewModal.isOpen}
         hidePreviewModal={agendaItemPreviewModal.close}
-        showUpdateItemModal={agendaItemUpdateModal.open}
-        toggleDeleteItemModal={agendaItemDeleteModal.open}
         formState={formState}
         t={t}
       />

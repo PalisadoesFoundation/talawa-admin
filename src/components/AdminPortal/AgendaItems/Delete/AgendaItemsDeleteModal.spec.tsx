@@ -19,12 +19,11 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 }));
 
 const mockT = (key: string): string => key;
-const mockTCommon = (key: string): string => key;
 const mockOnClose = vi.fn();
 const mockRefetchAgendaFolder = vi.fn();
 
 const MOCK_AGENDA_ITEM_ID = 'item123';
-
+const mockTCommon = (key: string): string => key;
 const MOCKS_SUCCESS: MockedResponse[] = [
   {
     request: {
@@ -118,22 +117,20 @@ describe('AgendaItemsDeleteModal', () => {
       expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
     });
 
-    it('should render "No" button with correct text', () => {
+    it('should render "Cancel" button', () => {
       renderModal();
 
-      const noButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-      expect(noButton).toBeInTheDocument();
-      expect(noButton).toHaveTextContent('no');
-      expect(noButton).toHaveClass('btn-danger');
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      expect(cancelButton).toBeInTheDocument();
+      expect(cancelButton).toHaveTextContent(/cancel/i);
     });
 
-    it('should render "Yes" button with correct text', () => {
+    it('should render "Delete" button', () => {
       renderModal();
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      expect(yesButton).toBeInTheDocument();
-      expect(yesButton).toHaveTextContent('yes');
-      expect(yesButton).toHaveClass('btn-success');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      expect(deleteButton).toBeInTheDocument();
+      expect(deleteButton).toHaveTextContent(/delete/i);
     });
 
     it('should apply correct modal props', () => {
@@ -142,23 +139,30 @@ describe('AgendaItemsDeleteModal', () => {
       const modal = screen.getByTestId('deleteAgendaItemModal');
       expect(modal).toBeInTheDocument();
     });
+
+    it('should render warning icon', () => {
+      renderModal();
+
+      const warningIcon = document.querySelector('.fa-exclamation-triangle');
+      expect(warningIcon).toBeInTheDocument();
+    });
   });
 
   describe('User Interactions', () => {
-    it('should call onClose when "No" button is clicked', async () => {
+    it('should call onClose when "Cancel" button is clicked', async () => {
       renderModal();
 
-      const noButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-      await userEvent.click(noButton);
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      await userEvent.click(cancelButton);
 
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
 
-    it('should call deleteAgendaItemHandler when "Yes" button is clicked', async () => {
+    it('should call deleteAgendaItemHandler when "Delete" button is clicked', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -172,8 +176,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should successfully delete agenda item', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -188,8 +192,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should call refetchAgendaFolder after successful deletion', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(mockRefetchAgendaFolder).toHaveBeenCalled();
@@ -199,8 +203,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should close modal after successful deletion', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(mockOnClose).toHaveBeenCalled();
@@ -210,8 +214,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should display success notification after successful deletion', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -262,7 +266,7 @@ describe('AgendaItemsDeleteModal', () => {
         </I18nextProvider>,
       );
 
-      await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
+      await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).not.toHaveBeenCalled();
@@ -277,8 +281,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should handle error when deletion fails', async () => {
       renderModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -290,8 +294,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should not call onClose when deletion fails', async () => {
       renderModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -303,8 +307,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should not call refetchAgendaFolder when deletion fails', async () => {
       renderModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -316,8 +320,8 @@ describe('AgendaItemsDeleteModal', () => {
     it('should handle Error instance in catch block', async () => {
       renderModal(MOCKS_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -343,8 +347,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       renderModal(MOCKS_NON_ERROR);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       // Non-Error instances won't trigger NotificationToast.error
       await waitFor(() => {
@@ -402,28 +406,6 @@ describe('AgendaItemsDeleteModal', () => {
       expect(customT).toHaveBeenCalledWith('deleteAgendaItem');
       expect(customT).toHaveBeenCalledWith('deleteAgendaItemMsg');
     });
-
-    it('should use tCommon function for common translations', () => {
-      const customTCommon = vi.fn((key: string) => `common_${key}`);
-
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaItemsDeleteModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaItemId={MOCK_AGENDA_ITEM_ID}
-              t={mockT}
-              tCommon={customTCommon}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(customTCommon).toHaveBeenCalledWith('no');
-      expect(customTCommon).toHaveBeenCalledWith('yes');
-    });
   });
 
   describe('Different Agenda Item IDs', () => {
@@ -452,8 +434,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       renderModal(mocks, true, differentItemId);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -467,12 +449,12 @@ describe('AgendaItemsDeleteModal', () => {
     it('should handle multiple rapid clicks on delete button', async () => {
       renderModal(MOCKS_SUCCESS);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
 
       // Rapidly click multiple times
-      await userEvent.click(yesButton);
-      await userEvent.click(yesButton);
-      await userEvent.click(yesButton);
+      await userEvent.click(deleteButton);
+      await userEvent.click(deleteButton);
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -534,11 +516,11 @@ describe('AgendaItemsDeleteModal', () => {
     it('should render buttons with correct type attribute', () => {
       renderModal();
 
-      const noButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
 
-      expect(noButton).toHaveAttribute('type', 'button');
-      expect(yesButton).toHaveAttribute('type', 'button');
+      expect(cancelButton).toHaveAttribute('type', 'button');
+      expect(deleteButton).toHaveAttribute('type', 'button');
     });
   });
 
@@ -546,11 +528,11 @@ describe('AgendaItemsDeleteModal', () => {
     it('should apply correct CSS classes to buttons', () => {
       renderModal();
 
-      const noButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
+      const cancelButton = screen.getByTestId('modal-cancel-btn');
+      const deleteButton = screen.getByTestId('modal-delete-btn');
 
-      expect(noButton).toHaveClass('btn', 'btn-danger');
-      expect(yesButton).toHaveClass('btn', 'btn-success');
+      expect(cancelButton).toHaveClass('btn', 'btn-secondary');
+      expect(deleteButton).toHaveClass('btn', 'btn-danger');
     });
   });
 
@@ -576,8 +558,8 @@ describe('AgendaItemsDeleteModal', () => {
         </MockedProvider>,
       );
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -617,8 +599,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       renderModal(mocks, true, '');
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -650,8 +632,8 @@ describe('AgendaItemsDeleteModal', () => {
 
       renderModal(mocks, true, longId);
 
-      const yesButton = screen.getByTestId('deleteAgendaItemBtn');
-      await userEvent.click(yesButton);
+      const deleteButton = screen.getByTestId('modal-delete-btn');
+      await userEvent.click(deleteButton);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();

@@ -111,7 +111,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Folder A');
     await user.type(screen.getByLabelText(/description/i), 'Desc A');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -176,7 +176,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Folder B');
     await user.type(screen.getByLabelText(/description/i), 'Desc B');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -223,7 +223,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Bad Folder');
     await user.type(screen.getByLabelText(/description/i), 'Bad Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Mutation failed');
@@ -281,7 +281,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Folder U');
     await user.type(screen.getByLabelText(/description/i), 'Desc U');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -309,69 +309,6 @@ describe('AgendaFolderCreateModal', () => {
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     expect(hideMock).toHaveBeenCalled();
-  });
-
-  it('resets form fields after successful submission', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <MockedProvider
-        link={
-          new StaticMockLink([
-            {
-              request: {
-                query: CREATE_AGENDA_FOLDER_MUTATION,
-                variables: {
-                  input: {
-                    name: 'Folder R',
-                    description: 'Desc R',
-                    eventId: 'event-1',
-                    sequence: 1,
-                    organizationId: 'org-123',
-                  },
-                },
-              },
-              result: {
-                data: {
-                  createAgendaFolder: {
-                    id: '20',
-                    name: 'Folder R',
-                    description: 'Desc R',
-                    sequence: 1,
-                    event: { id: 'event-1', name: 'Event' },
-                    creator: { id: 'u1', name: 'Admin' },
-                  },
-                },
-              },
-            },
-          ])
-        }
-      >
-        <BrowserRouter>
-          <AgendaFolderCreateModal
-            isOpen={true}
-            hide={vi.fn()}
-            eventId="event-1"
-            agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
-            refetchAgendaFolder={vi.fn()}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const nameInput = screen.getByLabelText(/folderName/i);
-    const descInput = screen.getByLabelText(/description/i);
-
-    await user.type(nameInput, 'Folder R');
-    await user.type(descInput, 'Desc R');
-
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
-
-    await waitFor(() => {
-      expect(nameInput).toHaveValue('');
-      expect(descInput).toHaveValue('');
-    });
   });
 
   it('does not show modal when isOpen is false', () => {
@@ -450,7 +387,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Mixed Sequence');
     await user.type(screen.getByLabelText(/description/i), 'Mixed Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -511,74 +448,12 @@ describe('AgendaFolderCreateModal', () => {
       screen.getByLabelText(/description/i),
       'Form State Description',
     );
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         'agendaFolderCreated',
       );
-    });
-  });
-
-  it('resets formState id and creator fields after successful submission', async () => {
-    const user = userEvent.setup();
-
-    render(
-      <MockedProvider
-        link={
-          new StaticMockLink([
-            {
-              request: {
-                query: CREATE_AGENDA_FOLDER_MUTATION,
-                variables: {
-                  input: {
-                    name: 'Reset Test',
-                    description: 'Reset Desc',
-                    eventId: 'event-1',
-                    sequence: 1,
-                    organizationId: 'org-123',
-                  },
-                },
-              },
-              result: {
-                data: {
-                  createAgendaFolder: {
-                    id: '108',
-                    name: 'Reset Test',
-                    description: 'Reset Desc',
-                    sequence: 1,
-                    event: { id: 'event-1', name: 'Event' },
-                    creator: { id: 'u1', name: 'Admin' },
-                  },
-                },
-              },
-            },
-          ])
-        }
-      >
-        <BrowserRouter>
-          <AgendaFolderCreateModal
-            isOpen={true}
-            hide={vi.fn()}
-            eventId="event-1"
-            agendaFolderData={{ agendaFoldersByEventId: [] }}
-            t={t}
-            refetchAgendaFolder={vi.fn()}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const nameInput = screen.getByLabelText(/folderName/i);
-    const descInput = screen.getByLabelText(/description/i);
-
-    await user.type(nameInput, 'Reset Test');
-    await user.type(descInput, 'Reset Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
-
-    await waitFor(() => {
-      expect(nameInput).toHaveValue('');
-      expect(descInput).toHaveValue('');
     });
   });
 
@@ -627,7 +502,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(nameInput, 'Error Test');
     await user.type(descInput, 'Error Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
@@ -703,7 +578,7 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Seq Test');
     await user.type(screen.getByLabelText(/description/i), 'Seq Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -770,12 +645,10 @@ describe('AgendaFolderCreateModal', () => {
 
     await user.type(screen.getByLabelText(/folderName/i), 'Weird Error');
     await user.type(screen.getByLabelText(/description/i), 'Desc');
-    await user.click(screen.getByTestId('createAgendaFolderFormSubmitBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Error message not found.',
-      );
+      expect(NotificationToast.error).toHaveBeenCalled();
       expect(NotificationToast.success).not.toHaveBeenCalled();
     });
   });

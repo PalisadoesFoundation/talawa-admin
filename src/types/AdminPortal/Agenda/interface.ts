@@ -285,8 +285,6 @@ export interface InterfaceItemFormStateType {
 export interface InterfaceAgendaItemsPreviewModalProps {
   isOpen: boolean;
   hidePreviewModal: () => void;
-  showUpdateItemModal: () => void;
-  toggleDeleteItemModal: () => void;
   formState: InterfaceItemFormStateType;
   t: (key: string) => string;
 }

@@ -6,33 +6,36 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaItemsPreviewModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaItemsPreviewModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal.tsx#L20)
+Defined in: [src/components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal.tsx#L25)
 
-Modal for previewing agenda item details.
+AgendaItemsPreviewModal
 
-## Param
-
-Controls modal visibility.
-
-## Param
-
-Closes the preview modal.
+Read-only preview modal for agenda item details.
+Uses `ViewModal` with optional edit and delete actions.
 
 ## Param
 
-Opens the update modal.
+Controls modal visibility
 
 ## Param
 
-Opens the delete confirmation modal.
+Callback to close the preview modal
 
 ## Param
 
-Agenda item details to display.
+Opens the update modal
 
 ## Param
 
-Translation function for agenda section keys.
+Opens the delete confirmation modal
+
+## Param
+
+Agenda item data to display
+
+## Param
+
+i18n translation function
 
 ## Returns
 

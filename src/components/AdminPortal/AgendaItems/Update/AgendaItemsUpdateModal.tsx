@@ -5,7 +5,7 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import Button from 'shared-components/Button/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
@@ -31,17 +31,20 @@ import type {
 } from 'types/AdminPortal/Agenda/interface';
 
 /**
- * Renders the modal used to update agenda items.
+ * AgendaItemsUpdateModal
  *
- * @param isOpen - Whether the modal is open.
- * @param onClose - Closes the modal.
- * @param agendaItemId - ID of the agenda item being updated.
- * @param itemFormState - Current agenda item form state.
- * @param setItemFormState - Setter for agenda item form state.
- * @param refetchAgendaFolder - Refetches agenda folders after update.
- * @param t - i18n translation function.
- * @param agendaItemCategories - Available agenda item categories.
- * @param agendaFolderData - Available agenda folders.
+ * Edit modal for updating an existing agenda item.
+ * Uses `EditModal` to handle submission, loading, and keyboard actions.
+ *
+ * @param isOpen - Controls modal visibility
+ * @param onClose - Callback to close the modal
+ * @param agendaItemId - ID of the agenda item being updated
+ * @param itemFormState - Current agenda item form state
+ * @param setItemFormState - Setter for agenda item form state
+ * @param agendaItemCategories - Available agenda item categories
+ * @param agendaFolderData - Available agenda folders
+ * @param refetchAgendaFolder - Refetches agenda folder data after update
+ * @param t - i18n translation function
  *
  * @returns JSX.Element
  */
@@ -66,16 +69,14 @@ const AgendaItemsUpdateModal: React.FC<
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio } = useMinioDownload();
 
-  const [updateAgendaItem, { loading }] = useMutation(
-    UPDATE_AGENDA_ITEM_MUTATION,
-  );
+  const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);
 
   const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
   useEffect(() => {
     setItemFormState((prev) => ({
       ...prev,
-      url: prev.url.filter((url) => url.trim()),
+      url: prev.url.filter((u) => u.trim()),
     }));
   }, [setItemFormState]);
 
@@ -92,7 +93,7 @@ const AgendaItemsUpdateModal: React.FC<
 
     setItemFormState({
       ...itemFormState,
-      url: [...itemFormState.url.filter((u) => u.trim()), trimmedUrl],
+      url: [...itemFormState.url.filter(Boolean), trimmedUrl],
     });
 
     setNewUrl('');
@@ -193,22 +194,20 @@ const AgendaItemsUpdateModal: React.FC<
       NotificationToast.success(t('agendaItemUpdated'));
       refetchAgendaFolder();
       onClose();
-    } catch (error) {
-      if (error instanceof Error) {
-        NotificationToast.error(error.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        NotificationToast.error(err.message);
       }
     }
   };
 
   return (
-    <CRUDModalTemplate
+    <EditModal
       open={isOpen}
       onClose={onClose}
       title={t('updateAgendaItem')}
-      onPrimary={updateAgendaItemHandler}
-      primaryText={t('update')}
-      loading={loading}
-      className={styles.AgendaItemModal}
+      onSubmit={updateAgendaItemHandler}
+      submitDisabled={!itemFormState.name.trim()}
       data-testid="updateAgendaItemModal"
     >
       {/* Folder */}
@@ -226,7 +225,7 @@ const AgendaItemsUpdateModal: React.FC<
             })
           }
           renderInput={(params) => (
-            <div ref={params.InputProps.ref}>
+            <div ref={params.InputProps.ref} className="position-relative">
               <input
                 {...params.inputProps}
                 className="form-control"
@@ -255,7 +254,7 @@ const AgendaItemsUpdateModal: React.FC<
             })
           }
           renderInput={(params) => (
-            <div ref={params.InputProps.ref}>
+            <div ref={params.InputProps.ref} className="position-relative">
               <input
                 {...params.inputProps}
                 className="form-control"
@@ -272,6 +271,7 @@ const AgendaItemsUpdateModal: React.FC<
           <FormTextField
             name="title"
             label={t('title')}
+            placeholder={t('enterTitle')}
             value={itemFormState.name}
             onChange={(v) => setItemFormState({ ...itemFormState, name: v })}
           />
@@ -280,6 +280,7 @@ const AgendaItemsUpdateModal: React.FC<
           <FormTextField
             name="duration"
             label={t('duration')}
+            placeholder={t('enterDuration')}
             value={itemFormState.duration}
             required
             onChange={(v) =>
@@ -292,20 +293,26 @@ const AgendaItemsUpdateModal: React.FC<
       <FormTextField
         name="description"
         label={t('description')}
+        placeholder={t('enterDescription')}
         value={itemFormState.description}
-        onChange={(v) => setItemFormState({ ...itemFormState, description: v })}
+        onChange={(v) =>
+          setItemFormState({
+            ...itemFormState,
+            description: v,
+          })
+        }
       />
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div className="d-flex">
+        <div className="d-flex gap-2">
           <input
             className="form-control"
-            data-testid="urlInput"
+            placeholder={t('enterUrl')}
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
           />
-          <Button type="button" onClick={handleAddUrl} data-testid="linkBtn">
+          <Button type="button" onClick={handleAddUrl}>
             {t('link')}
           </Button>
         </div>
@@ -320,7 +327,6 @@ const AgendaItemsUpdateModal: React.FC<
               <Button
                 variant="danger"
                 size="sm"
-                data-testid="deleteUrl"
                 onClick={() => handleRemoveUrl(url)}
               >
                 <FaTrash />
@@ -336,14 +342,13 @@ const AgendaItemsUpdateModal: React.FC<
           type="file"
           multiple
           accept="image/*,video/*"
-          data-testid="attachment"
           className="form-control"
           onChange={handleFileChange}
         />
       </FormFieldGroup>
 
       {itemFormState.attachments.length > 0 && (
-        <div className={styles.previewFile} data-testid="mediaPreview">
+        <div className={styles.previewFile}>
           {itemFormState.attachments.map((attachment) => (
             <div
               key={attachment.objectName}
@@ -368,7 +373,6 @@ const AgendaItemsUpdateModal: React.FC<
                 className={styles.closeButtonFile}
                 aria-label={t('removeAttachment')}
                 onClick={() => handleRemoveAttachment(attachment.objectName)}
-                data-testid="deleteAttachment"
               >
                 <i className="fa fa-times" />
               </button>
@@ -376,7 +380,7 @@ const AgendaItemsUpdateModal: React.FC<
           ))}
         </div>
       )}
-    </CRUDModalTemplate>
+    </EditModal>
   );
 };
 

@@ -38,8 +38,6 @@ describe('AgendaItemsPreviewModal', () => {
   const defaultProps = {
     isOpen: true,
     hidePreviewModal: vi.fn(),
-    showUpdateItemModal: vi.fn(),
-    toggleDeleteItemModal: vi.fn(),
     formState: mockFormState,
     t,
   };
@@ -170,6 +168,13 @@ describe('AgendaItemsPreviewModal', () => {
     expect(source).toHaveAttribute('type', 'video/mp4');
   });
 
+  it('video has muted attribute', () => {
+    render(<AgendaItemsPreviewModal {...defaultProps} />);
+
+    const video = document.querySelector('video');
+    expect(video).toHaveAttribute('muted');
+  });
+
   it('image attachment is wrapped in a link', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
@@ -189,64 +194,14 @@ describe('AgendaItemsPreviewModal', () => {
     expect(videoLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
-  it('calls showUpdateItemModal when edit button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const editButton = screen.getByTestId('previewAgendaItemModalUpdateBtn');
-    await user.click(editButton);
-
-    expect(defaultProps.showUpdateItemModal).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls toggleDeleteItemModal when delete button is clicked', async () => {
-    const user = userEvent.setup();
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const deleteButton = screen.getByTestId('previewAgendaItemModalDeleteBtn');
-    await user.click(deleteButton);
-
-    expect(defaultProps.toggleDeleteItemModal).toHaveBeenCalledTimes(1);
-  });
-
   it('calls hidePreviewModal when modal is closed', async () => {
     const user = userEvent.setup();
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
-    const closeButton = screen.getByTestId('modalCloseBtn');
+    const closeButton = screen.getByTestId('modal-close-btn');
     await user.click(closeButton);
 
     expect(defaultProps.hidePreviewModal).toHaveBeenCalledTimes(1);
-  });
-
-  it('displays edit button with correct aria-label', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const editButton = screen.getByTestId('previewAgendaItemModalUpdateBtn');
-    expect(editButton).toHaveAttribute('aria-label', 'editItem');
-  });
-
-  it('displays delete button with correct aria-label', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const deleteButton = screen.getByTestId('previewAgendaItemModalDeleteBtn');
-    expect(deleteButton).toHaveAttribute('aria-label', 'deleteItem');
-  });
-
-  it('renders edit icon inside edit button', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const editButton = screen.getByTestId('previewAgendaItemModalUpdateBtn');
-    const icon = editButton.querySelector('i.fas.fa-edit');
-    expect(icon).toBeInTheDocument();
-  });
-
-  it('renders trash icon inside delete button', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const deleteButton = screen.getByTestId('previewAgendaItemModalDeleteBtn');
-    const icon = deleteButton.querySelector('i.fas.fa-trash');
-    expect(icon).toBeInTheDocument();
   });
 
   it('displays "-" when category is undefined', () => {
@@ -516,22 +471,6 @@ describe('AgendaItemsPreviewModal', () => {
     expect(document.querySelectorAll('video')).toHaveLength(2);
   });
 
-  it('edit button has small size prop', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const editButton = screen.getByTestId('previewAgendaItemModalUpdateBtn');
-    // Button component with size="sm" prop is rendered
-    expect(editButton).toBeInTheDocument();
-  });
-
-  it('delete button has small size and danger variant props', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const deleteButton = screen.getByTestId('previewAgendaItemModalDeleteBtn');
-    // Button component with size="sm" and variant="danger" props is rendered
-    expect(deleteButton).toBeInTheDocument();
-  });
-
   it('all preview sections are rendered', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
@@ -543,5 +482,12 @@ describe('AgendaItemsPreviewModal', () => {
     expect(screen.getByText('createdBy')).toBeInTheDocument();
     expect(screen.getByText('urls')).toBeInTheDocument();
     expect(screen.getByText('attachments')).toBeInTheDocument();
+  });
+
+  it('renders close button', () => {
+    render(<AgendaItemsPreviewModal {...defaultProps} />);
+
+    const closeButton = screen.getByTestId('modal-close-btn');
+    expect(closeButton).toBeInTheDocument();
   });
 });

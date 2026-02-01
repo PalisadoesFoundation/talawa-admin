@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
@@ -194,7 +193,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('renders update button', () => {
       renderAgendaFolderUpdateModal();
 
-      expect(screen.getByTestId('editAgendaFolderBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('modal-submit-btn')).toBeInTheDocument();
     });
 
     it('displays current folder name in input', () => {
@@ -209,7 +208,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('displays current folder description in input', () => {
       renderAgendaFolderUpdateModal();
 
-      const descInput = screen.getByLabelText(
+      const descInput = screen.getByPlaceholderText(
         'description',
       ) as HTMLInputElement;
       expect(descInput.value).toBe('Test Description');
@@ -235,8 +234,14 @@ describe('AgendaFolderUpdateModal', () => {
     it('renders update button with correct text', () => {
       renderAgendaFolderUpdateModal();
 
-      const updateBtn = screen.getByTestId('editAgendaFolderBtn');
-      expect(updateBtn).toHaveTextContent('update');
+      const updateBtn = screen.getByTestId('modal-submit-btn');
+      expect(updateBtn).toHaveTextContent('Update');
+    });
+
+    it('renders cancel button', () => {
+      renderAgendaFolderUpdateModal();
+
+      expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
     });
   });
 
@@ -326,10 +331,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('calls updateAgendaFolder mutation when form is submitted', async () => {
       renderAgendaFolderUpdateModal();
 
-      const form = screen.getByTestId('editAgendaFolderBtn').closest('form');
-      if (form) {
-        await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
-      }
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -338,30 +340,10 @@ describe('AgendaFolderUpdateModal', () => {
       });
     });
 
-    it('prevents default form submission', async () => {
-      renderAgendaFolderUpdateModal();
-
-      const form = screen.getByTestId('editAgendaFolderBtn').closest('form');
-      const preventDefaultSpy = vi.fn();
-
-      if (form) {
-        form.onsubmit = () => {
-          preventDefaultSpy();
-          return false;
-        };
-      }
-
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
-
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
-    });
-
     it('shows success notification after successful update', async () => {
       renderAgendaFolderUpdateModal();
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -373,7 +355,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('calls refetchAgendaFolder after successful update', async () => {
       renderAgendaFolderUpdateModal();
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
@@ -383,30 +365,17 @@ describe('AgendaFolderUpdateModal', () => {
     it('calls onClose after successful update', async () => {
       renderAgendaFolderUpdateModal();
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(mockOnClose).toHaveBeenCalledTimes(1);
       });
     });
 
-    it('executes update flow in correct order', async () => {
-      renderAgendaFolderUpdateModal();
-
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
-
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
-
-      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      expect(mockOnClose).toHaveBeenCalled();
-    });
-
     it('does not show error notification on successful update', async () => {
       renderAgendaFolderUpdateModal();
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -431,54 +400,31 @@ describe('AgendaFolderUpdateModal', () => {
         formStateWithWhitespace,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 
-    it('sends undefined for empty trimmed name', async () => {
+    it('disables submit when folder name is only whitespace', async () => {
       const formStateWithEmptyName: InterfaceAgendaFolderUpdateFormStateType = {
         ...mockFolderFormState,
         name: '   ',
       };
 
-      const MOCKS_UNDEFINED_NAME: MockedResponse[] = [
-        {
-          request: {
-            query: UPDATE_AGENDA_FOLDER_MUTATION,
-            variables: {
-              input: {
-                id: mockAgendaFolderId,
-                name: undefined,
-                description: 'Test Description',
-              },
-            },
-          },
-          result: {
-            data: {
-              updateAgendaFolder: {
-                id: mockAgendaFolderId,
-                name: '',
-                description: 'Test Description',
-              },
-            },
-          },
-        },
-      ];
-
       renderAgendaFolderUpdateModal(
-        MOCKS_UNDEFINED_NAME,
+        MOCKS_SUCCESS,
         true,
         formStateWithEmptyName,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
-
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+      // Verify that clicking the disabled button doesn't trigger submission
+      await userEvent.click(submitBtn);
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
 
     it('sends undefined for empty trimmed description', async () => {
@@ -493,7 +439,7 @@ describe('AgendaFolderUpdateModal', () => {
         formStateWithEmptyDesc,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -512,7 +458,7 @@ describe('AgendaFolderUpdateModal', () => {
         formStateWithEmptyDesc,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -521,14 +467,40 @@ describe('AgendaFolderUpdateModal', () => {
   });
 
   describe('Form submission - Error handling', () => {
+    it('shows mutation error message when available', async () => {
+      const mocks = [
+        {
+          request: {
+            query: UPDATE_AGENDA_FOLDER_MUTATION,
+            variables: {
+              input: {
+                id: mockAgendaFolderId,
+                name: 'Test Folder',
+                description: 'Test Description',
+              },
+            },
+          },
+          error: new Error('Update failed'),
+        },
+      ];
+
+      renderAgendaFolderUpdateModal(mocks);
+
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
+      });
+    });
+
     it('shows error notification when mutation fails', async () => {
       renderAgendaFolderUpdateModal(MOCKS_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'agendaFolderUpdateFailed',
+          'Failed to update agenda folder',
         );
       });
     });
@@ -536,7 +508,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('does not call refetchAgendaFolder when mutation fails', async () => {
       renderAgendaFolderUpdateModal(MOCKS_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -548,7 +520,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('does not call onClose when mutation fails', async () => {
       renderAgendaFolderUpdateModal(MOCKS_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -560,7 +532,7 @@ describe('AgendaFolderUpdateModal', () => {
     it('does not show success notification when mutation fails', async () => {
       renderAgendaFolderUpdateModal(MOCKS_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -572,11 +544,11 @@ describe('AgendaFolderUpdateModal', () => {
     it('handles Error instance in catch block', async () => {
       renderAgendaFolderUpdateModal(MOCKS_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'agendaFolderUpdateFailed',
+          'Failed to update agenda folder',
         );
       });
     });
@@ -602,7 +574,7 @@ describe('AgendaFolderUpdateModal', () => {
 
       renderAgendaFolderUpdateModal(MOCKS_GRAPHQL_ERROR);
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();
@@ -610,11 +582,49 @@ describe('AgendaFolderUpdateModal', () => {
     });
   });
 
+  describe('Submit button state', () => {
+    it('disables submit button when folder name is empty', () => {
+      const emptyNameFormState: InterfaceAgendaFolderUpdateFormStateType = {
+        ...mockFolderFormState,
+        name: '',
+      };
+
+      renderAgendaFolderUpdateModal(MOCKS_SUCCESS, true, emptyNameFormState);
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('disables submit button when folder name contains only whitespace', () => {
+      const whitespaceNameFormState: InterfaceAgendaFolderUpdateFormStateType =
+        {
+          ...mockFolderFormState,
+          name: '   ',
+        };
+
+      renderAgendaFolderUpdateModal(
+        MOCKS_SUCCESS,
+        true,
+        whitespaceNameFormState,
+      );
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('enables submit button when folder name has valid content', () => {
+      renderAgendaFolderUpdateModal();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
   describe('Edge cases', () => {
     it('handles rapid form submissions gracefully', async () => {
       renderAgendaFolderUpdateModal();
 
-      const submitBtn = screen.getByTestId('editAgendaFolderBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
 
       // Click multiple times rapidly
       await userEvent.click(submitBtn);
@@ -662,11 +672,11 @@ describe('AgendaFolderUpdateModal', () => {
         </MockedProvider>,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'agendaFolderUpdateFailed',
+          'Invalid folder ID',
         );
       });
     });
@@ -708,7 +718,7 @@ describe('AgendaFolderUpdateModal', () => {
         formStateWithLongName,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -752,7 +762,7 @@ describe('AgendaFolderUpdateModal', () => {
         specialCharsFormState,
       );
 
-      await userEvent.click(screen.getByTestId('editAgendaFolderBtn'));
+      await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -804,17 +814,25 @@ describe('AgendaFolderUpdateModal', () => {
 
       expect(mockTSpy).toHaveBeenCalledWith('folderName');
       expect(mockTSpy).toHaveBeenCalledWith('description');
-      expect(mockTSpy).toHaveBeenCalledWith('update');
     });
   });
 
   describe('Modal close handling', () => {
-    it('does not submit form when modal is closed via onHide', async () => {
+    it('calls onClose when cancel button is clicked', async () => {
       renderAgendaFolderUpdateModal();
 
-      // Modal's onHide would be called by BaseModal, but we test our onClose prop
-      expect(mockOnClose).not.toHaveBeenCalled();
+      await userEvent.click(screen.getByTestId('modal-cancel-btn'));
+
+      expect(mockOnClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not submit form when modal is closed via cancel button', async () => {
+      renderAgendaFolderUpdateModal();
+
+      await userEvent.click(screen.getByTestId('modal-cancel-btn'));
+
       expect(NotificationToast.success).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
   });
 });

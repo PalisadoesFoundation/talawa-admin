@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMutation } from '@apollo/client';
 
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
@@ -11,20 +11,20 @@ import styles from './AgendaFolderUpdateModal.module.css';
 import type { InterfaceAgendaFolderUpdateModalProps } from 'types/AdminPortal/Agenda/interface';
 
 /**
- * AgendaFolderUpdateModal Component
+ * AgendaFolderUpdateModal
  *
- * This component renders a modal for updating an existing agenda folder.
- * It provides form fields for editing the folder name and description
- * and submits the updated data using an internal GraphQL mutation.
+ * Edit modal for updating an existing agenda folder.
+ * Uses the shared `EditModal` for consistent update behavior.
  *
- * @remarks
- * The component:
- * - Displays a modal using `BaseModal`
- * - Manages controlled form inputs for folder name and description
- * - Submits updated folder data via a callback function
- * - Supports internationalization using `react-i18next`
+ * @param isOpen - Controls modal visibility
+ * @param onClose - Callback to close the modal
+ * @param folderFormState - Current agenda folder form state
+ * @param setFolderFormState - Setter for agenda folder form state
+ * @param agendaFolderId - ID of the agenda folder being updated
+ * @param refetchAgendaFolder - Refetches agenda folder data after update
+ * @param t - i18n translation function
  *
- * @returns A JSX element that renders the agenda folder update modal.
+ * @returns JSX.Element
  */
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderUpdateModal: React.FC<
@@ -38,9 +38,7 @@ const AgendaFolderUpdateModal: React.FC<
   refetchAgendaFolder,
   t,
 }) => {
-  const [updateAgendaFolder, { loading }] = useMutation(
-    UPDATE_AGENDA_FOLDER_MUTATION,
-  );
+  const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
 
   const updateAgendaFolderHandler = async (): Promise<void> => {
     try {
@@ -54,56 +52,54 @@ const AgendaFolderUpdateModal: React.FC<
         },
       });
 
-      NotificationToast.success(t('agendaFolderUpdated') as string);
+      NotificationToast.success(t('agendaFolderUpdated'));
       refetchAgendaFolder();
       onClose();
-    } catch (error) {
-      if (error instanceof Error) {
-        NotificationToast.error(t('agendaFolderUpdateFailed') as string);
-      }
+    } catch (error: unknown) {
+      NotificationToast.error((error as Error).message);
     }
   };
 
   return (
-    <CRUDModalTemplate
+    <EditModal
       open={isOpen}
       onClose={onClose}
       title={t('updateAgendaFolder')}
-      onPrimary={updateAgendaFolderHandler}
-      primaryText={t('update')}
-      loading={loading}
-      className={styles.campaignModal}
+      onSubmit={updateAgendaFolderHandler}
+      submitDisabled={!folderFormState.name?.trim()}
       data-testid="updateAgendaFolderModal"
     >
-      <FormTextField
-        name="folderName"
-        type="text"
-        label={t('folderName')}
-        placeholder={t('folderNamePlaceholder')}
-        value={folderFormState.name}
-        onChange={(val) =>
-          setFolderFormState({
-            ...folderFormState,
-            name: val,
-          })
-        }
-        required
-      />
+      <div className={styles.form}>
+        <FormTextField
+          name="folderName"
+          type="text"
+          label={t('folderName')}
+          placeholder={t('folderNamePlaceholder')}
+          value={folderFormState.name}
+          onChange={(val) =>
+            setFolderFormState({
+              ...folderFormState,
+              name: val,
+            })
+          }
+          required
+        />
 
-      <FormTextField
-        name="folderDescription"
-        type="text"
-        label={t('description')}
-        placeholder={t('description')}
-        value={folderFormState.description}
-        onChange={(val) =>
-          setFolderFormState({
-            ...folderFormState,
-            description: val,
-          })
-        }
-      />
-    </CRUDModalTemplate>
+        <FormTextField
+          name="folderDescription"
+          type="text"
+          label={t('description')}
+          placeholder={t('description')}
+          value={folderFormState.description}
+          onChange={(val) =>
+            setFolderFormState({
+              ...folderFormState,
+              description: val,
+            })
+          }
+        />
+      </div>
+    </EditModal>
   );
 };
 

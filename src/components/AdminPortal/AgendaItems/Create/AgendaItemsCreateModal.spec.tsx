@@ -177,9 +177,17 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    await user.type(screen.getByLabelText(/title/i), 'Title');
-    await user.type(screen.getByLabelText(/duration/i), '10');
-    await user.type(screen.getByLabelText(/description/i), 'Desc');
+    const titleInput = screen.getByLabelText(/title/i);
+    await user.click(titleInput);
+    await user.paste('Title');
+
+    const durationInput = screen.getByLabelText(/duration/i);
+    await user.click(durationInput);
+    await user.paste('10');
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    await user.click(descriptionInput);
+    await user.paste('Desc');
 
     // select folder
     const folderInput = screen.getByPlaceholderText('folderName');
@@ -194,7 +202,7 @@ describe('AgendaItemsCreateModal', () => {
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
 
-    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -245,11 +253,19 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    await user.type(screen.getByLabelText(/title/i), 'Title');
-    await user.type(screen.getByLabelText(/duration/i), '10');
-    await user.type(screen.getByLabelText(/description/i), 'Desc');
+    const titleInput = screen.getByLabelText(/title/i);
+    await user.click(titleInput);
+    await user.paste('Title');
 
-    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+    const durationInput = screen.getByLabelText(/duration/i);
+    await user.click(durationInput);
+    await user.paste('10');
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    await user.click(descriptionInput);
+    await user.paste('Desc');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
@@ -275,14 +291,17 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    const urlInput = screen.getByTestId('urlInput');
+    const urlInput = screen.getByPlaceholderText('enterUrl');
 
-    await user.type(urlInput, 'https://example.com');
-    await user.click(screen.getByTestId('linkBtn'));
+    await user.click(urlInput);
+    await user.paste('https://example.com');
+    await user.click(screen.getByText('link'));
 
     expect(screen.getByText('https://example.com')).toBeInTheDocument();
 
-    await user.click(screen.getByTestId('deleteUrl'));
+    // FIX: Use the data-testid directly instead of searching for SVG attributes
+    const urlDeleteButton = screen.getByTestId('deleteUrl');
+    await user.click(urlDeleteButton);
 
     expect(screen.queryByText('https://example.com')).not.toBeInTheDocument();
   });
@@ -306,14 +325,17 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    await user.type(screen.getByTestId('urlInput'), 'invalid-url');
-    await user.click(screen.getByTestId('linkBtn'));
+    const urlInput = screen.getByPlaceholderText('enterUrl');
+    await user.click(urlInput);
+    await user.paste('invalid-url');
+    await user.click(screen.getByText('link'));
 
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
   });
 
   it('creates agenda item when agendaFolderData is undefined', async () => {
     const user = userEvent.setup();
+    const refetchMock = vi.fn();
 
     render(
       <MockedProvider
@@ -348,16 +370,25 @@ describe('AgendaItemsCreateModal', () => {
             t={t}
             agendaItemCategories={categories}
             agendaFolderData={undefined}
-            refetchAgendaFolder={vi.fn()}
+            refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
       </MockedProvider>,
     );
 
-    await user.type(screen.getByLabelText(/title/i), 'Title');
-    await user.type(screen.getByLabelText(/duration/i), '10');
-    await user.type(screen.getByLabelText(/description/i), 'Desc');
-    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+    const titleInput = screen.getByLabelText(/title/i);
+    await user.click(titleInput);
+    await user.paste('Title');
+
+    const durationInput = screen.getByLabelText(/duration/i);
+    await user.click(durationInput);
+    await user.paste('10');
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    await user.click(descriptionInput);
+    await user.paste('Desc');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -469,8 +500,10 @@ describe('AgendaItemsCreateModal', () => {
 
     const longUrl = 'https://example.com/' + 'a'.repeat(60);
 
-    await user.type(screen.getByTestId('urlInput'), longUrl);
-    await user.click(screen.getByTestId('linkBtn'));
+    const urlInput = screen.getByPlaceholderText('enterUrl');
+    await user.click(urlInput);
+    await user.paste(longUrl);
+    await user.click(screen.getByText('link'));
 
     expect(
       screen.getByText(longUrl.substring(0, 50) + '...'),
@@ -479,39 +512,36 @@ describe('AgendaItemsCreateModal', () => {
 
   it('submits agenda item without attachments', async () => {
     const user = userEvent.setup();
+    const refetchMock = vi.fn();
 
     render(
       <MockedProvider
-        link={
-          new StaticMockLink([
-            {
-              request: {
-                query: CREATE_AGENDA_ITEM_MUTATION,
-                variables: {
-                  input: {
-                    name: 'Title',
-                    description: 'Desc',
-                    eventId: 'event-1',
-                    sequence: 1,
-                    duration: '10',
-                    folderId: '',
-                    categoryId: '',
-                    attachments: undefined,
-                    url: undefined,
-                    type: 'general',
-                  },
-                },
-              },
-              result: {
-                data: {
-                  createAgendaItem: {
-                    id: 'new-id',
-                  },
+        mocks={[
+          {
+            request: {
+              query: CREATE_AGENDA_ITEM_MUTATION,
+              variables: {
+                input: {
+                  name: 'Title',
+                  description: 'Desc',
+                  eventId: 'event-1',
+                  sequence: 1,
+                  duration: '10',
+                  folderId: '',
+                  categoryId: '',
+                  type: 'general',
                 },
               },
             },
-          ])
-        }
+            result: {
+              data: {
+                createAgendaItem: {
+                  id: 'new-id',
+                },
+              },
+            },
+          },
+        ]}
       >
         <BrowserRouter>
           <AgendaItemsCreateModal
@@ -521,17 +551,25 @@ describe('AgendaItemsCreateModal', () => {
             t={t}
             agendaItemCategories={categories}
             agendaFolderData={agendaFolders}
-            refetchAgendaFolder={vi.fn()}
+            refetchAgendaFolder={refetchMock}
           />
         </BrowserRouter>
       </MockedProvider>,
     );
 
-    await user.type(screen.getByLabelText(/title/i), 'Title');
-    await user.type(screen.getByLabelText(/duration/i), '10');
-    await user.type(screen.getByLabelText(/description/i), 'Desc');
+    const titleInput = screen.getByLabelText(/title/i);
+    await user.click(titleInput);
+    await user.paste('Title');
 
-    await user.click(screen.getByTestId('createAgendaItemFormBtn'));
+    const durationInput = screen.getByLabelText(/duration/i);
+    await user.click(durationInput);
+    await user.paste('10');
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    await user.click(descriptionInput);
+    await user.paste('Desc');
+
+    await user.click(screen.getByTestId('modal-submit-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -591,7 +629,7 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    await user.click(screen.getByTestId('linkBtn'));
+    await user.click(screen.getByText('link'));
 
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
   });
@@ -654,9 +692,11 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    // wait for BOTH to be committed
-    const deleteButtons = await screen.findAllByTestId('deleteAttachment');
-    expect(deleteButtons).toHaveLength(2);
+    // wait for BOTH to be committed - look for deleteAttachment test ids
+    await waitFor(() => {
+      const deleteButtons = screen.getAllByTestId('deleteAttachment');
+      expect(deleteButtons).toHaveLength(2);
+    });
   });
 
   it('skips invalid files but uploads valid ones', async () => {
@@ -691,7 +731,11 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    await screen.findByTestId('deleteAttachment');
+    // Wait for the valid file to be uploaded and rendered
+    await waitFor(() => {
+      const deleteButtons = screen.getAllByTestId('deleteAttachment');
+      expect(deleteButtons).toHaveLength(1);
+    });
 
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
   });
@@ -725,9 +769,9 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), video);
 
-    await screen.findByTestId('deleteAttachment');
-
-    expect(document.querySelector('video')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(document.querySelector('video')).toBeInTheDocument();
+    });
   });
 
   it('removes attachment from state', async () => {
@@ -760,9 +804,88 @@ describe('AgendaItemsCreateModal', () => {
       new File(['img'], 'img.png', { type: 'image/png' }),
     );
 
-    const deleteBtn = await screen.findByTestId('deleteAttachment');
-    await user.click(deleteBtn);
+    // Find the delete button using data-testid
+    await waitFor(async () => {
+      const deleteBtn = screen.getByTestId('deleteAttachment');
+      await user.click(deleteBtn);
+    });
 
-    expect(screen.queryByTestId('deleteAttachment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      const remainingDeleteButtons =
+        screen.queryAllByTestId('deleteAttachment');
+      expect(remainingDeleteButtons).toHaveLength(0);
+    });
+  });
+
+  it('disables submit button when title is empty', () => {
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen={true}
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    expect(submitBtn).toBeDisabled();
+  });
+
+  it('enables submit button when title has content', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen={true}
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const titleInput = screen.getByLabelText(/title/i);
+    await user.click(titleInput);
+    await user.paste('Test Title');
+
+    const submitBtn = screen.getByTestId('modal-submit-btn');
+    expect(submitBtn).not.toBeDisabled();
+  });
+
+  it('calls hide on cancel button click', async () => {
+    const hideMock = vi.fn();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen={true}
+            hide={hideMock}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await userEvent.click(screen.getByTestId('modal-cancel-btn'));
+
+    expect(hideMock).toHaveBeenCalled();
   });
 });

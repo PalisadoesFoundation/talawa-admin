@@ -6,33 +6,32 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaItemsDeleteModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaItemsDeleteModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal.tsx#L23)
+Defined in: [src/components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal.tsx#L26)
+
+AgendaItemsDeleteModal
 
 Confirmation modal for deleting an agenda item.
+Uses the shared `DeleteModal` for standardized delete behavior.
 
 ## Param
 
-Whether the delete modal is visible.
+Controls modal visibility
 
 ## Param
 
-Closes the modal.
+Callback to close the modal
 
 ## Param
 
-ID of the agenda item to delete.
+ID of the agenda item to delete
 
 ## Param
 
-Refetches agenda folders after deletion.
+Refetches agenda folder data after deletion
 
 ## Param
 
-Translation function for agenda section keys.
-
-## Param
-
-Translation function for common keys.
+i18n translation function
 
 ## Returns
 

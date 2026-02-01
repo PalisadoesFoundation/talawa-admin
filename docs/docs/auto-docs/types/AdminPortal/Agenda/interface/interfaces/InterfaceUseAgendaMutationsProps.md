@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUseAgendaMutationsProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L316)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L314)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:316](https://github.com/P
 
 > **refetchAgendaFolder**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L317)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L315)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:317](https://github.com/P
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L318)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L316)
 
 #### Parameters
 

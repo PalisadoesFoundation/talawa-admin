@@ -6,45 +6,48 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAgendaItemsUpdateModalProps`](../../../../../../types/AdminPortal/Agenda/interface/interfaces/InterfaceAgendaItemsUpdateModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.tsx#L49)
+Defined in: [src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal.tsx#L52)
 
-Renders the modal used to update agenda items.
+AgendaItemsUpdateModal
 
-## Param
-
-Whether the modal is open.
-
-## Param
-
-Closes the modal.
+Edit modal for updating an existing agenda item.
+Uses `EditModal` to handle submission, loading, and keyboard actions.
 
 ## Param
 
-ID of the agenda item being updated.
+Controls modal visibility
 
 ## Param
 
-Current agenda item form state.
+Callback to close the modal
 
 ## Param
 
-Setter for agenda item form state.
+ID of the agenda item being updated
 
 ## Param
 
-Refetches agenda folders after update.
+Current agenda item form state
 
 ## Param
 
-i18n translation function.
+Setter for agenda item form state
 
 ## Param
 
-Available agenda item categories.
+Available agenda item categories
 
 ## Param
 
-Available agenda folders.
+Available agenda folders
+
+## Param
+
+Refetches agenda folder data after update
+
+## Param
+
+i18n translation function
 
 ## Returns
 
