@@ -731,6 +731,12 @@ const validateTsxLine = (
   );
 };
 
+/**
+ * Validates files for hardcoded values using the given glob pattern.
+ * @param pattern - Glob pattern to select files when `files` is not provided.
+ * @param files - Optional explicit list of files to validate.
+ * @returns Promise resolving to the list of validation results.
+ */
 export async function validateFiles(
   pattern: string,
   files?: string[],
@@ -788,6 +794,10 @@ export async function validateFiles(
   return results;
 }
 
+/**
+ * CLI entry point for design token validation.
+ * @returns Promise<void>
+ */
 export async function main() {
   console.log('Validating design token usage...\n');
 
@@ -802,6 +812,10 @@ export async function main() {
     ? Array.from(new Set(filesFromArgs.filter((file) => file.trim() !== '')))
     : [];
   const stagedFiles = stagedOnly ? getStagedFiles() : [];
+  if (stagedOnly && stagedFiles.length === 0) {
+    console.log('No staged files to validate.\n');
+    process.exit(0);
+  }
   const tsExtensions = new Set(['.ts', '.tsx']);
   const cssExtensions = new Set(['.css', '.scss', '.sass']);
 
