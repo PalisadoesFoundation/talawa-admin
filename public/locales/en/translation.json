@@ -2392,7 +2392,8 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "commentBy": "Comment by {{name}}"
+    "commentBy": "Comment by {{name}}",
+    "moreOptionsAriaLabel": "More options for comment"
   },
   "profileAvatar": {
     "altText": "Profile picture of {{name}}",

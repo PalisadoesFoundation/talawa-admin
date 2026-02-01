@@ -2392,7 +2392,8 @@
     "deleteComment": "删除评论",
     "deleting": "删除中…",
     "emptyCommentError": "请在提交前输入评论。",
-    "commentBy": "评论者：{{name}}"
+    "commentBy": "评论者：{{name}}",
+    "moreOptionsAriaLabel": "评论的更多选项"
   },
   "profileAvatar": {
     "altText": "{{name}}的个人资料图片",

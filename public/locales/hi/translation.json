@@ -2392,7 +2392,8 @@
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
-    "commentBy": "टिप्पणी: {{name}} द्वारा"
+    "commentBy": "टिप्पणी: {{name}} द्वारा",
+    "moreOptionsAriaLabel": "टिप्पणी के लिए अधिक विकल्प"
   },
   "profileAvatar": {
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
