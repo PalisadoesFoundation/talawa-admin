@@ -718,4 +718,49 @@ describe('EventRegistrantsModal', () => {
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
     }
   });
+
+  test('should show error notification when adding registrant fails', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      makeAddRegistrantErrorMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal');
+
+    const input = screen.getByTestId('autocomplete');
+    await user.type(input, 'John');
+
+    const option = await screen.findByText('John Doe');
+    await user.click(option);
+
+    const addButton = screen.getByTestId('add-registrant-btn');
+    await user.click(addButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('opens AddOnSpot modal on Space key press', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersEmptyMock(),
+    ]);
+
+    const input = await screen.findByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+
+    await user.type(input, 'NoUser');
+
+    const addOnspotLink = await screen.findByTestId('add-onspot-link');
+    addOnspotLink.focus();
+
+    await user.keyboard(' ');
+
+    expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
+  });
 });
