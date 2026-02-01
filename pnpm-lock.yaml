@@ -170,9 +170,6 @@ importers:
       react-toastify:
         specifier: ^11.0.3
         version: 11.0.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      react-tooltip:
-        specifier: ^5.28.0
-        version: 5.30.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       redux:
         specifier: ^5.0.1
         version: 5.0.1
@@ -6344,12 +6341,6 @@ packages:
     peerDependencies:
       react: ^18 || ^19
       react-dom: ^18 || ^19
-
-  react-tooltip@5.30.0:
-    resolution: {integrity: sha512-Yn8PfbgQ/wmqnL7oBpz1QiDaLKrzZMdSUUdk7nVeGTwzbxCAJiJzR4VSYW+eIO42F1INt57sPUmpgKv0KwJKtg==}
-    peerDependencies:
-      react: '>=16.14.0'
-      react-dom: '>=16.14.0'
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -14245,13 +14236,6 @@ snapshots:
   react-toastify@11.0.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       clsx: 2.1.1
-      react: 19.2.3
-      react-dom: 19.2.3(react@19.2.3)
-
-  react-tooltip@5.30.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
-    dependencies:
-      '@floating-ui/dom': 1.7.4
-      classnames: 2.5.1
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
 

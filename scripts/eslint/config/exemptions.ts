@@ -88,12 +88,7 @@ export const wrapperExemptions = [
   }),
   createWrapperExemption({
     componentName: 'Tooltip',
-    allowedIds: [
-      'mui-tooltip',
-      'mui-tooltip-path',
-      'rb-tooltip',
-      'react-tooltip',
-    ],
+    allowedIds: ['mui-tooltip', 'mui-tooltip-path', 'rb-tooltip'],
   }),
 ];
 

@@ -1,6 +1,5 @@
 .tooltipWrapper {
   display: inline-flex;
-  flex: 1 1 auto;
   min-width: 0;
   max-width: 100%;
 }
@@ -17,7 +16,8 @@
   max-width: var(--space-20);
   overflow-wrap: break-word;
   word-break: normal;
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-color);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md)
+    var(--shadow-color);
   opacity: 0;
   pointer-events: none;
   transition:

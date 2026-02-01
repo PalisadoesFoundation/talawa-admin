@@ -21,7 +21,6 @@
 .input {
   flex: 1;
   position: relative;
-  padding-right: var(--space-8);
   padding-inline-end: var(--space-8);
   width: var(--space-24);
 }

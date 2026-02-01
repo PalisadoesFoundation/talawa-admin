@@ -4,7 +4,37 @@
 
 # Interface: InterfaceTooltipProps
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L3)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L23)
+
+Props interface for the Tooltip component.
+
+## Param
+
+The trigger element that the tooltip wraps
+
+## Param
+
+The content to display inside the tooltip (can be text or JSX)
+
+## Param
+
+Position of the tooltip relative to the trigger (default: 'top')
+
+## Param
+
+Delay in milliseconds before showing the tooltip (default: 200)
+
+## Param
+
+Delay in milliseconds before hiding the tooltip (default: 0)
+
+## Param
+
+When true, the tooltip will not show on hover/focus
+
+## Param
+
+Additional CSS class to apply to the tooltip element
 
 ## Properties
 
@@ -12,7 +42,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:3](https://github.
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L4)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L24)
 
 ***
 
@@ -20,7 +50,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:4](https://github.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L10)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L30)
 
 ***
 
@@ -28,7 +58,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:10](https://github
 
 > **content**: `ReactNode`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L5)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L25)
 
 ***
 
@@ -36,7 +66,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:5](https://github.
 
 > `optional` **delayHide**: `number`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L8)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L28)
 
 ***
 
@@ -44,7 +74,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:8](https://github.
 
 > `optional` **delayShow**: `number`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L7)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L27)
 
 ***
 
@@ -52,7 +82,7 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:7](https://github.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L9)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L29)
 
 ***
 
@@ -60,4 +90,4 @@ Defined in: [src/types/shared-components/Tooltip/interface.ts:9](https://github.
 
 > `optional` **placement**: [`TooltipPlacement`](../type-aliases/TooltipPlacement.md)
 
-Defined in: [src/types/shared-components/Tooltip/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L6)
+Defined in: [src/types/shared-components/Tooltip/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Tooltip/interface.ts#L26)

@@ -164,12 +164,6 @@ const restrictedImports = [
     message:
       'Do not import Tooltip/OverlayTrigger from react-bootstrap. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
   },
-  {
-    id: 'react-tooltip',
-    name: 'react-tooltip',
-    message:
-      'Do not import from react-tooltip. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
-  },
 ];
 
 // Helper functions for rule processing

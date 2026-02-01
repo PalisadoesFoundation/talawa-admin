@@ -25,7 +25,6 @@
  * - `shared-components/Button/Button` for the Button component.
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
- * - `react-tooltip` for tooltips.
  * - `Avatar` component for displaying a placeholder profile picture.
  *
  */
