@@ -1,0 +1,21 @@
+.leftDrawerActiveButton,
+.leftDrawerInactiveButton {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.collapsibleDropdownIconWrapper {
+  width: 36px;
+}
+
+.leftDrawerCollapseActiveButton {
+  background-color: var(--leftDrawer-collapse-active-button-bg);
+  color: black;
+}
+
+.collapsibleDropdownIconWrapperSm {
+  width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

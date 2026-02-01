@@ -28,9 +28,9 @@ import React, { useEffect, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
@@ -49,6 +49,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -56,7 +57,7 @@ function OrganizationTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  const createTagModal = useModalState();
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -68,11 +69,11 @@ function OrganizationTags(): JSX.Element {
 
   const showCreateTagModal = (): void => {
     setTagName('');
-    setCreateTagModalIsOpen(true);
+    createTagModal.open();
   };
 
   const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
+    createTagModal.close();
   };
 
   const {
@@ -139,7 +140,7 @@ function OrganizationTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        createTagModal.close();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
       }
@@ -406,37 +407,9 @@ function OrganizationTags(): JSX.Element {
 
       {/* Create Tag Modal */}
       <BaseModal
-        show={createTagModalIsOpen}
-        onHide={hideCreateTagModal}
-        backdrop="static"
-        centered
+        open={createTagModal.isOpen}
         title={t('tagDetails')}
-        headerClassName={styles.tableHeader}
-        headerTestId="modalOrganizationHeader"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={(): void => hideCreateTagModal()}
-              data-testid="closeCreateTagModal"
-              className={styles.removeButton}
-              aria-label={tCommon('cancel')}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              form="create-tag-form"
-              value="invite"
-              data-testid="createTagSubmitBtn"
-              className={styles.addButton}
-              disabled={createTagLoading}
-              aria-label={tCommon('create')}
-            >
-              {tCommon('create')}
-            </Button>
-          </>
-        }
+        onClose={hideCreateTagModal}
       >
         <form id="create-tag-form" onSubmit={createTag}>
           <FormTextField
@@ -450,6 +423,29 @@ function OrganizationTags(): JSX.Element {
             data-testid="tagNameInput"
             className={styles.inputField}
           />
+
+          {/* Footer buttons go inside the form */}
+          <div className="mt-3 d-flex justify-content-end">
+            <Button
+              variant="secondary"
+              onClick={hideCreateTagModal}
+              data-testid="closeCreateTagModal"
+              className={styles.removeButton}
+              aria-label={tCommon('cancel')}
+            >
+              {tCommon('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              form="create-tag-form"
+              data-testid="createTagSubmitBtn"
+              className={styles.addButton}
+              disabled={createTagLoading}
+              aria-label={tCommon('create')}
+            >
+              {tCommon('create')}
+            </Button>
+          </div>
         </form>
       </BaseModal>
     </>

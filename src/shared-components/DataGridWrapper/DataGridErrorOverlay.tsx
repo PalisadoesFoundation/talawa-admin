@@ -4,12 +4,12 @@
  * A custom error overlay component for the DataGrid that displays error messages
  * in a consistent manner with other overlays (loading, empty state).
  *
- * @component
- * @category Shared Components
+ * @remarks
+ * Shared Components
  */
 import React from 'react';
 import { Stack, Typography } from '@mui/material';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 
 interface InterfaceDataGridErrorOverlayProps {
   /**
