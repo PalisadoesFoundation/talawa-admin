@@ -95,7 +95,7 @@ const MOCKS = [
           },
           {
             id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
+            name: 'Mills & Group',
             addressLine1: '5112 Dare Centers',
           },
         ],
@@ -105,6 +105,14 @@ const MOCKS = [
 ];
 
 const MOCKS3 = [
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
     result: {
@@ -117,7 +125,7 @@ const MOCKS3 = [
           },
           {
             id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
+            name: 'Mills & Group',
             addressLine1: '5112 Dare Centers',
           },
         ],
@@ -1418,7 +1426,7 @@ describe('Organization Autocomplete Component', () => {
     await user.click(input);
 
     await waitFor(() => {
-      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
   });
 
@@ -1437,7 +1445,6 @@ describe('Organization Autocomplete Component', () => {
 
   it('opens organization list using dropdown icon', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
 
     const buttons = within(autocomplete).getAllByRole('button');
     const dropdownButton = buttons[0];
@@ -1445,7 +1452,7 @@ describe('Organization Autocomplete Component', () => {
     await user.click(dropdownButton);
 
     await waitFor(() => {
-      expect(input).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
   });
 
@@ -1507,6 +1514,14 @@ describe('Organization Autocomplete Component', () => {
 
   it('handles empty organizations list', async () => {
     const EMPTY_ORGS_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
         result: {
@@ -1665,7 +1680,7 @@ describe('Organization Autocomplete Component', () => {
     const input = within(autocomplete).getByRole('combobox');
 
     // Test with special characters
-    await user.type(input, 'Mills');
+    await user.type(input, 'Mills &');
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
 
