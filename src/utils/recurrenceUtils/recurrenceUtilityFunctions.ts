@@ -328,7 +328,7 @@ export const getWeekOfMonth = (date: Date): number => {
 };
 
 /**
- * Calculates the Nth occurrence of a weekday within its month
+ * Calculate the Nth occurrence of a weekday within its month
  * (e.g. 3rd Monday, 4th Sunday)
  */
 export const getNthWeekdayOfMonth = (date: Date): number => {
