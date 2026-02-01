@@ -2,13 +2,12 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, afterEach } from 'vitest';
+import PageHeader from './PageHeader';
 
 afterEach(() => {
   vi.restoreAllMocks();
   vi.clearAllMocks();
 });
-import PageHeader from './PageHeader';
-
 describe('PageHeader Component', () => {
   it('renders title when provided', () => {
     render(<PageHeader title="Test Title" />);
