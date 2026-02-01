@@ -14,7 +14,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 
 const queryMock = [
   {
@@ -84,10 +84,6 @@ describe('EventRegistrantsWrapper Component', () => {
     eventId: 'event123',
     orgId: 'org123',
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   afterEach(() => {
     cleanup();

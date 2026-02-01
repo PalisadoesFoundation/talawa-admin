@@ -628,7 +628,7 @@ describe('EventRegistrantsModal', () => {
     // onInvitesSent callback is triggered implicitly
   });
 
-  test('getOptionLabel falls back to "unknownUser" translation when member name is empty', async () => {
+  test('shows warning when user types but does not select an option', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
