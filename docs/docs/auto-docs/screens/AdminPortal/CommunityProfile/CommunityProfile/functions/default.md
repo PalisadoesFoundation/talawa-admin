@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx:66](https://github.com/singhaditya73/talawa-admin/blob/29cd145661396699285252e71c943eb0a2ee6a65/src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx#L66)
+Defined in: [src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx:67](https://github.com/singhaditya73/talawa-admin/blob/1c152863810ddbcc25491141d0281f2b0d41697e/src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx#L67)
 
 ## Returns
 
