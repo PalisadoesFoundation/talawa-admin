@@ -10,9 +10,9 @@
 }
 
 .createButton {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-500) !important;
-  border: var(--border-1) solid var(--color-gray-500) !important;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-500);
+  border: var(--border-1) solid var(--color-gray-500);
   margin: var(--space-3) var(--space-5);
   width: var(--space-16);
   height: var(--space-10);
@@ -27,27 +27,27 @@
 }
 
 .dropdown {
-  background-color: var(--color-gray-50) !important;
+  background-color: var(--color-gray-50);
   min-width: var(--space-15);
   border: var(--border-1) solid var(--color-gray-500);
-  color: var(--color-gray-500) !important;
+  color: var(--color-gray-500);
   position: relative;
   display: inline-block;
 }
 
 /* Custom tooltip styling for events attended list */
 .eventsTooltip {
-  background-color: var(--color-white) !important;
-  color: var(--color-gray-900) !important;
-  border: var(--border-1) solid var(--color-blue-500) !important;
-  border-radius: var(--radius-md) !important;
+  background-color: var(--color-white);
+  color: var(--color-gray-900);
+  border: var(--border-1) solid var(--color-blue-500);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-offset-sm) var(--shadow-blur-md)
-    var(--shadow-spread-xs) rgba(0, 0, 0, 0.1) !important;
-  max-width: var(--space-20) !important;
+    var(--shadow-spread-xs) rgba(0, 0, 0, 0.1);
+  max-width: var(--space-20);
 }
 
 .eventsTooltip::after {
-  border-top-color: var(--color-white) !important;
+  border-top-color: var(--color-white);
 }
 
 .eventsTooltipContent {

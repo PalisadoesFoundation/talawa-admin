@@ -6,7 +6,7 @@
   margin: var(--space-4) var(--space-0);
   padding: var(--space-9) var(--space-3);
   border-radius: var(--radius-xl);
-  background-color: var(--color-blue-100) !important;
+  background-color: var(--color-blue-100);
 
   border: none;
   width: 100%;
@@ -87,7 +87,7 @@
 }
 
 .bgDanger {
-  background-color: var(--bs-danger) !important;
+  background-color: var(--bs-danger);
 }
 
 /* Responsive styles from app-fixed.module.css */

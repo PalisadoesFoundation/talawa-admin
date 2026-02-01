@@ -9,7 +9,7 @@
   position: fixed;
   z-index: 9999;
   padding: var(--space-2) var(--space-3);
-  background-color: var(--bs-secondary, var(--color-gray-800));
+  background-color: var(--color-gray-800);
   color: var(--color-white);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-sm);
@@ -18,7 +18,7 @@
   overflow-wrap: break-word;
   word-break: normal;
   box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-md)
-    rgba(0, 0, 0, 0.15);
+    var(--shadow-color, rgba(0, 0, 0, 0.15));
   opacity: 0;
   pointer-events: none;
   transition:
@@ -32,7 +32,7 @@
 
 /* Placement-specific transforms for entrance animation */
 .tooltip.top {
-  transform: translateY(4px);
+  transform: translateY(var(--space-2));
 }
 
 .tooltip.top.visible {
@@ -40,7 +40,7 @@
 }
 
 .tooltip.bottom {
-  transform: translateY(-4px);
+  transform: translateY(calc(-1 * var(--space-2)));
 }
 
 .tooltip.bottom.visible {
@@ -48,7 +48,7 @@
 }
 
 .tooltip.left {
-  transform: translateX(4px);
+  transform: translateX(var(--space-2));
 }
 
 .tooltip.left.visible {
@@ -56,7 +56,7 @@
 }
 
 .tooltip.right {
-  transform: translateX(-4px);
+  transform: translateX(calc(-1 * var(--space-2)));
 }
 
 .tooltip.right.visible {
@@ -67,45 +67,45 @@
 .tooltip::after {
   content: '';
   position: absolute;
-  border: 6px solid transparent;
+  border: var(--border-6) solid transparent;
 }
 
 .tooltip.top::after {
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-top-color: var(--bs-secondary, var(--color-gray-800));
+  border-top-color: var(--color-gray-800);
 }
 
 .tooltip.bottom::after {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-bottom-color: var(--bs-secondary, var(--color-gray-800));
+  border-bottom-color: var(--color-gray-800);
 }
 
 .tooltip.left::after {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-left-color: var(--bs-secondary, var(--color-gray-800));
+  border-left-color: var(--color-gray-800);
 }
 
 .tooltip.right::after {
   right: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-right-color: var(--bs-secondary, var(--color-gray-800));
+  border-right-color: var(--color-gray-800);
 }
 
 /* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .tooltip {
     transition: opacity 150ms ease-in-out;
-    transform: none !important;
+    transform: none;
   }
 
   .tooltip.visible {
-    transform: none !important;
+    transform: none;
   }
 }
