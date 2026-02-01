@@ -10,6 +10,7 @@ import {
   restrictedImportPaths,
   securityRestrictions,
   searchInputRestrictions,
+  modalStateRestrictions,
 } from '../rules/rules.ts';
 
 export const baseTypeScriptConfig = {
@@ -122,6 +123,7 @@ export const baseTypeScriptConfig = {
       'error',
       ...securityRestrictions,
       ...searchInputRestrictions,
+      ...modalStateRestrictions,
     ],
     'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
   },

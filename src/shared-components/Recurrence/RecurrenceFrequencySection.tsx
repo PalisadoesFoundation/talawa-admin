@@ -1,16 +1,10 @@
 import React from 'react';
-import { Dropdown, FormControl } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { Frequency, frequencies } from '../../utils/recurrenceUtils';
-import styles from '../../style/app-fixed.module.css';
+import styles from './RecurrenceFrequencySection.module.css';
 
-interface InterfaceRecurrenceFrequencySectionProps {
-  frequency: Frequency;
-  localInterval: number | string;
-  onIntervalChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onFrequencyChange: (newFrequency: Frequency) => void;
-  t: (key: string) => string;
-}
-
+import { InterfaceRecurrenceFrequencySectionProps } from 'types/shared-components/Recurrence/interface';
 /**
  * Frequency and interval selection section
  */
@@ -20,30 +14,30 @@ export const RecurrenceFrequencySection: React.FC<
   return (
     <div className="mb-4">
       <span className="fw-semibold text-secondary">{t('repeatsEvery')}</span>{' '}
-      <FormControl
+      <FormTextField
+        name="recurrenceInterval"
         type="number"
-        value={localInterval}
-        onChange={onIntervalChange}
-        onDoubleClick={(e) => {
-          (e.target as HTMLInputElement).select();
+        value={localInterval.toString()}
+        onChange={(value) =>
+          onIntervalChange({
+            target: { value },
+          } as React.ChangeEvent<HTMLInputElement>)
+        }
+        onDoubleClick={(e: React.MouseEvent<HTMLInputElement>) => {
+          (e.currentTarget as HTMLInputElement).select();
         }}
-        onKeyDown={(e) => {
-          if (
-            e.key === '-' ||
-            e.key === '+' ||
-            e.key === 'e' ||
-            e.key === 'E'
-          ) {
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (['-', '+', 'e', 'E'].includes(e.key)) {
             e.preventDefault();
           }
         }}
-        min="1"
+        required
+        placeholder="1"
         className={`${styles.recurrenceRuleNumberInput} ms-2 d-inline-block py-2`}
         data-testid="customRecurrenceIntervalInput"
         data-cy="customRecurrenceIntervalInput"
         aria-label={t('repeatsEvery')}
-        aria-required="true"
-        placeholder="1"
+        label={t('repeatsEvery')}
       />
       <Dropdown className="ms-3 d-inline-block">
         <Dropdown.Toggle
