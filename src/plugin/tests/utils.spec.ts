@@ -96,6 +96,70 @@ describe('Plugin Utils', () => {
         false,
       );
     });
+
+    it('should reject route extension with missing fields', () => {
+      const manifest: IPluginManifest = {
+        name: 'Test Plugin',
+        pluginId: 'test-plugin',
+        version: '1.0.0',
+        description: 'Test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        extensionPoints: {
+          routes: [
+            {
+              pluginId: 'test-plugin',
+              path: '/test',
+            } as unknown as NonNullable<
+              NonNullable<IPluginManifest['extensionPoints']>['routes']
+            >[number],
+          ],
+        },
+      };
+
+      expect(validatePluginManifest(manifest)).toBe(false);
+    });
+
+    it('should reject drawer extension with missing fields', () => {
+      const manifest: IPluginManifest = {
+        name: 'Test Plugin',
+        pluginId: 'test-plugin',
+        version: '1.0.0',
+        description: 'Test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        extensionPoints: {
+          drawer: [
+            {
+              pluginId: 'test-plugin',
+              label: 'Test',
+            } as unknown as NonNullable<
+              NonNullable<IPluginManifest['extensionPoints']>['drawer']
+            >[number],
+          ],
+        },
+      };
+
+      expect(validatePluginManifest(manifest)).toBe(false);
+    });
+
+    it('should reject non-array drawer extension', () => {
+      const manifest: IPluginManifest = {
+        name: 'Test Plugin',
+        pluginId: 'test-plugin',
+        version: '1.0.0',
+        description: 'Test plugin',
+        author: 'Test Author',
+        main: 'index.js',
+        extensionPoints: {
+          drawer: {} as unknown as NonNullable<
+            NonNullable<IPluginManifest['extensionPoints']>['drawer']
+          >,
+        },
+      };
+
+      expect(validatePluginManifest(manifest)).toBe(false);
+    });
   });
 
   describe('generatePluginId', () => {
@@ -304,6 +368,14 @@ describe('Plugin Utils', () => {
       const items: TestItem[] = [];
       const filteredItems = filterByPermissions(items, ['read'], false);
       expect(filteredItems).toEqual([]);
+    });
+
+    it('should exclude items when permissions do not match user permissions', () => {
+      const items = [{ permissions: ['read'] }, { permissions: ['write'] }];
+
+      const result = filterByPermissions(items, ['delete'], false);
+
+      expect(result).toEqual([]);
     });
   });
 });
