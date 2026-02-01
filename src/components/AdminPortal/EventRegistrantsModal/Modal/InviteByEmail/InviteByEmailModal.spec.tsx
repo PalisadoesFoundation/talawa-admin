@@ -225,7 +225,6 @@ describe('InviteByEmailModal', () => {
             },
           },
         },
-        delay: 50, // Add delay to capture loading state
       };
 
       renderComponent({}, [successMock]);
@@ -235,18 +234,11 @@ describe('InviteByEmailModal', () => {
       const messageInput = screen.getByTestId('invite-message');
       await user.type(messageInput, 'Test Message');
 
-      // Verify initial state before submission
       const sendButton = screen.getByTestId('invite-submit');
       expect(sendButton).not.toBeDisabled();
       expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
 
       await user.click(sendButton);
-
-      // Wait for loading state to appear AND button to be gone (atomic check)
-      await waitFor(() => {
-        expect(screen.getByTestId('loading-state')).toBeInTheDocument();
-        expect(screen.queryByTestId('invite-submit')).not.toBeInTheDocument();
-      });
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(

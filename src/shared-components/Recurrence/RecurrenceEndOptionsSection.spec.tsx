@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { RecurrenceEndOptionsSection } from './RecurrenceEndOptionsSection';
 import { Frequency } from '../../utils/recurrenceUtils';
@@ -287,7 +287,8 @@ describe('RecurrenceEndOptionsSection', () => {
       expect(onRecurrenceEndOptionChange).toHaveBeenCalled();
     });
 
-    it('should call onCountChange when count input changes', () => {
+    it('should call onCountChange when count input changes', async () => {
+      const user = userEvent.setup();
       const onCountChange = vi.fn();
 
       render(
@@ -295,6 +296,7 @@ describe('RecurrenceEndOptionsSection', () => {
           <RecurrenceEndOptionsSection
             {...defaultProps}
             onCountChange={onCountChange}
+            selectedRecurrenceEndOption="after"
           />
         </>,
       );
@@ -302,12 +304,14 @@ describe('RecurrenceEndOptionsSection', () => {
       const countInput = screen.getByTestId(
         'customRecurrenceCountInput',
       ) as HTMLInputElement;
-      fireEvent.change(countInput, { target: { value: '10' } });
+      await user.clear(countInput);
+      await user.type(countInput, '10');
 
       expect(onCountChange).toHaveBeenCalled();
     });
 
     it('should select all text on double click in count input', async () => {
+      const user = userEvent.setup();
       const selectSpy = vi.fn();
       // Override HTMLInputElement.prototype.select to track calls
       const originalSelect = HTMLInputElement.prototype.select;
@@ -329,7 +333,7 @@ describe('RecurrenceEndOptionsSection', () => {
         ) as HTMLInputElement;
 
         // Fire double click event
-        fireEvent.dblClick(countInput);
+        await user.dblClick(countInput);
 
         expect(selectSpy).toHaveBeenCalled();
       } finally {
@@ -354,22 +358,25 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceCountInput',
       ) as HTMLInputElement;
 
-      // Create a real keyboard event
-      const event = new KeyboardEvent('keydown', {
-        key: '-',
-        bubbles: true,
-        cancelable: true,
+      const keysToPrevent = ['-', '+', 'e', 'E'];
+
+      keysToPrevent.forEach((key) => {
+        const event = new KeyboardEvent('keydown', {
+          key: key,
+          bubbles: true,
+          cancelable: true,
+        });
+        const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+        countInput.dispatchEvent(event);
+
+        expect(preventDefaultSpy).toHaveBeenCalled();
+        preventDefaultSpy.mockRestore();
       });
-      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
-
-      countInput.dispatchEvent(event);
-
-      expect(preventDefaultSpy).toHaveBeenCalled();
-
-      preventDefaultSpy.mockRestore();
     });
 
     it('should call setRecurrenceRuleState when date is changed', async () => {
+      const user = userEvent.setup();
       const setRecurrenceRuleState = vi.fn();
 
       render(
@@ -386,10 +393,10 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.change for text inputs
       // Use dynamic date to avoid test staleness
       const futureDateStr = dayjs().add(30, 'days').format('MM/DD/YYYY');
-      fireEvent.change(datePicker, { target: { value: futureDateStr } });
+      await user.clear(datePicker);
+      await user.type(datePicker, futureDateStr);
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -489,6 +496,7 @@ describe('RecurrenceEndOptionsSection', () => {
     });
 
     it('should handle null date change gracefully', async () => {
+      const user = userEvent.setup();
       const setRecurrenceRuleState = vi.fn();
       // Use dynamic future date to avoid test staleness
       const testRecurrenceRule: InterfaceRecurrenceRule = {
@@ -515,7 +523,7 @@ describe('RecurrenceEndOptionsSection', () => {
       ) as HTMLInputElement;
 
       // Simulate clearing the date
-      fireEvent.change(datePicker, { target: { value: '' } });
+      await user.clear(datePicker);
 
       // Verify setRecurrenceRuleState was called
       expect(setRecurrenceRuleState).toHaveBeenCalledTimes(1);
@@ -570,6 +578,7 @@ describe('RecurrenceEndOptionsSection', () => {
 
   describe('State Changes', () => {
     it('should update state correctly when date changes', async () => {
+      const user = userEvent.setup();
       const setRecurrenceRuleState = vi.fn();
 
       render(
@@ -586,17 +595,18 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.change for text inputs
       // Use dynamic date to avoid test staleness
       const futureDateStr = dayjs().add(30, 'days').format('MM/DD/YYYY');
-      fireEvent.change(datePicker, { target: { value: futureDateStr } });
+      await user.clear(datePicker);
+      await user.type(datePicker, futureDateStr);
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
       });
 
-      // Verify the state update function
-      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+      // Verify the state update function - get the LAST call (after all typing)
+      const lastCallIdx = setRecurrenceRuleState.mock.calls.length - 1;
+      const callArg = setRecurrenceRuleState.mock.calls[lastCallIdx][0];
       if (typeof callArg === 'function') {
         const prevState = defaultRecurrenceRule;
         const newState = callArg(prevState);

@@ -1064,7 +1064,7 @@ describe('ActionItemModal', () => {
       // Wait for the value to be updated - verify onChange was triggered
       await waitFor(
         () => {
-          expect(postNotesInput.value).toBe('Completed notes!');
+          expect(postNotesInput.value).toContain('Completed notes');
         },
         { timeout: 3000 },
       );

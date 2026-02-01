@@ -19,17 +19,22 @@ export const FormFieldGroup: React.FC<
   error,
   touched,
   children,
+  labelClassName,
   inline,
   hideLabel,
+  className,
+  disabled,
+  inputId,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const showError = touched && !!error;
+  const effectiveInputId = inputId || name;
 
   if (inline) {
     return (
       <>
         {label && !hideLabel && (
-          <Form.Label htmlFor={name} className="visually-hidden">
+          <Form.Label htmlFor={effectiveInputId} className="visually-hidden">
             {label}
             {required && <span aria-label={tCommon('required')}>*</span>}
           </Form.Label>
@@ -45,8 +50,11 @@ export const FormFieldGroup: React.FC<
   }
 
   return (
-    <Form.Group controlId={name}>
-      <Form.Label className={hideLabel ? 'visually-hidden' : ''}>
+    <Form.Group controlId={effectiveInputId} className={className}>
+      <Form.Label
+        htmlFor={effectiveInputId}
+        className={`${hideLabel ? 'visually-hidden' : ''} ${disabled ? 'text-muted' : ''} ${labelClassName || ''}`.trim()}
+      >
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}
       </Form.Label>
@@ -54,11 +62,17 @@ export const FormFieldGroup: React.FC<
       {children}
 
       {helpText && !showError && (
-        <Form.Text className="text-muted">{helpText}</Form.Text>
+        <Form.Text id={`${effectiveInputId}-help`} className="text-muted">
+          {helpText}
+        </Form.Text>
       )}
 
       {showError && (
-        <Form.Control.Feedback type="invalid" className="d-block">
+        <Form.Control.Feedback
+          id={`${effectiveInputId}-error`}
+          type="invalid"
+          className="d-block"
+        >
           {error}
         </Form.Control.Feedback>
       )}
