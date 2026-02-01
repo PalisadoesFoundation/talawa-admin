@@ -537,63 +537,51 @@ describe('Recurrence Utility Functions', () => {
     // Use dynamic dates based on a future month
     const testMonth = getFutureMonth(2);
 
-    it('should return correct week for day 5 of the month', () => {
+    it('should return correct week for day 5 of the month (week 1)', () => {
       const date = testMonth.date(5).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((5 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(1);
     });
-    it('should return correct week for day 8 of the month', () => {
+    it('should return correct week for day 8 of the month (week 2)', () => {
       const date = testMonth.date(8).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((8 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(2);
     });
-    it('should return correct week for day 15 of the month', () => {
+    it('should return correct week for day 15 of the month (week 3)', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((15 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(3);
     });
-    it('should return correct week for day 22 of the month', () => {
+    it('should return correct week for day 22 of the month (week 4)', () => {
       const date = testMonth.date(22).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((22 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(4);
     });
-    it('should return correct week for day 29 of the month', () => {
+    it('should return correct week for day 29 of the month (week 5)', () => {
       const date = testMonth.date(29).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((29 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(5);
     });
 
     it('should handle dates at the end of the month correctly', () => {
+      // Last day can be 28, 29, 30, or 31, corresponding to week 4 or 5
       const lastDay = testMonth.endOf('month').hour(10).toDate();
       const dayOfMonth = testMonth.daysInMonth();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((dayOfMonth + firstDayOfMonth) / 7);
+      const expectedWeek = Math.ceil(dayOfMonth / 7);
       expect(getWeekOfMonth(lastDay)).toBe(expectedWeek);
     });
 
     it('should handle February correctly', () => {
-      // Find a future February and test day 28
+      // Find a future February and test day 28 (week 4)
       let year = dayjs().year();
       if (dayjs().month() >= 2) year++;
       const febDate = dayjs(`${year}-02-28T10:00:00.000Z`).toDate();
-      // Feb 28 is always in week 4 or 5
-      expect(getWeekOfMonth(febDate)).toBeGreaterThanOrEqual(4);
+      expect(getWeekOfMonth(febDate)).toBe(4);
     });
 
-    it('should handle February correctly in leap year (29 days)', () => {
+    it('should handle February correctly in leap year (29 days - week 5)', () => {
       // Use the helper to find Feb 29
       const feb29 = findLeapYearFeb29().toDate();
-      // Feb 29 is always in week 5
       expect(getWeekOfMonth(feb29)).toBe(5);
     });
 
     it('should handle months starting on different days of the week', () => {
-      // First day of any month should always be week 1
+      // First day of any month should always be week 1, regardless of day of week
       const month1 = getFutureMonth(1).date(1).hour(10).toDate();
       expect(getWeekOfMonth(month1)).toBe(1);
 
@@ -620,19 +608,14 @@ describe('Recurrence Utility Functions', () => {
         .hour(10)
         .toDate();
 
-      // Verify week calculation is consistent with implementation
       [thisYear, nextYear, yearAfter].forEach((date) => {
-        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        const expectedWeek = Math.ceil((15 + firstDay.getDay()) / 7);
-        expect(getWeekOfMonth(date)).toBe(expectedWeek);
+        expect(getWeekOfMonth(date)).toBe(3);
       });
     });
 
     it('should handle edge case: date in the middle of the month', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((15 + firstDayOfMonth) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(3);
     });
   });
 
