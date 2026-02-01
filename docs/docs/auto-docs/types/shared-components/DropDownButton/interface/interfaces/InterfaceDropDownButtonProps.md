@@ -4,7 +4,9 @@
 
 # Interface: InterfaceDropDownButtonProps
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L28)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L39)
+
+Interface for dropdown button component props.
 
 ## Extends
 
@@ -16,7 +18,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:28](https:/
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L52)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L63)
 
 ARIA label for accessibility.
 
@@ -26,7 +28,7 @@ ARIA label for accessibility.
 
 > `optional` **btnStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L26)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L33)
 
 Custom styles for the dropdown button.
 
@@ -40,7 +42,7 @@ Custom styles for the dropdown button.
 
 > `optional` **buttonLabel**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L83)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L94)
 
 The label of the button.
 
@@ -50,7 +52,7 @@ The label of the button.
 
 > `optional` **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L57)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L68)
 
 Data test id prefix for testing purposes.
 
@@ -60,7 +62,7 @@ Data test id prefix for testing purposes.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L93)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L104)
 
 Whether the dropdown button is disabled.
 
@@ -70,7 +72,7 @@ Whether the dropdown button is disabled.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L88)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L99)
 
 The icon to be displayed on the button.
 
@@ -80,7 +82,7 @@ The icon to be displayed on the button.
 
 > `optional` **id**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L32)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L43)
 
 The id of the dropdown button.
 
@@ -90,7 +92,7 @@ The id of the dropdown button.
 
 > **onSelect**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L47)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L58)
 
 Callback function when an option is selected.
 
@@ -110,7 +112,7 @@ Callback function when an option is selected.
 
 > **options**: [`InterfaceDropDownOption`](InterfaceDropDownOption.md)[]
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L37)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L48)
 
 The options to be displayed in the dropdown.
 
@@ -120,7 +122,7 @@ The options to be displayed in the dropdown.
 
 > `optional` **parentContainerStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L21)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L28)
 
 Custom styles for the parent container.
 
@@ -134,7 +136,7 @@ Custom styles for the parent container.
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L98)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L109)
 
 Placeholder text when no option is selected.
 
@@ -144,7 +146,7 @@ Placeholder text when no option is selected.
 
 > `optional` **selectedValue**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L42)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L53)
 
 The currently selected value.
 
@@ -154,6 +156,6 @@ The currently selected value.
 
 > `optional` **variant**: `"primary"` \| `"secondary"` \| `"success"` \| `"danger"` \| `"warning"` \| `"info"` \| `"dark"` \| `"light"` \| `"outline-primary"` \| `"outline-secondary"` \| `"outline-success"` \| `"outline-danger"` \| `"outline-warning"` \| `"outline-info"` \| `"outline-dark"` \| `"outline-light"`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L62)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L73)
 
 The variant/style of the button.

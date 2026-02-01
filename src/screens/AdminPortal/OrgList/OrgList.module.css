@@ -48,9 +48,9 @@
 ) {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      rgba(var(--shadow-spread-none), 0.15);
   border: var(--border-1) solid var(--color-gray-700) !important;
   color: var(--color-gray-700) !important;
 }
@@ -64,7 +64,6 @@
   background-color: var(--color-gray-100) !important;
   border: var(--border-1) solid var(--color-gray-700) !important;
   height: var(--space-10);
-  margin-top: var(--space-4);
   color: var(--color-gray-700);
 }
 
@@ -75,9 +74,9 @@
   color: var(--color-gray-700) !important;
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-300);
 }
 
 .listBoxOrgList {
@@ -252,9 +251,9 @@
   border-color: var(--color-blue-500);
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
+      var(--color-blue-200),
     0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+      var(--color-gray-300);
 }
 
 .orgImgContainer {

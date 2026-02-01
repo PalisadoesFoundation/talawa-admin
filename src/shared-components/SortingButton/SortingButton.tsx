@@ -49,6 +49,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
       dataTestIdPrefix={dataTestIdPrefix}
       buttonLabel={buttonLabel || String(selectedOption ?? '')}
       parentContainerStyle={className}
+      variant="outline-secondary"
       icon={
         icon ? (
           <img

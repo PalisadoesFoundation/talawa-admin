@@ -4,7 +4,9 @@
 
 # Interface: InterfaceDropDownOption
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L1)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L4)
+
+Interface for a single dropdown option.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:1](https://
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L15)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L18)
 
 Whether the option is disabled.
 
@@ -22,7 +24,7 @@ Whether the option is disabled.
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L10)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L13)
 
 The label of the option.
 
@@ -32,6 +34,6 @@ The label of the option.
 
 > **value**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L5)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L8)
 
 The value of the option.

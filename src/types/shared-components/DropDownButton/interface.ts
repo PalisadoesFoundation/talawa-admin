@@ -1,3 +1,6 @@
+/**
+ * Interface for a single dropdown option.
+ */
 export interface InterfaceDropDownOption {
   /**
    * The value of the option.
@@ -14,6 +17,10 @@ export interface InterfaceDropDownOption {
    */
   disabled?: boolean;
 }
+
+/**
+ * Interface for dropdown component props.
+ */
 export interface InterfaceDropDownProps {
   /**
    * Custom styles for the parent container.
@@ -25,6 +32,10 @@ export interface InterfaceDropDownProps {
    */
   btnStyle?: string;
 }
+
+/**
+ * Interface for dropdown button component props.
+ */
 export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
   /**
    * The id of the dropdown button.

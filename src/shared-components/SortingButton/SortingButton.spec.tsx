@@ -43,13 +43,14 @@ describe('SortingButton', () => {
 
           <div data-testid={`${dataTestIdPrefix}-menu`}>
             {options.map((option: { label: string; value: string }) => (
-              <div
+              <button
+                type="button"
                 key={option.value}
                 data-testid={option.value}
                 onClick={() => onSelect(option.value)}
               >
                 {option.label}
-              </div>
+              </button>
             ))}
           </div>
         </div>

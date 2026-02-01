@@ -121,7 +121,10 @@ beforeEach(() => {
   setItem('name', 'John Doe');
   setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
   global.IntersectionObserver = class {
-    constructor() {}
+    constructor(
+      _callback: IntersectionObserverCallback,
+      _options?: IntersectionObserverInit,
+    ) {}
     observe() {}
     unobserve() {}
     disconnect() {}

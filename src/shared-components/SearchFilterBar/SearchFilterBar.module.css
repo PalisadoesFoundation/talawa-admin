@@ -2,24 +2,27 @@
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin: 1.8rem 0 1.8rem 0;
+  align-items: center;
+  margin: var(--space-7) 0 var(--space-7) 0;
   align-items: stretch;
-  gap: 0.75rem;
+  gap: var(--space-1);
   flex-wrap: wrap;
+  height: var(--space-10);
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--space-1);
 }
 
 .screenReaderOnly {
   position: absolute;
-  width: 1px;
-  height: 1px;
+  width: 0;
+  height: 0;
   padding: 0;
-  margin: -1px;
+  margin: calc(-1 * var(--space-5));
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

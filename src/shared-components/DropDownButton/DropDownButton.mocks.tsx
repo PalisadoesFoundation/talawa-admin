@@ -11,6 +11,7 @@ import type {
   InterfaceDropDownOption,
 } from 'types/shared-components/DropDownButton/interface';
 import { ArrowDownwardSharp } from '@mui/icons-material';
+import { vi } from 'vitest';
 
 export const basicOptions: InterfaceDropDownOption[] = [
   { value: '1', label: 'Option 1' },
@@ -70,4 +71,12 @@ export const disabledOptionProps: InterfaceDropDownButtonProps = {
 export const variantProps: InterfaceDropDownButtonProps = {
   ...baseProps,
   variant: 'primary',
+};
+
+export const noTestIdProps: InterfaceDropDownButtonProps = {
+  id: 'no-test-id-dropdown',
+  options: basicOptions,
+  selectedValue: '2',
+  onSelect: mockOnSelect,
+  ariaLabel: 'No Test ID Dropdown',
 };

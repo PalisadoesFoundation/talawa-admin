@@ -4,7 +4,9 @@
 
 # Interface: InterfaceDropDownProps
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L17)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L24)
+
+Interface for dropdown component props.
 
 ## Extended by
 
@@ -16,7 +18,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:17](https:/
 
 > `optional` **btnStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L26)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L33)
 
 Custom styles for the dropdown button.
 
@@ -26,6 +28,6 @@ Custom styles for the dropdown button.
 
 > `optional` **parentContainerStyle**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L21)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L28)
 
 Custom styles for the parent container.

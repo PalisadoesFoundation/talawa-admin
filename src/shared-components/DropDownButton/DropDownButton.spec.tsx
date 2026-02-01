@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InterfaceDropDownButtonProps } from 'types/shared-components/DropDownButton/interface';
@@ -14,6 +14,7 @@ import {
   disabledOptionProps,
   variantProps,
   mockOnSelect,
+  noTestIdProps,
 } from './DropDownButton.mocks';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -22,7 +23,7 @@ const renderComponent = (props: InterfaceDropDownButtonProps) => {
 };
 
 describe('DropDownButton Component', () => {
-  beforeEach(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -139,5 +140,11 @@ describe('DropDownButton Component', () => {
       'aria-label',
       i18nForTest.t('common:optionsSuffix'),
     );
+  });
+
+  it('uses default data-testid prefix when dataTestIdPrefix is not provided', () => {
+    renderComponent(noTestIdProps);
+    const button = screen.getByTestId('dropdown-toggle');
+    expect(button).toBeInTheDocument();
   });
 });
