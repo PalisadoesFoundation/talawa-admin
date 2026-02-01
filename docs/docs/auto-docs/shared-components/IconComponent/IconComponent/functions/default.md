@@ -4,15 +4,15 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/IconComponent/IconComponent.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/IconComponent/IconComponent.tsx#L60)
+Defined in: [src/shared-components/IconComponent/IconComponent.tsx:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/IconComponent/IconComponent.tsx#L202)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-[`IIconComponent`](../../../../types/shared-components/IconComponent/interface/interfaces/IIconComponent.md)
+[`InterfaceIconComponentProps`](../../../../types/shared-components/IconComponent/interface/interfaces/InterfaceIconComponentProps.md)
 
 ## Returns
 

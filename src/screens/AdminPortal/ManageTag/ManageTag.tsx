@@ -72,6 +72,7 @@ import {
 import type {
   InterfaceTagAssignedMembersQuery,
   SortedByType,
+  TagActionType,
 } from 'utils/organizationTagsUtils';
 import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -93,7 +94,6 @@ import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
-type TagActionType = 'assignToTags' | 'removeFromTags';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -303,10 +303,12 @@ function ManageTag(): JSX.Element {
     navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
   const toggleUnassignUserTagModal = (): void => {
-    if (unassignUserTagModal.isOpen) {
+    if (!unassignUserTagModal.isOpen) {
+      unassignUserTagModal.open();
+    } else {
       setUnassignUserId(null);
+      unassignUserTagModal.close();
     }
-    unassignUserTagModal.open();
   };
 
   const getFullName = (
@@ -528,35 +530,39 @@ function ManageTag(): JSX.Element {
                   <div className="ms-3 fs-5">{tCommon('actions')}</div>
                 </div>
                 <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
-                  <div
+                  <button
+                    type="button"
                     onClick={tagActionsModal.open}
                     className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="assignToTags"
                   >
                     {t('assignToTags')}
-                  </div>
-                  <div
+                  </button>
+                  <button
+                    type="button"
                     onClick={tagActionsModal.open}
                     className="mb-1 btn btn-danger btn-sm w-75"
                     data-testid="removeFromTags"
                   >
                     {t('removeFromTags')}
-                  </div>
+                  </button>
                   <hr className={styles.tagActionsDivider} />
-                  <div
+                  <button
+                    type="button"
                     onClick={editUserTagModal.open}
                     className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="editUserTag"
                   >
                     {tCommon('edit')}
-                  </div>
-                  <div
+                  </button>
+                  <button
+                    type="button"
                     onClick={removeUserTagModal.open}
                     className="mb-2 btn btn-danger btn-sm w-75"
                     data-testid="removeTag"
                   >
                     {tCommon('remove')}
-                  </div>
+                  </button>
                 </div>
               </Col>
             </Row>
@@ -576,7 +582,6 @@ function ManageTag(): JSX.Element {
       <TagActions
         tagActionsModalIsOpen={tagActionsModal.isOpen}
         hideTagActionsModal={tagActionsModal.close}
-        // tagActionType={tagActionType}
         tagActionType={tagActionType}
         t={t}
         tCommon={tCommon}
