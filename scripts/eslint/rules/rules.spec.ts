@@ -381,6 +381,49 @@ describe('ESLint Syntax Restrictions', () => {
       );
       expect(error).toBeUndefined();
     });
+
+    it('should error on i18n.t() with spaces', async () => {
+      const code = `i18n.t('Has Spaces');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('spaces'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should error on i18n.t() with PascalCase', async () => {
+      const code = `i18n.t('PascalCase');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('lowercase'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should error on i18n.t() with snake_case', async () => {
+      const code = `i18n.t('snake_case');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('underscores'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should allow i18n.t() with camelCase', async () => {
+      const code = `i18n.t('camelCaseKey');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' && msg.message.includes('i18n'),
+      );
+      expect(error).toBeUndefined();
+    });
   });
 
   describe('ESLint Rule Data Tests', () => {
