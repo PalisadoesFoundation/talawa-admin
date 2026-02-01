@@ -146,7 +146,7 @@ function OrgList(): JSX.Element {
   });
 
   const [searchByName, setSearchByName] = useState('');
-  const { isOpen, close } = useModalState();
+  const { isOpen, open, close } = useModalState();
 
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
@@ -424,7 +424,7 @@ function OrgList(): JSX.Element {
               {role === 'administrator' && (
                 <RBButton
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                  onClick={close}
+                  onClick={open}
                   data-testid="createOrganizationBtn"
                 >
                   <i className="fa fa-plus me-2" />
