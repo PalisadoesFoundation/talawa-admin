@@ -60,7 +60,7 @@ describe('Testing Loader component', () => {
   });
   test('Component should be rendered properly only noCols is provided', () => {
     const props: InterfaceTableLoaderProps = {
-      noOfRows: 10,
+      noOfRows: 1,
       noOfCols: 3,
     };
     render(
