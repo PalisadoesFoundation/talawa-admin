@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserEvents
 
-Defined in: [src/utils/interfaces.ts:1871](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1871)
+Defined in: [src/utils/interfaces.ts:1891](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1891)
 
 Defines the structure for user-related events with volunteer information.
 
@@ -14,7 +14,7 @@ Defines the structure for user-related events with volunteer information.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1874](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1874)
+Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1894)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1874](https://github.com/PalisadoesFoundati
 
 > **endAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1876)
+Defined in: [src/utils/interfaces.ts:1896](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1896)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1876](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1872](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1872)
+Defined in: [src/utils/interfaces.ts:1892](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1892)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1872](https://github.com/PalisadoesFoundati
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:1877](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1877)
+Defined in: [src/utils/interfaces.ts:1897](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1897)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:1877](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1873](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1873)
+Defined in: [src/utils/interfaces.ts:1893](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1893)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/interfaces.ts:1873](https://github.com/PalisadoesFoundati
 
 > **startAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1875](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1875)
+Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1895)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1875](https://github.com/PalisadoesFoundati
 
 > **volunteerGroups**: [`InterfaceVolunteerGroupInfo`](InterfaceVolunteerGroupInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:1878](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1878)
+Defined in: [src/utils/interfaces.ts:1898](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1898)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/utils/interfaces.ts:1878](https://github.com/PalisadoesFoundati
 
 > **volunteers**: [`InterfaceEventVolunteerInfo`](InterfaceEventVolunteerInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:1879](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1879)
+Defined in: [src/utils/interfaces.ts:1899](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1899)

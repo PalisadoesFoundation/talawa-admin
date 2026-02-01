@@ -6,16 +6,16 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/Requests/Requests.tsx:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Requests/Requests.tsx#L80)
+Defined in: [src/screens/AdminPortal/Requests/Requests.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Requests/Requests.tsx#L77)
 
 Renders the Membership Requests screen.
 
 Responsibilities:
-- Displays membership requests with infinite scroll support
+- Displays pending membership requests
 - Supports search submission via SearchFilterBar
 - Shows user avatars and request details
 - Handles accept and reject request actions
-- Shows empty state via DataGrid overlay when no requests exist
+- Shows empty state when no requests exist
 
 Localization:
 - Uses `common` and `requests` namespaces

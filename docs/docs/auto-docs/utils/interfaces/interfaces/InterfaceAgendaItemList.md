@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemList
 
-Defined in: [src/utils/interfaces.ts:1720](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1720)
+Defined in: [src/utils/interfaces.ts:1740](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1740)
 
 Defines the structure for a list of agenda items by event.
 
@@ -14,4 +14,4 @@ Defines the structure for a list of agenda items by event.
 
 > **agendaItemByEvent**: [`InterfaceAgendaItemInfo`](InterfaceAgendaItemInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:1721](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1721)
+Defined in: [src/utils/interfaces.ts:1741](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1741)
