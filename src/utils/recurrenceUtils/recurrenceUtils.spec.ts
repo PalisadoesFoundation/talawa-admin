@@ -741,15 +741,13 @@ describe('Recurrence Utility Functions', () => {
       const thirdMonday = getNthDayOfWeekInMonth(testMonth, 1, 3); // 1 = Monday
       const options = getMonthlyOptions(thirdMonday.toDate());
       const dayOfMonth = thirdMonday.date();
-      // Calculate expected week using same formula as getWeekOfMonth
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((dayOfMonth + firstDayOfMonth) / 7);
-      const ordinals = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
-      const expectedOrdinal = ordinals[expectedWeek] || 'last';
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + thirdMonday.startOf('month').day()) / 7,
+      );
       expect(options.byWeekday).toBe(
-        `Monthly on the ${expectedOrdinal} Monday`,
+        `Monthly on the ${getOrdinalString(expectedWeek)} Monday`,
       );
       expect(options.dateValue).toBe(dayOfMonth);
       expect(options.weekdayValue).toEqual({
@@ -831,15 +829,13 @@ describe('Recurrence Utility Functions', () => {
       const fourthSunday = getNthDayOfWeekInMonth(testMonth, 0, 4); // 0 = Sunday
       const options = getMonthlyOptions(fourthSunday.toDate());
       const dayOfMonth = fourthSunday.date();
-      // Calculate expected week using same formula as getWeekOfMonth
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek = Math.ceil((dayOfMonth + firstDayOfMonth) / 7);
-      const ordinals = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
-      const expectedOrdinal = ordinals[expectedWeek] || 'last';
 
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + fourthSunday.startOf('month').day()) / 7,
+      );
       expect(options.byWeekday).toBe(
-        `Monthly on the ${expectedOrdinal} Sunday`,
+        `Monthly on the ${getOrdinalString(expectedWeek)} Sunday`,
       );
       expect(options.dateValue).toBe(dayOfMonth);
       expect(options.weekdayValue).toEqual({
@@ -905,31 +901,29 @@ describe('Recurrence Utility Functions', () => {
 
     it('should return consistent weekday values for the same day of week', () => {
       // Find 1st, 2nd, and 3rd Monday of test month
-      const monday1Date = getNthDayOfWeekInMonth(testMonth, 1, 1);
-      const monday2Date = getNthDayOfWeekInMonth(testMonth, 1, 2);
-      const monday3Date = getNthDayOfWeekInMonth(testMonth, 1, 3);
-      const monday1 = monday1Date.toDate();
-      const monday2 = monday2Date.toDate();
-      const monday3 = monday3Date.toDate();
-      // Calculate expected weeks using same formula as getWeekOfMonth
-      const firstDayOfMonth = testMonth.date(1).day();
-      const expectedWeek1 = Math.ceil(
-        (monday1Date.date() + firstDayOfMonth) / 7,
-      );
-      const expectedWeek2 = Math.ceil(
-        (monday2Date.date() + firstDayOfMonth) / 7,
-      );
-      const expectedWeek3 = Math.ceil(
-        (monday3Date.date() + firstDayOfMonth) / 7,
-      );
+      const monday1 = getNthDayOfWeekInMonth(testMonth, 1, 1).toDate();
+      const monday2 = getNthDayOfWeekInMonth(testMonth, 1, 2).toDate();
+      const monday3 = getNthDayOfWeekInMonth(testMonth, 1, 3).toDate();
 
       expect(getMonthlyOptions(monday1).weekdayValue.day).toBe(WeekDays.MO);
       expect(getMonthlyOptions(monday2).weekdayValue.day).toBe(WeekDays.MO);
       expect(getMonthlyOptions(monday3).weekdayValue.day).toBe(WeekDays.MO);
 
-      expect(getMonthlyOptions(monday1).weekdayValue.week).toBe(expectedWeek1);
-      expect(getMonthlyOptions(monday2).weekdayValue.week).toBe(expectedWeek2);
-      expect(getMonthlyOptions(monday3).weekdayValue.week).toBe(expectedWeek3);
+      const getExpectedWeek = (date: Date) => {
+        const d = dayjs(date);
+        const firstDayOfMonth = d.startOf('month').day();
+        return Math.ceil((d.date() + firstDayOfMonth) / 7);
+      };
+
+      expect(getMonthlyOptions(monday1).weekdayValue.week).toBe(
+        getExpectedWeek(monday1),
+      );
+      expect(getMonthlyOptions(monday2).weekdayValue.week).toBe(
+        getExpectedWeek(monday2),
+      );
+      expect(getMonthlyOptions(monday3).weekdayValue.week).toBe(
+        getExpectedWeek(monday3),
+      );
     });
 
     it('should handle edge case: date that falls in the fifth week', () => {
