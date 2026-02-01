@@ -51,8 +51,8 @@ import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaItemList,
 } from 'utils/interfaces';
-import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
-import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
+import AgendaItemsContainer from 'components/AdminPortal/AgendaItems/AgendaItemsContainer';
+import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from './EventAgendaItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

@@ -167,7 +167,7 @@
   "contactInfoHeading": "Informations de contact",
   "educationGrade": "Niveau d’éducation",
   "employmentStatus": "Statut professionnel",
-  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo.",
+  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de {{size}}Mo.",
   "homePhoneNumber": "Numéro de téléphone fixe",
   "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou GIF.",
   "maritalStatus": "État civil",
@@ -271,14 +271,6 @@
   "imageNotFound": "Image non trouvée",
   "changeLanguage": "Changer de langue",
   "selectField": "Sélectionner {{fieldName}}",
-  "userEvents": {
-    "presetToday": "Aujourd'hui",
-    "presetThisWeek": "Cette Semaine",
-    "presetThisMonth": "Ce Mois",
-    "presetNext7Days": "7 Prochains Jours",
-    "presetNext30Days": "30 Prochains Jours",
-    "presetNextMonth": "Mois Prochain"
-  },
   "ascending": "Croissant",
   "descending": "Décroissant",
   "noRegistrations": "Nombre d'Inscriptions",
@@ -305,5 +297,5 @@
   "unavailable": "Indisponible",
   "clearSelection": "Effacer la sélection",
   "toggleSidebar": "Basculer la barre latérale",
-  "picture": "Photo de {{name}}"
+  "picture": "Image de {{name}}"
 }

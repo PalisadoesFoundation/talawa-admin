@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import Button from 'shared-components/Button/Button';
 import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
@@ -55,8 +56,12 @@ const UpcomingEvents = (): JSX.Element => {
   if (!orgId || !userId) {
     return <Navigate to="/" replace />;
   }
-  const [showRecurringModal, setShowRecurringModal] = useState(false);
-  const pendingVolunteerRequestState = useState<{
+  const {
+    isOpen: showRecurringModal,
+    open: openRecurringModal,
+    close: closeRecurringModal,
+  } = useModalState();
+  const [pendingVolunteerRequest, setPendingVolunteerRequest] = useState<{
     eventId: string;
     eventName: string;
     eventDate: string;
@@ -65,8 +70,6 @@ const UpcomingEvents = (): JSX.Element => {
     status: string;
     isRecurring: boolean;
   } | null>(null);
-  const pendingVolunteerRequest = pendingVolunteerRequestState[0];
-  const setPendingVolunteerRequest = pendingVolunteerRequestState[1];
   const handleVolunteerClick = (
     eventId: string,
     eventName: string,
@@ -85,7 +88,7 @@ const UpcomingEvents = (): JSX.Element => {
       status: status || 'requested',
       isRecurring: isRecurring || false,
     });
-    setShowRecurringModal(true);
+    openRecurringModal();
   };
   const {
     data: eventsData,
@@ -435,7 +438,7 @@ const UpcomingEvents = (): JSX.Element => {
       )}
       <RecurringEventVolunteerModal
         show={showRecurringModal}
-        onHide={() => setShowRecurringModal(false)}
+        onHide={closeRecurringModal}
         eventName={pendingVolunteerRequest?.eventName || ''}
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
