@@ -267,8 +267,21 @@ module.exports = {
                                         }
                                     }
 
+                                    // Robustly detect indentation of the closing brace line (supports tabs/mixed)
+                                    const braceLine = sourceCode.getLocFromIndex(closingBrace).line; // 1-based
+                                    const braceLineStartIdx = sourceCode.getIndexFromLoc({ line: braceLine, column: 0 });
+                                    const lineToBrace = sourceCode.text.slice(braceLineStartIdx, closingBrace);
+                                    const leadingWsMatch = lineToBrace.match(/^(\s*)/);
+                                    const closingLineLeading = leadingWsMatch ? leadingWsMatch[1] : '';
+                                    // If there is non-whitespace before the brace on the same line, fall back to stmtIndent
+                                    const hasCodeBeforeBrace = lineToBrace.trim().length > 0;
+                                    const braceIndent = hasCodeBeforeBrace ? stmtIndent : closingLineLeading;
+
                                     // i18n-ignore-next-line: code template, not user-facing text
-                                    const cleanupCode = `\n${stmtIndent}vi.clearAllMocks();`;
+                                    const eolMatch = sourceCode.text.match(/\r?\n/);
+                                    const EOL = eolMatch ? eolMatch[0] : '\n';
+                                    // i18n-ignore-next-line: code template
+                                    const cleanupCode = `${EOL}${stmtIndent}vi.clearAllMocks();${EOL}${braceIndent}`;
                                     return fixer.insertTextBeforeRange([closingBrace, closingBrace], cleanupCode);
                                 } else {
                                     // Single expression arrow function - would need to convert to block
