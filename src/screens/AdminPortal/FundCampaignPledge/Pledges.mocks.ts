@@ -7,7 +7,11 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { MEMBERS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
+import {
+  MEMBERS_LIST,
+  MEMBERS_LIST_PG,
+  USER_DETAILS,
+} from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 
 const createUser = (
@@ -432,19 +436,47 @@ export const PLEDGE_MODAL_MOCKS = [
   },
 ];
 
+const membersListPgResult = {
+  data: {
+    organization: {
+      __typename: 'Organization',
+      id: 'orgId',
+      members: {
+        __typename: 'UserConnection',
+        edges: [
+          {
+            __typename: 'UserEdge',
+            node: {
+              __typename: 'User',
+              id: '1',
+              name: 'John Doe',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+            },
+          },
+          {
+            __typename: 'UserEdge',
+            node: {
+              __typename: 'User',
+              id: '2',
+              name: 'Jane Smith',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+            },
+          },
+        ],
+      },
+    },
+  },
+};
+
 export const PLEDGE_MODAL_ERROR_MOCKS = [
   {
     request: {
       query: CREATE_PLEDGE,
-      variables: {
-        campaignId: 'campaignId',
-        amount: 100,
-        currency: 'USD',
-        startDate: expect.any(String),
-        endDate: expect.any(String),
-        userIds: ['1'],
-      },
     },
+    variableMatcher: (vars: { campaignId: string; pledgerId: string }) =>
+      vars.campaignId === 'campaignId' && vars.pledgerId === '1',
     error: new Error('Failed to create pledge'),
   },
   {
@@ -453,31 +485,15 @@ export const PLEDGE_MODAL_ERROR_MOCKS = [
       variables: {
         id: '1',
         amount: 200,
-        currency: 'USD',
-        startDate: expect.any(String),
-        endDate: expect.any(String),
-        users: ['1'],
       },
     },
     error: new Error('Failed to update pledge'),
   },
   {
     request: {
-      query: MEMBERS_LIST,
-      variables: { id: 'orgId' },
+      query: MEMBERS_LIST_PG,
+      variables: { input: { id: 'orgId' } },
     },
-    result: {
-      data: {
-        organizations: [
-          {
-            __typename: 'Organization',
-            members: [
-              createUser('1', 'John', 'Doe'),
-              createUser('2', 'Jane', 'Smith'),
-            ],
-          },
-        ],
-      },
-    },
+    result: membersListPgResult,
   },
 ];
