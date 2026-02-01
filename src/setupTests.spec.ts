@@ -1,14 +1,24 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-const STORAGE_KEY = ['local', 'Storage'].join('');
+const STORAGE_KEY = 'localStorage';
 
 describe('setupTests', () => {
   const originalConsoleError = console.error;
   const originalConsoleWarn = console.warn;
   const originalFetch = global.fetch;
-  const originalStorage = (globalThis as Record<string, unknown>)[STORAGE_KEY];
+  const originalStorageDescriptor = Object.getOwnPropertyDescriptor(
+    globalThis,
+    STORAGE_KEY,
+  );
+  // ✅ FIX #1: Capture original HTMLMediaElement.prototype.muted descriptor
+  const originalMutedDescriptor = Object.getOwnPropertyDescriptor(
+    HTMLMediaElement.prototype,
+    'muted',
+  );
 
   beforeEach(() => {
+    // ✅ FIX #2: Reset to real timers BEFORE each test as safety measure
+    vi.useRealTimers();
     vi.resetModules();
 
     Reflect.defineProperty(globalThis, STORAGE_KEY, {
@@ -23,11 +33,27 @@ describe('setupTests', () => {
     console.warn = originalConsoleWarn;
     global.fetch = originalFetch;
 
-    Reflect.defineProperty(globalThis, STORAGE_KEY, {
-      value: originalStorage,
-      writable: true,
-      configurable: true,
-    });
+    // ✅ FIX #3: Properly restore localStorage using descriptor
+    if (originalStorageDescriptor) {
+      Reflect.defineProperty(
+        globalThis,
+        STORAGE_KEY,
+        originalStorageDescriptor,
+      );
+    } else {
+      Reflect.deleteProperty(globalThis, STORAGE_KEY);
+    }
+
+    // ✅ FIX #1: Restore HTMLMediaElement.prototype.muted to prevent test pollution
+    if (originalMutedDescriptor) {
+      Object.defineProperty(
+        HTMLMediaElement.prototype,
+        'muted',
+        originalMutedDescriptor,
+      );
+    } else {
+      Reflect.deleteProperty(HTMLMediaElement.prototype, 'muted');
+    }
 
     vi.useRealTimers();
 
