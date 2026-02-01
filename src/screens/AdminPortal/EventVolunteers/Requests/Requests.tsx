@@ -47,7 +47,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -154,12 +154,12 @@ function Requests(): JSX.Element {
     );
   }
 
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'srNo',
       headerName: tCommon('serialNumber'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -173,7 +173,7 @@ function Requests(): JSX.Element {
       headerName: tCommon('volunteer'),
       flex: 3,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -211,7 +211,7 @@ function Requests(): JSX.Element {
       field: 'requestType',
       headerName: t('eventVolunteers.requestType'),
       flex: 2,
-      minWidth: 150,
+      minWidth: 'space-15',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -234,7 +234,7 @@ function Requests(): JSX.Element {
       field: 'requestDate',
       headerName: t('eventVolunteers.requestDate'),
       flex: 2,
-      minWidth: 150,
+      minWidth: 'space-15',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -248,7 +248,7 @@ function Requests(): JSX.Element {
       headerName: tCommon('options'),
       align: 'center',
       flex: 2,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

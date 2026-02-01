@@ -67,7 +67,7 @@ Metadata and configuration for column behavior.
 
 #### align?
 
-> `optional` **align**: `"center"` \| `"left"` \| `"right"`
+> `optional` **align**: `"left"` \| `"right"` \| `"center"`
 
 Text alignment for cell content ('left', 'center', or 'right')
 

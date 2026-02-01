@@ -44,7 +44,10 @@ import AttendedEventList from '../AttendanceList/AttendedEventList';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
-import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
+import {
+  DataGridWrapper,
+  type TokenAwareGridColDef,
+} from 'shared-components/DataGridWrapper';
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
@@ -144,12 +147,12 @@ function EventAttendance(): JSX.Element {
     getEventAttendees();
   }, [eventId, getEventAttendees]);
 
-  const columns: GridColDef<InterfaceMember & { index: number }>[] = useMemo(
+  const columns: TokenAwareGridColDef[] = useMemo(
     () => [
       {
         field: 'index',
         headerName: '#',
-        width: 70,
+        width: 'space-11-5',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -158,7 +161,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'name',
         headerName: t('Member Name'),
-        width: 200,
+        width: 'space-16-7',
         sortable: false,
         filterable: false,
         renderCell: (params) => (
@@ -167,14 +170,14 @@ function EventAttendance(): JSX.Element {
             state={{ id: params.row.id }}
             className={styles.membername}
           >
-            {params.value}
+            {params.value as string}
           </Link>
         ),
       },
       {
         field: 'status',
         headerName: t('Status'),
-        width: 150,
+        width: 'space-15',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -185,7 +188,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'eventsAttended',
         headerName: t('Events Attended'),
-        width: 180,
+        width: 'space-16-5',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -196,12 +199,12 @@ function EventAttendance(): JSX.Element {
               tooltip: {
                 sx: {
                   backgroundColor: 'var(--bs-white)',
-                  fontSize: '2em',
-                  maxHeight: '170px',
+                  fontSize: 'var(--font-size-3xl)',
+                  maxHeight: 'var(--space-19)',
                   overflowY: 'scroll',
                   scrollbarColor: 'white',
                   border: 'var(--primary-border-solid)',
-                  borderRadius: '6px',
+                  borderRadius: 'var(--radius-md)',
                   boxShadow:
                     'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) rgba(var(--color-black), 0.1)',
                 },
@@ -230,7 +233,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'tagsAssignedWith',
         headerName: t('Task Assigned'),
-        width: 200,
+        width: 'space-16-7',
         sortable: false,
         filterable: false,
         headerAlign: 'left',

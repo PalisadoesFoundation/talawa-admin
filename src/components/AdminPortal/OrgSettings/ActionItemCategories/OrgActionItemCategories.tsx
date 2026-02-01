@@ -38,8 +38,9 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
+  convertTokenColumns,
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
 import { Stack } from '@mui/material';
@@ -197,12 +198,12 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   }
 
   /** DataGrid column configuration */
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'serialNumber',
       headerName: 'Sr. No.',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -216,7 +217,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Category',
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -236,7 +237,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Status',
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -254,7 +255,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       field: 'createdAt',
       headerName: 'Created On',
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -272,7 +273,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerName: 'Action',
       flex: 1.5,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -406,7 +407,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
             ...category,
             serialNumber: index + 1,
           }))}
-          columns={columns}
+          columns={convertTokenColumns(columns)}
           isRowSelectable={() => false}
         />
 

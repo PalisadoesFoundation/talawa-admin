@@ -51,7 +51,7 @@ import { useQuery } from '@apollo/client';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
   type GridCellParams,
-  type GridColDef,
+  type TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -169,13 +169,13 @@ function Groups(): JSX.Element {
       </div>
     );
   }
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'group',
       headerName: t('groupHeader'),
       flex: 1,
       align: 'left',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -195,7 +195,7 @@ function Groups(): JSX.Element {
       headerName: t('leaderHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -250,7 +250,7 @@ function Groups(): JSX.Element {
       headerName: t('optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

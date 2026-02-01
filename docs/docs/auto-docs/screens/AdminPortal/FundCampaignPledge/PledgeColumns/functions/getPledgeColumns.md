@@ -4,7 +4,7 @@
 
 # Function: getPledgeColumns()
 
-> **getPledgeColumns**(`props`): `GridColDef`[]
+> **getPledgeColumns**(`props`): [`TokenAwareGridColDef`](../../../../../types/DataGridWrapper/interface/type-aliases/TokenAwareGridColDef.md)[]
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
 
@@ -20,6 +20,6 @@ The props containing translation functions and event handlers.
 
 ## Returns
 
-`GridColDef`[]
+[`TokenAwareGridColDef`](../../../../../types/DataGridWrapper/interface/type-aliases/TokenAwareGridColDef.md)[]
 
 An array of GridColDef for the pledges table.

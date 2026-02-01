@@ -1,7 +1,7 @@
 import React from 'react';
 import type {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
 } from 'shared-components/DataGridWrapper';
 import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
@@ -46,12 +46,12 @@ export const getPledgeColumns = ({
   handleClick,
   handleOpenModal,
   handleDeleteClick,
-}: InterfacePledgeColumnsProps): GridColDef[] => [
+}: InterfacePledgeColumnsProps): TokenAwareGridColDef[] => [
   {
     field: 'pledgers',
     headerName: t('pledges.pledgers'),
     flex: 3,
-    minWidth: 50,
+    minWidth: 'space-10',
     align: 'left',
     headerAlign: 'center',
     headerClassName: `${styles.tableHeader}`,
@@ -112,7 +112,7 @@ export const getPledgeColumns = ({
     field: 'pledgeDate',
     headerName: t('pledges.pledgeDate'),
     flex: 1,
-    minWidth: 150,
+    minWidth: 'space-15',
     align: 'center',
     headerAlign: 'center',
     headerClassName: `${styles.tableHeader}`,
@@ -126,7 +126,7 @@ export const getPledgeColumns = ({
     field: 'amount',
     headerName: t('pledges.pledged'),
     flex: 1,
-    minWidth: 100,
+    minWidth: 'space-13',
     align: 'center',
     headerAlign: 'center',
     headerClassName: `${styles.tableHeader}`,
@@ -146,7 +146,7 @@ export const getPledgeColumns = ({
     field: 'donated',
     headerName: t('pledges.donated'),
     flex: 1,
-    minWidth: 100,
+    minWidth: 'space-13',
     align: 'center',
     headerAlign: 'center',
     headerClassName: `${styles.tableHeader}`,
@@ -164,7 +164,7 @@ export const getPledgeColumns = ({
     field: 'action',
     headerName: tCommon('action'),
     flex: 1,
-    minWidth: 100,
+    minWidth: 'space-13',
     align: 'center',
     headerAlign: 'center',
     headerClassName: `${styles.tableHeader}`,

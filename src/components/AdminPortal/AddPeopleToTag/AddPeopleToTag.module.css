@@ -1,4 +1,129 @@
 .dataGridContainer {
-  height: 300px;
+  height: var(--space-21);
   overflow: auto;
+}
+
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--error-icon-size, var(--font-size-3xl));
+  color: var(--bs-danger, var(--errorIcon-color));
+  margin-bottom: var(--space-5);
+}
+
+.tableHeader {
+  background-color: var(--tableHeader-bg);
+  color: var(--tableHeader-color);
+  font-size: var(--font-size-header);
+  font-weight: var(--font-weight-bold);
+}
+
+.editButton {
+  background-color: var(--editButton-bg);
+  color: var(--editButton-font);
+  border-color: var(--editButton-border);
+  --bs-btn-active-bg: var(--editButton-bg-active);
+  --bs-btn-active-border-color: var(--editButton-border-active);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--editButton-bg-hover);
+  border-color: var(--editButton-border-hover);
+  box-shadow: none;
+}
+
+.removeButton {
+  margin-bottom: var(--space-4);
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  margin-right: var(--space-4);
+  --bs-btn-border-color: var(--removeButton-border);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-4);
+  background-color: var(--disabled-btn);
+  border-color: var(--addButton-bg);
+}
+
+.modalHeader {
+  border: none;
+  background-color: var(--modalHeader-bg) !important;
+  padding: var(--space-5);
+  color: var(--modalHeader-color);
+}
+
+.modalHeader div,
+.modalHeader .modal-title {
+  color: var(--modalTitle-color) !important;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+.modalHeader button.close,
+.modalHeader .btn-close {
+  color: var(--modalClose-button-color) !important;
+  opacity: 1;
+}
+
+.scrollContainer {
+  height: var(--space-13);
+  overflow-y: auto;
+  margin-bottom: var(--space-5);
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-offset-none, 0) var(--shadow-offset-xs)
+    var(--shadow-blur-sm) var(--memberBadge-box-shadow);
+}
+
+.removeFilterIcon {
+  cursor: pointer;
+}
+
+.loadingDiv {
+  min-height: var(--space-21);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: var(--space-14);
+  overflow-y: auto;
 }

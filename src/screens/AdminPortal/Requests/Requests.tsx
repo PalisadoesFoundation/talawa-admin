@@ -36,7 +36,7 @@ import {
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
   GridCellParams,
-  GridColDef,
+  TokenAwareGridColDef,
   DataGridWrapper,
 } from 'shared-components/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -218,13 +218,13 @@ const Requests = (): JSX.Element => {
   ];
 
   // Columns for ReportingTable (DataGrid)
-  const columns: GridColDef[] = [
+  const columns: TokenAwareGridColDef[] = [
     {
       field: 'sl_no',
       headerName: t('requests.sl_no'),
       display: 'flex',
       flex: 0.5,
-      minWidth: 50,
+      minWidth: 'space-10',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
@@ -243,7 +243,7 @@ const Requests = (): JSX.Element => {
       headerName: t('requests.profile'),
       display: 'flex',
       flex: 1,
-      minWidth: 80,
+      minWidth: 'space-12',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
@@ -281,7 +281,7 @@ const Requests = (): JSX.Element => {
       headerName: tCommon('name'),
       display: 'flex',
       flex: 2,
-      minWidth: 150,
+      minWidth: 'space-15',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
@@ -297,7 +297,7 @@ const Requests = (): JSX.Element => {
       headerName: tCommon('email'),
       display: 'flex',
       flex: 2,
-      minWidth: 150,
+      minWidth: 'space-15',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
@@ -313,7 +313,7 @@ const Requests = (): JSX.Element => {
       headerName: t('requests.accept'),
       display: 'flex',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
@@ -343,7 +343,7 @@ const Requests = (): JSX.Element => {
       headerName: t('requests.reject'),
       display: 'flex',
       flex: 1,
-      minWidth: 100,
+      minWidth: 'space-13',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',

@@ -200,6 +200,9 @@ const ALLOWLIST_PATTERNS = [
   /@media[^{]*\(\s*(?:min|max)-(?:width|height):\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*width:\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*height:\s*[\d.]+(px|rem|em)\s*\)/,
+  // Spacing token names for DataGrid columns (e.g., minWidth: 'space-15')
+  // These are converted to pixel values by DataGridWrapper
+  /(?:width|minWidth|maxWidth):\s*['"]space-(?:0-5|\d{1,2})['"]/,
 ];
 
 const normalizePath = (file: string): string => file.split(path.sep).join('/');

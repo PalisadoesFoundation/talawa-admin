@@ -162,7 +162,7 @@ Optional shape: 'circle', 'square', or 'rounded'.
 
 ### size?
 
-> `optional` **size**: `"small"` \| `"custom"` \| `"medium"` \| `"large"`
+> `optional` **size**: `"custom"` \| `"small"` \| `"medium"` \| `"large"`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L18)
 

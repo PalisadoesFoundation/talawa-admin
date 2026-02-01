@@ -120,6 +120,21 @@ pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo
 pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo --warn
 ```
 
+## MUI DataGrid Column Widths
+
+MUI DataGrid column properties (`width`, `minWidth`, `maxWidth`) require numeric pixel values and cannot accept CSS variables. Use spacing token names with `DataGridWrapper`, which converts them to pixels automatically.
+
+```tsx
+const columns = [
+  { field: 'name', headerName: 'Name', minWidth: 'space-15' },   // 150px
+  { field: 'email', headerName: 'Email', minWidth: 'space-17' }, // 220px
+];
+
+<DataGridWrapper rows={data} columns={columns} />
+```
+
+See `src/utils/tokenValues.ts` for the complete token-to-pixel mapping.
+
 ## Notes
 
 - Hex colors and raw unit values should only exist in token files.

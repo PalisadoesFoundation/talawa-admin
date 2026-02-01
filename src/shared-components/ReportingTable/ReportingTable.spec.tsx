@@ -114,14 +114,14 @@ describe('ReportingTable', () => {
       expect(result).toBe(sampleColumns); // Should return the same reference
     });
 
-    it('adjusts first column to flex: 0.5 and minWidth: 50 when compactMode is true', () => {
+    it('adjusts first column to flex: 0.5 and minWidth: space-10 when compactMode is true', () => {
       const result = adjustColumnsForCompactMode(sampleColumns, true);
 
       expect(result[0]).toEqual({
         field: 'id',
         headerName: '#',
         flex: 0.5,
-        [COL_MIN_WIDTH]: 50,
+        [COL_MIN_WIDTH]: 'space-10',
         sortable: false,
       });
     });
@@ -204,7 +204,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(singleColumn, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0][COL_MIN_WIDTH]).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe('space-10');
     });
 
     it('handles two column array', () => {
@@ -228,7 +228,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(twoColumns, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0][COL_MIN_WIDTH]).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe('space-10');
       expect(result[1].flex).toBe(1.5); // Capped from 3
     });
   });

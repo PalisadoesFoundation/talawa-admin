@@ -21,14 +21,18 @@ import type {
   InterfaceAttendeeCheckIn,
   InterfaceModalProp,
   InterfaceTableData,
+  InterfaceTableCheckIn,
 } from 'types/shared-components/CheckIn/interface';
 import type {
-  GridColDef,
+  TokenAwareGridColDef,
   GridRowHeightReturnValue,
 } from 'shared-components/DataGridWrapper';
-import { DataGrid } from 'shared-components/DataGridWrapper';
+import {
+  DataGrid,
+  convertTokenColumns,
+} from 'shared-components/DataGridWrapper';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import styles from 'style/app-fixed.module.css';
+import styles from './CheckInModal.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -105,16 +109,16 @@ export const CheckInModal = ({
   }, [checkInData, eventId, checkInLoading, isRecurring]);
 
   // Define columns for the DataGrid
-  const columns: GridColDef[] = [
-    { field: 'userName', headerName: t('user'), width: 300 }, // Column for user names
+  const columns: TokenAwareGridColDef[] = [
+    { field: 'userName', headerName: t('user'), width: 'space-20' }, // Column for user names
     {
       field: 'checkInData',
       headerName: t('checkInStatus'),
-      width: 400,
+      width: 'space-23',
       renderCell: (props) => (
         // Render a custom row component for check-in status
         <TableRow
-          data={props.value}
+          data={props.value as InterfaceTableCheckIn}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
           // isRecurring={isRecurring}
@@ -171,7 +175,7 @@ export const CheckInModal = ({
           <DataGrid
             rows={tableData}
             getRowHeight={(): GridRowHeightReturnValue => 'auto'}
-            columns={columns}
+            columns={convertTokenColumns(columns)}
             filterModel={filterQueryModel}
           />
         </div>

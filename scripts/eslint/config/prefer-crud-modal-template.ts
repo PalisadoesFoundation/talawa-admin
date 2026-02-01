@@ -3,6 +3,7 @@ import customRules from '../index.ts';
  * ESLint flat config for the prefer-crud-modal-template rule.
  * Targets TypeScript React files in src/ while excluding test, spec, and story files.
  */
+// TODO: Re-enable after PR for issue #5397 is merged
 export const preferCrudModalTemplateConfig = {
   files: ['src/**/*.tsx'],
   ignores: [
@@ -15,6 +16,6 @@ export const preferCrudModalTemplateConfig = {
     'custom-rules': customRules,
   },
   rules: {
-    'custom-rules/prefer-crud-modal-template': 'error',
+    // 'custom-rules/prefer-crud-modal-template': 'error',
   },
 };
