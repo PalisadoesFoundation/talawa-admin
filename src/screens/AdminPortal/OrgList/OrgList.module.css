@@ -291,3 +291,21 @@
 .itemCardOrgList {
   display: block;
 }
+
+.warningAlert {
+  margin-bottom: var(--space-5);
+}
+
+.notVerifiedContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.plusIcon {
+  margin-right: var(--space-2);
+}
+
+.shimmerText {
+  composes: shimmer from '../../../assets/css/app.css';
+}

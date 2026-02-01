@@ -2,7 +2,11 @@
   background-color: var(--color-gray-50);
   color: var(--color-gray-700);
   border: var(--border-1) solid var(--color-gray-700);
-  padding: var(--space-4) var(--space-4);
+  margin-top: calc(var(--space-2) + var(--space-0-5));
+  margin-inline: calc(var(--space-3) + var(--space-1));
+  margin-bottom: var(--space-3);
+  width: var(--space-16);
+  height: var(--space-10);
 }
 
 .closeButton {

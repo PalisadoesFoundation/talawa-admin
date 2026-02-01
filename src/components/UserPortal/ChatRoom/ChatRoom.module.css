@@ -1,5 +1,7 @@
 .chatAreaContainer {
   padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
   height: 100%;
   min-height: 0;
@@ -11,7 +13,7 @@
 
 .sendMessageInput {
   background-color: white;
-  border-radius: 12px 0px 0px 12px;
+  border-radius: var(--space-4) var(--space-0) var(--space-0) var(--space-4);
 }
 
 .grey {
@@ -76,7 +78,7 @@
   margin: var(--space-2) var(--space-3);
   width: fit-content;
   max-width: 75%;
-  background-color: rgba(196, 255, 211, 0.3);
+  background-color: color-mix(in srgb, var(--color-green-50), transparent 70%);
   min-width: var(--space-6);
   padding-bottom: 0;
   display: flex;
@@ -199,8 +201,8 @@
   background: none;
   border: none;
   --bs-btn-active-bg: none;
-  min-width: 24px;
-  height: 24px;
+  min-width: var(--space-7);
+  height: var(--space-7);
   border-radius: 50%;
   transition:
     opacity 0.15s ease,
@@ -214,7 +216,8 @@
 }
 
 .customToggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: var(--color-black);
+  opacity: 0.05;
 }
 
 .customToggle svg {
@@ -328,6 +331,9 @@ a {
 }
 
 .flexContainerMinHeight {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
   min-height: 0;
 }
 

@@ -359,8 +359,8 @@ function OrgList(): JSX.Element {
     setPage(0);
   };
 
-  const shimmerClass = styles.orgImgContainer + ' shimmer';
-  const shimmerBtnClass = 'shimmer ' + styles.button;
+  const shimmerClass = `${styles.orgImgContainer} ${styles.shimmerText}`;
+  const shimmerBtnClass = `${styles.shimmerText} ${styles.button}`;
   const pluginBtnClass = 'btn  btn-primary ' + styles.pluginStoreBtn;
   const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
@@ -372,11 +372,11 @@ function OrgList(): JSX.Element {
           variant="warning"
           dismissible
           onClose={handleDismissWarning}
-          className="mb-3"
+          className={styles.warningAlert}
           data-testid="email-verification-warning"
           aria-live="polite"
         >
-          <div className="d-flex justify-content-between align-items-center">
+          <div className={styles.notVerifiedContainer}>
             <div>
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
@@ -427,7 +427,7 @@ function OrgList(): JSX.Element {
                   onClick={open}
                   data-testid="createOrganizationBtn"
                 >
-                  <i className="fa fa-plus me-2" />
+                  <i className={`fa fa-plus ${styles.plusIcon}`} />
                   {t('createOrganization')}
                 </RBButton>
               )}
@@ -470,10 +470,22 @@ function OrgList(): JSX.Element {
                       <div className={shimmerClass} />
 
                       <div className={styles.content}>
-                        <h5 className="shimmer" title={t('orgName')}></h5>
-                        <h6 className="shimmer" title={t('location')}></h6>
-                        <h6 className="shimmer" title={t('admins')}></h6>
-                        <h6 className="shimmer" title={t('members')}></h6>
+                        <h5
+                          className={styles.shimmerText}
+                          title={t('orgName')}
+                        ></h5>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('location')}
+                        ></h6>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('admins')}
+                        ></h6>
+                        <h6
+                          className={styles.shimmerText}
+                          title={t('members')}
+                        ></h6>
                       </div>
                     </div>
                     <div className={shimmerBtnClass} />

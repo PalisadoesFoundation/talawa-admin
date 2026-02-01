@@ -8,7 +8,11 @@
 }
 
 .roleBadge {
+  composes: badge from '../../assets/css/app.css';
+  composes: bg-success from '../../assets/css/app.css';
+  composes: text-dark from '../../assets/css/app.css';
   font-size: var(--font-size-xs);
+  margin-left: var(--space-3);
 }
 
 .hiddenInput {
@@ -16,6 +20,7 @@
 }
 
 .dropdownToggle {
+  composes: btn-sm from '../../asets/css/app.css';
   color: var(--color-black);
   border: none;
   padding: var(--space-0);
@@ -123,8 +128,9 @@
 
 .chatUserDetails {
   display: flex;
-  gap: var(--space-5);
   align-items: center;
+  width: 100%;
+  gap: var(--space-5);
 }
 
 .input {
@@ -149,4 +155,29 @@
 
 .userData {
   /* TableContainer styling - can be empty or add specific styles if needed */
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.headerGroupInfo {
+  composes: modal-title from '../../assets/css/app.css';
+  composes: h4 from '../../assets/css/app.css';
+}
+
+.userName {
+  margin-left: var(--space-3);
+}
+
+.dropdown {
+  margin-left: auto;
+}
+
+.profileAvatarContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
 }
