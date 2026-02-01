@@ -6,8 +6,6 @@
 
 Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L5)
 
-Props for EventRegistrantsModal component.
-
 ## Properties
 
 ### eventId

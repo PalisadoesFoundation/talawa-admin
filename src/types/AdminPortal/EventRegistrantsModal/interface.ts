@@ -1,7 +1,7 @@
 /**
  * Props for EventRegistrantsModal component.
  */
-
+import type React from 'react';
 export interface InterfaceEventRegistrantsModalProps {
   show: boolean;
   eventId: string;
@@ -9,6 +9,9 @@ export interface InterfaceEventRegistrantsModalProps {
   handleClose: () => void;
 }
 
+/**
+ * Props for BaseModal mock component used in tests.
+ */
 export interface InterfaceBaseModalProps {
   show: boolean;
   children?: React.ReactNode;
@@ -18,6 +21,9 @@ export interface InterfaceBaseModalProps {
   onHide?: () => void;
 }
 
+/**
+ * Props for Autocomplete mock component used in tests.
+ */
 export interface InterfaceAutocompleteMockProps {
   renderInput: (params: Record<string, unknown>) => JSX.Element;
   options?: { id: string; name?: string }[];

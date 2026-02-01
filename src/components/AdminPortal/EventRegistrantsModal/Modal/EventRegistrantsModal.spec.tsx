@@ -362,7 +362,6 @@ describe('EventRegistrantsModal', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
-    vi.restoreAllMocks();
     vi.resetModules();
   });
 
