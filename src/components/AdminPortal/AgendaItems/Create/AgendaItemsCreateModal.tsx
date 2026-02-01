@@ -302,6 +302,7 @@ const AgendaItemsCreateModal: React.FC<
               <input
                 {...params.inputProps}
                 className="form-control"
+                // i18n-ignore-next-line
                 aria-label="category"
                 placeholder={t('categoryName')}
               />
