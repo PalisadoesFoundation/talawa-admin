@@ -10,6 +10,7 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
+  i18nCamelCaseRestrictions,
 } from './rules.ts';
 
 const filename = fileURLToPath(import.meta.url);
@@ -337,6 +338,51 @@ describe('ESLint Syntax Restrictions', () => {
     });
   });
 
+  describe('i18n CamelCase Restrictions', () => {
+    it('should error on t() with spaces', async () => {
+      const code = `t('Has Spaces');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('spaces'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should error on t() with PascalCase', async () => {
+      const code = `t('PascalCase');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('lowercase'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should error on t() with snake_case', async () => {
+      const code = `t('snake_case');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('underscores'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should allow t() with camelCase', async () => {
+      const code = `t('camelCaseKey');`;
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' && msg.message.includes('i18n'),
+      );
+      expect(error).toBeUndefined();
+    });
+  });
+
   describe('ESLint Rule Data Tests', () => {
     describe('restrictedImports data integrity', () => {
       it('should have all required import restrictions', () => {
@@ -532,6 +578,69 @@ describe('ESLint Syntax Restrictions', () => {
           expect(restriction.message).toContain(
             'shared-components/CRUDModalTemplate/hooks/useModalState',
           );
+        });
+      });
+    });
+    describe('i18nCamelCaseRestrictions data integrity', () => {
+      it('should have i18n camelCase related restrictions', () => {
+        expect(i18nCamelCaseRestrictions.length).toBe(4);
+
+        i18nCamelCaseRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toBeDefined();
+          expect(restriction.message).toBeDefined();
+          expect(typeof restriction.selector).toBe('string');
+          expect(typeof restriction.message).toBe('string');
+        });
+      });
+
+      it('should target translation key violations', () => {
+        i18nCamelCaseRestrictions.forEach((restriction) => {
+          expect(restriction.selector).toContain(
+            "CallExpression[callee.name='t']",
+          );
+          expect(restriction.selector).toContain('Literal');
+        });
+      });
+
+      it('should include pattern for spaces', () => {
+        const spacesRestriction = i18nCamelCaseRestrictions.find(
+          (restriction) => restriction.selector.includes('\\s'),
+        );
+        expect(spacesRestriction).toBeDefined();
+        expect(spacesRestriction?.message).toContain('spaces');
+        expect(spacesRestriction?.message).toContain('camelCase');
+      });
+
+      it('should include pattern for leading uppercase', () => {
+        const uppercaseRestriction = i18nCamelCaseRestrictions.find(
+          (restriction) => restriction.selector.includes('^(?![a-z])'),
+        );
+        expect(uppercaseRestriction).toBeDefined();
+
+        expect(uppercaseRestriction?.message).toContain('lowercase');
+        expect(uppercaseRestriction?.message).toContain('camelCase');
+      });
+
+      it('should include pattern for dashes and underscores', () => {
+        const dashUnderscoreRestriction = i18nCamelCaseRestrictions.find(
+          (restriction) => restriction.selector.includes('[-_]'),
+        );
+        expect(dashUnderscoreRestriction).toBeDefined();
+        expect(dashUnderscoreRestriction?.message).toContain('dashes');
+        expect(dashUnderscoreRestriction?.message).toContain('underscores');
+      });
+
+      it('should include pattern for invalid characters', () => {
+        const invalidCharsRestriction = i18nCamelCaseRestrictions.find(
+          (restriction) => restriction.selector.includes('[^a-zA-Z0-9.:]'),
+        );
+        expect(invalidCharsRestriction).toBeDefined();
+        expect(invalidCharsRestriction?.message).toContain('alphanumeric');
+      });
+
+      it('should have consistent message format mentioning i18n Convention', () => {
+        i18nCamelCaseRestrictions.forEach((restriction) => {
+          expect(restriction.message).toContain('i18n Convention Violation');
         });
       });
     });

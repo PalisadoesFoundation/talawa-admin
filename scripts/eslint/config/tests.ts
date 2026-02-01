@@ -1,3 +1,4 @@
+// @ts-expect-error - Local plugin without declaration file
 import vitestIsolation from '../plugins/eslint-plugin-vitest-isolation/index.js';
 
 export const testConfig = {

@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import type { Linter, ESLint } from 'eslint';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import imports from 'eslint-plugin-import';
@@ -11,9 +12,10 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
+  i18nCamelCaseRestrictions,
 } from '../rules/rules.ts';
 
-export const baseTypeScriptConfig = {
+export const baseTypeScriptConfig: Linter.Config = {
   files: ['**/*.ts', '**/*.tsx'],
   languageOptions: {
     ecmaVersion: 'latest',
@@ -40,12 +42,12 @@ export const baseTypeScriptConfig = {
     },
   },
   plugins: {
-    react,
-    '@typescript-eslint': ts,
-    vitest,
-    import: imports,
-    prettier,
-    tsdoc,
+    react: react as unknown as ESLint.Plugin,
+    '@typescript-eslint': ts as unknown as ESLint.Plugin,
+    vitest: vitest as unknown as ESLint.Plugin,
+    import: imports as unknown as ESLint.Plugin,
+    prettier: prettier as unknown as ESLint.Plugin,
+    tsdoc: tsdoc as unknown as ESLint.Plugin,
   },
   settings: {
     react: {
@@ -124,6 +126,7 @@ export const baseTypeScriptConfig = {
       ...securityRestrictions,
       ...searchInputRestrictions,
       ...modalStateRestrictions,
+      ...i18nCamelCaseRestrictions,
     ],
     'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
   },
