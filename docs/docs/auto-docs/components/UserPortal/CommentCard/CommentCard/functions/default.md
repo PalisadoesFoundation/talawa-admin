@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L71)
+Defined in: [src/components/UserPortal/CommentCard/CommentCard.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CommentCard/CommentCard.tsx#L72)
 
 ## Parameters
 
