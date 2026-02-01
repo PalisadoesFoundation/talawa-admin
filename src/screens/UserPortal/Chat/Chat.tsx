@@ -153,6 +153,11 @@ export default function Chat(): JSX.Element {
       setAllChats(filteredChats);
       if (filterType === 'all') {
         setChats(filteredChats);
+      } else if (filterType === 'group') {
+        const groups = filteredChats.filter((chat: NewChatType) =>
+          isGroupChat(chat),
+        );
+        setChats(groups);
       }
     }
   }, [chatsListData, filterType, orgId]);

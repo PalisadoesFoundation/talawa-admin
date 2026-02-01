@@ -84,13 +84,13 @@ export const handleCreateDirectChat = async (
     return (
       !chat.isGroup &&
       edges?.length === 2 &&
-      edges?.some((edge) => edge.node.user.id === id)
+      edges?.some((edge) => edge.node?.user?.id === id)
     );
   });
   if (existingChat) {
     const existingUser = existingChat.members?.edges?.find(
-      (edge) => edge.node.user.id === id,
-    )?.node.user;
+      (edge) => edge.node?.user?.id === id,
+    )?.node?.user;
     errorHandler(
       t,
       new Error(

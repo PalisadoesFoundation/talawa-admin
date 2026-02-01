@@ -376,7 +376,7 @@ export default function GroupChatDetails({
           )}
 
           <p>
-            {chat?.members?.edges?.length || 0} {t('members')}
+            {chat.members?.edges?.length || 0} {t('members')}
           </p>
           <p>{chat?.description}</p>
         </div>
