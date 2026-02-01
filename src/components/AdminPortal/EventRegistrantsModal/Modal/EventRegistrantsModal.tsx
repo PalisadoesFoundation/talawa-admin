@@ -213,22 +213,22 @@ export const EventRegistrantsModal = ({
             }
             renderInput={(params): React.ReactNode => (
               <FormTextField
-                {...params.inputProps}
-                type="text"
                 name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
                 ref={params.InputProps.ref}
                 value={inputValue}
-                onChange={(v: string) => {
-                  params.inputProps.onChange?.({
-                    target: { value: v },
-                  } as React.ChangeEvent<HTMLInputElement>);
-                }}
                 placeholder={t('addRegistrantPlaceholder') as string}
                 data-testid="autocomplete"
                 id={params.id}
                 disabled={params.disabled}
                 fullWidth
+                onChange={(v: string) => {
+                  if (params.inputProps?.onChange) {
+                    params.inputProps.onChange({
+                      target: { value: v },
+                    } as React.ChangeEvent<HTMLInputElement>);
+                  }
+                }}
               />
             )}
           />
