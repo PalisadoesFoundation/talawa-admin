@@ -275,13 +275,19 @@ module.exports = {
                                     const closingLineLeading = leadingWsMatch ? leadingWsMatch[1] : '';
                                     // If there is non-whitespace before the brace on the same line, fall back to stmtIndent
                                     const hasCodeBeforeBrace = lineToBrace.trim().length > 0;
-                                    const braceIndent = hasCodeBeforeBrace ? stmtIndent : closingLineLeading;
+                                    const braceIndent = closingLineLeading;
 
                                     // i18n-ignore-next-line: code template, not user-facing text
                                     const eolMatch = sourceCode.text.match(/\r?\n/);
                                     const EOL = eolMatch ? eolMatch[0] : '\n';
                                     // i18n-ignore-next-line: code template
                                     const cleanupCode = `${EOL}${stmtIndent}vi.clearAllMocks();${EOL}${braceIndent}`;
+
+                                    if (!hasCodeBeforeBrace) {
+                                        // If no code before brace, replace the existing indentation to avoid trailing whitespace/orphaned indentation
+                                        return fixer.replaceTextRange([braceLineStartIdx, closingBrace], cleanupCode);
+                                    }
+
                                     return fixer.insertTextBeforeRange([closingBrace, closingBrace], cleanupCode);
                                 } else {
                                     // Single expression arrow function - would need to convert to block

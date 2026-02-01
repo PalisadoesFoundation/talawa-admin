@@ -1,7 +1,6 @@
 import { RuleTester, Rule } from 'eslint';
 // @ts-expect-error -- Missing declaration file for JS module
 import requireAfterEachCleanup from './require-aftereach-cleanup';
-import { describe } from 'vitest';
 import parser from '@typescript-eslint/parser';
 
 const ruleTester = new RuleTester({
@@ -16,12 +15,11 @@ const ruleTester = new RuleTester({
 
 const rule = requireAfterEachCleanup as Rule.RuleModule;
 
-describe('require-aftereach-cleanup', () => {
-  ruleTester.run('require-aftereach-cleanup', rule, {
-    valid: [
-      // No mocks used
-      {
-        code: `
+ruleTester.run('require-aftereach-cleanup', rule, {
+  valid: [
+    // No mocks used
+    {
+      code: `
           import { describe, it, expect } from 'vitest';
           describe('test', () => {
             it('should work', () => {
@@ -29,10 +27,10 @@ describe('require-aftereach-cleanup', () => {
             });
           });
         `,
-      },
-      // vi.fn() with cleanup
-      {
-        code: `
+    },
+    // vi.fn() with cleanup
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => {
@@ -43,10 +41,10 @@ describe('require-aftereach-cleanup', () => {
             });
           });
         `,
-      },
-      // vi.mock() with cleanup
-      {
-        code: `
+    },
+    // vi.mock() with cleanup
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           vi.mock('./module');
           describe('test', () => {
@@ -56,10 +54,10 @@ describe('require-aftereach-cleanup', () => {
             it('should work', () => {});
           });
         `,
-      },
-      // vi.spyOn() with cleanup
-      {
-        code: `
+    },
+    // vi.spyOn() with cleanup
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => {
@@ -70,10 +68,10 @@ describe('require-aftereach-cleanup', () => {
             });
           });
         `,
-      },
-      // Cleanup in single expression arrow function
-      {
-        code: `
+    },
+    // Cleanup in single expression arrow function
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => vi.clearAllMocks());
@@ -82,13 +80,13 @@ describe('require-aftereach-cleanup', () => {
             });
           });
         `,
-      },
-    ],
+    },
+  ],
 
-    invalid: [
-      // vi.fn() without afterEach
-      {
-        code: `
+  invalid: [
+    // vi.fn() without afterEach
+    {
+      code: `
           import { describe, it, vi } from 'vitest';
           describe('test', () => {
             it('should work', () => {
@@ -96,8 +94,8 @@ describe('require-aftereach-cleanup', () => {
             });
           });
         `,
-        errors: [{ messageId: 'missingAfterEach' }],
-        output: `
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
           import { describe, it, vi } from 'vitest';
           describe('test', () => {
             
@@ -110,18 +108,18 @@ it('should work', () => {
             });
           });
         `,
-      },
-      // vi.mock() without afterEach
-      {
-        code: `
+    },
+    // vi.mock() without afterEach
+    {
+      code: `
           import { describe, it, vi } from 'vitest';
           vi.mock('./module');
           describe('test', () => {
             it('should work', () => {});
           });
         `,
-        errors: [{ messageId: 'missingAfterEach' }],
-        output: `
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
           import { describe, it, vi } from 'vitest';
           vi.mock('./module');
           describe('test', () => {
@@ -133,10 +131,10 @@ it('should work', () => {
 it('should work', () => {});
           });
         `,
-      },
-      // afterEach exists but missing cleanup
-      {
-        code: `
+    },
+    // afterEach exists but missing cleanup
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => {
@@ -147,13 +145,13 @@ it('should work', () => {});
             });
           });
         `,
-        errors: [{ messageId: 'missingCleanup' }],
-        output: `
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => {
               console.log('cleanup');
-            
+
               vi.clearAllMocks();
             });
             it('should work', () => {
@@ -161,10 +159,10 @@ it('should work', () => {});
             });
           });
         `,
-      },
-      // vi.resetAllMocks() usage (discouraged)
-      {
-        code: `
+    },
+    // vi.resetAllMocks() usage (discouraged)
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => {
@@ -175,11 +173,11 @@ it('should work', () => {});
             });
           });
         `,
-        errors: [{ messageId: 'discouragedMethod' }],
-      },
-      // afterEach with single expression arrow function (no cleanup) - No autofix
-      {
-        code: `
+      errors: [{ messageId: 'discouragedMethod' }],
+    },
+    // afterEach with single expression arrow function (no cleanup) - No autofix
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => console.log('cleanup'));
@@ -188,23 +186,23 @@ it('should work', () => {});
             });
           });
         `,
-        errors: [{ messageId: 'missingCleanup' }],
-        output: null,
-      },
-      // Top-level test without describe (no autofix because no describe found)
-      {
-        code: `
+      errors: [{ messageId: 'missingCleanup' }],
+      output: null,
+    },
+    // Top-level test without describe (no autofix because no describe found)
+    {
+      code: `
           import { it, vi } from 'vitest';
           it('should work', () => {
             vi.fn();
           });
         `,
-        errors: [{ messageId: 'missingAfterEach' }],
-        output: null,
-      },
-      // afterEach with referenced function (no autofix)
-      {
-        code: `
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: null,
+    },
+    // afterEach with referenced function (no autofix)
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           const cleanup = () => vi.clearAllMocks();
           describe('test', () => {
@@ -214,12 +212,12 @@ it('should work', () => {});
             });
           });
         `,
-        errors: [{ messageId: 'missingCleanup' }],
-        output: null,
-      },
-      // resetAllMocks arrow function (discouraged)
-      {
-        code: `
+      errors: [{ messageId: 'missingCleanup' }],
+      output: null,
+    },
+    // resetAllMocks arrow function (discouraged)
+    {
+      code: `
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => vi.resetAllMocks());
@@ -228,18 +226,18 @@ it('should work', () => {});
             });
           });
         `,
-        errors: [{ messageId: 'discouragedMethod' }],
-      },
-      // Empty describe block with mocks outside
-      {
-        code: `
+      errors: [{ messageId: 'discouragedMethod' }],
+    },
+    // Empty describe block with mocks outside
+    {
+      code: `
           import { describe, it, vi } from 'vitest';
           vi.fn();
           describe('empty', () => {
           });
         `,
-        errors: [{ messageId: 'missingAfterEach' }],
-        output: `
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
           import { describe, it, vi } from 'vitest';
           vi.fn();
           describe('empty', () => {
@@ -250,7 +248,6 @@ it('should work', () => {});
 
           });
         `,
-      },
-    ],
-  });
+    },
+  ],
 });
