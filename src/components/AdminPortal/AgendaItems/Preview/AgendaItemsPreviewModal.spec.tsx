@@ -378,7 +378,7 @@ describe('AgendaItemsPreviewModal', () => {
     expect(links).toHaveLength(2);
   });
 
-  it('URL links have correct target and rel attributes', () => {
+  it('all external links have correct target and rel attributes', () => {
     render(<AgendaItemsPreviewModal {...defaultProps} />);
 
     const links = screen.getAllByRole('link');

@@ -240,8 +240,6 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
-  console.log(agendaItemFormState);
-
   return (
     <CreateModal
       open={isOpen}
@@ -303,7 +301,7 @@ const AgendaItemsCreateModal: React.FC<
                 {...params.inputProps}
                 className="form-control"
                 // i18n-ignore-next-line
-                aria-label="category"
+                aria-label={t('category')}
                 placeholder={t('categoryName')}
               />
               {params.InputProps.endAdornment}

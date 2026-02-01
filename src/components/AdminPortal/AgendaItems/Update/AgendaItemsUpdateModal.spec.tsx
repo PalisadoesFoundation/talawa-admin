@@ -790,7 +790,7 @@ describe('AgendaItemsUpdateModal', () => {
     const user = userEvent.setup();
     const setItemFormStateMock = vi.fn();
 
-    const _ = render(
+    render(
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsUpdateModal

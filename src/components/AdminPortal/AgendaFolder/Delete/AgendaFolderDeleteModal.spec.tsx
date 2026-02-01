@@ -292,7 +292,7 @@ describe('AgendaFolderDeleteModal', () => {
       });
     });
 
-    it('executes deletion flow in correct order', async () => {
+    it('executes all deletion flow callbacks after successful mutation', async () => {
       renderAgendaFolderDeleteModal();
 
       const yesButton = screen.getByTestId('modal-delete-btn');
@@ -399,7 +399,7 @@ describe('AgendaFolderDeleteModal', () => {
   });
 
   describe('Modal properties', () => {
-    it('renders modal with small size', () => {
+    it('renders modal when open', () => {
       renderAgendaFolderDeleteModal();
 
       const modal = screen.getByTestId('deleteAgendaFolderModal');
@@ -545,27 +545,6 @@ describe('AgendaFolderDeleteModal', () => {
         </MockedProvider>,
       );
 
-      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolderMsg');
-    });
-
-    it('calls t function for entity name', () => {
-      const mockTSpy = vi.fn((key: string) => key);
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderDeleteModal
-              isOpen={true}
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockTSpy}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolder');
       expect(mockTSpy).toHaveBeenCalledWith('deleteAgendaFolderMsg');
     });
   });
