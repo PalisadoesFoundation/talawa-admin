@@ -181,6 +181,8 @@ export const EventRegistrantsModal = ({
         >
           <Autocomplete
             disablePortal
+            inputValue={inputValue}
+            onInputChange={(_, value) => setInputValue(value)}
             id="addRegistrant"
             onChange={(_, newMember): void => {
               setMember(newMember);
@@ -211,11 +213,17 @@ export const EventRegistrantsModal = ({
             }
             renderInput={(params): React.ReactNode => (
               <FormTextField
+                {...params.inputProps}
+                type="text"
                 name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
                 ref={params.InputProps.ref}
                 value={inputValue}
-                onChange={(v: string) => setInputValue(v)}
+                onChange={(v: string) => {
+                  params.inputProps.onChange?.({
+                    target: { value: v },
+                  } as React.ChangeEvent<HTMLInputElement>);
+                }}
                 placeholder={t('addRegistrantPlaceholder') as string}
                 data-testid="autocomplete"
                 id={params.id}
