@@ -96,13 +96,15 @@ function EventCard({
   const creatorName = creator.name ?? t('unknownCreator');
 
   // Check if the user is initially registered for the event
-  const isInitiallyRegistered = attendees.some(
-    (attendee) => attendee.id === userId,
+  const isRegisteredFromProps = React.useMemo(
+    () => attendees.some((attendee) => attendee.id === userId),
+    [attendees, userId],
   );
 
   // Set up the mutation for registering for the event
   const [registerEventMutation, { loading }] = useMutation(REGISTER_EVENT);
-  const [isRegistered, setIsRegistered] = React.useState(isInitiallyRegistered);
+  const [isRegisteredLocal, setIsRegisteredLocal] = React.useState(false);
+  const isRegistered = isRegisteredLocal || isRegisteredFromProps;
 
   /**
    * Handles registering for the event.
@@ -118,7 +120,7 @@ function EventCard({
           },
         });
         if (data) {
-          setIsRegistered(true);
+          setIsRegisteredLocal(true);
           NotificationToast.success(
             t('registeredSuccessfully', { eventName: name }),
           );
