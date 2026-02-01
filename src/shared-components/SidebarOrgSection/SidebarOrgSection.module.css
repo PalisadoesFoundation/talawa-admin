@@ -22,7 +22,7 @@
 }
 
 .profileContainer:focus-visible {
-  outline: var(--border-2) solid var(--primary-color);
+  outline: var(--border-2) solid var(--color-blue-500);
   outline-offset: var(--border-2);
 }
 
@@ -61,13 +61,13 @@
   white-space: nowrap;
   display: block;
   text-overflow: ellipsis;
-  color: var(--bs-emphasis-color, var(--primaryText-color));
+  color: var(--bs-emphasis-color, var(--color-black));
 }
 
 .secondaryText {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
-  color: var(--leftDrawer-secondaryText-color);
+  color: var(--color-gray-600);
   display: block;
   text-transform: capitalize;
   overflow: hidden;
