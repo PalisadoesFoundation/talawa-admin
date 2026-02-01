@@ -318,7 +318,7 @@ export const formatRecurrenceForApi = (
 /**
  * Calculates which week of the month a given date falls in (calendar row), using UTC.
  * @param date - The date to calculate the week for
- * @returns The week number (1-5) within the month
+ * @returns The week number (1-6) within the month
  */
 export const getWeekOfMonth = (date: Date): number => {
   const year = date.getUTCFullYear();

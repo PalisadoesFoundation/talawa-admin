@@ -58,6 +58,15 @@ const getFutureMonth = (monthsAhead = 2): dayjs.Dayjs => {
   return dayjs.utc().add(monthsAhead, 'month').startOf('month');
 };
 
+// Returns a future month where the 1st is Tuesday (day() === 2), for deterministic week numbers
+const getMonthWithFirstDayTuesday = (): dayjs.Dayjs => {
+  let d = dayjs.utc().add(1, 'month').startOf('month');
+  while (d.day() !== 2) {
+    d = d.add(1, 'month');
+  }
+  return d;
+};
+
 // Get the nth occurrence of a weekday in a month (UTC)
 const getNthDayOfWeekInMonth = (
   yearMonth: dayjs.Dayjs,
@@ -550,59 +559,33 @@ describe('Recurrence Utility Functions', () => {
   });
 
   describe('getWeekOfMonth', () => {
-    const testMonth = getFutureMonth(2);
+    // Month where 1st is Tuesday (UTC) so expected week numbers are deterministic
+    const testMonth = getMonthWithFirstDayTuesday();
 
     it('should return correct week for day 5 of the month', () => {
       const date = testMonth.date(5).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((5 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(1);
     });
     it('should return correct week for day 8 of the month', () => {
       const date = testMonth.date(8).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((8 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(2);
     });
     it('should return correct week for day 15 of the month', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((15 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(3);
     });
     it('should return correct week for day 22 of the month', () => {
       const date = testMonth.date(22).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((22 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(4);
     });
     it('should return correct week for day 29 of the month', () => {
       const date = testMonth.date(29).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((29 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(5);
     });
 
     it('should handle dates at the end of the month correctly', () => {
       const lastDay = testMonth.endOf('month').hour(10).toDate();
-      const dayOfMonth = testMonth.daysInMonth();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil(
-        (dayOfMonth + firstDayUTC.getUTCDay()) / 7,
-      );
-      expect(getWeekOfMonth(lastDay)).toBe(expectedWeek);
+      expect(getWeekOfMonth(lastDay)).toBe(5);
     });
 
     it('should handle February correctly', () => {
@@ -656,11 +639,7 @@ describe('Recurrence Utility Functions', () => {
 
     it('should handle edge case: date in the middle of the month', () => {
       const date = testMonth.date(15).hour(10).toDate();
-      const firstDayUTC = new Date(
-        Date.UTC(testMonth.year(), testMonth.month(), 1),
-      );
-      const expectedWeek = Math.ceil((15 + firstDayUTC.getUTCDay()) / 7);
-      expect(getWeekOfMonth(date)).toBe(expectedWeek);
+      expect(getWeekOfMonth(date)).toBe(3);
     });
   });
 

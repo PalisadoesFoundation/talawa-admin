@@ -22,4 +22,4 @@ The date to calculate the week for
 
 `number`
 
-The week number (1-5) within the month
+The week number (1-6) within the month
