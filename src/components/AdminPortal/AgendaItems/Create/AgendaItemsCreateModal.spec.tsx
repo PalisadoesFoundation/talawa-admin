@@ -810,38 +810,40 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    const categoryInput = screen.getByRole('combobox', { name: /category/i });
-    const categoryField = categoryInput.closest('.MuiAutocomplete-root');
-    expect(categoryField).toBeTruthy();
+    const categoryInput = screen.getByRole('combobox', {
+      name: /category/i,
+    });
+    const autocompleteRoot = categoryInput.closest(
+      '.MuiAutocomplete-root',
+    ) as HTMLElement;
 
-    const scoped = within(categoryField as HTMLElement);
-    const openButton = scoped.getByRole('button', { name: /open/i });
+    const openButton = within(autocompleteRoot).getByRole('button', {
+      name: /open/i,
+    });
+
     await user.click(openButton);
 
-    // 🔹 select option (pointer required by MUI)
-    const option = await screen.findByText('Category');
-    await user.pointer([{ keys: '[MouseLeft]', target: option }]);
+    const listbox = await screen.findByRole('listbox');
+    const option = within(listbox).getByRole('option', {
+      name: 'Category',
+    });
 
-    // 🔹 commit selection
-    categoryInput.blur();
-
-    // required fields
+    await user.click(option);
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.type(screen.getByLabelText(/duration/i), '10');
 
     await user.click(screen.getByTestId('modal-submit-btn'));
-
     await waitFor(() => {
-      expect(createMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            input: expect.objectContaining({
-              categoryId: 'cat-1',
-            }),
-          }),
-        }),
-      );
+      expect(createMock).toHaveBeenCalled();
     });
+
+    const call = createMock.mock.calls[0][0] as {
+      variables: {
+        input: { categoryId: string };
+      };
+    };
+
+    expect(call.variables.input.categoryId).toBe('cat-1');
   });
 
   it('updates description when description field changes', async () => {
@@ -999,7 +1001,6 @@ describe('AgendaItemsCreateModal', () => {
 
     const input = screen.getByTestId('attachment');
 
-    // manually fire change with empty FileList
     await userEvent.upload(input, []);
 
     expect(NotificationToast.error).not.toHaveBeenCalled();
