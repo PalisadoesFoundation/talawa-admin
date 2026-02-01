@@ -1793,7 +1793,9 @@
     "location": "स्थान",
     "register": "पंजीकरण करें",
     "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया",
-    "eventCardAriaLabel": "{{name}} के लिए इवेंट कार्ड"
+    "eventCardAriaLabel": "{{name}} के लिए इवेंट कार्ड",
+    "unknownCreator": "अज्ञात निर्माता",
+    "alreadyRegisteredAriaLabel": "इवेंट पहले से पंजीकृत है"
   },
   "advertisement": {
     "title": "विज्ञापनों",

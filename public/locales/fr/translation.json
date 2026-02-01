@@ -1798,7 +1798,9 @@
     "location": "Lieu",
     "register": "S'inscrire",
     "registeredSuccessfully": "Inscrit avec succès à {{eventName}}",
-    "eventCardAriaLabel": "Carte d'événement pour {{name}}"
+    "eventCardAriaLabel": "Carte d'événement pour {{name}}",
+    "alreadyRegisteredAriaLabel": "L'événement est déjà enregistré",
+    "unknownCreator": "Créateur Inconnu"
   },
   "advertisement": {
     "title": "Annonces",

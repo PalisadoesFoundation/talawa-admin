@@ -1798,7 +1798,9 @@
     "location": "位置",
     "register": "注册",
     "registeredSuccessfully": "成功注册 {{eventName}}",
-    "eventCardAriaLabel": "{{name}} 的活动卡片"
+    "eventCardAriaLabel": "{{name}} 的活动卡片",
+    "unknownCreator": "未知创作者",
+    "alreadyRegisteredAriaLabel": "活动已注册"
   },
   "advertisement": {
     "title": "广告",

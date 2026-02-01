@@ -140,11 +140,19 @@ function EventCard({
             data-testid="loadingIcon"
           />
         ) : isRegistered ? (
-          <Button size="sm" disabled>
+          <Button
+            size="sm"
+            disabled
+            aria-label={t('alreadyRegisteredAriaLabel')}
+          >
             {t('alreadyRegistered')}
           </Button>
         ) : isInviteOnly ? (
-          <Button size="sm" disabled>
+          <Button
+            size="sm"
+            disabled
+            aria-label={tCommon('inviteOnlyEventAriaLabel')}
+          >
             {tCommon('inviteOnlyEvent')}
           </Button>
         ) : (

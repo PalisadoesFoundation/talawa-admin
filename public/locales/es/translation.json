@@ -1781,7 +1781,9 @@
     "alreadyRegistered": "Ya registrado",
     "register": "Registro",
     "registeredSuccessfully": "Registrado exitosamente para {{eventName}}",
-    "eventCardAriaLabel": "Tarjeta de evento para {{name}}"
+    "eventCardAriaLabel": "Tarjeta de evento para {{name}}",
+    "alreadyRegisteredAriaLabel": "El evento ya está registrado",
+    "unknownCreator": "Creador Desconocido"
   },
   "advertisement": {
     "title": "Anuncios",

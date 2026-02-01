@@ -1781,7 +1781,9 @@
     "location": "location",
     "register": "register",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
-    "eventCardAriaLabel": "Event card for {{name}}"
+    "eventCardAriaLabel": "Event card for {{name}}",
+    "alreadyRegisteredAriaLabel": "Event is already registered",
+    "unknownCreator": "Unknown Creator"
   },
   "advertisement": {
     "title": "Advertisements",
