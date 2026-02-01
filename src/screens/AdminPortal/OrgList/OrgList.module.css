@@ -307,5 +307,5 @@
 }
 
 .shimmerText {
-  composes: shimmer from '../../../assets/css/app.css';
+  composes: shimmer from global;
 }

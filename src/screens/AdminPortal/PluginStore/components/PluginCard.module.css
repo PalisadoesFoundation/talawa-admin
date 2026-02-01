@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   background: var(--color-white);
-  border-radius: 12;
+  border-radius: calc(var(--radius-md) + var(--radius-sm));
   box-shadow: 0 1px 4px
     color-mix(in srgb, var(--color-gray-800), transparent 93%);
   border: var(--border-1) solid var(--color-gray-100);
@@ -14,7 +14,7 @@
 .pluginIcon {
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: 8;
+  border-radius: var(--radius-md);
   object-fit: cover;
   background: var(--color-gray-50);
   margin-right: var(--space-7);

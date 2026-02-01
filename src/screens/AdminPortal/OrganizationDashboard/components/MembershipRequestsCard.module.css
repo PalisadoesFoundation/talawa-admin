@@ -36,3 +36,6 @@
   text-align: center;
   color: var(--color-gray-700);
 }
+.p0 {
+  padding: var(--space-0);
+}

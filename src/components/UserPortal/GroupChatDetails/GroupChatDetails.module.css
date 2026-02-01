@@ -8,9 +8,9 @@
 }
 
 .roleBadge {
-  composes: badge from '../../assets/css/app.css';
-  composes: bg-success from '../../assets/css/app.css';
-  composes: text-dark from '../../assets/css/app.css';
+  composes: badge from global;
+  composes: bg-success from global;
+  composes: text-dark from global;
   font-size: var(--font-size-xs);
   margin-left: var(--space-3);
 }
@@ -20,7 +20,7 @@
 }
 
 .dropdownToggle {
-  composes: btn-sm from '../../asets/css/app.css';
+  composes: btn-sm from global;
   color: var(--color-black);
   border: none;
   padding: var(--space-0);
@@ -164,8 +164,8 @@
 }
 
 .headerGroupInfo {
-  composes: modal-title from '../../assets/css/app.css';
-  composes: h4 from '../../assets/css/app.css';
+  composes: modal-title from global;
+  composes: h4 from global;
 }
 
 .userName {
