@@ -160,6 +160,10 @@ describe('EmptyState Component', () => {
 });
 
 describe('EmptyState – i18n failure fallback', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.resetModules();
+  });
   it('falls back to raw text when translation throws', async () => {
     vi.resetModules();
 
