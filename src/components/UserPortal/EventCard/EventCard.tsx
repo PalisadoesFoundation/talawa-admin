@@ -181,7 +181,7 @@ function EventCard({
             {dayjs(`${DUMMY_DATE_TIME_PREFIX}${startTime}`).format('h:mm:ss A')}
           </b>
         ) : (
-          <></>
+          null
         )}
         <b> {dayjs(startAt).format('D MMMM YYYY')}</b>
       </div>
