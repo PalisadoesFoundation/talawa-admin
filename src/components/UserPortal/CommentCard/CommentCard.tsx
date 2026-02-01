@@ -36,7 +36,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import commentCardStyles from './CommentCard.module.css';
@@ -49,6 +49,7 @@ import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/Pro
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
 import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
+import { IDENTIFIER_USER_ID } from 'Constant/common';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -75,7 +76,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-  const userId = getItem('userId');
+  const userId = getItem(IDENTIFIER_USER_ID);
 
   const [likes, setLikes] = React.useState(upVoteCount);
   const [isLiked, setIsLiked] = React.useState(false);

@@ -143,7 +143,7 @@ function EventCard({
         )
       }
       variant="standard"
-      ariaLabel={t('userEventCard.eventCardAriaLabel', { name })}
+      ariaLabel={t('eventCardAriaLabel', { name })}
       dataTestId="event-card"
       className={styles.mainContainer}
     >

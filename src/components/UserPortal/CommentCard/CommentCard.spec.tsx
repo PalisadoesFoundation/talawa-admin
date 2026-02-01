@@ -12,10 +12,10 @@ import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Mock NotificationToast methods
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -542,7 +542,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(NotificationToast.warning).toHaveBeenCalledWith(
       'Please sign in to like comments.',
-      expect.any(Object),
     );
   });
 
@@ -611,7 +610,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'You have already liked this comment.',
-      expect.any(Object),
     );
   });
 
@@ -658,7 +656,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'No associated vote found to remove.',
-      expect.any(Object),
     );
   });
 
@@ -735,7 +732,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'Network error occurred',
-      expect.any(Object),
     );
   });
 
@@ -778,7 +774,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'Could not find an existing like to remove.',
-      expect.any(Object),
     );
   });
 
@@ -807,7 +802,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(defaultProps.refetchComments).toHaveBeenCalled();
     expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment deleted successfully',
-      expect.any(Object),
     );
   });
 
@@ -842,7 +836,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(defaultProps.refetchComments).toHaveBeenCalled();
     expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment updated successfully',
-      expect.any(Object),
     );
   });
 
@@ -871,7 +864,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a comment before submitting.',
-      expect.any(Object),
     );
   });
 
@@ -905,7 +897,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'Failed to update comment',
-      expect.any(Object),
     );
   });
 
@@ -933,7 +924,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'Failed to delete comment',
-      expect.any(Object),
     );
   });
 
