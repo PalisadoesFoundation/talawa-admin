@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor, cleanup } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -22,6 +16,7 @@ import {
   MOCKS_NEW_2,
   USER_UNDEFINED_MOCK,
 } from './UsersMocks.mocks';
+import type { MockedResponse } from '@apollo/client/testing';
 import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -55,7 +50,7 @@ vi.mock('@mui/icons-material', async () => {
   };
 });
 
-vi.mock('components/IconComponent/IconComponent', () => ({
+vi.mock('shared-components/IconComponent/IconComponent', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid={`mock-icon-${name}`} />
   ),
@@ -83,7 +78,7 @@ async function wait(ms = 1000): Promise<void> {
   });
 }
 
-const { setItem, removeItem, clearAllItems } = useLocalStorage();
+const { setItem, removeItem } = useLocalStorage();
 
 beforeEach(() => {
   setItem('id', '123');
@@ -93,8 +88,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  clearAllItems();
-  vi.restoreAllMocks();
+  cleanup();
+  vi.clearAllMocks();
+  vi.clearAllTimers();
 });
 
 describe('Testing Users screen', () => {
@@ -216,7 +212,14 @@ describe('Testing Users screen', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(300);
 
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
@@ -476,6 +479,7 @@ describe('Testing Users screen', () => {
 
   describe('Testing sorting and loadMoreUsers functionality', () => {
     it('should set the correct order variable and update hasMore', async () => {
+      const user = userEvent.setup();
       render(
         <MockedProvider mocks={MOCKS_NEW}>
           <BrowserRouter>
@@ -489,10 +493,10 @@ describe('Testing Users screen', () => {
       await wait();
 
       const sortDropdown = await screen.findByTestId('sortUsers');
-      fireEvent.click(sortDropdown);
+      await user.click(sortDropdown);
 
       const newestOption = screen.getByTestId('newest');
-      fireEvent.click(newestOption);
+      await user.click(newestOption);
 
       await wait();
 
@@ -500,9 +504,9 @@ describe('Testing Users screen', () => {
       const rowsNewest = await screen.findAllByRole('row');
       expect(rowsNewest.length).toBeGreaterThan(0);
 
-      fireEvent.click(sortDropdown);
+      await user.click(sortDropdown);
       const oldestOption = screen.getByTestId('oldest');
-      fireEvent.click(oldestOption);
+      await user.click(oldestOption);
 
       await wait();
 
@@ -512,8 +516,76 @@ describe('Testing Users screen', () => {
     });
 
     it('should load more users and merge them correctly', async () => {
+      const LOAD_MORE_MOCKS: MockedResponse[] = [
+        {
+          request: {
+            query: USER_LIST_FOR_ADMIN,
+            variables: {
+              first: 12,
+              after: null,
+              orgFirst: 32,
+              where: undefined,
+            },
+          },
+          result: {
+            data: {
+              allUsers: {
+                edges: [
+                  {
+                    cursor: '1',
+                    node: {
+                      id: '1',
+                      name: 'First User',
+                      emailAddress: 'a@test.com',
+                      role: 'regular',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: true, endCursor: '1' },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: USER_LIST_FOR_ADMIN,
+            variables: {
+              first: 12,
+              after: '1',
+              orgFirst: 32,
+              where: undefined,
+            },
+          },
+          result: {
+            data: {
+              allUsers: {
+                edges: [
+                  {
+                    cursor: '2',
+                    node: {
+                      id: '2',
+                      name: 'Second User',
+                      emailAddress: 'b@test.com',
+                      role: 'regular',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: '2' },
+              },
+            },
+          },
+        },
+
+        {
+          request: { query: ORGANIZATION_LIST },
+          result: {
+            data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          },
+        },
+      ];
+
       render(
-        <MockedProvider mocks={MOCKS_NEW_2}>
+        <MockedProvider mocks={LOAD_MORE_MOCKS}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -524,14 +596,16 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
+      expect(await screen.findByText('First User')).toBeInTheDocument();
 
-      // Simulate scroll to trigger load more
-      await act(async () => {
-        fireEvent.scroll(window, { target: { scrollY: 1000 } });
+      Object.defineProperty(window, 'scrollY', {
+        writable: true,
+        configurable: true,
+        value: 6000,
       });
+      window.dispatchEvent(new Event('scroll'));
 
-      await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
+      expect(await screen.findByText('Second User')).toBeInTheDocument();
     });
   });
 
@@ -704,7 +778,7 @@ describe('Testing Users screen', () => {
     });
 
     it('should display end of results message when hasMore is false', async () => {
-      const endMock = [
+      const endMock: MockedResponse[] = [
         {
           request: {
             query: USER_LIST_FOR_ADMIN,
@@ -720,6 +794,7 @@ describe('Testing Users screen', () => {
               allUsers: {
                 edges: [
                   {
+                    cursor: '1',
                     node: {
                       id: '1',
                       name: 'Test User',
@@ -734,9 +809,7 @@ describe('Testing Users screen', () => {
           },
         },
         {
-          request: {
-            query: ORGANIZATION_LIST,
-          },
+          request: { query: ORGANIZATION_LIST },
           result: {
             data: { organizations: [{ id: 'org1', name: 'Org' }] },
           },
@@ -756,9 +829,17 @@ describe('Testing Users screen', () => {
       );
 
       await wait();
-      // Simulate full scroll to trigger endMessage
-      fireEvent.scroll(window, { target: { scrollY: 10000 } });
-      await wait();
+
+      Object.defineProperty(window, 'scrollY', {
+        writable: true,
+        configurable: true,
+        value: 10_000,
+      });
+
+      window.dispatchEvent(new Event('scroll'));
+
+      await wait(200);
+
       expect(screen.getByText(/End of results/i)).toBeInTheDocument();
     });
 
@@ -908,6 +989,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should NOT update sorting when same option is selected', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
@@ -921,10 +1003,10 @@ describe('useEffect loadMoreUsers trigger', () => {
     await wait();
 
     const sortDropdown = await screen.findByTestId('sortUsers');
-    fireEvent.click(sortDropdown);
+    await user.click(sortDropdown);
 
     const newest = screen.getByTestId('newest');
-    fireEvent.click(newest);
+    await user.click(newest);
 
     await wait();
 
@@ -932,8 +1014,8 @@ describe('useEffect loadMoreUsers trigger', () => {
     const firstUserAfterFirstSort = rowsAfterFirstClick[1]?.textContent;
 
     // Click same option again - should not trigger re-sort
-    fireEvent.click(sortDropdown);
-    fireEvent.click(newest);
+    await user.click(sortDropdown);
+    await user.click(newest);
 
     await wait();
 
@@ -945,6 +1027,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should filter only regular users', async () => {
+    const user = userEvent.setup();
     const filterMock = [
       {
         request: {
@@ -1013,8 +1096,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('user'));
+    await user.click(screen.getByTestId('filterUsers'));
+    await user.click(screen.getByTestId('user'));
 
     await wait();
 
@@ -1025,6 +1108,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should return all users when filter is cancel', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
@@ -1037,8 +1121,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('cancel'));
+    await user.click(screen.getByTestId('filterUsers'));
+    await user.click(screen.getByTestId('cancel'));
 
     await wait();
 
@@ -1047,6 +1131,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should actually sort users by newest date (real data validation)', async () => {
+    const user = userEvent.setup();
     const newestMock = [
       {
         request: {
@@ -1115,8 +1200,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('sortUsers'));
-    fireEvent.click(screen.getByTestId('newest'));
+    await user.click(screen.getByTestId('sortUsers'));
+    await user.click(screen.getByTestId('newest'));
 
     await wait();
 
@@ -1126,6 +1211,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should NOT update filtering when same option is clicked', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
@@ -1139,18 +1225,18 @@ describe('useEffect loadMoreUsers trigger', () => {
     await wait();
 
     const filterDropdown = await screen.findByTestId('filterUsers');
-    fireEvent.click(filterDropdown);
+    await user.click(filterDropdown);
 
     const cancel = screen.getByTestId('cancel');
-    fireEvent.click(cancel);
+    await user.click(cancel);
 
     await wait();
 
     const rowsAfterFirstClick = screen.queryAllByRole('row').length;
 
     // Click again - should not trigger re-render or change state
-    fireEvent.click(filterDropdown);
-    fireEvent.click(cancel);
+    await user.click(filterDropdown);
+    await user.click(cancel);
 
     await wait();
 
@@ -1234,11 +1320,16 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should return early from loadMoreUsers when isLoadingMore is already true', async () => {
-    const slowMocks = [
+    const slowMocks: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
-          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
         },
         result: {
           data: {
@@ -1269,9 +1360,7 @@ describe('useEffect loadMoreUsers trigger', () => {
         delay: 2000,
       },
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
           data: { organizations: [{ id: '1', name: 'Org' }] },
         },
@@ -1290,16 +1379,25 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 5000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 5000,
+    });
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(200);
 
-    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    window.scrollY = 9000;
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(200);
 
     expect(true).toBe(true);
   });
 
   it('should filter only admin users (by row count change)', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
@@ -1314,8 +1412,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const rowsBefore = screen.queryAllByRole('row').length;
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('admin'));
+    await user.click(screen.getByTestId('filterUsers'));
+    await user.click(screen.getByTestId('admin'));
 
     await wait();
 
@@ -1353,7 +1451,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should block second fetchMore call when isLoadingMore is true', async () => {
-    const safeMocks = [
+    const safeMocks: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -1386,10 +1484,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                   },
                 },
               ],
-              pageInfo: {
-                hasNextPage: true,
-                endCursor: '1',
-              },
+              pageInfo: { hasNextPage: true, endCursor: '1' },
             },
           },
         },
@@ -1408,22 +1503,15 @@ describe('useEffect loadMoreUsers trigger', () => {
           data: {
             allUsers: {
               edges: [],
-              pageInfo: {
-                hasNextPage: false,
-                endCursor: null,
-              },
+              pageInfo: { hasNextPage: false, endCursor: null },
             },
           },
         },
       },
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
-          data: {
-            organizations: [{ id: 'org1', name: 'Org' }],
-          },
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
         },
       },
     ];
@@ -1440,20 +1528,26 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    // ---- first scroll triggers fetchMore ----
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(300);
 
-    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    window.scrollY = 9000;
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(300);
 
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
   it('should handle rapid consecutive scroll events gracefully', async () => {
-    // Smoke test: verifies component remains stable when multiple scroll events
-    // fire in quick succession. The isLoadingMore guard (covered by istanbul ignore)
-    // prevents duplicate fetches, but we only verify correct end-state behavior here.
-    const delayedFetchMoreMocks = [
+    const delayedFetchMoreMocks: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -1486,10 +1580,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                   },
                 },
               ],
-              pageInfo: {
-                hasNextPage: true,
-                endCursor: '1',
-              },
+              pageInfo: { hasNextPage: true, endCursor: '1' },
             },
           },
         },
@@ -1526,23 +1617,16 @@ describe('useEffect loadMoreUsers trigger', () => {
                   },
                 },
               ],
-              pageInfo: {
-                hasNextPage: false,
-                endCursor: '2',
-              },
+              pageInfo: { hasNextPage: false, endCursor: '2' },
             },
           },
         },
-        delay: 1000, // Delay fetchMore to keep isLoadingMore true
+        delay: 1000,
       },
       {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
+        request: { query: ORGANIZATION_LIST },
         result: {
-          data: {
-            organizations: [{ id: 'org1', name: 'Org' }],
-          },
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
         },
       },
     ];
@@ -1561,21 +1645,24 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // First scroll triggers loadMoreUsers and sets isLoadingMore = true
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+    window.dispatchEvent(new Event('scroll'));
 
-    // Second scroll while first fetch is still in progress
-    fireEvent.scroll(window, { target: { scrollY: 12000 } });
+    window.scrollY = 12000;
+    window.dispatchEvent(new Event('scroll'));
 
-    // Wait for the delayed fetchMore to complete
     await wait(1500);
 
-    // Verify component remains stable - both users should be displayed after fetch completes
     expect(screen.getByText('User One')).toBeInTheDocument();
     expect(screen.getByText('User Two')).toBeInTheDocument();
   });
 
   it('should explicitly hit oldest sorting logic branch', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
@@ -1588,8 +1675,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('sortUsers'));
-    fireEvent.click(screen.getByTestId('oldest'));
+    await user.click(screen.getByTestId('sortUsers'));
+    await user.click(screen.getByTestId('oldest'));
 
     await wait();
 
@@ -1642,7 +1729,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should load more users with active search filter (searchByName truthy)', async () => {
-    const searchMocks = [
+    const searchMocks: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -1755,11 +1842,14 @@ describe('useEffect loadMoreUsers trigger', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST },
-        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+        },
       },
     ];
-
     render(
       <MockedProvider mocks={searchMocks}>
         <BrowserRouter>
@@ -1780,15 +1870,20 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // Verify initial state: John User exists, John Smith (second page) does not
     expect(screen.getByText('John User')).toBeInTheDocument();
     expect(screen.queryByText('John Smith')).not.toBeInTheDocument();
 
-    // Trigger scroll to load more users while search is active
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
-    // Verify pagination worked: both first and second page results are now present
+    // Second page merged
     expect(screen.getByText('John User')).toBeInTheDocument();
     expect(screen.getByText('John Smith')).toBeInTheDocument();
   });
@@ -1859,7 +1954,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should show loading state when isLoadingMore is true', async () => {
-    const slowLoadMoreMocks = [
+    const slowLoadMoreMocks: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -1933,7 +2028,7 @@ describe('useEffect loadMoreUsers trigger', () => {
             },
           },
         },
-        delay: 1000,
+        delay: 1000, // simulate slow fetchMore
       },
       {
         request: { query: ORGANIZATION_LIST },
@@ -1955,25 +2050,28 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // Verify initial state: First User exists, Second User does not
+    // Initial state
     expect(screen.getByText('First User')).toBeInTheDocument();
     expect(screen.queryByText('Second User')).not.toBeInTheDocument();
 
-    // Trigger scroll to load more
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    // ---- simulate scroll (no fireEvent) ----
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+    window.dispatchEvent(new Event('scroll'));
 
-    // Allow a brief moment for the loading state to be set
+    // Allow loading flag to flip
     await wait(100);
 
-    // Verify loading indicator is shown while fetchMore is in progress
-    // The InfiniteScroll loader prop renders TableLoader when isLoadingMore is true
-    const loaders = screen.getAllByTestId('TableLoader');
-    expect(loaders.length).toBeGreaterThan(0);
+    // Loader should be visible while fetchMore is pending
+    expect(screen.getAllByTestId('TableLoader').length).toBeGreaterThan(0);
 
-    // Wait for the delayed fetchMore to complete
+    // Wait for delayed fetchMore to resolve
     await wait(1500);
 
-    // Verify loading is complete and both users are displayed
+    // Final state
     expect(screen.getByText('First User')).toBeInTheDocument();
     expect(screen.getByText('Second User')).toBeInTheDocument();
   });
@@ -2240,7 +2338,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   it('should show "End of results" when initial response has no more pages', async () => {
     // Verifies the UI displays "End of results" when pageInfo.hasNextPage is false
     // from the first response, indicating InfiniteScroll has reached pagination end
-    const noNextPageMock = [
+    const noNextPageMock: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -2301,16 +2399,20 @@ describe('useEffect loadMoreUsers trigger', () => {
     // Verify user is displayed
     expect(screen.getByText('Single User')).toBeInTheDocument();
 
-    // Trigger scroll - InfiniteScroll should not fetch more since hasNextPage is false
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(200);
 
-    // The component should show "End of results" since there are no more pages
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
   it('should sort users by oldest and verify the sorted order', async () => {
-    // This test explicitly covers line 294: the oldest sorting branch
+    const user = userEvent.setup();
     const multipleUsersMock = [
       {
         request: {
@@ -2396,9 +2498,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Older User')).toBeInTheDocument();
 
     // Click sort dropdown and select oldest
-    fireEvent.click(screen.getByTestId('sortUsers'));
+    await user.click(screen.getByTestId('sortUsers'));
     await wait(50);
-    fireEvent.click(screen.getByTestId('oldest'));
+    await user.click(screen.getByTestId('oldest'));
 
     await wait();
 
@@ -2417,6 +2519,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should handle filterUsers default case returning all users', async () => {
+    const user = userEvent.setup();
     // This test covers line 312: the default return allUsers fallthrough
     // When filteringOption is neither 'cancel', 'user', nor 'admin'
     const usersMock = [
@@ -2504,9 +2607,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Admin Person')).toBeInTheDocument();
 
     // Open filter dropdown and click cancel to set filter to 'cancel'
-    fireEvent.click(screen.getByTestId('filterUsers'));
+    await user.click(screen.getByTestId('filterUsers'));
     await wait(50);
-    fireEvent.click(screen.getByTestId('cancel'));
+    await user.click(screen.getByTestId('cancel'));
 
     await wait();
 
@@ -2516,10 +2619,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should handle loadMoreUsers when pageInfoState has no hasNextPage after second fetch', async () => {
-    // Verifies pagination exhausts correctly: first page has hasNextPage:true,
-    // second page has hasNextPage:false. Both users render, "End of results" is shown,
-    // and further scrolls do not trigger additional fetches.
-    const paginatedMock = [
+    const paginatedMock: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -2619,26 +2719,28 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // Verify first user is displayed
+    // First user rendered
     expect(screen.getByText('First User')).toBeInTheDocument();
 
-    // Trigger first scroll to load more users
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
-    // Both users should now be displayed
     expect(screen.getByText('First User')).toBeInTheDocument();
     expect(screen.getByText('Second User')).toBeInTheDocument();
 
-    // Now hasNextPage is false, so hasMore should be false
-    // "End of results" should be shown
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
 
-    // Trigger another scroll - pagination is exhausted so no additional fetch occurs
-    fireEvent.scroll(window, { target: { scrollY: 12000 } });
+    window.scrollY = 12000;
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(200);
 
-    // "End of results" remains visible
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
@@ -2692,8 +2794,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should handle fetchMore returning null edges gracefully', async () => {
-    // This test covers lines 261-266: the ?? operators for null data
-    const nullEdgesMock = [
+    const nullEdgesMock: MockedResponse[] = [
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
@@ -2744,15 +2845,17 @@ describe('useEffect loadMoreUsers trigger', () => {
         result: {
           data: {
             allUsers: {
-              edges: null, // null edges to test ?? operator
-              pageInfo: null, // null pageInfo to test ?? operator
+              edges: null,
+              pageInfo: null,
             },
           },
         },
       },
       {
         request: { query: ORGANIZATION_LIST },
-        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+        result: {
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+        },
       },
     ];
 
@@ -2770,14 +2873,18 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // Initial user should be displayed
     expect(screen.getByText('Initial User')).toBeInTheDocument();
 
-    // Trigger scroll to load more (which will return null edges)
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    Object.defineProperty(window, 'scrollY', {
+      writable: true,
+      configurable: true,
+      value: 6000,
+    });
+
+    window.dispatchEvent(new Event('scroll'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
-    // Component should handle null gracefully - initial user still there
     expect(screen.getByText('Initial User')).toBeInTheDocument();
   });
 

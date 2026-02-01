@@ -34,7 +34,7 @@ vi.mock('react-router', async (importOriginal) => {
 });
 
 // Mock IconComponent to expose fill prop for testing
-vi.mock('components/IconComponent/IconComponent', () => ({
+vi.mock('shared-components/IconComponent/IconComponent', () => ({
   default: ({ name, fill }: { name: string; fill?: string }) => (
     <div data-testid="mocked-icon-component" data-name={name} data-fill={fill}>
       {name}Icon
