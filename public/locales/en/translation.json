@@ -1783,7 +1783,8 @@
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "eventCardAriaLabel": "Event card for {{name}}",
     "alreadyRegisteredAriaLabel": "Event is already registered",
-    "unknownCreator": "Unknown Creator"
+    "unknownCreator": "Unknown Creator",
+    "inviteOnlyEventAriaLabel": "Invite only event"
   },
   "advertisement": {
     "title": "Advertisements",

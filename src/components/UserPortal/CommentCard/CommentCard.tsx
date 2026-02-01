@@ -67,11 +67,16 @@ const VoteCount = styled(Typography)(() => ({
  * @param text - The text content of the comment.
  * @param refetchComments - Optional callback to refresh comments after modifications.
  *
- * `@returns` A JSX element representing the comment card.
+ * @returns JSX element representing the comment card.
  */
-function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
-  const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
-    props;
+function CommentCard({
+  id,
+  creator,
+  hasUserVoted,
+  upVoteCount,
+  text,
+  refetchComments,
+}: InterfaceCommentCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');

@@ -1800,7 +1800,8 @@
     "registeredSuccessfully": "Inscrit avec succès à {{eventName}}",
     "eventCardAriaLabel": "Carte d'événement pour {{name}}",
     "alreadyRegisteredAriaLabel": "L'événement est déjà enregistré",
-    "unknownCreator": "Créateur Inconnu"
+    "unknownCreator": "Créateur Inconnu",
+    "inviteOnlyEventAriaLabel": "Événement sur invitation uniquement"
   },
   "advertisement": {
     "title": "Annonces",

@@ -18,6 +18,17 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
+  },
+}));
+
 const { setItem, clearAllItems } = useLocalStorage();
 
 const MOCKS = [

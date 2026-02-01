@@ -150,11 +150,7 @@ function EventCard({
             {t('alreadyRegistered')}
           </Button>
         ) : isInviteOnly ? (
-          <Button
-            size="sm"
-            disabled
-            aria-label={tCommon('inviteOnlyEventAriaLabel')}
-          >
+          <Button size="sm" disabled aria-label={t('inviteOnlyEventAriaLabel')}>
             {tCommon('inviteOnlyEvent')}
           </Button>
         ) : (

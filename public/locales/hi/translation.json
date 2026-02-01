@@ -1795,7 +1795,8 @@
     "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया",
     "eventCardAriaLabel": "{{name}} के लिए इवेंट कार्ड",
     "unknownCreator": "अज्ञात निर्माता",
-    "alreadyRegisteredAriaLabel": "इवेंट पहले से पंजीकृत है"
+    "alreadyRegisteredAriaLabel": "इवेंट पहले से पंजीकृत है",
+    "inviteOnlyEventAriaLabel": "केवल आमंत्रण इवेंट"
   },
   "advertisement": {
     "title": "विज्ञापनों",
