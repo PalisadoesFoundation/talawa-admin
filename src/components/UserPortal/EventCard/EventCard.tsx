@@ -1,3 +1,20 @@
+import React from 'react';
+import styles from './EventCard.module.css';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import dayjs from 'dayjs';
+import Button from 'shared-components/Button';
+import { useMutation } from '@apollo/client';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
+import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
+import { useTranslation } from 'react-i18next';
+
+import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
+import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
+import UserPortalCard from '../UserPortalCard/UserPortalCard';
+
 /**
  * EventCard Component
  *
@@ -52,23 +69,6 @@
  * - `NotificationToast` for notifications.
  * - `utils/useLocalstorage` for local storage handling.
  */
-import React from 'react';
-import styles from './EventCard.module.css';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import dayjs from 'dayjs';
-import Button from 'shared-components/Button';
-import { useMutation } from '@apollo/client';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-
-import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
-import { useTranslation } from 'react-i18next';
-
-import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import type { InterfaceEventCardProps } from 'types/UserPortal/EventCard/interface';
-import { DUMMY_DATE_TIME_PREFIX, IDENTIFIER_USER_ID } from 'Constant/common';
-import UserPortalCard from '../UserPortalCard/UserPortalCard';
-
 function EventCard({
   id,
   name,
