@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import EmptyState from './EmptyState';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
@@ -49,7 +50,8 @@ describe('EmptyState Component', () => {
     expect(screen.getByText('createYourFirstCampaign')).toBeInTheDocument();
   });
 
-  it('applies action props correctly and test onClick action prop', () => {
+  it('applies action props correctly and test onClick action prop', async () => {
+    const user = userEvent.setup();
     const handleClick = vi.fn();
     renderEmptyState({
       ...emptyStateBaseForActionMock,
@@ -61,8 +63,8 @@ describe('EmptyState Component', () => {
     });
     const button = screen.getByRole('button', { name: 'createNew' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('MuiButton-contained');
-    fireEvent.click(button);
+    expect(button).toHaveClass('btn-contained');
+    await user.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
@@ -83,7 +85,8 @@ describe('EmptyState Component', () => {
     expect(screen.getByTestId('my-empty-state')).toBeInTheDocument();
   });
 
-  it('renders correctly with all props', () => {
+  it('renders correctly with all props', async () => {
+    const user = userEvent.setup();
     const handleClick = vi.fn();
     const { getByText, getByTestId } = renderEmptyState({
       ...emptyStateWithAllPropsMock,
@@ -95,8 +98,8 @@ describe('EmptyState Component', () => {
     });
     const button = screen.getByRole('button', { name: 'resetFilters' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('MuiButton-text');
-    fireEvent.click(button);
+    expect(button).toHaveClass('btn-text');
+    await user.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
     expect(getByText('noResults')).toBeInTheDocument();
     expect(getByText('tryAdjustingFilters')).toBeInTheDocument();
@@ -118,7 +121,7 @@ describe('EmptyState Component', () => {
       name: 'Secondary Action',
     });
 
-    expect(button).toHaveClass('MuiButton-text');
+    expect(button).toHaveClass('btn-text');
   });
 
   it('renders action button with outlined variant', () => {
@@ -135,7 +138,7 @@ describe('EmptyState Component', () => {
       name: 'Outlined Action',
     });
 
-    expect(button).toHaveClass('MuiButton-outlined');
+    expect(button).toHaveClass('btn-outline-primary');
   });
   it('renders action button with default variant when variant is undefined', () => {
     renderEmptyState({
@@ -150,7 +153,7 @@ describe('EmptyState Component', () => {
       name: 'Default Action',
     });
 
-    expect(button).toHaveClass('MuiButton-contained');
+    expect(button).toHaveClass('btn-contained');
   });
 });
 
