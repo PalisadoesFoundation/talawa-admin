@@ -92,6 +92,7 @@
     "userEditProfilePicture": "编辑用户头像",
     "communityLogo": "社区标志",
     "organizations": "组织",
+    "clickToSelectOrg": "点击选择组织",
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
     "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
