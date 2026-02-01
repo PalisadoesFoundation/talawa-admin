@@ -14,6 +14,7 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
 import './assets/css/app.css';
 import './style/tokens/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
@@ -50,6 +51,12 @@ import { refreshToken } from 'utils/getRefreshToken';
 
 const { getItem, clearAllItems } = useLocalStorage();
 const BEARER_PREFIX = 'Bearer ';
+
+if (import.meta.env.DEV) {
+  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 // Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
 let isRefreshing = false;

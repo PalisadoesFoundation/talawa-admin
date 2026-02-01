@@ -6,13 +6,13 @@
 
 > **CheckInWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/CheckIn/CheckInWrapper.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CheckIn/CheckInWrapper.tsx#L36)
+Defined in: [src/shared-components/CheckIn/CheckInWrapper.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CheckIn/CheckInWrapper.tsx#L32)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`PropType`
+[`InterfaceCheckInWrapperProps`](../../../../types/shared-components/CheckInWrapper/interface/interfaces/InterfaceCheckInWrapperProps.md)
 
 ## Returns
 

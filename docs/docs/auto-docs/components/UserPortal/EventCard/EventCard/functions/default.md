@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L59)
+Defined in: [src/components/UserPortal/EventCard/EventCard.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/EventCard/EventCard.tsx#L60)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 [`IEvent`](../../../../../types/Event/interface/interfaces/IEvent.md)
 
