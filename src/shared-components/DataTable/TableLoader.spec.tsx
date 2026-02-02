@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { TableLoader } from './TableLoader';
-import { vi, describe, it, expect } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 
 const mockColumn = {
   id: 'col-1',
@@ -41,6 +41,11 @@ describe('TableLoader', () => {
 
     const rows = screen.getAllByTestId(/skeleton-row-/);
     expect(rows.length).toBe(5);
+
+    rows.forEach((row) => {
+      const rowCells = within(row).getAllByTestId('table-loader-cell');
+      expect(rowCells.length).toBe(1);
+    });
 
     const cells = screen.getAllByTestId('table-loader-cell');
     expect(cells.length).toBe(5);
