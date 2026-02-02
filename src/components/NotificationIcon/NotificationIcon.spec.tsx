@@ -9,15 +9,16 @@ import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
   return {
-  ...actual,
-  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
-    t: (key: string) =>
-      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
-    i18n: {
-      changeLanguage: () => Promise.resolve(),
-    },
-  }),
-}});
+    ...actual,
+    useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
+      t: (key: string) =>
+        options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+      i18n: {
+        changeLanguage: () => Promise.resolve(),
+      },
+    }),
+  };
+});
 
 // Mock useLocalStorage
 vi.mock('utils/useLocalstorage', () => ({
