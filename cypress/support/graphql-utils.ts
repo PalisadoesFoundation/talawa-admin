@@ -38,7 +38,9 @@ export const aliasGraphQLOperation = (operationName: string): void => {
 export const waitForGraphQLOperation = (
   operationName: string,
 ): Cypress.Chainable<Cypress.Interception> => {
-  return cy.wait(`@${operationName}`) as Cypress.Chainable<Cypress.Interception>;
+  return cy.wait(
+    `@${operationName}`,
+  ) as Cypress.Chainable<Cypress.Interception>;
 };
 
 export const mockGraphQLOperation = (

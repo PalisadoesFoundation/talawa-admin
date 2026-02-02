@@ -25,13 +25,11 @@ describe('GraphQL utilities', () => {
     );
     cy.visit('/admin');
 
-    cy.waitForGraphQLOperation('OrganizationListBasic').then(
-      (interception) => {
-        const errors = interception.response?.body?.errors as
-          | Array<{ message: string }>
-          | undefined;
-        expect(errors?.[0]?.message).to.eq('Organization list failed');
-      },
-    );
+    cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
+      const errors = interception.response?.body?.errors as
+        | Array<{ message: string }>
+        | undefined;
+      expect(errors?.[0]?.message).to.eq('Organization list failed');
+    });
   });
 });
