@@ -25,7 +25,6 @@ import {
   DatePicker as MuiDatePicker,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import type { Dayjs } from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormFieldGroup } from '../FormFieldGroup/FormFieldGroup';
 import styles from './DatePicker.module.css';
