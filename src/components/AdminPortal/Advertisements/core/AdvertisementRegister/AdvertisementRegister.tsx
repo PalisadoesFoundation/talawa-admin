@@ -448,7 +448,7 @@ function AdvertisementRegister({
             />
           </FormFieldGroup>
           {formStatus === 'register' && (
-            <FormFieldGroup name="attachments" label={t('Rmedia')}>
+            <FormFieldGroup name="advertisementMedia" label={t('Rmedia')}>
               <input
                 className={styles.inputField}
                 id="advertisementMedia"
