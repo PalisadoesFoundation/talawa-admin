@@ -18,7 +18,7 @@
  *
  * @returns A JSX element containing a DataTable in loading state.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import DataTable from '../DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import type { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
@@ -29,13 +29,12 @@ const TableLoader = ({
   noOfCols,
   'data-testid': dataTestId,
 }: InterfaceTableLoaderProps): JSX.Element => {
-  useEffect(() => {
-    if (!headerTitles && !noOfCols) {
-      throw new Error(
-        'TableLoader error: Either headerTitles or noOfCols is required!',
-      );
-    }
-  }, [headerTitles, noOfCols]);
+  // Move validation to render time (before any JSX)
+  if (!headerTitles && !noOfCols) {
+    throw new Error(
+      'TableLoader error: Either headerTitles or noOfCols is required!',
+    );
+  }
 
   const columnCount = headerTitles?.length ?? noOfCols ?? 0;
 
