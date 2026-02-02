@@ -43,7 +43,7 @@ const requestGraphQL = (
 /**
  * Ensure an event volunteer exists for the first event in the organization.
  * @param orgId - Organization ID to seed volunteers for.
- * @returns Cypress.Chainable<void> that resolves when a volunteer exists.
+ * @returns Cypress.Chainable that resolves when a volunteer exists.
  */
 const ensureVolunteerExistsForOrg = (
   orgId: string,
