@@ -95,10 +95,6 @@
   width: 100%;
 }
 
-.fullWidth {
-  width: 100%;
-}
-
 .paddedInput {
   padding-right: calc(40px + 0.75rem);
 }

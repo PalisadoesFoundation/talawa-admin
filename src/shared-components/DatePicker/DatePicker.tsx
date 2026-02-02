@@ -2,23 +2,19 @@
  * DatePicker component - A wrapper around MUI DatePicker with FormFieldGroup integration
  *
  * @remarks
- * Note: This component sets enableAccessibleFieldDOMStructure={false}
- * to maintain compatibility with custom input styling.
- * This disables MUI's accessible field structure. The tradeoff is acceptable
- * because we provide:
+ * This component sets `enableAccessibleFieldDOMStructure` to false to maintain
+ * compatibility with custom input styling and react-bootstrap. This disables
+ * MUI's accessible field structure. The tradeoff is acceptable because we provide:
  * - Custom label element with htmlFor association
  * - aria-label on the input field via slotProps
  * - Proper keyboard navigation support
  * - Screen reader compatibility through ARIA attributes
+ *
  * This component integrates MUI DatePicker with our FormFieldGroup pattern to provide:
  * - Consistent validation and error handling
  * - Proper accessibility with ARIA attributes
  * - Label and help text management
  * - Touch state tracking for validation UX
- *
- * Note: This component sets `enableAccessibleFieldDOMStructure` to false
- * to maintain compatibility with react-bootstrap styling while still
- * providing full accessibility through FormFieldGroup's ARIA support.
  */
 import React, { useId } from 'react';
 import {
