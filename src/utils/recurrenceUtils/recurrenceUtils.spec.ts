@@ -652,27 +652,13 @@ describe('Recurrence Utility Functions', () => {
     });
 
     it('should handle different years correctly', () => {
-      const thisYear = dayjs.utc().add(1, 'month').date(15).hour(10).toDate();
-      const nextYear = dayjs
-        .utc()
-        .add(1, 'year')
-        .add(1, 'month')
-        .date(15)
-        .hour(10)
-        .toDate();
-      const yearAfter = dayjs
-        .utc()
-        .add(2, 'year')
-        .add(1, 'month')
-        .date(15)
-        .hour(10)
-        .toDate();
-
-      [thisYear, nextYear, yearAfter].forEach((date) => {
-        const firstDay = new Date(
-          Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1),
-        );
-        const expectedWeek = Math.ceil((15 + firstDay.getUTCDay()) / 7);
+      // Pre-validated: Jan 15, 2025 (Wed) → week 3; Jan 15, 2026 (Thu) → week 3; Jan 15, 2027 (Fri) → week 3
+      const testCases = [
+        { date: new Date(Date.UTC(2025, 0, 15, 10)), expectedWeek: 3 },
+        { date: new Date(Date.UTC(2026, 0, 15, 10)), expectedWeek: 3 },
+        { date: new Date(Date.UTC(2027, 0, 15, 10)), expectedWeek: 3 },
+      ];
+      testCases.forEach(({ date, expectedWeek }) => {
         expect(getWeekOfMonth(date)).toBe(expectedWeek);
       });
     });
