@@ -32,14 +32,12 @@ import styles from './customTableCell.module.css';
 import { Link } from 'react-router';
 import type { InterfaceCustomTableCellProps } from 'types/MemberActivity/interface';
 import { useTranslation } from 'react-i18next';
-import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
   eventId,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
-  const { t: tErrors } = useTranslation('errors');
-  const { data, loading, error, refetch } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error } = useQuery(EVENT_DETAILS, {
     variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
@@ -75,39 +73,31 @@ export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
   }
 
   return (
-    <ErrorBoundaryWrapper
-      fallbackErrorMessage={tErrors('defaultErrorMessage')}
-      fallbackTitle={tErrors('title')}
-      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
-      resetButtonText={tErrors('resetButton')}
-      onReset={refetch}
-    >
-      <TableRow className="my-6" data-testid="custom-row">
-        <TableCell align="left">
-          <Link
-            to={`/admin/event/${event.organization.id}/${event.id}`}
-            className={styles.membername}
-          >
-            {event.name}
-          </Link>
-        </TableCell>
-        <TableCell align="left">
-          {new Date(event.startAt).toLocaleDateString(undefined, {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            timeZone: 'UTC',
-          })}
-        </TableCell>
-        <TableCell align="left">
-          {event.isRecurringEventTemplate ? t('yes') : t('no')}
-        </TableCell>
-        <TableCell align="left">
-          <span title={t('numberOfAttendees')}>
-            {event.attendees?.length ?? 0}
-          </span>
-        </TableCell>
-      </TableRow>
-    </ErrorBoundaryWrapper>
+    <TableRow className="my-6" data-testid="custom-row">
+      <TableCell align="left">
+        <Link
+          to={`/admin/event/${event.organization.id}/${event.id}`}
+          className={styles.membername}
+        >
+          {event.name}
+        </Link>
+      </TableCell>
+      <TableCell align="left">
+        {new Date(event.startAt).toLocaleDateString(undefined, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          timeZone: 'UTC',
+        })}
+      </TableCell>
+      <TableCell align="left">
+        {event.isRecurringEventTemplate ? t('yes') : t('no')}
+      </TableCell>
+      <TableCell align="left">
+        <span title={t('numberOfAttendees')}>
+          {event.attendees?.length ?? 0}
+        </span>
+      </TableCell>
+    </TableRow>
   );
 };

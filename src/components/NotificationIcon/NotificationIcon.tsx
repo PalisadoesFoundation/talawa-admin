@@ -64,12 +64,16 @@ const NotificationIcon = (): JSX.Element => {
   }, [data]);
 
   const dropdownOptions = loading
-    ? [{ value: 'status-loading', label: t('loading') }]
+    ? [{ value: 'status-loading', label: t('loading'), disabled: true }]
     : error
-      ? [{ value: 'status-error', label: t('errorFetching') }]
+      ? [{ value: 'status-error', label: t('errorFetching'), disabled: true }]
       : notifications.length === 0
         ? [
-            { value: 'status-empty', label: t('noNewNotifications') },
+            {
+              value: 'status-empty',
+              label: t('noNewNotifications'),
+              disabled: true,
+            },
             { value: 'view-all', label: t('viewAllNotifications') },
           ]
         : [
@@ -108,7 +112,7 @@ const NotificationIcon = (): JSX.Element => {
           className={styles.unreadBadge}
           title={t('unreadCount', { count: unreadCount })}
         >
-          {unreadCount > 9 ? t('unreadOverflow', { count: 9 }) : unreadCount}
+          {unreadCount > 9 ? '9+' : unreadCount}
         </span>
       )}
     </div>
