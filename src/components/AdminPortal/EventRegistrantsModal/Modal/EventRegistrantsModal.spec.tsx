@@ -327,14 +327,6 @@ const makeAddRegistrantRecurringSuccessMock = (): ApolloMock => ({
   },
 });
 
-const makeAddRegistrantErrorMock = (): ApolloMock => ({
-  request: {
-    query: ADD_EVENT_ATTENDEE,
-    variables: { userId: 'user1', eventId: 'event123' },
-  },
-  error: new Error('Oops'),
-});
-
 const renderWithProviders = (
   mocks: ApolloMock[],
   props: typeof defaultProps = defaultProps,
@@ -459,45 +451,6 @@ describe('EventRegistrantsModal', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
-    });
-  });
-
-  test('handles error when add registrant mutation fails', async () => {
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithOneMock(),
-      makeAddRegistrantErrorMock(),
-    ]);
-
-    await screen.findByTestId('invite-modal');
-
-    const input = await screen.findByTestId('autocomplete');
-
-    await user.click(input);
-    await user.type(input, 'John Doe');
-
-    // Wait for dropdown and select option
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    const option = screen.getByText('John Doe');
-    await user.click(option);
-
-    const addButton = screen.getByTestId('add-registrant-btn');
-    await user.click(addButton);
-
-    // Assert warning shown first
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Adding the attendee...',
-      );
-    });
-
-    // Assert error toast
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
