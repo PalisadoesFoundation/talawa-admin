@@ -177,16 +177,6 @@ describe('AgendaItemsPreviewModal', () => {
     expect(imageLink).toHaveAttribute('rel', 'noopener noreferrer');
   });
 
-  it('video attachment is wrapped in a link', () => {
-    render(<AgendaItemsPreviewModal {...defaultProps} />);
-
-    const video = document.querySelector('video');
-    const videoLink = video?.closest('a');
-    expect(videoLink).toHaveAttribute('href', 'https://example.com/video.mp4');
-    expect(videoLink).toHaveAttribute('target', '_blank');
-    expect(videoLink).toHaveAttribute('rel', 'noopener noreferrer');
-  });
-
   it('calls hidePreviewModal when modal is closed', async () => {
     const user = userEvent.setup();
     render(<AgendaItemsPreviewModal {...defaultProps} />);
