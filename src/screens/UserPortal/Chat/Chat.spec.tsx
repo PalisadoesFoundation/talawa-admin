@@ -160,8 +160,10 @@ const mockChatsListData = {
       id: 'chat-1',
       name: 'Direct Chat 1',
       isGroup: false,
-      users: [{}, {}],
-      image: 'http://example.com/chat1.png',
+      members: { edges: [{}, {}] },
+      avatarURL: 'http://example.com/chat1.png',
+      lastMessage: { body: 'Hello' },
+      unreadMessagesCount: 0,
       __typename: 'Chat',
     },
     {
@@ -169,8 +171,10 @@ const mockChatsListData = {
       id: 'chat-2',
       name: 'Group Chat 1',
       isGroup: true,
-      users: [{}, {}, {}],
-      image: 'http://example.com/chat2.png',
+      members: { edges: [{}, {}, {}] },
+      avatarURL: 'http://example.com/chat2.png',
+      lastMessage: { body: 'Hi group' },
+      unreadMessagesCount: 2,
       __typename: 'Chat',
     },
     {
@@ -178,8 +182,10 @@ const mockChatsListData = {
       id: 'chat-3',
       name: 'Direct Chat 2',
       isGroup: false,
-      users: [{}, {}],
-      image: 'http://example.com/chat3.png',
+      members: { edges: [{}, {}] },
+      avatarURL: 'http://example.com/chat3.png',
+      lastMessage: { body: 'Hey' },
+      unreadMessagesCount: 0,
       __typename: 'Chat',
     },
   ],
@@ -365,7 +371,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
     expect(screen.getByTestId('chat')).toBeInTheDocument();
     expect(screen.getByText('Messages')).toBeInTheDocument();
-    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('chat-room')).toBeInTheDocument();
   });
 
@@ -675,10 +681,10 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId('dropdown-item-newChat');
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -702,10 +708,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {
@@ -727,11 +735,11 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
 
     // Open direct chat modal
     await user.click(dropdown);
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId('dropdown-item-newChat');
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -742,7 +750,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
     // Open group chat modal without closing direct chat
     await user.click(dropdown);
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {
@@ -779,10 +789,10 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent(legacyMocks);
     await screen.findByTestId('contact-card-legacy-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId('dropdown-item-newChat');
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -1498,7 +1508,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('new-chat-icon')).toBeInTheDocument();
   });
 
@@ -1506,12 +1516,14 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
     await waitFor(() => {
-      expect(screen.getByTestId('newDirectChat')).toBeInTheDocument();
-      expect(screen.getByTestId('newGroupChat')).toBeInTheDocument();
+      expect(screen.getByTestId('dropdown-item-newChat')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('dropdown-item-newGroupChat'),
+      ).toBeInTheDocument();
       expect(screen.getByText('Starred Messages')).toBeInTheDocument();
     });
   });
@@ -2036,9 +2048,11 @@ describe('Chat Component - Comprehensive Coverage', () => {
     await screen.findByTestId('contact-card-chat-1');
 
     // Open group chat modal
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {

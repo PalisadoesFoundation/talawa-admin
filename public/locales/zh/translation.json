@@ -1854,6 +1854,7 @@
     "advertisementLoading": "广告加载中..."
   },
   "userChat": {
+    "chatMenu": "聊天菜单",
     "starredMessages": "星标消息",
     "all": "全部",
     "unread": "未读",
@@ -1897,7 +1898,7 @@
     "newGroup": "新群组",
     "groupName": "组名",
     "groupDescription": "群组描述",
-    "confirmRemoveMember": "确认删除成员",
+    "confirmRemoveMember": "您确定要将 {{name}} 从此聊天中移除吗？",
     "failedToAddUser": "添加用户失败",
     "userAddedSuccessfully": "用户添加成功",
     "next": "下一步",

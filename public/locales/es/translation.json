@@ -1837,6 +1837,7 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "chatMenu": "Menú de chat",
     "starredMessages": "Mensajes destacados",
     "all": "Todos",
     "unread": "No leídos",
@@ -1880,7 +1881,7 @@
     "newGroup": "Nuevo Grupo",
     "groupName": "Nombre del grupo",
     "groupDescription": "Descripción del Grupo",
-    "confirmRemoveMember": "Confirmar eliminar miembro",
+    "confirmRemoveMember": "¿Estás seguro de que quieres eliminar a {{name}} de este chat?",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
     "next": "Siguiente",

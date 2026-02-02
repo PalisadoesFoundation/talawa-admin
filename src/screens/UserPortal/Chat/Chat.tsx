@@ -30,7 +30,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
+import { DropDownButton } from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
@@ -193,31 +193,30 @@ export default function Chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <Dropdown className={styles.dropdownToggle}>
-                <Dropdown.Toggle
-                  className={styles.customToggle}
-                  data-testid={'dropdown'}
-                >
-                  <NewChat />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={openCreateDirectChatModal}
-                    data-testid="newDirectChat"
-                  >
-                    {t('newChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={openCreateGroupChatModal}
-                    data-testid="newGroupChat"
-                  >
-                    {t('newGroupChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    {t('starredMessages')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <div className={styles.dropdownToggle}>
+                <DropDownButton
+                  id="chat-menu-dropdown"
+                  icon={<NewChat />}
+                  options={[
+                    { value: 'newChat', label: t('newChat') },
+                    { value: 'newGroupChat', label: t('newGroupChat') },
+                    { value: 'starredMessages', label: t('starredMessages') },
+                  ]}
+                  onSelect={(value) => {
+                    if (value === 'newChat') openCreateDirectChatModal();
+                    else if (value === 'newGroupChat')
+                      openCreateGroupChatModal();
+                    else if (value === 'starredMessages')
+                      window.location.hash = '#/action-3';
+                  }}
+                  dataTestIdPrefix="dropdown"
+                  variant="link"
+                  buttonLabel=""
+                  placeholder=""
+                  ariaLabel={t('chatMenu')}
+                  btnStyle={styles.customToggle}
+                />
+              </div>
             </div>
             <div
               className={`${styles.contactListContainer} d-flex flex-column`}

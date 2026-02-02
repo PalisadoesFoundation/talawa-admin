@@ -1838,6 +1838,7 @@
   },
   "userChat": {
     "starredMessages": "Starred Messages",
+    "chatMenu": "Chat Menu",
     "all": "All",
     "unread": "Unread",
     "groups": "Groups",
@@ -1880,7 +1881,7 @@
     "newGroup": "New Group",
     "groupName": "Group name",
     "groupDescription": "Group Description",
-    "confirmRemoveMember": "Confirm Remove Member",
+    "confirmRemoveMember": "Are you sure you want to remove {{name}} from this chat?",
     "failedToAddUser": "Failed to Add User",
     "userAddedSuccessfully": "User Added Successfully",
     "next": "Next",

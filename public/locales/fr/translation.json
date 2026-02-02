@@ -1854,6 +1854,7 @@
     "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
+    "chatMenu": "Menu de discussion",
     "starredMessages": "Messages favoris",
     "all": "Tous",
     "unread": "Non lus",
@@ -1898,7 +1899,7 @@
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
     "chatAction": "Action de chat",
-    "confirmRemoveMember": "Confirmer la suppression du membre",
+    "confirmRemoveMember": "Êtes-vous sûr de vouloir supprimer {{name}} de cette discussion ?",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
     "userAddedSuccessfully": "Utilisateur ajouté avec succès",
     "directChatExists": "Une conversation avec {{name}} existe déjà !"

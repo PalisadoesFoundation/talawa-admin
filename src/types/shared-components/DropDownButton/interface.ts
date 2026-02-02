@@ -86,7 +86,8 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
     | 'outline-warning'
     | 'outline-info'
     | 'outline-light'
-    | 'outline-dark';
+    | 'outline-dark'
+    | 'link';
 
   /**
    * The label of the button.

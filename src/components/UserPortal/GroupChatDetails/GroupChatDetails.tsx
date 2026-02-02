@@ -45,7 +45,8 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
-import { ListGroup, Dropdown } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
+import { DropDownButton } from 'shared-components/DropDownButton';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
@@ -423,49 +424,49 @@ export default function GroupChatDetails({
                       </span>
                     </div>
                     {canManage && (
-                      <Dropdown className="ms-auto">
-                        <Dropdown.Toggle
-                          variant="link"
+                      <div className="ms-auto">
+                        <DropDownButton
                           id={`dropdown-${user.id}`}
-                          className={`btn-sm ${styles.dropdownToggle}`}
-                        >
-                          <BsThreeDotsVertical />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu align="end">
-                          <Dropdown.Item
-                            onClick={() =>
+                          icon={<BsThreeDotsVertical />}
+                          variant="link"
+                          btnStyle={`btn-sm ${styles.dropdownToggle}`} // i18n-ignore-line
+                          buttonLabel=""
+                          placeholder=""
+                          aria-label={t('chatMenu')}
+                          options={[
+                            {
+                              value: 'toggleRole',
+                              label:
+                                role === 'administrator'
+                                  ? t('demoteToRegular')
+                                  : t('promoteToAdmin'),
+                            },
+                            ...(canRemove
+                              ? [{ value: 'remove', label: t('remove') }]
+                              : []),
+                          ]}
+                          onSelect={(value) => {
+                            if (value === 'toggleRole') {
                               handleRoleChange(
                                 user.id,
                                 role === 'administrator'
                                   ? 'regular'
                                   : 'administrator',
-                              )
+                              );
+                            } else if (value === 'remove') {
+                              if (
+                                window.confirm(
+                                  t('confirmRemoveMember', {
+                                    name: user.name,
+                                  }),
+                                )
+                              ) {
+                                handleRemoveMember(user.id);
+                              }
                             }
-                          >
-                            {role === 'administrator'
-                              ? t('demoteToRegular')
-                              : t('promoteToAdmin')}
-                          </Dropdown.Item>
-                          {canRemove && (
-                            <Dropdown.Item
-                              className={styles.removeItem}
-                              onClick={() => {
-                                if (
-                                  window.confirm(
-                                    t('confirmRemoveMember', {
-                                      name: user.name,
-                                    }),
-                                  )
-                                ) {
-                                  handleRemoveMember(user.id);
-                                }
-                              }}
-                            >
-                              {t('remove')}
-                            </Dropdown.Item>
-                          )}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                          }}
+                        />
+                      </div>
                     )}
                   </div>
                 </ListGroup.Item>
@@ -533,7 +534,7 @@ export default function GroupChatDetails({
                         };
                       }) =>
                         userDetails.id !== userId &&
-                        !chat.members?.edges?.some(
+                        !(chat.members?.edges ?? []).some(
                           (edge) => edge.node.user.id === userDetails.id,
                         ),
                     )

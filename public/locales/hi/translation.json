@@ -1849,6 +1849,7 @@
     "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
+    "chatMenu": "चैट मेनू",
     "starredMessages": "तारांकित संदेश",
     "all": "सब",
     "unread": "अपठित",
@@ -1892,7 +1893,7 @@
     "newGroup": "नया समूह",
     "groupName": "समूह का नाम",
     "groupDescription": "समूह विवरण",
-    "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
+    "confirmRemoveMember": "क्या आप वाकई {{name}} को इस चैट से हटाना चाहते हैं?",
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
     "next": "अगला",
