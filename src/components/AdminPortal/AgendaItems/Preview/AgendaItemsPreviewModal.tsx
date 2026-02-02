@@ -1,9 +1,7 @@
 import React from 'react';
 import { FaLink } from 'react-icons/fa';
-
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './AgendaItemsPreviewModal.module.css';
-
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/AdminPortal/Agenda/interface';
 
 /**
@@ -24,22 +22,22 @@ const AgendaItemsPreviewModal: React.FC<
   const renderAttachments = (): JSX.Element[] =>
     (formState.attachment ?? []).map((att, index) => (
       <div key={index} className={styles.previewFile}>
-        <a href={att.previewUrl} target="_blank" rel="noopener noreferrer">
-          {att.mimeType.startsWith('video') ? (
-            <video
-              muted
-              autoPlay
-              loop
-              playsInline
-              controls
-              crossOrigin="anonymous"
-            >
-              <source src={att.previewUrl} type={att.mimeType} />
-            </video>
-          ) : (
+        {att.mimeType.startsWith('video') ? (
+          <video
+            muted
+            autoPlay
+            loop
+            playsInline
+            controls
+            crossOrigin="anonymous"
+          >
+            <source src={att.previewUrl} type={att.mimeType} />
+          </video>
+        ) : (
+          <a href={att.previewUrl} target="_blank" rel="noopener noreferrer">
             <img src={att.previewUrl} alt={t('attachmentPreviewAlt')} />
-          )}
-        </a>
+          </a>
+        )}
       </div>
     ));
 
