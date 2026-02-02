@@ -110,7 +110,7 @@
 }
 
 .editCommentInput {
-  border: var(--border-width-1) solid var(--color-neutral-400);
+  border: var(--border-1) solid var(--color-gray-300);
   border-radius: var(--radius-sm);
-  padding: var(--spacing-2);
+  padding: var(--space-2);
 }
