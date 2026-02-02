@@ -206,10 +206,7 @@ const createMocks4 = (): MockedResponse[] => [
   },
 ];
 
-const link = new StaticMockLink(createMocks(), true);
-// Note: Avoid shared links; create per-test link instances instead of module-scoped ones
-
-const link4 = new StaticMockLink(createMocks4(), true);
+// Note: Avoid shared links; we'll create a fresh StaticMockLink per test
 
 const createMocksVerifiedEmail = (): MockedResponse[] => [
   {
@@ -251,7 +248,7 @@ const createMocksVerifiedEmail = (): MockedResponse[] => [
     result: { data: { organizations: [] } },
   },
 ];
-const linkVerifiedEmail = new StaticMockLink(createMocksVerifiedEmail(), true);
+// For verified email scenarios, instantiate a fresh link within the test
 
 const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
   const warning = vi.fn();
@@ -299,6 +296,8 @@ beforeEach(() => {
   );
   // Avoid real network health-check fetch errors influencing toast assertions
   vi.spyOn(global, 'fetch').mockResolvedValue({} as Response);
+  // Fresh Apollo StaticMockLink per test to ensure isolation
+  link = new StaticMockLink(createMocks(), true);
 });
 
 afterEach(() => {
@@ -361,6 +360,7 @@ vi.mock('react-google-recaptcha', async () => {
 });
 
 let user: ReturnType<typeof userEvent.setup>;
+let link: StaticMockLink;
 
 beforeEach(() => {
   user = userEvent.setup();
@@ -834,8 +834,10 @@ describe('Testing Login Page Screen', () => {
   it('Testing wrong login functionality', async () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
+    const localLink4 = new StaticMockLink(createMocks4(), true);
+
     render(
-      <MockedProvider link={link4}>
+      <MockedProvider link={localLink4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2742,8 +2744,13 @@ describe('Cookie-based authentication verification', () => {
   it('Testing login functionality with verified email clears storage flags', async () => {
     const formData = { email: 'verified@gmail.com', password: 'password123' };
 
+    const verifiedEmailLink = new StaticMockLink(
+      createMocksVerifiedEmail(),
+      true,
+    );
+
     render(
-      <MockedProvider link={linkVerifiedEmail}>
+      <MockedProvider link={verifiedEmailLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
