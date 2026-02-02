@@ -239,9 +239,9 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           import { describe, it, vi } from 'vitest';
           vi.fn();
           describe('empty', () => {
-          afterEach(() => {
-            vi.clearAllMocks();
-          });
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
 
           });
         `,

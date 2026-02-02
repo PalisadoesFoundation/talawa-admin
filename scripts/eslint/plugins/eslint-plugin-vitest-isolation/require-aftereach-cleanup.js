@@ -230,10 +230,19 @@ module.exports = {
                                         // Get indentation from describe callback opening brace
                                         const nextLineStart = sourceCode.text.indexOf('\n', callback.body.range[0]) + 1;
                                         if (nextLineStart > 0 && nextLineStart < sourceCode.text.length) {
-                                            const leadingMatch = sourceCode.text.substring(nextLineStart).match(/^(\s+)/);
+                                            const nextLineText = sourceCode.text.substring(nextLineStart);
+                                            const leadingMatch = nextLineText.match(/^(\s*)/);
                                             if (leadingMatch) {
-                                                baseIndent = leadingMatch[1];
-                                                innerIndent = baseIndent.includes('\t') ? '\t' : '  ';
+                                                const existingIndent = leadingMatch[1];
+                                                // Detect indent unit from existing indent or default to 2 spaces
+                                                innerIndent = existingIndent.includes('\t') ? '\t' : '  ';
+                                                // If next line is just closing brace (empty block), add one indent level
+                                                const isClosingBrace = nextLineText.match(/^\s*\}[\s;)]*$/);
+                                                if (isClosingBrace) {
+                                                    baseIndent = existingIndent + innerIndent;
+                                                } else {
+                                                    baseIndent = existingIndent;
+                                                }
                                             }
                                         }
                                     }
