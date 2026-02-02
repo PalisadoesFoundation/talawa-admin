@@ -86,6 +86,8 @@
 
 .pickerIconButton svg {
   font-size: var(--font-size-xl);
+}
+
 /* Increase specificity to override potential conflicts */
 .wrapper.wrapper {
   display: flex;

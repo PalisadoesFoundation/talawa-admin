@@ -27,8 +27,6 @@ import { useTranslation } from 'react-i18next';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-
 import type {
   InterfaceDateRangePickerProps,
   IDateRangeValue,
@@ -176,7 +174,9 @@ export default function DateRangePicker({
               data-testid={startInputId}
               slotProps={{
                 textField: {
+                  id: startInputId,
                   'aria-label': t('startDate'),
+                  'aria-describedby': helperText ? helperId : undefined,
                 },
               }}
             />
@@ -195,7 +195,9 @@ export default function DateRangePicker({
               data-testid={endInputId}
               slotProps={{
                 textField: {
+                  id: endInputId,
                   'aria-label': t('endDate'),
+                  'aria-describedby': helperText ? helperId : undefined,
                 },
               }}
             />
@@ -228,6 +230,7 @@ export default function DateRangePicker({
 
         {helperText && (
           <small
+            id={helperId}
             className={`${styles.helperText} ${error ? styles.helperTextError : ''}`}
             data-testid={helperId}
           >
@@ -235,73 +238,6 @@ export default function DateRangePicker({
           </small>
         )}
       </div>
-      <div className={styles.controlsRow}>
-        <FormFieldGroup label={t('startDate')} name="startDate">
-          <DatePicker
-            value={startDayjs}
-            name="start-date"
-            onChange={handleStartChange}
-            disabled={disabled}
-            data-testid={`${dataTestId}-start-input`}
-            slotProps={{
-              textField: {
-                'aria-label': t('startDate'),
-              },
-            }}
-          />
-        </FormFieldGroup>
-
-        <FormFieldGroup label={t('endDate')} name="endDate">
-          <DatePicker
-            value={endDayjs}
-            name="end-date"
-            onChange={handleEndChange}
-            disabled={disabled}
-            minDate={
-              normalizedStartDate ? dayjs(normalizedStartDate) : undefined
-            }
-            data-testid={`${dataTestId}-end-input`}
-            slotProps={{
-              textField: {
-                'aria-label': t('endDate'),
-              },
-            }}
-          />
-        </FormFieldGroup>
-      </div>
-
-      {helperText && (
-        <div
-          data-testid={`${dataTestId}-helper`}
-          className={error ? 'text-danger' : undefined}
-        >
-          {helperText}
-        </div>
-      )}
-
-      {presets && presets.length > 0 && showPresets !== false && (
-        <div className={styles.presetRow}>
-          {presets.map((preset) => {
-            const isActive = preset.key === activePresetKey;
-
-            return (
-              <button
-                key={preset.key}
-                type="button"
-                disabled={disabled}
-                aria-pressed={isActive}
-                data-testid={`${dataTestId}-preset-${preset.key}`}
-                className={`${styles.presetButton} ${
-                  isActive ? styles.presetButtonActive : ''
-                }`}
-                onClick={() => handlePresetClick(preset)}
-              >
-                {preset.label}
-              </button>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
