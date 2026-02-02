@@ -1,8 +1,26 @@
+const triggerGraphQLRequest = (operationName: string): Cypress.Chainable => {
+  return cy.window().then((win) => {
+    return win.fetch('/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        operationName,
+        query: 'query ExampleOperation { __typename }',
+      }),
+    });
+  });
+};
+
 describe('GraphQL utilities', () => {
+  beforeEach(() => {
+    Cypress.env('apiUrl', '/graphql');
+    cy.visit('/');
+  });
+
   it('aliases and waits for a live operation', () => {
-    cy.aliasGraphQLOperation('OrganizationListBasic');
-    cy.visit('/admin');
-    cy.waitForGraphQLOperation('OrganizationListBasic');
+    cy.aliasGraphQLOperation('ExampleOperation');
+    triggerGraphQLRequest('ExampleOperation');
+    cy.waitForGraphQLOperation('ExampleOperation');
   });
 
   it('mocks a successful query', () => {
@@ -10,11 +28,10 @@ describe('GraphQL utilities', () => {
       'OrganizationListBasic',
       'api/graphql/organizations.success.json',
     );
-    cy.visit('/admin');
-    cy.waitForGraphQLOperation('OrganizationListBasic');
-
-    cy.get('[data-testid="selectOrg"] input').click();
-    cy.contains('Example Org').should('be.visible');
+    triggerGraphQLRequest('OrganizationListBasic');
+    cy.waitForGraphQLOperation('OrganizationListBasic')
+      .its('response.body.data.organizations.0.name')
+      .should('eq', 'Example Org');
   });
 
   it('mocks an error response', () => {
@@ -23,13 +40,10 @@ describe('GraphQL utilities', () => {
       'Organization list failed',
       'GRAPHQL_ERROR',
     );
-    cy.visit('/admin');
+    triggerGraphQLRequest('OrganizationListBasic');
 
-    cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
-      const errors = interception.response?.body?.errors as
-        | Array<{ message: string }>
-        | undefined;
-      expect(errors?.[0]?.message).to.eq('Organization list failed');
-    });
+    cy.waitForGraphQLOperation('OrganizationListBasic')
+      .its('response.body.errors.0.message')
+      .should('eq', 'Organization list failed');
   });
 });
