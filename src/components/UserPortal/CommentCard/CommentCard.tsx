@@ -1,18 +1,3 @@
-/**
- * CommentCard Component
- *
- * This component represents a card displaying a comment with the ability to like or dislike it.
- * It shows the comment creator's details, the comment text, and the like/dislike counts.
- *
- * @param id - The unique identifier of the comment.
- * @param creator - The creator of the comment, including their ID and name.
- * @param hasUserVoted - Whether the current user has voted and the vote type.
- * @param upVoteCount - The number of upvotes (likes) on the comment.
- * @param text - The text content of the comment.
- * @param refetchComments - Function to refresh comments after voting.
- *
- * @returns A JSX element representing the comment card.
- */
 import React from 'react';
 import {
   IconButton,
@@ -25,15 +10,13 @@ import {
   MenuItem,
   Input,
 } from '@mui/material';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import {
   MoreHoriz,
   ThumbUp,
   ThumbUpOutlined,
   EditOutlined,
   DeleteOutline,
-  Close as CloseIcon,
-  Save as SaveIcon,
 } from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
@@ -42,7 +25,6 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import commentCardStyles from './CommentCard.module.css';
-import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
 import {
   DELETE_COMMENT,
@@ -50,6 +32,9 @@ import {
 } from 'GraphQl/Mutations/CommentMutations';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import UserPortalCard from '../UserPortalCard/UserPortalCard';
+import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
+import { IDENTIFIER_USER_ID } from 'Constant/common';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -68,20 +53,22 @@ const VoteCount = styled(Typography)(() => ({
   minWidth: 20,
   textAlign: 'center',
 }));
-interface InterfaceCommentCardProps {
-  id: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  hasUserVoted?: { voteType: VoteType } | null;
-  upVoteCount: number;
-  // downVoteCount: number;
-  text: string;
-  refetchComments?: () => void;
-}
 
+/**
+ * CommentCard Component
+ *
+ * This component represents a card displaying a comment with the ability to like or dislike it.
+ * It shows the comment creator's details, the comment text, and the like/dislike counts.
+ *
+ * @param id - The unique identifier of the comment.
+ * @param creator - The creator of the comment, including their ID, name, and optional avatar URL.
+ * @param hasUserVoted - Object indicating if current user has voted and the vote type.
+ * @param upVoteCount - The number of upvotes (likes) on the comment.
+ * @param text - The text content of the comment.
+ * @param refetchComments - Optional callback to refresh comments after modifications.
+ *
+ * @returns JSX element representing the comment card.
+ */
 function CommentCard({
   id,
   creator,
@@ -94,7 +81,7 @@ function CommentCard({
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-  const userId = getItem('userId');
+  const userId = getItem(IDENTIFIER_USER_ID);
 
   const [likes, setLikes] = React.useState(upVoteCount);
   const [isLiked, setIsLiked] = React.useState(false);
@@ -228,16 +215,62 @@ function CommentCard({
       onReset={refetchComments}
     >
       <CommentContainer>
-        <Stack direction="row" spacing={2} alignItems="flex-start">
-          <span className={commentCardStyles.userImageUserComment}>
-            <ProfileAvatarDisplay
-              imageUrl={creator.avatarURL || defaultAvatar}
-              fallbackName={creator.name}
-              size="small"
-              dataTestId="user-avatar"
-              enableEnlarge
-            />
-          </span>
+        <UserPortalCard
+          imageSlot={
+            <span className={commentCardStyles.userImageUserComment}>
+              <ProfileAvatarDisplay
+                imageUrl={creator.avatarURL || defaultAvatar}
+                fallbackName={creator.name}
+                size="small"
+                dataTestId="user-avatar"
+                enableEnlarge
+              />
+            </span>
+          }
+          actionsSlot={
+            userId === creator.id ? (
+              <>
+                <IconButton
+                  ref={menuAnchorRef}
+                  onClick={handleMenuOpen}
+                  size="small"
+                  data-testid="more-options-button"
+                  aria-label={t('commentCard.moreOptionsAriaLabel')}
+                >
+                  <MoreHoriz />
+                </IconButton>
+                <Menu
+                  anchorEl={menuAnchorRef.current}
+                  open={showCommentOptions}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                  <MenuItem
+                    data-testid="update-comment-button"
+                    onClick={toggleEditComment}
+                  >
+                    <EditOutlined className={commentCardStyles.iconSmall} />
+                    {t('commentCard.editComment')}
+                  </MenuItem>
+                  <MenuItem
+                    data-testid="delete-comment-button"
+                    onClick={handleDeleteComment}
+                    disabled={deletingComment}
+                  >
+                    <DeleteOutline className={commentCardStyles.iconSmall} />
+                    {deletingComment
+                      ? t('commentCard.deleting')
+                      : t('commentCard.deleteComment')}
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : undefined
+          }
+          variant="compact"
+          ariaLabel={t('commentCard.commentBy', { name: creator.name })}
+          dataTestId="comment-card"
+        >
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle2" fontWeight="bold">
               {creator.name}
@@ -262,44 +295,7 @@ function CommentCard({
               <VoteCount>{likes}</VoteCount>
             </Stack>
           </Box>
-          {userId === creator.id && (
-            <>
-              <IconButton
-                ref={menuAnchorRef}
-                onClick={handleMenuOpen}
-                size="small"
-                data-testid="more-options-button"
-              >
-                <MoreHoriz />
-              </IconButton>
-              <Menu
-                anchorEl={menuAnchorRef.current}
-                open={showCommentOptions}
-                onClose={handleMenuClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              >
-                <MenuItem
-                  data-testid="update-comment-button"
-                  onClick={toggleEditComment}
-                >
-                  <EditOutlined className={commentCardStyles.iconSmall} />
-                  {t('commentCard.editComment')}
-                </MenuItem>
-                <MenuItem
-                  data-testid="delete-comment-button"
-                  onClick={handleDeleteComment}
-                  disabled={deletingComment}
-                >
-                  <DeleteOutline className={commentCardStyles.iconSmall} />
-                  {deletingComment
-                    ? t('commentCard.deleting')
-                    : t('commentCard.deleteComment')}
-                </MenuItem>
-              </Menu>
-            </>
-          )}
-        </Stack>
+        </UserPortalCard>
 
         {/* Edit Comment Modal */}
         <Modal
@@ -309,7 +305,7 @@ function CommentCard({
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <Box className={commentCardStyles.editInputWrapper}>
+            <Box sx={{ mb: 2 }}>
               <Input
                 multiline
                 rows={4}
@@ -317,26 +313,18 @@ function CommentCard({
                 onChange={handleEditCommentInput}
                 fullWidth
                 data-testid="edit-comment-input"
-                className={commentCardStyles.editCommentInput}
-                aria-label={t('commentCard.editComment')}
               />
             </Box>
 
             <Box className={commentCardStyles.modalActions}>
-              <Box className={commentCardStyles.leftModalActions}>
-                <Button
-                  onClick={toggleEditComment}
-                  data-testid="edit-comment-modal-close-btn"
-                  icon={<CloseIcon />}
-                  iconPosition="start"
-                  variant="outlined"
-                >
+              <Box />
+              <Box className={commentCardStyles.rightModalActions}>
+                <Button variant="outlined" onClick={toggleEditComment}>
                   {tCommon('cancel')}
                 </Button>
-              </Box>
-              <Box className={commentCardStyles.rightModalActions}>
                 <Button
-                  variant="primary"
+                  variant="contained"
+                  disabled={updatingComment}
                   onClick={async () => {
                     if (!editedCommentText.trim()) {
                       NotificationToast.error(
@@ -350,10 +338,9 @@ function CommentCard({
                       toggleEditComment();
                     }
                   }}
-                  data-testid="edit-comment-save-btn"
-                  icon={<SaveIcon />}
+                  data-testid="save-comment-button"
+                  icon={<EditOutlined />}
                   iconPosition="start"
-                  disabled={updatingComment}
                 >
                   {updatingComment ? tCommon('saving') : tCommon('save')}
                 </Button>

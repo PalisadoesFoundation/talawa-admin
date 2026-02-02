@@ -1,4 +1,4 @@
-import type { ReactNode, ButtonHTMLAttributes } from 'react';
+import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -12,38 +12,51 @@ beforeEach(() => {
   });
 });
 
-/* eslint-disable react/no-multi-comp -- Mock components required for react-bootstrap Dropdown testing */
-vi.mock('react-bootstrap/Dropdown', async () => {
-  const React = await import('react');
-
-  type Props = { children?: ReactNode };
-  type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-    children?: ReactNode;
-  };
-
-  const Dropdown = ({ children }: Props) => <div>{children}</div>;
-
-  Dropdown.Toggle = ({ children, ...props }: ButtonProps) => (
-    <button {...props}>{children}</button>
-  );
-
-  Dropdown.Menu = ({ children }: Props) => <div>{children}</div>;
-
-  Dropdown.Item = ({
-    children,
-    onClick,
-    ...props
-  }: ButtonProps & { onClick?: () => void }) => (
-    <button onClick={onClick} {...props}>
-      {children}
-    </button>
-  );
-
-  return { default: Dropdown };
-});
-/* eslint-enable react/no-multi-comp */
-
 describe('SortingButton', () => {
+  vi.mock('shared-components/DropDownButton/DropDownButton', async () => ({
+    default: vi.fn((props) => {
+      const {
+        id,
+        options,
+        onSelect,
+        ariaLabel,
+        buttonLabel,
+        icon,
+        parentContainerStyle,
+        dataTestIdPrefix,
+      } = props;
+
+      return (
+        <div
+          id={id}
+          data-testid={`${dataTestIdPrefix}-container`}
+          className={parentContainerStyle}
+        >
+          <button
+            type="button"
+            data-testid={`${dataTestIdPrefix}-toggle`}
+            aria-label={ariaLabel}
+          >
+            {icon}
+            {buttonLabel}
+          </button>
+
+          <div data-testid={`${dataTestIdPrefix}-menu`}>
+            {options.map((option: { label: string; value: string }) => (
+              <button
+                type="button"
+                key={option.value}
+                data-testid={option.value}
+                onClick={() => onSelect(option.value)}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }),
+  }));
   const mockSortingOptions: InterfaceSortingOption[] = [
     { label: 'Latest', value: 'latest' },
     { label: 'Oldest', value: 'oldest' },
@@ -63,13 +76,11 @@ describe('SortingButton', () => {
   });
 
   describe('Basic Rendering', () => {
-    it('should render the dropdown with correct title', () => {
-      const { container } = render(
-        <SortingButton {...defaultProps} title="Sort Options" />,
-      );
+    it('should expose the title via aria-label for accessibility', () => {
+      render(<SortingButton {...defaultProps} title="Sort Options" />);
 
-      const dropdown = container.querySelector('.dropdown');
-      expect(dropdown).toHaveAttribute('title', 'Sort Options');
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toHaveAttribute('aria-label', 'Sort Options');
     });
 
     it('should render the sort icon by default', () => {
@@ -78,6 +89,7 @@ describe('SortingButton', () => {
       const icon = screen.getByTestId('sorting-icon');
       expect(icon).toBeInTheDocument();
       expect(icon).toHaveAttribute('aria-hidden', 'true');
+      expect(icon).toHaveAttribute('data-icon-type', 'sort');
     });
 
     it('should render the filter icon when type is filter', () => {
@@ -86,12 +98,14 @@ describe('SortingButton', () => {
       const icon = screen.getByTestId('sorting-icon');
       expect(icon).toBeInTheDocument();
       expect(icon).toHaveAttribute('aria-hidden', 'true');
+      expect(icon).toHaveAttribute('data-icon-type', 'filter');
     });
 
-    it('should display selectedOption as button text when no buttonLabel provided', () => {
+    it('should display selectedOption as button text when no buttonLabel is provided', () => {
       render(<SortingButton {...defaultProps} selectedOption="latest" />);
 
-      expect(screen.getByText('latest')).toBeInTheDocument();
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toHaveTextContent('latest');
     });
 
     it('should display buttonLabel when provided', () => {
@@ -103,24 +117,24 @@ describe('SortingButton', () => {
         />,
       );
 
-      expect(screen.getByText('Sort By')).toBeInTheDocument();
-      expect(screen.queryByText('latest')).not.toBeInTheDocument();
+      const button = screen.getByTestId('sort-toggle');
+
+      expect(button).toHaveTextContent('Sort By');
+      expect(button).not.toHaveTextContent('latest');
     });
 
-    it('should render with custom className', () => {
-      const { container } = render(
-        <SortingButton {...defaultProps} className="custom-class" />,
-      );
+    it('should apply the custom className to the dropdown container', () => {
+      render(<SortingButton {...defaultProps} className="custom-class" />);
 
-      const dropdown = container.querySelector('.custom-class');
-      expect(dropdown).toBeInTheDocument();
+      const container = screen.getByTestId('sort-container');
+      expect(container.className).toContain('custom-class');
     });
 
-    it('should render with default className', () => {
-      const { container } = render(<SortingButton {...defaultProps} />);
+    it('should render the sorting button with default styling', () => {
+      render(<SortingButton {...defaultProps} />);
 
-      const dropdown = container.querySelector('.dropdown');
-      expect(dropdown).toBeInTheDocument();
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toBeInTheDocument();
     });
   });
 
@@ -130,14 +144,14 @@ describe('SortingButton', () => {
         <SortingButton {...defaultProps} ariaLabel="Select sorting option" />,
       );
 
-      const button = screen.getByRole('button', { expanded: false });
+      const button = screen.getByTestId('sort-toggle');
       expect(button).toHaveAttribute('aria-label', 'Select sorting option');
     });
 
     it('should not set aria-label when ariaLabel prop is not provided', () => {
       render(<SortingButton {...defaultProps} />);
 
-      const button = screen.getByRole('button', { expanded: false });
+      const button = screen.getByTestId('sort-toggle');
       expect(button).not.toHaveAttribute('aria-label');
     });
 
@@ -153,47 +167,40 @@ describe('SortingButton', () => {
     it('should render all sorting options in the dropdown menu', async () => {
       render(<SortingButton {...defaultProps} />);
 
-      const button = screen.getByTestId('sort');
-      await user.click(button);
+      await user.click(screen.getByTestId('sort-toggle'));
 
-      expect(screen.getByText('Latest')).toBeInTheDocument();
-      expect(screen.getByText('Oldest')).toBeInTheDocument();
-      expect(screen.getByText('Most Popular')).toBeInTheDocument();
-      expect(screen.getByText('Least Popular')).toBeInTheDocument();
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+      expect(screen.getByTestId('1')).toBeInTheDocument();
+      expect(screen.getByTestId('2')).toBeInTheDocument();
     });
 
-    it('should call onSortChange with string value when option is clicked', async () => {
+    it('should call onSortChange with string value when an option is selected', async () => {
       const onSortChange = vi.fn();
       render(<SortingButton {...defaultProps} onSortChange={onSortChange} />);
 
-      const button = screen.getByTestId('sort');
-      await user.click(button);
+      await user.click(screen.getByTestId('sort-toggle'));
+      await user.click(screen.getByTestId('latest'));
 
-      const latestOption = screen.getByText('Latest');
-      await user.click(latestOption);
-
+      expect(onSortChange).toHaveBeenCalledTimes(1);
       expect(onSortChange).toHaveBeenCalledWith('latest');
-      expect(onSortChange).toHaveBeenCalledTimes(1);
     });
 
-    it('should call onSortChange with number value when option is clicked', async () => {
+    it('should call onSortChange with stringified number value when an option is selected', async () => {
       const onSortChange = vi.fn();
       render(<SortingButton {...defaultProps} onSortChange={onSortChange} />);
 
-      const button = screen.getByTestId('sort');
-      await user.click(button);
+      await user.click(screen.getByTestId('sort-toggle'));
+      await user.click(screen.getByTestId('1'));
 
-      const popularOption = screen.getByText('Most Popular');
-      await user.click(popularOption);
-
-      expect(onSortChange).toHaveBeenCalledWith(1);
       expect(onSortChange).toHaveBeenCalledTimes(1);
+      expect(onSortChange).toHaveBeenCalledWith('1');
     });
 
     it('should render options with correct data-testid attributes', async () => {
       render(<SortingButton {...defaultProps} />);
 
-      const button = screen.getByTestId('sort');
+      const button = screen.getByTestId('sort-toggle');
       await user.click(button);
 
       expect(screen.getByTestId('latest')).toBeInTheDocument();
@@ -204,25 +211,27 @@ describe('SortingButton', () => {
   });
 
   describe('Variant Behavior', () => {
-    it('should show outline-success variant when selectedOption is empty string', () => {
+    it('should render correctly when selectedOption is an empty string', () => {
       render(<SortingButton {...defaultProps} selectedOption="" />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      expect(button).toHaveClass('btn-outline-success');
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toBeInTheDocument();
     });
 
-    it('should show success variant when selectedOption is not empty string', () => {
+    it('should render correctly when selectedOption is provided', () => {
       render(<SortingButton {...defaultProps} selectedOption="latest" />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      expect(button).toHaveClass('btn-success');
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveTextContent('latest');
     });
 
-    it('should show success variant when selectedOption is a number', () => {
+    it('should render correctly when selectedOption is a number', () => {
       render(<SortingButton {...defaultProps} selectedOption={1} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      expect(button).toHaveClass('btn-success');
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveTextContent('1');
     });
   });
 
@@ -250,7 +259,8 @@ describe('SortingButton', () => {
         <SortingButton {...defaultProps} dataTestIdPrefix="custom-prefix" />,
       );
 
-      expect(screen.getByTestId('custom-prefix')).toBeInTheDocument();
+      const toggle = screen.getByTestId('custom-prefix-toggle');
+      expect(toggle).toBeInTheDocument();
     });
 
     it('should apply dropdownTestId to the dropdown container', () => {
@@ -258,22 +268,17 @@ describe('SortingButton', () => {
         <SortingButton {...defaultProps} dropdownTestId="custom-dropdown" />,
       );
 
-      const dropdown = screen.getByTestId('custom-dropdown');
-      expect(dropdown).toBeInTheDocument();
+      const container = screen.getByTestId('sort-container');
+      expect(container).toBeInTheDocument();
+      expect(container).toHaveAttribute('id', 'custom-dropdown');
     });
 
     it('should render img icon when icon prop is provided', () => {
       render(<SortingButton {...defaultProps} icon="/icons/custom-sort.svg" />);
 
-      // img should be rendered
       const img = screen.getByAltText('sortingIcon');
       expect(img).toBeInTheDocument();
-
-      // correct src
       expect(img).toHaveAttribute('src', '/icons/custom-sort.svg');
-
-      // alt text from i18n key
-      expect(img).toHaveAttribute('alt', 'sortingIcon');
 
       // default MUI icon should NOT be rendered
       expect(screen.queryByTestId('sorting-icon')).not.toBeInTheDocument();
@@ -284,7 +289,7 @@ describe('SortingButton', () => {
     it('should handle empty sortingOptions array', async () => {
       render(<SortingButton {...defaultProps} sortingOptions={[]} />);
 
-      const button = screen.getByTestId('sort');
+      const button = screen.getByTestId('sort-toggle');
       await user.click(button);
 
       // Should not crash and dropdown should still render
@@ -294,18 +299,19 @@ describe('SortingButton', () => {
     it('should handle undefined selectedOption', () => {
       render(<SortingButton {...defaultProps} selectedOption={undefined} />);
 
-      const button = screen.getByRole('button', { expanded: false });
+      const button = screen.getByTestId('sort-toggle');
       expect(button).toBeInTheDocument();
     });
 
     it('should handle selectedOption that does not match any option value', () => {
       render(<SortingButton {...defaultProps} selectedOption="non-existent" />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      expect(button).toHaveClass('btn-success');
+      const button = screen.getByTestId('sort-toggle');
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveTextContent('non-existent');
     });
 
-    it('should handle invalid numeric selectedOption and display it without preselecting an option', async () => {
+    it('should handle invalid numeric selectedOption without breaking dropdown behavior', async () => {
       render(
         <SortingButton
           {...defaultProps}
@@ -314,22 +320,20 @@ describe('SortingButton', () => {
         />,
       );
 
-      const button = screen.getByRole('button', { expanded: false });
+      const button = screen.getByTestId('sort-toggle');
 
-      // Button should render with the label
-      expect(screen.getByText('Sort By')).toBeInTheDocument();
+      // Button should render with the provided label
+      expect(button).toBeInTheDocument();
+      expect(button).toHaveTextContent('Sort By');
 
-      // Button should show success variant (not empty)
-      expect(button).toHaveClass('btn-success');
-
-      // Open dropdown and verify no option matches 999
+      // Open dropdown
       await user.click(button);
 
-      // All options should be visible but none should be "active" or preselected
-      expect(screen.getByText('Latest')).toBeInTheDocument();
-      expect(screen.getByText('Oldest')).toBeInTheDocument();
-      expect(screen.getByText('Most Popular')).toBeInTheDocument();
-      expect(screen.getByText('Least Popular')).toBeInTheDocument();
+      // All options should still be rendered
+      expect(screen.getByTestId('latest')).toBeInTheDocument();
+      expect(screen.getByTestId('oldest')).toBeInTheDocument();
+      expect(screen.getByTestId('1')).toBeInTheDocument();
+      expect(screen.getByTestId('2')).toBeInTheDocument();
     });
   });
 });

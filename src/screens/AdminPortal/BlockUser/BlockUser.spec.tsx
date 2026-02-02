@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi } from 'vitest';
 import BlockUser from './BlockUser';
@@ -348,12 +343,14 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -404,12 +401,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -455,12 +454,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -554,12 +555,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -595,12 +598,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -667,12 +672,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -787,12 +794,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -853,12 +862,14 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -961,12 +972,14 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
 
-      const blockedUsersOption = await screen.findByTestId('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });
@@ -1131,7 +1144,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
       );
 
-      const sortingButton = await screen.findByTestId('blockUserView');
+      const sortingButton = await screen.findByTestId('blockUserView-toggle');
 
       await act(async () => {
         fireEvent.click(sortingButton);
@@ -1139,7 +1152,9 @@ describe('BlockUser Component', () => {
 
       await flushPromises();
 
-      const blockedUsersOption = await screen.findByText('blockedUsers');
+      const blockedUsersOption = await screen.findByTestId(
+        'blockUserView-item-blockedUsers',
+      );
       await act(async () => {
         fireEvent.click(blockedUsersOption);
       });

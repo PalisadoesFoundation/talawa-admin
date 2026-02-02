@@ -4,7 +4,6 @@ import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
-import translation from '../../../../public/locales/en/translation.json';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
@@ -18,6 +17,17 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
+  },
+}));
 
 const { setItem, clearAllItems } = useLocalStorage();
 
@@ -161,7 +171,7 @@ describe('Testing Event Card In User portal', () => {
           query: REGISTER_EVENT,
           variables: { id: '123' },
         },
-        error: new Error(translation.userEventCard.failedToRegister),
+        error: new Error('Failed to register for the event'),
       },
     ];
 
@@ -181,11 +191,11 @@ describe('Testing Event Card In User portal', () => {
 
     await userEvent.click(screen.getByText('Register'));
 
-    await waitFor(() => {
+    await waitFor(() =>
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        translation.userEventCard.failedToRegister,
-      );
-    });
+        'Failed to register for the event',
+      ),
+    );
   });
 
   it('should display "Invite Only" badge and disable registration when isInviteOnly is true', () => {
@@ -207,6 +217,26 @@ describe('Testing Event Card In User portal', () => {
     expect(inviteOnlyButton).toBeInTheDocument();
     expect(inviteOnlyButton.closest('button')).toBeDisabled();
     expect(screen.queryByText('Register')).not.toBeInTheDocument();
+  });
+
+  it('should set aria-label with event name for accessibility', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const eventCard = screen.getByTestId('event-card');
+    expect(eventCard).toHaveAttribute(
+      'aria-label',
+      `Event card for ${props.name}`,
+    );
   });
 
   it('should handle combined scenario with isPublic: false and isInviteOnly: true', () => {
@@ -231,6 +261,7 @@ describe('Testing Event Card In User portal', () => {
 });
 
 describe('Event card when start and end time are not given', () => {
+  // Props with empty startTime and endTime to test all-day events
   const props = {
     id: '123',
     name: 'Test Event',
@@ -262,8 +293,8 @@ describe('Event card when start and end time are not given', () => {
     isRecurringEventException: false,
   };
 
-  it('Card is rendered correctly', async () => {
-    const { container } = render(
+  it('Card is rendered correctly without start and end times', async () => {
+    render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
@@ -275,8 +306,10 @@ describe('Event card when start and end time are not given', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() =>
-      expect(container.querySelector(':empty')).toBeInTheDocument(),
-    );
+    // Verify event name is displayed
+    expect(screen.getByText('Test Event')).toBeInTheDocument();
+    // Verify times are not displayed when empty
+    expect(screen.queryByTestId('startTime')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('endTime')).not.toBeInTheDocument();
   });
 });
