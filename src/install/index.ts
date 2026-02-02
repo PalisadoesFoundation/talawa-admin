@@ -135,10 +135,14 @@ export function handleDirectExecutionError(error: unknown): void {
 }
 
 /**
- * Runs the main installation function if this file is executed directly
- * @param argv - The argv array to check (defaults to process.argv)
+ * Runs the main installation function if this file is executed directly.
+ *
+ * @param argv - The command line arguments array to check. Defaults to process.argv.
+ * @param currentFilePath - The current file path to compare against argv[1]. Defaults to fileURLToPath(import.meta.url).
+ * @param mainFn - The async main function to execute when direct execution is detected. Defaults to the exported main function.
+ * @param errorHandler - The error handler function to call if mainFn throws an error. Defaults to handleDirectExecutionError.
+ * @returns void
  */
-
 export function runIfDirectExecution(
   argv: string[] = process.argv,
   currentFilePath: string = fileURLToPath(import.meta.url),

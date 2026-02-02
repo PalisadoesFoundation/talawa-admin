@@ -15,6 +15,10 @@ vi.mock('./packages');
 vi.mock('./utils/exec');
 vi.mock('inquirer');
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 describe('install/index', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -246,10 +250,6 @@ describe('install/index', () => {
   });
 
   describe('runIfDirectExecution', () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
     it('should call main when argv[1] contains install/index.ts', () => {
       const mainSpy = vi.fn().mockResolvedValue(undefined);
       const errorSpy = vi.fn();
