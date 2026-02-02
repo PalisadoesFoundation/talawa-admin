@@ -432,7 +432,7 @@ export default function GroupChatDetails({
                           btnStyle={`btn-sm ${styles.dropdownToggle}`} // i18n-ignore-line
                           buttonLabel=""
                           placeholder=""
-                          aria-label={t('chatMenu')}
+                          ariaLabel={t('chatMenu')}
                           options={[
                             {
                               value: 'toggleRole',
