@@ -72,7 +72,7 @@
 
 .leftModalActions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .rightModalActions {
@@ -105,16 +105,12 @@
 }
 
 .editInputWrapper {
-  margin-bottom: 16px;
+  margin-bottom: var(--space-5);
   width: 100%;
 }
 
 .editCommentInput {
-  border: 1px solid var(--bs-gray-400);
-  border-radius: 4px;
-  padding: 8px;
-}
-
-.userImageUserComment {
-  composes: userImageUserComment from '../../../style/app-fixed.module.css';
+  border: var(--border-width-1) solid var(--color-neutral-400);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-2);
 }
