@@ -1839,10 +1839,12 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('bypasses recaptcha when feature is off', async () => {
+    // Ensure pathname exists to prevent i18n language detector crash
+    setLocationPath('/');
     vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
-      REACT_APP_USE_RECAPTCHA: 'no',
+      REACT_APP_USE_RECAPTCHA: 'NO',
       RECAPTCHA_SITE_KEY: 'xxx',
     }));
     // re-import component so mock applies
@@ -1859,6 +1861,8 @@ describe('Extra coverage for 100 %', () => {
       </MockedProvider>,
     );
     await wait();
+    // Recaptcha should not render when feature flag is off
+    expect(screen.queryByTestId('mock-recaptcha')).toBeNull();
     // Verify recaptcha is bypassed by submitting login without token
     await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
     await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
