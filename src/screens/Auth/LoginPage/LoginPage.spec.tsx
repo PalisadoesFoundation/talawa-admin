@@ -283,6 +283,9 @@ const mockUseLocalStorage = {
   getStorageKey: vi.fn(),
 };
 
+// Capture original window.location to restore after each test
+const originalLocation = window.location;
+
 beforeEach(() => {
   vi.clearAllMocks();
   routerMocks.navigate.mockReset();
@@ -300,6 +303,12 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+  // Restore original window.location to prevent cross-test bleed
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    writable: true,
+    value: originalLocation,
+  });
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -2756,7 +2765,38 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
-    const localLink = new StaticMockLink(createMocks(), true);
+    // Create test-specific mock that matches the variables used in this test
+    const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: {
+            email: 'testadmin2@example.com',
+            password: 'Pass@123',
+            recaptchaToken: 'fake-recaptcha-token',
+          },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '1',
+                role: 'administrator',
+                name: 'Test Admin',
+                emailAddress: 'testadmin2@example.com',
+                countryCode: 'US',
+                avatarURL: null,
+                isEmailAddressVerified: true,
+              },
+              authenticationToken: 'authenticationToken',
+              refreshToken: 'refreshToken',
+            },
+          },
+        },
+      },
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+    ];
+    const localLink = new StaticMockLink(RECAPTCHA_LOGIN_MOCKS, true);
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={localLink}>
