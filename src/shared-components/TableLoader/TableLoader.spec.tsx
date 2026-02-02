@@ -6,8 +6,15 @@ import type { InterfaceTableLoaderProps } from 'types/shared-components/TableLoa
 import TableLoader from './TableLoader';
 import { vi } from 'vitest';
 
+let originalConsoleError: typeof console.error;
+
 beforeAll(() => {
+  originalConsoleError = console.error;
   console.error = vi.fn();
+});
+
+afterAll(() => {
+  console.error = originalConsoleError;
 });
 
 interface IMockColumn {
@@ -33,8 +40,10 @@ vi.mock('../DataTable/DataTable', () => ({
 
 describe('Testing Loader component', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
+
   test('Component should be rendered properly only headerTitles is provided', () => {
     const props: InterfaceTableLoaderProps = {
       noOfRows: 1,

@@ -526,7 +526,7 @@ describe('Testing Requests screen', () => {
     await wait(500);
 
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
-
+    expect(screen.getByTestId('requests-no-orgs-empty')).toBeInTheDocument();
     expect(container).toBeInTheDocument();
   });
 

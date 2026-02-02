@@ -7,12 +7,16 @@
  * The component delegates all skeleton rendering logic to DataTable by passing
  * an empty data set and enabling the loading state.
  *
- * @param noOfRows - Number of skeleton rows to display while loading.
- * @param headerTitles - Optional list of column header labels.
+ * @param props - Component props from InterfaceTableLoaderProps
+ *
+ * Props:
+ * - noOfRows - Number of skeleton rows to display while loading.
+ * - headerTitles - Optional list of column header labels.
  *   When provided, the number of columns is derived from this array.
- * @param noOfCols - Optional number of columns to render when headerTitles
+ * - noOfCols - Optional number of columns to render when headerTitles
  *   is not provided.
- * @param data-testid - Optional test identifier for the root container.
+ * - data-testid - Optional test identifier for the root container.
+
  *
  * @throws Error if neither headerTitles nor noOfCols is provided.
  *
@@ -23,12 +27,8 @@ import DataTable from '../DataTable/DataTable';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import type { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
-const TableLoader = ({
-  noOfRows,
-  headerTitles,
-  noOfCols,
-  'data-testid': dataTestId,
-}: InterfaceTableLoaderProps): JSX.Element => {
+const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
+  const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
   // Move validation to render time (before any JSX)
   if (!headerTitles && !noOfCols) {
     throw new Error(
