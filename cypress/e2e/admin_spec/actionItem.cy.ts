@@ -3,7 +3,7 @@ import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 
 /**
  * Retrieve the auth token from localStorage.
- * @returns Cypress.Chainable<string | null> token value or null if missing/invalid.
+ * @returns Cypress.Chainable of string or null if missing/invalid.
  */
 const getAuthToken = (): Cypress.Chainable<string | null> => {
   return cy.window().then((win) => {
@@ -11,7 +11,7 @@ const getAuthToken = (): Cypress.Chainable<string | null> => {
     if (!rawToken) return null;
     try {
       return JSON.parse(rawToken) as string;
-    } catch (error) {
+    } catch {
       cy.log('Failed to parse Talawa-admin_token from localStorage');
       return null;
     }
@@ -22,7 +22,7 @@ const getAuthToken = (): Cypress.Chainable<string | null> => {
  * Execute a GraphQL operation via cy.request.
  * @param token - Optional auth token for the request.
  * @param body - GraphQL operation payload.
- * @returns Cypress.Chainable<Cypress.Response<unknown>> for assertions.
+ * @returns Cypress.Chainable response for assertions.
  */
 const requestGraphQL = (
   token: string | null,

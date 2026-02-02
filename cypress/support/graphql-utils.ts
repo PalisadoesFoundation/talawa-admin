@@ -76,9 +76,9 @@ export const waitForGraphQLOperation = (
  *
  * Uses interceptGraphQLOperation to route matching requests and applies
  * the responder based on its shape:
- * - function: receives the request and can call req.reply/req.continue manually
- * - string: treated as a fixture path and passed to req.reply({ fixture, ...options })
- * - object: treated as a response body and passed to req.reply({ body, ...options })
+ * - function: receives the request and can call req.reply or req.continue manually
+ * - string: treated as a fixture path and passed to req.reply with fixture and options
+ * - object: treated as a response body and passed to req.reply with body and options
  *
  * @param operationName - GraphQL operationName to mock.
  * @param responder - Fixture path, inline body, or request handler.

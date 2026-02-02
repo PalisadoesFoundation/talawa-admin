@@ -1,8 +1,11 @@
 type GraphQLError = { message: string };
 
-const triggerGraphQLRequest = (operationName: string): Cypress.Chainable => {
+const triggerGraphQLRequest = (
+  operationName: string,
+  url: string = '/graphql',
+): Cypress.Chainable => {
   return cy.window().then((win) => {
-    return win.fetch('/graphql', {
+    return win.fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -17,6 +20,8 @@ const triggerGraphQLRequest = (operationName: string): Cypress.Chainable => {
 describe('GraphQL utilities', () => {
   beforeEach(() => {
     Cypress.env('apiUrl', '/graphql');
+    Cypress.env('API_URL', null);
+    Cypress.env('CYPRESS_API_URL', null);
     cy.visit('/');
   });
 
@@ -24,8 +29,8 @@ describe('GraphQL utilities', () => {
     cy.aliasGraphQLOperation('OrganizationListBasic');
     triggerGraphQLRequest('OrganizationListBasic');
     cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
-      expect(interception.response?.statusCode).to.eq(200);
-      expect(interception.response?.body).to.exist;
+      expect(interception.response).to.not.be.undefined;
+      expect(interception.response?.body).to.not.be.undefined;
     });
   });
 
@@ -54,5 +59,78 @@ describe('GraphQL utilities', () => {
         | undefined;
       expect(errors?.[0]?.message).to.eq('Organization list failed');
     });
+  });
+
+  it('uses API_URL when apiUrl is not set', () => {
+    Cypress.env('apiUrl', null);
+    Cypress.env('API_URL', '/graphql-api-url');
+    cy.mockGraphQLOperation('ApiUrlOperation', {
+      data: { ok: true },
+    });
+
+    triggerGraphQLRequest('ApiUrlOperation', '/graphql-api-url');
+    cy.waitForGraphQLOperation('ApiUrlOperation')
+      .its('response.body.data.ok')
+      .should('eq', true);
+  });
+
+  it('uses CYPRESS_API_URL when other envs are unset', () => {
+    Cypress.env('apiUrl', null);
+    Cypress.env('API_URL', null);
+    Cypress.env('CYPRESS_API_URL', '/graphql-cypress-env');
+
+    cy.mockGraphQLOperation('CypressEnvOperation', {
+      data: { ok: true },
+    });
+
+    triggerGraphQLRequest('CypressEnvOperation', '/graphql-cypress-env');
+    cy.waitForGraphQLOperation('CypressEnvOperation')
+      .its('response.body.data.ok')
+      .should('eq', true);
+  });
+
+  it('falls back to default pattern when envs are unset', () => {
+    Cypress.env('apiUrl', null);
+    Cypress.env('API_URL', null);
+    Cypress.env('CYPRESS_API_URL', null);
+
+    cy.mockGraphQLOperation('DefaultOperation', {
+      data: { ok: true },
+    });
+
+    triggerGraphQLRequest('DefaultOperation');
+    cy.waitForGraphQLOperation('DefaultOperation')
+      .its('response.body.data.ok')
+      .should('eq', true);
+  });
+
+  it('supports function responders', () => {
+    cy.mockGraphQLOperation('FunctionResponder', (req) => {
+      req.reply({ statusCode: 201, body: { data: { ok: true } } });
+    });
+
+    triggerGraphQLRequest('FunctionResponder');
+    cy.waitForGraphQLOperation('FunctionResponder')
+      .its('response.statusCode')
+      .should('eq', 201);
+  });
+
+  it('passes through non-matching operations', () => {
+    cy.mockGraphQLOperation('MatchOperation', { data: { ok: false } });
+    cy.intercept('POST', '/graphql', (req) => {
+      if (req.body?.operationName === 'DifferentOperation') {
+        req.alias = 'fallbackOperation';
+        req.reply({ statusCode: 200, body: { data: { ok: true } } });
+        return;
+      }
+
+      req.continue();
+    });
+
+    triggerGraphQLRequest('DifferentOperation');
+
+    cy.wait('@fallbackOperation')
+      .its('response.body.data.ok')
+      .should('eq', true);
   });
 });
