@@ -5,7 +5,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -335,7 +335,6 @@ describe('Testing Community Profile Screen', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   test('Components should render properly', async () => {
@@ -595,8 +594,12 @@ describe('Testing Community Profile Screen', () => {
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    // Simulate clearing file input
-    fireEvent.change(fileInput, { target: { files: [] } });
+    // Simulate clearing file input by setting value to empty
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
 
     // Should not crash and buttons should still be disabled if no other fields filled
@@ -621,7 +624,7 @@ describe('Testing Community Profile Screen', () => {
       ).toBeInTheDocument();
     });
 
-    const form = container.querySelector('form') as HTMLFormElement;
+    const _form = container.querySelector('form') as HTMLFormElement;
     const nameInput = screen.getByPlaceholderText(
       /Community Name/i,
     ) as HTMLInputElement;
@@ -647,9 +650,7 @@ describe('Testing Community Profile Screen', () => {
     expect(submitButton).not.toBeDisabled();
 
     // Submit form
-    await act(async () => {
-      fireEvent.submit(form);
-    });
+    await userEvent.click(submitButton);
 
     // Wait for success toast
     await waitFor(() => {
@@ -672,9 +673,10 @@ describe('Testing Community Profile Screen', () => {
 
     const resetButton = screen.getByTestId('resetChangesBtn');
     await userEvent.click(resetButton);
-    await wait(500);
 
-    expect(errorHandler).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
   test('should enable buttons when only name is filled', async () => {
@@ -807,7 +809,12 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    fireEvent.change(fileInput, { target: { files: [] } });
+    // Simulate clearing file input by setting value to empty
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await wait();
 
@@ -879,8 +886,16 @@ describe('Testing Community Profile Screen', () => {
       expect(screen.getByTestId('saveChangesBtn')).not.toBeDisabled();
     });
 
-    // Clear file by simulating empty file selection
-    fireEvent.change(fileInput, { target: { files: [] } });
+    // Clear file by setting files to empty (userEvent.clear doesn't work for file inputs)
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    Object.defineProperty(fileInput, 'value', {
+      value: '',
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
 
     // After clearing, if no other fields are filled, buttons should be disabled
