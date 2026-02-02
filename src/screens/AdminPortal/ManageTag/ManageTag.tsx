@@ -377,7 +377,7 @@ function ManageTag(): JSX.Element {
               variant="danger"
               onClick={() => {
                 setUnassignUserId(params.row?._id);
-                unassignUserTagModal.toggle();
+                toggleUnassignUserTagModal();
               }}
               data-testid="unassignTagBtn"
             >

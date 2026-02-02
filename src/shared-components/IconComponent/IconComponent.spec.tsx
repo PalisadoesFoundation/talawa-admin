@@ -5,6 +5,7 @@ import { describe, it, expect, afterEach, vi } from 'vitest';
 
 afterEach(() => {
   vi.clearAllMocks();
+  vi.resetAllMocks();
 });
 
 const screenTestIdMap: Record<string, Record<string, string>> = {
@@ -102,7 +103,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   },
 };
 
-describe('Testing Collapsible Dropdown component', () => {
+describe('IconComponent renders correct icon by name', () => {
   it('Renders the correct icon according to the component', () => {
     for (const component in screenTestIdMap) {
       render(<IconComponent name={screenTestIdMap[component].name} />);
@@ -165,7 +166,6 @@ describe('IconComponent sx color handling', () => {
     render(<IconComponent name="Campaigns" fill="var(--bs-primary)" />);
     const icon = screen.getByTestId('Icon-Component-Campaigns');
     expect(icon).toBeInTheDocument();
-    // CSS variables are passed through as-is to the sx prop
     expect(icon).toHaveStyle({ color: 'var(--bs-primary)' });
   });
 });
@@ -196,7 +196,7 @@ describe('IconComponent dimension props', () => {
   it('applies all props (fill, height, width) to Tags icon', () => {
     render(<IconComponent name="Tags" fill="#FF5733" height="40" width="40" />);
     const icon = screen.getByTestId('Icon-Component-TagsIcon');
-    expect(icon).toHaveAttribute('fill', '#FF5733'); // <-- fix
+    expect(icon).toHaveAttribute('fill', '#FF5733');
     expect(icon).toHaveAttribute('height', '40');
     expect(icon).toHaveAttribute('width', '40');
   });
@@ -205,7 +205,6 @@ describe('IconComponent dimension props', () => {
     render(<IconComponent name="Events" />);
     const icon = screen.getByTestId('Icon-Component-EventsIcon');
     expect(icon).toBeInTheDocument();
-    // Material-UI icons have default fontSize when dimensions aren't specified
     expect(icon.tagName.toLowerCase()).toBe('svg');
   });
 });
