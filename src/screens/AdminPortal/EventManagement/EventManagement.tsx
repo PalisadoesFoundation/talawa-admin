@@ -46,7 +46,6 @@ import { BsPersonCheck } from 'react-icons/bs';
 import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
-import { Dropdown } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import styles from './EventManagement.module.css';
 
@@ -57,6 +56,7 @@ import EventAgenda from 'components/AdminPortal/EventManagement/EventAgenda/Even
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
+import DropDownButton from 'shared-components/DropDownButton';
 /**
  * Tab options for the event management component.
  */
@@ -214,6 +214,16 @@ const EventManagement = (): JSX.Element => {
 
   const currentTab = eventDashboardTabs.find((t) => t.value === tab);
 
+  const tabDropdownOptions = eventDashboardTabs.map(({ value, icon }) => ({
+    value,
+    label: (
+      <span className="d-flex align-items-center gap-2">
+        {icon}
+        {t(value)}
+      </span>
+    ),
+  }));
+
   return (
     <div className="d-flex flex-column bg-white rounded-4 min-vh-75">
       <Row className="mx-3 mt-4">
@@ -235,32 +245,18 @@ const EventManagement = (): JSX.Element => {
             {eventDashboardTabs.map(renderButton)}
           </div>
 
-          <Dropdown
-            className="d-md-none"
-            data-testid="tabsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              data-testid="tabsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {eventDashboardTabs.map(({ value, icon }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value ? 'text-secondary' : ''}`}
-                  data-testid={`${value}DropdownItem`}
-                >
-                  {icon} {t(value)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+          <DropDownButton
+            id="event-tabs-dropdown"
+            options={tabDropdownOptions}
+            selectedValue={tab}
+            onSelect={(val) => setTab(val as TabOptions)}
+            ariaLabel={t('eventTabs')}
+            dataTestIdPrefix="tabsDropdown"
+            variant="success"
+            buttonLabel={t(tab)}
+            parentContainerStyle="d-md-none"
+            btnStyle="w-100"
+          />
         </Col>
       </Row>
 

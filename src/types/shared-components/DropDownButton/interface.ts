@@ -10,7 +10,7 @@ export interface InterfaceDropDownOption {
   /**
    * The label of the option.
    */
-  label: string;
+  label: React.ReactNode;
 
   /**
    * Whether the option is disabled.
