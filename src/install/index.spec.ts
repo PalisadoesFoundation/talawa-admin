@@ -246,9 +246,6 @@ describe('install/index', () => {
   });
 
   describe('runIfDirectExecution', () => {
-    beforeEach(() => {
-      // ...existing code...
-    });
     afterEach(() => {
       vi.clearAllMocks();
     });
@@ -266,24 +263,18 @@ describe('install/index', () => {
       const mainSpy = vi
         .spyOn(installModule, 'main')
         .mockResolvedValue(undefined);
-      const errorSpy = vi.spyOn(installModule, 'handleDirectExecutionError');
       const argv = ['node', '/some/other/file.ts'];
       runIfDirectExecution(argv);
       expect(mainSpy).not.toHaveBeenCalled();
-      mainSpy.mockRestore();
-      errorSpy.mockRestore();
     });
 
     it('should not call main when argv[1] is undefined', () => {
       const mainSpy = vi
         .spyOn(installModule, 'main')
         .mockResolvedValue(undefined);
-      const errorSpy = vi.spyOn(installModule, 'handleDirectExecutionError');
       const argv = ['node'];
       runIfDirectExecution(argv);
       expect(mainSpy).not.toHaveBeenCalled();
-      mainSpy.mockRestore();
-      errorSpy.mockRestore();
     });
 
     it('should handle main rejection with error handler', async () => {
@@ -293,8 +284,9 @@ describe('install/index', () => {
       const fakePath = '/some/path/install/index.ts';
       const argv = ['node', fakePath];
       runIfDirectExecution(argv, fakePath, mainSpy, errorSpy);
-      await new Promise((resolve) => setTimeout(resolve, 10));
-      expect(errorSpy).toHaveBeenCalledWith(testError);
+      await vi.waitFor(() => {
+        expect(errorSpy).toHaveBeenCalledWith(testError);
+      });
     });
 
     it('should use process.argv by default', () => {
@@ -313,10 +305,6 @@ describe('install/index', () => {
       } finally {
         process.argv = originalArgv;
       }
-    });
-
-    it('should export runIfDirectExecution function', () => {
-      expect(typeof runIfDirectExecution).toBe('function');
     });
   });
 });
