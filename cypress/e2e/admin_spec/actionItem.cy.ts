@@ -1,17 +1,33 @@
 import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 
+/**
+ * Retrieve the auth token from localStorage.
+ * @returns Cypress.Chainable<string | null> token value or null if missing/invalid.
+ */
 const getAuthToken = (): Cypress.Chainable<string | null> => {
   return cy.window().then((win) => {
     const rawToken = win.localStorage.getItem('Talawa-admin_token');
-    return rawToken ? (JSON.parse(rawToken) as string) : null;
+    if (!rawToken) return null;
+    try {
+      return JSON.parse(rawToken) as string;
+    } catch (error) {
+      cy.log('Failed to parse Talawa-admin_token from localStorage');
+      return null;
+    }
   });
 };
 
+/**
+ * Execute a GraphQL operation via cy.request.
+ * @param token - Optional auth token for the request.
+ * @param body - GraphQL operation payload.
+ * @returns Cypress.Chainable<Cypress.Response<unknown>> for assertions.
+ */
 const requestGraphQL = (
   token: string | null,
   body: Record<string, unknown>,
-): Cypress.Chainable<Cypress.Response> => {
+): Cypress.Chainable<Cypress.Response<unknown>> => {
   const apiUrl = Cypress.env('apiUrl') as string;
   return cy.request({
     method: 'POST',
@@ -24,6 +40,11 @@ const requestGraphQL = (
   });
 };
 
+/**
+ * Ensure an event volunteer exists for the first event in the organization.
+ * @param orgId - Organization ID to seed volunteers for.
+ * @returns Cypress.Chainable<void> that resolves when a volunteer exists.
+ */
 const ensureVolunteerExistsForOrg = (
   orgId: string,
 ): Cypress.Chainable<void> => {
@@ -68,6 +89,9 @@ const ensureVolunteerExistsForOrg = (
   `;
 
   return getAuthToken().then((token) => {
+    if (!token) {
+      throw new Error('Missing auth token while seeding event volunteers.');
+    }
     return requestGraphQL(token, {
       operationName: 'GetOrganizationEvents',
       query: getEventsQuery,
@@ -76,7 +100,11 @@ const ensureVolunteerExistsForOrg = (
       const eventId =
         eventsResponse.body?.data?.organization?.events?.edges?.[0]?.node?.id;
 
-      if (!eventId) return;
+      if (!eventId) {
+        throw new Error(
+          `No events found for org ${orgId}; cannot seed volunteer.`,
+        );
+      }
 
       return requestGraphQL(token, {
         operationName: 'GetEventVolunteers',
@@ -92,7 +120,9 @@ const ensureVolunteerExistsForOrg = (
           variables: {},
         }).then((userResponse) => {
           const userId = userResponse.body?.data?.user?.id;
-          if (!userId) return;
+          if (!userId) {
+            throw new Error('Current user not found; cannot seed volunteer.');
+          }
 
           return requestGraphQL(token, {
             operationName: 'CreateEventVolunteer',

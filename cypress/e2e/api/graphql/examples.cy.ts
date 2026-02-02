@@ -1,3 +1,5 @@
+type GraphQLError = { message: string };
+
 const triggerGraphQLRequest = (operationName: string): Cypress.Chainable => {
   return cy.window().then((win) => {
     return win.fetch('/graphql', {
@@ -5,6 +7,7 @@ const triggerGraphQLRequest = (operationName: string): Cypress.Chainable => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         operationName,
+        // operationName drives cy.intercept matching, so a static query body is sufficient.
         query: 'query ExampleOperation { __typename }',
       }),
     });
@@ -18,9 +21,12 @@ describe('GraphQL utilities', () => {
   });
 
   it('aliases and waits for a live operation', () => {
-    cy.aliasGraphQLOperation('ExampleOperation');
-    triggerGraphQLRequest('ExampleOperation');
-    cy.waitForGraphQLOperation('ExampleOperation');
+    cy.aliasGraphQLOperation('OrganizationListBasic');
+    triggerGraphQLRequest('OrganizationListBasic');
+    cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
+      expect(interception.response?.statusCode).to.eq(200);
+      expect(interception.response?.body).to.exist;
+    });
   });
 
   it('mocks a successful query', () => {
@@ -42,8 +48,11 @@ describe('GraphQL utilities', () => {
     );
     triggerGraphQLRequest('OrganizationListBasic');
 
-    cy.waitForGraphQLOperation('OrganizationListBasic')
-      .its('response.body.errors.0.message')
-      .should('eq', 'Organization list failed');
+    cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
+      const errors = interception.response?.body?.errors as
+        | GraphQLError[]
+        | undefined;
+      expect(errors?.[0]?.message).to.eq('Organization list failed');
+    });
   });
 });
