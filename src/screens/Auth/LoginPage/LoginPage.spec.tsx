@@ -359,8 +359,8 @@ vi.mock('react-google-recaptcha', async () => {
   return { __esModule: true, default: recaptcha };
 });
 
-let user: ReturnType<typeof userEvent.setup>;
-let link: StaticMockLink;
+let user!: ReturnType<typeof userEvent.setup>;
+let link!: StaticMockLink;
 
 beforeEach(() => {
   user = userEvent.setup();
