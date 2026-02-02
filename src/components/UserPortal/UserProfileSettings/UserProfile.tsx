@@ -79,7 +79,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             <div className={styles.imgContainer}>
               <ProfileAvatarDisplay
                 imageUrl={image && image !== 'null' ? image : undefined}
-                fallbackName={`${firstName} ${lastName}`}
+                fallbackName={[firstName, lastName].filter(Boolean).join(' ')}
                 size="custom"
                 customSize={60}
                 shape="circle"

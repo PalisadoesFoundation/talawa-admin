@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, within } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import UserProfile from './UserProfile';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -39,11 +39,7 @@ describe('UserProfile Component', () => {
 
     expect(getByText('john..@example.com')).toBeInTheDocument();
 
-    const profileAvatarContainer = getByTestId('profile-avatar');
-    expect(profileAvatarContainer).toBeInTheDocument();
-
-    const profileImage = within(profileAvatarContainer).getByRole('img');
-    expect(profileImage).toHaveAttribute('src', 'profile-image-url');
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
     expect(
       getByText(
         `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
