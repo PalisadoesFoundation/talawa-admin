@@ -480,7 +480,7 @@ describe('AgendaDragAndDrop', () => {
     });
   });
 
-  describe('Drag and drop - Item reordering (Lines 38-75)', () => {
+  describe('Drag and drop - Item reordering', () => {
     it('handles successful item reorder within same folder', async () => {
       renderAgendaDragAndDrop(MOCKS_SUCCESS_ITEM_SEQUENCE);
 
@@ -635,7 +635,7 @@ describe('AgendaDragAndDrop', () => {
     });
   });
 
-  describe('Drag and drop - Folder reordering (Lines 81-109)', () => {
+  describe('Drag and drop - Folder reordering', () => {
     it('handles successful folder reorder', async () => {
       renderAgendaDragAndDrop(MOCKS_SUCCESS_FOLDER_SEQUENCE);
 
@@ -947,6 +947,70 @@ describe('AgendaDragAndDrop', () => {
   });
 
   describe('Additional item drag scenarios', () => {
+    it('covers early return when ITEM destination is null', () => {
+      renderAgendaDragAndDrop();
+
+      capturedOnDragEnd?.({
+        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        destination: null,
+        draggableId: 'item1',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+
+    it('covers early return when ITEM droppableIds differ', () => {
+      renderAgendaDragAndDrop();
+
+      capturedOnDragEnd?.({
+        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        destination: { index: 1, droppableId: 'agenda-items-folder2' },
+        draggableId: 'item1',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+
+    it('covers folder early return when destination is null', () => {
+      renderAgendaDragAndDrop();
+
+      capturedOnDragEnd?.({
+        source: { index: 0, droppableId: 'agendaFolder' },
+        destination: null,
+        draggableId: 'folder1',
+        type: 'FOLDER',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+
+      expect(mockSetFolders).not.toHaveBeenCalled();
+    });
+
+    it('covers folder early return when source and destination index match', () => {
+      renderAgendaDragAndDrop();
+
+      capturedOnDragEnd?.({
+        source: { index: 0, droppableId: 'agendaFolder' },
+        destination: { index: 0, droppableId: 'agendaFolder' },
+        draggableId: 'folder1',
+        type: 'FOLDER',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+
+      expect(mockSetFolders).not.toHaveBeenCalled();
+    });
+
     it('handles dragging item to different droppableId (different folder)', () => {
       renderAgendaDragAndDrop();
 
@@ -1624,5 +1688,42 @@ describe('AgendaDragAndDrop', () => {
         expect(mockRefetchAgendaFolder).toHaveBeenCalled();
       });
     });
+
+    it('renders non-Event agendaFolderConnection styles', () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <AgendaDragAndDrop
+              folders={mockFolders}
+              setFolders={mockSetFolders}
+              agendaFolderConnection={'Organization' as 'Event'}
+              t={mockT}
+              onEditFolder={mockOnEditFolder}
+              onDeleteFolder={mockOnDeleteFolder}
+              onPreviewItem={mockOnPreviewItem}
+              onEditItem={mockOnEditItem}
+              onDeleteItem={mockOnDeleteItem}
+              refetchAgendaFolder={mockRefetchAgendaFolder}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(screen.getByText('Folder 1')).toBeInTheDocument();
+    });
+
+    it('renders category name when category exists', () => {
+      renderAgendaDragAndDrop();
+
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+  });
+
+  it('renders default folder without edit/delete interactions', () => {
+    renderAgendaDragAndDrop([], [mockDefaultFolder]);
+
+    expect(screen.getByText('Default Folder')).toBeInTheDocument();
+    expect(screen.getByLabelText('editFolder')).toBeDisabled();
+    expect(screen.getByLabelText('deleteFolder')).toBeDisabled();
   });
 });

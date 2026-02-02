@@ -53,20 +53,21 @@ export default function AgendaDragAndDrop({
     items.splice(destination.index, 0, moved);
 
     try {
-      await Promise.all(
-        items.map((item, index) =>
-          item.sequence !== index + 1
-            ? updateAgendaItemSequence({
-                variables: {
-                  input: {
-                    id: item.id,
-                    sequence: index + 1,
-                  },
-                },
-              })
-            : Promise.resolve(),
-        ),
-      );
+      const updates = items
+        .map((item, index) => ({ item, index }))
+        .filter(({ item, index }) => item.sequence !== index + 1)
+        .map(({ item, index }) =>
+          updateAgendaItemSequence({
+            variables: {
+              input: {
+                id: item.id,
+                sequence: index + 1,
+              },
+            },
+          }),
+        );
+
+      await Promise.all(updates);
 
       NotificationToast.success(t('itemSequenceUpdateSuccessMsg'));
       refetchAgendaFolder();
@@ -88,20 +89,21 @@ export default function AgendaDragAndDrop({
     setFolders(updatedFolders);
 
     try {
-      await Promise.all(
-        updatedFolders.map((folder, index) =>
-          folder.sequence !== index + 1
-            ? updateAgendaFolder({
-                variables: {
-                  input: {
-                    id: folder.id,
-                    sequence: index + 1,
-                  },
-                },
-              })
-            : Promise.resolve(),
-        ),
-      );
+      const updates = updatedFolders
+        .map((folder, index) => ({ folder, index }))
+        .filter(({ folder, index }) => folder.sequence !== index + 1)
+        .map(({ folder, index }) =>
+          updateAgendaFolder({
+            variables: {
+              input: {
+                id: folder.id,
+                sequence: index + 1,
+              },
+            },
+          }),
+        );
+
+      await Promise.all(updates);
 
       NotificationToast.success(t('sectionSequenceUpdateSuccessMsg'));
       refetchAgendaFolder();
@@ -137,6 +139,15 @@ export default function AgendaDragAndDrop({
     }
   };
 
+  const getRoundedBottomClass = (isEvent: boolean): string =>
+    isEvent ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mx-0';
+
+  const getRoundedTopClass = (isEvent: boolean): string =>
+    isEvent ? 'rounded-top-4' : 'rounded-top-2';
+
+  const getDraggingClass = (isDragging: boolean): string =>
+    isDragging ? styles.dragging : '';
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       {/* FOLDERS */}
@@ -160,9 +171,9 @@ export default function AgendaDragAndDrop({
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}
-                      className={`${styles.agendaItemRow} ${
-                        snapshot.isDragging ? styles.dragging : ''
-                      } py-3 mb-4 px-4`}
+                      className={`${styles.agendaItemRow} ${getDraggingClass(
+                        snapshot.isDragging,
+                      )} py-3 mb-4 px-4`}
                     >
                       {/* Folder header */}
                       <Row>
@@ -231,18 +242,14 @@ export default function AgendaDragAndDrop({
 
                       {/* Table head */}
                       <div
-                        className={`shadow-sm ${
-                          agendaFolderConnection === 'Event'
-                            ? 'rounded-top-4 mx-4'
-                            : 'rounded-top-2 mx-0'
-                        }`}
+                        className={`shadow-sm ${getRoundedTopClass(
+                          agendaFolderConnection === 'Event',
+                        )} ${agendaFolderConnection === 'Event' ? 'mx-4' : 'mx-0'}`}
                       >
                         <Row
-                          className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${
-                            agendaFolderConnection === 'Event'
-                              ? 'rounded-top-4'
-                              : 'rounded-top-2'
-                          }`}
+                          className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${getRoundedTopClass(
+                            agendaFolderConnection === 'Event',
+                          )}`}
                         >
                           <Col lg={1} className="fw-bold text-center">
                             {t('sequence')}
@@ -284,11 +291,9 @@ export default function AgendaDragAndDrop({
                           <div
                             ref={provided.innerRef}
                             {...provided.droppableProps}
-                            className={`bg-light-subtle border border-top-0 shadow-sm ${
-                              agendaFolderConnection === 'Event'
-                                ? 'rounded-bottom-4 mx-4'
-                                : 'rounded-bottom-2 mx-0'
-                            }`}
+                            className={`bg-light-subtle border border-top-0 shadow-sm ${getRoundedBottomClass(
+                              agendaFolderConnection === 'Event',
+                            )}`}
                           >
                             {[...agendaFolder.items.edges]
                               .sort((a, b) => a.node.sequence - b.node.sequence)
@@ -305,11 +310,9 @@ export default function AgendaDragAndDrop({
                                       <div
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
-                                        className={`${styles.agendaItemRow} ${
-                                          snapshot.isDragging
-                                            ? styles.dragging
-                                            : ''
-                                        } py-2`}
+                                        className={`${styles.agendaItemRow} ${getDraggingClass(
+                                          snapshot.isDragging,
+                                        )} py-2`}
                                       >
                                         <Row className="mx-3 my-3">
                                           <Col lg={1} className="text-center">
