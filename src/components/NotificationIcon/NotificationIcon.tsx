@@ -17,6 +17,7 @@ import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 interface InterfaceNotification {
   id: string;
@@ -34,6 +35,7 @@ const getNotificationPath = (pathname: string): string => {
 
 const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
+  const { t: tErrors } = useTranslation('errors');
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
@@ -62,68 +64,75 @@ const NotificationIcon = (): JSX.Element => {
   }, [data]);
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle
-        variant="white"
-        id="dropdown-basic"
-        aria-label={t('openNotificationsMenu')}
-        className={styles.iconButton}
-      >
-        <div className={styles.iconContainer}>
-          <NotificationsIcon className={styles.bellIcon} />
-          {unreadCount > 0 && (
-            <span
-              className={styles.unreadBadge}
-              title={t('unreadCount', { count: unreadCount })}
-            >
-              {unreadCount > 9 ? '9+' : unreadCount}
-            </span>
-          )}
-        </div>
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu className={styles.glassMenu}>
-        {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
-        {error && <Dropdown.Item>{t('errorFetching')}</Dropdown.Item>}
-        {!loading &&
-          !error &&
-          (notifications.length > 0 ? (
-            notifications.map((notification) => (
-              <Dropdown.Item
-                key={notification.id}
-                className={`${styles.notificationItem} ${
-                  notification.navigation ? styles.clickable : ''
-                }`}
-                onClick={() => {
-                  if (notification.navigation) {
-                    navigate(notification.navigation);
-                    return;
-                  }
-                  navigate(notificationPath);
-                }}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <Dropdown>
+        <Dropdown.Toggle
+          variant="white"
+          id="dropdown-basic"
+          aria-label={t('openNotificationsMenu')}
+          className={styles.iconButton}
+        >
+          <div className={styles.iconContainer}>
+            <NotificationsIcon className={styles.bellIcon} />
+            {unreadCount > 0 && (
+              <span
+                className={styles.unreadBadge}
+                title={t('unreadCount', { count: unreadCount })}
               >
-                {!notification.isRead && (
-                  <span
-                    className={styles.notificationDot}
-                    title={t('unread')}
-                  />
-                )}
-                <span className={styles.notificationText}>
-                  {notification.body.length > 48
-                    ? notification.body.slice(0, 48) + '...'
-                    : notification.body}
-                </span>
-              </Dropdown.Item>
-            ))
-          ) : (
-            <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
-          ))}
-        <Dropdown.Divider />
-        <Dropdown.Item onClick={() => navigate(notificationPath)}>
-          {t('viewAllNotifications')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+                {unreadCount > 9 ? '9+' : unreadCount}
+              </span>
+            )}
+          </div>
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu className={styles.glassMenu}>
+          {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
+          {error && <Dropdown.Item>{t('errorFetching')}</Dropdown.Item>}
+          {!loading &&
+            !error &&
+            (notifications.length > 0 ? (
+              notifications.map((notification) => (
+                <Dropdown.Item
+                  key={notification.id}
+                  className={`${styles.notificationItem} ${
+                    notification.navigation ? styles.clickable : ''
+                  }`}
+                  onClick={() => {
+                    if (notification.navigation) {
+                      navigate(notification.navigation);
+                      return;
+                    }
+                    navigate(notificationPath);
+                  }}
+                >
+                  {!notification.isRead && (
+                    <span
+                      className={styles.notificationDot}
+                      title={t('unread')}
+                    />
+                  )}
+                  <span className={styles.notificationText}>
+                    {notification.body.length > 48
+                      ? notification.body.slice(0, 48) + '...'
+                      : notification.body}
+                  </span>
+                </Dropdown.Item>
+              ))
+            ) : (
+              <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
+            ))}
+          <Dropdown.Divider />
+          <Dropdown.Item onClick={() => navigate(notificationPath)}>
+            {t('viewAllNotifications')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </ErrorBoundaryWrapper>
   );
 };
 

@@ -104,3 +104,20 @@
   box-shadow: 0 0 0 2px var(--colorWhite, #fff);
   /* Simulated outline */
 }
+
+.clickable {
+  cursor: pointer;
+}
+
+.notClickable {
+  cursor: default;
+}
+
+.notificationWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.notificationIconColor {
+  color: var(--color-gray-850);
+}

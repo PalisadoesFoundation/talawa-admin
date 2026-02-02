@@ -1,0 +1,8 @@
+{
+  "name": "eslint-custom-rules",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@typescript-eslint/utils": "^8.53.1"
+  }
+}

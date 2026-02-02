@@ -2565,5 +2565,8 @@
   },
   "csv": {
     "demographics": "Démographie de {{category}}"
+  },
+  "customTablecell": {
+    "numberOfAttendees": "Nombre de participants"
   }
 }
