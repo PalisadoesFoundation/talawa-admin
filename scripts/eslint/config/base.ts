@@ -15,6 +15,8 @@ import {
   i18nCamelCaseRestrictions,
 } from '../rules/rules.ts';
 
+const asPlugin = (plugin: unknown): ESLint.Plugin => plugin as ESLint.Plugin;
+
 export const baseTypeScriptConfig: Linter.Config = {
   files: ['**/*.ts', '**/*.tsx'],
   languageOptions: {
@@ -42,12 +44,12 @@ export const baseTypeScriptConfig: Linter.Config = {
     },
   },
   plugins: {
-    react: react as unknown as ESLint.Plugin,
-    '@typescript-eslint': ts as unknown as ESLint.Plugin,
-    vitest: vitest as unknown as ESLint.Plugin,
-    import: imports as unknown as ESLint.Plugin,
-    prettier: prettier as unknown as ESLint.Plugin,
-    tsdoc: tsdoc as unknown as ESLint.Plugin,
+    react: asPlugin(react),
+    '@typescript-eslint': asPlugin(ts),
+    vitest: asPlugin(vitest),
+    import: asPlugin(imports),
+    prettier: asPlugin(prettier),
+    tsdoc: asPlugin(tsdoc),
   },
   settings: {
     react: {

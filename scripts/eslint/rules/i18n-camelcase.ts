@@ -1,9 +1,17 @@
 /**
  * Restrictions for i18n translation keys to enforce camelCase
  */
+
+/**
+ * ESLint AST selector matching both direct t() calls and member-expression i18n.t() calls.
+ */
 export const tCallSelector =
   ":matches(CallExpression[callee.name='t'], CallExpression[callee.type='MemberExpression'][callee.property.name='t'])";
 
+/**
+ * Array of ESLint no-restricted-syntax rules enforcing camelCase naming for i18n translation keys.
+ * Restrictions include: no spaces, must start lowercase, no dashes/underscores, alphanumeric + dots + colons only.
+ */
 export const i18nCamelCaseRestrictions = [
   {
     selector: `${tCallSelector} > Literal[value=/\\s/]`,
