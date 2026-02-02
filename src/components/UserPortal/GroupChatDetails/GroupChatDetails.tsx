@@ -94,6 +94,42 @@ export default function GroupChatDetails({
   // Support both 'userId' (for regular users) and 'id' (for admins)
   const userId = getItem('userId') || getItem('id');
 
+  //states
+
+  const [userName, setUserName] = useState('');
+  const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
+  const [chatName, setChatName] = useState<string>(chat?.name || '');
+  const [, setSelectedImage] = useState(chat?.avatarURL || '');
+  const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
+
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
+
+  //mutations
+
+  const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
+  const [updateChat] = useMutation(UPDATE_CHAT);
+  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
+  const [deleteChat] = useMutation(DELETE_CHAT);
+  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
+
+  //queries
+  const {
+    data: allUsersData,
+    loading: allUsersLoading,
+    refetch: allUsersRefetch,
+  } = useQuery(ORGANIZATION_MEMBERS, {
+    variables: {
+      input: { id: chat.organization?.id },
+      first: 20,
+      after: null,
+      where: {},
+    },
+    skip: !userId,
+  });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (!userId) {
       NotificationToast.error(t('userNotFound'));
@@ -113,24 +149,6 @@ export default function GroupChatDetails({
       </BaseModal>
     );
   }
-
-  //states
-
-  const [userName, setUserName] = useState('');
-  const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
-  const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [, setSelectedImage] = useState(chat?.avatarURL || '');
-
-  const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio } = useMinioDownload();
-
-  //mutations
-
-  const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
-  const [updateChat] = useMutation(UPDATE_CHAT);
-  const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
-  const [deleteChat] = useMutation(DELETE_CHAT);
-  const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
 
   const currentUserRole = chat.members?.edges?.find(
     (edge) => edge.node.user.id === userId,
@@ -173,29 +191,12 @@ export default function GroupChatDetails({
     }
   };
 
-  //modal
-
-  const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
-
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
   }
 
   const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
-
-  const {
-    data: allUsersData,
-    loading: allUsersLoading,
-    refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
-    variables: {
-      input: { id: chat.organization?.id },
-      first: 20,
-      after: null,
-      where: {},
-    },
-  });
 
   const addUserToGroupChat = async (userId: string): Promise<void> => {
     await addUser({
@@ -214,8 +215,6 @@ export default function GroupChatDetails({
       where: trimmedName ? { name_contains: trimmedName } : {},
     });
   };
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
     fileInputRef?.current?.click();
@@ -253,6 +252,15 @@ export default function GroupChatDetails({
     } else {
       setSelectedImage('');
     }
+  };
+
+  type OrganizationMemberEdgeNode = {
+    node: {
+      id: string;
+      name: string;
+      avatarURL?: string;
+      role: string;
+    };
   };
 
   return (
@@ -523,16 +531,7 @@ export default function GroupChatDetails({
                   allUsersData.organization?.members?.edges?.length > 0 &&
                   allUsersData.organization.members.edges
                     .filter(
-                      ({
-                        node: userDetails,
-                      }: {
-                        node: {
-                          id: string;
-                          name: string;
-                          avatarURL?: string;
-                          role: string;
-                        };
-                      }) =>
+                      ({ node: userDetails }: OrganizationMemberEdgeNode) =>
                         userDetails.id !== userId &&
                         !(chat.members?.edges ?? []).some(
                           (edge) => edge.node.user.id === userDetails.id,
@@ -540,16 +539,7 @@ export default function GroupChatDetails({
                     )
                     .map(
                       (
-                        {
-                          node: userDetails,
-                        }: {
-                          node: {
-                            id: string;
-                            name: string;
-                            avatarURL?: string;
-                            role: string;
-                          };
-                        },
+                        { node: userDetails }: OrganizationMemberEdgeNode,
                         index: number,
                       ) => (
                         <TableRow key={userDetails.id} data-testid="user">
