@@ -89,6 +89,8 @@ export const wrapperExemptions = [
   createWrapperExemption({
     componentName: 'Tooltip',
     allowedIds: ['mui-tooltip', 'mui-tooltip-path', 'rb-tooltip'],
+  }),
+  createWrapperExemption({
     componentName: 'DropDownButton',
     allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
   }),
