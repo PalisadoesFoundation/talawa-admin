@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import PropTypes from 'prop-types';
@@ -21,18 +21,18 @@ const SearchingButton: React.FC<InterfaceSearchingButtonProps> = ({
   type = 'sort',
 }) => {
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
-
   return (
-    <Dropdown aria-expanded="false" title={title} data-testid={dropdownTestId}>
-      <Dropdown.Toggle
-        variant="outline-success"
-        data-testid={dataTestIdPrefix}
-        className={className}
-      >
-        <IconComponent className="me-1" />
-        {text}
-      </Dropdown.Toggle>
-    </Dropdown>
+    <DropDownButton
+      id={dropdownTestId}
+      options={[]}
+      ariaLabel={title}
+      dataTestIdPrefix={dataTestIdPrefix}
+      buttonLabel={text}
+      icon={<IconComponent className="me-1" />}
+      variant="outline-success"
+      parentContainerStyle={className}
+      onSelect={() => {}}
+    />
   );
 };
 
