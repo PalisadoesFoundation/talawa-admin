@@ -30,7 +30,7 @@ describe('SearchingButton Component', () => {
     render(
       <SearchingButton
         dataTestIdPrefix="custom-toggle"
-        dropdownTestId="custom-dropdown"
+        toggleId="custom-dropdown"
         text="Test Option"
       />,
     );

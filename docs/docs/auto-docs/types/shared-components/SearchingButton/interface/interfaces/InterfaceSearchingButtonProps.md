@@ -30,16 +30,6 @@ The prefix for data-testid attributes for testing
 
 ***
 
-### dropdownTestId?
-
-> `optional` **dropdownTestId**: `string`
-
-Defined in: [src/types/shared-components/SearchingButton/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L12)
-
-The data-testid attribute for the Dropdown
-
-***
-
 ### text?
 
 > `optional` **text**: `string`
@@ -57,6 +47,16 @@ The text to display in the button
 Defined in: [src/types/shared-components/SearchingButton/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L6)
 
 The title attribute for the Dropdown
+
+***
+
+### toggleId?
+
+> `optional` **toggleId**: `string`
+
+Defined in: [src/types/shared-components/SearchingButton/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchingButton/interface.ts#L12)
+
+HTML id applied to the dropdown toggle button
 
 ***
 

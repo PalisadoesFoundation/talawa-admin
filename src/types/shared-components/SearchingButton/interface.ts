@@ -8,8 +8,8 @@ export interface InterfaceSearchingButtonProps {
   text?: string;
   /** The prefix for data-testid attributes for testing */
   dataTestIdPrefix: string;
-  /** The data-testid attribute for the Dropdown */
-  dropdownTestId?: string;
+  /** HTML id applied to the dropdown toggle button */
+  toggleId?: string;
   /** Custom class name for the Dropdown */
   className?: string;
   /** Type to determine the icon to display: 'sort' or 'filter' */

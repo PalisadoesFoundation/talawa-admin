@@ -16,14 +16,14 @@ const SearchingButton: React.FC<InterfaceSearchingButtonProps> = ({
   title,
   text = 'Select an option', // Default text if none is provided
   dataTestIdPrefix,
-  dropdownTestId,
+  toggleId,
   className = styles.dropdown,
   type = 'sort',
 }) => {
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
   return (
     <DropDownButton
-      id={dropdownTestId}
+      id={toggleId}
       options={[]}
       ariaLabel={title}
       dataTestIdPrefix={dataTestIdPrefix}
