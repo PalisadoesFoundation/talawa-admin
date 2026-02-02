@@ -722,15 +722,7 @@ describe('EventRegistrantsModal', () => {
     const addOnspotLink = await screen.findByTestId('add-onspot-link');
     addOnspotLink.focus();
 
-    addOnspotLink.dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: ' ',
-        code: 'Space',
-        charCode: 32,
-        keyCode: 32,
-        bubbles: true,
-      }),
-    );
+    await user.keyboard(' '); // ← Use this instead of dispatchEvent
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
