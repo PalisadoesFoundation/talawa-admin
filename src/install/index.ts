@@ -138,10 +138,15 @@ export function handleDirectExecutionError(error: unknown): void {
  * Runs the main installation function if this file is executed directly
  * @param argv - The argv array to check (defaults to process.argv)
  */
-export function runIfDirectExecution(argv: string[] = process.argv): void {
-  const currentFilePath = fileURLToPath(import.meta.url);
+
+export function runIfDirectExecution(
+  argv: string[] = process.argv,
+  currentFilePath: string = fileURLToPath(import.meta.url),
+  mainFn: () => Promise<void> = main,
+  errorHandler: (error: unknown) => void = handleDirectExecutionError,
+): void {
   if (argv[1] === currentFilePath || argv[1]?.includes('install/index.ts')) {
-    main().catch(handleDirectExecutionError);
+    mainFn().catch(errorHandler);
   }
 }
 

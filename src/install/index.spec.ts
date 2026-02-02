@@ -1,11 +1,8 @@
 import inquirer from 'inquirer';
-import { fileURLToPath } from 'url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  handleDirectExecutionError,
-  main,
-  runIfDirectExecution,
-} from './index';
+import * as installModule from './index';
+const { runIfDirectExecution, main, handleDirectExecutionError } =
+  installModule;
 import * as detectorModule from './os/detector';
 import * as packagesModule from './packages';
 import type { IPackageStatus } from './types';
@@ -250,136 +247,71 @@ describe('install/index', () => {
 
   describe('runIfDirectExecution', () => {
     beforeEach(() => {
-      // Reset all mocks before each test
       vi.resetAllMocks();
     });
 
     it('should call main when argv[1] contains install/index.ts', () => {
-      const mockMain = vi.fn().mockResolvedValue(undefined);
-      const mockHandleError = vi.fn();
-
-      // Create a version of runIfDirectExecution that uses our mocks
-      const testRunIfDirectExecution = (
-        argv: string[] = process.argv,
-      ): void => {
-        const currentFilePath = fileURLToPath(import.meta.url);
-        if (
-          argv[1] === currentFilePath ||
-          argv[1]?.includes('install/index.ts')
-        ) {
-          mockMain().catch(mockHandleError);
-        }
-      };
-
-      const mockArgv = ['node', '/different/path/to/install/index.ts'];
-      testRunIfDirectExecution(mockArgv);
-
-      expect(mockMain).toHaveBeenCalled();
+      const mainSpy = vi.fn().mockResolvedValue(undefined);
+      const errorSpy = vi.fn();
+      const fakePath = '/different/path/to/install/index.ts';
+      const argv = ['node', fakePath];
+      runIfDirectExecution(argv, fakePath, mainSpy, errorSpy);
+      expect(mainSpy).toHaveBeenCalled();
     });
 
     it('should not call main when argv[1] does not match conditions', () => {
-      const mockMain = vi.fn().mockResolvedValue(undefined);
-      const mockHandleError = vi.fn();
-
-      const testRunIfDirectExecution = (
-        argv: string[] = process.argv,
-      ): void => {
-        const currentFilePath = fileURLToPath(import.meta.url);
-        if (
-          argv[1] === currentFilePath ||
-          argv[1]?.includes('install/index.ts')
-        ) {
-          mockMain().catch(mockHandleError);
-        }
-      };
-
-      const mockArgv = ['node', '/some/other/file.ts'];
-      testRunIfDirectExecution(mockArgv);
-
-      expect(mockMain).not.toHaveBeenCalled();
+      const mainSpy = vi
+        .spyOn(installModule, 'main')
+        .mockResolvedValue(undefined);
+      const errorSpy = vi.spyOn(installModule, 'handleDirectExecutionError');
+      const argv = ['node', '/some/other/file.ts'];
+      runIfDirectExecution(argv);
+      expect(mainSpy).not.toHaveBeenCalled();
+      mainSpy.mockRestore();
+      errorSpy.mockRestore();
     });
 
     it('should not call main when argv[1] is undefined', () => {
-      const mockMain = vi.fn().mockResolvedValue(undefined);
-      const mockHandleError = vi.fn();
-
-      const testRunIfDirectExecution = (
-        argv: string[] = process.argv,
-      ): void => {
-        const currentFilePath = fileURLToPath(import.meta.url);
-        if (
-          argv[1] === currentFilePath ||
-          argv[1]?.includes('install/index.ts')
-        ) {
-          mockMain().catch(mockHandleError);
-        }
-      };
-
-      const mockArgv = ['node'];
-      testRunIfDirectExecution(mockArgv);
-
-      expect(mockMain).not.toHaveBeenCalled();
+      const mainSpy = vi
+        .spyOn(installModule, 'main')
+        .mockResolvedValue(undefined);
+      const errorSpy = vi.spyOn(installModule, 'handleDirectExecutionError');
+      const argv = ['node'];
+      runIfDirectExecution(argv);
+      expect(mainSpy).not.toHaveBeenCalled();
+      mainSpy.mockRestore();
+      errorSpy.mockRestore();
     });
 
     it('should handle main rejection with error handler', async () => {
       const testError = new Error('Main failed');
-      const mockMain = vi.fn().mockRejectedValue(testError);
-      const mockHandleError = vi.fn();
-
-      const testRunIfDirectExecution = (
-        argv: string[] = process.argv,
-      ): void => {
-        const currentFilePath = fileURLToPath(import.meta.url);
-        if (
-          argv[1] === currentFilePath ||
-          argv[1]?.includes('install/index.ts')
-        ) {
-          mockMain().catch(mockHandleError);
-        }
-      };
-
-      const mockArgv = ['node', '/some/path/install/index.ts'];
-      testRunIfDirectExecution(mockArgv);
-
-      // Wait for the promise to be handled
+      const mainSpy = vi.fn().mockRejectedValue(testError);
+      const errorSpy = vi.fn();
+      const fakePath = '/some/path/install/index.ts';
+      const argv = ['node', fakePath];
+      runIfDirectExecution(argv, fakePath, mainSpy, errorSpy);
       await new Promise((resolve) => setTimeout(resolve, 10));
-
-      expect(mockHandleError).toHaveBeenCalledWith(testError);
+      expect(errorSpy).toHaveBeenCalledWith(testError);
     });
 
     it('should use process.argv by default', () => {
       const originalArgv = process.argv;
-      const mockMain = vi.fn().mockResolvedValue(undefined);
-      const mockHandleError = vi.fn();
-
-      const testRunIfDirectExecution = (
-        argv: string[] = process.argv,
-      ): void => {
-        const currentFilePath = fileURLToPath(import.meta.url);
-        if (
-          argv[1] === currentFilePath ||
-          argv[1]?.includes('install/index.ts')
-        ) {
-          mockMain().catch(mockHandleError);
-        }
-      };
-
+      const mainSpy = vi.fn().mockResolvedValue(undefined);
+      const errorSpy = vi.fn();
       try {
-        // Test with non-matching argv
-        process.argv = ['node', '/some/other/script.js'];
-        testRunIfDirectExecution();
-        expect(mockMain).not.toHaveBeenCalled();
-
-        // Test with matching argv
         process.argv = ['node', '/some/path/install/index.ts'];
-        testRunIfDirectExecution();
-        expect(mockMain).toHaveBeenCalled();
+        runIfDirectExecution(
+          undefined,
+          '/some/path/install/index.ts',
+          mainSpy,
+          errorSpy,
+        );
+        expect(mainSpy).toHaveBeenCalled();
       } finally {
         process.argv = originalArgv;
       }
     });
 
-    // Test the actual function behavior through integration
     it('should export runIfDirectExecution function', () => {
       expect(typeof runIfDirectExecution).toBe('function');
     });
