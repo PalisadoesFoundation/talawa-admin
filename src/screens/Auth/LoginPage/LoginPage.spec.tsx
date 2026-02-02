@@ -31,7 +31,7 @@ interface InterfaceStorageHelper {
   getStorageKey: (key: string) => string;
 }
 
-const createMocks = () => [
+const createMocks = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -104,37 +104,50 @@ const createMocks = () => [
   },
 ];
 
-const createMocks3 = () => [
-  {
-    request: { query: GET_COMMUNITY_DATA_PG },
-    result: { data: { community: null } },
-  },
-  {
-    request: { query: GET_COMMUNITY_DATA_PG },
-    result: { data: { community: null } },
-  },
-  {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: '6437904485008f171cf29924',
-            name: 'Unity Foundation',
-            addressLine1: '123 Random Street',
-          },
-          {
-            id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills & Group',
-            addressLine1: '5112 Dare Centers',
-          },
-        ],
+// Factory with overrides for specific test scenarios
+const createMocks3 = (
+  overrides: Partial<{
+    communityData: unknown;
+    organizationsData: unknown[];
+  }> = {},
+): MockedResponse[] => {
+  const defaults = {
+    communityData: null,
+    organizationsData: [
+      {
+        id: '6437904485008f171cf29924',
+        name: 'Unity Foundation',
+        addressLine1: '123 Random Street',
+      },
+      {
+        id: 'db1d5caad2ade57ab811e681',
+        name: 'Mills & Group',
+        addressLine1: '5112 Dare Centers',
+      },
+    ],
+  };
+  const config = { ...defaults, ...overrides };
+  return [
+    {
+      request: { query: GET_COMMUNITY_DATA_PG },
+      result: { data: { community: config.communityData } },
+    },
+    {
+      request: { query: GET_COMMUNITY_DATA_PG },
+      result: { data: { community: config.communityData } },
+    },
+    {
+      request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+      result: {
+        data: {
+          organizations: config.organizationsData,
+        },
       },
     },
-  },
-];
+  ];
+};
 
-const createMocks4 = () => [
+const createMocks4 = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -170,7 +183,7 @@ const link3 = new StaticMockLink(createMocks3(), true);
 
 const link4 = new StaticMockLink(createMocks4(), true);
 
-const createMocksVerifiedEmail = () => [
+const createMocksVerifiedEmail = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
