@@ -398,7 +398,7 @@ describe('LoadingMoreRows (loadingMore functionality)', () => {
     });
 
     it('renders skeleton cells with correct CSS class', () => {
-      const { container } = render(
+      render(
         <DataTable
           data={[{ name: 'Ada', email: 'ada@example.com' }]}
           columns={baseColumns}
