@@ -241,11 +241,10 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
       <div data-testid="search-filter-bar">
         <input
           ref={inputRef}
-          type="text"
+          type="search"
           defaultValue={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search"
-          role="searchbox"
           data-testid={searchInputTestId}
         />
         <button
@@ -368,18 +367,8 @@ describe('DataGridWrapper', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
-
-    searchInput.focus();
     await user.clear(searchInput);
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
-    await user.type(searchInput, 'e');
-    searchInput.focus();
-    await user.type(searchInput, 's');
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
+    await user.type(searchInput, 'test');
     await user.click(screen.getByTestId('search-submit-btn'));
 
     // Verify the callback was called with user input
@@ -741,17 +730,8 @@ describe('DataGridWrapper', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
-    searchInput.focus();
     await user.clear(searchInput);
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
-    await user.type(searchInput, 'e');
-    searchInput.focus();
-    await user.type(searchInput, 's');
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
+    await user.type(searchInput, 'test');
     await user.click(screen.getByTestId('search-submit-btn'));
 
     expect(onSearchChange).toHaveBeenCalledWith('test', undefined);
@@ -780,17 +760,8 @@ describe('DataGridWrapper', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
-    searchInput.focus();
     await user.clear(searchInput);
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
-    await user.type(searchInput, 'e');
-    searchInput.focus();
-    await user.type(searchInput, 's');
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
+    await user.type(searchInput, 'test');
     await user.click(screen.getByTestId('search-submit-btn'));
 
     // Click the searchBy trigger button
@@ -850,17 +821,8 @@ describe('DataGridWrapper', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
-    searchInput.focus();
     await user.clear(searchInput);
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
-    await user.type(searchInput, 'e');
-    searchInput.focus();
-    await user.type(searchInput, 's');
-    searchInput.focus();
-    await user.type(searchInput, 't');
-    searchInput.focus();
+    await user.type(searchInput, 'test');
     await user.click(screen.getByTestId('search-submit-btn'));
 
     expect(onSearchChange).toHaveBeenCalledWith('test', 'name');

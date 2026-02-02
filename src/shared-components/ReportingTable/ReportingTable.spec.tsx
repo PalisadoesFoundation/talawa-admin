@@ -35,6 +35,30 @@ describe('ReportingTable', () => {
     expect(rows.length).toBeGreaterThanOrEqual(3); // header + 2 data rows
   });
 
+  it('converts spacing token in width property', () => {
+    const columnsWithTokenWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', width: 'space-15', sortable: false },
+    ];
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('converts spacing token in maxWidth property', () => {
+    const columnsWithTokenMaxWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', maxWidth: 'space-17', sortable: false },
+    ];
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenMaxWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
   it('passes through gridProps (noRowsOverlay when rows empty)', () => {
     const gridProps: ReportingTableGridProps = {
       slots: {
