@@ -32,6 +32,33 @@ interface InterfaceStorageHelper {
   getStorageKey: (key: string) => string;
 }
 
+// Minimal GraphQL types used by the mocks in this spec
+interface InterfaceCommunity {
+  id?: string;
+  name?: string;
+  description?: string;
+  logoURL?: string | null;
+  websiteURL?: string | null;
+  facebookURL?: string | null;
+  linkedinURL?: string | null;
+  xURL?: string | null;
+  githubURL?: string | null;
+  instagramURL?: string | null;
+  youtubeURL?: string | null;
+  slackURL?: string | null;
+  redditURL?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  inactivityTimeoutDuration?: number;
+  logoMimeType?: string | null;
+}
+
+interface InterfaceOrganization {
+  id: string;
+  name: string;
+  addressLine1?: string | null;
+}
+
 const createMocks = (): MockedResponse[] => [
   {
     request: {
@@ -108,8 +135,8 @@ const createMocks = (): MockedResponse[] => [
 // Factory with overrides for specific test scenarios
 const createMocks3 = (
   overrides: Partial<{
-    communityData: unknown;
-    organizationsData: unknown[];
+    communityData: InterfaceCommunity | null;
+    organizationsData: InterfaceOrganization[];
   }> = {},
 ): MockedResponse[] => {
   const defaults = {
