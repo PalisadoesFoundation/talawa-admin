@@ -719,12 +719,18 @@ describe('EventRegistrantsModal', () => {
     }
   });
 
-  test('should show error notification when adding registrant fails', async () => {
+  test('shows error toasts when add attendee mutation fails', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
-      makeAddRegistrantErrorMock(),
+      {
+        request: {
+          query: ADD_EVENT_ATTENDEE,
+          variables: { userId: 'user1', eventId: 'event123' },
+        },
+        error: new Error('Network error: Failed to add attendee'),
+      },
     ]);
 
     await screen.findByTestId('invite-modal');
@@ -735,15 +741,20 @@ describe('EventRegistrantsModal', () => {
     const option = await screen.findByText('John Doe');
     await user.click(option);
 
-    const addButton = screen.getByTestId('add-registrant-btn');
-    await user.click(addButton);
+    await user.click(screen.getByTestId('add-registrant-btn'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Error adding attendee',
+      );
+
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Network error: Failed to add attendee',
+      );
     });
   });
 
-  test('opens AddOnSpot modal on Space key press', async () => {
+  test('opens AddOnSpot modal when Space key is pressed on add-onspot link', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -753,13 +764,20 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
     );
-
-    await user.type(input, 'NoUser');
+    await user.type(input, 'NonExistentUser');
 
     const addOnspotLink = await screen.findByTestId('add-onspot-link');
     addOnspotLink.focus();
 
-    await user.keyboard(' ');
+    addOnspotLink.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        charCode: 32,
+        keyCode: 32,
+        bubbles: true,
+      }),
+    );
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
