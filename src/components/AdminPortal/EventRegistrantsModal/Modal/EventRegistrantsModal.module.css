@@ -1,0 +1,22 @@
+.modalHeader {
+  border: none;
+  background-color: var(--modalHeader-bg);
+  padding: 1rem;
+  color: var(--modalHeader-color);
+}
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.underlineText {
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
