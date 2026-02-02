@@ -2,7 +2,8 @@ import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, Router } from 'react-router';
+import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -179,7 +180,7 @@ const createMocks4 = (): MockedResponse[] => [
 ];
 
 const link = new StaticMockLink(createMocks(), true);
-const link3 = new StaticMockLink(createMocks3(), true);
+// Note: Avoid shared links; create per-test link instances instead of module-scoped ones
 
 const link4 = new StaticMockLink(createMocks4(), true);
 
@@ -1383,49 +1384,27 @@ describe('Testing invitation functionality', () => {
 });
 
 describe('Organization Autocomplete Component', () => {
-  let originalLocation: Location;
+  let history: ReturnType<typeof createMemoryHistory>;
 
   beforeEach(() => {
-    // Save original and replace with isolated mock per test
-    originalLocation = window.location;
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        pathname: '/',
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        protocol: 'https:',
-        host: 'localhost:4321',
-        hostname: 'localhost',
-        port: '4321',
-        search: '',
-        hash: '',
-        reload: vi.fn(),
-        assign: vi.fn(),
-        replace: vi.fn(),
-      } as unknown as Location,
-    });
+    history = createMemoryHistory({ initialEntries: ['/'] });
   });
 
   afterEach(() => {
-    // Restore original location to avoid cross-test pollution
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: originalLocation,
-    });
     vi.clearAllMocks();
   });
 
   const setupRegistrationForm = async () => {
+    const localLink = new StaticMockLink(createMocks3(), true);
     render(
-      <MockedProvider link={link3}>
-        <BrowserRouter>
+      <MockedProvider link={localLink}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1563,13 +1542,13 @@ describe('Organization Autocomplete Component', () => {
 
     render(
       <MockedProvider link={emptyLink}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1645,13 +1624,13 @@ describe('Organization Autocomplete Component', () => {
 
     render(
       <MockedProvider link={errorLink}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
