@@ -31,14 +31,15 @@
  * ```
  *
  * Dependencies:
- * - `react-bootstrap` for modal and button components.
+ * - shared-components/Button for button components.
+ * - shared-components/BaseModal for modal components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
  * - `NotificationToast` for toast notifications.
  * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   EVENT_ATTENDEES,
@@ -46,30 +47,29 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import TextField from '@mui/material/TextField';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
-import styles from '../EventRegistrants.module.css';
+import styles from './EventRegistrantsModal.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 
-type ModalPropType = {
-  show: boolean;
-  eventId: string;
-  orgId: string;
-  handleClose: () => void;
-};
-
-export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
-  const { eventId, orgId, handleClose, show } = props;
+export const EventRegistrantsModal = ({
+  eventId,
+  orgId,
+  handleClose,
+  show,
+}: InterfaceEventRegistrantsModalProps): JSX.Element => {
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
@@ -81,7 +81,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
@@ -181,6 +180,9 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           }
         >
           <Autocomplete
+            disablePortal
+            inputValue={inputValue}
+            onInputChange={(_, value) => setInputValue(value)}
             id="addRegistrant"
             onChange={(_, newMember): void => {
               setMember(newMember);
@@ -190,11 +192,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                 <p className="me-2">{t('noRegistrationsFound')}</p>
                 <button
                   type="button"
+                  data-testid="add-onspot-link"
                   className={`underline ${styles.underlineText}`}
-                  onClick={() => {
-                    setOpen(true);
-                  }}
+                  onClick={() => setOpen(true)}
                   onMouseDown={(e) => e.preventDefault()}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setOpen(true);
+                    }
+                  }}
                 >
                   {t('addOnspotRegistrationLink')}
                 </button>
@@ -205,11 +212,23 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               member.name || t('unknownUser')
             }
             renderInput={(params): React.ReactNode => (
-              <TextField
-                {...params}
-                data-testid="autocomplete"
+              <FormTextField
+                name="addRegistrant"
                 label={t('addRegistrantLabel') as string}
+                ref={params.InputProps.ref}
+                value={inputValue}
                 placeholder={t('addRegistrantPlaceholder') as string}
+                data-testid="autocomplete"
+                id={params.id}
+                disabled={params.disabled}
+                fullWidth
+                onChange={(v: string) => {
+                  if (params.inputProps?.onChange) {
+                    params.inputProps.onChange({
+                      target: { value: v },
+                    } as React.ChangeEvent<HTMLInputElement>);
+                  }
+                }}
               />
             )}
           />

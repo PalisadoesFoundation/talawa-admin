@@ -15,20 +15,19 @@
  * Integrates with `react-toastify` for user notifications.
  */
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import {
   FormFieldGroup,
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import { BaseModal } from 'shared-components/BaseModal';
-import TextField from '@mui/material/TextField';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from './InviteByEmail.module.css';
+import styles from './InviteByEmailModal.module.css';
 import type { InterfaceInviteByEmailModalProps } from 'types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface';
 
 const validateEmails = (emails: string[]): string[] => {
@@ -126,15 +125,12 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
   };
 
   return (
-    <BaseModal
-      show={show}
-      onHide={handleClose}
-      backdrop="static"
-      centered
-      headerClassName={styles.modalHeader}
+    <CRUDModalTemplate
+      open={show}
+      onClose={handleClose}
       title={t('title', { defaultValue: 'Invite by Email' })}
-      showCloseButton
-      footer={
+      loading={isSubmitting}
+      customFooter={
         <>
           <Button
             variant="secondary"
@@ -143,11 +139,11 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
           >
             {tCommon('close', { defaultValue: 'Close' })}
           </Button>
+
           <LoadingState isLoading={isSubmitting} variant="inline">
             <Button
               type="submit"
               form="invite-by-email-form"
-              className={`border-1 mx-4 ${styles.addButton}`}
               variant="success"
               disabled={isSubmitting}
               data-testid="invite-submit"
@@ -163,58 +159,48 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
         data-testid="invite-by-email-form"
         id="invite-by-email-form"
       >
-        <FormFieldGroup
-          name="recipients"
-          label={t('emailsLabel', {
-            defaultValue: 'Recipient emails and names',
-          })}
-        >
+        <FormFieldGroup name="recipients" label={t('emailsLabel')}>
           {recipients.map((r) => (
             <div key={r.id} className="d-flex align-items-center mb-2">
-              <TextField
-                label={t('email', { defaultValue: 'Email' })}
-                variant="outlined"
-                size="small"
-                value={r.email}
-                onChange={(e) => {
+              <FormTextField
+                name={`recipient-email-${r.id}`}
+                label={t('email')}
+                value={r.email || ''}
+                onChange={(v: string) =>
                   setRecipients((prev) =>
                     prev.map((item) =>
-                      item.id === r.id
-                        ? { ...item, email: e.target.value }
-                        : item,
+                      item.id === r.id ? { ...item, email: v } : item,
                     ),
-                  );
-                }}
+                  )
+                }
                 className={styles.emailField}
               />
 
-              <TextField
-                label={t('name', { defaultValue: 'Name' })}
-                variant="outlined"
-                size="small"
-                value={r.name}
-                onChange={(e) => {
+              <FormTextField
+                name={`recipient-name-${r.id}`}
+                label={t('name')}
+                value={r.name || ''}
+                onChange={(v: string) =>
                   setRecipients((prev) =>
                     prev.map((item) =>
-                      item.id === r.id
-                        ? { ...item, name: e.target.value }
-                        : item,
+                      item.id === r.id ? { ...item, name: v } : item,
                     ),
-                  );
-                }}
+                  )
+                }
                 className={styles.nameField}
               />
 
               {recipients.length > 1 && (
                 <Button
                   variant="link"
-                  onClick={() => {
-                    const copy = recipients.filter((item) => item.id !== r.id);
-                    setRecipients(copy);
-                  }}
+                  onClick={() =>
+                    setRecipients((prev) =>
+                      prev.filter((item) => item.id !== r.id),
+                    )
+                  }
                   className={styles.removeButton}
                 >
-                  {t('remove', { defaultValue: 'Remove' })}
+                  {t('remove')}
                 </Button>
               )}
             </div>
@@ -230,38 +216,29 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
                 ])
               }
             >
-              {t('addRecipient', { defaultValue: 'Add recipient' })}
+              {t('addRecipient')}
             </Button>
           </div>
 
-          <small className="text-muted">
-            {t('emailsHelp', {
-              defaultValue:
-                'Provide email and optional name for each recipient. Add multiple recipients as needed.',
-            })}
-          </small>
+          <small className="text-muted">{t('emailsHelp')}</small>
         </FormFieldGroup>
 
-        <FormFieldGroup
-          name="message"
-          label={t('messageLabel', { defaultValue: 'Message (optional)' })}
-        >
-          <TextField
-            fullWidth
+        <FormFieldGroup name="message" label={t('messageLabel')}>
+          <FormTextField
+            name="message"
+            label={t('messageLabel', { defaultValue: 'Message (optional)' })}
+            value={message || ''}
+            onChange={(v: string) => setMessage(v)}
             multiline
             minRows={2}
-            placeholder={t('messagePlaceholder', {
-              defaultValue: 'You are invited to attend this event.',
-            })}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            inputProps={{ 'data-testid': 'invite-message' }}
+            placeholder={t('messagePlaceholder')}
+            data-testid="invite-message"
           />
         </FormFieldGroup>
 
         <FormTextField
           name="expiresInDays"
-          label={t('expiresInDaysLabel', { defaultValue: 'Expires in (days)' })}
+          label={t('expiresInDaysLabel')}
           type="number"
           value={expiresInDays.toString()}
           onChange={(v) => {
@@ -271,7 +248,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
           data-testid="invite-expires"
         />
       </form>
-    </BaseModal>
+    </CRUDModalTemplate>
   );
 };
 

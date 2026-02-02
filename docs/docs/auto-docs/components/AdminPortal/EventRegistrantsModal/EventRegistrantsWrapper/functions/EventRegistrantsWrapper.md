@@ -6,13 +6,13 @@
 
 > **EventRegistrantsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/AdminPortal/EventRegistrantsModal/EventRegistrantsWrapper.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L41)
+Defined in: [src/components/AdminPortal/EventRegistrantsModal/EventRegistrantsWrapper.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventRegistrantsModal/EventRegistrantsWrapper.tsx#L37)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`PropType`
+[`InterfaceEventRegistrantsWrapperProps`](../../../../../types/AdminPortal/EventRegistrantsWrapper/interface/interfaces/InterfaceEventRegistrantsWrapperProps.md)
 
 ## Returns
 
