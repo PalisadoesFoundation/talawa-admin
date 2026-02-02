@@ -805,7 +805,7 @@ export async function main() {
 
   if (args.includes('--staged') && (hasFilesFlag || scanEntireRepo)) {
     console.error(
-      'Conflicting flags: --staged cannot be combined with --files or --all/--scan-entire-repo.',
+      'Conflicting flags: --staged cannot be combined with --files or --scan-entire-repo.',
     );
     process.exit(1);
   }
