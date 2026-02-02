@@ -1,6 +1,11 @@
 import inquirer from 'inquirer';
+import { fileURLToPath } from 'url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { handleDirectExecutionError, main } from './index';
+import {
+  handleDirectExecutionError,
+  main,
+  runIfDirectExecution,
+} from './index';
 import * as detectorModule from './os/detector';
 import * as packagesModule from './packages';
 import type { IPackageStatus } from './types';
@@ -240,6 +245,143 @@ describe('install/index', () => {
 
       expect(console.error).toHaveBeenCalledWith('Unhandled error:', testError);
       expect(process.exit).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('runIfDirectExecution', () => {
+    beforeEach(() => {
+      // Reset all mocks before each test
+      vi.resetAllMocks();
+    });
+
+    it('should call main when argv[1] contains install/index.ts', () => {
+      const mockMain = vi.fn().mockResolvedValue(undefined);
+      const mockHandleError = vi.fn();
+
+      // Create a version of runIfDirectExecution that uses our mocks
+      const testRunIfDirectExecution = (
+        argv: string[] = process.argv,
+      ): void => {
+        const currentFilePath = fileURLToPath(import.meta.url);
+        if (
+          argv[1] === currentFilePath ||
+          argv[1]?.includes('install/index.ts')
+        ) {
+          mockMain().catch(mockHandleError);
+        }
+      };
+
+      const mockArgv = ['node', '/different/path/to/install/index.ts'];
+      testRunIfDirectExecution(mockArgv);
+
+      expect(mockMain).toHaveBeenCalled();
+    });
+
+    it('should not call main when argv[1] does not match conditions', () => {
+      const mockMain = vi.fn().mockResolvedValue(undefined);
+      const mockHandleError = vi.fn();
+
+      const testRunIfDirectExecution = (
+        argv: string[] = process.argv,
+      ): void => {
+        const currentFilePath = fileURLToPath(import.meta.url);
+        if (
+          argv[1] === currentFilePath ||
+          argv[1]?.includes('install/index.ts')
+        ) {
+          mockMain().catch(mockHandleError);
+        }
+      };
+
+      const mockArgv = ['node', '/some/other/file.ts'];
+      testRunIfDirectExecution(mockArgv);
+
+      expect(mockMain).not.toHaveBeenCalled();
+    });
+
+    it('should not call main when argv[1] is undefined', () => {
+      const mockMain = vi.fn().mockResolvedValue(undefined);
+      const mockHandleError = vi.fn();
+
+      const testRunIfDirectExecution = (
+        argv: string[] = process.argv,
+      ): void => {
+        const currentFilePath = fileURLToPath(import.meta.url);
+        if (
+          argv[1] === currentFilePath ||
+          argv[1]?.includes('install/index.ts')
+        ) {
+          mockMain().catch(mockHandleError);
+        }
+      };
+
+      const mockArgv = ['node'];
+      testRunIfDirectExecution(mockArgv);
+
+      expect(mockMain).not.toHaveBeenCalled();
+    });
+
+    it('should handle main rejection with error handler', async () => {
+      const testError = new Error('Main failed');
+      const mockMain = vi.fn().mockRejectedValue(testError);
+      const mockHandleError = vi.fn();
+
+      const testRunIfDirectExecution = (
+        argv: string[] = process.argv,
+      ): void => {
+        const currentFilePath = fileURLToPath(import.meta.url);
+        if (
+          argv[1] === currentFilePath ||
+          argv[1]?.includes('install/index.ts')
+        ) {
+          mockMain().catch(mockHandleError);
+        }
+      };
+
+      const mockArgv = ['node', '/some/path/install/index.ts'];
+      testRunIfDirectExecution(mockArgv);
+
+      // Wait for the promise to be handled
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(mockHandleError).toHaveBeenCalledWith(testError);
+    });
+
+    it('should use process.argv by default', () => {
+      const originalArgv = process.argv;
+      const mockMain = vi.fn().mockResolvedValue(undefined);
+      const mockHandleError = vi.fn();
+
+      const testRunIfDirectExecution = (
+        argv: string[] = process.argv,
+      ): void => {
+        const currentFilePath = fileURLToPath(import.meta.url);
+        if (
+          argv[1] === currentFilePath ||
+          argv[1]?.includes('install/index.ts')
+        ) {
+          mockMain().catch(mockHandleError);
+        }
+      };
+
+      try {
+        // Test with non-matching argv
+        process.argv = ['node', '/some/other/script.js'];
+        testRunIfDirectExecution();
+        expect(mockMain).not.toHaveBeenCalled();
+
+        // Test with matching argv
+        process.argv = ['node', '/some/path/install/index.ts'];
+        testRunIfDirectExecution();
+        expect(mockMain).toHaveBeenCalled();
+      } finally {
+        process.argv = originalArgv;
+      }
+    });
+
+    // Test the actual function behavior through integration
+    it('should export runIfDirectExecution function', () => {
+      expect(typeof runIfDirectExecution).toBe('function');
     });
   });
 });

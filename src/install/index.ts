@@ -134,12 +134,16 @@ export function handleDirectExecutionError(error: unknown): void {
   process.exit(1);
 }
 
-// Run main if this file is executed directly
-const currentFilePath = fileURLToPath(import.meta.url);
-/* istanbul ignore if */
-if (
-  process.argv[1] === currentFilePath ||
-  process.argv[1]?.includes('install/index.ts')
-) {
-  main().catch(handleDirectExecutionError);
+/**
+ * Runs the main installation function if this file is executed directly
+ * @param argv - The argv array to check (defaults to process.argv)
+ */
+export function runIfDirectExecution(argv: string[] = process.argv): void {
+  const currentFilePath = fileURLToPath(import.meta.url);
+  if (argv[1] === currentFilePath || argv[1]?.includes('install/index.ts')) {
+    main().catch(handleDirectExecutionError);
+  }
 }
+
+// Run main if this file is executed directly
+runIfDirectExecution();
