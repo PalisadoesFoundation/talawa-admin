@@ -11,13 +11,13 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
-import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
 interface InterfaceNotification {
   id: string;
@@ -63,6 +63,57 @@ const NotificationIcon = (): JSX.Element => {
     setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);
 
+  const dropdownOptions = loading
+    ? [{ value: 'status-loading', label: t('loading') }]
+    : error
+      ? [{ value: 'status-error', label: t('errorFetching') }]
+      : notifications.length === 0
+        ? [
+            { value: 'status-empty', label: t('noNewNotifications') },
+            { value: 'view-all', label: t('viewAllNotifications') },
+          ]
+        : [
+            ...notifications.map((notification) => ({
+              value: notification.id,
+              label:
+                notification.body.length > 48
+                  ? `${notification.body.slice(0, 48)}...`
+                  : notification.body,
+            })),
+            { value: 'view-all', label: t('viewAllNotifications') },
+          ];
+
+  const handleSelectNotification = (value: string) => {
+    if (value === 'view-all') {
+      navigate(notificationPath);
+      return;
+    }
+
+    const notification = notifications.find((n) => n.id === value);
+    if (!notification) return;
+
+    if (notification.navigation) {
+      navigate(notification.navigation);
+      return;
+    }
+
+    navigate(notificationPath);
+  };
+
+  const bellIconWithBadge = (
+    <div className={styles.iconContainer}>
+      <NotificationsIcon className={styles.bellIcon} />
+      {unreadCount > 0 && (
+        <span
+          className={styles.unreadBadge}
+          title={t('unreadCount', { count: unreadCount })}
+        >
+          {unreadCount > 9 ? t('unreadOverflow', { count: 9 }) : unreadCount}
+        </span>
+      )}
+    </div>
+  );
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -70,68 +121,19 @@ const NotificationIcon = (): JSX.Element => {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Dropdown>
-        <Dropdown.Toggle
-          variant="white"
-          id="dropdown-basic"
-          aria-label={t('openNotificationsMenu')}
-          className={styles.iconButton}
-        >
-          <div className={styles.iconContainer}>
-            <NotificationsIcon className={styles.bellIcon} />
-            {unreadCount > 0 && (
-              <span
-                className={styles.unreadBadge}
-                title={t('unreadCount', { count: unreadCount })}
-              >
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            )}
-          </div>
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu className={styles.glassMenu}>
-          {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
-          {error && <Dropdown.Item>{t('errorFetching')}</Dropdown.Item>}
-          {!loading &&
-            !error &&
-            (notifications.length > 0 ? (
-              notifications.map((notification) => (
-                <Dropdown.Item
-                  key={notification.id}
-                  className={`${styles.notificationItem} ${
-                    notification.navigation ? styles.clickable : ''
-                  }`}
-                  onClick={() => {
-                    if (notification.navigation) {
-                      navigate(notification.navigation);
-                      return;
-                    }
-                    navigate(notificationPath);
-                  }}
-                >
-                  {!notification.isRead && (
-                    <span
-                      className={styles.notificationDot}
-                      title={t('unread')}
-                    />
-                  )}
-                  <span className={styles.notificationText}>
-                    {notification.body.length > 48
-                      ? notification.body.slice(0, 48) + '...'
-                      : notification.body}
-                  </span>
-                </Dropdown.Item>
-              ))
-            ) : (
-              <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
-            ))}
-          <Dropdown.Divider />
-          <Dropdown.Item onClick={() => navigate(notificationPath)}>
-            {t('viewAllNotifications')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="notification-dropdown"
+        options={dropdownOptions}
+        selectedValue={undefined}
+        onSelect={handleSelectNotification}
+        ariaLabel={t('openNotificationsMenu')}
+        dataTestIdPrefix="notification-dropdown"
+        variant="light"
+        buttonLabel=""
+        parentContainerStyle={undefined}
+        btnStyle={styles.iconButton}
+        icon={bellIconWithBadge}
+      />
     </ErrorBoundaryWrapper>
   );
 };

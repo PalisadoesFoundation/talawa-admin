@@ -2565,8 +2565,5 @@
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
-  },
-  "customTablecell": {
-    "numberOfAttendees": "参与者人数"
   }
 }

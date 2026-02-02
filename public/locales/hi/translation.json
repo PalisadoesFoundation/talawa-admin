@@ -2565,8 +2565,5 @@
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"
-  },
-  "customTablecell": {
-    "numberOfAttendees": "उपस्थित लोगों की संख्या"
   }
 }

@@ -39,7 +39,7 @@ export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const { t: tErrors } = useTranslation('errors');
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error, refetch } = useQuery(EVENT_DETAILS, {
     variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',
@@ -80,6 +80,7 @@ export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
       fallbackTitle={tErrors('title')}
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
+      onReset={refetch}
     >
       <TableRow className="my-6" data-testid="custom-row">
         <TableCell align="left">
