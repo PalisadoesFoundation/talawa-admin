@@ -6,7 +6,10 @@ import { MemoryRouter, Routes, Route } from 'react-router';
 import NotificationIcon from './NotificationIcon';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 
-vi.mock('react-i18next', () => ({
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+  ...actual,
   useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
     t: (key: string) =>
       options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
@@ -14,7 +17,7 @@ vi.mock('react-i18next', () => ({
       changeLanguage: () => Promise.resolve(),
     },
   }),
-}));
+}});
 
 // Mock useLocalStorage
 vi.mock('utils/useLocalstorage', () => ({
@@ -288,7 +291,7 @@ describe('NotificationIcon Component', () => {
     );
     await user.click(screen.getByRole('button'));
     await waitFor(() => {
-      expect(screen.getByTitle('notification.unread')).toBeInTheDocument();
+      expect(screen.getByTitle('notification.unreadCount')).toBeInTheDocument();
     });
   });
 

@@ -14,7 +14,10 @@ dayjs.extend(utc);
  * Mock the `react-i18next` module to provide translation functionality.
  */
 
-vi.mock('react-i18next', () => ({
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+  ...actual,
   useTranslation: () => ({
     t: (key: string, params?: Record<string, unknown>) => {
       const translations: Record<string, string> = {
@@ -34,7 +37,7 @@ vi.mock('react-i18next', () => ({
     },
     i18n: { changeLanguage: () => Promise.resolve() },
   }),
-}));
+}});
 
 /**
  * Mock the `CustomTableCell` component for testing.
