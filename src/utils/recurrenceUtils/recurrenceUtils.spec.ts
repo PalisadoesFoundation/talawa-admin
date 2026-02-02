@@ -772,14 +772,20 @@ describe('Recurrence Utility Functions', () => {
     it('should return correct options for a date in the middle of the month', () => {
       const thirdMonday = getNthDayOfWeekInMonth(testMonth, 1, 3); // 1 = Monday, 3 = third occurrence
       const options = getMonthlyOptions(thirdMonday.toDate());
+      const dayOfMonth = thirdMonday.date();
 
-      const expectedWeek = options.weekdayValue.week;
-      const expectedOrdinal = getOrdinalString(expectedWeek);
-
-      expect(options.byWeekday).toBe(
-        `Monthly on the ${expectedOrdinal} Monday`,
+      expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + thirdMonday.startOf('month').day()) / 7,
       );
-      expect(options.weekdayValue.day).toBe(WeekDays.MO);
+      expect(options.byWeekday).toBe(
+        `Monthly on the ${getOrdinalString(expectedWeek)} Monday`,
+      );
+      expect(options.dateValue).toBe(dayOfMonth);
+      expect(options.weekdayValue).toEqual({
+        week: expectedWeek,
+        day: WeekDays.MO,
+      });
     });
 
     it('should return correct options for the first day of the month', () => {
@@ -848,14 +854,20 @@ describe('Recurrence Utility Functions', () => {
     it('should return correct options for a Sunday', () => {
       const fourthSunday = getNthDayOfWeekInMonth(testMonth, 0, 4); // 0 = Sunday
       const options = getMonthlyOptions(fourthSunday.toDate());
+      const dayOfMonth = fourthSunday.date();
 
-      const expectedWeek = options.weekdayValue.week;
-      const expectedOrdinal = getOrdinalString(expectedWeek);
-
-      expect(options.byWeekday).toBe(
-        `Monthly on the ${expectedOrdinal} Sunday`,
+      expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
+      const expectedWeek = Math.ceil(
+        (dayOfMonth + fourthSunday.startOf('month').day()) / 7,
       );
-      expect(options.weekdayValue.day).toBe(WeekDays.SU);
+      expect(options.byWeekday).toBe(
+        `Monthly on the ${getOrdinalString(expectedWeek)} Sunday`,
+      );
+      expect(options.dateValue).toBe(dayOfMonth);
+      expect(options.weekdayValue).toEqual({
+        week: expectedWeek,
+        day: WeekDays.SU,
+      });
     });
 
     it('should return correct options for a Saturday', () => {
@@ -921,17 +933,25 @@ describe('Recurrence Utility Functions', () => {
       const monday2 = getNthDayOfWeekInMonth(testMonth, 1, 2).toDate();
       const monday3 = getNthDayOfWeekInMonth(testMonth, 1, 3).toDate();
 
-      const opt1 = getMonthlyOptions(monday1);
-      const opt2 = getMonthlyOptions(monday2);
-      const opt3 = getMonthlyOptions(monday3);
+      expect(getMonthlyOptions(monday1).weekdayValue.day).toBe(WeekDays.MO);
+      expect(getMonthlyOptions(monday2).weekdayValue.day).toBe(WeekDays.MO);
+      expect(getMonthlyOptions(monday3).weekdayValue.day).toBe(WeekDays.MO);
 
-      expect(opt1.weekdayValue.day).toBe(WeekDays.MO);
-      expect(opt2.weekdayValue.day).toBe(WeekDays.MO);
-      expect(opt3.weekdayValue.day).toBe(WeekDays.MO);
+      const getExpectedWeek = (date: Date) => {
+        const d = dayjs(date);
+        const firstDayOfMonth = d.startOf('month').day();
+        return Math.ceil((d.date() + firstDayOfMonth) / 7);
+      };
 
-      // Weeks must be increasing, not fixed numbers
-      expect(opt2.weekdayValue.week).toBeGreaterThan(opt1.weekdayValue.week);
-      expect(opt3.weekdayValue.week).toBeGreaterThan(opt2.weekdayValue.week);
+      expect(getMonthlyOptions(monday1).weekdayValue.week).toBe(
+        getExpectedWeek(monday1),
+      );
+      expect(getMonthlyOptions(monday2).weekdayValue.week).toBe(
+        getExpectedWeek(monday2),
+      );
+      expect(getMonthlyOptions(monday3).weekdayValue.week).toBe(
+        getExpectedWeek(monday3),
+      );
     });
 
     it('should handle edge case: date that falls in the fifth week', () => {
