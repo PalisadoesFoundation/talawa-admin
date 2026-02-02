@@ -36,7 +36,7 @@ import styles from './MessageItem.module.css';
 import type { INewChat } from './types';
 import MessageImage from './MessageImage';
 import DropDownButton from 'shared-components/DropDownButton';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 
 interface IMessageItemProps {
   message: INewChat['messages']['edges'][0]['node'];
@@ -91,21 +91,24 @@ export default function MessageItem({
     return opts;
   }, [isOwnMessage, isFile, t]);
 
-  const handleMessageAction = (action: string): void => {
-    switch (action) {
-      case 'reply':
-        onReply(message);
-        break;
-      case 'edit':
-        onEdit(message);
-        break;
-      case 'delete':
-        onDelete(message.id);
-        break;
-      default:
-        return;
-    }
-  };
+  const handleMessageAction = useCallback(
+    (action: string): void => {
+      switch (action) {
+        case 'reply':
+          onReply(message);
+          break;
+        case 'edit':
+          onEdit(message);
+          break;
+        case 'delete':
+          onDelete(message.id);
+          break;
+        default:
+          return;
+      }
+    },
+    [message, onReply, onEdit, onDelete],
+  );
 
   return (
     <div

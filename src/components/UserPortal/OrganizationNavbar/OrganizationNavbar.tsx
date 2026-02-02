@@ -142,6 +142,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   />
                 }
                 placeholder=""
+                ariaLabel={tCommon('changeLanguage')}
               />
 
               <div className={styles.userMenuContainer}>
@@ -171,6 +172,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                     />
                   }
                   placeholder=""
+                  ariaLabel={tCommon('userMenu')}
                 />
               </div>
             </Navbar.Collapse>

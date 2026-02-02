@@ -163,6 +163,7 @@ function userNavbar(): JSX.Element {
               />
             }
             placeholder=""
+            ariaLabel={tCommon('changeLanguage')}
           />
 
           <NotificationIcon />
@@ -195,6 +196,7 @@ function userNavbar(): JSX.Element {
                 />
               }
               placeholder=""
+              ariaLabel={tCommon('userMenu')}
             />
           </div>
         </Navbar.Collapse>

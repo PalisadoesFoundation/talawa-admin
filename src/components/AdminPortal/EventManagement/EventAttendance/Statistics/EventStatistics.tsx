@@ -83,6 +83,9 @@ ChartJS.register(
 // Age calculation helper to avoid triggering i18n checker and ensure consistency
 const MIN_ADULT_AGE = 18;
 const MAX_YOUNG_ADULT_AGE = 40;
+const DESIGN_TOKEN = {
+  BW: 2,
+} as const;
 
 const calculateAge = (birthDate: Date): number => {
   const today = new Date();
@@ -420,10 +423,6 @@ export const AttendanceStatisticsModal: React.FC<
       </Button>
     </>
   );
-
-  const DESIGN_TOKEN = {
-    BW: 2,
-  };
 
   return (
     <ErrorBoundaryWrapper

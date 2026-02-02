@@ -53,6 +53,7 @@ const LanguageSelector = (
     testIdPrefix,
     handleLanguageChange,
     currentLanguageCode,
+    dropDirection,
   } = props;
   const { t: tCommon } = useTranslation('common');
   if (!showLanguageSelector) return null;
@@ -69,6 +70,7 @@ const LanguageSelector = (
       id={`${testIdPrefix || ''}language-dropdown`}
       options={languageOptions}
       selectedValue={currentLanguageCode}
+      drop={dropDirection}
       onSelect={handleLanguageChange}
       // i18n-ignore-next-line
       dataTestIdPrefix={`${testIdPrefix || ''}language`}

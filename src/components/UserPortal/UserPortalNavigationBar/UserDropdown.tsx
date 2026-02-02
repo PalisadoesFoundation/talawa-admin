@@ -49,6 +49,7 @@ const UserProfileDropdown = (
     tCommon,
     styles,
     PermIdentityIcon,
+    dropDirection,
   } = props;
   if (!showUserProfile) return null;
   const handleUserAction = (action: string): void => {
@@ -82,6 +83,7 @@ const UserProfileDropdown = (
             label: tCommon('logout'),
           },
         ]}
+        drop={dropDirection}
         onSelect={handleUserAction}
         // i18n-ignore-next-line
         dataTestIdPrefix={`${testIdPrefix}user`}
