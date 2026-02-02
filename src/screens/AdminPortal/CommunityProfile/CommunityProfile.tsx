@@ -16,7 +16,7 @@
  * Dependencies:
  * - React,React-Bootstrap, NotificationToast, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
- * - Utility functions: `convertToBase64` and `errorHandler`.
+ * - Utility functions: `errorHandler`.
  *
  * @returns The rendered CommunityProfile component.
  *
@@ -285,7 +285,6 @@ const CommunityProfile = (): JSX.Element => {
                   setLogoFile(file || null);
                 }}
                 autoComplete="off"
-                required
               />
             </FormFieldGroup>
             <FormFieldGroup label={t('social')} name="social">

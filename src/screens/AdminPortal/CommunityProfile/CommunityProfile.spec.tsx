@@ -229,6 +229,7 @@ const RESET_ERROR_MOCK = [
           name: 'Test',
           websiteURL: 'https://test.com',
           logoURL: 'logo.png',
+          logoMimeType: 'image/png',
           inactivityTimeoutDuration: 30,
           facebookURL: null,
           instagramURL: null,
@@ -333,6 +334,7 @@ describe('Testing Community Profile Screen', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -408,7 +410,7 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(slack, profileVariables.socialURL);
 
     const mockFile = new File(['logo'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logo, { target: { files: [mockFile] } });
+    await userEvent.upload(logo, mockFile);
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);
@@ -541,15 +543,16 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(websiteInput, 'https://test.com');
 
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [mockFile] } });
+    await userEvent.upload(logoInput, mockFile);
 
     await wait();
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(submitButton);
-    await wait(500);
 
-    expect(errorHandler).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
   test('should handle file upload and store File object', async () => {
@@ -570,7 +573,7 @@ describe('Testing Community Profile Screen', () => {
     });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
+    await userEvent.upload(fileInput, mockFile);
     await wait();
 
     // Verify file input accepted the file
@@ -649,12 +652,9 @@ describe('Testing Community Profile Screen', () => {
     });
 
     // Wait for success toast
-    await waitFor(
-      () => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
   });
 
   test('should handle reset error correctly', async () => {
@@ -738,16 +738,13 @@ describe('Testing Community Profile Screen', () => {
 
     const logoInput = screen.getByTestId('fileInput');
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [mockFile] } });
+    await userEvent.upload(logoInput, mockFile);
 
     // Wait for state to update after file selection
-    await waitFor(
-      () => {
-        const saveButton = screen.getByTestId('saveChangesBtn');
-        expect(saveButton).not.toBeDisabled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      expect(saveButton).not.toBeDisabled();
+    });
 
     const saveButton = screen.getByTestId('saveChangesBtn');
     const resetButton = screen.getByTestId('resetChangesBtn');
@@ -846,18 +843,48 @@ describe('Testing Community Profile Screen', () => {
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
+    await userEvent.upload(fileInput, mockFile);
     await wait();
 
     // Upload another file
     const mockFile2 = new File(['content2'], 'test2.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [mockFile2] } });
+    await userEvent.upload(fileInput, mockFile2);
     await wait();
 
     // The second file should be in the input
     expect(fileInput.files?.[0]).toBe(mockFile2);
+  });
+
+  test('should handle uploading then clearing a logo file', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
+
+    // Upload file
+    await userEvent.upload(fileInput, mockFile);
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).not.toBeDisabled();
+    });
+
+    // Clear file by simulating empty file selection
+    fireEvent.change(fileInput, { target: { files: [] } });
+    await wait();
+
+    // After clearing, if no other fields are filled, buttons should be disabled
+    expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
   });
 
   describe('LoadingState Behavior', () => {
