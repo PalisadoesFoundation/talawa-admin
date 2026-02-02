@@ -906,10 +906,13 @@ describe('MemberDetail', () => {
   describe('Form Validation and User Interaction', () => {
     test('Should display dicebear image if image is null', async () => {
       renderMemberDetailScreen(createLink(MOCKS1));
-      const userImage = await waitFor(() =>
+      const avatarContainer = await waitFor(() =>
         screen.getByTestId('profile-picture'),
       );
-      expect(userImage.getAttribute('src')).toBe('mocked-data-uri');
+      // ProfileAvatarDisplay renders fallback Avatar which uses dicebear
+      const fallbackAvatar = avatarContainer.querySelector('img');
+      expect(fallbackAvatar).toBeInTheDocument();
+      expect(fallbackAvatar?.getAttribute('src')).toBe('mocked-data-uri');
     });
 
     test('should handle undefined member id properly', async () => {
@@ -1288,7 +1291,8 @@ describe('MemberDetail', () => {
 
     await user.upload(fileInput, file);
 
-    const avatarImg = await screen.findByTestId('profile-picture');
+    const avatarContainer = await screen.findByTestId('profile-picture');
+    const avatarImg = avatarContainer.querySelector('img');
     expect(avatarImg).toHaveAttribute('src', 'blob:mock-avatar');
 
     objectUrlSpy.mockRestore();
@@ -1300,7 +1304,9 @@ describe('MemberDetail', () => {
       expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
     });
 
-    const avatarImg = await screen.findByTestId('profile-picture');
+    const avatarContainer = await screen.findByTestId('profile-picture');
+    // ProfileAvatarDisplay renders fallback Avatar which uses dicebear
+    const avatarImg = avatarContainer.querySelector('img');
     expect(avatarImg).toHaveAttribute('src', 'mocked-data-uri');
   });
 
@@ -1600,10 +1606,12 @@ describe('MemberDetail', () => {
       </MockedProvider>,
     );
 
-    const userImage = await waitFor(() =>
+    const avatarContainer = await waitFor(() =>
       screen.getByTestId('profile-picture'),
     );
-    expect(userImage.getAttribute('src')).toBe('mocked-data-uri');
+    // ProfileAvatarDisplay renders fallback Avatar which uses dicebear
+    const avatarImg = avatarContainer.querySelector('img');
+    expect(avatarImg?.getAttribute('src')).toBe('mocked-data-uri');
     unmount();
   });
 
