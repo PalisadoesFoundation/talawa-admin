@@ -471,8 +471,9 @@ describe('LoadingMoreRows (loadingMore functionality)', () => {
     });
 
     it('handles empty columns array', () => {
+      type RowWithId = { id?: string };
       render(
-        <DataTable
+        <DataTable<RowWithId>
           data={[{}]}
           columns={[]}
           loadingMore
