@@ -154,12 +154,12 @@ describe('Testing Leaderboard Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    const sortBtn = await screen.findByTestId('sort');
+    const sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hours_DESC
     await userEvent.click(sortBtn);
-    const hoursDesc = await screen.findByTestId('hours_DESC');
+    const hoursDesc = await screen.findByTestId('sort-item-hours_DESC');
     expect(hoursDesc).toBeInTheDocument();
     await userEvent.click(hoursDesc);
 
@@ -169,7 +169,7 @@ describe('Testing Leaderboard Screen', () => {
     // Sort by hours_ASC
     expect(sortBtn).toBeInTheDocument();
     await userEvent.click(sortBtn);
-    const hoursAsc = await screen.findByTestId('hours_ASC');
+    const hoursAsc = await screen.findByTestId('sort-item-hours_ASC');
     expect(hoursAsc).toBeInTheDocument();
     await userEvent.click(hoursAsc);
 
@@ -186,11 +186,11 @@ describe('Testing Leaderboard Screen', () => {
     });
 
     // Filter by allTime
-    const filter = await screen.findByTestId('timeFrame');
+    const filter = await screen.findByTestId('timeFrame-toggle');
     expect(filter).toBeInTheDocument();
 
     await userEvent.click(filter);
-    const timeFrameAll = await screen.findByTestId('allTime');
+    const timeFrameAll = await screen.findByTestId('timeFrame-item-allTime');
     expect(timeFrameAll).toBeInTheDocument();
 
     await userEvent.click(timeFrameAll);
@@ -206,14 +206,14 @@ describe('Testing Leaderboard Screen', () => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
 
-    const filter = await screen.findByTestId('timeFrame');
+    const filter = await screen.findByTestId('timeFrame-toggle');
     expect(filter).toBeInTheDocument();
 
     // Filter by weekly
     expect(filter).toBeInTheDocument();
     await userEvent.click(filter);
 
-    const timeFrameWeekly = await screen.findByTestId('weekly');
+    const timeFrameWeekly = await screen.findByTestId('timeFrame-item-weekly');
     expect(timeFrameWeekly).toBeInTheDocument();
     await userEvent.click(timeFrameWeekly);
 
@@ -230,11 +230,13 @@ describe('Testing Leaderboard Screen', () => {
     });
 
     // Filter by monthly
-    const filter = await screen.findByTestId('timeFrame');
+    const filter = await screen.findByTestId('timeFrame-toggle');
     expect(filter).toBeInTheDocument();
     await userEvent.click(filter);
 
-    const timeFrameMonthly = await screen.findByTestId('monthly');
+    const timeFrameMonthly = await screen.findByTestId(
+      'timeFrame-item-monthly',
+    );
     expect(timeFrameMonthly).toBeInTheDocument();
     await userEvent.click(timeFrameMonthly);
 
@@ -253,11 +255,11 @@ describe('Testing Leaderboard Screen', () => {
     });
 
     // Filter by yearly
-    const filter = await screen.findByTestId('timeFrame');
+    const filter = await screen.findByTestId('timeFrame-toggle');
     expect(filter).toBeInTheDocument();
     await userEvent.click(filter);
 
-    const timeFrameYearly = await screen.findByTestId('yearly');
+    const timeFrameYearly = await screen.findByTestId('timeFrame-item-yearly');
     expect(timeFrameYearly).toBeInTheDocument();
     await userEvent.click(timeFrameYearly);
 

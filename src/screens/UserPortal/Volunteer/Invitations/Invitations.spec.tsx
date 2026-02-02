@@ -548,7 +548,7 @@ describe('Testing Invitations Screen', () => {
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
 
-    let sortBtn = await screen.findByTestId('sort');
+    let sortBtn = await screen.findByTestId('sort-toggle');
     expect(sortBtn).toBeInTheDocument();
     // Sort by createdAt_DESC (default)
     await waitFor(() => {
@@ -559,9 +559,9 @@ describe('Testing Invitations Screen', () => {
     });
 
     // Sort by createdAt_ASC
-    sortBtn = screen.getByTestId('sort');
+    sortBtn = screen.getByTestId('sort-toggle');
     await user.click(sortBtn);
-    const createdAtASC = await screen.findByTestId('createdAt_ASC');
+    const createdAtASC = await screen.findByTestId('sort-item-createdAt_ASC');
     expect(createdAtASC).toBeInTheDocument();
     await user.click(createdAtASC);
 
@@ -582,11 +582,11 @@ describe('Testing Invitations Screen', () => {
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
     // Filter by All
-    const filter = await screen.findByTestId('filter');
+    const filter = await screen.findByTestId('filter-toggle');
     expect(filter).toBeInTheDocument();
 
     await user.click(filter);
-    const filterAll = await screen.findByTestId('all');
+    const filterAll = await screen.findByTestId('filter-item-all');
     expect(filterAll).toBeInTheDocument();
 
     await user.click(filterAll);
@@ -605,11 +605,11 @@ describe('Testing Invitations Screen', () => {
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
     // Filter by group
-    const filter = await screen.findByTestId('filter');
+    const filter = await screen.findByTestId('filter-toggle');
     expect(filter).toBeInTheDocument();
 
     await user.click(filter);
-    const filterGroup = await screen.findByTestId('group');
+    const filterGroup = await screen.findByTestId('filter-item-group');
     expect(filterGroup).toBeInTheDocument();
 
     await user.click(filterGroup);
@@ -636,11 +636,13 @@ describe('Testing Invitations Screen', () => {
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
     // Filter by individual
-    const filter = await screen.findByTestId('filter');
+    const filter = await screen.findByTestId('filter-toggle');
     expect(filter).toBeInTheDocument();
 
     await user.click(filter);
-    const filterIndividual = await screen.findByTestId('individual');
+    const filterIndividual = await screen.findByTestId(
+      'filter-item-individual',
+    );
     expect(filterIndividual).toBeInTheDocument();
 
     await user.click(filterIndividual);

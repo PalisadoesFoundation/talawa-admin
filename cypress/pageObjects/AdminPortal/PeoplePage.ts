@@ -3,8 +3,9 @@ export class PeoplePage {
   private readonly _searchInput = '[placeholder="Enter Full Name"]';
   private readonly _searchButton = '[data-testid="searchbtn"]';
   private readonly _searchResult = '[data-field="name"]';
-  private readonly _addMembersBtn = '[data-testid="addMembers"]';
-  private readonly _existingUserToggle = '[data-testid="existingUser"]';
+  private readonly _addMembersBtn = '[data-testid="addMembers-toggle"]';
+  private readonly _existingUserToggle =
+    '[data-testid="addMembers-item-existingUser"]';
   private readonly _searchUserInput = '[data-testid="searchUser"]';
   private readonly _submitSearchBtn = '[data-testid="submitBtn"]';
   private readonly _addBtn = '[data-testid="addBtn"]';
