@@ -26,7 +26,7 @@ describe('SearchingButton Component', () => {
     ).toHaveTextContent('Custom Option');
   });
 
-  it('applies the given test ids to the dropdown and toggle', () => {
+  it('applies the given test ids and toggle id correctly', () => {
     render(
       <SearchingButton
         dataTestIdPrefix="custom-toggle"
@@ -34,10 +34,15 @@ describe('SearchingButton Component', () => {
         text="Test Option"
       />,
     );
-    // Check that the toggle button has the custom test id.
-    expect(screen.getByTestId('custom-toggle-toggle')).toBeInTheDocument();
-    // Check that the Dropdown container has the custom test id.
+
+    const toggle = screen.getByTestId('custom-toggle-toggle');
+
+    // data-testid checks
+    expect(toggle).toBeInTheDocument();
     expect(screen.getByTestId('custom-toggle-container')).toBeInTheDocument();
+
+    // ✅ IMPORTANT: verify toggleId is applied as HTML id
+    expect(toggle).toHaveAttribute('id', 'custom-dropdown');
   });
 
   it('renders sort icon when type is "sort"', () => {
