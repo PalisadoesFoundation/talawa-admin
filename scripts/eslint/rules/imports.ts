@@ -163,6 +163,17 @@ const restrictedImports = [
     importNames: ['Tooltip', 'OverlayTrigger'],
     message:
       'Do not import Tooltip/OverlayTrigger from react-bootstrap. Use the shared Tooltip component from src/shared-components/Tooltip/ instead.',
+    id: 'rb-dropdown',
+    name: 'react-bootstrap',
+    importNames: ['Dropdown'],
+    message:
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
+  },
+  {
+    id: 'rb-dropdown-path',
+    name: 'react-bootstrap/Dropdown',
+    message:
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
   },
 ];
 

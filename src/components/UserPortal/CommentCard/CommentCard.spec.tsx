@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,7 +12,19 @@ import userEvent from '@testing-library/user-event';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+
+// Mock NotificationToast methods
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+    promise: vi.fn(),
+  },
+}));
 import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
@@ -31,23 +43,6 @@ interface InterfaceGraphQLErrorWithCode extends Error {
 vi.mock('utils/i18n', () => ({
   default: i18nForTest,
 }));
-
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-    warning: vi.fn(),
-  },
-}));
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const MOCKS = [
   {
@@ -158,10 +153,8 @@ const defaultProps = {
     name: 'test user',
   },
   upVoteCount: 1,
-  downVoteCount: 0,
   text: 'testComment',
   hasUserVoted: {
-    hasVoted: true,
     voteType: 'up_vote' as const,
   },
   refetchComments: vi.fn(),
@@ -200,7 +193,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     expect(screen.getByText('testComment')).toBeInTheDocument();
     expect(screen.getByText('test user')).toBeInTheDocument();
   });
@@ -219,7 +212,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     expect(screen.getByText('testComment')).toBeInTheDocument();
   });
 
@@ -230,7 +223,6 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const notVotedProps = {
       ...defaultProps,
       hasUserVoted: {
-        hasVoted: false,
         voteType: null,
       },
     };
@@ -247,17 +239,18 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
 
     // Verify initial state - should show 1 like (from defaultProps)
     expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
     // Click the like button
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
 
     // Verify the like count increased to 2
-    expect(screen.getByText(/^\s*2\s*$/)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*2\s*$/)).toBeInTheDocument(),
+    );
 
     // Verify the button state changed (should now show filled ThumbUp icon for liked state)
     const likeBtn = screen.getByTestId('likeCommentBtn');
@@ -278,9 +271,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*0\s*$/)).toBeInTheDocument(),
+    );
   });
 
   it('should handle like mutation error correctly', async () => {
@@ -312,11 +307,9 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
+    await waitFor(() => expect(NotificationToast.error).toHaveBeenCalled());
   });
 
   it('should handle unlike mutation error correctly', async () => {
@@ -347,11 +340,9 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalled();
+    await waitFor(() => expect(NotificationToast.error).toHaveBeenCalled());
   });
 
   it('should show loading state while mutation is in progress', async () => {
@@ -390,7 +381,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
   });
 
@@ -413,7 +404,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const noDataLink = new StaticMockLink([noDataMock], true);
     setItemLocal('userId', '2');
 
-    const { container } = render(
+    render(
       <MockedProvider link={noDataLink}>
         <BrowserRouter>
           <Provider store={store}>
@@ -425,13 +416,15 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
+    await screen.findByText('testComment');
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
-    const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    expect(updatedLikes).toBe(initialLikes);
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
+
+    // Should still be 1 (failed update)
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument(),
+    );
   });
 
   it('should handle successful mutation with empty data for unlike', async () => {
@@ -454,7 +447,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     const emptyDataLink = new StaticMockLink([emptyDataMock], true);
 
-    const { container } = render(
+    render(
       <MockedProvider link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
@@ -466,13 +459,15 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
+    await screen.findByText('testComment');
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
-    const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    expect(updatedLikes).toBe(initialLikes);
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
+
+    // Should still be 1 (failed update)
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument(),
+    );
   });
 
   it('should handle successful mutation with empty data for like', async () => {
@@ -496,7 +491,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const emptyDataLink = new StaticMockLink([emptyDataMock], true);
     setItemLocal('userId', '2');
 
-    const { container } = render(
+    render(
       <MockedProvider link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
@@ -508,13 +503,15 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-    const initialLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
+    await screen.findByText('testComment');
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
-    const updatedLikes = container.textContent?.match(/\d+ Likes/)?.[0];
-    expect(updatedLikes).toBe(initialLikes);
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
+
+    // Should still be 1 (failed update)
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument(),
+    );
   });
 
   it('should show warning toast when user is not signed in', async () => {
@@ -533,13 +530,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.warning).toHaveBeenCalledWith(
-      'Please sign in to like comments.',
-      expect.any(Object),
+    await waitFor(() =>
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Please sign in to like comments.',
+      ),
     );
   });
 
@@ -602,13 +598,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'You have already liked this comment.',
-      expect.any(Object),
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'You have already liked this comment.',
+      ),
     );
   });
 
@@ -649,13 +644,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'No associated vote found to remove.',
-      expect.any(Object),
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'No associated vote found to remove.',
+      ),
     );
   });
 
@@ -680,7 +674,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByAltText('Profile picture of test user');
 
     // Check that the image element exists and has the default avatar as src
     const avatarImg = screen.getByAltText('Profile picture of test user');
@@ -726,13 +720,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Network error occurred',
-      expect.any(Object),
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Network error occurred',
+      ),
     );
   });
 
@@ -769,13 +762,12 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
-
-    expect(toast.error).toHaveBeenCalledWith(
-      'Could not find an existing like to remove.',
-      expect.any(Object),
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Could not find an existing like to remove.',
+      ),
     );
   });
 
@@ -797,14 +789,15 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('delete-comment-button'));
-    await wait();
-    expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith(
+
+    await waitFor(() =>
+      expect(defaultProps.refetchComments).toHaveBeenCalled(),
+    );
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment deleted successfully',
-      expect.any(Object),
     );
   });
 
@@ -826,20 +819,22 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen
-      .getByTestId('edit-comment-input')
-      .querySelector('textarea') as HTMLTextAreaElement;
+
+    const textArea = (
+      await screen.findByTestId('edit-comment-input')
+    ).querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
-    await wait();
-    expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith(
+
+    await waitFor(() =>
+      expect(defaultProps.refetchComments).toHaveBeenCalled(),
+    );
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Comment updated successfully',
-      expect.any(Object),
     );
   });
 
@@ -856,19 +851,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen
-      .getByTestId('edit-comment-input')
-      .querySelector('textarea') as HTMLTextAreaElement;
+    const textArea = (
+      await screen.findByTestId('edit-comment-input')
+    ).querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, ' ');
     await userEvent.click(screen.getByTestId('save-comment-button'));
-    await wait();
-    expect(toast.error).toHaveBeenCalledWith(
-      'Please enter a comment before submitting.',
-      expect.any(Object),
+
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Please enter a comment before submitting.',
+      ),
     );
   });
 
@@ -890,19 +886,20 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen
-      .getByTestId('edit-comment-input')
-      .querySelector('textarea') as HTMLTextAreaElement;
+    const textArea = (
+      await screen.findByTestId('edit-comment-input')
+    ).querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
-    await wait();
-    expect(toast.error).toHaveBeenCalledWith(
-      'Failed to update comment',
-      expect.any(Object),
+
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Failed to update comment',
+      ),
     );
   });
 
@@ -924,13 +921,14 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('delete-comment-button'));
-    await wait();
-    expect(toast.error).toHaveBeenCalledWith(
-      'Failed to delete comment',
-      expect.any(Object),
+
+    await waitFor(() =>
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Failed to delete comment',
+      ),
     );
   });
 
@@ -978,15 +976,16 @@ describe('Testing CommentCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await screen.findByText('testComment');
 
     // Verify initial state - should show 1 like (from defaultProps)
     expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
-    await wait();
 
     // Verify the like count didn't change because id was null
-    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument(),
+    );
   });
 });

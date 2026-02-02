@@ -268,7 +268,7 @@ importers:
         specifier: ^7.0.3
         version: 7.0.3
       cypress:
-        specifier: ^14.4.0
+        specifier: ^14.5.4
         version: 14.5.4
       eslint:
         specifier: ^9.29.0
