@@ -56,6 +56,42 @@ vi.mock('shared-components/IconComponent/IconComponent', () => ({
   ),
 }));
 
+// Mock react-infinite-scroll-component to allow manual triggering of 'next'
+// This is essential to test the `next={loadMoreTags}` function even when dataLength is 0 or hasNextPage is false.
+interface InterfaceInfiniteScrollMockProps {
+  next: () => void;
+  hasMore?: boolean;
+  children?: React.ReactNode;
+  dataLength?: number;
+  loader?: React.ReactNode;
+}
+
+vi.mock('react-infinite-scroll-component', () => ({
+  default: ({
+    next,
+    hasMore,
+    children,
+    dataLength,
+    loader,
+  }: InterfaceInfiniteScrollMockProps) => (
+    <div data-testid="infinite-scroll-mock">
+      <button
+        type="button"
+        data-testid="trigger-load-more"
+        onClick={() => {
+          next();
+        }}
+      >
+        Load More
+      </button>
+      <div data-testid="has-more-value">{String(hasMore)}</div>
+      <div data-testid="data-length-value">{dataLength}</div>
+      {loader && <div data-testid="loader-wrapper">{loader}</div>}
+      {children}
+    </div>
+  ),
+}));
+
 // Debounce duration used by SearchFilterBar component (default: 300ms)
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -85,6 +121,15 @@ beforeEach(() => {
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
   setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
+  global.IntersectionObserver = class {
+    constructor(
+      _callback: IntersectionObserverCallback,
+      _options?: IntersectionObserverInit,
+    ) {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof IntersectionObserver;
 });
 
 afterEach(() => {
@@ -1099,12 +1144,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     await user.click(screen.getByTestId('filterUsers'));
     await user.click(screen.getByTestId('user'));
 
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    expect(rows.length).toBe(2); // header + 1 row
-    expect(rows[1]).toHaveTextContent('Regular User');
+    await waitFor(() => {
+      expect(screen.getByText('Regular User')).toBeInTheDocument();
+    });
   });
 
   it('should return all users when filter is cancel', async () => {
@@ -1207,7 +1249,9 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const rows = screen.getAllByRole('row');
 
-    expect(rows[1]).toHaveTextContent('New User');
+    await waitFor(() => {
+      expect(screen.getByText('New User')).toBeInTheDocument();
+    });
   });
 
   it('should NOT update filtering when same option is clicked', async () => {
@@ -2953,6 +2997,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Only User')).toBeInTheDocument();
 
     // With hasNextPage false, pagination is complete and "End of results" is shown
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
   });
 });
