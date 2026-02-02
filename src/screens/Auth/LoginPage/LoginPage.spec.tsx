@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router } from 'react-router';
+import { Router } from 'react-router';
 import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -377,15 +377,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/admin',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/admin'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -395,15 +396,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('There should be default values of pre-login data when queried result is null', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -437,15 +439,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'John@123',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -494,15 +497,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'john@123',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -550,15 +554,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'doeJohn@2',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -606,15 +611,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'joe',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -662,15 +668,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'johndoe',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -723,15 +730,16 @@ describe('Testing Login Page Screen', () => {
       orgId: 'abc',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -776,15 +784,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -806,15 +815,16 @@ describe('Testing Login Page Screen', () => {
   it('Testing login functionality', async () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -836,15 +846,16 @@ describe('Testing Login Page Screen', () => {
 
     const localLink4 = new StaticMockLink(createMocks4(), true);
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={localLink4}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -862,15 +873,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing password preview feature for login', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -899,15 +911,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -941,15 +954,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -973,15 +987,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user firsts lands on a page', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1002,15 +1017,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '7' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1046,15 +1062,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '12345678' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1090,15 +1107,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '1234567' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1132,15 +1150,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '12345678' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1173,15 +1192,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1200,15 +1220,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/register',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/register'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1226,15 +1247,16 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1248,15 +1270,16 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1289,15 +1312,16 @@ describe('Testing invitation functionality', () => {
     const mockRemoveItem = vi.fn();
     mockUseLocalStorage.removeItem = mockRemoveItem;
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1335,15 +1359,16 @@ describe('Testing invitation functionality', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1385,15 +1410,16 @@ describe('Testing invitation functionality', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1753,15 +1779,16 @@ describe('Talawa-API server fetch check', () => {
 
   it('Checks if Talawa-API resource is loaded successfully', async () => {
     await act(async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
         <MockedProvider link={link}>
-          <BrowserRouter>
+          <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <LoginPage />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
+          </Router>
         </MockedProvider>,
       );
     });
@@ -1774,15 +1801,16 @@ describe('Talawa-API server fetch check', () => {
     vi.spyOn(global, 'fetch').mockRejectedValue(mockError);
 
     await act(async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
         <MockedProvider link={link}>
-          <BrowserRouter>
+          <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <LoginPage />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
+          </Router>
         </MockedProvider>,
       );
     });
@@ -1800,6 +1828,7 @@ const renderLoginPage = (
   mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
+  const history = createMemoryHistory({ initialEntries: ['/'] });
 
   return render(
     <MockedProvider
@@ -1809,13 +1838,13 @@ const renderLoginPage = (
             mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
           })}
     >
-      <BrowserRouter>
+      <Router location={history.location} navigator={history}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <LoginPage />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </Router>
     </MockedProvider>,
   );
 };
@@ -1849,15 +1878,16 @@ describe('Extra coverage for 100 %', () => {
     }));
     // re-import component so mock applies
     const { default: LoginPageFresh } = await import('./LoginPage');
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider mocks={createMocks()}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPageFresh />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1912,7 +1942,6 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('warns when non-admin logs in from admin portal', async () => {
-    setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
       ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
       {
@@ -1936,7 +1965,18 @@ describe('Extra coverage for 100 %', () => {
         },
       },
     ];
-    renderLoginPage(NON_ADMIN_MOCK);
+    const history = createMemoryHistory({ initialEntries: ['/admin'] });
+    render(
+      <MockedProvider mocks={NON_ADMIN_MOCK}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
     await wait();
     await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
     await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
@@ -2346,15 +2386,16 @@ describe('Cookie-based authentication verification', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2445,15 +2486,16 @@ describe('Cookie-based authentication verification', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider mocks={SIGNUP_SUCCESS_MOCK}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2594,15 +2636,16 @@ describe('Cookie-based authentication verification', () => {
       },
     ];
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2690,15 +2733,16 @@ describe('Cookie-based authentication verification', () => {
       },
     ];
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2715,15 +2759,16 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2753,15 +2798,16 @@ describe('Cookie-based authentication verification', () => {
       true,
     );
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={verifiedEmailLink}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2793,15 +2839,16 @@ describe('Cookie-based authentication verification', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={link}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
