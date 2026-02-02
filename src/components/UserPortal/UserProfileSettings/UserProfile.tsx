@@ -29,7 +29,7 @@
  * - `Avatar` component for displaying a placeholder profile picture.
  *
  */
-import Avatar from 'shared-components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
@@ -75,14 +75,15 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
             <div className={styles.imgContainer}>
-              {image && image !== 'null' ? (
-                <img src={image} alt={t('profilePicture')} />
-              ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
-                  alt={t('dummyPicture')}
-                />
-              )}
+              <ProfileAvatarDisplay
+                imageUrl={image && image !== 'null' ? image : undefined}
+                fallbackName={`${firstName} ${lastName}`}
+                size="custom"
+                customSize={60}
+                shape="circle"
+                objectFit="cover"
+                enableEnlarge={true}
+              />
             </div>
             <div className={styles.profileDetails}>
               <span
