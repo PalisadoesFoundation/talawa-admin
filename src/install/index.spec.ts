@@ -247,7 +247,10 @@ describe('install/index', () => {
 
   describe('runIfDirectExecution', () => {
     beforeEach(() => {
-      vi.resetAllMocks();
+      // ...existing code...
+    });
+    afterEach(() => {
+      vi.clearAllMocks();
     });
 
     it('should call main when argv[1] contains install/index.ts', () => {
