@@ -2776,3 +2776,36 @@ describe('Cookie-based authentication verification', () => {
     });
   });
 });
+
+// Unit checks for createMocks3 override behavior
+describe('createMocks3 factory', () => {
+  it('should handle empty community', () => {
+    const mocks = createMocks3({ communityData: null, organizationsData: [] });
+    const communityMocks = mocks.filter(
+      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+    );
+    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+    for (const mock of communityMocks) {
+      // @ts-expect-error runtime shape check in test
+      expect(mock.result?.data?.community ?? null).toBeNull();
+    }
+  });
+
+  it('should handle community with data', () => {
+    const community = {
+      id: '1',
+      name: 'Test Org',
+      description: 'Description',
+      typename: 'Organization',
+    };
+    const mocks = createMocks3({ communityData: community });
+    const communityMocks = mocks.filter(
+      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+    );
+    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+    for (const mock of communityMocks) {
+      // @ts-expect-error runtime shape check in test
+      expect(mock.result?.data?.community).toEqual(community);
+    }
+  });
+});
