@@ -1383,19 +1383,36 @@ describe('Testing invitation functionality', () => {
 });
 
 describe('Organization Autocomplete Component', () => {
+  let originalLocation: Location;
+
   beforeEach(() => {
+    // Save original and replace with isolated mock per test
+    originalLocation = window.location;
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
-        reload: vi.fn(),
+        pathname: '/',
         href: 'https://localhost:4321/',
         origin: 'https://localhost:4321',
-        pathname: '/',
-      },
+        protocol: 'https:',
+        host: 'localhost:4321',
+        hostname: 'localhost',
+        port: '4321',
+        search: '',
+        hash: '',
+        reload: vi.fn(),
+        assign: vi.fn(),
+        replace: vi.fn(),
+      } as unknown as Location,
     });
   });
 
   afterEach(() => {
+    // Restore original location to avoid cross-test pollution
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
     vi.clearAllMocks();
   });
 
