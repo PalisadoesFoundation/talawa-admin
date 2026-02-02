@@ -52,7 +52,7 @@ describe('UserProfile Component', () => {
 
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
-  it('renders Avatar when image is null', () => {
+  it('renders ProfileAvatarDisplay fallback when image is null', () => {
     const userDetails = {
       firstName: 'Alice',
       lastName: 'Smith',

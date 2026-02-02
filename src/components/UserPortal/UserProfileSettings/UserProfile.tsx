@@ -28,7 +28,7 @@
  * - `react-tooltip` for tooltips.
  * - `ProfileAvatarDisplay` for profile picture + fallback rendering.
  *
- * `@param` props - Partial InterfaceUser props for UserProfile.
+ * @param props - Partial InterfaceUser props for UserProfile.
  *
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
