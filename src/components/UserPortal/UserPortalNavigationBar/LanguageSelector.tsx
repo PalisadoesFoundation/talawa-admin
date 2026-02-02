@@ -1,9 +1,9 @@
-import { Dropdown } from 'react-bootstrap';
 import LanguageIcon from '@mui/icons-material/Language';
 import { InterfaceLanguageSelectorProps } from 'types/UserPortal/UserPortalNavigationBar/interface';
 import styles from './LanguageSelector.module.css';
 import { languages } from 'utils/languages';
 import { useTranslation } from 'react-i18next';
+import DropDownButton from 'shared-components/DropDownButton';
 /**
  * LanguageSelector Component
  *
@@ -51,46 +51,38 @@ const LanguageSelector = (
   const {
     showLanguageSelector,
     testIdPrefix,
-    dropDirection,
     handleLanguageChange,
     currentLanguageCode,
   } = props;
   const { t: tCommon } = useTranslation('common');
   if (!showLanguageSelector) return null;
 
+  const languageOptions = languages.map((language) => ({
+    value: language.code,
+    label: language.name,
+    disabled: currentLanguageCode === language.code,
+  }));
+
   return (
-    <Dropdown
-      data-testid={`${testIdPrefix || ''}languageDropdown`}
-      drop={dropDirection}
-    >
-      <Dropdown.Toggle
-        variant="white"
-        id="dropdown-basic"
-        data-testid={`${testIdPrefix || ''}languageDropdownToggle`}
-        className={styles.colorWhite}
-        aria-label={tCommon('selectLanguage')}
-      >
+    <DropDownButton
+      // i18n-ignore-next-line
+      id={`${testIdPrefix || ''}language-dropdown`}
+      options={languageOptions}
+      selectedValue={currentLanguageCode}
+      onSelect={handleLanguageChange}
+      // i18n-ignore-next-line
+      dataTestIdPrefix={`${testIdPrefix || ''}language`}
+      variant="light"
+      btnStyle={styles.colorWhite}
+      icon={
         <LanguageIcon
           className={styles.colorWhite}
           data-testid={`${testIdPrefix || ''}languageIcon`}
         />
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {languages.map((language, index: number) => (
-          <Dropdown.Item
-            key={index}
-            onClick={async (): Promise<void> => {
-              await handleLanguageChange(language.code);
-            }}
-            disabled={currentLanguageCode === language.code}
-            data-testid={`${testIdPrefix || ''}changeLanguageBtn${index}`}
-          >
-            <span className={`fi fi-${language.country_code} mr-2`}></span>{' '}
-            {language.name}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+      }
+      ariaLabel={tCommon('selectLanguage')}
+      placeholder=""
+    />
   );
 };
 export default LanguageSelector;

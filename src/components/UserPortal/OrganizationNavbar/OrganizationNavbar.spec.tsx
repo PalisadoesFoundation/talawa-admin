@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Router } from 'react-router-dom';
@@ -175,16 +175,15 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
 
-    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('language-item-en'));
 
     await wait();
 
     expect(cookies.get('i18next')).toBe('en');
     // Check if navigation links are rendered
     expect(screen.getByText('Home')).toBeInTheDocument();
-    // expect(screen.getByText('Chat')).toBeInTheDocument();
   });
 
   it('The language is switched to fr', async () => {
@@ -202,9 +201,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-fr'));
 
     await wait();
 
@@ -226,9 +224,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-hi'));
 
     await wait();
 
@@ -250,9 +247,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-es'));
 
     await wait();
 
@@ -274,9 +270,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-zh'));
 
     await wait();
 
@@ -311,9 +306,14 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    await userEvent.click(screen.getByTestId('personIcon'));
-    await userEvent.click(screen.getByTestId('logoutBtn'));
-    expect(mockClearAllItems).toHaveBeenCalled();
+    await userEvent.click(screen.getByTestId('user-toggle'));
+
+    await userEvent.click(screen.getByTestId('user-item-logout'));
+
+    await waitFor(() => {
+      expect(mockClearAllItems).toHaveBeenCalled();
+    });
+
     expect(mockLocation.replace).toHaveBeenCalledWith('/');
   });
 

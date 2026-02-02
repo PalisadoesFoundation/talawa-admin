@@ -38,15 +38,10 @@
  */
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import {
-  ButtonGroup,
-  Tooltip,
-  OverlayTrigger,
-  Dropdown,
-} from 'react-bootstrap';
+import { ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-
+import DropDownButton from 'shared-components/DropDownButton';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -396,30 +391,32 @@ export const AttendanceStatisticsModal: React.FC<
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
 
+  const exportOptions = useMemo(() => {
+    const opts = [];
+    if (showTrends) {
+      opts.push({
+        value: 'trends',
+        label: t('trends'),
+      });
+    }
+    opts.push({
+      value: 'demographics',
+      label: t('demographics'),
+    });
+    return opts;
+  }, [showTrends, t]);
+
   const modalFooter = (
     <>
-      <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
-        <Dropdown.Toggle
-          className="p-2 m-2"
-          variant="info"
-          id="export-dropdown"
-        >
-          {t('exportData')}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {showTrends && (
-            <Dropdown.Item data-testid="trends-export" eventKey="trends">
-              {t('trends')}
-            </Dropdown.Item>
-          )}
-          <Dropdown.Item
-            data-testid="demographics-export"
-            eventKey="demographics"
-          >
-            {t('demographics')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="export-dropdown"
+        options={exportOptions}
+        onSelect={handleExport}
+        buttonLabel={t('exportData')}
+        dataTestIdPrefix="export"
+        variant="info"
+        parentContainerStyle="p-2 m-2"
+      />
       <Button
         className="p-2 m-2"
         variant="secondary"
@@ -430,6 +427,11 @@ export const AttendanceStatisticsModal: React.FC<
       </Button>
     </>
   );
+
+  const DESIGN_TOKEN = {
+    BW: 2,
+  };
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -596,7 +598,7 @@ export const AttendanceStatisticsModal: React.FC<
                       'var(--color-purple-500)',
                       'var(--color-brown-500)',
                     ],
-                    borderWidth: 2,
+                    borderWidth: DESIGN_TOKEN.BW,
                   },
                 ],
               }}
