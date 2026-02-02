@@ -1,4 +1,3 @@
-// @ts-expect-error -- Missing declaration file for JS plugin
 import vitestIsolation from '../plugins/eslint-plugin-vitest-isolation/index.js';
 
 export const testConfig = {
