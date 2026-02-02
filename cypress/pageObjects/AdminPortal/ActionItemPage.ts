@@ -40,7 +40,8 @@ export class ActionItemPage {
   }
 
   selectFirstEvent() {
-    cy.get(this.eventCard).first().should('be.visible').click();
+    // Select Event #1 which has volunteers in sample data
+    cy.get(this.eventCard).contains('Event #1').should('be.visible').click();
     return this;
   }
 

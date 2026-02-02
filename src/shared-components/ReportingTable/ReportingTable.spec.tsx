@@ -47,6 +47,18 @@ describe('ReportingTable', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
+  it('passes through numeric width property unchanged', () => {
+    const columnsWithNumericWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', width: 100, sortable: false },
+    ];
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithNumericWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
   it('converts spacing token in maxWidth property', () => {
     const columnsWithTokenMaxWidth: ReportingTableColumn[] = [
       { field: 'id', headerName: 'ID', maxWidth: 'space-17', sortable: false },
@@ -54,6 +66,18 @@ describe('ReportingTable', () => {
 
     render(
       <ReportingTable rows={sampleRows} columns={columnsWithTokenMaxWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('passes through numeric maxWidth property unchanged', () => {
+    const columnsWithNumericMaxWidth: ReportingTableColumn[] = [
+      { field: 'id', headerName: 'ID', maxWidth: 200, sortable: false },
+    ];
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithNumericMaxWidth} />,
     );
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
