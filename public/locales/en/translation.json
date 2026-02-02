@@ -1169,7 +1169,8 @@
     "statistics": "Statistics",
     "to": "TO",
     "volunteers": "Volunteers",
-    "backToEvents": "Back to Events"
+    "backToEvents": "Back to Events",
+    "eventTabs": "Event Tabs"
   },
   "eventAttendance": {
     "event_attendance_table": "Event Attendance Table",

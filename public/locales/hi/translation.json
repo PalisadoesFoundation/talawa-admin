@@ -1181,7 +1181,8 @@
     "statistics": "आँकड़े",
     "to": "को",
     "volunteers": "स्वयंसेवक",
-    "backToEvents": "इवेंट्स पर वापस जाएं"
+    "backToEvents": "इवेंट्स पर वापस जाएं",
+    "eventTabs": "इवेंट टैब्स"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",
