@@ -1012,11 +1012,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter-toggle'));
     await waitFor(() => {
-      expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-amount_ASC')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('amount_ASC'));
+    await userEvent.click(screen.getByTestId('filter-item-amount_ASC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1038,11 +1038,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter-toggle'));
     await waitFor(() => {
-      expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-amount_DESC')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('amount_DESC'));
+    await userEvent.click(screen.getByTestId('filter-item-amount_DESC'));
 
     await waitFor(() => {
       const amountCells = screen.getAllByTestId('amountCell');
@@ -1064,11 +1064,13 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter-toggle'));
     await waitFor(() => {
-      expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('filter-item-endDate_DESC'),
+      ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('endDate_DESC'));
+    await userEvent.click(screen.getByTestId('filter-item-endDate_DESC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1092,11 +1094,11 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('filter-toggle'));
     await waitFor(() => {
-      expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-item-endDate_ASC')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('endDate_ASC'));
+    await userEvent.click(screen.getByTestId('filter-item-endDate_ASC'));
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1145,7 +1147,7 @@ describe('Testing Campaign Pledge Screen', () => {
     });
 
     // Directly test the sorting by manipulating the state
-    const filterButton = screen.getByTestId('filter');
+    const filterButton = screen.getByTestId('filter-toggle');
     await userEvent.click(filterButton);
 
     // The default case should maintain the original order
@@ -1169,14 +1171,14 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Test all sorting options
     const sortOptions = [
-      'amount_ASC',
-      'amount_DESC',
-      'endDate_ASC',
-      'endDate_DESC',
+      'filter-item-amount_ASC',
+      'filter-item-amount_DESC',
+      'filter-item-endDate_ASC',
+      'filter-item-endDate_DESC',
     ];
 
     for (const option of sortOptions) {
-      await userEvent.click(screen.getByTestId('filter'));
+      await userEvent.click(screen.getByTestId('filter-toggle'));
       await waitFor(() => {
         expect(screen.getByTestId(option)).toBeInTheDocument();
       });
