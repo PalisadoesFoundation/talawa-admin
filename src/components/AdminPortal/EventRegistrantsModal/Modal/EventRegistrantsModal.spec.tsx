@@ -144,45 +144,63 @@ vi.mock('shared-components/BaseModal', async () => {
   };
 });
 
-vi.mock('@mui/material/Autocomplete', async () => {
-  return {
-    __esModule: true,
-    default: ({
-      renderInput,
-      options = [],
-      onChange,
-      noOptionsText,
-    }: InterfaceAutocompleteMockProps) => {
-      return (
-        <div>
-          {renderInput({
-            id: 'addRegistrant',
-            disabled: false,
-            InputProps: { ref: vi.fn() },
-          })}
+vi.mock('@mui/material/Autocomplete', () => ({
+  __esModule: true,
+  default: ({
+    renderInput,
+    options,
+    onChange,
+    noOptionsText,
+    onInputChange,
+  }: InterfaceAutocompleteMockProps & { inputValue?: string }) => {
+    const handleInputChange = (
+      e: React.ChangeEvent<HTMLInputElement>,
+    ): void => {
+      // Trigger onInputChange when input value changes
+      if (onInputChange) {
+        onInputChange({} as React.SyntheticEvent, e.target.value, 'input');
+      }
+    };
 
-          {options.length === 0 && (
-            <div data-testid="no-options">{noOptionsText}</div>
-          )}
+    const inputProps = {
+      onChange: handleInputChange,
+      onInput: handleInputChange,
+    };
 
-          {options.length > 0 && (
-            <ul data-testid="options">
-              {options.map((opt) => (
-                <li
-                  key={opt.id}
-                  data-testid={`option-${opt.id}`}
-                  onClick={() => onChange?.({} as React.SyntheticEvent, opt)}
-                >
-                  {opt.name || 'Unknown User'}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      );
-    },
-  };
-});
+    return (
+      <div data-testid="autocomplete-mock">
+        {renderInput({
+          InputProps: { ref: vi.fn() },
+          id: 'test-autocomplete',
+          disabled: false,
+          inputProps: inputProps, // ← Pass inputProps with onChange
+        })}
+        {options && options.length > 0 ? (
+          options.map((option) => (
+            <div
+              key={option.id}
+              data-testid={`option-${option.id}`}
+              onClick={(): void => {
+                if (onChange) {
+                  onChange({} as React.SyntheticEvent, option);
+                }
+              }}
+              onKeyDown={(): void => {
+                /* mock */
+              }}
+              role="button"
+              tabIndex={0}
+            >
+              {option.name || 'Unknown User'}
+            </div>
+          ))
+        ) : (
+          <div data-testid="no-options">{noOptionsText}</div>
+        )}
+      </div>
+    );
+  },
+}));
 
 type ApolloMock = MockedResponse<Record<string, unknown>>;
 
@@ -707,12 +725,20 @@ describe('EventRegistrantsModal', () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Error adding attendee',
         );
+      },
+      { timeout: 3000 },
+    );
+
+    await waitFor(
+      () => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Network error: Failed to add attendee',
         );
       },
-      { timeout: 3000 },
+      { timeout: 1000 },
     );
+
+    expect(NotificationToast.error).toHaveBeenCalledTimes(2);
   });
 
   test('opens AddOnSpot modal when Space key is pressed on add-onspot link', async () => {
@@ -729,9 +755,16 @@ describe('EventRegistrantsModal', () => {
 
     const addOnspotLink = await screen.findByTestId('add-onspot-link');
 
-    await user.type(addOnspotLink, ' ');
+    addOnspotLink.focus();
 
-    expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
+    await user.keyboard(' ');
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('add-onspot-modal')).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
   });
 
   test('falls back to translated unknownUser when member name is empty', async () => {
@@ -751,6 +784,29 @@ describe('EventRegistrantsModal', () => {
 
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalled();
+    });
+  });
+
+  test('updates inputValue state when user types in autocomplete', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    const input = await screen.findByTestId('autocomplete');
+
+    await user.type(input, 'Test User');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('Test User');
+    });
+
+    await user.clear(input);
+    await user.type(input, 'Another Test');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('Another Test');
     });
   });
 });

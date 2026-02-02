@@ -31,5 +31,11 @@ export interface InterfaceAutocompleteMockProps {
     event: React.SyntheticEvent,
     value: { id: string; name?: string } | null,
   ) => void;
+  onInputChange?: (
+    event: React.SyntheticEvent,
+    value: string,
+    reason: string,
+  ) => void;
+  inputValue?: string;
   noOptionsText?: string;
 }

@@ -10,11 +10,19 @@ Props for Autocomplete mock component used in tests.
 
 ## Properties
 
+### inputValue?
+
+> `optional` **inputValue**: `string`
+
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L39)
+
+***
+
 ### noOptionsText?
 
 > `optional` **noOptionsText**: `string`
 
-Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L34)
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L40)
 
 ***
 
@@ -37,6 +45,32 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:30](https:
 `string`
 
 ###### name?
+
+`string`
+
+#### Returns
+
+`void`
+
+***
+
+### onInputChange()?
+
+> `optional` **onInputChange**: (`event`, `value`, `reason`) => `void`
+
+Defined in: [src/types/AdminPortal/EventRegistrantsModal/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/interface.ts#L34)
+
+#### Parameters
+
+##### event
+
+`SyntheticEvent`
+
+##### value
+
+`string`
+
+##### reason
 
 `string`
 
