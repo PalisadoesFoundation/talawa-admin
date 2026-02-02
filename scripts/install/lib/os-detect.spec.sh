@@ -341,10 +341,10 @@ test_exported_variables() {
     
     # Verify each variable is exported with correct value in subshells
     local subshell_OS_TYPE subshell_OS_DISPLAY_NAME subshell_IS_WSL subshell_OS_DETECTED
-    subshell_OS_TYPE=$(bash -c 'echo "$OS_TYPE"')
-    subshell_OS_DISPLAY_NAME=$(bash -c 'echo "$OS_DISPLAY_NAME"')
-    subshell_IS_WSL=$(bash -c 'echo "$IS_WSL"')
-    subshell_OS_DETECTED=$(bash -c 'echo "$_OS_DETECTED"')
+    subshell_OS_TYPE=$(bash -c 'echo "${OS_TYPE-}"')
+    subshell_OS_DISPLAY_NAME=$(bash -c 'echo "${OS_DISPLAY_NAME-}"')
+    subshell_IS_WSL=$(bash -c 'echo "${IS_WSL-}"')
+    subshell_OS_DETECTED=$(bash -c 'echo "${_OS_DETECTED-}"')
     
     assert_equals "$expected_OS_TYPE" "$subshell_OS_TYPE" "OS_TYPE should be exported with correct value" && \
     assert_equals "$expected_OS_DISPLAY_NAME" "$subshell_OS_DISPLAY_NAME" "OS_DISPLAY_NAME should be exported with correct value" && \
