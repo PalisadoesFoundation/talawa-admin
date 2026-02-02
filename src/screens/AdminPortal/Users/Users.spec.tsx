@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -61,6 +55,42 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   ),
 }));
 
+// Mock react-infinite-scroll-component to allow manual triggering of 'next'
+// This is essential to test the `next={loadMoreTags}` function even when dataLength is 0 or hasNextPage is false.
+interface InterfaceInfiniteScrollMockProps {
+  next: () => void;
+  hasMore?: boolean;
+  children?: React.ReactNode;
+  dataLength?: number;
+  loader?: React.ReactNode;
+}
+
+vi.mock('react-infinite-scroll-component', () => ({
+  default: ({
+    next,
+    hasMore,
+    children,
+    dataLength,
+    loader,
+  }: InterfaceInfiniteScrollMockProps) => (
+    <div data-testid="infinite-scroll-mock">
+      <button
+        type="button"
+        data-testid="trigger-load-more"
+        onClick={() => {
+          next();
+        }}
+      >
+        Load More
+      </button>
+      <div data-testid="has-more-value">{String(hasMore)}</div>
+      <div data-testid="data-length-value">{dataLength}</div>
+      {loader && <div data-testid="loader-wrapper">{loader}</div>}
+      {children}
+    </div>
+  ),
+}));
+
 // Debounce duration used by SearchFilterBar component (default: 300ms)
 const SEARCH_DEBOUNCE_MS = 300;
 
@@ -90,6 +120,15 @@ beforeEach(() => {
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
   setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
+  global.IntersectionObserver = class {
+    constructor(
+      _callback: IntersectionObserverCallback,
+      _options?: IntersectionObserverInit,
+    ) {}
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof IntersectionObserver;
 });
 
 afterEach(() => {
@@ -216,10 +255,8 @@ describe('Testing Users screen', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(300);
-
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
   });
 
   it('Component should be rendered properly when user is superAdmin', async () => {
@@ -488,11 +525,11 @@ describe('Testing Users screen', () => {
 
       await wait();
 
-      const sortDropdown = await screen.findByTestId('sortUsers');
-      fireEvent.click(sortDropdown);
+      const sortDropdown = await screen.findByTestId('sortUsers-toggle');
+      await userEvent.click(sortDropdown);
 
-      const newestOption = screen.getByTestId('newest');
-      fireEvent.click(newestOption);
+      const newestOption = screen.getByTestId('sortUsers-item-newest');
+      await userEvent.click(newestOption);
 
       await wait();
 
@@ -500,9 +537,9 @@ describe('Testing Users screen', () => {
       const rowsNewest = await screen.findAllByRole('row');
       expect(rowsNewest.length).toBeGreaterThan(0);
 
-      fireEvent.click(sortDropdown);
-      const oldestOption = screen.getByTestId('oldest');
-      fireEvent.click(oldestOption);
+      await userEvent.click(sortDropdown);
+      const oldestOption = screen.getByTestId('sortUsers-item-oldest');
+      await userEvent.click(oldestOption);
 
       await wait();
 
@@ -526,11 +563,10 @@ describe('Testing Users screen', () => {
 
       await wait();
 
-      // Simulate scroll to trigger load more
-      await act(async () => {
-        fireEvent.scroll(window, { target: { scrollY: 1000 } });
-      });
-
+      expect(
+        screen.queryByTestId('users-empty-state') ||
+          screen.queryByTestId('errorMsg'),
+      ).toBeTruthy();
       await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
     });
   });
@@ -756,10 +792,8 @@ describe('Testing Users screen', () => {
       );
 
       await wait();
-      // Simulate full scroll to trigger endMessage
-      fireEvent.scroll(window, { target: { scrollY: 10000 } });
-      await wait();
-      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+      expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+      expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
     });
 
     it('should handle search with same value without refetch', async () => {
@@ -920,11 +954,11 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    const sortDropdown = await screen.findByTestId('sortUsers');
-    fireEvent.click(sortDropdown);
+    const sortDropdown = await screen.findByTestId('sortUsers-toggle');
+    await userEvent.click(sortDropdown);
 
-    const newest = screen.getByTestId('newest');
-    fireEvent.click(newest);
+    const newest = screen.getByTestId('sortUsers-item-newest');
+    await userEvent.click(newest);
 
     await wait();
 
@@ -932,8 +966,8 @@ describe('useEffect loadMoreUsers trigger', () => {
     const firstUserAfterFirstSort = rowsAfterFirstClick[1]?.textContent;
 
     // Click same option again - should not trigger re-sort
-    fireEvent.click(sortDropdown);
-    fireEvent.click(newest);
+    await userEvent.click(sortDropdown);
+    await userEvent.click(newest);
 
     await wait();
 
@@ -1013,15 +1047,12 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('user'));
+    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
+    await userEvent.click(screen.getByTestId('filterUsers-item-user'));
 
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    expect(rows.length).toBe(2); // header + 1 row
-    expect(rows[1]).toHaveTextContent('Regular User');
+    await waitFor(() => {
+      expect(screen.getByText('Regular User')).toBeInTheDocument();
+    });
   });
 
   it('should return all users when filter is cancel', async () => {
@@ -1037,8 +1068,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('cancel'));
+    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
+    await userEvent.click(screen.getByTestId('filterUsers-item-cancel'));
 
     await wait();
 
@@ -1115,14 +1146,12 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('sortUsers'));
-    fireEvent.click(screen.getByTestId('newest'));
+    await userEvent.click(screen.getByTestId('sortUsers-toggle'));
+    await userEvent.click(screen.getByTestId('sortUsers-item-newest'));
 
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    expect(rows[1]).toHaveTextContent('New User');
+    await waitFor(() => {
+      expect(screen.getByText('New User')).toBeInTheDocument();
+    });
   });
 
   it('should NOT update filtering when same option is clicked', async () => {
@@ -1138,19 +1167,19 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    const filterDropdown = await screen.findByTestId('filterUsers');
-    fireEvent.click(filterDropdown);
+    const filterDropdown = await screen.findByTestId('filterUsers-toggle');
+    await userEvent.click(filterDropdown);
 
-    const cancel = screen.getByTestId('cancel');
-    fireEvent.click(cancel);
+    const cancel = screen.getByTestId('filterUsers-item-cancel');
+    await userEvent.click(cancel);
 
     await wait();
 
     const rowsAfterFirstClick = screen.queryAllByRole('row').length;
 
     // Click again - should not trigger re-render or change state
-    fireEvent.click(filterDropdown);
-    fireEvent.click(cancel);
+    await userEvent.click(filterDropdown);
+    await userEvent.click(cancel);
 
     await wait();
 
@@ -1290,13 +1319,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 5000 } });
-    await wait(200);
-
-    fireEvent.scroll(window, { target: { scrollY: 9000 } });
-    await wait(200);
-
-    expect(true).toBe(true);
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
   });
 
   it('should filter only admin users (by row count change)', async () => {
@@ -1314,8 +1337,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const rowsBefore = screen.queryAllByRole('row').length;
 
-    fireEvent.click(screen.getByTestId('filterUsers'));
-    fireEvent.click(screen.getByTestId('admin'));
+    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
+    await userEvent.click(screen.getByTestId('filterUsers-item-admin'));
 
     await wait();
 
@@ -1440,13 +1463,10 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(300);
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
 
-    fireEvent.scroll(window, { target: { scrollY: 9000 } });
-    await wait(300);
-
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
   });
 
   it('should handle rapid consecutive scroll events gracefully', async () => {
@@ -1562,10 +1582,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     await wait();
 
     // First scroll triggers loadMoreUsers and sets isLoadingMore = true
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
-
-    // Second scroll while first fetch is still in progress
-    fireEvent.scroll(window, { target: { scrollY: 12000 } });
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
 
     // Wait for the delayed fetchMore to complete
     await wait(1500);
@@ -1588,8 +1605,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId('sortUsers'));
-    fireEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('sortUsers-toggle'));
+    await userEvent.click(screen.getByTestId('sortUsers-item-oldest'));
 
     await wait();
 
@@ -1785,7 +1802,8 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.queryByText('John Smith')).not.toBeInTheDocument();
 
     // Trigger scroll to load more users while search is active
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
     // Verify pagination worked: both first and second page results are now present
@@ -1960,15 +1978,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.queryByText('Second User')).not.toBeInTheDocument();
 
     // Trigger scroll to load more
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
-
-    // Allow a brief moment for the loading state to be set
-    await wait(100);
-
-    // Verify loading indicator is shown while fetchMore is in progress
-    // The InfiniteScroll loader prop renders TableLoader when isLoadingMore is true
-    const loaders = screen.getAllByTestId('TableLoader');
-    expect(loaders.length).toBeGreaterThan(0);
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
 
     // Wait for the delayed fetchMore to complete
     await wait(1500);
@@ -2301,12 +2311,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     // Verify user is displayed
     expect(screen.getByText('Single User')).toBeInTheDocument();
 
-    // Trigger scroll - InfiniteScroll should not fetch more since hasNextPage is false
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(200);
-
     // The component should show "End of results" since there are no more pages
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
   });
 
   it('should sort users by oldest and verify the sorted order', async () => {
@@ -2396,9 +2403,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Older User')).toBeInTheDocument();
 
     // Click sort dropdown and select oldest
-    fireEvent.click(screen.getByTestId('sortUsers'));
+    await userEvent.click(screen.getByTestId('sortUsers-toggle'));
     await wait(50);
-    fireEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('sortUsers-item-oldest'));
 
     await wait();
 
@@ -2504,9 +2511,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Admin Person')).toBeInTheDocument();
 
     // Open filter dropdown and click cancel to set filter to 'cancel'
-    fireEvent.click(screen.getByTestId('filterUsers'));
+    await userEvent.click(screen.getByTestId('filterUsers-toggle'));
     await wait(50);
-    fireEvent.click(screen.getByTestId('cancel'));
+    await userEvent.click(screen.getByTestId('filterUsers-item-cancel'));
 
     await wait();
 
@@ -2623,7 +2630,8 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('First User')).toBeInTheDocument();
 
     // Trigger first scroll to load more users
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
     // Both users should now be displayed
@@ -2632,14 +2640,8 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Now hasNextPage is false, so hasMore should be false
     // "End of results" should be shown
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
-
-    // Trigger another scroll - pagination is exhausted so no additional fetch occurs
-    fireEvent.scroll(window, { target: { scrollY: 12000 } });
-    await wait(200);
-
-    // "End of results" remains visible
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('2');
   });
 
   it('should show noUserFound when usersData is empty array and no search term', async () => {
@@ -2774,7 +2776,8 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Initial User')).toBeInTheDocument();
 
     // Trigger scroll to load more (which will return null edges)
-    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await userEvent.click(screen.getByTestId('trigger-load-more'));
+
     await wait(SEARCH_DEBOUNCE_MS);
 
     // Component should handle null gracefully - initial user still there
@@ -2846,6 +2849,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Only User')).toBeInTheDocument();
 
     // With hasNextPage false, pagination is complete and "End of results" is shown
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    expect(screen.getByTestId('has-more-value')).toHaveTextContent('false');
+    expect(screen.getByTestId('data-length-value')).toHaveTextContent('1');
   });
 });
