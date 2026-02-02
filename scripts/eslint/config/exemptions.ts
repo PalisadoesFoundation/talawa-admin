@@ -86,6 +86,10 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+  createWrapperExemption({
+    componentName: 'DropDownButton',
+    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
+  }),
 ];
 
 export const avatarExemption = createWrapperExemption({

@@ -236,8 +236,8 @@ describe('Actions Screen', () => {
       expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
-    await user.click(screen.getByTestId('sort'));
-    const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
+    await user.click(screen.getByTestId('sort-toggle'));
+    const dueDateAscOption = await screen.findByTestId('sort-item-dueDate_ASC');
     await user.click(dueDateAscOption);
 
     await waitFor(() => {
@@ -252,8 +252,10 @@ describe('Actions Screen', () => {
       expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
-    await user.click(screen.getByTestId('sort'));
-    const dueDateDescOption = await screen.findByTestId('dueDate_DESC');
+    await user.click(screen.getByTestId('sort-toggle'));
+    const dueDateDescOption = await screen.findByTestId(
+      'sort-item-dueDate_DESC',
+    );
     await user.click(dueDateDescOption);
 
     await waitFor(() => {
@@ -296,8 +298,8 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category search
-    await user.click(screen.getByTestId('searchBy'));
-    const categoryOption = await screen.findByTestId('category');
+    await user.click(screen.getByTestId('searchBy-toggle'));
+    const categoryOption = await screen.findByTestId('searchBy-item-category');
     await user.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
@@ -319,8 +321,8 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category
-    await user.click(screen.getByTestId('searchBy'));
-    const categoryOption = await screen.findByTestId('category');
+    await user.click(screen.getByTestId('searchBy-toggle'));
+    const categoryOption = await screen.findByTestId('searchBy-item-category');
     await user.click(categoryOption);
 
     await waitFor(() => {
@@ -328,8 +330,8 @@ describe('Actions Screen', () => {
     });
 
     // Switch back to assignee
-    await user.click(screen.getByTestId('searchBy'));
-    const assigneeOption = await screen.findByTestId('assignee');
+    await user.click(screen.getByTestId('searchBy-toggle'));
+    const assigneeOption = await screen.findByTestId('searchBy-item-assignee');
     await user.click(assigneeOption);
     await waitFor(() => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
@@ -571,8 +573,8 @@ describe('Actions Screen', () => {
     });
 
     // Set sort order
-    await user.click(screen.getByTestId('sort'));
-    const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
+    await user.click(screen.getByTestId('sort-toggle'));
+    const dueDateAscOption = await screen.findByTestId('sort-item-dueDate_ASC');
     await user.click(dueDateAscOption);
 
     // Then search
@@ -614,8 +616,8 @@ describe('Actions Screen', () => {
     });
 
     // Switch to category search
-    await user.click(screen.getByTestId('searchBy'));
-    const categoryOption = await screen.findByTestId('category');
+    await user.click(screen.getByTestId('searchBy-toggle'));
+    const categoryOption = await screen.findByTestId('searchBy-item-category');
     await user.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
