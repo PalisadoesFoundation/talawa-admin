@@ -60,10 +60,10 @@ import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import VenuesIcon from 'assets/svgs/venues.svg?react';
-import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
-import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
+import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
+import DashboardCardLoading from 'components/AdminPortal/OrganizationDashCards/Loader/DashboardCardLoading';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import styles from '../OrganizationDashboard.module.css';
+import styles from './DashboardStats.module.css';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;

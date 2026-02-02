@@ -5,7 +5,6 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
-const isSharded = !!process.env.SHARD_INDEX || !!process.env.SHARD_COUNT;
 const cpuCount = cpus().length;
 
 const MAX_CI_THREADS = 12; // Reduced to leave headroom
@@ -22,12 +21,11 @@ const baseTestInclude = [
   'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
   'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
 ];
+
 const eslintTestInclude = [
   'scripts/eslint/**/*.{spec,test}.{js,jsx,ts,tsx}',
 ];
-const testInclude = isSharded
-  ? baseTestInclude
-  : [...baseTestInclude, ...eslintTestInclude];
+const testInclude = [...baseTestInclude, ...eslintTestInclude];
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
@@ -52,8 +50,8 @@ export default defineConfig({
     // Inline specific dependencies to avoid vitest issues
     server: {
       deps: {
-        inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
-      }
+        inline: ['@mui/x-charts', '@mui/x-data-grid', '@mui/x-date-pickers'],
+      },
     },
     testTimeout: 30000,
     hookTimeout: 10000,
@@ -84,7 +82,7 @@ export default defineConfig({
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
         '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}', // Exclude mock/helper files from coverage
         'coverage/**',
-        'src/!(install)/index.{js,ts}',  // Exclude index files except in install folder
+        'src/!(install)/index.{js,ts}', // Exclude index files except in install folder
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
@@ -93,7 +91,8 @@ export default defineConfig({
         'cypress.config.ts',
         '.github/**', // Exclude GitHub workflows and scripts
         'scripts/!(eslint)/**', // Exclude scripts except eslint folder
-        'scripts/*.{js,ts}',     // Exclude individual files in scripts root
+        'scripts/*.{js,ts}', // Exclude individual files in scripts root
+        'scripts/eslint/config/**', // Exclude ESLint config modules from coverage
         'config/**', // Exclude configuration files
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],

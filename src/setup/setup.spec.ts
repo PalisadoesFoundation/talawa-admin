@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { main, askAndSetRecaptcha } from './setup';
+import { main, askAndSetRecaptcha, askAndSetLogErrors } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
 import updateEnvFile from './updateEnvFile/updateEnvFile';
@@ -406,6 +406,56 @@ describe('Talawa Admin Setup', () => {
     );
 
     localConsoleError.mockRestore();
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to NO when user opts out', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: false,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'NO');
+  });
+
+  it('should call askAndSetLogErrors directly and set ALLOW_LOGS to YES when user opts in', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: true,
+    });
+
+    await askAndSetLogErrors();
+
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+  });
+
+  it('should handle errors when inquirer.prompt rejects in askAndSetLogErrors', async () => {
+    const mockError = new Error('Prompt failure');
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(mockError);
+
+    await expect(askAndSetLogErrors()).rejects.toThrow('Prompt failure');
+
+    // Verify updateEnvFile was not called when prompt fails
+    expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  it('should handle errors when updateEnvFile throws in askAndSetLogErrors', async () => {
+    const mockError = new Error('Failed to update environment file');
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldLogErrors: true,
+    });
+
+    vi.mocked(updateEnvFile).mockImplementationOnce(() => {
+      throw mockError;
+    });
+
+    await expect(askAndSetLogErrors()).rejects.toThrow(
+      'Failed to update environment file',
+    );
+
+    // Verify updateEnvFile was called before throwing
+    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
   });
 
   it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {

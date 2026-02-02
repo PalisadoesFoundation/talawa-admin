@@ -9,7 +9,7 @@
  */
 
 import React, { act } from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
@@ -19,7 +19,7 @@ import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 
 import ContactCard from './ContactCard';
-import type { InterfaceContactCardProps } from 'types/Chat/interface';
+import type { InterfaceContactCardProps } from 'types/UserPortal/Chat/interface';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -170,14 +170,16 @@ describe('ContactCard [User Portal]', () => {
     expect(screen.queryByTestId(`contact-unseen-${props.id}`)).toBeNull();
   });
 
-  it('calls setSelectedContact when clicked', () => {
+  it('calls setSelectedContact when clicked', async () => {
     const setSelectedContact = vi.fn();
 
     render(
       <ContactCard {...baseProps} setSelectedContact={setSelectedContact} />,
     );
 
-    fireEvent.click(screen.getByTestId(`contact-container-${baseProps.id}`));
+    await userEvent.click(
+      screen.getByTestId(`contact-container-${baseProps.id}`),
+    );
 
     expect(setSelectedContact).toHaveBeenCalledWith(baseProps.id);
   });

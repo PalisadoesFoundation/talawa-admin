@@ -1,0 +1,120 @@
+.datedivEvents {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+}
+
+.dateboxEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: var(--dateboxEvents-border, #e8e5e5);
+  outline: none;
+  box-shadow: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-right: 5px;
+  padding-left: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.datediv > div {
+  flex: 1;
+}
+
+@media only screen and (max-width: 600px) {
+  .datediv {
+    flex-direction: column;
+  }
+
+  .datediv > div {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
+
+  .datediv > div p {
+    margin-bottom: 5px;
+  }
+}
+
+.checkboxdivEvents {
+  display: flex;
+  flex-wrap: wrap;
+  --events-gap: 1rem;
+  gap: var(--events-gap, 1rem);
+}
+
+.checkboxdivEvents > label {
+  margin-right: 50px;
+}
+
+.checkboxdivEvents > label > input {
+  margin-left: 10px;
+}
+
+.checkboxdivEvents > div {
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
+  min-width: 200px;
+}
+
+.dispflexEvents {
+  display: flex;
+  align-items: center;
+}
+
+.dispflexEvents > input {
+  border: none;
+  box-shadow: none;
+  margin-top: 5px;
+}
+
+/* Migrated from app-fixed.module.css */
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--inputField-bg, #fff);
+  border: 1px solid var(--inputField-border, #dddddd);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 7px;
+  width: 100%;
+}
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font, #555555);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg, #a8c7fa);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover, #1778f2);
+  border-color: var(--addButton-border-hover, #555555);
+}
+
+.switch input {
+  --bs-form-switch-bg: transparent;
+}
+
+.switch input:checked {
+  background-color: var(--switch-bg-checked, #1778f2);
+  border-color: var(--switch-border-checked, #1778f2);
+  box-shadow: 0 0 0.1rem 0.2rem var(--switch-box-shadow-checked, #a8c7fa);
+}
+
+.switch input:focus {
+  border-color: var(--switch-border-focus, #d1d5db);
+}
+
+/* Helper for bootstrap switch alignment */
+.switch :global(.form-check-input) {
+  margin-left: -2.5em;
+}
