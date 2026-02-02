@@ -95,13 +95,13 @@ function userNavbar(): JSX.Element {
   /**
    * Handles user actions (settings or logout).
    */
-  const handleUserAction = (action: string): void => {
+  const handleUserAction = async (action: string): Promise<void> => {
     switch (action) {
       case 'settings':
         navigate('/user/settings');
         break;
       case 'logout':
-        handleLogout();
+        await handleLogout();
         break;
       default:
         return;

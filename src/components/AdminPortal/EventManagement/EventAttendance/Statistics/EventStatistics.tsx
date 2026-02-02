@@ -391,20 +391,13 @@ export const AttendanceStatisticsModal: React.FC<
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
 
-  const exportOptions = useMemo(() => {
-    const opts = [];
-    if (showTrends) {
-      opts.push({
-        value: 'trends',
-        label: t('trends'),
-      });
-    }
-    opts.push({
-      value: 'demographics',
-      label: t('demographics'),
-    });
-    return opts;
-  }, [showTrends, t]);
+  const exportOptions = useMemo(
+    () => [
+      ...(showTrends ? [{ value: 'trends', label: t('trends') }] : []),
+      { value: 'demographics', label: t('demographics') },
+    ],
+    [showTrends, t],
+  );
 
   const modalFooter = (
     <>

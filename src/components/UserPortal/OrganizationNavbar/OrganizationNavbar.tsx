@@ -29,9 +29,7 @@ import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import DropDownButton from 'shared-components/DropDownButton';
-interface InterfaceNavbarProps {
-  currentPage: string | null;
-}
+import { InterfaceNavbarProps } from 'types/UserPortal/OrganizationNavbar/interface';
 
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -70,13 +68,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     await i18next.changeLanguage(languageCode);
   };
 
-  const handleUserAction = (action: string): void => {
+  const handleUserAction = async (action: string): Promise<void> => {
     switch (action) {
       case 'settings':
         navigate('/user/settings');
         break;
       case 'logout':
-        handleLogout();
+        await handleLogout();
         break;
       default:
         return;
