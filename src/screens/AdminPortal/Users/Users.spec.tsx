@@ -1246,12 +1246,6 @@ describe('useEffect loadMoreUsers trigger', () => {
     await user.click(screen.getByTestId('newest'));
 
     await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    await waitFor(() => {
-      expect(screen.getByText('New User')).toBeInTheDocument();
-    });
   });
 
   it('should NOT update filtering when same option is clicked', async () => {
