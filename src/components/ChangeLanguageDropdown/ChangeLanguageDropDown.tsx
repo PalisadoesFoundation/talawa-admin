@@ -1,21 +1,4 @@
-/**
- * Component: ChangeLanguageDropDown
- *
- * A React component that provides a dropdown menu for changing the application's language.
- * It integrates with i18next for internationalization and updates the user's language preference
- * on the server using a GraphQL mutation.
- *
- * @param props - Props for the dropdown, see {@link InterfaceDropDownProps}
- * @returns JSX.Element
- * @remarks
- * - The component uses `react-bootstrap` for the dropdown UI.
- * - The current language is determined using a cookie (`i18next`).
- * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`.
- * - If a user avatar exists in localStorage, it is processed and included in the mutation.
- * - Displays a toast notification if the user ID is not found.
- */
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useMemo } from 'react';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
 import styles from './ChangeLanguageDropDown.module.css';
@@ -28,6 +11,7 @@ import { urlToFile } from 'utils/urlToFile';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -82,6 +66,21 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
   };
 
+  const languageOptions = useMemo(
+    () =>
+      languages.map((language) => ({
+        value: language.code,
+        label: (
+          <span>
+            <span className={`fi fi-${language.country_code} me-2`}></span>
+            {language.name}
+          </span>
+        ),
+        disabled: currentLanguageCode === language.code,
+      })),
+    [currentLanguageCode],
+  );
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -89,45 +88,16 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Dropdown
-        title={tCommon('changeLanguage')}
-        data-testid="language-dropdown-container"
-      >
-        <Dropdown.Toggle
-          className={styles.changeLanguageBtn}
-          data-testid="language-dropdown-btn"
-        >
-          {languages.map((language, index: number) => (
-            <span
-              key={`dropdown-btn-${index}`}
-              data-testid={`dropdown-btn-${index}`}
-            >
-              {currentLanguageCode === language.code && (
-                <span className={`${props?.btnTextStyle ?? ''}`}>
-                  <span
-                    className={`fi fi-${language.country_code} me-2`}
-                  ></span>
-                  {language.name}
-                </span>
-              )}
-            </span>
-          ))}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {languages.map((language, index: number) => (
-            <Dropdown.Item
-              key={`dropdown-item-${index}`}
-              className="dropdown-item"
-              onClick={async (): Promise<void> => changeLanguage(language.code)}
-              disabled={currentLanguageCode === language.code}
-              data-testid={`change-language-btn-${language.code}`}
-            >
-              <span className={`fi fi-${language.country_code} me-2`}></span>
-              {language.name}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="change-language-dropdown"
+        options={languageOptions}
+        selectedValue={currentLanguageCode}
+        onSelect={changeLanguage}
+        btnStyle={`${styles.changeLanguageBtn} ${props?.btnTextStyle ?? ''}`}
+        ariaLabel={tCommon('changeLanguage')}
+        dataTestIdPrefix="change-language"
+        variant="light"
+      />
     </ErrorBoundaryWrapper>
   );
 };
