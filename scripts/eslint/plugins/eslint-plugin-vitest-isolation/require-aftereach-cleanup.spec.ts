@@ -98,12 +98,11 @@ ruleTester.run('require-aftereach-cleanup', rule, {
       output: `
           import { describe, it, vi } from 'vitest';
           describe('test', () => {
-            
             afterEach(() => {
               vi.clearAllMocks();
             });
 
-it('should work', () => {
+            it('should work', () => {
               const mock = vi.fn();
             });
           });
@@ -123,12 +122,11 @@ it('should work', () => {
           import { describe, it, vi } from 'vitest';
           vi.mock('./module');
           describe('test', () => {
-            
             afterEach(() => {
               vi.clearAllMocks();
             });
 
-it('should work', () => {});
+            it('should work', () => {});
           });
         `,
     },
@@ -244,7 +242,6 @@ it('should work', () => {});
           afterEach(() => {
             vi.clearAllMocks();
           });
-
 
           });
         `,

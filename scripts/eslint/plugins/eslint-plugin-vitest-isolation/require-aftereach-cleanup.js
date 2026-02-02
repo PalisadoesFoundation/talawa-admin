@@ -190,40 +190,76 @@ module.exports = {
                                 if (callback.body && callback.body.type === 'BlockStatement') {
                                     // Insert afterEach at the beginning of describe block
                                     const describeBody = callback.body.body;
-                                    const insertPosition = describeBody.length > 0
-                                        ? describeBody[0].range[0]
-                                        : callback.body.range[0] + 1;
+                                    let insertPosition = callback.body.range[0] + 1;
+                                    let firstStmt = null;
+
+                                    if (describeBody.length > 0) {
+                                        firstStmt = describeBody[0];
+
+                                        // Check for leading comments before first statement and preserve them
+                                        const leadingComments = sourceCode.getCommentsBefore(firstStmt);
+                                        if (leadingComments.length > 0) {
+                                            // Insert after the last leading comment
+                                            const lastComment = leadingComments[leadingComments.length - 1];
+                                            insertPosition = lastComment.range[1];
+                                        } else {
+                                            insertPosition = sourceCode.getIndexFromLoc({
+                                                line: firstStmt.loc.start.line,
+                                                column: 0,
+                                            });
+                                        }
+                                    }
 
                                     // Detect indentation from the first statement or describe block
                                     let baseIndent = '  '; // Default to 2 spaces
+                                    let innerIndent = '  '; // Default inner indent
 
-                                    if (describeBody.length > 0) {
+                                    if (firstStmt) {
                                         // Get indentation from first statement in describe
-                                        const firstStmt = describeBody[0];
                                         const lineStart = sourceCode.getIndexFromLoc({ line: firstStmt.loc.start.line, column: 0 });
                                         const stmtStart = firstStmt.range[0];
                                         const leadingText = sourceCode.text.substring(lineStart, stmtStart);
                                         const match = leadingText.match(/^(\s+)/);
                                         if (match) {
                                             baseIndent = match[1];
+                                            // Derive inner indent from base (assume same unit as base indent)
+                                            // If base is tabs, use tab; if spaces, use 2 spaces or detect from source
+                                            innerIndent = baseIndent.includes('\t') ? '\t' : '  ';
                                         }
                                     } else {
                                         // Get indentation from describe callback opening brace
-                                        const descLineStart = sourceCode.getIndexFromLoc({ line: callback.body.loc.start.line + 1, column: 0 });
                                         const nextLineStart = sourceCode.text.indexOf('\n', callback.body.range[0]) + 1;
                                         if (nextLineStart > 0 && nextLineStart < sourceCode.text.length) {
                                             const leadingMatch = sourceCode.text.substring(nextLineStart).match(/^(\s+)/);
                                             if (leadingMatch) {
                                                 baseIndent = leadingMatch[1];
+                                                innerIndent = baseIndent.includes('\t') ? '\t' : '  ';
                                             }
                                         }
                                     }
 
                                     // Build properly indented afterEach block
                                     // i18n-ignore-next-line: code template, not user-facing text
-                                    const afterEachCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});\n\n`;
+                                    const afterEachCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n${baseIndent}`;
 
-                                    return fixer.insertTextBeforeRange([insertPosition, insertPosition], afterEachCode);
+                                    if (firstStmt) {
+                                        // Check if we preserved comments (insertPosition is after a comment)
+                                        const leadingComments = sourceCode.getCommentsBefore(firstStmt);
+                                        if (leadingComments.length > 0) {
+                                            // Insert after comments, before statement
+                                            // i18n-ignore-next-line: code template, not user-facing text
+                                            const insertCode = `\n\n${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
+                                            return fixer.insertTextAfterRange([insertPosition, insertPosition], insertCode);
+                                        }
+                                        // Replace from line start to statement start (the leading whitespace)
+                                        // with afterEach block + original indentation
+                                        const firstStmtStart = firstStmt.range[0];
+                                        return fixer.replaceTextRange([insertPosition, firstStmtStart], afterEachCode);
+                                    }
+                                    // Empty describe block - insert with leading newline
+                                    // i18n-ignore-next-line: code template, not user-facing text
+                                    const emptyBodyCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n`;
+                                    return fixer.insertTextBeforeRange([insertPosition, insertPosition], emptyBodyCode);
                                 }
                             }
 
@@ -273,7 +309,7 @@ module.exports = {
                                     const lineToBrace = sourceCode.text.slice(braceLineStartIdx, closingBrace);
                                     const leadingWsMatch = lineToBrace.match(/^(\s*)/);
                                     const closingLineLeading = leadingWsMatch ? leadingWsMatch[1] : '';
-                                    // If there is non-whitespace before the brace on the same line, fall back to stmtIndent
+                                    // Align closing brace to its line's leading whitespace (even when code precedes it)
                                     const hasCodeBeforeBrace = lineToBrace.trim().length > 0;
                                     const braceIndent = closingLineLeading;
 
