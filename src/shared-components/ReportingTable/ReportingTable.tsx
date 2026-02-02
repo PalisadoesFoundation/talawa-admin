@@ -10,7 +10,9 @@ import { isSpacingToken, getSpacingValue } from '../../utils/tokenValues';
 /**
  * Converts token-aware column definitions to MUI-compatible GridColDef.
  */
-function convertTokenColumns(columns: ReportingTableColumn[]): GridColDef[] {
+export function convertTokenColumns(
+  columns: ReportingTableColumn[],
+): GridColDef[] {
   return columns.map((col) => {
     const converted = { ...col } as GridColDef;
 

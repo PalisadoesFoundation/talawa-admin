@@ -1,7 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ReportingTable, { adjustColumnsForCompactMode } from './ReportingTable';
+import ReportingTable, {
+  adjustColumnsForCompactMode,
+  convertTokenColumns,
+} from './ReportingTable';
 import type {
   ReportingTableColumn,
   ReportingRow,
@@ -40,6 +43,10 @@ describe('ReportingTable', () => {
       { field: 'id', headerName: 'ID', width: 'space-15', sortable: false },
     ];
 
+    // Verify convertTokenColumns converts 'space-15' to 150
+    const converted = convertTokenColumns(columnsWithTokenWidth);
+    expect(converted[0].width).toBe(150);
+
     render(
       <ReportingTable rows={sampleRows} columns={columnsWithTokenWidth} />,
     );
@@ -63,6 +70,10 @@ describe('ReportingTable', () => {
     const columnsWithTokenMaxWidth: ReportingTableColumn[] = [
       { field: 'id', headerName: 'ID', maxWidth: 'space-17', sortable: false },
     ];
+
+    // Verify convertTokenColumns converts 'space-17' to 220
+    const converted = convertTokenColumns(columnsWithTokenMaxWidth);
+    expect(converted[0].maxWidth).toBe(220);
 
     render(
       <ReportingTable rows={sampleRows} columns={columnsWithTokenMaxWidth} />,

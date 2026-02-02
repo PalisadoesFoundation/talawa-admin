@@ -10,6 +10,7 @@ import type {
   GridValidRowModel,
 } from '@mui/x-data-grid';
 import type { TokenAwareGridColDef } from '../../types/DataGridWrapper/interface';
+import type { SpacingToken } from '../../utils/tokenValues';
 
 interface IRenderCellCall {
   row: TestRow;
@@ -1152,5 +1153,19 @@ describe('convertTokenColumns', () => {
     expect(result[0].sortable).toBe(false);
     expect(result[0].align).toBe('center');
     expect(result[0].headerAlign).toBe('center');
+  });
+
+  test('passes through invalid token strings unchanged (type system prevents this at compile time)', () => {
+    const columns: TokenAwareGridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Name',
+        width: 'space-invalid' as SpacingToken,
+      },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe('space-invalid');
   });
 });
