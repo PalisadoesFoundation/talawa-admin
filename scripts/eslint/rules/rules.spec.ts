@@ -446,6 +446,28 @@ describe('ESLint Syntax Restrictions', () => {
       );
       expect(error).toBeUndefined();
     });
+
+    it('should error on t() with spaces in template literal', async () => {
+      const code = 't(`Has Spaces`);';
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('spaces'),
+      );
+      expect(error).toBeDefined();
+    });
+
+    it('should error on t() with snake_case in template literal', async () => {
+      const code = 't(`snake_case`);';
+      const messages = await lintCode(code);
+      const error = messages.find(
+        (msg) =>
+          msg.ruleId === 'no-restricted-syntax' &&
+          msg.message.includes('underscores'),
+      );
+      expect(error).toBeDefined();
+    });
   });
 
   describe('ESLint Rule Data Tests', () => {
