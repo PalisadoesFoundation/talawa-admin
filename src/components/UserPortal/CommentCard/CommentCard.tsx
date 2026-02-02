@@ -1,22 +1,3 @@
-/**
- * CommentCard Component
- *
- * This component represents a card displaying a comment with the ability to like or dislike it.
- * It shows the comment creator's details, the comment text, and the like/dislike counts.
- *
- * @component
- * @param props - The properties required by the CommentCard component.
- * @param props.id - The unique identifier of the comment.
- * @param props.creator - The creator of the comment, including their ID and name.
- * @param props.upVoteCount - The number of upvotes (likes) on the comment.
- * @param props.downVoteCount - The number of downvotes (dislikes) on the comment.
- * @param props.downVoters - An array of users who have disliked the comment.
- * @param props.text - The text content of the comment.
- * @param props.onVote - Callback function triggered when the comment is voted on.
- * @param props.fetchComments - Function to refresh comments after voting.
- *
- * @returns A JSX element representing the comment card.
- */
 import React from 'react';
 import {
   IconButton,
@@ -27,10 +8,9 @@ import {
   Modal,
   Menu,
   MenuItem,
-  FormControl,
   Input,
-  Button,
 } from '@mui/material';
+import Button from 'shared-components/Button';
 import {
   MoreHoriz,
   ThumbUp,
@@ -41,12 +21,10 @@ import {
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import styles from '../../../style/app-fixed.module.css';
 import commentCardStyles from './CommentCard.module.css';
-import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
 import {
   DELETE_COMMENT,
@@ -54,6 +32,9 @@ import {
 } from 'GraphQl/Mutations/CommentMutations';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import UserPortalCard from '../UserPortalCard/UserPortalCard';
+import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
+import { IDENTIFIER_USER_ID } from 'Constant/common';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -72,28 +53,35 @@ const VoteCount = styled(Typography)(() => ({
   minWidth: 20,
   textAlign: 'center',
 }));
-interface InterfaceCommentCardProps {
-  id: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  hasUserVoted?: { voteType: VoteType } | null;
-  upVoteCount: number;
-  // downVoteCount: number;
-  text: string;
-  refetchComments?: () => void;
-}
 
-function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
-  const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
-    props;
+/**
+ * CommentCard Component
+ *
+ * This component represents a card displaying a comment with the ability to like or dislike it.
+ * It shows the comment creator's details, the comment text, and the like/dislike counts.
+ *
+ * @param id - The unique identifier of the comment.
+ * @param creator - The creator of the comment, including their ID, name, and optional avatar URL.
+ * @param hasUserVoted - Object indicating if current user has voted and the vote type.
+ * @param upVoteCount - The number of upvotes (likes) on the comment.
+ * @param text - The text content of the comment.
+ * @param refetchComments - Optional callback to refresh comments after modifications.
+ *
+ * @returns JSX element representing the comment card.
+ */
+function CommentCard({
+  id,
+  creator,
+  hasUserVoted,
+  upVoteCount,
+  text,
+  refetchComments,
+}: InterfaceCommentCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-  const userId = getItem('userId');
+  const userId = getItem(IDENTIFIER_USER_ID);
 
   const [likes, setLikes] = React.useState(upVoteCount);
   const [isLiked, setIsLiked] = React.useState(false);
@@ -227,16 +215,62 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       onReset={refetchComments}
     >
       <CommentContainer>
-        <Stack direction="row" spacing={2} alignItems="flex-start">
-          <span className={styles.userImageUserComment}>
-            <ProfileAvatarDisplay
-              imageUrl={creator.avatarURL || defaultAvatar}
-              fallbackName={creator.name}
-              size="small"
-              dataTestId="user-avatar"
-              enableEnlarge
-            />
-          </span>
+        <UserPortalCard
+          imageSlot={
+            <span className={commentCardStyles.userImageUserComment}>
+              <ProfileAvatarDisplay
+                imageUrl={creator.avatarURL || defaultAvatar}
+                fallbackName={creator.name}
+                size="small"
+                dataTestId="user-avatar"
+                enableEnlarge
+              />
+            </span>
+          }
+          actionsSlot={
+            userId === creator.id ? (
+              <>
+                <IconButton
+                  ref={menuAnchorRef}
+                  onClick={handleMenuOpen}
+                  size="small"
+                  data-testid="more-options-button"
+                  aria-label={t('commentCard.moreOptionsAriaLabel')}
+                >
+                  <MoreHoriz />
+                </IconButton>
+                <Menu
+                  anchorEl={menuAnchorRef.current}
+                  open={showCommentOptions}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                >
+                  <MenuItem
+                    data-testid="update-comment-button"
+                    onClick={toggleEditComment}
+                  >
+                    <EditOutlined className={commentCardStyles.iconSmall} />
+                    {t('commentCard.editComment')}
+                  </MenuItem>
+                  <MenuItem
+                    data-testid="delete-comment-button"
+                    onClick={handleDeleteComment}
+                    disabled={deletingComment}
+                  >
+                    <DeleteOutline className={commentCardStyles.iconSmall} />
+                    {deletingComment
+                      ? t('commentCard.deleting')
+                      : t('commentCard.deleteComment')}
+                  </MenuItem>
+                </Menu>
+              </>
+            ) : undefined
+          }
+          variant="compact"
+          ariaLabel={t('commentCard.commentBy', { name: creator.name })}
+          dataTestId="comment-card"
+        >
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle2" fontWeight="bold">
               {creator.name}
@@ -261,44 +295,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               <VoteCount>{likes}</VoteCount>
             </Stack>
           </Box>
-          {userId === creator.id && (
-            <>
-              <IconButton
-                ref={menuAnchorRef}
-                onClick={handleMenuOpen}
-                size="small"
-                data-testid="more-options-button"
-              >
-                <MoreHoriz />
-              </IconButton>
-              <Menu
-                anchorEl={menuAnchorRef.current}
-                open={showCommentOptions}
-                onClose={handleMenuClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              >
-                <MenuItem
-                  data-testid="update-comment-button"
-                  onClick={toggleEditComment}
-                >
-                  <EditOutlined className={commentCardStyles.iconSmall} />
-                  {t('commentCard.editComment')}
-                </MenuItem>
-                <MenuItem
-                  data-testid="delete-comment-button"
-                  onClick={handleDeleteComment}
-                  disabled={deletingComment}
-                >
-                  <DeleteOutline className={commentCardStyles.iconSmall} />
-                  {deletingComment
-                    ? t('commentCard.deleting')
-                    : t('commentCard.deleteComment')}
-                </MenuItem>
-              </Menu>
-            </>
-          )}
-        </Stack>
+        </UserPortalCard>
 
         {/* Edit Comment Modal */}
         <Modal
@@ -308,7 +305,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         >
           <Box className={commentCardStyles.editModalContent}>
             <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-            <FormControl fullWidth sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2 }}>
               <Input
                 multiline
                 rows={4}
@@ -317,7 +314,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 fullWidth
                 data-testid="edit-comment-input"
               />
-            </FormControl>
+            </Box>
 
             <Box className={commentCardStyles.modalActions}>
               <Box />
@@ -342,7 +339,8 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                     }
                   }}
                   data-testid="save-comment-button"
-                  startIcon={<EditOutlined />}
+                  icon={<EditOutlined />}
+                  iconPosition="start"
                 >
                   {updatingComment ? tCommon('saving') : tCommon('save')}
                 </Button>
