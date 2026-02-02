@@ -697,14 +697,22 @@ describe('EventRegistrantsModal', () => {
     await user.click(screen.getByTestId('add-registrant-btn'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Error adding attendee',
-      );
-
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Network error: Failed to add attendee',
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Adding the attendee...',
       );
     });
+
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Error adding attendee',
+        );
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Network error: Failed to add attendee',
+        );
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('opens AddOnSpot modal when Space key is pressed on add-onspot link', async () => {
@@ -720,10 +728,29 @@ describe('EventRegistrantsModal', () => {
     await user.type(input, 'NonExistentUser');
 
     const addOnspotLink = await screen.findByTestId('add-onspot-link');
-    addOnspotLink.focus();
 
-    await user.keyboard(' '); // ← Use this instead of dispatchEvent
+    await user.type(addOnspotLink, ' ');
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
+  });
+
+  test('falls back to translated unknownUser when member name is empty', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersUnknownNameMock(),
+    ]);
+
+    const input = await screen.findByTestId('autocomplete');
+    await user.type(input, 'unknown');
+
+    const option = await screen.findByTestId('option-user2');
+    await user.click(option);
+
+    await user.click(screen.getByTestId('add-registrant-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalled();
+    });
   });
 });
