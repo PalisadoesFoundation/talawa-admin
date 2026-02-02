@@ -145,7 +145,7 @@ describe('Event Attendance Component', () => {
       expect(dataGrid).toBeInTheDocument();
     });
 
-    const sortDropdown = screen.getByTestId('sort-dropdown');
+    const sortDropdown = screen.getByTestId('sort-dropdown-toggle');
     await userEvent.click(sortDropdown);
 
     await userEvent.click(screen.getByText('Ascending'));
@@ -164,7 +164,7 @@ describe('Event Attendance Component', () => {
       expect(dataGrid).toBeInTheDocument();
     });
 
-    const sortDropdown = screen.getByTestId('sort-dropdown');
+    const sortDropdown = screen.getByTestId('sort-dropdown-toggle');
     await userEvent.click(sortDropdown);
 
     await userEvent.click(await screen.findByText('Descending'));
@@ -183,7 +183,7 @@ describe('Event Attendance Component', () => {
       expect(dataGrid).toBeInTheDocument();
     });
 
-    const filterDropdown = screen.getByTestId('filter-dropdown');
+    const filterDropdown = screen.getByTestId('filter-dropdown-toggle');
     await userEvent.click(filterDropdown);
     await userEvent.click(screen.getByText('This Month'));
 
@@ -201,7 +201,7 @@ describe('Event Attendance Component', () => {
       expect(dataGrid).toBeInTheDocument();
     });
 
-    const filterDropdown = screen.getByTestId('filter-dropdown');
+    const filterDropdown = screen.getByTestId('filter-dropdown-toggle');
     await userEvent.click(filterDropdown);
     await userEvent.click(screen.getByText('This Year'));
 

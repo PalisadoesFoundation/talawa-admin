@@ -1686,9 +1686,9 @@ describe('UpcomingEvents', () => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
       // Change dropdown to location
-      const dropdownButton = screen.getByTestId('searchBy');
+      const dropdownButton = screen.getByTestId('searchBy-toggle');
       await userEvent.click(dropdownButton);
-      const locationOption = screen.getByTestId('location');
+      const locationOption = screen.getByTestId('searchBy-item-location');
       await userEvent.click(locationOption);
       const input = screen.getByTestId('searchByInput');
       await userEvent.type(input, 'park');
@@ -1766,9 +1766,9 @@ describe('UpcomingEvents', () => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
       // Change dropdown to location
-      const dropdownButton = screen.getByTestId('searchBy');
+      const dropdownButton = screen.getByTestId('searchBy-toggle');
       await userEvent.click(dropdownButton);
-      const locationOption = screen.getByTestId('location');
+      const locationOption = screen.getByTestId('searchBy-item-location');
       await userEvent.click(locationOption);
       const input = screen.getByTestId('searchByInput');
       await userEvent.type(input, 'park');

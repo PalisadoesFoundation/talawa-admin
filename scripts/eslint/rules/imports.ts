@@ -144,6 +144,19 @@ const restrictedImports = [
     message:
       'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
   },
+  {
+    id: 'rb-dropdown',
+    name: 'react-bootstrap',
+    importNames: ['Dropdown'],
+    message:
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
+  },
+  {
+    id: 'rb-dropdown-path',
+    name: 'react-bootstrap/Dropdown',
+    message:
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
+  },
 ];
 
 // Helper functions for rule processing

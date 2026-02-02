@@ -370,9 +370,9 @@ describe('Organisation Tags Page', () => {
         'userTag 1',
       );
     });
-    await userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('sortTags-toggle'));
     // Click the "Oldest" button to sort in ascending order
-    await userEvent.click(screen.getByTestId('oldest'));
+    await userEvent.click(screen.getByTestId('sortTags-item-oldest'));
 
     // Wait for tags to be re-ordered (oldest first)
     await waitFor(() => {
@@ -382,7 +382,7 @@ describe('Organisation Tags Page', () => {
     });
 
     // Click "Latest" to switch back to descending order
-    await userEvent.click(screen.getByTestId('latest'));
+    await userEvent.click(screen.getByTestId('sortTags-item-latest'));
 
     // Wait for tags to be re-ordered back (latest first)
     await waitFor(() => {

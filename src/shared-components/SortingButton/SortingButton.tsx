@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import PropTypes from 'prop-types';
@@ -33,45 +33,39 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   const { t: tCommon } = useTranslation('common');
 
   return (
-    <Dropdown aria-expanded="false" title={title} data-testid={dropdownTestId}>
-      <Dropdown.Toggle
-        variant={selectedOption === '' ? 'outline-success' : 'success'}
-        data-testid={`${dataTestIdPrefix}`}
-        className={className}
-        aria-label={ariaLabel}
-      >
-        <span className={styles.iconRightMargin}>
-          {icon ? (
-            <img
-              src={String(icon)}
-              alt={tCommon('sortingIcon')}
-              aria-hidden="true"
-            />
-          ) : (
-            <IconComponent
-              data-testid="sorting-icon"
-              data-icon-type={type}
-              aria-hidden="true"
-            />
-          )}
-        </span>
-        {/* Use the appropriate icon */}
-        {buttonLabel || selectedOption}
-        {/* Use buttonLabel if provided, otherwise use selectedOption */}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {sortingOptions.map((option) => (
-          <Dropdown.Item
-            key={option.value}
-            onClick={() => onSortChange(option.value)}
-            data-testid={`${option.value}`}
-            className={styles.dropdownItem}
-          >
-            {option.label}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+    <DropDownButton
+      id={dropdownTestId}
+      options={sortingOptions.map((option) => ({
+        label: option.label,
+        value: String(option.value),
+      }))}
+      selectedValue={
+        selectedOption !== undefined && selectedOption !== null
+          ? String(selectedOption)
+          : undefined
+      }
+      onSelect={(value) => onSortChange(value)}
+      ariaLabel={ariaLabel || title}
+      dataTestIdPrefix={dataTestIdPrefix}
+      buttonLabel={buttonLabel || String(selectedOption ?? '')}
+      parentContainerStyle={className}
+      variant="outline-secondary"
+      icon={
+        icon ? (
+          <img
+            src={String(icon)}
+            alt={tCommon('sortingIcon')}
+            aria-hidden="true"
+          />
+        ) : (
+          <IconComponent
+            data-testid="sorting-icon"
+            data-icon-type={type}
+            aria-hidden="true"
+          />
+        )
+      }
+    />
   );
 };
 

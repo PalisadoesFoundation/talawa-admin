@@ -4,8 +4,9 @@ export class ActionItemPage {
   private readonly memberSelect = '[data-cy="memberSelect"]';
   private readonly volunteerSelect = '[data-cy="volunteerSelect"]';
   private readonly submitBtn = '[data-testid="modal-submit-btn"]';
-  private readonly sortBtn = '[data-testid="sort"]';
-  private readonly sortByAssignedAtDesc = '[data-testid="assignedAt_DESC"]';
+  private readonly sortBtn = '[data-testid="sort-toggle"]';
+  private readonly sortByAssignedAtDesc =
+    '[data-testid="sort-item-assignedAt_DESC"]';
   private readonly editItemBtn = '[data-testid^="editItemBtn"]';
   private readonly viewItemBtn = '[data-testid^="viewItemBtn"]';
   private readonly statusCheckbox = '[data-testid^="statusCheckbox"]';

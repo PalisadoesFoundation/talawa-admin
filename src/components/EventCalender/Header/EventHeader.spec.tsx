@@ -39,8 +39,8 @@ describe('EventHeader Component', () => {
     expect(getByTestId('searchEvent')).toBeInTheDocument();
     expect(getByTestId('searchButton')).toBeInTheDocument();
     expect(getByTestId('createEventModalBtn')).toBeInTheDocument();
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
-    expect(getByTestId('eventType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
+    expect(getByTestId('eventType-container')).toBeInTheDocument();
   });
 
   it('renders with correct initial viewType', () => {
@@ -54,7 +54,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('calls handleChangeView with MONTH view type', async () => {
@@ -68,9 +68,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Month View'));
+    await user.click(getByTestId('selectViewType-item-Month View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.MONTH);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -87,9 +87,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Day'));
+    await user.click(getByTestId('selectViewType-item-Day'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -106,9 +106,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('selectViewType'));
+    await user.click(getByTestId('selectViewType-toggle'));
 
-    await user.click(getByTestId('Year View'));
+    await user.click(getByTestId('selectViewType-item-Year View'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.YEAR);
     expect(handleChangeView).toHaveBeenCalledTimes(1);
@@ -125,9 +125,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('eventType'));
+    await user.click(getByTestId('eventType-toggle'));
 
-    await user.click(getByTestId('Events'));
+    await user.click(getByTestId('eventType-item-Events'));
 
     expect(handleChangeView).not.toHaveBeenCalled();
   });
@@ -143,9 +143,9 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    await user.click(getByTestId('eventType'));
+    await user.click(getByTestId('eventType-toggle'));
 
-    await user.click(getByTestId('Workshops'));
+    await user.click(getByTestId('eventType-item-Workshops'));
 
     expect(handleChangeView).not.toHaveBeenCalled();
   });
@@ -263,7 +263,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('renders with ViewType.YEAR as initial viewType', () => {
@@ -277,7 +277,7 @@ describe('EventHeader Component', () => {
       </I18nextProvider>,
     );
 
-    expect(getByTestId('selectViewType')).toBeInTheDocument();
+    expect(getByTestId('selectViewType-container')).toBeInTheDocument();
   });
 
   it('maintains separate functionality for view type and event type dropdowns', async () => {
@@ -292,14 +292,14 @@ describe('EventHeader Component', () => {
     );
 
     // Change view type
-    await user.click(getByTestId('selectViewType'));
-    await user.click(getByTestId('Day'));
+    await user.click(getByTestId('selectViewType-toggle'));
+    await user.click(getByTestId('selectViewType-item-Day'));
 
     expect(handleChangeView).toHaveBeenCalledWith(ViewType.DAY);
 
     // Change event type
-    await user.click(getByTestId('eventType'));
-    await user.click(getByTestId('Events'));
+    await user.click(getByTestId('eventType-toggle'));
+    await user.click(getByTestId('eventType-item-Events'));
 
     expect(handleChangeView).toHaveBeenCalledTimes(1); // Only called once from view type change
   });

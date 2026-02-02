@@ -297,5 +297,6 @@
   "unavailable": "Unavailable",
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
-  "picture": "{{name}} Picture"
+  "picture": "{{name}} Picture",
+  "optionsSuffix": "options"
 }

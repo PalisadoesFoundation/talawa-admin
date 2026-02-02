@@ -297,5 +297,6 @@
   "unavailable": "Indisponible",
   "clearSelection": "Effacer la sélection",
   "toggleSidebar": "Basculer la barre latérale",
-  "picture": "Image de {{name}}"
+  "picture": "Image de {{name}}",
+  "optionsSuffix": "options"
 }

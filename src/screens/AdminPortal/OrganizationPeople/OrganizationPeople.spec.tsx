@@ -505,7 +505,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -644,7 +644,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -699,7 +699,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to users tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const usersOption = screen.getByText(/users/i);
@@ -778,7 +778,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
@@ -889,7 +889,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);

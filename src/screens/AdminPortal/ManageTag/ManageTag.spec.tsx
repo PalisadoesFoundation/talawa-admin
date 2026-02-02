@@ -1213,16 +1213,16 @@ describe('Manage Tag Page', () => {
     });
 
     // Click the sort button to open the dropdown
-    const sortButton = screen.getByTestId('sortPeople');
+    const sortButton = screen.getByTestId('sortPeople-toggle');
     await userEvent.click(sortButton);
 
     // Wait for dropdown to open and click on "Oldest" option (ASCENDING)
     await waitFor(() => {
-      const oldestOption = screen.getByTestId('ASCENDING');
+      const oldestOption = screen.getByTestId('sortPeople-item-ASCENDING');
       expect(oldestOption).toBeInTheDocument();
     });
 
-    const oldestOption = screen.getByTestId('ASCENDING');
+    const oldestOption = screen.getByTestId('sortPeople-item-ASCENDING');
     await userEvent.click(oldestOption);
 
     // This should trigger the onSortChange callback on line 410

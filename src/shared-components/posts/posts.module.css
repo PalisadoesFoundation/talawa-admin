@@ -2,10 +2,7 @@
   background-color: var(--color-gray-50);
   color: var(--color-gray-700);
   border: var(--border-1) solid var(--color-gray-700);
-  margin: calc(var(--space-2) + var(--space-0-5))
-    calc(var(--space-3) + var(--space-1));
-  width: var(--space-16);
-  height: var(--space-10);
+  padding: var(--space-4) var(--space-4);
 }
 
 .closeButton {
@@ -15,13 +12,9 @@
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs)
-    color-mix(in srgb, var(--color-black) 30%, transparent);
+  box-shadow: var(--shadow-xs);
   background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
+  color: var(--color-gray-900);
   border: var(--border-1) solid var(--color-gray-700);
 }
 
