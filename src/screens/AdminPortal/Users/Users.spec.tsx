@@ -133,6 +133,7 @@ beforeEach(() => {
 
 afterEach(() => {
   clearAllItems();
+  vi.clearAllMocks();
   vi.restoreAllMocks();
 });
 
