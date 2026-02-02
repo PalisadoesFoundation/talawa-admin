@@ -176,3 +176,36 @@ describe('IconComponent Chat icon', () => {
     expect(icon).toBeInTheDocument();
   });
 });
+
+describe('IconComponent dimension props', () => {
+  it('applies custom height and width to Dashboard icon', () => {
+    render(<IconComponent name="Dashboard" height="48" width="48" />);
+    const icon = screen.getByTestId('Icon-Component-DashboardIcon');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveAttribute('height', '48');
+    expect(icon).toHaveAttribute('width', '48');
+  });
+
+  it('applies custom height and width to People icon', () => {
+    render(<IconComponent name="People" height="32" width="32" />);
+    const icon = screen.getByTestId('Icon-Component-PeopleIcon');
+    expect(icon).toHaveAttribute('height', '32');
+    expect(icon).toHaveAttribute('width', '32');
+  });
+
+  it('applies all props (fill, height, width) to Tags icon', () => {
+    render(<IconComponent name="Tags" fill="#FF5733" height="40" width="40" />);
+    const icon = screen.getByTestId('Icon-Component-TagsIcon');
+    expect(icon).toHaveAttribute('fill', '#FF5733'); // <-- fix
+    expect(icon).toHaveAttribute('height', '40');
+    expect(icon).toHaveAttribute('width', '40');
+  });
+
+  it('uses default dimensions when height and width are not provided', () => {
+    render(<IconComponent name="Events" />);
+    const icon = screen.getByTestId('Icon-Component-EventsIcon');
+    expect(icon).toBeInTheDocument();
+    // Material-UI icons have default fontSize when dimensions aren't specified
+    expect(icon.tagName.toLowerCase()).toBe('svg');
+  });
+});
