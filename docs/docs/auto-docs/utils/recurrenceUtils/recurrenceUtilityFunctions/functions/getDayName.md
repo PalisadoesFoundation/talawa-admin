@@ -6,7 +6,7 @@
 
 > **getDayName**(`dayIndex`): `string`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L368)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L375)
 
 Gets the full day name from a day index
 

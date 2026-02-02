@@ -6,7 +6,7 @@
 
 > **getMonthlyOptions**(`startDate`): `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L377)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L384)
 
 Generates monthly recurrence options based on the start date
 

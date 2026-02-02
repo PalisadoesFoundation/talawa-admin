@@ -366,6 +366,46 @@ describe('Recurrence Utility Functions', () => {
       const text = getRecurrenceRuleText(rule, startDate);
       expect(text).toBe('Weekly on Monday and Friday, never ends');
     });
+
+    it('should use "Weekly" only (no days) when weekly recurrence has empty byDay', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.WEEKLY,
+        interval: 1,
+        byDay: [],
+        never: true,
+      };
+      const text = getRecurrenceRuleText(rule, startDate);
+      expect(text).toBe('Weekly, never ends');
+    });
+
+    it('should use "on Day N" when monthly recurrence has no byMonthDay', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        never: true,
+      };
+      const text = getRecurrenceRuleText(rule, startDate);
+      expect(text).toBe(`Monthly on Day ${startDate.getUTCDate()}, never ends`);
+    });
+
+    it('should append "until <date>" when recurrence has endDate', () => {
+      const endDate = dayjs.utc().add(1, 'year').toDate();
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        endDate,
+      };
+      const text = getRecurrenceRuleText(rule, startDate, endDate);
+      expect(text).toContain('Daily');
+      expect(text).toContain('until');
+      expect(text).toContain(
+        endDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      );
+    });
   });
 
   describe('getOrdinalSuffix', () => {
@@ -782,12 +822,12 @@ describe('Recurrence Utility Functions', () => {
       const dayOfWeek = day29.day();
       const dayName = getDayNameFromIndex(dayOfWeek);
       const options = getMonthlyOptions(day29.toDate());
-
+      // Day 29 + 7 crosses month boundary → last occurrence (week 6)
       expect(options.byDate).toBe('Monthly on day 29');
-      expect(options.byWeekday).toBe(`Monthly on the fifth ${dayName}`);
+      expect(options.byWeekday).toBe(`Monthly on the last ${dayName}`);
       expect(options.dateValue).toBe(29);
       expect(options.weekdayValue).toEqual({
-        week: 5,
+        week: 6,
         day: dayIndexToWeekDay[dayOfWeek],
       });
     });
@@ -829,17 +869,15 @@ describe('Recurrence Utility Functions', () => {
       const fourthSunday = getNthDayOfWeekInMonth(testMonth, 0, 4); // 0 = Sunday
       const options = getMonthlyOptions(fourthSunday.toDate());
       const dayOfMonth = fourthSunday.date();
-
+      // When fourth Sunday + 7 crosses month boundary it is "last" (week 6)
+      const isLast = dayOfMonth + 7 > testMonth.daysInMonth();
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      const expectedWeek = Math.ceil(
-        (dayOfMonth + fourthSunday.startOf('month').day()) / 7,
-      );
       expect(options.byWeekday).toBe(
-        `Monthly on the ${getOrdinalString(expectedWeek)} Sunday`,
+        isLast ? 'Monthly on the last Sunday' : 'Monthly on the fourth Sunday',
       );
       expect(options.dateValue).toBe(dayOfMonth);
       expect(options.weekdayValue).toEqual({
-        week: expectedWeek,
+        week: isLast ? 6 : 4,
         day: WeekDays.SU,
       });
     });
@@ -848,11 +886,18 @@ describe('Recurrence Utility Functions', () => {
       const fourthSaturday = getNthDayOfWeekInMonth(testMonth, 6, 4); // 6 = Saturday
       const options = getMonthlyOptions(fourthSaturday.toDate());
       const dayOfMonth = fourthSaturday.date();
-
+      const isLast = dayOfMonth + 7 > fourthSaturday.daysInMonth();
       expect(options.byDate).toBe(`Monthly on day ${dayOfMonth}`);
-      expect(options.byWeekday).toBe('Monthly on the fourth Saturday');
+      expect(options.byWeekday).toBe(
+        isLast
+          ? 'Monthly on the last Saturday'
+          : 'Monthly on the fourth Saturday',
+      );
       expect(options.dateValue).toBe(dayOfMonth);
-      expect(options.weekdayValue).toEqual({ week: 4, day: WeekDays.SA });
+      expect(options.weekdayValue).toEqual({
+        week: isLast ? 6 : 4,
+        day: WeekDays.SA,
+      });
     });
 
     it('should handle February correctly', () => {
@@ -875,12 +920,12 @@ describe('Recurrence Utility Functions', () => {
       const options = getMonthlyOptions(d);
       const dayOfWeek = d.getUTCDay();
       const dayName = getDayNameFromIndex(dayOfWeek);
-
+      // Feb 29 + 7 crosses month boundary → last occurrence (week 6)
       expect(options.byDate).toBe('Monthly on day 29');
-      expect(options.byWeekday).toBe(`Monthly on the fifth ${dayName}`);
+      expect(options.byWeekday).toBe(`Monthly on the last ${dayName}`);
       expect(options.dateValue).toBe(29);
       expect(options.weekdayValue).toEqual({
-        week: 5,
+        week: 6,
         day: dayIndexToWeekDay[dayOfWeek],
       });
     });
@@ -926,9 +971,23 @@ describe('Recurrence Utility Functions', () => {
       const testDate =
         fifthMonday.date() > 7 ? fifthMonday : testMonth.date(29).hour(10);
       const options = getMonthlyOptions(testDate.toDate());
-
+      // When date+7 crosses month boundary we get "last" (week 6), else 5
+      const isLast = testDate.date() + 7 > testMonth.daysInMonth();
       expect(options.dateValue).toBe(testDate.date());
-      expect(options.weekdayValue.week).toBe(5);
+      expect(options.weekdayValue.week).toBe(isLast ? 6 : 5);
+    });
+
+    it('should return "last" (week 6) when date+7 days crosses month boundary', () => {
+      // Last Monday of a 31-day month (e.g. Jan: 1,8,15,22,29); date+7 crosses into next month
+      const janEnd = dayjs.utc().year(2024).month(0).endOf('month');
+      let lastMondayJan = janEnd;
+      while (lastMondayJan.day() !== 1)
+        lastMondayJan = lastMondayJan.subtract(1, 'day');
+      lastMondayJan = lastMondayJan.hour(10).minute(0).second(0).millisecond(0);
+      const options = getMonthlyOptions(lastMondayJan.toDate());
+      expect(options.byWeekday).toBe('Monthly on the last Monday');
+      expect(options.weekdayValue.week).toBe(6);
+      expect(options.weekdayValue.day).toBe(WeekDays.MO);
     });
   });
 });

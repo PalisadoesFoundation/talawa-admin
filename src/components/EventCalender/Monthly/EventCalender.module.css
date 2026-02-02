@@ -1,11 +1,11 @@
 .calendar_hour_block {
-  border-top: 1px solid var(--calenderHourBlock-border);
+  border-top: var(--border-1) solid var(--calenderHourBlock-border);
   display: flex;
 }
 
 .calendar_hour_text_container {
   width: var(--space-10);
-  border-right: 1px solid var(--calenderHourTextContainer-border);
+  border-right: var(--border-1) solid var(--calenderHourTextContainer-border);
   height: auto;
 }
 
@@ -39,7 +39,7 @@
   top: 0;
   left: 0;
   background-color: var(--expandListContainer-bg);
-  border: 1px solid var(--expandListContainer-border);
+  border: var(--border-1) solid var(--expandListContainer-border);
   border-radius: var(--space-2);
   margin: var(--space-2);
 }
@@ -75,7 +75,7 @@
   position: relative;
   display: block;
   margin: var(--space-1);
-  z-index: 10;
+  z-index: 2;
 }
 
 .btn__more:hover {
@@ -151,7 +151,7 @@
 
 .holiday_name {
   font-size: var(--font-size-md);
-  font-weight: 200;
+  font-weight: var(--font-weight-lighter);
   color: var(--holidayName-color);
 }
 
@@ -230,10 +230,10 @@
   padding-right: var(--space-1);
   border-radius: var(--space-3);
   margin: var(--space-2);
-  border: 1px solid var(--day-border);
+  border: var(--border-1) solid var(--day-border);
   color: var(--day-color);
   font-weight: var(--font-weight-semibold);
-  height: 9rem;
+  height: var(--space-15);
   position: relative;
 }
 
@@ -295,7 +295,7 @@
 }
 
 .buttonEventCalendar {
-  border-radius: 100rem;
+  border-radius: var(--radius-full);
   color: var(--buttonEventCalendar-color);
   border: 0;
 }

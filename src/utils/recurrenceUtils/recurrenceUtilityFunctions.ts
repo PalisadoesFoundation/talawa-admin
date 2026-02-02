@@ -329,11 +329,13 @@ export const getWeekOfMonth = (date: Date): number => {
 };
 
 /**
- * Returns which occurrence (1st, 2nd, 3rd, etc.) of the given weekday
+ * Returns which occurrence (1st, 2nd, 3rd, etc., or last) of the given weekday
  * the date is within the month (UTC). Used for "Monthly on the third Monday" style labels.
  * Uses UTC to avoid timezone drift and flakiness across environments (CI TZ=UTC vs local).
+ * Returns 6 when the date is the last occurrence of that weekday in the month
+ * (i.e. date + 7 days crosses the month boundary).
  * @param date - The date to check
- * @returns Occurrence index 1-5 (or up to 5 for that weekday in the month)
+ * @returns Occurrence index 1-5, or 6 for "last" when date+7 days crosses month boundary
  */
 const getWeekdayOccurrenceInMonth = (date: Date): number => {
   const year = date.getUTCFullYear();
@@ -346,6 +348,11 @@ const getWeekdayOccurrenceInMonth = (date: Date): number => {
     if (utcDate.getUTCDay() === dayOfWeek) {
       count++;
     }
+  }
+  // Last occurrence: date + 7 days crosses month boundary (issue #6966)
+  const plusSeven = new Date(Date.UTC(year, month, dayOfMonth + 7));
+  if (plusSeven.getUTCMonth() !== month) {
+    return 6;
   }
   return count;
 };
