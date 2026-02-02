@@ -11,6 +11,8 @@
  *   --staged --all        Validate entire content of staged files only (both flags required)
  *   --scan-entire-repo    Ignore file lists and scan all source files
  *
+ * Note: --staged cannot be combined with --files or --scan-entire-repo.
+ *
  * Detected patterns:
  *   - Hex colors (#fff, #ffffff, #ffffffaa)
  *   - RGB/RGBA colors (rgb(0,0,0), rgba(0,0,0,0.5))
@@ -800,6 +802,13 @@ export async function validateFiles(
  */
 export async function main() {
   console.log('Validating design token usage...\n');
+
+  if (args.includes('--staged') && (hasFilesFlag || scanEntireRepo)) {
+    console.error(
+      'Conflicting flags: --staged cannot be combined with --files or --all/--scan-entire-repo.',
+    );
+    process.exit(1);
+  }
 
   if (stagedOnly && !checkAll) {
     console.error(
