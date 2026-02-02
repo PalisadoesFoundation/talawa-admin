@@ -296,8 +296,6 @@ beforeEach(() => {
   );
   // Avoid real network health-check fetch errors influencing toast assertions
   vi.spyOn(global, 'fetch').mockResolvedValue({} as Response);
-  // Fresh Apollo StaticMockLink per test to ensure isolation
-  link = new StaticMockLink(createMocks(), true);
 });
 
 afterEach(() => {
@@ -360,7 +358,6 @@ vi.mock('react-google-recaptcha', async () => {
 });
 
 let user!: ReturnType<typeof userEvent.setup>;
-let link!: StaticMockLink;
 
 beforeEach(() => {
   user = userEvent.setup();
@@ -379,7 +376,7 @@ describe('Testing Login Page Screen', () => {
     });
     const history = createMemoryHistory({ initialEntries: ['/admin'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -398,7 +395,7 @@ describe('Testing Login Page Screen', () => {
   it('There should be default values of pre-login data when queried result is null', async () => {
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -441,7 +438,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -499,7 +496,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -556,7 +553,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -613,7 +610,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -670,7 +667,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -732,7 +729,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -786,7 +783,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -817,7 +814,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -875,7 +872,7 @@ describe('Testing Login Page Screen', () => {
   it('Testing password preview feature for login', async () => {
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -913,7 +910,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -956,7 +953,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -989,7 +986,7 @@ describe('Testing Login Page Screen', () => {
   it('Testing for the password error warning when user firsts lands on a page', async () => {
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1019,7 +1016,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1064,7 +1061,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1109,7 +1106,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1152,7 +1149,7 @@ describe('Testing Login Page Screen', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1194,7 +1191,7 @@ describe('Testing Login Page Screen', () => {
     });
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1222,7 +1219,7 @@ describe('Testing Login Page Screen', () => {
     });
     const history = createMemoryHistory({ initialEntries: ['/register'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1249,7 +1246,7 @@ describe('Testing redirect if already logged in', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1272,7 +1269,7 @@ describe('Testing redirect if already logged in', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1314,7 +1311,7 @@ describe('Testing invitation functionality', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1361,7 +1358,7 @@ describe('Testing invitation functionality', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1412,7 +1409,7 @@ describe('Testing invitation functionality', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1781,7 +1778,7 @@ describe('Talawa-API server fetch check', () => {
     await act(async () => {
       const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
-        <MockedProvider link={link}>
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
           <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -1803,7 +1800,7 @@ describe('Talawa-API server fetch check', () => {
     await act(async () => {
       const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
-        <MockedProvider link={link}>
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
           <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -1989,7 +1986,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('renders component after mount', async () => {
-    renderLoginPage(link);
+    renderLoginPage();
     await wait();
     expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
   });
@@ -2759,9 +2756,10 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
+    const localLink = new StaticMockLink(createMocks(), true);
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={localLink}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2785,7 +2783,7 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    expect(link.operation?.variables?.recaptchaToken).toBe(
+    expect(localLink.operation?.variables?.recaptchaToken).toBe(
       'fake-recaptcha-token',
     );
   });
@@ -2841,7 +2839,7 @@ describe('Cookie-based authentication verification', () => {
 
     const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
