@@ -410,7 +410,9 @@ describe('Testing Community Profile Screen', () => {
 
     const mockFile = new File(['logo'], 'test.png', { type: 'image/png' });
     await userEvent.upload(logo, mockFile);
-    await wait();
+    await waitFor(() => {
+      expect((logo as HTMLInputElement).files?.[0]).toBe(mockFile);
+    });
 
     expect(communityName).toHaveValue(profileVariables.name);
     expect(websiteLink).toHaveValue(profileVariables.websiteURL);
@@ -573,10 +575,10 @@ describe('Testing Community Profile Screen', () => {
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
     await userEvent.upload(fileInput, mockFile);
-    await wait();
-
-    // Verify file input accepted the file
-    expect(fileInput.files?.[0]).toBe(mockFile);
+    await waitFor(() => {
+      // Verify file input accepted the file
+      expect(fileInput.files?.[0]).toBe(mockFile);
+    });
   });
 
   test('should handle empty file selection gracefully', async () => {
@@ -607,7 +609,7 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('should show success toast when profile is updated successfully', async () => {
-    const { container } = render(
+    render(
       <MockedProvider mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
@@ -624,7 +626,6 @@ describe('Testing Community Profile Screen', () => {
       ).toBeInTheDocument();
     });
 
-    const _form = container.querySelector('form') as HTMLFormElement;
     const nameInput = screen.getByPlaceholderText(
       /Community Name/i,
     ) as HTMLInputElement;
@@ -640,11 +641,10 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(websiteInput, 'https://test.com');
 
     // Wait for state to update
-    await wait();
-
-    // Verify inputs have values and button is enabled
-    expect(nameInput.value).toBe('Test Name');
-    expect(websiteInput.value).toBe('https://test.com');
+    await waitFor(() => {
+      expect(nameInput.value).toBe('Test Name');
+      expect(websiteInput.value).toBe('https://test.com');
+    });
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     expect(submitButton).not.toBeDisabled();
@@ -851,17 +851,19 @@ describe('Testing Community Profile Screen', () => {
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
 
     await userEvent.upload(fileInput, mockFile);
-    await wait();
+    await waitFor(() => {
+      expect(fileInput.files?.[0]).toBe(mockFile);
+    });
 
     // Upload another file
     const mockFile2 = new File(['content2'], 'test2.png', {
       type: 'image/png',
     });
     await userEvent.upload(fileInput, mockFile2);
-    await wait();
-
-    // The second file should be in the input
-    expect(fileInput.files?.[0]).toBe(mockFile2);
+    await waitFor(() => {
+      // The second file should be in the input
+      expect(fileInput.files?.[0]).toBe(mockFile2);
+    });
   });
 
   test('should handle uploading then clearing a logo file', async () => {
