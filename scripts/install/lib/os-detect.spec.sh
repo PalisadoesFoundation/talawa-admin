@@ -333,16 +333,23 @@ test_exported_variables() {
     
     detect_os
     
+    # Capture expected values from parent shell
     local expected_OS_TYPE="$OS_TYPE"
     local expected_OS_DISPLAY_NAME="$OS_DISPLAY_NAME"
     local expected_IS_WSL="$IS_WSL"
     local expected_OS_DETECTED="$_OS_DETECTED"
     
-    bash -c "[[ \"\$OS_TYPE\" == \"$expected_OS_TYPE\" ]]" && \
-    bash -c "[[ \"\$OS_DISPLAY_NAME\" == \"$expected_OS_DISPLAY_NAME\" ]]" && \
-    bash -c "[[ \"\$IS_WSL\" == \"$expected_IS_WSL\" ]]" && \
-    bash -c "[[ \"\$_OS_DETECTED\" == \"$expected_OS_DETECTED\" ]]" && \
-    assert_equals "true" "true" "Variables should be exported to subshells with correct values"
+    # Verify each variable is exported with correct value in subshells
+    local subshell_OS_TYPE subshell_OS_DISPLAY_NAME subshell_IS_WSL subshell_OS_DETECTED
+    subshell_OS_TYPE=$(bash -c 'echo "$OS_TYPE"')
+    subshell_OS_DISPLAY_NAME=$(bash -c 'echo "$OS_DISPLAY_NAME"')
+    subshell_IS_WSL=$(bash -c 'echo "$IS_WSL"')
+    subshell_OS_DETECTED=$(bash -c 'echo "$_OS_DETECTED"')
+    
+    assert_equals "$expected_OS_TYPE" "$subshell_OS_TYPE" "OS_TYPE should be exported with correct value" && \
+    assert_equals "$expected_OS_DISPLAY_NAME" "$subshell_OS_DISPLAY_NAME" "OS_DISPLAY_NAME should be exported with correct value" && \
+    assert_equals "$expected_IS_WSL" "$subshell_IS_WSL" "IS_WSL should be exported with correct value" && \
+    assert_equals "$expected_OS_DETECTED" "$subshell_OS_DETECTED" "_OS_DETECTED should be exported with correct value"
 }
 
 test_is_wsl_reset() {
