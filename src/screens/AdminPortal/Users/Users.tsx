@@ -1,14 +1,3 @@
-/**
- * The `Users` component displays a list of users with search, filter, sort, and infinite scroll capabilities.
- *
- * ## Migration (Phase 5 - Issue #5819):
- * - Migrated to use DataTable with useTableData hook for GraphQL integration
- * - Simplified state management using useTableData for data fetching
- * - Preserved custom row rendering via UsersTableItem for complex organization management
- * - Maintains backward compatibility with existing search, filter, and sort functionality
- *
- * @returns The rendered Users component
- */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +9,7 @@ import {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
   InterfaceQueryUserListItem,
-  IUserListQueryResponse,
+  InterfaceUserListQueryResponse,
 } from 'utils/interfaces';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './Users.module.css';
@@ -44,14 +33,31 @@ const USER_ROLES = {
 } as const;
 
 // Validation helpers
-const isValidSortingOption = (option: unknown): option is SortingOption => {
+export const isValidSortingOption = (
+  option: unknown,
+): option is SortingOption => {
   return option === 'newest' || option === 'oldest';
 };
 
-const isValidFilteringOption = (option: unknown): option is FilteringOption => {
+export const isValidFilteringOption = (
+  option: unknown,
+): option is FilteringOption => {
   return option === 'admin' || option === 'user' || option === 'cancel';
 };
 
+/**
+ * The Users component displays a list of users with search, filter, sort, and infinite scroll capabilities.
+ *
+ * Migration (Phase 5 - Issue #5819): Migrated to use DataTable with useTableData hook for GraphQL integration,
+ * simplified state management using useTableData for data fetching, preserved custom row rendering via UsersTableItem
+ * for complex organization management, and maintained backward compatibility with existing search, filter, and sort functionality.
+ *
+ * @remarks
+ * This component uses the DataTable component for rendering user lists with pagination support.
+ * Search, filtering by role, and sorting by creation date are fully supported.
+ *
+ * @returns The rendered Users component
+ */
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
@@ -88,8 +94,8 @@ const Users = (): JSX.Element => {
     InterfaceQueryUserListItem,
     InterfaceQueryUserListItem
   >(queryResult, {
-    path: (data: unknown): IUserListQueryResponse['allUsers'] =>
-      (data as IUserListQueryResponse)?.allUsers,
+    path: (data: unknown): InterfaceUserListQueryResponse['allUsers'] =>
+      (data as InterfaceUserListQueryResponse)?.allUsers,
   });
 
   // Show warning if there are no organizations
@@ -147,8 +153,13 @@ const Users = (): JSX.Element => {
   };
 
   const resetAndRefetch = (): void => {
+    refetch({
+      first: perPageResult,
+      after: null,
+      orgFirst: 32,
+      where: undefined,
+    });
     setSearchByName('');
-    refetch();
   };
 
   const handleSorting = (option: string): void => {
@@ -248,6 +259,7 @@ const Users = (): JSX.Element => {
         </h6>
         <div className="text-center mt-3">
           <button
+            type="button"
             className="btn btn-sm btn-outline-danger"
             onClick={() => refetch()}
             aria-label={tCommon('retry')}

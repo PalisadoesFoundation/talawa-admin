@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: IUserListQueryResponse
+# Interface: InterfaceUserListQueryResponse
 
 Defined in: [src/utils/interfaces.ts:1401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1401)
 

@@ -20,7 +20,15 @@ tags:
     accessibility,
   ]
 ---
+## Changelog by Phase (TableFix)
 
+### Phase 5 (Issue #5819): Users Component DataTable Migration
+
+- Migrated Users.tsx to DataTable component with useTableData hook for GraphQL integration
+- Simplified state management via useTableData for automatic pagination handling
+- Preserved custom row rendering through UsersTableItem component for organization management UI
+- Maintained search, filter (by role: admin/regular), and sort (newest/oldest) functionality
+- Implemented integration-level testing approach focusing on user-visible outcomes rather than DataTable internals
 ## Introduction
 
 What you’ll learn

@@ -203,9 +203,14 @@ const Requests = (): JSX.Element => {
       const { data: acceptData } = await acceptUser({
         variables: { input: { membershipRequestId } },
       });
-      if (acceptData) {
+      if (acceptData?.acceptMembershipRequest?.success) {
         NotificationToast.success(t('requests.acceptedSuccessfully') as string);
         refetch();
+      } else {
+        const errorMessage =
+          acceptData?.acceptMembershipRequest?.message ||
+          (t('users.errorOccurred') as string);
+        NotificationToast.error(errorMessage);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -217,9 +222,14 @@ const Requests = (): JSX.Element => {
       const { data: rejectData } = await rejectUser({
         variables: { input: { membershipRequestId } },
       });
-      if (rejectData) {
+      if (rejectData?.rejectMembershipRequest?.success) {
         NotificationToast.success(t('requests.rejectedSuccessfully') as string);
         refetch();
+      } else {
+        const errorMessage =
+          rejectData?.rejectMembershipRequest?.message ||
+          (t('users.errorOccurred') as string);
+        NotificationToast.error(errorMessage);
       }
     } catch (error: unknown) {
       errorHandler(t, error);

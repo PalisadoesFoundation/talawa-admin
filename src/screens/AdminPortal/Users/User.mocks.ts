@@ -46,7 +46,7 @@ export const MOCKS = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 emailAddress: 'john@example.com',
                 avatarURL: null,
                 createdAt: '2030-06-20T00:00:00.000Z',
@@ -83,7 +83,7 @@ export const MOCKS = [
               node: {
                 id: 'user2',
                 name: 'Jane Doe',
-                role: 'Member',
+                role: 'regular',
                 emailAddress: 'jane@example.com',
                 avatarURL: null,
                 createdAt: '2030-06-20T00:00:00.000Z',
@@ -178,7 +178,7 @@ export const MOCKS = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 avatarURL: 'https://example.com/avatar1.png',
                 emailAddress: 'john@example.com',
                 createdAt: '2030-06-20T00:00:00.000Z',
@@ -221,7 +221,7 @@ export const MOCKS = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 avatarURL: 'https://example.com/avatar2.png',
                 emailAddress: 'john@example.com',
                 createdAt: '2030-06-21T00:00:00.000Z',
@@ -282,7 +282,7 @@ export const MOCKS2 = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 emailAddress: 'john@example.com',
                 avatarURL: null,
                 createdAt: '2030-06-20T00:00:00.000Z',

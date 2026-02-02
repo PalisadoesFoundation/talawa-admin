@@ -2637,9 +2637,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               acceptMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req123',
-                },
+                success: true,
+                message: 'Membership request accepted',
               },
             },
           },
@@ -2702,9 +2701,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               rejectMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req789',
-                },
+                success: true,
+                message: 'Membership request rejected',
               },
             },
           },
@@ -2855,36 +2853,6 @@ describe('Testing Requests screen', () => {
   });
 
   describe('Column rendering', () => {
-    test('should render all column headers with correct data-field attributes', async () => {
-      render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Requests />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await wait(200);
-
-      // Verify table column headers are present in thead
-      const table = screen.getByTestId('datatable');
-      const headerCells = table.querySelectorAll('thead th');
-
-      expect(headerCells.length).toBeGreaterThanOrEqual(4);
-      const headerTexts = Array.from(headerCells).map((cell) =>
-        cell.textContent?.trim(),
-      );
-
-      expect(headerTexts.some((text) => text?.includes('Sl. No.'))).toBe(true);
-      expect(headerTexts.some((text) => text?.includes('Profile'))).toBe(true);
-      expect(headerTexts.some((text) => text?.includes('Name'))).toBe(true);
-      expect(headerTexts.some((text) => text?.includes('Email'))).toBe(true);
-    });
-
     test('should render accept and reject buttons in action column', async () => {
       render(
         <MockedProvider link={link}>

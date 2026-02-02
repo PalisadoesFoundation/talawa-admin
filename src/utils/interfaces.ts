@@ -1398,7 +1398,7 @@ export interface InterfaceQueryBlockPageMemberListItem {
 /**
  * GraphQL response type for user list queries.
  */
-export interface IUserListQueryResponse {
+export interface InterfaceUserListQueryResponse {
   allUsers?: {
     edges?:
       | Array<
