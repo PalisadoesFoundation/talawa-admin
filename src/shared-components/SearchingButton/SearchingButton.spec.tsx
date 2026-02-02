@@ -26,22 +26,21 @@ describe('SearchingButton Component', () => {
     ).toHaveTextContent('Custom Option');
   });
 
-  it('applies the given test ids and toggle id correctly', () => {
+  it('applies the given test ids and dropdown id correctly', () => {
     render(
       <SearchingButton
         dataTestIdPrefix="custom-toggle"
-        toggleId="custom-dropdown"
+        dropdownTestId="custom-dropdown"
         text="Test Option"
       />,
     );
 
     const toggle = screen.getByTestId('custom-toggle-toggle');
 
-    // data-testid checks
+    // existing checks
     expect(toggle).toBeInTheDocument();
     expect(screen.getByTestId('custom-toggle-container')).toBeInTheDocument();
 
-    // ✅ IMPORTANT: verify toggleId is applied as HTML id
     expect(toggle).toHaveAttribute('id', 'custom-dropdown');
   });
 
