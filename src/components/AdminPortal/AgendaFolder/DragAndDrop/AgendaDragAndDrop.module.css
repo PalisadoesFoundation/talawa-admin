@@ -23,6 +23,7 @@
   padding: 0 12px;
   font-size: 14px;
   height: 32px;
+  white-space: nowrap;
   margin: 5px;
 }
 

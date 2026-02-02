@@ -299,7 +299,7 @@ export interface InterfaceAgendaItemsPreviewModalProps {
 export interface InterfaceAgendaDragAndDropProps {
   folders: InterfaceAgendaFolderInfo[];
   setFolders: Dispatch<SetStateAction<InterfaceAgendaFolderInfo[]>>;
-  agendaFolderConnection: 'Event';
+  agendaFolderConnection: 'Event' | 'Organization';
   t: (key: string) => string;
 
   onEditFolder: (folder: InterfaceAgendaFolderInfo) => void;

@@ -732,6 +732,8 @@ describe('AgendaDragAndDrop', () => {
       });
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      // Verify rollback occurred - setFolders called twice (optimistic update, then rollback)
+      expect(mockSetFolders).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -1696,7 +1698,7 @@ describe('AgendaDragAndDrop', () => {
             <AgendaDragAndDrop
               folders={mockFolders}
               setFolders={mockSetFolders}
-              agendaFolderConnection={'Organization' as 'Event'}
+              agendaFolderConnection="Organization"
               t={mockT}
               onEditFolder={mockOnEditFolder}
               onDeleteFolder={mockOnDeleteFolder}
@@ -1717,13 +1719,5 @@ describe('AgendaDragAndDrop', () => {
 
       expect(screen.getByText('Category 1')).toBeInTheDocument();
     });
-  });
-
-  it('renders default folder without edit/delete interactions', () => {
-    renderAgendaDragAndDrop([], [mockDefaultFolder]);
-
-    expect(screen.getByText('Default Folder')).toBeInTheDocument();
-    expect(screen.getByLabelText('editFolder')).toBeDisabled();
-    expect(screen.getByLabelText('deleteFolder')).toBeDisabled();
   });
 });

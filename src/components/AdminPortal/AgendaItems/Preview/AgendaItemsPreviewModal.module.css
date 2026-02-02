@@ -42,20 +42,22 @@
 }
 
 .preview {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  column-gap: 16px;
+  margin-bottom: 12px;
 }
 
 .preview p {
   font-weight: 600;
-  min-width: 120px;
+  min-width: 140px;
   margin-bottom: 0;
 }
 
 .view {
   color: var(--color-gray-600);
-  flex: 1;
+  min-width: 0;
+  padding-left: 12px;
 }
 
 .previewFile {
@@ -77,14 +79,20 @@
 .urlListItem {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
   padding: 5px 0;
   list-style: none;
+
+  min-width: 0;
 }
 
 .urlListItem a {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
+
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .urlListItem a:hover {
