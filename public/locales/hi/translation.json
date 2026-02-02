@@ -92,6 +92,7 @@
     "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
     "organizations": "संगठन",
+    "clickToSelectOrg": "संगठन का चयन करने के लिए क्लिक करें",
     "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
     "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
@@ -1791,7 +1792,11 @@
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "location": "स्थान",
     "register": "पंजीकरण करें",
-    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया"
+    "registeredSuccessfully": "{{eventName}} के लिए सफलतापूर्वक पंजीकरण किया गया",
+    "eventCardAriaLabel": "{{name}} के लिए इवेंट कार्ड",
+    "unknownCreator": "अज्ञात निर्माता",
+    "alreadyRegisteredAriaLabel": "इवेंट पहले से पंजीकृत है",
+    "inviteOnlyEventAriaLabel": "केवल आमंत्रण इवेंट"
   },
   "advertisement": {
     "title": "विज्ञापनों",
@@ -2389,7 +2394,9 @@
     "editComment": "टिप्पणी संपादित करें",
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
-    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "commentBy": "टिप्पणी: {{name}} द्वारा",
+    "moreOptionsAriaLabel": "टिप्पणी के लिए अधिक विकल्प"
   },
   "profileAvatar": {
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",

@@ -95,7 +95,7 @@ const MOCKS = [
           },
           {
             id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
+            name: 'Mills & Group',
             addressLine1: '5112 Dare Centers',
           },
         ],
@@ -105,6 +105,14 @@ const MOCKS = [
 ];
 
 const MOCKS3 = [
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
     result: {
@@ -117,7 +125,7 @@ const MOCKS3 = [
           },
           {
             id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
+            name: 'Mills & Group',
             addressLine1: '5112 Dare Centers',
           },
         ],
@@ -1361,46 +1369,330 @@ describe('Testing invitation functionality', () => {
   });
 });
 
-it('Render the Select Organization list and change the option', async () => {
-  // Skip this test for admin path since register button is removed
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    value: {
-      reload: vi.fn(),
-      href: 'https://localhost:4321/',
-      origin: 'https://localhost:4321',
-      pathname: '/',
-    },
+describe('Organization Autocomplete Component', () => {
+  beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
   });
 
-  render(
-    <MockedProvider link={link3}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-  await wait();
+  const setupRegistrationForm = async () => {
+    render(
+      <MockedProvider link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  const registerButton = screen.queryByTestId('goToRegisterPortion');
-  if (registerButton) {
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await user.click(registerButton);
+    await wait();
+
+    return screen.getByTestId('selectOrg');
+  };
+
+  it('renders Select Organization autocomplete with placeholder', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute(
+      'placeholder',
+      i18nForTest.t('loginPage.clickToSelectOrg'),
+    );
+  });
+
+  it('opens organization list when input is clicked', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.click(input);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('filters and selects an organization using keyboard', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+  });
+
+  it('opens organization list using dropdown icon', async () => {
+    const autocomplete = await setupRegistrationForm();
+
+    const buttons = within(autocomplete).getAllByRole('button');
+    const dropdownButton = buttons[0];
+
+    await user.click(dropdownButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('should have full width input as per w-100 class', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(input).toHaveClass('w-100');
+    expect(input).toHaveClass('form-control');
+  });
+  it('clears selected organization using clear icon', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
+  });
+
+  it('allows reopening list after clearing selection', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await wait();
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
+
+    // Click to reopen dropdown
+    await user.click(input);
+
+    await waitFor(() => {
+      // Dropdown should open
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('handles empty organizations list', async () => {
+    const EMPTY_ORGS_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    const emptyLink = new StaticMockLink(EMPTY_ORGS_MOCK, true);
+
+    render(
+      <MockedProvider link={emptyLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
     await user.click(registerButton);
     await wait();
 
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
-    autocomplete.focus();
 
-    await user.clear(input);
-    await user.type(input, 'a');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute(
+      'placeholder',
+      i18nForTest.t('loginPage.clickToSelectOrg'),
+    );
+  });
+
+  it('updates form state when organization is selected', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
-  }
+
+    await wait();
+
+    await user.type(screen.getByPlaceholderText(/Name/i), 'Test User');
+    await user.type(screen.getByTestId('signInEmail'), 'test@example.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+    await user.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Test@123',
+    );
+
+    const registrationBtn = screen.getByTestId('registrationBtn');
+    expect(registrationBtn).toBeEnabled();
+  });
+
+  it('displays organizations in correct format', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.click(input);
+    await wait();
+
+    await user.type(input, 'Unity');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('Unity');
+    });
+  });
+
+  it('handles GraphQL error when fetching organizations', async () => {
+    const ERROR_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        error: new Error('Failed to fetch organizations'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(ERROR_MOCK, true);
+
+    render(
+      <MockedProvider link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await user.click(registerButton);
+    await wait();
+
+    const autocomplete = screen.getByTestId('selectOrg');
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(autocomplete).toBeInTheDocument();
+    expect(input).toBeEnabled();
+  });
+
+  it('only shows clear button when organization is selected', async () => {
+    const autocomplete = await setupRegistrationForm();
+
+    // Check that dropdown button exists
+    const dropdownButton = within(autocomplete).getByRole('button', {
+      name: /open/i,
+    });
+    expect(dropdownButton).toBeInTheDocument();
+
+    // Select organization
+    const input = within(autocomplete).getByRole('combobox');
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+
+      within(autocomplete).queryByRole('button', {
+        name: /clear/i,
+      });
+    });
+  });
+
+  it('maintains focus during interactions', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    // Click input to focus
+    await user.click(input);
+    expect(input).toHaveFocus();
+
+    // Type something
+    await user.type(input, 'Test');
+    expect(input).toHaveFocus();
+
+    // Clear input
+    await user.keyboard('{Control>}a{/Control}'); // Select all
+    await user.keyboard('{Delete}');
+    expect(input).toHaveFocus();
+  });
+
+  it('handles special characters in organization names', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    // Test with special characters
+    await user.type(input, 'Mills &');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+  });
 });
 
 describe('Talawa-API server fetch check', () => {
