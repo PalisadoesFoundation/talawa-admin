@@ -246,5 +246,79 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           });
         `,
     },
+    // describe with comment before first statement (covers leadingComments branch)
+    {
+      code: `
+          import { describe, it, vi } from 'vitest';
+          describe('test', () => {
+            // comment
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
+          import { describe, it, vi } from 'vitest';
+          describe('test', () => {
+            // comment
+
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
+
+
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
+    // Empty describe with comment (covers !isClosingBrace branch)
+    {
+      code: `
+          import { describe, it, vi } from 'vitest';
+          vi.fn();
+          describe('empty', () => {
+            // comment
+          });
+        `,
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
+          import { describe, it, vi } from 'vitest';
+          vi.fn();
+          describe('empty', () => {
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
+
+            // comment
+          });
+        `,
+    },
+    // No indentation (covers no match branch)
+    {
+      code: `
+import { describe, it, vi } from 'vitest';
+describe('test', () => {
+it('should work', () => {
+vi.fn();
+});
+});
+`,
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
+import { describe, it, vi } from 'vitest';
+describe('test', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+it('should work', () => {
+vi.fn();
+});
+});
+`,
+    },
   ],
 });

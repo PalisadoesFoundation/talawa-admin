@@ -260,10 +260,20 @@ module.exports = {
                                             const insertCode = `\n\n${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
                                             return fixer.insertTextAfterRange([insertPosition, insertPosition], insertCode);
                                         }
-                                        // Replace from line start to statement start (the leading whitespace)
-                                        // with afterEach block + original indentation
-                                        const firstStmtStart = firstStmt.range[0];
-                                        return fixer.replaceTextRange([insertPosition, firstStmtStart], afterEachCode);
+                                        // Insert before the statement to preserve its original indentation
+                                        // The afterEach block follows the indentation of the describe block (baseIndent)
+                                        // We append our own newlines, but we don't append baseIndent at the end
+                                        // because the existing statement already has its own indentation.
+
+                                        // Remove the trailing baseIndent from the afterEachCode template for this case
+                                        // Original: `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n${baseIndent}`;
+
+                                        // New template without trailing indent:
+                                        // i18n-ignore-next-line: code template
+                                        const insertCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
+
+                                        // Insert at line start (insertPosition) which is before the indentation of firstStmt
+                                        return fixer.insertTextBeforeRange([insertPosition, insertPosition], insertCode);
                                     }
                                     // Empty describe block - insert with leading newline
                                     // i18n-ignore-next-line: code template, not user-facing text
@@ -359,13 +369,11 @@ module.exports = {
          */
         function findAfterEachNode(node) {
             let afterEachNode = null;
-            const visited = new WeakSet();
 
             function traverse(n) {
-                if (!n || typeof n !== 'object' || visited.has(n)) {
+                if (!n || typeof n !== 'object') {
                     return;
                 }
-                visited.add(n);
 
                 if (n.type === 'CallExpression' &&
                     n.callee && n.callee.name === 'afterEach' &&
@@ -399,14 +407,11 @@ module.exports = {
          */
         function findFirstDescribeBlock(node) {
             let firstDescribe = null;
-            const visited = new WeakSet();
 
             function traverse(n) {
-                // Prevent infinite recursion from circular references
-                if (!n || typeof n !== 'object' || visited.has(n)) {
+                if (!n || typeof n !== 'object') {
                     return;
                 }
-                visited.add(n);
 
                 if (n.type === 'CallExpression' &&
                     n.callee && n.callee.name === 'describe' &&
