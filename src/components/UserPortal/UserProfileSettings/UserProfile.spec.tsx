@@ -1,12 +1,12 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, within } from '@testing-library/react';
 import UserProfile from './UserProfile';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import common from '../../../../public/locales/en/common.json';
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -22,9 +22,6 @@ const renderWithProviders = (ui: React.ReactElement) =>
   );
 
 describe('UserProfile Component', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
   it('renders with complete user data and shows truncated name and email', () => {
     const userDetails = {
       firstName: 'Christopher',
@@ -34,7 +31,7 @@ describe('UserProfile Component', () => {
       image: 'profile-image-url',
     };
 
-    const { getByText, getByAltText, getByTestId } = renderWithProviders(
+    const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
 
@@ -42,8 +39,10 @@ describe('UserProfile Component', () => {
 
     expect(getByText('john..@example.com')).toBeInTheDocument();
 
-    const profileImage = getByAltText('Profile picture of Christopher Doe');
-    expect(profileImage).toBeInTheDocument();
+    const profileAvatarContainer = getByTestId('profile-avatar');
+    expect(profileAvatarContainer).toBeInTheDocument();
+
+    const profileImage = within(profileAvatarContainer).getByRole('img');
     expect(profileImage).toHaveAttribute('src', 'profile-image-url');
     expect(
       getByText(
@@ -62,10 +61,10 @@ describe('UserProfile Component', () => {
       image: 'null',
     };
 
-    const { getByAltText } = renderWithProviders(
+    const { getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByAltText('Profile picture of Alice Smith')).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
     const userDetails = {

@@ -26,7 +26,9 @@
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
  * - `react-tooltip` for tooltips.
- * - `Avatar` component for displaying a placeholder profile picture.
+ * - `ProfileAvatarDisplay` for profile picture + fallback rendering.
+ *
+ * `@param` props - Partial InterfaceUser props for UserProfile.
  *
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -83,6 +85,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
                 shape="circle"
                 objectFit="cover"
                 enableEnlarge={true}
+                dataTestId="profile-avatar"
               />
             </div>
             <div className={styles.profileDetails}>
