@@ -5,10 +5,10 @@ import type { IColumnDef } from '../../types/shared-components/DataTable/interfa
 
 /**
  * Tests for LoadingMoreRows functionality (loadingMore prop in DataTable)
- * 
+ *
  * This test file covers the inline loadingMore skeleton rows rendering
  * that appears when loadingMore=true in DataTable component.
- * 
+ *
  * Coverage includes:
  * - Rendering with different numbers of columns
  * - effectiveSelectable prop variations (true/false)
