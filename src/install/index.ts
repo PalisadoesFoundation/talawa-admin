@@ -129,14 +129,17 @@ function displaySuccessMessage(packagesInstalled: string[]): void {
   console.log('  https://docs-admin.talawa.io/docs/installation');
 }
 
+export function handleDirectExecutionError(error: unknown): void {
+  console.error('Unhandled error:', error);
+  process.exit(1);
+}
+
 // Run main if this file is executed directly
 const currentFilePath = fileURLToPath(import.meta.url);
+/* istanbul ignore if */
 if (
   process.argv[1] === currentFilePath ||
   process.argv[1]?.includes('install/index.ts')
 ) {
-  main().catch((error) => {
-    console.error('Unhandled error:', error);
-    process.exit(1);
-  });
+  main().catch(handleDirectExecutionError);
 }

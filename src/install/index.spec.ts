@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { main } from './index';
+import { handleDirectExecutionError, main } from './index';
 import * as detectorModule from './os/detector';
 import * as packagesModule from './packages';
 import type { IPackageStatus } from './types';
@@ -219,6 +219,26 @@ describe('install/index', () => {
 
       await main();
 
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
+  });
+
+  describe('handleDirectExecutionError', () => {
+    it('should log error and exit with code 1', () => {
+      const testError = new Error('Test error');
+
+      handleDirectExecutionError(testError);
+
+      expect(console.error).toHaveBeenCalledWith('Unhandled error:', testError);
+      expect(process.exit).toHaveBeenCalledWith(1);
+    });
+
+    it('should handle non-Error objects', () => {
+      const testError = 'String error';
+
+      handleDirectExecutionError(testError);
+
+      expect(console.error).toHaveBeenCalledWith('Unhandled error:', testError);
       expect(process.exit).toHaveBeenCalledWith(1);
     });
   });
