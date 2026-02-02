@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { DataGridWrapper } from './index';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { DataGridWrapper, convertTokenColumns } from './index';
 import { vi } from 'vitest';
 import React from 'react';
 import type {
@@ -8,6 +9,7 @@ import type {
   GridRowsProp,
   GridValidRowModel,
 } from '@mui/x-data-grid';
+import type { TokenAwareGridColDef } from '../../types/DataGridWrapper/interface';
 
 interface IRenderCellCall {
   row: TestRow;
@@ -233,23 +235,30 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
       dataTestIdPrefix?: string;
     }>;
   }) => {
+    const inputRef = React.useRef<HTMLInputElement>(null);
+
     return (
       <div data-testid="search-filter-bar">
         <input
+          ref={inputRef}
           type="text"
-          value={searchValue}
+          defaultValue={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && onSearchSubmit) {
-              onSearchSubmit(searchValue);
-            }
-          }}
           placeholder="Search"
           role="searchbox"
           data-testid={searchInputTestId}
         />
-
-        {/* ADD THESE TRIGGER BUTTONS */}
+        <button
+          type="button"
+          data-testid="search-submit-btn"
+          onClick={() =>
+            onSearchSubmit &&
+            inputRef.current &&
+            onSearchSubmit(inputRef.current.value)
+          }
+        >
+          Submit
+        </button>
         {dropdowns?.map((dropdown) => (
           <button
             type="button"
@@ -327,23 +336,23 @@ describe('DataGridWrapper', () => {
   });
 
   // Search functionality tests
-  test('handles client-side search', () => {
-    vi.useFakeTimers();
+  test('handles client-side search', async () => {
+    const user = userEvent.setup();
     render(
       <DataGridWrapper
         {...defaultProps}
-        searchConfig={{ enabled: true, fields: ['name'], debounceMs: 100 }}
+        searchConfig={{ enabled: true, fields: ['name'], debounceMs: 0 }}
       />,
     );
 
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'Alice' } });
-    vi.advanceTimersByTime(100);
+    await user.clear(input);
+    await user.type(input, 'Alice');
     expect(input).toHaveValue('Alice');
-    vi.useRealTimers();
   });
 
-  test('handles server-side search with SearchFilterBar', () => {
+  test('handles server-side search with SearchFilterBar', async () => {
+    const user = userEvent.setup();
     const onSearchChange = vi.fn();
     render(
       <DataGridWrapper
@@ -358,15 +367,23 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    // The mock no longer auto-calls, so we need to simulate user interaction
-    const searchInput = screen.getByTestId('searchInput');
+    const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
 
-    // Simulate user typing and pressing Enter
-    fireEvent.change(searchInput, { target: { value: 'explicit-search' } });
-    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+    searchInput.focus();
+    await user.clear(searchInput);
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.type(searchInput, 'e');
+    searchInput.focus();
+    await user.type(searchInput, 's');
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.click(screen.getByTestId('search-submit-btn'));
 
-    // Now verify the callback was called with user input
-    expect(onSearchChange).toHaveBeenCalledWith('explicit-search', 'name');
+    // Verify the callback was called with user input
+    expect(onSearchChange).toHaveBeenCalledWith('test', 'name');
   });
 
   test('shows warning for server-side search without callback', () => {
@@ -414,14 +431,15 @@ describe('DataGridWrapper', () => {
   });
 
   // Pagination tests
-  test('configures and renders pagination controls', () => {
+  test('configures and renders pagination controls', async () => {
+    const user = userEvent.setup();
     render(
       <DataGridWrapper
         {...defaultProps}
         paginationConfig={{ enabled: true, defaultPageSize: 10 }}
       />,
     );
-    fireEvent.click(screen.getByTestId('trigger-pagination-change'));
+    await user.click(screen.getByTestId('trigger-pagination-change'));
     // Verify pagination is configured (mock calls onPaginationModelChange)
     expect(screen.getByTestId('data-grid')).toBeInTheDocument();
   });
@@ -461,10 +479,11 @@ describe('DataGridWrapper', () => {
   });
 
   // Interaction tests
-  test('handles row click', () => {
+  test('handles row click', async () => {
+    const user = userEvent.setup();
     const onRowClick = vi.fn();
     render(<DataGridWrapper {...defaultProps} onRowClick={onRowClick} />);
-    fireEvent.click(screen.getByTestId('row-1'));
+    await user.click(screen.getByTestId('row-1'));
     expect(onRowClick).toHaveBeenCalled();
   });
 
@@ -480,28 +499,32 @@ describe('DataGridWrapper', () => {
   });
 
   // Edge case tests
-  test('handles null values in search fields', () => {
+  test('handles null values in search fields', async () => {
+    const user = userEvent.setup();
     const rowsWithNulls = [
       { id: 1, name: null, role: 'Admin' },
       { id: 2, name: 'Bob', role: null },
     ];
 
-    vi.useFakeTimers();
     render(
       <DataGridWrapper
         {...defaultProps}
         rows={rowsWithNulls}
-        searchConfig={{ enabled: true, fields: ['name', 'role'] }}
+        searchConfig={{
+          enabled: true,
+          fields: ['name', 'role'],
+          debounceMs: 0,
+        }}
       />,
     );
 
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'Admin' } });
-    vi.advanceTimersByTime(300);
-    vi.useRealTimers();
+    await user.clear(input);
+    await user.type(input, 'Admin');
   });
 
-  test('SearchFilterBar with both dropdowns', () => {
+  test('SearchFilterBar with both dropdowns', async () => {
+    const user = userEvent.setup();
     const onSearchByChange = vi.fn();
     const onSortChange = vi.fn();
 
@@ -531,16 +554,16 @@ describe('DataGridWrapper', () => {
     );
 
     // Click the triggers
-    fireEvent.click(screen.getByTestId('searchBy-trigger'));
-    fireEvent.click(screen.getByTestId('sort-trigger'));
+    await user.click(screen.getByTestId('searchBy-trigger'));
+    await user.click(screen.getByTestId('sort-trigger'));
 
     expect(onSearchByChange).toHaveBeenCalledWith('name');
     expect(onSortChange).toHaveBeenCalledWith('name_asc');
   });
 
   // Debounce cleanup test
-  test('cleans up debounce timer', () => {
-    vi.useFakeTimers();
+  test('cleans up debounce timer', async () => {
+    const user = userEvent.setup();
     const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
     const { unmount } = render(
       <DataGridWrapper
@@ -550,11 +573,11 @@ describe('DataGridWrapper', () => {
     );
 
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'test' } });
+    await user.clear(input);
+    await user.type(input, 'test');
     unmount();
     expect(clearTimeoutSpy).toHaveBeenCalled();
 
-    vi.useRealTimers();
     clearTimeoutSpy.mockRestore();
   });
 
@@ -579,49 +602,49 @@ describe('DataGridWrapper', () => {
     consoleSpy.mockRestore();
   });
 
-  test('filter function handles nullish values with coalescing operator', () => {
+  test('filter function handles nullish values with coalescing operator', async () => {
+    const user = userEvent.setup();
     const rowsWithNullish = [
       { id: 1, name: null, role: undefined },
       { id: 2, name: 'Bob', role: 'User' },
       { id: 3, name: 'Charlie', role: null },
     ];
 
-    vi.useFakeTimers();
-
     render(
       <DataGridWrapper
         {...defaultProps}
         rows={rowsWithNullish}
-        searchConfig={{ enabled: true, fields: ['name', 'role'] }}
+        searchConfig={{
+          enabled: true,
+          fields: ['name', 'role'],
+          debounceMs: 0,
+        }}
       />,
     );
 
     const input = screen.getByRole('searchbox');
 
     // Test 1: Searching for 'Bob' (non-null value)
-    fireEvent.change(input, { target: { value: 'Bob' } });
-    vi.advanceTimersByTime(300);
+    await user.clear(input);
+    await user.type(input, 'Bob');
     expect(input).toHaveValue('Bob');
 
     // Test 2: Searching for 'User' (non-undefined value)
-    fireEvent.change(input, { target: { value: 'User' } });
-    vi.advanceTimersByTime(300);
+    await user.clear(input);
+    await user.type(input, 'User');
     expect(input).toHaveValue('User');
 
     // Test 3: Searching for empty string (should show all rows)
-    fireEvent.change(input, { target: { value: '' } });
-    vi.advanceTimersByTime(300);
+    await user.clear(input);
     expect(input).toHaveValue('');
 
     // Test 4: Searching for non-existent value
-    fireEvent.change(input, { target: { value: 'Nonexistent' } });
-    vi.advanceTimersByTime(300);
+    await user.type(input, 'Nonexistent');
     expect(input).toHaveValue('Nonexistent');
-
-    vi.useRealTimers();
   });
 
-  test('sort dropdown else branch (no onSortChange)', () => {
+  test('sort dropdown else branch (no onSortChange)', async () => {
+    const user = userEvent.setup();
     render(
       <DataGridWrapper
         {...defaultProps}
@@ -643,7 +666,7 @@ describe('DataGridWrapper', () => {
     );
 
     // Click the sort trigger button
-    fireEvent.click(screen.getByTestId('sort-trigger'));
+    await user.click(screen.getByTestId('sort-trigger'));
 
     expect(screen.getByTestId('search-filter-bar')).toBeInTheDocument();
   });
@@ -684,7 +707,8 @@ describe('DataGridWrapper', () => {
     expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 
-  test('search term updates on Enter key press', () => {
+  test('search term updates on Enter key press', async () => {
+    const user = userEvent.setup();
     render(
       <DataGridWrapper
         {...defaultProps}
@@ -693,13 +717,14 @@ describe('DataGridWrapper', () => {
     );
 
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'test' } });
-    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+    await user.clear(input);
+    await user.type(input, 'test{Enter}');
 
     expect(input).toHaveValue('test');
   });
 
-  test('handles server-side search without selectedSearchBy', () => {
+  test('handles server-side search without selectedSearchBy', async () => {
+    const user = userEvent.setup();
     const onSearchChange = vi.fn();
 
     render(
@@ -715,15 +740,25 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    // Simulate user typing and pressing Enter
-    const searchInput = screen.getByTestId('searchInput');
-    fireEvent.change(searchInput, { target: { value: 'test-search-value' } });
-    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+    const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
+    searchInput.focus();
+    await user.clear(searchInput);
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.type(searchInput, 'e');
+    searchInput.focus();
+    await user.type(searchInput, 's');
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.click(screen.getByTestId('search-submit-btn'));
 
-    expect(onSearchChange).toHaveBeenCalledWith('test-search-value', undefined);
+    expect(onSearchChange).toHaveBeenCalledWith('test', undefined);
   });
 
-  test('SearchFilterBar callbacks execute correctly', () => {
+  test('SearchFilterBar callbacks execute correctly', async () => {
+    const user = userEvent.setup();
     const onSearchChange = vi.fn();
     const onSearchByChange = vi.fn();
 
@@ -744,15 +779,24 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    // Simulate user typing and pressing Enter
-    const searchInput = screen.getByTestId('searchInput');
-    fireEvent.change(searchInput, { target: { value: 'test-search-value' } });
-    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+    const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
+    searchInput.focus();
+    await user.clear(searchInput);
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.type(searchInput, 'e');
+    searchInput.focus();
+    await user.type(searchInput, 's');
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.click(screen.getByTestId('search-submit-btn'));
 
-    // ADD THIS LINE: Click the searchBy trigger button
-    fireEvent.click(screen.getByTestId('searchBy-trigger'));
+    // Click the searchBy trigger button
+    await user.click(screen.getByTestId('searchBy-trigger'));
 
-    expect(onSearchChange).toHaveBeenCalledWith('test-search-value', 'name');
+    expect(onSearchChange).toHaveBeenCalledWith('test', 'name');
     expect(onSearchByChange).toHaveBeenCalledWith('name');
   });
 
@@ -787,8 +831,9 @@ describe('DataGridWrapper', () => {
     expect(screen.getByRole('searchbox')).toBeInTheDocument();
   });
 
-  // More specific test for onSearchSubmit with Enter key
-  test('Enter key triggers onSearchSubmit in SearchFilterBar', () => {
+  // More specific test for onSearchSubmit with submit button
+  test('Submit button triggers onSearchSubmit in SearchFilterBar', async () => {
+    const user = userEvent.setup();
     const onSearchChange = vi.fn();
 
     render(
@@ -804,17 +849,21 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    const searchInput = screen.getByTestId('searchInput');
+    const searchInput = screen.getByTestId('searchInput') as HTMLInputElement;
+    searchInput.focus();
+    await user.clear(searchInput);
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.type(searchInput, 'e');
+    searchInput.focus();
+    await user.type(searchInput, 's');
+    searchInput.focus();
+    await user.type(searchInput, 't');
+    searchInput.focus();
+    await user.click(screen.getByTestId('search-submit-btn'));
 
-    // Simulate typing and pressing Enter
-    fireEvent.change(searchInput, { target: { value: 'manual-enter-test' } });
-    fireEvent.keyDown(searchInput, {
-      key: 'Enter',
-      code: 'Enter',
-    });
-
-    // This should trigger lines 196-202 through the onKeyDown handler
-    expect(onSearchChange).toHaveBeenCalledWith('manual-enter-test', 'name');
+    expect(onSearchChange).toHaveBeenCalledWith('test', 'name');
   });
 
   // More comprehensive test for line 260
@@ -844,8 +893,8 @@ describe('DataGridWrapper', () => {
     expect(screen.getByText('Custom message')).toBeInTheDocument();
   });
 
-  test('simulate onSearchSubmit for client-side search', () => {
-    vi.useFakeTimers();
+  test('simulate onSearchSubmit for client-side search', async () => {
+    const user = userEvent.setup();
 
     render(
       <DataGridWrapper
@@ -853,7 +902,7 @@ describe('DataGridWrapper', () => {
         searchConfig={{
           enabled: true,
           searchByOptions: [{ label: 'Name', value: 'name' }],
-          // Client-side by default
+          debounceMs: 0,
         }}
       />,
     );
@@ -862,18 +911,11 @@ describe('DataGridWrapper', () => {
     const searchInput = screen.getByTestId('searchInput');
 
     // Type something
-    fireEvent.change(searchInput, { target: { value: 'test search' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'test search{Enter}');
 
-    // Press Enter to trigger onSearchSubmit
-    fireEvent.keyDown(searchInput, {
-      key: 'Enter',
-      code: 'Enter',
-    });
-
-    vi.advanceTimersByTime(300);
     // Verify search term was applied
     expect(searchInput).toHaveValue('test search');
-    vi.useRealTimers();
   });
 
   // Default sort initialization
@@ -955,29 +997,29 @@ describe('DataGridWrapper', () => {
   });
 
   // Test clear functionality triggers setSearchTerm
-  test('clear button resets search term', () => {
-    vi.useFakeTimers();
+  test('clear button resets search term', async () => {
+    const user = userEvent.setup();
     render(
       <DataGridWrapper
         {...defaultProps}
-        searchConfig={{ enabled: true, fields: ['name'] }}
+        searchConfig={{ enabled: true, fields: ['name'], debounceMs: 0 }}
       />,
     );
 
     const searchInput = screen.getByRole('searchbox');
     expect(searchInput).toHaveValue('');
-    fireEvent.change(searchInput, { target: { value: 'Alice' } });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Alice');
     expect(searchInput).toHaveValue('Alice');
 
     const clearButton = screen.getByLabelText('Clear');
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     expect(searchInput).toHaveValue('');
-    vi.advanceTimersByTime(300);
-    vi.useRealTimers();
   });
 
-  test('does not call onSearchByChange when not provided', () => {
+  test('does not call onSearchByChange when not provided', async () => {
+    const user = userEvent.setup();
     // No onSearchByChange in searchConfig
     render(
       <DataGridWrapper
@@ -997,9 +1039,156 @@ describe('DataGridWrapper', () => {
     );
 
     // Click the searchBy trigger button
-    fireEvent.click(screen.getByTestId('searchBy-trigger'));
+    await user.click(screen.getByTestId('searchBy-trigger'));
 
     // Should not crash or throw errors
     expect(screen.getByTestId('search-filter-bar')).toBeInTheDocument();
+  });
+});
+
+describe('convertTokenColumns', () => {
+  test('converts spacing tokens to pixel values for width property', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'name', headerName: 'Name', width: 'space-15' },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(150);
+  });
+
+  test('converts spacing tokens to pixel values for minWidth property', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'name', headerName: 'Name', minWidth: 'space-13' },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].minWidth).toBe(96);
+  });
+
+  test('converts spacing tokens to pixel values for maxWidth property', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'name', headerName: 'Name', maxWidth: 'space-20' },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].maxWidth).toBe(300);
+  });
+
+  test('passes through numeric values without conversion', () => {
+    const columns: TokenAwareGridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Name',
+        width: 200,
+        minWidth: 100,
+        maxWidth: 400,
+      },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(200);
+    expect(result[0].minWidth).toBe(100);
+    expect(result[0].maxWidth).toBe(400);
+  });
+
+  test('handles mixed token and numeric values in single column', () => {
+    const columns: TokenAwareGridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Name',
+        width: 'space-15',
+        minWidth: 100,
+        maxWidth: 'space-20',
+      },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(150);
+    expect(result[0].minWidth).toBe(100);
+    expect(result[0].maxWidth).toBe(300);
+  });
+
+  test('handles multiple columns with different configurations', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'id', headerName: '#', width: 'space-10' },
+      {
+        field: 'name',
+        headerName: 'Name',
+        minWidth: 'space-15',
+        maxWidth: 300,
+      },
+      { field: 'email', headerName: 'Email', width: 250 },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(48);
+    expect(result[1].minWidth).toBe(150);
+    expect(result[1].maxWidth).toBe(300);
+    expect(result[2].width).toBe(250);
+  });
+
+  test('handles columns with undefined width properties', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'name', headerName: 'Name' },
+      { field: 'email', headerName: 'Email', flex: 1 },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBeUndefined();
+    expect(result[0].minWidth).toBeUndefined();
+    expect(result[0].maxWidth).toBeUndefined();
+    expect(result[1].width).toBeUndefined();
+  });
+
+  test('handles empty columns array', () => {
+    const columns: TokenAwareGridColDef[] = [];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result).toEqual([]);
+    expect(result.length).toBe(0);
+  });
+
+  test('converts fractional spacing tokens (space-11-5, space-16-5, space-16-7)', () => {
+    const columns: TokenAwareGridColDef[] = [
+      { field: 'id', headerName: '#', width: 'space-11-5' },
+      { field: 'name', headerName: 'Name', width: 'space-16-5' },
+      { field: 'email', headerName: 'Email', width: 'space-16-7' },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(70);
+    expect(result[1].width).toBe(180);
+    expect(result[2].width).toBe(200);
+  });
+
+  test('preserves other column properties during conversion', () => {
+    const columns: TokenAwareGridColDef[] = [
+      {
+        field: 'name',
+        headerName: 'Name',
+        width: 'space-15',
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+      },
+    ];
+
+    const result = convertTokenColumns(columns);
+
+    expect(result[0].width).toBe(150);
+    expect(result[0].field).toBe('name');
+    expect(result[0].headerName).toBe('Name');
+    expect(result[0].sortable).toBe(false);
+    expect(result[0].align).toBe('center');
+    expect(result[0].headerAlign).toBe('center');
   });
 });

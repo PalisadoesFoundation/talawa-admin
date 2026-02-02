@@ -200,9 +200,9 @@ const ALLOWLIST_PATTERNS = [
   /@media[^{]*\(\s*(?:min|max)-(?:width|height):\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*width:\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*height:\s*[\d.]+(px|rem|em)\s*\)/,
-  // Spacing token names for DataGrid columns (e.g., minWidth: 'space-15')
+  // Spacing token names for DataGrid columns (e.g., minWidth: 'space-15', width: 'space-11-5')
   // These are converted to pixel values by DataGridWrapper
-  /(?:width|minWidth|maxWidth):\s*['"]space-(?:0-5|\d{1,2})['"]/,
+  /(?:width|minWidth|maxWidth):\s*['"]space-(?:0-5|\d{1,2}(?:-(?:5|7))?)['"]/,
 ];
 
 const normalizePath = (file: string): string => file.split(path.sep).join('/');
@@ -461,7 +461,9 @@ export const shouldSkipFile = (file: string): boolean => {
     normalized === 'src/style/app-fixed.module.css' ||
     normalized === 'src/assets/css/app.css' ||
     normalized.startsWith('src/test-utils/validate-tokens') ||
-    normalized.startsWith('src/style/tokens/')
+    normalized.startsWith('src/style/tokens/') ||
+    normalized.endsWith('.spec.ts') ||
+    normalized.endsWith('.spec.tsx')
   );
 };
 

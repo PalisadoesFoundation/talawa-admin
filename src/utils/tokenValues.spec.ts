@@ -23,11 +23,14 @@ describe('tokenValues', () => {
         'space-9',
         'space-10',
         'space-11',
+        'space-11-5',
         'space-12',
         'space-13',
         'space-14',
         'space-15',
         'space-16',
+        'space-16-5',
+        'space-16-7',
         'space-17',
         'space-18',
         'space-19',
@@ -53,8 +56,11 @@ describe('tokenValues', () => {
       expect(spacingTokens['space-5']).toBe(16);
       expect(spacingTokens['space-8']).toBe(32);
       expect(spacingTokens['space-10']).toBe(48);
+      expect(spacingTokens['space-11-5']).toBe(70);
       expect(spacingTokens['space-13']).toBe(96);
       expect(spacingTokens['space-15']).toBe(150);
+      expect(spacingTokens['space-16-5']).toBe(180);
+      expect(spacingTokens['space-16-7']).toBe(200);
     });
 
     it('has all values as numbers', () => {

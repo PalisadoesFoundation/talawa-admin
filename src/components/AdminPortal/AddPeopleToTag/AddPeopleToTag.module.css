@@ -16,82 +16,82 @@
 }
 
 .errorIcon {
-  font-size: var(--error-icon-size, var(--font-size-3xl));
-  color: var(--bs-danger, var(--errorIcon-color));
+  font-size: var(--font-size-3xl);
+  color: var(--color-red-500);
   margin-bottom: var(--space-5);
 }
 
 .tableHeader {
-  background-color: var(--tableHeader-bg);
-  color: var(--tableHeader-color);
-  font-size: var(--font-size-header);
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }
 
 .editButton {
-  background-color: var(--editButton-bg);
-  color: var(--editButton-font);
-  border-color: var(--editButton-border);
-  --bs-btn-active-bg: var(--editButton-bg-active);
-  --bs-btn-active-border-color: var(--editButton-border-active);
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--editButton-bg-hover);
-  border-color: var(--editButton-border-hover);
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-500);
   box-shadow: none;
 }
 
 .removeButton {
   margin-bottom: var(--space-4);
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
   margin-right: var(--space-4);
-  --bs-btn-border-color: var(--removeButton-border);
+  --bs-btn-border-color: var(--color-red-100);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover) !important;
-  border-color: var(--removeButton-border-hover);
-  color: var(--removeButton-color-hover);
+  background-color: var(--color-red-500) !important;
+  border-color: var(--color-red-500);
+  color: var(--color-white);
 }
 
 .addButton {
   margin-bottom: var(--space-4);
-  color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
+  color: var(--color-gray-500);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
   --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
-  border-color: var(--addButton-border-hover);
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-gray-500);
 }
 
 .addButton:disabled {
   margin-bottom: var(--space-4);
-  background-color: var(--disabled-btn);
-  border-color: var(--addButton-bg);
+  background-color: var(--color-blue-100);
+  border-color: var(--color-blue-200);
 }
 
 .modalHeader {
   border: none;
-  background-color: var(--modalHeader-bg) !important;
+  background-color: var(--color-white) !important;
   padding: var(--space-5);
-  color: var(--modalHeader-color);
+  color: var(--color-black);
 }
 
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--modalTitle-color) !important;
+  color: var(--color-gray-700) !important;
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
 
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--modalClose-button-color) !important;
+  color: var(--color-red-500) !important;
   opacity: 1;
 }
 
@@ -106,8 +106,8 @@
   align-items: center;
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-offset-none, 0) var(--shadow-offset-xs)
-    var(--shadow-blur-sm) var(--memberBadge-box-shadow);
+  box-shadow: 0 var(--shadow-offset-xs) var(--shadow-blur-sm)
+    var(--color-gray-300);
 }
 
 .removeFilterIcon {
@@ -122,8 +122,8 @@
 }
 
 .rowBackground {
-  background-color: var(--rowBackground-bg);
-  color: var(--rowBackground-color);
+  background-color: var(--color-white);
+  color: var(--color-black);
   max-height: var(--space-14);
   overflow-y: auto;
 }

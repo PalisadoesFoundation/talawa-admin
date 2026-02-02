@@ -52,8 +52,8 @@ import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
   type GridCellParams,
   type TokenAwareGridColDef,
+  DataGridWrapper,
 } from 'shared-components/DataGridWrapper';
-import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';

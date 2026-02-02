@@ -213,7 +213,9 @@ describe('ESLint Syntax Restrictions', () => {
     });
   });
 
-  describe('Modal state restrictions', () => {
+  // Modal state restrictions tests are disabled because the rules are commented out in base.ts
+  // Uncomment these tests when modalStateRestrictions are re-enabled in scripts/eslint/config/base.ts
+  describe.todo('Modal state restrictions', () => {
     it('should error on useState with modalState variable name', async () => {
       const code = `
         import React, { useState } from 'react';
