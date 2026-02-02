@@ -92,6 +92,7 @@
     "userEditProfilePicture": "编辑用户头像",
     "communityLogo": "社区标志",
     "organizations": "组织",
+    "clickToSelectOrg": "点击选择组织",
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
     "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
@@ -1796,7 +1797,11 @@
     "alreadyRegistered": "已经注册",
     "location": "位置",
     "register": "注册",
-    "registeredSuccessfully": "成功注册 {{eventName}}"
+    "registeredSuccessfully": "成功注册 {{eventName}}",
+    "eventCardAriaLabel": "{{name}} 的活动卡片",
+    "unknownCreator": "未知创作者",
+    "alreadyRegisteredAriaLabel": "活动已注册",
+    "inviteOnlyEventAriaLabel": "仅限受邀活动"
   },
   "advertisement": {
     "title": "广告",
@@ -2389,7 +2394,9 @@
     "editComment": "编辑评论",
     "deleteComment": "删除评论",
     "deleting": "删除中…",
-    "emptyCommentError": "请在提交前输入评论。"
+    "emptyCommentError": "请在提交前输入评论。",
+    "commentBy": "评论者：{{name}}",
+    "moreOptionsAriaLabel": "评论的更多选项"
   },
   "profileAvatar": {
     "altText": "{{name}}的个人资料图片",

@@ -79,6 +79,7 @@ reviews:
           - No disabled tests (`*.skip`) without documented reason + linked issue
           - Proper async utilities (`waitFor`, `act`)
           - Shard-compatible (12-shard strategy, no shared state, <30s timeout)
+          - Tests won't be flaky when CI/CD response times are highly variable
 
         ## 2. Code Quality & Implementation
 

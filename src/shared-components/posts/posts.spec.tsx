@@ -906,10 +906,10 @@ describe('Sorting Functionality', () => {
     renderComponent([emptyPostsMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
     await user.selectOptions(sortSelect, 'latest');
 
     // Should handle empty posts gracefully and not crash
@@ -923,10 +923,10 @@ describe('Sorting Functionality', () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     await user.selectOptions(sortSelect, 'oldest');
 
@@ -944,10 +944,10 @@ describe('Sorting Functionality', () => {
     ]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+      expect(screen.getByTestId('sortpost-select')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     // Sort by latest first
     await user.selectOptions(sortSelect, 'latest');
@@ -1365,7 +1365,7 @@ describe('HandleSorting Edge Case', () => {
       expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
     });
 
-    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    const sortSelect = screen.getByTestId('sortpost-select');
 
     // Verify hasMore is false when sorting is applied
     let infiniteScroll = screen.getByTestId('infinite-scroll');

@@ -162,7 +162,7 @@ describe('PluginStore', () => {
 
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
       expect(screen.getByTestId('searchPlugins')).toBeInTheDocument();
-      expect(screen.getByTestId('filterPlugins')).toBeInTheDocument();
+      expect(screen.getByTestId('filterPlugins-container')).toBeInTheDocument();
       expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
     });
 
@@ -244,9 +244,11 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterButton = screen.getByTestId('filterPlugins');
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
       await userEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
       await userEvent.click(installedOption);
 
       await waitFor(() => {
@@ -491,9 +493,11 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterButton = screen.getByTestId('filterPlugins');
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
       await userEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
       await userEvent.click(installedOption);
 
       await waitFor(() => {
@@ -1090,9 +1094,11 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       // Change filter dropdown
-      const filterButton = screen.getByTestId('filterPlugins');
+      const filterButton = screen.getByTestId('filterPlugins-toggle');
       await userEvent.click(filterButton);
-      const installedOption = screen.getByTestId('installed');
+      const installedOption = screen.getByTestId(
+        'filterPlugins-item-installed',
+      );
       await userEvent.click(installedOption);
 
       // Page should be reset to 0 when filter changes. Verify first-page items are rendered
