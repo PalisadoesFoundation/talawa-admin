@@ -167,6 +167,7 @@ export default function MessageItem({
             btnStyle={styles.customToggle}
             icon={<MoreVert />}
             placeholder=""
+            ariaLabel={t('messageActions')}
           />
           <span className={styles.messageTime}>
             {new Date(message?.createdAt).toLocaleTimeString('it-IT', {
