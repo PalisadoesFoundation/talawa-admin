@@ -31,7 +31,7 @@ interface InterfaceStorageHelper {
   getStorageKey: (key: string) => string;
 }
 
-const MOCKS = [
+const createMocks = () => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -104,7 +104,7 @@ const MOCKS = [
   },
 ];
 
-const MOCKS3 = [
+const createMocks3 = () => [
   {
     request: { query: GET_COMMUNITY_DATA_PG },
     result: { data: { community: null } },
@@ -134,7 +134,7 @@ const MOCKS3 = [
   },
 ];
 
-const MOCKS4 = [
+const createMocks4 = () => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -165,12 +165,12 @@ const MOCKS4 = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-const link3 = new StaticMockLink(MOCKS3, true);
+const link = new StaticMockLink(createMocks(), true);
+const link3 = new StaticMockLink(createMocks3(), true);
 
-const link4 = new StaticMockLink(MOCKS4, true);
+const link4 = new StaticMockLink(createMocks4(), true);
 
-const MOCKS_VERIFIED_EMAIL = [
+const createMocksVerifiedEmail = () => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -210,7 +210,7 @@ const MOCKS_VERIFIED_EMAIL = [
     result: { data: { organizations: [] } },
   },
 ];
-const linkVerifiedEmail = new StaticMockLink(MOCKS_VERIFIED_EMAIL, true);
+const linkVerifiedEmail = new StaticMockLink(createMocksVerifiedEmail(), true);
 
 const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
   const warning = vi.fn();
@@ -1759,7 +1759,7 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = MOCKS,
+  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
 
@@ -1810,7 +1810,7 @@ describe('Extra coverage for 100 %', () => {
     // re-import component so mock applies
     const { default: LoginPageFresh } = await import('./LoginPage');
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={createMocks()}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1872,7 +1872,7 @@ describe('Extra coverage for 100 %', () => {
   it('warns when non-admin logs in from admin portal', async () => {
     setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
-      ...MOCKS.filter((m) => m.request.query !== SIGNIN_QUERY),
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
       {
         request: {
           query: SIGNIN_QUERY,
