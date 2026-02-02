@@ -261,14 +261,14 @@ describe('Organisation Tags Page', () => {
         screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
-    const sortButton = screen.getByTestId('sortTags');
+    const sortButton = screen.getByTestId('sortTags-toggle');
     expect(sortButton).toBeInTheDocument();
     await user.click(sortButton);
-    const ascendingOption = screen.getByTestId('ASCENDING');
+    const ascendingOption = screen.getByTestId('sortTags-item-ASCENDING');
     expect(ascendingOption).toBeInTheDocument();
     await user.click(ascendingOption);
     await user.click(sortButton);
-    const descendingOption = screen.getByTestId('DESCENDING');
+    const descendingOption = screen.getByTestId('sortTags-item-DESCENDING');
     expect(descendingOption).toBeInTheDocument();
     await user.click(descendingOption);
   });
