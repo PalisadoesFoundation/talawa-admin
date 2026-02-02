@@ -1,14 +1,8 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, cleanup, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -906,16 +900,16 @@ describe('Organisations Page testing as Admin', () => {
 
     await wait();
 
-    const sortDropdown = screen.getByTestId('sort');
+    const sortDropdown = screen.getByTestId('sortOrgs-container');
     expect(sortDropdown).toBeInTheDocument();
 
-    const sortToggle = screen.getByTestId('sortOrgs');
+    const sortToggle = screen.getByTestId('sortOrgs-toggle');
 
     await act(async () => {
       fireEvent.click(sortToggle);
     });
 
-    const latestOption = screen.getByTestId('Latest');
+    const latestOption = screen.getByTestId('sortOrgs-item-Latest');
 
     await act(async () => {
       fireEvent.click(latestOption);
@@ -927,7 +921,9 @@ describe('Organisations Page testing as Admin', () => {
       fireEvent.click(sortToggle);
     });
 
-    const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
+    const oldestOption = await waitFor(() =>
+      screen.getByTestId('sortOrgs-item-Earliest'),
+    );
 
     await act(async () => {
       fireEvent.click(oldestOption);
@@ -1096,11 +1092,11 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open sort dropdown
-    const sortButton = screen.getByTestId('sortOrgs');
+    const sortButton = screen.getByTestId('sortOrgs-toggle');
     await userEvent.click(sortButton);
 
     // Select Latest option to verify descending date sort functionality
-    const latestOption = screen.getByTestId('Latest');
+    const latestOption = screen.getByTestId('sortOrgs-item-Latest');
     await userEvent.click(latestOption);
 
     await wait(200);
@@ -1121,11 +1117,11 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Open sort dropdown
-    const sortButton = screen.getByTestId('sortOrgs');
+    const sortButton = screen.getByTestId('sortOrgs-toggle');
     await userEvent.click(sortButton);
 
     // Select Earliest option to verify ascending date sort functionality
-    const earliestOption = screen.getByTestId('Earliest');
+    const earliestOption = screen.getByTestId('sortOrgs-item-Earliest');
     await userEvent.click(earliestOption);
 
     await wait(200);
@@ -1512,14 +1508,14 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    const sortDropdown = screen.getByTestId('sortOrgs');
+    const sortDropdown = screen.getByTestId('sortOrgs-toggle');
     expect(sortDropdown).toBeInTheDocument();
 
     // Click to open dropdown
     await userEvent.click(sortDropdown);
 
     // Select Earliest option - use the exact test ID from the component
-    const earliestOption = screen.getByTestId('Earliest');
+    const earliestOption = screen.getByTestId('sortOrgs-item-Earliest');
     await userEvent.click(earliestOption);
 
     await wait();
@@ -1539,14 +1535,14 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    const sortDropdown = screen.getByTestId('sortOrgs');
+    const sortDropdown = screen.getByTestId('sortOrgs-toggle');
     expect(sortDropdown).toBeInTheDocument();
 
     // Click to open dropdown
     await userEvent.click(sortDropdown);
 
     // Select Latest option
-    const latestOption = screen.getByTestId('Latest');
+    const latestOption = screen.getByTestId('sortOrgs-item-Latest');
     await userEvent.click(latestOption);
 
     await wait();
@@ -1569,17 +1565,17 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    const sortDropdown = screen.getByTestId('sortOrgs');
+    const sortDropdown = screen.getByTestId('sortOrgs-toggle');
 
     // Test Latest sorting (dateB - dateA path)
     await userEvent.click(sortDropdown);
-    const latestOption = screen.getByTestId('Latest');
+    const latestOption = screen.getByTestId('sortOrgs-item-Latest');
     await userEvent.click(latestOption);
     await wait(200);
 
     // Test Earliest sorting (dateA - dateB path)
     await userEvent.click(sortDropdown);
-    const earliestOption = screen.getByTestId('Earliest');
+    const earliestOption = screen.getByTestId('sortOrgs-item-Earliest');
     await userEvent.click(earliestOption);
     await wait(200);
   });
@@ -2060,13 +2056,13 @@ describe('Advanced Component Functionality Tests', () => {
     }
 
     // Find and open sort dropdown
-    const sortDropdown = screen.getByTestId('sortOrgs');
+    const sortDropdown = screen.getByTestId('sortOrgs-toggle');
     expect(sortDropdown).toBeInTheDocument();
     await userEvent.click(sortDropdown);
     await wait(100);
 
     // Select "Earliest" option to verify ascending date sort works correctly
-    const earliestOption = screen.getByTestId('Earliest');
+    const earliestOption = screen.getByTestId('sortOrgs-item-Earliest');
     expect(earliestOption).toBeInTheDocument();
     await userEvent.click(earliestOption);
     await wait(300); // Give more time for re-render

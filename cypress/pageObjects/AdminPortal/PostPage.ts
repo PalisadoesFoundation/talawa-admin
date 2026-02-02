@@ -33,7 +33,7 @@ export class PostsPage {
 
   sortPostsByNewest() {
     cy.get(this._sortButton).should('be.visible').click();
-    cy.get('[data-testid="latest"]').should('be.visible').click();
+    cy.get('[data-testid="sortpost-item-latest"]').should('be.visible').click();
     return this;
   }
 
