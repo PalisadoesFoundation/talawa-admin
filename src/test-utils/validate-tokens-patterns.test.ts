@@ -1,6 +1,10 @@
 import { describe, expect, test } from 'vitest';
 
-import { CSS_PATTERNS, TSX_PATTERNS } from '../../scripts/validate-tokens';
+import {
+  CSS_PATTERNS,
+  TSX_PATTERNS,
+  ALLOWLIST_PATTERNS,
+} from '../../scripts/validate-tokens';
 
 describe('CSS_PATTERNS', () => {
   describe('hexColor', () => {
@@ -418,6 +422,54 @@ describe('TSX_PATTERNS', () => {
       expect('outlineWidth: 1'.match(TSX_PATTERNS.outlineCamelCase)).toEqual([
         'outlineWidth: 1',
       ]);
+    });
+  });
+});
+
+describe('ALLOWLIST_PATTERNS', () => {
+  describe('DataGrid spacing token pattern', () => {
+    // Get the DataGrid spacing token pattern from ALLOWLIST_PATTERNS
+    const dataGridSpacingTokenPattern = ALLOWLIST_PATTERNS.find((pattern) =>
+      pattern.source.includes('space-'),
+    );
+
+    // Helper to safely match against the pattern and return full match only
+    const matchPattern = (str: string): string | null => {
+      if (!dataGridSpacingTokenPattern) return null;
+      const match = str.match(dataGridSpacingTokenPattern);
+      return match ? match[0] : null;
+    };
+
+    test('pattern exists in ALLOWLIST_PATTERNS', () => {
+      expect(dataGridSpacingTokenPattern).toBeDefined();
+    });
+
+    test('matches width with single quotes', () => {
+      expect(matchPattern("width: 'space-15'")).toBe("width: 'space-15'");
+    });
+
+    test('matches minWidth with double quotes', () => {
+      expect(matchPattern('minWidth: "space-11-5"')).toBe(
+        'minWidth: "space-11-5"',
+      );
+    });
+
+    test('matches maxWidth with fractional token space-0-5', () => {
+      expect(matchPattern("maxWidth: 'space-0-5'")).toBe(
+        "maxWidth: 'space-0-5'",
+      );
+    });
+
+    test('does not match invalid suffix', () => {
+      expect(matchPattern("width: 'space-15-3'")).toBeNull();
+    });
+
+    test('does not match missing quotes', () => {
+      expect(matchPattern('width: space-15')).toBeNull();
+    });
+
+    test('does not match invalid token name', () => {
+      expect(matchPattern("width: 'space-invalid'")).toBeNull();
     });
   });
 });

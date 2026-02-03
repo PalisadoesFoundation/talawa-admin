@@ -171,7 +171,7 @@ export const TSX_PATTERNS = {
  * Allowlist patterns - values that should NOT be flagged
  * These are valid CSS values that happen to match our patterns
  */
-const ALLOWLIST_PATTERNS = [
+export const ALLOWLIST_PATTERNS = [
   // CSS var() usage is always allowed
   /var\(--[^)]+\)/,
   // calc() expressions are allowed (they may contain tokens)

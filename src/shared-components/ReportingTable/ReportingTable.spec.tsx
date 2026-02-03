@@ -99,6 +99,27 @@ describe('ReportingTable', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
+  it('converts spacing token in minWidth property', () => {
+    const columnsWithTokenMinWidth: ReportingTableColumn[] = [
+      {
+        field: 'id',
+        headerName: 'ID',
+        [COL_MIN_WIDTH]: 'space-10',
+        sortable: false,
+      },
+    ];
+
+    // Verify convertTokenColumns converts 'space-10' to 48
+    const converted = convertTokenColumns(columnsWithTokenMinWidth);
+    expect(converted[0].minWidth).toBe(48);
+
+    render(
+      <ReportingTable rows={sampleRows} columns={columnsWithTokenMinWidth} />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
   it('passes through gridProps (noRowsOverlay when rows empty)', () => {
     const gridProps: ReportingTableGridProps = {
       slots: {
