@@ -1147,6 +1147,7 @@ describe('OrgUpdate Component', () => {
     const userRegSwitch = screen.getByTestId('user-reg-switch');
     expect(userRegSwitch).toBeChecked();
   });
+
   it('shows error toast when uploaded file is not an image', async () => {
     const user = userEvent.setup();
 
@@ -1164,6 +1165,7 @@ describe('OrgUpdate Component', () => {
       'organisationImage',
     ) as HTMLInputElement;
 
+    // userEvent respects the `accept` attribute; remove it to test JS validation
     fileInput.removeAttribute('accept');
 
     const invalidFile = new File(['hello'], 'test.txt', {
