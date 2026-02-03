@@ -1,0 +1,19 @@
+{
+  "people": [
+    {
+      "id": "person_001",
+      "name": "Alex Example",
+      "email": "alex@example.org",
+      "role": "administrator",
+      "joinedAt": "2025-11-20T00:00:00.000Z"
+    },
+    {
+      "id": "person_002",
+      "name": "Long Name Member — 世界",
+      "email": "long.name@example.org",
+      "role": "member",
+      "joinedAt": "2025-11-21T00:00:00.000Z"
+    }
+  ],
+  "emptyPeople": []
+}

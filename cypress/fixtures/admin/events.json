@@ -1,0 +1,23 @@
+{
+  "events": [
+    {
+      "id": "event_001",
+      "name": "Example Event",
+      "description": "Primary event",
+      "startsAt": "2026-01-05T10:00:00.000Z",
+      "endsAt": "2026-01-05T12:00:00.000Z",
+      "location": "Main Hall",
+      "organizationId": "org_001"
+    },
+    {
+      "id": "event_002",
+      "name": "Long Event Name — مرحبا 世界",
+      "description": "Edge case",
+      "startsAt": "2026-02-10T18:00:00.000Z",
+      "endsAt": "2026-02-10T20:00:00.000Z",
+      "location": "Remote",
+      "organizationId": "org_002"
+    }
+  ],
+  "emptyEvents": []
+}

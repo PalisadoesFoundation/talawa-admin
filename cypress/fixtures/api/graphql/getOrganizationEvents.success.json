@@ -1,0 +1,28 @@
+{
+  "data": {
+    "organization": {
+      "events": {
+        "edges": [
+          {
+            "node": {
+              "id": "event_001",
+              "name": "Example Event",
+              "startAt": "2026-01-05T10:00:00.000Z",
+              "endAt": "2026-01-05T12:00:00.000Z",
+              "location": "Main Hall"
+            }
+          },
+          {
+            "node": {
+              "id": "event_002",
+              "name": "Long Event Name — مرحبا 世界",
+              "startAt": "2026-02-10T18:00:00.000Z",
+              "endAt": "2026-02-10T20:00:00.000Z",
+              "location": "Remote"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

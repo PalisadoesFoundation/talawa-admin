@@ -149,6 +149,29 @@ cy.fixture('users').then((users) => {
 });
 ```
 
+#### Fixture library structure
+
+Fixtures are organized by domain under `cypress/fixtures/` to keep tests
+deterministic and consistent:
+
+- `auth/` - credential and user fixtures for login flows
+- `admin/` - organizations, events, people, action items, advertisements, tags,
+  venues
+- `user/` - posts, volunteers, campaigns, donations
+- `api/graphql/` - GraphQL responses grouped by operationName
+
+Datasets are intentionally minimal, include edge cases (empty arrays, long
+names, Unicode), and avoid PII.
+
+Example usage with GraphQL utilities:
+
+```ts
+cy.mockGraphQLOperation(
+  'OrganizationListBasic',
+  'api/graphql/organizations.success.json',
+);
+```
+
 ### Test Coverage Report
 
 After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
