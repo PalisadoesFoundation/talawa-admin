@@ -103,8 +103,6 @@ export default function MessageItem({
         case 'delete':
           onDelete(message.id);
           break;
-        default:
-          return;
       }
     },
     [message, onReply, onEdit, onDelete],

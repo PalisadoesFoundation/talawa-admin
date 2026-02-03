@@ -60,8 +60,6 @@ const UserProfileDropdown = (
       case 'logout':
         handleLogout();
         break;
-      default:
-        return;
     }
   };
 

@@ -340,6 +340,33 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       `/user/organization/${organizationId}`,
     );
   });
+
+  it('Should navigate to settings page when settings option is clicked', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/initial'],
+    });
+
+    render(
+      <MockedProvider link={link}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationNavbar {...navbarProps} />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('user-toggle'));
+    await userEvent.click(screen.getByTestId('user-item-settings'));
+
+    await wait();
+
+    expect(history.location.pathname).toBe('/user/settings');
+  });
 });
 
 describe('Testing OrganizationNavbar Cookie Fallback', () => {

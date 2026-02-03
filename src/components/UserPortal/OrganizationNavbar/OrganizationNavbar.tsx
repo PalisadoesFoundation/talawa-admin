@@ -76,8 +76,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
       case 'logout':
         await handleLogout();
         break;
-      default:
-        return;
     }
   };
 
