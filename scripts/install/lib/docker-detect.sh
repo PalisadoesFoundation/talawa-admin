@@ -23,8 +23,28 @@
 # ==============================================================================
 # SOURCE GUARD - Prevent multiple sourcing
 # ==============================================================================
-[[ -n "${TALAWA_DOCKER_DETECT_SOURCED:-}" ]] && return 0
-readonly TALAWA_DOCKER_DETECT_SOURCED=1
+[[ -n "${TALAWA_DOCKER_DETECT_SOURCED:-}" ]] && [[ -z "${_DOCKER_DETECT_TEST_MODE:-}" ]] && return 0
+TALAWA_DOCKER_DETECT_SOURCED=1
+
+# ==============================================================================
+# TEST MODE CONFIGURATION
+# ==============================================================================
+# For testing, set _DOCKER_DETECT_TEST_MODE=1 and define mock functions:
+#   _mock_docker_cli_output     - Output for "docker --version"
+#   _mock_docker_info_output    - Output for "docker info"
+#   _mock_docker_info_exit_code - Exit code for "docker info"
+#   _mock_docker_compose_output - Output for "docker compose version"
+#   _mock_docker_compose_v1_output - Output for "docker-compose --version"
+#   _mock_has_docker            - "true" or "false" to simulate docker presence
+#   _mock_has_docker_compose_v1 - "true" or "false" to simulate docker-compose presence
+#
+# Example:
+#   export _DOCKER_DETECT_TEST_MODE=1
+#   export _mock_has_docker="true"
+#   export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+#   source scripts/install/lib/docker-detect.sh
+# ==============================================================================
+export _DOCKER_DETECT_TEST_MODE="${_DOCKER_DETECT_TEST_MODE:-}"
 
 # ==============================================================================
 # DOCKER STATUS CONSTANTS
@@ -49,17 +69,38 @@ readonly TALAWA_DOCKER_DETECT_SOURCED=1
 # ==============================================================================
 
 # Default timeout for daemon connectivity check (in seconds)
-readonly DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-5}"
+if [[ -z "${DOCKER_DAEMON_TIMEOUT:-}" ]]; then
+    DOCKER_DAEMON_TIMEOUT=5
+fi
 
 # ==============================================================================
 # UTILITY FUNCTIONS
 # ==============================================================================
 
-# Check if a command exists (local version for standalone use)
-# This is duplicated from common.sh to allow standalone usage if needed
+# Check if a command exists (with test mode support)
+# In test mode, checks _mock_has_* variables instead of actual commands
 # Usage: _docker_command_exists "docker"
 _docker_command_exists() {
-    command -v "${1:-}" >/dev/null 2>&1
+    local cmd="${1:-}"
+    
+    if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+        case "$cmd" in
+            docker)
+                [[ "${_mock_has_docker:-false}" == "true" ]]
+                ;;
+            docker-compose)
+                [[ "${_mock_has_docker_compose_v1:-false}" == "true" ]]
+                ;;
+            timeout|gtimeout)
+                return 1
+                ;;
+            *)
+                command -v "$cmd" >/dev/null 2>&1
+                ;;
+        esac
+    else
+        command -v "$cmd" >/dev/null 2>&1
+    fi
 }
 
 # ==============================================================================
@@ -72,10 +113,19 @@ _docker_command_exists() {
 check_docker_cli() {
     if _docker_command_exists docker; then
         local version_output
-        version_output="$(docker --version 2>/dev/null)" || {
-            printf 'not_installed'
-            return 1
-        }
+        
+        if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+            version_output="${_mock_docker_cli_output:-}"
+            if [[ -z "$version_output" ]]; then
+                printf 'not_installed'
+                return 1
+            fi
+        else
+            version_output="$(docker --version 2>/dev/null)" || {
+                printf 'not_installed'
+                return 1
+            }
+        fi
         # Parse version from "Docker version 24.0.7, build afdd53b"
         local version
         version="$(printf '%s' "$version_output" | awk '{print $3}' | tr -d ',')"
@@ -110,54 +160,60 @@ check_docker_daemon() {
     local docker_info_output
     local exit_code
 
-    # Try to get docker info with timeout
-    # Use timeout command if available, otherwise use built-in approach
-    if _docker_command_exists timeout; then
-        # GNU coreutils timeout (Linux)
-        docker_info_output="$(timeout "${DOCKER_DAEMON_TIMEOUT}" docker info 2>&1)"
-        exit_code=$?
-        
-        # timeout returns 124 when command times out
-        if [[ $exit_code -eq 124 ]]; then
-            printf 'unresponsive'
-            return 1
-        fi
-    elif _docker_command_exists gtimeout; then
-        # GNU coreutils timeout on macOS (via homebrew coreutils)
-        docker_info_output="$(gtimeout "${DOCKER_DAEMON_TIMEOUT}" docker info 2>&1)"
-        exit_code=$?
-        
-        if [[ $exit_code -eq 124 ]]; then
-            printf 'unresponsive'
-            return 1
-        fi
+    # Test mode: use mock output
+    if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+        docker_info_output="${_mock_docker_info_output:-}"
+        exit_code="${_mock_docker_info_exit_code:-1}"
     else
-        # Fallback: run without timeout (macOS without coreutils)
-        # Use a background process with sleep to implement basic timeout
-        local tmpfile
-        tmpfile="$(mktemp 2>/dev/null || mktemp -t docker_check)"
-        
-        (docker info > "$tmpfile" 2>&1) &
-        local pid=$!
-        
-        # Wait for completion or timeout
-        local count=0
-        while kill -0 "$pid" 2>/dev/null; do
-            sleep 1
-            count=$((count + 1))
-            if [[ $count -ge $DOCKER_DAEMON_TIMEOUT ]]; then
-                kill -9 "$pid" 2>/dev/null || true
-                wait "$pid" 2>/dev/null || true
-                rm -f "$tmpfile"
+        # Try to get docker info with timeout
+        # Use timeout command if available, otherwise use built-in approach
+        if _docker_command_exists timeout; then
+            # GNU coreutils timeout (Linux)
+            docker_info_output="$(timeout "${DOCKER_DAEMON_TIMEOUT}" docker info 2>&1)"
+            exit_code=$?
+            
+            # timeout returns 124 when command times out
+            if [[ $exit_code -eq 124 ]]; then
                 printf 'unresponsive'
                 return 1
             fi
-        done
-        
-        wait "$pid" 2>/dev/null
-        exit_code=$?
-        docker_info_output="$(cat "$tmpfile" 2>/dev/null)"
-        rm -f "$tmpfile"
+        elif _docker_command_exists gtimeout; then
+            # GNU coreutils timeout on macOS (via homebrew coreutils)
+            docker_info_output="$(gtimeout "${DOCKER_DAEMON_TIMEOUT}" docker info 2>&1)"
+            exit_code=$?
+            
+            if [[ $exit_code -eq 124 ]]; then
+                printf 'unresponsive'
+                return 1
+            fi
+        else
+            # Fallback: run without timeout (macOS without coreutils)
+            # Use a background process with sleep to implement basic timeout
+            local tmpfile
+            tmpfile="$(mktemp 2>/dev/null || mktemp -t docker_check)"
+            
+            (docker info > "$tmpfile" 2>&1) &
+            local pid=$!
+            
+            # Wait for completion or timeout
+            local count=0
+            while kill -0 "$pid" 2>/dev/null; do
+                sleep 1
+                count=$((count + 1))
+                if [[ $count -ge $DOCKER_DAEMON_TIMEOUT ]]; then
+                    kill -9 "$pid" 2>/dev/null || true
+                    wait "$pid" 2>/dev/null || true
+                    rm -f "$tmpfile"
+                    printf 'unresponsive'
+                    return 1
+                fi
+            done
+            
+            wait "$pid" 2>/dev/null
+            exit_code=$?
+            docker_info_output="$(cat "$tmpfile" 2>/dev/null)"
+            rm -f "$tmpfile"
+        fi
     fi
 
     # Check for success
@@ -198,19 +254,37 @@ check_docker_compose() {
 
     # Try Docker Compose v2 (plugin) first: "docker compose version"
     if _docker_command_exists docker; then
-        version_output="$(docker compose version 2>/dev/null)" && {
-            # Parse version from "Docker Compose version v2.21.0"
-            version="$(printf '%s' "$version_output" | awk '{print $NF}' | tr -d 'v')"
-            if [[ -n "$version" ]]; then
-                printf 'v2:%s' "$version"
-                return 0
+        if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+            version_output="${_mock_docker_compose_output:-}"
+            if [[ -n "$version_output" ]]; then
+                # Parse version from "Docker Compose version v2.21.0"
+                version="$(printf '%s' "$version_output" | awk '{print $NF}' | tr -d 'v')"
+                if [[ -n "$version" ]]; then
+                    printf 'v2:%s' "$version"
+                    return 0
+                fi
             fi
-        }
+        else
+            version_output="$(docker compose version 2>/dev/null)" && {
+                # Parse version from "Docker Compose version v2.21.0"
+                version="$(printf '%s' "$version_output" | awk '{print $NF}' | tr -d 'v')"
+                if [[ -n "$version" ]]; then
+                    printf 'v2:%s' "$version"
+                    return 0
+                fi
+            }
+        fi
     fi
 
     # Try legacy docker-compose (v1 standalone)
     if _docker_command_exists docker-compose; then
-        version_output="$(docker-compose --version 2>/dev/null)" && {
+        if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+            version_output="${_mock_docker_compose_v1_output:-}"
+        else
+            version_output="$(docker-compose --version 2>/dev/null)"
+        fi
+        
+        if [[ -n "$version_output" ]]; then
             # Parse version from "docker-compose version 1.29.2, build 5becea4c"
             # or "Docker Compose version v2.x.x" (some installations)
             version="$(printf '%s' "$version_output" | awk '{print $3}' | tr -d ',v')"
@@ -223,7 +297,7 @@ check_docker_compose() {
                 fi
                 return 0
             fi
-        }
+        fi
     fi
 
     printf 'not_installed'
