@@ -4,7 +4,7 @@
 
 # Interface: InterfaceContactCardProps
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L117)
+Defined in: [src/types/UserPortal/Chat/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L116)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:117](https://github.com/Pali
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L118)
+Defined in: [src/types/UserPortal/Chat/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L117)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:118](https://github.com/Pali
 
 > **image**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L120)
+Defined in: [src/types/UserPortal/Chat/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L119)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:120](https://github.com/Pali
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L123)
+Defined in: [src/types/UserPortal/Chat/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L122)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:123](https://github.com/Pali
 
 > **lastMessage**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L125)
+Defined in: [src/types/UserPortal/Chat/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L124)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:125](https://github.com/Pali
 
 > **selectedContact**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L121)
+Defined in: [src/types/UserPortal/Chat/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L120)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:121](https://github.com/Pali
 
 > **setSelectedContact**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L122)
+Defined in: [src/types/UserPortal/Chat/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L121)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:122](https://github.com/Pali
 
 > **title**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L119)
+Defined in: [src/types/UserPortal/Chat/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L118)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:119](https://github.com/Pali
 
 > **unseenMessages**: `number`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L124)
+Defined in: [src/types/UserPortal/Chat/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L123)

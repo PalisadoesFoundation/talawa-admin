@@ -22,12 +22,12 @@ interface InterfaceChatUser {
   createdAt: Date;
 }
 
-interface MockMessage {
+interface InterfaceMockMessage {
   _id: string;
   createdAt: Date;
   sender: InterfaceChatUser;
   messageContent: string;
-  replyTo?: MockMessage;
+  replyTo?: InterfaceMockMessage;
   updatedAt: Date;
   media?: string;
 }
@@ -51,9 +51,9 @@ function createMessage(
   id: string,
   sender: InterfaceChatUser,
   content: string,
-  replyTo?: MockMessage,
+  replyTo?: InterfaceMockMessage,
   media?: string,
-): MockMessage {
+): InterfaceMockMessage {
   return {
     _id: id,
     createdAt: dayjs().toDate(),
@@ -93,7 +93,7 @@ const createGroupChat = (
   name: string,
   image: string,
   users: InterfaceChatUser[],
-  messages: MockMessage[],
+  messages: InterfaceMockMessage[],
 ): ChatType => {
   const admins = users.filter((u) => u._id === 'user1'); // Alice is admin
 
@@ -101,31 +101,25 @@ const createGroupChat = (
     id: id,
     name: name,
     description: 'Test Description',
-    avatarURL: image || null,
-    avatarMimeType: null,
+    avatarURL: image || undefined,
+    avatarMimeType: undefined,
     isGroup: true,
     createdAt: dayjs().toDate().toISOString(),
-    updatedAt: null,
+    updatedAt: undefined,
     members: {
       edges: users.map((user) => ({
         node: {
           user: {
             id: user._id,
             name: user.firstName + (user.lastName ? ' ' + user.lastName : ''),
-            avatarURL: null,
-            avatarMimeType: null,
+            avatarURL: undefined,
+            avatarMimeType: undefined,
           },
           role: admins.some((a) => a._id === user._id)
             ? 'administrator'
             : 'regular',
         },
       })),
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: null,
-        endCursor: null,
-      },
     },
     messages: {
       edges: messages.map((msg) => ({
@@ -137,8 +131,8 @@ const createGroupChat = (
           creator: {
             id: msg.sender._id,
             name: msg.sender.firstName,
-            avatarURL: null,
-            avatarMimeType: null,
+            avatarURL: undefined,
+            avatarMimeType: undefined,
           },
           parentMessage: msg.replyTo
             ? {
@@ -153,15 +147,9 @@ const createGroupChat = (
             : null,
         },
       })),
-      pageInfo: {
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: null,
-        endCursor: null,
-      },
     },
     unreadMessagesCount: 0,
-    lastMessage: null,
+    lastMessage: undefined,
     organization: { id: 'org123', name: 'Test Org' },
   };
 };
