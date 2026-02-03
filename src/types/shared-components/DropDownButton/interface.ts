@@ -48,6 +48,11 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
   options: InterfaceDropDownOption[];
 
   /**
+   * Direction the dropdown menu opens.
+   */
+  drop?: 'up' | 'down' | 'start' | 'end';
+
+  /**
    * The currently selected value.
    */
   selectedValue?: string;

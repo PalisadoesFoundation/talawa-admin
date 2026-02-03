@@ -129,14 +129,30 @@ function displaySuccessMessage(packagesInstalled: string[]): void {
   console.log('  https://docs-admin.talawa.io/docs/installation');
 }
 
-// Run main if this file is executed directly
-const currentFilePath = fileURLToPath(import.meta.url);
-if (
-  process.argv[1] === currentFilePath ||
-  process.argv[1]?.includes('install/index.ts')
-) {
-  main().catch((error) => {
-    console.error('Unhandled error:', error);
-    process.exit(1);
-  });
+export function handleDirectExecutionError(error: unknown): void {
+  console.error('Unhandled error:', error);
+  process.exit(1);
 }
+
+/**
+ * Runs the main installation function if this file is executed directly.
+ *
+ * @param argv - The command line arguments array to check. Defaults to process.argv.
+ * @param currentFilePath - The current file path to compare against argv[1]. Defaults to fileURLToPath(import.meta.url).
+ * @param mainFn - The async main function to execute when direct execution is detected. Defaults to the exported main function.
+ * @param errorHandler - The error handler function to call if mainFn throws an error. Defaults to handleDirectExecutionError.
+ * @returns void
+ */
+export function runIfDirectExecution(
+  argv: string[] = process.argv,
+  currentFilePath: string = fileURLToPath(import.meta.url),
+  mainFn: () => Promise<void> = main,
+  errorHandler: (error: unknown) => void = handleDirectExecutionError,
+): void {
+  if (argv[1] === currentFilePath || argv[1]?.includes('install/index.ts')) {
+    mainFn().catch(errorHandler);
+  }
+}
+
+// Run main if this file is executed directly
+runIfDirectExecution();

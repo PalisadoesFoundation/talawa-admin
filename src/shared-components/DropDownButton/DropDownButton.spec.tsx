@@ -15,6 +15,7 @@ import {
   variantProps,
   mockOnSelect,
   noTestIdProps,
+  dropUpProps,
 } from './DropDownButton.mocks';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -146,5 +147,12 @@ describe('DropDownButton Component', () => {
     renderComponent(noTestIdProps);
     const button = screen.getByTestId('dropdown-toggle');
     expect(button).toBeInTheDocument();
+  });
+  it('opens dropdown menu upwards when drop up is provided', async () => {
+    renderComponent(dropUpProps);
+    const button = screen.getByTestId('test-dropdown-toggle');
+    await userEvent.click(button);
+    const menu = screen.getByTestId('test-dropdown-menu');
+    expect(menu.parentElement).toHaveClass('dropup');
   });
 });
