@@ -49,6 +49,7 @@ describe('SearchingButton Component', () => {
         dataTestIdPrefix="sort-toggle"
         text="Sort Option"
         type="sort"
+        title="Sort options"
       />,
     );
     // Expect an <svg> to be rendered inside the toggle.
@@ -57,6 +58,7 @@ describe('SearchingButton Component', () => {
     expect(svgElement).toBeInTheDocument();
     // Optionally, you can check that the svg element has a class that matches MUI's default (e.g., MuiSvgIcon-root).
     expect(svgElement).toHaveClass('MuiSvgIcon-root');
+    expect(toggle).toHaveAccessibleName('Sort options');
   });
 
   it('renders filter icon when type is "filter"', () => {
@@ -72,5 +74,20 @@ describe('SearchingButton Component', () => {
     expect(svgElement).toBeInTheDocument();
     // Optionally, check for a class. Since both icons are MUI icons, you might check for differences if you add custom test ids.
     expect(svgElement).toHaveClass('MuiSvgIcon-root');
+  });
+
+  it('applies title as aria-label on the toggle button', () => {
+    render(<SearchingButton dataTestIdPrefix="test" title="Sort items" />);
+
+    const toggle = screen.getByTestId('test-toggle');
+    expect(toggle).toHaveAttribute('aria-label', 'Sort items');
+  });
+  it('applies className to the dropdown container', () => {
+    render(
+      <SearchingButton dataTestIdPrefix="test" className="custom-class" />,
+    );
+
+    const container = screen.getByTestId('test-container');
+    expect(container).toHaveClass('custom-class');
   });
 });
