@@ -1,6 +1,6 @@
 .agendaItemRow {
-  border: 1px solid var(--agendaItemRow-border);
-  border-radius: 4px;
+  border: var(--border-1) solid var(--agendaItemRow-border);
+  border-radius: var(--radius-xs);
   transition: box-shadow 0.2s ease;
   background-color: var(--agendaItemRow-bg);
 }
@@ -10,7 +10,11 @@
 }
 
 .dragging {
-  box-shadow: 0 4px 8px var(--dragging-box-shadow);
+  box-shadow:
+    var(--shadow-offset-none)
+    var(--shadow-offset-md)
+    var(--shadow-blur-lg)
+    var(--dragging-box-shadow);
   z-index: 1000;
   background-color: var(--dragging-bg);
 }
@@ -19,17 +23,21 @@
   display: inline-flex;
   align-items: center;
   background-color: var(--categoryChip-bg);
-  border-radius: 16px;
-  padding: 0 12px;
-  font-size: 14px;
-  height: 32px;
+  border-radius: var(--radius-md);
+  padding: var(--space-0) var(--space-6);
+  font-size: var(--font-size-sm);
+  height: var(--space-8);
   white-space: nowrap;
-  margin: 5px;
+  margin: var(--space-4);
 }
 
 .tableHeadAgendaItems {
   background-color: var(--tableHeadAgendaItems-bg) !important;
   color: var(--tableHeadAgendaItems-color);
-  border-radius: 20px 20px 0px 0px !important;
-  padding: 20px;
+  border-radius:
+    var(--radius-lg)
+    var(--radius-lg)
+    var(--radius-none)
+    var(--radius-none) !important;
+  padding: var(--space-8);
 }

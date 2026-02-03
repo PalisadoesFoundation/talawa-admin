@@ -5,24 +5,27 @@
 
 .campaignModal {
   max-width: 80vw;
-  margin: 2vh auto;
+  margin: var(--space-8) auto;
 }
 
 .regBtn {
-  margin-top: 1rem;
-  border: 1px solid var(--regBtn-border);
-  box-shadow: 0 2px 2px var(--regBtn-box-shadow);
-  padding: 10px 10px;
-  border-radius: 5px;
+  margin-top: var(--space-5);
+  border: var(--border-1) solid var(--regBtn-border);
+  box-shadow:
+    var(--shadow-offset-none)
+    var(--shadow-offset-sm)
+    var(--shadow-blur-sm)
+    var(--regBtn-box-shadow);
+  padding: var(--space-5) var(--space-5);
+  border-radius: var(--radius-sm);
   background-color: var(--regBtn-bg);
   width: 100%;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: var(--regBtn-color);
   outline: none;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
 }
