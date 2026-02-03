@@ -51,18 +51,12 @@ import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdat
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 enum ItemStatus {
   Pending = 'pending',
   Completed = 'completed',
   Late = 'late',
-}
-
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-  VIEW = 'view',
-  STATUS = 'status',
 }
 
 interface InterfaceEventActionItemsProps {
@@ -97,30 +91,43 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-    [ModalState.STATUS]: false,
-  });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  const itemModal = useModalState();
+  const deleteModal = useModalState();
+  const viewModal = useModalState();
+  const statusModal = useModalState();
 
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
-  const handleModalClick = useCallback(
-    (actionItem: IActionItemInfo | null, modal: ModalState): void => {
-      if (modal === ModalState.SAME) {
-        setModalMode(actionItem ? 'edit' : 'create');
-      }
-      setActionItem(actionItem);
-      openModal(modal);
+  const handleOpenItemModal = useCallback(
+    (item: IActionItemInfo | null): void => {
+      setModalMode(item ? 'edit' : 'create');
+      setActionItem(item);
+      itemModal.open();
     },
-    [openModal],
+    [itemModal],
+  );
+
+  const handleOpenViewModal = useCallback(
+    (item: IActionItemInfo): void => {
+      setActionItem(item);
+      viewModal.open();
+    },
+    [viewModal],
+  );
+
+  const handleOpenDeleteModal = useCallback(
+    (item: IActionItemInfo): void => {
+      setActionItem(item);
+      deleteModal.open();
+    },
+    [deleteModal],
+  );
+
+  const handleOpenStatusModal = useCallback(
+    (item: IActionItemInfo): void => {
+      setActionItem(item);
+      statusModal.open();
+    },
+    [statusModal],
   );
 
   const {
@@ -345,7 +352,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               size="sm"
               className={styles.infoButton}
               data-testid={`viewItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              onClick={() => handleOpenViewModal(params.row)}
               aria-label={t('details')}
             >
               <i className="fa fa-info" />
@@ -355,7 +362,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               size="sm"
               className={styles.infoButton}
               data-testid={`editItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              onClick={() => handleOpenItemModal(params.row)}
               aria-label={t('editActionItem')}
             >
               <i className="fa fa-edit" />
@@ -365,7 +372,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               variant="danger"
               className={styles.actionItemDeleteButton}
               data-testid={`deleteItemBtn${params.row.id}`}
-              onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              onClick={() => handleOpenDeleteModal(params.row)}
               aria-label={t('deleteActionItem')}
             >
               <i className="fa fa-trash" />
@@ -391,7 +398,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               data-testid={`statusCheckbox${params.row.id}`}
               className={styles.checkboxButton}
               checked={params.row.isCompleted}
-              onChange={() => handleModalClick(params.row, ModalState.STATUS)}
+              onChange={() => handleOpenStatusModal(params.row)}
               aria-label={
                 params.row.isCompleted
                   ? t('actionItemCompleted')
@@ -480,7 +487,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           />
           <Button
             variant="success"
-            onClick={() => handleModalClick(null, ModalState.SAME)}
+            onClick={() => handleOpenItemModal(null)}
             className={styles.createButton}
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
@@ -499,7 +506,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         getRowId={(row) => row.id}
         sx={{
           backgroundColor: 'white',
-          borderRadius: '16px',
+          borderRadius: 'var(--radius-xl)',
           '& .MuiDataGrid-columnHeaders': { border: 'none' },
           '& .MuiDataGrid-cell': { border: 'none' },
           '& .MuiDataGrid-columnSeparator': { display: 'none' },
@@ -523,8 +530,8 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       />
 
       <ItemModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
+        isOpen={itemModal.isOpen}
+        hide={itemModal.close}
         orgId={orgId}
         eventId={eventId}
         actionItemsRefetch={eventActionItemsRefetch}
@@ -538,23 +545,23 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       {actionItem && (
         <>
           <ItemViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
+            isOpen={viewModal.isOpen}
+            hide={viewModal.close}
             item={actionItem}
           />
 
           <ItemUpdateStatusModal
             actionItem={actionItem}
-            isOpen={modalState[ModalState.STATUS]}
-            hide={() => closeModal(ModalState.STATUS)}
+            isOpen={statusModal.isOpen}
+            hide={statusModal.close}
             actionItemsRefetch={eventActionItemsRefetch}
             isRecurring={isRecurring}
             eventId={eventId}
           />
 
           <ItemDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
+            isOpen={deleteModal.isOpen}
+            hide={deleteModal.close}
             actionItem={actionItem}
             actionItemsRefetch={eventActionItemsRefetch}
             eventId={eventId}

@@ -29,6 +29,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -110,7 +111,7 @@ const organizationFunds = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const fundModal = useModalState();
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -118,12 +119,12 @@ const organizationFunds = (): JSX.Element => {
   const [searchText, setSearchText] = useState('');
 
   const handleOpenModal = useCallback(
-    (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
-      setFund(fund);
+    (selectedFund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
+      setFund(selectedFund);
       setFundModalMode(mode);
-      setModalState(true);
+      fundModal.open();
     },
-    [],
+    [fundModal],
   );
 
   const {
@@ -431,8 +432,8 @@ const organizationFunds = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={fundModal.isOpen}
+        hide={fundModal.close}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

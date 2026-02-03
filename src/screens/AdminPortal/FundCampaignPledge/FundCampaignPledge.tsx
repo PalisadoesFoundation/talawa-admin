@@ -24,11 +24,7 @@ import type {
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { getPledgeColumns } from './PledgeColumns';
 import Button from 'shared-components/Button';
-
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-}
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 /**
  * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
@@ -51,9 +47,8 @@ const fundCampaignPledge = (): JSX.Element => {
     currency: '',
   });
 
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
+  const pledgeModal = useModalState();
+  const deleteModal = useModalState();
 
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
@@ -168,29 +163,24 @@ const fundCampaignPledge = (): JSX.Element => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
 
-  const openModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-  };
-
-  const closeModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-  };
-
   const handleOpenModal = useCallback(
-    (pledge: InterfacePledgeInfo | null, mode: 'edit' | 'create'): void => {
-      setPledge(pledge);
+    (
+      selectedPledge: InterfacePledgeInfo | null,
+      mode: 'edit' | 'create',
+    ): void => {
+      setPledge(selectedPledge);
       setPledgeModalMode(mode);
-      openModal(ModalState.SAME);
+      pledgeModal.open();
     },
-    [openModal],
+    [pledgeModal],
   );
 
   const handleDeleteClick = useCallback(
-    (pledge: InterfacePledgeInfo): void => {
-      setPledge(pledge);
-      openModal(ModalState.DELETE);
+    (selectedPledge: InterfacePledgeInfo): void => {
+      setPledge(selectedPledge);
+      deleteModal.open();
     },
-    [openModal],
+    [deleteModal],
   );
 
   const handleClick = (
@@ -408,8 +398,8 @@ const fundCampaignPledge = (): JSX.Element => {
           }}
         />
         <PledgeModal
-          isOpen={modalState[ModalState.SAME]}
-          hide={() => closeModal(ModalState.SAME)}
+          isOpen={pledgeModal.isOpen}
+          hide={pledgeModal.close}
           campaignId={fundCampaignId}
           orgId={orgId}
           pledge={pledge}
@@ -418,8 +408,8 @@ const fundCampaignPledge = (): JSX.Element => {
           mode={pledgeModalMode}
         />
         <PledgeDeleteModal
-          isOpen={modalState[ModalState.DELETE]}
-          hide={() => closeModal(ModalState.DELETE)}
+          isOpen={deleteModal.isOpen}
+          hide={deleteModal.close}
           pledge={pledge}
           refetchPledge={refetchPledge}
         />

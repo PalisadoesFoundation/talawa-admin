@@ -26,6 +26,7 @@ import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/Breadcr
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -87,18 +88,21 @@ const orgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const campaignModal = useModalState();
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
 
   const handleOpenModal = useCallback(
-    (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
-      setCampaign(campaign);
+    (
+      selectedCampaign: InterfaceCampaignInfo | null,
+      mode: 'edit' | 'create',
+    ): void => {
+      setCampaign(selectedCampaign);
       setCampaignModalMode(mode);
-      setModalState(true);
+      campaignModal.open();
     },
-    [],
+    [campaignModal],
   );
 
   const {
@@ -468,8 +472,8 @@ const orgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={campaignModal.isOpen}
+        hide={campaignModal.close}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}

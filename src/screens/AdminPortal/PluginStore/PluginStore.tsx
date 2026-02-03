@@ -15,11 +15,12 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
+import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const pluginModal = useModalState();
+  const uploadModal = useModalState();
   const [selectedPluginId, setSelectedPluginId] = useState<string | null>(null);
   const [selectedPluginMeta, setSelectedPluginMeta] =
     useState<IPluginMeta | null>(null);
@@ -89,19 +90,19 @@ export default function PluginStore() {
   const openPlugin = (plugin: IPluginMeta) => {
     setSelectedPluginId(plugin.id);
     setSelectedPluginMeta(plugin);
-    setShowModal(true);
+    pluginModal.open();
   };
 
   // Close modal
-  const closeModal = () => {
-    setShowModal(false);
+  const closePluginModal = () => {
+    pluginModal.close();
     setSelectedPluginId(null);
     setSelectedPluginMeta(null);
   };
 
   // Close upload modal
   const closeUploadModal = async () => {
-    setShowUploadModal(false);
+    uploadModal.close();
     // Refresh plugin data after upload
     await refetch();
     // Reload the page to ensure all plugin states are properly updated
@@ -127,7 +128,7 @@ export default function PluginStore() {
   const uploadPluginButton = (
     <Button
       className={`${styles.dropdown} ${styles.createorgdropdown}`}
-      onClick={() => setShowUploadModal(true)}
+      onClick={uploadModal.open}
       data-testid="uploadPluginBtn"
     >
       <i className={'fa fa-plus me-2'} />
@@ -174,8 +175,8 @@ export default function PluginStore() {
       </div>
       {/* Plugin Details Modal */}
       <PluginModal
-        show={showModal}
-        onHide={closeModal}
+        show={pluginModal.isOpen}
+        onHide={closePluginModal}
         pluginId={selectedPluginId}
         meta={selectedPluginMeta}
         loading={loading || pluginLoading}
@@ -188,7 +189,7 @@ export default function PluginStore() {
       />
       {/* Upload Plugin Modal */}
       <UploadPluginModal
-        show={showUploadModal}
+        show={uploadModal.isOpen}
         onHide={closeUploadModal}
         data-testid="upload-plugin-modal"
       />
