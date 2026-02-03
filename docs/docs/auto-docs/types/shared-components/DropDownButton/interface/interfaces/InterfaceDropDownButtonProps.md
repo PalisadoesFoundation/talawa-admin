@@ -40,7 +40,7 @@ Custom styles for the dropdown button.
 
 ### buttonLabel?
 
-> `optional` **buttonLabel**: `string`
+> `optional` **buttonLabel**: `ReactNode`
 
 Defined in: [src/types/shared-components/DropDownButton/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L94)
 

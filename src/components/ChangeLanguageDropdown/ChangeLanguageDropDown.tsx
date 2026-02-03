@@ -13,6 +13,13 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import { useTranslation } from 'react-i18next';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
+/**
+ * ChangeLanguageDropDown component used to switch between different languages.
+ * It provides a dropdown menu with available language options.
+ *
+ * @param props - Props for the DropDownButton component
+ * @returns The rendered ChangeLanguageDropDown component
+ */
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
