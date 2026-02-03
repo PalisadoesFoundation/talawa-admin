@@ -152,7 +152,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'index',
         headerName: '#',
-        width: 'space-11-5',
+        width: 'space-11',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -161,7 +161,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'name',
         headerName: t('Member Name'),
-        width: 'space-16-7',
+        width: 'space-17',
         sortable: false,
         filterable: false,
         renderCell: (params) => (
@@ -188,7 +188,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'eventsAttended',
         headerName: t('Events Attended'),
-        width: 'space-16-5',
+        width: 'space-16',
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -233,7 +233,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'tagsAssignedWith',
         headerName: t('Task Assigned'),
-        width: 'space-16-7',
+        width: 'space-17',
         sortable: false,
         filterable: false,
         headerAlign: 'left',

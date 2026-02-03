@@ -449,9 +449,7 @@ describe('ALLOWLIST_PATTERNS', () => {
     });
 
     test('matches minWidth with double quotes', () => {
-      expect(matchPattern('minWidth: "space-11-5"')).toBe(
-        'minWidth: "space-11-5"',
-      );
+      expect(matchPattern('minWidth: "space-11"')).toBe('minWidth: "space-11"');
     });
 
     test('matches maxWidth with fractional token space-0-5', () => {

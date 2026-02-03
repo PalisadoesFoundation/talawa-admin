@@ -1119,18 +1119,18 @@ describe('convertTokenColumns', () => {
     expect(result.length).toBe(0);
   });
 
-  test('converts fractional spacing tokens (space-11-5, space-16-5, space-16-7)', () => {
+  test('converts various spacing tokens', () => {
     const columns: TokenAwareGridColDef[] = [
-      { field: 'id', headerName: '#', width: 'space-11-5' },
-      { field: 'name', headerName: 'Name', width: 'space-16-5' },
-      { field: 'email', headerName: 'Email', width: 'space-16-7' },
+      { field: 'id', headerName: '#', width: 'space-11' },
+      { field: 'name', headerName: 'Name', width: 'space-16' },
+      { field: 'email', headerName: 'Email', width: 'space-17' },
     ];
 
     const result = convertTokenColumns(columns);
 
-    expect(result[0].width).toBe(70);
-    expect(result[1].width).toBe(180);
-    expect(result[2].width).toBe(200);
+    expect(result[0].width).toBe(64);
+    expect(result[1].width).toBe(160);
+    expect(result[2].width).toBe(220);
   });
 
   test('preserves other column properties during conversion', () => {

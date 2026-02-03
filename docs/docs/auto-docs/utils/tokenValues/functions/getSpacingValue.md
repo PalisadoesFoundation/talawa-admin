@@ -6,7 +6,7 @@
 
 > **getSpacingValue**(`token`): `number`
 
-Defined in: [src/utils/tokenValues.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tokenValues.ts#L69)
+Defined in: [src/utils/tokenValues.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/tokenValues.ts#L66)
 
 Converts a spacing token name to its pixel value.
 
