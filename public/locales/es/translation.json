@@ -1882,7 +1882,9 @@
     "confirmRemoveMember": "Confirmar eliminar miembro",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
+    "thisUser": "este usuario"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

@@ -1,15 +1,14 @@
 import type { ApolloQueryResult } from '@apollo/client';
 
-export type NewChatType = {
+export type Chat = {
   id: string;
   name: string;
   description?: string;
   avatarMimeType?: string;
   avatarURL?: string;
-  isGroup: boolean;
+  isGroup?: boolean;
   createdAt: string;
-  updatedAt: string | null;
-  // Optional unread/computed fields (provided by unreadChats or when opting-in)
+  updatedAt?: string | null;
   unreadMessagesCount?: number;
   hasUnread?: boolean;
   firstUnreadMessageId?: string;
@@ -51,9 +50,9 @@ export type NewChatType = {
     avatarMimeType?: string;
     avatarURL?: string;
   };
-  members: {
+  members?: {
     edges: Array<{
-      cursor: string;
+      cursor?: string;
       node: {
         user: {
           id: string;
@@ -65,7 +64,7 @@ export type NewChatType = {
       };
     }>;
   };
-  messages: {
+  messages?: {
     edges: Array<{
       __typename?: string;
       node: {
@@ -100,7 +99,7 @@ export type NewChatType = {
 export interface InterfaceGroupChatDetailsProps {
   toggleGroupChatDetailsModal: () => void;
   groupChatDetailsModalisOpen: boolean;
-  chat: NewChatType;
+  chat: Chat;
   chatRefetch: (
     variables?:
       | Partial<{
@@ -111,7 +110,7 @@ export interface InterfaceGroupChatDetailsProps {
           beforeMessages?: string | null;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: NewChatType }>>;
+  ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
 }
 
 export interface InterfaceContactCardProps {

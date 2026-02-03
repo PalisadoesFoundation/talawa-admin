@@ -156,30 +156,30 @@ vi.mock('assets/svgs/newChat.svg?react', () => ({
 const mockChatsListData = {
   chatsByUser: [
     {
-      _id: 'chat-1',
       id: 'chat-1',
       name: 'Direct Chat 1',
-      isGroup: false,
-      users: [{}, {}],
-      image: 'http://example.com/chat1.png',
+      avatarURL: 'http://example.com/chat1.png',
+      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+      unreadMessagesCount: 0,
+      lastMessage: null,
       __typename: 'Chat',
     },
     {
-      _id: 'chat-2',
       id: 'chat-2',
       name: 'Group Chat 1',
-      isGroup: true,
-      users: [{}, {}, {}],
-      image: 'http://example.com/chat2.png',
+      avatarURL: 'http://example.com/chat2.png',
+      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+      unreadMessagesCount: 0,
+      lastMessage: null,
       __typename: 'Chat',
     },
     {
-      _id: 'chat-3',
       id: 'chat-3',
       name: 'Direct Chat 2',
-      isGroup: false,
-      users: [{}, {}],
-      image: 'http://example.com/chat3.png',
+      avatarURL: 'http://example.com/chat3.png',
+      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u4', name: 'User 4' }, role: 'regular' } }] },
+      unreadMessagesCount: 0,
+      lastMessage: null,
       __typename: 'Chat',
     },
   ],
@@ -565,28 +565,28 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should filter for legacy group chats by user count', async () => {
-    const legacyGroupMock = {
+  test('should filter for group chats by member count', async () => {
+    const groupMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-group',
-              id: 'legacy-group',
-              name: 'Legacy Group',
-              isGroup: false,
-              users: [{}, {}, {}],
-              image: '',
+              id: 'group-chat',
+              name: 'Group Chat',
+              avatarURL: '',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
             {
-              _id: 'legacy-direct',
-              id: 'legacy-direct',
-              name: 'Legacy Direct',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              id: 'direct-chat',
+              name: 'Direct Chat',
+              avatarURL: '',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -595,28 +595,29 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     const customMocks = [
-      legacyGroupMock,
-      legacyGroupMock,
-      legacyGroupMock,
+      groupMock,
+      groupMock,
+      groupMock,
       mockUnreadChats,
     ];
 
     renderComponent(customMocks);
 
-    await screen.findByTestId('contact-card-legacy-group');
+    await screen.findByTestId('contact-card-group-chat');
 
     const groupButton = screen.getByTestId('groupChat');
     await user.click(groupButton);
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('contact-card-legacy-group'),
+        screen.getByTestId('contact-card-group-chat'),
       ).toBeInTheDocument();
       expect(
-        screen.queryByTestId('contact-card-legacy-direct'),
+        screen.queryByTestId('contact-card-direct-chat'),
       ).not.toBeInTheDocument();
     });
   });
+
 
   test('should switch back to all filter', async () => {
     renderComponent();
@@ -751,20 +752,20 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should pass filtered legacy chats to CreateDirectChat', async () => {
-    const legacyMocks = [
+  test('should pass all chats to CreateDirectChat', async () => {
+    const chatMocks = [
       {
         request: { query: CHATS_LIST, variables: { first: 10, after: null } },
         result: {
           data: {
             chatsByUser: [
               {
-                _id: 'legacy-1',
-                id: 'legacy-1',
-                name: 'Legacy Chat',
-                isGroup: false,
-                users: [{}, {}],
-                image: '',
+                id: 'chat-1',
+                name: 'Test Chat',
+                avatarURL: '',
+                members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+                unreadMessagesCount: 0,
+                lastMessage: null,
                 __typename: 'Chat',
               },
             ],
@@ -774,8 +775,8 @@ describe('Chat Component - Comprehensive Coverage', () => {
       mockUnreadChats,
     ];
 
-    renderComponent(legacyMocks);
-    await screen.findByTestId('contact-card-legacy-1');
+    renderComponent(chatMocks);
+    await screen.findByTestId('contact-card-chat-1');
 
     const dropdown = screen.getByTestId('dropdown');
     await user.click(dropdown);
@@ -800,23 +801,23 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'chat-1',
               id: 'chat-1',
               name: 'Chat in Org 1',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1' },
+              avatarURL: '',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
+              organization: { id: 'org-1', name: 'Org 1' },
               __typename: 'Chat',
             },
             {
-              _id: 'chat-2',
               id: 'chat-2',
               name: 'Chat in Org 2',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-2', _id: 'org-2' },
+              avatarURL: '',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
+              organization: { id: 'org-2', name: 'Org 2' },
               __typename: 'Chat',
             },
           ],
@@ -1219,62 +1220,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should handle legacy GroupChat type in orgId filtering', async () => {
-    mockUseParams.mockReturnValue({ orgId: 'org-1' });
 
-    const mockLegacyWithOrgId = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              _id: 'legacy-1',
-              id: 'legacy-1',
-              name: 'Legacy Chat Org 1',
-              isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
-              lastMessage: null,
-              unreadMessagesCount: 0,
-              __typename: 'Chat',
-            },
-            {
-              _id: 'legacy-2',
-              id: 'legacy-2',
-              name: 'Legacy Chat Org 2',
-              isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
-              lastMessage: null,
-              unreadMessagesCount: 0,
-              __typename: 'Chat',
-            },
-          ],
-        },
-      },
-    };
+  // ==================== CHAT TYPE HANDLING ====================
 
-    renderComponent([
-      mockLegacyWithOrgId,
-      mockLegacyWithOrgId,
-      mockUnreadChats,
-    ]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
-      expect(
-        screen.queryByTestId('contact-card-legacy-2'),
-      ).not.toBeInTheDocument();
-    });
-  });
-
-  // ==================== NEWCHATTYPE VS LEGACY TYPE ====================
 
   test('should handle NewChatType with members.edges for group detection', async () => {
     const newChatTypeMock = {
@@ -1346,19 +1294,19 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle legacy chat with no name', async () => {
-    const legacyChatNoNameMock = {
+  test('should handle chat with no name', async () => {
+    const chatNoNameMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'no-name-chat',
               id: 'no-name-chat',
               name: null,
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -1367,8 +1315,8 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     renderComponent([
-      legacyChatNoNameMock,
-      legacyChatNoNameMock,
+      chatNoNameMock,
+      chatNoNameMock,
       mockUnreadChats,
     ]);
 
@@ -1422,45 +1370,6 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should correctly identify isGroup for legacy chat with isGroup=true', async () => {
-    const legacyGroupTrueMock = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              _id: 'legacy-explicit-group',
-              id: 'legacy-explicit-group',
-              name: 'Explicit Group',
-              isGroup: true,
-              users: [{}, {}],
-              image: '',
-              __typename: 'Chat',
-            },
-          ],
-        },
-      },
-    };
-
-    renderComponent([
-      legacyGroupTrueMock,
-      legacyGroupTrueMock,
-      legacyGroupTrueMock,
-      mockUnreadChats,
-    ]);
-
-    await screen.findByTestId('contact-card-legacy-explicit-group');
-
-    // Switch to group filter - should appear
-    const groupButton = screen.getByTestId('groupChat');
-    await user.click(groupButton);
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('contact-card-legacy-explicit-group'),
-      ).toBeInTheDocument();
-    });
-  });
 
   // ==================== CHATROOM INTEGRATION ====================
 
@@ -1706,26 +1615,26 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle mixed NewChatType and legacy chats', async () => {
-    const mixedChatsMock = {
+  test('should handle multiple chats with different configurations', async () => {
+    const multipleChatsMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-chat',
-              id: 'legacy-chat',
-              name: 'Legacy Chat',
-              isGroup: false,
-              users: [{}, {}],
-              image: 'http://example.com/legacy.png',
+              id: 'direct-chat',
+              name: 'Direct Chat',
+              avatarURL: 'http://example.com/direct.png',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
             {
-              id: 'new-chat',
-              name: 'New Chat',
-              avatarURL: 'http://example.com/new.png',
-              members: { edges: [{}, {}] },
+              id: 'group-chat',
+              name: 'Group Chat',
+              avatarURL: 'http://example.com/group.png',
+              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
               unreadMessagesCount: 3,
               lastMessage: { body: 'Latest message' },
               __typename: 'Chat',
@@ -1736,17 +1645,17 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     renderComponent([
-      mixedChatsMock,
-      mixedChatsMock,
-      mixedChatsMock,
+      multipleChatsMock,
+      multipleChatsMock,
+      multipleChatsMock,
       mockUnreadChats,
     ]);
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('contact-card-legacy-chat'),
+        screen.getByTestId('contact-card-direct-chat'),
       ).toBeInTheDocument();
-      expect(screen.getByTestId('contact-card-new-chat')).toBeInTheDocument();
+      expect(screen.getByTestId('contact-card-group-chat')).toBeInTheDocument();
     });
   });
 

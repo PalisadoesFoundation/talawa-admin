@@ -1894,7 +1894,9 @@
     "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
-    "next": "अगला"
+    "next": "अगला",
+    "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
+    "thisUser": "इस उपयोगकर्ता"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

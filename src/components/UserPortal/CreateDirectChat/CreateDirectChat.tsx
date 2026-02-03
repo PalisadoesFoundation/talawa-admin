@@ -50,7 +50,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
-import { type GroupChat } from 'types/UserPortal/Chat/type';
+import type { Chat } from 'types/UserPortal/Chat/interface';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
@@ -66,7 +66,7 @@ interface InterfaceCreateDirectChatProps {
   chatsListRefetch: (
     variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
-  chats: GroupChat[];
+  chats: Chat[];
 }
 
 const { getItem } = useLocalStorage();
@@ -74,7 +74,7 @@ const { getItem } = useLocalStorage();
 export const handleCreateDirectChat = async (
   id: string,
   userName: string,
-  chats: GroupChat[],
+  chats: Chat[],
   t: TFunction<'translation', 'userChat'>,
   createChat: {
     (
@@ -132,14 +132,19 @@ export const handleCreateDirectChat = async (
 ): Promise<void> => {
   const existingChat = chats.find(
     (chat) =>
-      chat.users?.length === 2 && chat.users.some((user) => user._id === id),
+      chat.members?.edges?.length === 2 &&
+      chat.members?.edges?.some((edge) => edge.node.user.id === id),
   );
   if (existingChat) {
-    const existingUser = existingChat.users.find((user) => user._id === id);
+    const existingUser = existingChat.members?.edges?.find(
+      (edge) => edge.node.user.id === id,
+    )?.node.user;
     errorHandler(
       t,
       new Error(
-        `A conversation with ${existingUser?.firstName || 'this user'} already exists!`,
+        t('conversationAlreadyExists', {
+          userName: existingUser?.name || t('thisUser'),
+        }),
       ),
     );
   } else {
