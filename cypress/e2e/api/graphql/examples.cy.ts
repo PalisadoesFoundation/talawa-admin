@@ -1,28 +1,59 @@
 type GraphQLError = { message: string };
 
+const requestTimeoutMs = 5000;
+const windowTimeoutMs = 10000;
+
 const triggerGraphQLRequest = (
   operationName: string,
   url: string = '/graphql',
 ): Cypress.Chainable => {
-  return cy.window().then((win) => {
-    return win.fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        operationName,
-        // operationName drives cy.intercept matching, so a static query body is sufficient.
-        query: 'query ExampleOperation { __typename }',
-      }),
-    });
+  return cy.window({ timeout: windowTimeoutMs }).then((win) => {
+    const controller = new AbortController();
+    const timeoutId = win.setTimeout(
+      () => controller.abort(),
+      requestTimeoutMs,
+    );
+    return win
+      .fetch(url, {
+        method: 'POST',
+        signal: controller.signal,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          operationName,
+          // operationName drives cy.intercept matching, so a static query body is sufficient.
+          query: 'query ExampleOperation { __typename }',
+        }),
+      })
+      .catch((error) => {
+        throw new Error(
+          `GraphQL request "${operationName}" failed: ${String(error)}`,
+        );
+      })
+      .finally(() => {
+        win.clearTimeout(timeoutId);
+      });
   });
 };
 
 describe('GraphQL utilities', () => {
+  let originalApiUrl: unknown;
+  let originalApiUrlEnv: unknown;
+  let originalCypressApiUrl: unknown;
+
   beforeEach(() => {
+    originalApiUrl = Cypress.env('apiUrl');
+    originalApiUrlEnv = Cypress.env('API_URL');
+    originalCypressApiUrl = Cypress.env('CYPRESS_API_URL');
     Cypress.env('apiUrl', '/graphql');
     Cypress.env('API_URL', null);
     Cypress.env('CYPRESS_API_URL', null);
     cy.visit('/');
+  });
+
+  afterEach(() => {
+    Cypress.env('apiUrl', originalApiUrl);
+    Cypress.env('API_URL', originalApiUrlEnv);
+    Cypress.env('CYPRESS_API_URL', originalCypressApiUrl);
   });
 
   it('aliases and waits for a live operation', () => {

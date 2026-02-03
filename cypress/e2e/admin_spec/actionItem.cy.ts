@@ -23,6 +23,8 @@ type GraphQLResponse = {
   body: unknown;
 };
 
+const requestTimeoutMs = 10000;
+
 type EventsResponseShape = {
   data?: {
     organization?: {
@@ -65,7 +67,7 @@ const requestGraphQL = (
   token: string | null,
   body: Record<string, unknown>,
 ): Cypress.Chainable<GraphQLResponse> => {
-  return cy.window().then((win) => {
+  return cy.window({ timeout: requestTimeoutMs + 5000 }).then((win) => {
     const apiBase =
       (Cypress.env('apiUrl') as string | undefined) ||
       (Cypress.env('API_URL') as string | undefined) ||
@@ -74,9 +76,19 @@ const requestGraphQL = (
     const requestUrl = apiBase.endsWith('/graphql')
       ? apiBase
       : new URL('/graphql', apiBase).toString();
+    const operationName =
+      typeof body.operationName === 'string'
+        ? body.operationName
+        : 'UnknownOperation';
+    const controller = new AbortController();
+    const timeoutId = win.setTimeout(
+      () => controller.abort(),
+      requestTimeoutMs,
+    );
     return win
       .fetch(requestUrl, {
         method: 'POST',
+        signal: controller.signal,
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +99,17 @@ const requestGraphQL = (
       .then(async (response) => ({
         status: response.status,
         body: await response.json(),
-      }));
+      }))
+      .catch((error) => {
+        cy.log(`GraphQL request "${operationName}" failed: ${String(error)}`);
+        return {
+          status: 0,
+          body: { errors: [{ message: String(error) }] },
+        };
+      })
+      .finally(() => {
+        win.clearTimeout(timeoutId);
+      });
   });
 };
 
