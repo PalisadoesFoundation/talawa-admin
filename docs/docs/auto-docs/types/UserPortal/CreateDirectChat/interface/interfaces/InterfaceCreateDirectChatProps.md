@@ -12,7 +12,7 @@ Props for CreateDirectChatModal component.
 
 ### chats
 
-> **chats**: [`GroupChat`](../../../../Chat/type/type-aliases/GroupChat.md)[]
+> **chats**: [`GroupChat`](../../../Chat/type/type-aliases/GroupChat.md)[]
 
 Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L23)
 

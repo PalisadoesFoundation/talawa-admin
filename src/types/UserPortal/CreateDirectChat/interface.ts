@@ -1,5 +1,5 @@
 import type { ApolloQueryResult } from '@apollo/client';
-import type { GroupChat } from 'types/Chat/type';
+import type { GroupChat } from '../Chat/type';
 
 /**
  *  Organization member interface.
