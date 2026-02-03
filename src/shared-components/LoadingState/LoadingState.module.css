@@ -1,3 +1,7 @@
+:root {
+  --skeleton-bg-pos-start: 200% 0;
+  --skeleton-bg-pos-end: -200% 0;
+}
 /* -- Loader.tsx -- */
 
 .spinner_wrapper {
@@ -103,4 +107,14 @@
 .skeletonCellSmall {
   height: var(--space-8);
   width: var(--space-13);
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: var(--skeleton-bg-pos-start);
+  }
+
+  100% {
+    background-position: var(--skeleton-bg-pos-end);
+  }
 }
