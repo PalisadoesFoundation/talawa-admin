@@ -18,7 +18,7 @@ export type ReportingTableColumn = Partial<GridColDef> & {
   /** Header name for the column */
   headerName?: string;
   /** Minimum width for the column */
-  minWidth?: number;
+  minWidth?: number | string;
   /** Alignment for the column content */
   align?: 'left' | 'center' | 'right';
   /** Alignment for the column header */

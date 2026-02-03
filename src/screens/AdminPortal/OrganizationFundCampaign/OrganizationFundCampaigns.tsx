@@ -27,7 +27,7 @@ import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/Breadcr
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
-import { width } from '../../../types/DataGridWrapper/width';
+import { spacing } from 'style/tokens/tokens';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -180,7 +180,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: width.w60,
+      minWidth: spacing.columnMinWidth.xs,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -236,7 +236,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'goalAmount',
       headerName: t('fundingGoal'),
       flex: 1,
-      minWidth: width.w100,
+      minWidth: spacing.columnMinWidth.sm,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -261,7 +261,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'fundingRaised',
       headerName: t('raised'),
       flex: 1,
-      minWidth: width.w100,
+      minWidth: spacing.columnMinWidth.sm,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -286,7 +286,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentageRaised'),
       flex: 1,
-      minWidth: width.w120,
+      minWidth: spacing.columnMinWidth.md,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -340,7 +340,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1.5,
-      minWidth: width.w120,
+      minWidth: spacing.columnMinWidth.md,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,

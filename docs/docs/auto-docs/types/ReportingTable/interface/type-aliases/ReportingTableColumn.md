@@ -52,7 +52,7 @@ Header name for the column
 
 ### minWidth?
 
-> `optional` **minWidth**: `number`
+> `optional` **minWidth**: `number` \| `string`
 
 Minimum width for the column
 
