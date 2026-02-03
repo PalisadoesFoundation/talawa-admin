@@ -298,5 +298,6 @@
   "clearSelection": "清除选择",
   "toggleSidebar": "切换侧边栏",
   "picture": "{{name}}的图片",
-  "optionsSuffix": "选项"
+  "optionsSuffix": "选项",
+  "userMenu": "用户菜单"
 }
