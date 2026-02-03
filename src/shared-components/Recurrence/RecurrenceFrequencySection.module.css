@@ -1,0 +1,12 @@
+.recurrenceRuleNumberInput {
+  width: 70px;
+}
+
+/* Migrated from app-fixed.module.css */
+.dropdown.dropdown {
+  background-color: var(--dropdown-bg);
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color);
+  position: relative;
+}

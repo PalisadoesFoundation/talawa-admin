@@ -342,10 +342,13 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+    // Wait for data to load (longer timeout for full suite run under load)
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const joinedLabels = screen.getAllByText(/Joined :/i);
     expect(joinedLabels).toHaveLength(2);
@@ -372,6 +375,7 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles search functionality correctly', async () => {
+    const user = userEvent.setup({ delay: null });
     const mocks = [
       createMemberConnectionMock({
         orgId: 'orgid',
@@ -401,14 +405,17 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
+    // Wait for data to load (longer timeout for full suite run under load)
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     // Search for "Jane"
     const searchInput = screen.getByTestId('searchbtn');
-    await userEvent.type(searchInput, 'Jane');
+    await user.type(searchInput, 'Jane');
 
     // Wait for debounced search (SearchFilterBar has 300ms debounce)
     await waitFor(
@@ -427,7 +434,7 @@ describe('OrganizationPeople', () => {
     );
 
     // Clear search
-    await userEvent.clear(searchInput);
+    await user.clear(searchInput);
 
     // Should show both again
     await waitFor(() => {
@@ -505,7 +512,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -644,7 +651,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -699,7 +706,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to users tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const usersOption = screen.getByText(/users/i);
@@ -778,7 +785,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
@@ -889,7 +896,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
+    const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);

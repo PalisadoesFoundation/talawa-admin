@@ -71,7 +71,9 @@ export const wrapperExemptions = [
       'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
       'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
       'src/shared-components/DatePicker/**/*.{ts,tsx}',
+      'src/types/shared-components/DatePicker/**/*.{ts,tsx}',
       'src/shared-components/TimePicker/**/*.{ts,tsx}',
+      'src/types/shared-components/TimePicker/**/*.{ts,tsx}',
       'src/index.tsx',
     ],
     rules: restrictImportsExcept(['mui-date-pickers']),
@@ -83,6 +85,10 @@ export const wrapperExemptions = [
   createWrapperExemption({
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
+  }),
+  createWrapperExemption({
+    componentName: 'DropDownButton',
+    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
   }),
 ];
 

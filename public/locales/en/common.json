@@ -258,6 +258,7 @@
   "organizationEvent": "Organization Members",
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
+  "inviteOnlyEventAriaLabel": "Invite only event",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "noCategory": "No Category",
   "sortingIcon": "sorting-icon",
@@ -270,14 +271,6 @@
   "imageNotFound": "Image not found",
   "changeLanguage": "Change Language",
   "selectField": "Select {{fieldName}}",
-  "userEvents": {
-    "presetToday": "Today",
-    "presetThisWeek": "This Week",
-    "presetThisMonth": "This Month",
-    "presetNext7Days": "Next 7 Days",
-    "presetNext30Days": "Next 30 Days",
-    "presetNextMonth": "Next Month"
-  },
   "ascending": "Ascending",
   "descending": "Descending",
   "noRegistrations": "No of Registrations",
@@ -304,5 +297,6 @@
   "unavailable": "Unavailable",
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
-  "picture": "{{name}} Picture"
+  "picture": "{{name}} Picture",
+  "optionsSuffix": "options"
 }

@@ -1,0 +1,191 @@
+/**
+ * AgendaItemsUpdateModal.module.css
+ * Component-specific styles for AgendaItemsUpdateModal
+ */
+
+.AgendaItemModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: var(--sidebar-offset, 13vw);
+}
+
+@media (max-width: 768px) {
+  .AgendaItemModal {
+    margin: 10vh auto;
+    max-width: 90%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 90%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .AgendaItemModal {
+    margin: 5vh auto;
+    max-width: 95%;
+  }
+
+  .titlemodalAgendaItems {
+    width: 100%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 100%;
+  }
+}
+
+.titlemodalAgendaItems {
+  color: var(--color-gray-900);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--color-gray-200);
+  width: 65%;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--color-gray-200);
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:focus-visible,
+.noOutline textarea:focus-visible {
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-600);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
+/* Increased specificity to override Bootstrap without !important */
+.noOutline.noOutline:is(:hover, :focus, :active, .show) {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+.urlListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.urlListItem a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.urlListItem a:hover {
+  text-decoration: underline;
+}
+
+.urlIcon {
+  margin-right: 10px;
+}
+
+.deleteButtonAgendaItems {
+  margin-left: auto;
+  padding: 2px 5px;
+}
+
+.previewFile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.previewFile img,
+.previewFile video {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.attachmentPreview {
+  position: relative;
+  width: 100%;
+}
+
+.closeButtonFile {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
+  border: none;
+  color: var(--color-red-500);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.greenregbtnAgendaItems {
+  margin-top: 15px;
+  border: 1px solid var(--color-green-500);
+  box-shadow: 0 2px 2px var(--color-gray-300);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--color-green-500);
+  width: 100%;
+  font-size: 16px;
+  color: var(--color-white);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.greenregbtnAgendaItems:focus-visible {
+  outline: 2px solid var(--color-green-500);
+  outline-offset: 2px;
+}
+
+.attachmentPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: var(--color-gray-50);
+  border: 1px dashed var(--color-gray-200);
+  border-radius: 8px;
+  min-height: 100px;
+}
+
+.attachmentPlaceholder i {
+  font-size: 32px;
+  color: var(--color-gray-600);
+  margin-bottom: 8px;
+}
+
+.fileName {
+  font-size: 14px;
+  color: var(--color-gray-900);
+  word-break: break-word;
+  text-align: center;
+  max-width: 200px;
+}

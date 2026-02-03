@@ -256,6 +256,7 @@
   "organizationEvent": "Miembros de la organización",
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
+  "inviteOnlyEventAriaLabel": "Evento solo con invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
   "noCategory": "Sin categoría",
   "to": "A",
@@ -270,14 +271,6 @@
   "imageNotFound": "Imagen no encontrada",
   "changeLanguage": "Cambiar idioma",
   "selectField": "Seleccionar {{fieldName}}",
-  "userEvents": {
-    "presetToday": "Hoy",
-    "presetThisWeek": "Esta Semana",
-    "presetThisMonth": "Este Mes",
-    "presetNext7Days": "Próximos 7 Días",
-    "presetNext30Days": "Próximos 30 Días",
-    "presetNextMonth": "Próximo Mes"
-  },
   "ascending": "Ascendente",
   "descending": "Descendente",
   "noRegistrations": "Número de Registros",
@@ -304,5 +297,6 @@
   "unavailable": "No disponible",
   "clearSelection": "Limpiar selección",
   "toggleSidebar": "Alternar barra lateral",
-  "picture": "Imagen de {{name}}"
+  "picture": "Imagen de {{name}}",
+  "optionsSuffix": "opciones"
 }

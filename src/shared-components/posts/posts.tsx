@@ -47,7 +47,8 @@ import {
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams, useSearchParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import {
   InterfaceOrganizationPostListData,
   InterfacePost,
@@ -80,33 +81,25 @@ export default function PostsPage() {
   const [allPosts, setAllPosts] = useState<InterfacePost[]>([]);
   const [after, setAfter] = useState<string | null>(null);
   const first = 6;
-  const [postModalIsOpen, setPostModalIsOpen] = useState(false);
+  const createPostModal = useModalState();
+  const postViewModal = useModalState();
   const [selectedViewPost, setSelectedViewPost] =
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
+  // i18n-ignore-next-line
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
-  const [showPostViewModal, setShowPostViewModal] = useState(false);
   const [searchParams] = useSearchParams();
-
-  const showCreatePostModal = (): void => {
-    setPostModalIsOpen(true);
-  };
-
-  const hideCreatePostModal = (): void => {
-    setPostModalIsOpen(false);
-  };
 
   const handleStoryClick = (post: InterfacePost) => {
     setSelectedViewPost(post);
-    setShowPostViewModal(true);
+    postViewModal.open();
   };
 
   const handleClosePostViewModal = () => {
-    setShowPostViewModal(false);
+    postViewModal.close();
     setSelectedViewPost(null);
-    // Remove previewPostID from url
     const params = new URLSearchParams(window.location.search);
     params.delete('previewPostID');
     const query = params.toString();
@@ -201,7 +194,7 @@ export default function PostsPage() {
     const previewPostID = searchParams.get('previewPostID');
     if (previewPostID && previewPostData?.post) {
       setSelectedViewPost(previewPostData.post);
-      setShowPostViewModal(true);
+      postViewModal.open();
     }
   }, [searchParams, previewPostData]);
 
@@ -361,18 +354,18 @@ export default function PostsPage() {
                 ],
                 selected: sortingOption,
                 onChange: handleSorting,
-                testIdPrefix: 'sortpost-toggle',
+                testIdPrefix: 'sortpost',
               },
             ]}
             showEventTypeFilter={false}
             actions={
               <Button
                 variant="success"
-                onClick={showCreatePostModal}
+                onClick={createPostModal.open}
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
-                className={`${styles.createButton} mb-2`}
+                className={`${styles.createButton}`}
               >
                 <Add />
                 {t('createPost')}
@@ -417,7 +410,13 @@ export default function PostsPage() {
               {/* Posts List with Infinite Scroll */}
               {isFiltering ? (
                 // Display filtered posts without infinite scroll
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 'var(--space-2)',
+                  }}
+                >
                   {postsToDisplay.map((post) => (
                     <PostCard
                       key={post.id}
@@ -444,7 +443,11 @@ export default function PostsPage() {
                   scrollThreshold={0.8}
                 >
                   <Box
-                    sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 'var(--space-2)',
+                    }}
                   >
                     {postsToDisplay.map((post) => (
                       <PostCard
@@ -473,8 +476,8 @@ export default function PostsPage() {
       {userId && (
         <div>
           <CreatePostModal
-            show={postModalIsOpen}
-            onHide={hideCreatePostModal}
+            show={createPostModal.isOpen}
+            onHide={createPostModal.close}
             refetch={refetch}
             orgId={currentUrl}
             type="create"
@@ -484,7 +487,7 @@ export default function PostsPage() {
 
       {/* Pinned Post Modal */}
       <PostViewModal
-        show={showPostViewModal}
+        show={postViewModal.isOpen}
         onHide={handleClosePostViewModal}
         post={selectedViewPost}
         refetch={refetch}

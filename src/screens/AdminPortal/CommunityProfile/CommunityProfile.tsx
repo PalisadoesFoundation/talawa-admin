@@ -16,7 +16,7 @@
  * Dependencies:
  * - React,React-Bootstrap, NotificationToast, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
- * - Utility functions: `convertToBase64` and `errorHandler`.
+ * - Utility functions: `errorHandler`.
  *
  * @returns The rendered CommunityProfile component.
  *
@@ -41,6 +41,7 @@ import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -58,7 +59,6 @@ import {
   RedditLogo,
   SlackLogo,
 } from 'assets/svgs/social-icons';
-import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
@@ -80,7 +80,8 @@ const CommunityProfile = (): JSX.Element => {
     id: string;
     name: string | undefined;
     websiteURL: string | undefined;
-    logo: string | undefined;
+    logoURL: string | undefined;
+    logoMimeType: string | undefined;
     inactivityTimeoutDuration: number;
     facebookURL: string | undefined;
     instagramURL: string | undefined;
@@ -96,7 +97,6 @@ const CommunityProfile = (): JSX.Element => {
   const [profileVariable, setProfileVariable] = React.useState({
     name: '',
     websiteURL: '',
-    logo: '',
     facebookURL: '',
     instagramURL: '',
     inactivityTimeoutDuration: 0,
@@ -107,6 +107,12 @@ const CommunityProfile = (): JSX.Element => {
     redditURL: '',
     slackURL: '',
   });
+
+  // State for logo file (sent directly to mutation as Upload scalar)
+  const [logoFile, setLogoFile] = React.useState<File | null>(null);
+
+  // Ref for logo file input to keep DOM and state in sync
+  const logoInputRef = React.useRef<HTMLInputElement>(null);
 
   // Query to fetch community data
   const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
@@ -122,7 +128,6 @@ const CommunityProfile = (): JSX.Element => {
       setProfileVariable({
         name: preLoginData.name ?? '',
         websiteURL: preLoginData.websiteURL ?? '',
-        logo: preLoginData.logo ?? '',
         facebookURL: preLoginData.facebookURL ?? '',
         inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
         instagramURL: preLoginData.instagramURL ?? '',
@@ -157,6 +162,7 @@ const CommunityProfile = (): JSX.Element => {
     try {
       await uploadPreLoginImagery({
         variables: {
+          logo: logoFile || undefined,
           name: profileVariable.name,
           websiteURL: profileVariable.websiteURL,
           inactivityTimeoutDuration: data?.community?.inactivityTimeoutDuration,
@@ -185,7 +191,6 @@ const CommunityProfile = (): JSX.Element => {
       setProfileVariable({
         name: '',
         websiteURL: '',
-        logo: '',
         facebookURL: '',
         instagramURL: '',
         inactivityTimeoutDuration: 0,
@@ -196,6 +201,11 @@ const CommunityProfile = (): JSX.Element => {
         redditURL: '',
         slackURL: '',
       });
+      setLogoFile(null);
+      // Clear the file input DOM element
+      if (logoInputRef.current) {
+        logoInputRef.current.value = '';
+      }
 
       await resetPreLoginImagery({
         variables: { resetPreLoginImageryId: preLoginData?.id },
@@ -215,7 +225,7 @@ const CommunityProfile = (): JSX.Element => {
     if (
       profileVariable.name == '' &&
       profileVariable.websiteURL == '' &&
-      profileVariable.logo == ''
+      logoFile === null
     ) {
       return true;
     } else {
@@ -232,31 +242,34 @@ const CommunityProfile = (): JSX.Element => {
         <Card.Body>
           <div className="mb-3">{t('communityProfileInfo')}</div>
           <form onSubmit={handleOnSubmit}>
-            <FormFieldGroup label={t('communityName')} name="name" required>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={profileVariable.name}
-                onChange={handleOnChange}
-                className={`form-control mb-3 ${styles.inputField}`}
-                placeholder={t('communityName')}
-                autoComplete="off"
-              />
-            </FormFieldGroup>
-
-            <FormFieldGroup label={t('wesiteLink')} name="websiteURL" required>
-              <input
-                type="url"
-                id="websiteURL"
-                name="websiteURL"
-                value={profileVariable.websiteURL}
-                onChange={handleOnChange}
-                className={`form-control mb-3 ${styles.inputField}`}
-                placeholder={t('wesiteLink')}
-                autoComplete="off"
-              />
-            </FormFieldGroup>
+            <FormTextField
+              name="name"
+              label={t('communityName')}
+              value={profileVariable.name}
+              onChange={(value: string) =>
+                setProfileVariable({ ...profileVariable, name: value })
+              }
+              placeholder={t('communityName')}
+              autoComplete="off"
+              required
+              className={`mb-3 ${styles.inputField}`}
+              labelClassName={styles.formLabel}
+            />
+            <FormTextField
+              id="websiteURL"
+              name="websiteURL"
+              type="url"
+              label={t('wesiteLink')}
+              value={profileVariable.websiteURL}
+              onChange={(value: string) =>
+                setProfileVariable({ ...profileVariable, websiteURL: value })
+              }
+              placeholder={t('wesiteLink')}
+              autoComplete="off"
+              required
+              className={`mb-3 ${styles.inputField}`}
+              labelClassName={styles.formLabel}
+            />
 
             <FormFieldGroup label={t('logo')} name="logo" required>
               <input
@@ -266,14 +279,12 @@ const CommunityProfile = (): JSX.Element => {
                 accept="image/*"
                 className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
-                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                ref={logoInputRef}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setProfileVariable((prev) => ({
-                    ...prev,
-                    logo: base64file ?? '',
-                  }));
+                  setLogoFile(file || null);
                 }}
+                autoComplete="off"
               />
             </FormFieldGroup>
             <FormFieldGroup label={t('social')} name="social">
@@ -281,125 +292,132 @@ const CommunityProfile = (): JSX.Element => {
                 <div className="mb-3 d-flex align-items-center gap-3">
                   <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
                   <input
+                    aria-label={`${t('social')} ${t('url')}`}
                     type="url"
                     id="facebook"
                     name="facebookURL"
                     data-testid="facebook"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
                     value={profileVariable.facebookURL}
                     onChange={handleOnChange}
-                    className={`form-control ${styles.inputField}`}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="instagram"
+                    name="instagramURL"
+                    data-testid="instagram"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.instagramURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={XLogo} alt={`X ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="x"
+                    name="xURL"
+                    data-testid="x"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.xURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="linkedIn"
+                    name="linkedInURL"
+                    data-testid="linkedIn"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.linkedInURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={GithubLogo} alt={`Github ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="github"
+                    name="githubURL"
+                    data-testid="github"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.githubURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="youtube"
+                    name="youtubeURL"
+                    data-testid="youtube"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.youtubeURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="reddit"
+                    name="redditURL"
+                    data-testid="reddit"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.redditURL}
+                    onChange={handleOnChange}
+                    placeholder={t('url')}
+                    autoComplete="off"
+                  />
+                </div>
+
+                <div className="mb-3 d-flex align-items-center gap-3">
+                  <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
+                  <input
+                    aria-label={`${t('social')} ${t('url')}`}
+                    type="url"
+                    id="slack"
+                    name="slackURL"
+                    data-testid="slack"
+                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
+                    value={profileVariable.slackURL}
+                    onChange={handleOnChange}
                     placeholder={t('url')}
                     autoComplete="off"
                   />
                 </div>
               </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="instagram"
-                  name="instagramURL"
-                  data-testid="instagram"
-                  value={profileVariable.instagramURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={XLogo} alt={`X ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="x"
-                  name="xURL"
-                  data-testid="x"
-                  value={profileVariable.xURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="linkedIn"
-                  name="linkedInURL"
-                  data-testid="linkedIn"
-                  value={profileVariable.linkedInURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={GithubLogo} alt={`Github ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="github"
-                  name="githubURL"
-                  data-testid="github"
-                  value={profileVariable.githubURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="youtube"
-                  name="youtubeURL"
-                  data-testid="youtube"
-                  value={profileVariable.youtubeURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="reddit"
-                  name="redditURL"
-                  data-testid="reddit"
-                  value={profileVariable.redditURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
-
-              <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
-                <input
-                  type="url"
-                  id="slack"
-                  name="slackURL"
-                  data-testid="slack"
-                  value={profileVariable.slackURL}
-                  onChange={handleOnChange}
-                  className={`form-control ${styles.inputField}`}
-                  placeholder={t('url')}
-                  autoComplete="off"
-                />
-              </div>
             </FormFieldGroup>
-
             <div
               className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
             >

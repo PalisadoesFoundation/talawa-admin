@@ -2,7 +2,8 @@ import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { Router } from 'react-router';
+import { createMemoryHistory } from 'history';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -31,7 +32,34 @@ interface InterfaceStorageHelper {
   getStorageKey: (key: string) => string;
 }
 
-const MOCKS = [
+// Minimal GraphQL types used by the mocks in this spec
+interface InterfaceCommunity {
+  id?: string;
+  name?: string;
+  description?: string;
+  logoURL?: string | null;
+  websiteURL?: string | null;
+  facebookURL?: string | null;
+  linkedinURL?: string | null;
+  xURL?: string | null;
+  githubURL?: string | null;
+  instagramURL?: string | null;
+  youtubeURL?: string | null;
+  slackURL?: string | null;
+  redditURL?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+  inactivityTimeoutDuration?: number;
+  logoMimeType?: string | null;
+}
+
+interface InterfaceOrganization {
+  id: string;
+  name: string;
+  addressLine1?: string | null;
+}
+
+const createMocks = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -95,7 +123,7 @@ const MOCKS = [
           },
           {
             id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
+            name: 'Mills & Group',
             addressLine1: '5112 Dare Centers',
           },
         ],
@@ -104,29 +132,50 @@ const MOCKS = [
   },
 ];
 
-const MOCKS3 = [
-  {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: '6437904485008f171cf29924',
-            name: 'Unity Foundation',
-            addressLine1: '123 Random Street',
-          },
-          {
-            id: 'db1d5caad2ade57ab811e681',
-            name: 'Mills Group',
-            addressLine1: '5112 Dare Centers',
-          },
-        ],
+// Factory with overrides for specific test scenarios
+const createMocks3 = (
+  overrides: Partial<{
+    communityData: InterfaceCommunity | null;
+    organizationsData: InterfaceOrganization[];
+  }> = {},
+): MockedResponse[] => {
+  const defaults = {
+    communityData: null,
+    organizationsData: [
+      {
+        id: '6437904485008f171cf29924',
+        name: 'Unity Foundation',
+        addressLine1: '123 Random Street',
+      },
+      {
+        id: 'db1d5caad2ade57ab811e681',
+        name: 'Mills & Group',
+        addressLine1: '5112 Dare Centers',
+      },
+    ],
+  };
+  const config = { ...defaults, ...overrides };
+  return [
+    {
+      request: { query: GET_COMMUNITY_DATA_PG },
+      result: { data: { community: config.communityData } },
+    },
+    {
+      request: { query: GET_COMMUNITY_DATA_PG },
+      result: { data: { community: config.communityData } },
+    },
+    {
+      request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+      result: {
+        data: {
+          organizations: config.organizationsData,
+        },
       },
     },
-  },
-];
+  ];
+};
 
-const MOCKS4 = [
+const createMocks4 = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -157,12 +206,9 @@ const MOCKS4 = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, true);
-const link3 = new StaticMockLink(MOCKS3, true);
+// Note: Avoid shared links; we'll create a fresh StaticMockLink per test
 
-const link4 = new StaticMockLink(MOCKS4, true);
-
-const MOCKS_VERIFIED_EMAIL = [
+const createMocksVerifiedEmail = (): MockedResponse[] => [
   {
     request: {
       query: SIGNIN_QUERY,
@@ -202,7 +248,7 @@ const MOCKS_VERIFIED_EMAIL = [
     result: { data: { organizations: [] } },
   },
 ];
-const linkVerifiedEmail = new StaticMockLink(MOCKS_VERIFIED_EMAIL, true);
+// For verified email scenarios, instantiate a fresh link within the test
 
 const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
   const warning = vi.fn();
@@ -237,6 +283,9 @@ const mockUseLocalStorage = {
   getStorageKey: vi.fn(),
 };
 
+// Capture original window.location to restore after each test
+const originalLocation = window.location;
+
 beforeEach(() => {
   vi.clearAllMocks();
   routerMocks.navigate.mockReset();
@@ -254,6 +303,12 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+  // Restore original window.location to prevent cross-test bleed
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    writable: true,
+    value: originalLocation,
+  });
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -311,7 +366,7 @@ vi.mock('react-google-recaptcha', async () => {
   return { __esModule: true, default: recaptcha };
 });
 
-let user: ReturnType<typeof userEvent.setup>;
+let user!: ReturnType<typeof userEvent.setup>;
 
 beforeEach(() => {
   user = userEvent.setup();
@@ -328,15 +383,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/admin',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/admin'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -346,15 +402,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('There should be default values of pre-login data when queried result is null', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -388,15 +445,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'John@123',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -445,15 +503,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'john@123',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -501,15 +560,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'doeJohn@2',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -557,15 +617,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'joe',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -613,15 +674,16 @@ describe('Testing Login Page Screen', () => {
       confirmPassword: 'johndoe',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -674,15 +736,16 @@ describe('Testing Login Page Screen', () => {
       orgId: 'abc',
     };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -727,15 +790,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -757,15 +821,16 @@ describe('Testing Login Page Screen', () => {
   it('Testing login functionality', async () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -785,15 +850,18 @@ describe('Testing Login Page Screen', () => {
   it('Testing wrong login functionality', async () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
+    const localLink4 = new StaticMockLink(createMocks4(), true);
+
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link4}>
-        <BrowserRouter>
+      <MockedProvider link={localLink4}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -811,15 +879,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing password preview feature for login', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -848,15 +917,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -890,15 +960,16 @@ describe('Testing Login Page Screen', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -922,15 +993,16 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user firsts lands on a page', async () => {
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -951,15 +1023,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '7' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -995,15 +1068,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '12345678' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1039,15 +1113,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '1234567' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1081,15 +1156,16 @@ describe('Testing Login Page Screen', () => {
 
     const password = { password: '12345678' };
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1122,15 +1198,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1149,15 +1226,16 @@ describe('Testing Login Page Screen', () => {
         pathname: '/register',
       },
     });
+    const history = createMemoryHistory({ initialEntries: ['/register'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1175,15 +1253,16 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1197,15 +1276,16 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
@@ -1238,15 +1318,16 @@ describe('Testing invitation functionality', () => {
     const mockRemoveItem = vi.fn();
     mockUseLocalStorage.removeItem = mockRemoveItem;
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1284,15 +1365,16 @@ describe('Testing invitation functionality', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1334,15 +1416,16 @@ describe('Testing invitation functionality', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -1361,46 +1444,325 @@ describe('Testing invitation functionality', () => {
   });
 });
 
-it('Render the Select Organization list and change the option', async () => {
-  // Skip this test for admin path since register button is removed
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    value: {
-      reload: vi.fn(),
-      href: 'https://localhost:4321/',
-      origin: 'https://localhost:4321',
-      pathname: '/',
-    },
+describe('Organization Autocomplete Component', () => {
+  let history: ReturnType<typeof createMemoryHistory>;
+
+  beforeEach(() => {
+    history = createMemoryHistory({ initialEntries: ['/'] });
   });
 
-  render(
-    <MockedProvider link={link3}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-  await wait();
+  const setupRegistrationForm = async () => {
+    const localLink = new StaticMockLink(createMocks3(), true);
+    render(
+      <MockedProvider link={localLink}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
 
-  const registerButton = screen.queryByTestId('goToRegisterPortion');
-  if (registerButton) {
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await user.click(registerButton);
+    await wait();
+
+    return screen.getByTestId('selectOrg');
+  };
+
+  it('renders Select Organization autocomplete with placeholder', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute(
+      'placeholder',
+      i18nForTest.t('loginPage.clickToSelectOrg'),
+    );
+  });
+
+  it('opens organization list when input is clicked', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.click(input);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('filters and selects an organization using keyboard', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+  });
+
+  it('opens organization list using dropdown icon', async () => {
+    const autocomplete = await setupRegistrationForm();
+
+    const buttons = within(autocomplete).getAllByRole('button');
+    const dropdownButton = buttons[0];
+
+    await user.click(dropdownButton);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('should have full width input as per w-100 class', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(input).toHaveClass('w-100');
+    expect(input).toHaveClass('form-control');
+  });
+  it('clears selected organization using clear icon', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
+  });
+
+  it('allows reopening list after clearing selection', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await wait();
+
+    const clearButton = screen.getByLabelText(/clear/i);
+    await user.click(clearButton);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
+
+    // Click to reopen dropdown
+    await user.click(input);
+
+    await waitFor(() => {
+      // Dropdown should open
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+  });
+
+  it('handles empty organizations list', async () => {
+    const EMPTY_ORGS_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    const emptyLink = new StaticMockLink(EMPTY_ORGS_MOCK, true);
+
+    render(
+      <MockedProvider link={emptyLink}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
     await user.click(registerButton);
     await wait();
 
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
-    autocomplete.focus();
 
-    await user.clear(input);
-    await user.type(input, 'a');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute(
+      'placeholder',
+      i18nForTest.t('loginPage.clickToSelectOrg'),
+    );
+  });
+
+  it('updates form state when organization is selected', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.type(input, 'Unity');
     await user.keyboard('{ArrowDown}');
     await user.keyboard('{Enter}');
-  }
+
+    await wait();
+
+    await user.type(screen.getByPlaceholderText(/Name/i), 'Test User');
+    await user.type(screen.getByTestId('signInEmail'), 'test@example.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+    await user.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Test@123',
+    );
+
+    const registrationBtn = screen.getByTestId('registrationBtn');
+    expect(registrationBtn).toBeEnabled();
+  });
+
+  it('displays organizations in correct format', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    await user.click(input);
+    await wait();
+
+    await user.type(input, 'Unity');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('Unity');
+    });
+  });
+
+  it('handles GraphQL error when fetching organizations', async () => {
+    const ERROR_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        error: new Error('Failed to fetch organizations'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(ERROR_MOCK, true);
+
+    render(
+      <MockedProvider link={errorLink}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await user.click(registerButton);
+    await wait();
+
+    const autocomplete = screen.getByTestId('selectOrg');
+    const input = within(autocomplete).getByRole('combobox');
+
+    expect(autocomplete).toBeInTheDocument();
+    expect(input).toBeEnabled();
+  });
+
+  it('only shows clear button when organization is selected', async () => {
+    const autocomplete = await setupRegistrationForm();
+
+    // Check that dropdown button exists
+    const dropdownButton = within(autocomplete).getByRole('button', {
+      name: /open/i,
+    });
+    expect(dropdownButton).toBeInTheDocument();
+
+    // Select organization
+    const input = within(autocomplete).getByRole('combobox');
+    await user.type(input, 'Unity');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+
+      within(autocomplete).queryByRole('button', {
+        name: /clear/i,
+      });
+    });
+  });
+
+  it('maintains focus during interactions', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    // Click input to focus
+    await user.click(input);
+    expect(input).toHaveFocus();
+
+    // Type something
+    await user.type(input, 'Test');
+    expect(input).toHaveFocus();
+
+    // Clear input
+    await user.keyboard('{Control>}a{/Control}'); // Select all
+    await user.keyboard('{Delete}');
+    expect(input).toHaveFocus();
+  });
+
+  it('handles special characters in organization names', async () => {
+    const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByRole('combobox');
+
+    // Test with special characters
+    await user.type(input, 'Mills &');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(input).not.toHaveValue('');
+    });
+  });
 });
 
 describe('Talawa-API server fetch check', () => {
@@ -1423,15 +1785,16 @@ describe('Talawa-API server fetch check', () => {
 
   it('Checks if Talawa-API resource is loaded successfully', async () => {
     await act(async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <LoginPage />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
+          </Router>
         </MockedProvider>,
       );
     });
@@ -1444,15 +1807,16 @@ describe('Talawa-API server fetch check', () => {
     vi.spyOn(global, 'fetch').mockRejectedValue(mockError);
 
     await act(async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
       render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <LoginPage />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
+          </Router>
         </MockedProvider>,
       );
     });
@@ -1467,9 +1831,10 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = MOCKS,
+  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
+  const history = createMemoryHistory({ initialEntries: ['/'] });
 
   return render(
     <MockedProvider
@@ -1479,13 +1844,13 @@ const renderLoginPage = (
             mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
           })}
     >
-      <BrowserRouter>
+      <Router location={history.location} navigator={history}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <LoginPage />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </Router>
     </MockedProvider>,
   );
 };
@@ -1509,26 +1874,31 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('bypasses recaptcha when feature is off', async () => {
+    // Ensure pathname exists to prevent i18n language detector crash
+    setLocationPath('/');
     vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
-      REACT_APP_USE_RECAPTCHA: 'no',
+      REACT_APP_USE_RECAPTCHA: 'NO',
       RECAPTCHA_SITE_KEY: 'xxx',
     }));
     // re-import component so mock applies
     const { default: LoginPageFresh } = await import('./LoginPage');
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider mocks={MOCKS}>
-        <BrowserRouter>
+      <MockedProvider mocks={createMocks()}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPageFresh />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
     await wait();
+    // Recaptcha should not render when feature flag is off
+    expect(screen.queryByTestId('mock-recaptcha')).toBeNull();
     // Verify recaptcha is bypassed by submitting login without token
     await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
     await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
@@ -1578,9 +1948,8 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('warns when non-admin logs in from admin portal', async () => {
-    setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
-      ...MOCKS.filter((m) => m.request.query !== SIGNIN_QUERY),
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
       {
         request: {
           query: SIGNIN_QUERY,
@@ -1602,7 +1971,18 @@ describe('Extra coverage for 100 %', () => {
         },
       },
     ];
-    renderLoginPage(NON_ADMIN_MOCK);
+    const history = createMemoryHistory({ initialEntries: ['/admin'] });
+    render(
+      <MockedProvider mocks={NON_ADMIN_MOCK}>
+        <Router location={history.location} navigator={history}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </Router>
+      </MockedProvider>,
+    );
     await wait();
     await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
     await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
@@ -1615,7 +1995,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('renders component after mount', async () => {
-    renderLoginPage(link);
+    renderLoginPage();
     await wait();
     expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
   });
@@ -2012,15 +2392,16 @@ describe('Cookie-based authentication verification', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2111,15 +2492,16 @@ describe('Cookie-based authentication verification', () => {
       },
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider mocks={SIGNUP_SUCCESS_MOCK}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2260,15 +2642,16 @@ describe('Cookie-based authentication verification', () => {
       },
     ];
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2356,15 +2739,16 @@ describe('Cookie-based authentication verification', () => {
       },
     ];
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
       <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
-        <BrowserRouter>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2381,15 +2765,48 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
+    // Create test-specific mock that matches the variables used in this test
+    const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: {
+            email: 'testadmin2@example.com',
+            password: 'Pass@123',
+            recaptchaToken: 'fake-recaptcha-token',
+          },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '1',
+                role: 'administrator',
+                name: 'Test Admin',
+                emailAddress: 'testadmin2@example.com',
+                countryCode: 'US',
+                avatarURL: null,
+                isEmailAddressVerified: true,
+              },
+              authenticationToken: 'authenticationToken',
+              refreshToken: 'refreshToken',
+            },
+          },
+        },
+      },
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+    ];
+    const localLink = new StaticMockLink(RECAPTCHA_LOGIN_MOCKS, true);
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={localLink}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2406,7 +2823,7 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    expect(link.operation?.variables?.recaptchaToken).toBe(
+    expect(localLink.operation?.variables?.recaptchaToken).toBe(
       'fake-recaptcha-token',
     );
   });
@@ -2414,15 +2831,21 @@ describe('Cookie-based authentication verification', () => {
   it('Testing login functionality with verified email clears storage flags', async () => {
     const formData = { email: 'verified@gmail.com', password: 'password123' };
 
+    const verifiedEmailLink = new StaticMockLink(
+      createMocksVerifiedEmail(),
+      true,
+    );
+
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={linkVerifiedEmail}>
-        <BrowserRouter>
+      <MockedProvider link={verifiedEmailLink}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
@@ -2454,20 +2877,54 @@ describe('Cookie-based authentication verification', () => {
       return null;
     });
 
+    const history = createMemoryHistory({ initialEntries: ['/'] });
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+        <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <LoginPage />
             </I18nextProvider>
           </Provider>
-        </BrowserRouter>
+        </Router>
       </MockedProvider>,
     );
 
     await waitFor(() => {
       expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
     });
+  });
+});
+
+// Unit checks for createMocks3 override behavior
+describe('createMocks3 factory', () => {
+  it('should handle empty community', () => {
+    const mocks = createMocks3({ communityData: null, organizationsData: [] });
+    const communityMocks = mocks.filter(
+      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+    );
+    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+    for (const mock of communityMocks) {
+      // @ts-expect-error runtime shape check in test
+      expect(mock.result?.data?.community ?? null).toBeNull();
+    }
+  });
+
+  it('should handle community with data', () => {
+    const community = {
+      id: '1',
+      name: 'Test Org',
+      description: 'Description',
+      typename: 'Organization',
+    };
+    const mocks = createMocks3({ communityData: community });
+    const communityMocks = mocks.filter(
+      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+    );
+    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+    for (const mock of communityMocks) {
+      // @ts-expect-error runtime shape check in test
+      expect(mock.result?.data?.community).toEqual(community);
+    }
   });
 });

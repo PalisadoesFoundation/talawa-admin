@@ -57,40 +57,65 @@ Follow the existing scale order and units in each file when adding new tokens.
 
 ## Validation and CI/CD Checks
 
-Token usage is enforced by `scripts/validate-tokens.ts`, which scans `src/` CSS/TS/TSX files (excluding token files and `src/assets/css/app.css`) for hardcoded values:
+Token usage is enforced by `scripts/validate-tokens.ts`, which scans `src/` CSS/TS/TSX files (excluding token files and `src/assets/css/app.css`) for hardcoded values.
 
-- Hex colors (for example: `#ffffff`)
-- `px` values in spacing-related declarations (`margin`, `padding`, `width`, `height`, `gap`, `top`, `right`, `bottom`, `left`)
-- `font-size` in `px`
-- Numeric `font-weight` values (for example: `600`)
+### Detected Patterns
 
-Local checks:
+#### CSS/SCSS Files
+
+| Category | Patterns Detected |
+|----------|-------------------|
+| **Colors** | Hex colors (`#fff`, `#ffffff`, `#ffffffaa`), RGB/RGBA (`rgb(0,0,0)`, `rgba(0,0,0,0.5)`), HSL/HSLA (`hsl(0,0%,0%)`, `hsla(0,0%,0%,0.5)`) |
+| **Spacing** | `margin`, `padding`, `width`, `height`, `gap`, `top`, `right`, `bottom`, `left`, `inset` with `px`/`rem`/`em` values (including shorthand like `padding: 8px 16px`) |
+| **Typography** | `font-size` with `px`/`rem`/`em`, `font-weight` with numeric values (100-900), `line-height` with `px`/`rem`/`em` |
+| **Borders** | `border-radius` with `px`/`rem`/`em`, `border-width` with units, `border` shorthand with colors |
+| **Effects** | `box-shadow` with hardcoded offset/blur values and colors |
+
+#### TSX/TS Inline Styles
+
+| Category | Patterns Detected |
+|----------|-------------------|
+| **Spacing** | `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`, `margin`, `padding` (and logical properties like `marginInline`, `paddingBlock`) |
+| **Dimensions** | `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight`, `gap`, `rowGap`, `columnGap`, `top`, `right`, `bottom`, `left` |
+| **Typography** | `fontSize` with numeric or string values, `fontWeight` with numeric values (100-900), `lineHeight` with unit values |
+| **Borders** | `borderRadius` with numeric or string values |
+| **Colors** | `color`, `backgroundColor`, `borderColor`, `background` with hex/rgb/hsl values |
+
+### Allowlisted Patterns
+
+The following patterns are **not flagged** as violations:
+
+- CSS `var()` usage (for example: `var(--space-4)`)
+- CSS `calc()` expressions
+- CSS custom property definitions (`--my-token: value`)
+- Zero values (`0`, `0px`)
+- Percentage values (`50%`, `100%`)
+- Non-dimensional properties: `z-index`, `opacity`, `flex`, `flex-grow`, `flex-shrink`, `order`
+- Time-based values: `animation-duration`, `animation-delay`, `transition-duration`, `transition-delay`
+
+### Local Checks
 
 - `lint-staged` runs `npx tsx scripts/validate-tokens.ts --files` on staged `*.ts`, `*.tsx`, `*.css`, `*.scss`, `*.sass`.
 - `.husky/pre-commit` runs `lint-staged`, so violations fail the commit before it is created.
 
-CI/CD checks:
+### CI/CD Checks
 
 - The PR workflow runs `pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES` to scan only the files changed in the PR, and the job fails if hardcoded values are found.
 
 These guardrails catch new hardcoded values before merge and keep token usage consistent without slowing down CI with full-repo scans.
 
-Run locally:
+### Run Locally
 
-- `pnpm exec tsx scripts/validate-tokens.ts --staged`
-- `pnpm exec tsx scripts/validate-tokens.ts --files src/path/to/file.tsx`
-- `pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo`
+```bash
+# Check staged files (for pre-commit)
+pnpm exec tsx scripts/validate-tokens.ts --staged --all
 
-### Current Limitations
+# Check specific files
+pnpm exec tsx scripts/validate-tokens.ts --files src/path/to/file.tsx src/path/to/style.css
 
-- Spacing detection only matches a single `px` value in simple CSS declarations, so shorthands like `padding: 8px 16px` may only flag the first value.
-- TSX inline styles (including MUI `sx`) and camelCase properties like `marginTop` are not parsed by the current regex checks.
-- Only `px` is checked for spacing and font sizes; `rem`/`em` values are not detected.
-
-### Planned Follow-up Work
-
-- Add camelCase property patterns for TSX (for example: `marginTop`, `paddingX`, `fontSize`).
-- Detect `rem`/`em` units with a token allowlist to avoid false positives.
+# Scan entire repository
+pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo
+```
 
 ## Notes
 
