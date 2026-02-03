@@ -6,7 +6,7 @@
 
 > **areRecurrenceRulesEqual**(`rule1`, `rule2`): `boolean`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L276)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:275](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L275)
 
 Checks if two recurrence rules are equal
 

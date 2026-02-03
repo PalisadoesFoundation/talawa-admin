@@ -253,6 +253,7 @@
   "organizationEvent": "संगठन के सदस्य",
   "organizationEventDescription": "संगठन के सभी सदस्यों के लिए दृश्य",
   "inviteOnlyEvent": "केवल आमंत्रण",
+  "inviteOnlyEventAriaLabel": "केवल आमंत्रण इवेंट",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
   "noCategory": "कोई श्रेणी नहीं",
   "to": "को",
@@ -296,5 +297,7 @@
   "unavailable": "अनुपलब्ध",
   "clearSelection": "चयन साफ़ करें",
   "toggleSidebar": "साइडबार टॉगल करें",
-  "picture": "{{name}} चित्र"
+  "picture": "{{name}} चित्र",
+  "optionsSuffix": "विकल्प",
+  "userMenu": "उपयोगकर्ता मेनू"
 }

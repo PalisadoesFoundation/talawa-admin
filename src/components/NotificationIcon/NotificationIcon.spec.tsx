@@ -6,15 +6,19 @@ import { MemoryRouter, Routes, Route } from 'react-router';
 import NotificationIcon from './NotificationIcon';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
-    t: (key: string) =>
-      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
-    i18n: {
-      changeLanguage: () => Promise.resolve(),
-    },
-  }),
-}));
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
+      t: (key: string) =>
+        options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+      i18n: {
+        changeLanguage: () => Promise.resolve(),
+      },
+    }),
+  };
+});
 
 // Mock useLocalStorage
 vi.mock('utils/useLocalstorage', () => ({
@@ -99,17 +103,21 @@ describe('NotificationIcon Component', () => {
   });
 
   it('should render loading state', async () => {
+    // Use a long delay so loading state is visible before mock resolves
     render(
-      <MockedProvider mocks={mocks([], false, 300)}>
+      <MockedProvider mocks={mocks([], false, 2000)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
       </MockedProvider>,
     );
     await user.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.getByText('notification.loading')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('notification.loading')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('should render error state', async () => {
@@ -284,7 +292,7 @@ describe('NotificationIcon Component', () => {
     );
     await user.click(screen.getByRole('button'));
     await waitFor(() => {
-      expect(screen.getByTitle('notification.unread')).toBeInTheDocument();
+      expect(screen.getByTitle('notification.unreadCount')).toBeInTheDocument();
     });
   });
 
