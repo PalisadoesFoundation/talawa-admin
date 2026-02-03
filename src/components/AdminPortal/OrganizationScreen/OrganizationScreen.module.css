@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 1rem 1.5rem 0 calc(300px + 2rem + 1.5rem);
+  padding: var(--space-5) var(--space-7) var(--space-0) calc(300px + var(--space-8) + var(--space-7));
 }
 
 .expand {
-  padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.5rem);
+  padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-7));
   animation: moveLeft 0.5s ease-in-out;
 }
 
@@ -16,15 +16,15 @@
 
 .profileContainer {
   border: none;
-  padding: 2.1rem 0.5rem;
-  height: 52px;
-  border-radius: 8px 0px 0px 8px;
+  padding: var(--space-8) var(--space-3);
+  height: var(--space-10);
+  border-radius: var(--radius-md) var(--radius-none) var(--radius-none) var(--radius-md);
   display: flex;
   align-items: center;
   background-color: white !important;
   box-shadow:
-    0 4px 4px 0 rgba(177, 177, 177, 0.2),
-    0 6px 20px 0 rgba(151, 151, 151, 0.19);
+    0 var(--shadow-offset-md) var(--shadow-offset-md) 0 var(--color-gray-200),
+    0 var(--shadow-blur-md) 20px 0 var(--color-gray-200);
 }
 
 .profileContainer:focus {
@@ -33,23 +33,23 @@
 }
 
 .imageContainer {
-  width: 56px;
+  width: var(--space-10);
 }
 
 .profileContainer .profileText {
   flex: 1;
   text-align: start;
   overflow: hidden;
-  margin-right: 4px;
+  margin-right: var(--space-2);
 }
 
 .angleDown {
-  margin-left: 4px;
+  margin-left: var(--space-2);
 }
 
 .profileContainer .profileText .primaryText {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -61,28 +61,28 @@
 }
 
 .profileContainer .profileText .secondaryText {
-  font-size: 0.8rem;
-  font-weight: 400;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
   color: var(--bs-secondary);
   display: block;
   text-transform: capitalize;
 }
 
 .contract {
-  padding-left: calc(300px + 2rem + 1.5rem);
+  padding-left: calc(300px + var(--space-8) + var(--space-7));
   animation: moveRight 0.5s ease-in-out;
 }
 
 .collapseSidebarButton {
   position: fixed;
-  height: 40px;
+  height: var(--space-9);
   bottom: 0;
   z-index: 100;
-  width: calc(300px + 2rem);
-  background-color: rgba(245, 245, 245, 0.7);
+  width: calc(300px + var(--space-8));
+  background-color: var(--color-gray-50);
   color: black;
   border: none;
-  border-radius: 0px;
+  border-radius: var(--radius-none);
 }
 
 .collapseSidebarButton:hover,
@@ -98,13 +98,13 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: 40px;
+  width: var(--space-9);
   height: 100vh;
   z-index: 100;
-  background-color: rgba(245, 245, 245);
+  background-color: var(--color-gray-50);
   border: none;
-  border-radius: 0px;
-  margin-right: 20px;
+  border-radius: var(--radius-none);
+  margin-right: var(--space-8);
   color: black;
 }
 
@@ -141,48 +141,48 @@
 
 @media (max-width: 1120px) {
   .contract {
-    padding-left: calc(276px + 2rem + 1.5rem);
+    padding-left: calc(276px + var(--space-8) + var(--space-7));
   }
 
   .collapseSidebarButton {
-    width: calc(250px + 2rem);
+    width: calc(250px + var(--space-8));
   }
 }
 
 @media (max-height: 900px) {
   .pageContainer {
-    padding: 1rem 1.5rem 0 calc(300px + 2rem);
+    padding: var(--space-5) var(--space-7) var(--space-0) calc(300px + var(--space-8));
   }
 
   .collapseSidebarButton {
-    height: 30px;
-    width: calc(300px + 1rem);
+    height: var(--space-8);
+    width: calc(300px + var(--space-5));
   }
 }
 
 @media (max-height: 650px) {
   .pageContainer {
-    padding: 1rem 1.5rem 0 calc(270px);
+    padding: var(--space-5) var(--space-7) var(--space-0) calc(270px);
   }
 
   .collapseSidebarButton {
-    width: 250px;
-    height: 20px;
+    width: var(--space-18);
+    height: var(--space-8);
   }
 
   .opendrawer {
-    width: 30px;
+    width: var(--space-8);
   }
 }
 
 /* For tablets */
 @media (max-width: 820px) {
   .pageContainer {
-    padding-left: 2.5rem;
+    padding-left: var(--space-9);
   }
 
   .opendrawer {
-    width: 25px;
+    width: var(--space-7);
   }
 
   .contract,
@@ -204,5 +204,5 @@
 }
 
 .titleMargin {
-  margin-top: 0.75rem;
+  margin-top: var(--space-4);
 }
