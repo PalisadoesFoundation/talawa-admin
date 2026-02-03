@@ -15,14 +15,13 @@
  * const password = generateSecurePassword();
  * console.log(password); // e.g., "Xy7$kL9mN2pQ!"
  * ```
-*/
+ */
 
 export const generateSecurePassword = (): string => {
   const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
   const numberChars = '0123456789';
   const specialChars = '!@#$%^&*(),.?":{}|<>';
-  
 
   const minLength = 12;
   const char = uppercaseChars + lowercaseChars + numberChars + specialChars;
@@ -30,17 +29,16 @@ export const generateSecurePassword = (): string => {
 
   const charArr = [uppercaseChars, lowercaseChars, numberChars, specialChars];
 
-  const randomArr = new Uint32Array(minLength)
-  crypto.getRandomValues(randomArr)
+  const randomArr = new Uint32Array(minLength);
+  crypto.getRandomValues(randomArr);
 
   for (let i = 0; i < charArr.length; i++) {
-    password += (charArr[i][randomArr[i]%charArr[i].length]);
+    password += charArr[i][randomArr[i] % charArr[i].length];
   }
 
   for (let i = password.length; i < minLength; i++) {
-    password += (char[randomArr[i]%char.length])
+    password += char[randomArr[i] % char.length];
   }
-
 
   return shuffleString(password);
 };
