@@ -287,12 +287,12 @@ jobs:
           BASE_SHA=$(git merge-base "${{ github.event.pull_request.base.sha }}" "$HEAD_SHA")
 
           # Get all changed files between base and head
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRD "$BASE_SHA" "$HEAD_SHA" | tr '\n' ' ')
+          mapfile -d '' ALL_CHANGED_FILES < <(git diff --name-only -z --diff-filter=ACMR "$BASE_SHA" "$HEAD_SHA")
 
           # Check for sensitive files using the python script
-          if [ -n "$ALL_CHANGED_FILES" ]; then
+          if [ ${#ALL_CHANGED_FILES[@]} -gt 0 ]; then
              chmod +x .github-central/.github/workflows/scripts/sensitive_file_check.py
-             .github-central/.github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files $ALL_CHANGED_FILES
+             .github-central/.github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files "${ALL_CHANGED_FILES[@]}"
           fi
 
   Count-Changed-Files:
