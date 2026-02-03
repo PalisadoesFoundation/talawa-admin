@@ -2,7 +2,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SearchingButton from './SearchingButton';
-import userEvent from '@testing-library/user-event';
 import { describe, it, expect } from 'vitest';
 
 describe('SearchingButton Component', () => {
