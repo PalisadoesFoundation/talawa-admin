@@ -28,7 +28,16 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
     <DropDownButton
       options={options}
       buttonLabel={currentLabel}
-      onSelect={(value) => onSelect(recurrenceOptions[Number(value)])}
+      onSelect={(value) => {
+        const index = Number(value);
+        if (
+          Number.isInteger(index) &&
+          index >= 0 &&
+          index < recurrenceOptions.length
+        ) {
+          onSelect(recurrenceOptions[index]);
+        }
+      }}
       ariaLabel={t('recurring')}
       dataTestIdPrefix="recurrence"
       variant="outline-secondary"

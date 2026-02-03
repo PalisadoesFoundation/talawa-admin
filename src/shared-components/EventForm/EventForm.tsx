@@ -38,6 +38,11 @@ import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 
+/**
+ * EventForm - A reusable form component for creating and editing events.
+ * @param props - Component props from IEventFormProps.
+ * @returns JSX.Element
+ */
 const EventForm: React.FC<IEventFormProps> = ({
   initialValues,
   onSubmit,

@@ -523,7 +523,14 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 buttonLabel={getCurrentRecurrenceLabel()}
                 onSelect={(index) => {
                   const options = getRecurrenceOptions();
-                  handleRecurrenceSelect(options[parseInt(index, 10)]);
+                  const idx = parseInt(index, 10);
+                  if (
+                    Number.isFinite(idx) &&
+                    idx >= 0 &&
+                    idx < options.length
+                  ) {
+                    handleRecurrenceSelect(options[idx]);
+                  }
                 }}
                 ariaLabel={t('selectRecurrencePattern')}
                 dataTestIdPrefix="recurrence"
