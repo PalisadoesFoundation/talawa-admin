@@ -41,15 +41,13 @@ const INITIAL_FORM_STATE = {
   confirmNewPassword: '',
 };
 
-export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
+export const UserPasswordUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
   userId,
   requirePreviousPassword = true,
   onCancel,
   onSuccess,
 }): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userPasswordUpdate',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
@@ -66,17 +64,21 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
   const handleSave = async (): Promise<void> => {
     // 1. Validation
     if (requirePreviousPassword && !formState.previousPassword) {
-      NotificationToast.error(t('passCantBeEmpty') as string);
+      NotificationToast.error(
+        t('userPasswordUpdate.passCantBeEmpty') as string,
+      );
       return;
     }
 
     if (!formState.newPassword || !formState.confirmNewPassword) {
-      NotificationToast.error(t('passCantBeEmpty') as string);
+      NotificationToast.error(
+        t('userPasswordUpdate.passCantBeEmpty') as string,
+      );
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      NotificationToast.error(t('passNoMatch') as string);
+      NotificationToast.error(t('userPasswordUpdate.passNoMatch') as string);
       return;
     }
 
@@ -99,7 +101,9 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
         });
         if (data) {
           NotificationToast.success(
-            tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+            tCommon('updatedSuccessfully', {
+              item: t('userPasswordUpdate.labels.password'),
+            }) as string,
           );
           setFormState(INITIAL_FORM_STATE);
           if (onSuccess) onSuccess();
@@ -107,7 +111,7 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
       } else {
         // Admin Mode: Use UPDATE_USER_MUTATION
         if (!userId) {
-          NotificationToast.error(t('users.userIdRequired'));
+          NotificationToast.error(t('userPasswordUpdate.userIdRequired'));
           return;
         }
 
@@ -122,7 +126,9 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
 
         if (data) {
           NotificationToast.success(
-            tCommon('updatedSuccessfully', { item: 'Password' }) as string,
+            tCommon('updatedSuccessfully', {
+              item: t('userPasswordUpdate.labels.password'),
+            }) as string,
           );
           setFormState(INITIAL_FORM_STATE);
           if (onSuccess) onSuccess();
@@ -152,14 +158,14 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
             <div>
               <div>
                 <FormFieldGroup
-                  label={t('previousPassword')}
+                  label={t('userPasswordUpdate.previousPassword')}
                   inputId="previousPassword"
                   name="previousPassword"
                 >
                   <input
                     type="password"
                     id="previousPassword"
-                    placeholder={t('previousPassword')}
+                    placeholder={t('userPasswordUpdate.previousPassword')}
                     autoComplete="off"
                     required
                     className="form-control"
@@ -180,14 +186,14 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
           <div>
             <div>
               <FormFieldGroup
-                label={t('newPassword')}
+                label={t('userPasswordUpdate.newPassword')}
                 inputId="newPassword"
                 name="newPassword"
               >
                 <input
                   type="password"
                   id="newPassword"
-                  placeholder={t('newPassword')}
+                  placeholder={t('userPasswordUpdate.newPassword')}
                   autoComplete="off"
                   required
                   className="form-control"
@@ -203,14 +209,14 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
         <div className={styles.dispflexUserPasswordUpdate}>
           <div>
             <FormFieldGroup
-              label={t('confirmNewPassword')}
+              label={t('userPasswordUpdate.confirmNewPassword')}
               inputId="confirmNewPassword"
               name="confirmNewPassword"
             >
               <input
                 type="password"
                 id="confirmNewPassword"
-                placeholder={t('confirmNewPassword')}
+                placeholder={t('userPasswordUpdate.confirmNewPassword')}
                 autoComplete="off"
                 required
                 className="form-control"
@@ -242,4 +248,4 @@ export const UserUpdate: React.FC<InterfaceUserPasswordUpdateProps> = ({
     </div>
   );
 };
-export default UserUpdate;
+export default UserPasswordUpdate;

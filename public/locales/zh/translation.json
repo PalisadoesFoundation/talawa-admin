@@ -1245,13 +1245,15 @@
     "cancel": "取消"
   },
   "userPasswordUpdate": {
+    "labels": {
+      "password": "密码"
+    },
+    "userIdRequired": "必须提供用户 ID",
     "previousPassword": "旧密码",
     "newPassword": "新密码",
     "confirmNewPassword": "确认新密码",
     "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。",
-    "saveChanges": "保存更改",
-    "cancel": "取消"
+    "passNoMatch": "新密码和确认密码不匹配。"
   },
   "orgDelete": {
     "deleteOrg": "删除组织"

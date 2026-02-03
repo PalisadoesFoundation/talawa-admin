@@ -1288,15 +1288,6 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
-  "userPasswordUpdate": {
-    "previousPassword": "Previous Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passCantBeEmpty": "Password can't be empty",
-    "passNoMatch": "New and Confirm password do not match.",
-    "saveChanges": "saveChanges",
-    "cancel": "cancel"
-  },
   "orgDelete": {
     "deleteOrg": "Delete Org"
   },
@@ -2568,5 +2559,16 @@
   },
   "csv": {
     "demographics": "{{category}} Demographics"
+  },
+  "userPasswordUpdate": {
+    "labels": {
+      "password": "Password"
+    },
+    "userIdRequired": "User ID is required",
+    "passCantBeEmpty": "Password cannot be empty",
+    "passNoMatch": "Passwords do not match",
+    "previousPassword": "Previous Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password"
   }
 }

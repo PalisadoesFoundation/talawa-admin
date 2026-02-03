@@ -1223,11 +1223,13 @@
     "cancel": "Cancelar"
   },
   "userPasswordUpdate": {
+    "labels": {
+      "password": "Contraseña"
+    },
+    "userIdRequired": "Se requiere ID de usuario",
     "previousPassword": "Contraseña anterior",
     "newPassword": "Nueva contraseña",
     "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
     "passCantBeEmpty": "La contraseña no puede estar vacía",
     "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },

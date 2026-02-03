@@ -27,7 +27,7 @@
  * ```
  */
 import React, { useEffect, useRef, useState } from 'react';
-import UserUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
+import UserPasswordUpdate from 'shared-components/UserPasswordUpdate/UserPasswordUpdate';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useMutation, useQuery } from '@apollo/client';
@@ -406,7 +406,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label className="form-label">{tCommon('password')}</label>
+                  <div className="form-label">{tCommon('password')}</div>
                   <div>
                     <Button
                       variant="outline-primary"
@@ -570,10 +570,10 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       <BaseModal
         show={showPasswordModal}
         onHide={closePasswordModal}
-        title={tCommon('changePassword')}
+        title={t('changePassword')}
         showCloseButton={true}
       >
-        <UserUpdate
+        <UserPasswordUpdate
           userId={resolvedUserId}
           requirePreviousPassword={false}
           onCancel={closePasswordModal}

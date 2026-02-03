@@ -1240,13 +1240,15 @@
     "cancel": "रद्द करें"
   },
   "userPasswordUpdate": {
+    "labels": {
+      "password": "पासवर्ड"
+    },
+    "userIdRequired": "उपयोगकर्ता आईडी आवश्यक है",
     "previousPassword": "पिछला पासवर्ड",
     "newPassword": "नया पासवर्ड",
     "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
     "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
-    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
-    "saveChanges": "परिवर्तन सहेजें",
-    "cancel": "रद्द करें"
+    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
   },
   "orgDelete": {
     "deleteOrg": "संगठन हटाएं"

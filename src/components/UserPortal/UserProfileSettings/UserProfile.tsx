@@ -31,7 +31,7 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import UserUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
+import UserPasswordUpdate from 'shared-components/UserPasswordUpdate/UserPasswordUpdate';
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
@@ -134,7 +134,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             title={t('changePassword')}
             showCloseButton={true}
           >
-            <UserUpdate
+            <UserPasswordUpdate
               onCancel={() => setShowPasswordModal(false)}
               onSuccess={() => setShowPasswordModal(false)}
             />

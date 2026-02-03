@@ -110,7 +110,7 @@ describe('Testing User Password Update', () => {
 
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      `Password can't be empty`,
+      `Password cannot be empty`,
     );
   });
 
@@ -142,7 +142,7 @@ describe('Testing User Password Update', () => {
 
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'New and Confirm password do not match.',
+      'Passwords do not match',
     );
   });
 

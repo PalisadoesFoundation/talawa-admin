@@ -768,6 +768,42 @@ vi.mock('screens/UserPortal/Settings/ProfileHeader/ProfileHeader', () => ({
   ),
 }));
 
+vi.mock('shared-components/UserPasswordUpdate/UserPasswordUpdate', () => ({
+  __esModule: true,
+  UserPasswordUpdate: ({
+    onCancel,
+    onSuccess,
+  }: {
+    onCancel: () => void;
+    onSuccess: () => void;
+  }) => (
+    <div data-testid="mock-user-password-update">
+      <button data-testid="mock-update-cancel" onClick={onCancel}>
+        Mock Cancel
+      </button>
+      <button data-testid="mock-update-success" onClick={onSuccess}>
+        Mock Success
+      </button>
+    </div>
+  ),
+  default: ({
+    onCancel,
+    onSuccess,
+  }: {
+    onCancel: () => void;
+    onSuccess: () => void;
+  }) => (
+    <div data-testid="mock-user-password-update">
+      <button data-testid="mock-update-cancel" onClick={onCancel}>
+        Mock Cancel
+      </button>
+      <button data-testid="mock-update-success" onClick={onSuccess}>
+        Mock Success
+      </button>
+    </div>
+  ),
+}));
+
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -1783,6 +1819,79 @@ describe('MemberDetail', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
       expect(mockReload).toHaveBeenCalledTimes(1);
+    });
+  });
+});
+
+describe('Password Change Modal Flow', () => {
+  it('opens modal when change password button is clicked', async () => {
+    const link = createLink(MOCKS1);
+    renderMemberDetailScreen(link);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const changePasswordBtn = screen.getByTestId('changePasswordBtn');
+    userEvent.click(changePasswordBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText('Change Password')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('mock-user-password-update'),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('closes modal when cancel is clicked in UserPasswordUpdate', async () => {
+    const link = createLink(MOCKS1);
+    renderMemberDetailScreen(link);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('changePasswordBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('mock-user-password-update'),
+      ).toBeInTheDocument();
+    });
+
+    // Click mock cancel
+    userEvent.click(screen.getByTestId('mock-update-cancel'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('mock-user-password-update'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('closes modal when success is triggered in UserPasswordUpdate', async () => {
+    const link = createLink(MOCKS1);
+    renderMemberDetailScreen(link);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId('changePasswordBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('mock-user-password-update'),
+      ).toBeInTheDocument();
+    });
+
+    // Click mock success
+    userEvent.click(screen.getByTestId('mock-update-success'));
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('mock-user-password-update'),
+      ).not.toBeInTheDocument();
     });
   });
 });
