@@ -1073,24 +1073,33 @@ describe('CreateEventModal', () => {
     await userEvent.click(dropdown);
 
     // Verify the dynamically generated labels based on current date
-    const options = screen.getAllByRole('button');
+    await waitFor(() => {
+      const options = screen.getAllByTestId(/recurrence-item-/);
 
-    // Should include "Does not repeat", "Daily", "Weekly on [Day]", etc.
-    expect(
-      options.some((option) => option.textContent?.includes('Does not repeat')),
-    ).toBe(true);
-    expect(
-      options.some((option) => option.textContent?.includes('Daily')),
-    ).toBe(true);
-    expect(
-      options.some((option) => option.textContent?.includes('Weekly on')),
-    ).toBe(true);
-    expect(
-      options.some((option) => option.textContent?.includes('Monthly on day')),
-    ).toBe(true);
-    expect(
-      options.some((option) => option.textContent?.includes('Annually on')),
-    ).toBe(true);
+      expect(
+        options.some((option) =>
+          option.textContent?.includes('Does not repeat'),
+        ),
+      ).toBe(true);
+
+      expect(
+        options.some((option) => option.textContent?.includes('Daily')),
+      ).toBe(true);
+
+      expect(
+        options.some((option) => option.textContent?.includes('Weekly on')),
+      ).toBe(true);
+
+      expect(
+        options.some((option) =>
+          option.textContent?.includes('Monthly on day'),
+        ),
+      ).toBe(true);
+
+      expect(
+        options.some((option) => option.textContent?.includes('Annually on')),
+      ).toBe(true);
+    });
   });
 
   // Edge Case Tests
