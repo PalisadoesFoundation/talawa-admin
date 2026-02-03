@@ -575,4 +575,18 @@ describe('ProfileAvatarDisplay Component', () => {
     // Modal should show the translated 'Profile Picture' title
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
   });
+  test('applies correct data-testid to img element', () => {
+    const { getByTestId } = render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+      />,
+    );
+
+    const imgElement = getByTestId('test-avatar-img');
+    expect(imgElement).toBeInTheDocument();
+    expect(imgElement.getAttribute('src')).toBe(
+      'https://example.com/image.jpg',
+    );
+  });
 });
