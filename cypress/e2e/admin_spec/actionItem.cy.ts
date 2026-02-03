@@ -90,7 +90,7 @@ const ensureVolunteerExistsForOrg = (
 
   return getAuthToken().then((token) => {
     if (!token) {
-      throw new Error('Missing auth token while seeding event volunteers.');
+      cy.log('Auth token not found; attempting volunteer seed via cookies.');
     }
     return requestGraphQL(token, {
       operationName: 'GetOrganizationEvents',
