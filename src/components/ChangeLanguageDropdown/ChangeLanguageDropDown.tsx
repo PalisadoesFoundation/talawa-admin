@@ -8,14 +8,13 @@
  * @param props - Props for the dropdown, see {@link InterfaceDropDownProps}
  * @returns JSX.Element
  * @remarks
- * - The component uses `react-bootstrap` for the dropdown UI.
+ * - The component uses shared `DropDownButton` for the dropdown UI.
  * - The current language is determined using a cookie (`i18next`).
  * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`.
  * - If a user avatar exists in localStorage, it is processed and included in the mutation.
  * - Displays a toast notification if the user ID is not found.
  */
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useMemo } from 'react';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
 import styles from './ChangeLanguageDropDown.module.css';
@@ -28,6 +27,7 @@ import { urlToFile } from 'utils/urlToFile';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
+import DropDownButton from 'shared-components/DropDownButton';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -82,6 +82,16 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
   };
 
+  // Build dropdown options from languages
+  const languageOptions = useMemo(
+    () =>
+      languages.map((language) => ({
+        value: language.code,
+        label: language.name,
+      })),
+    [],
+  );
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -89,45 +99,23 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Dropdown
-        title={tCommon('changeLanguage')}
-        data-testid="language-dropdown-container"
-      >
-        <Dropdown.Toggle
-          className={styles.changeLanguageBtn}
-          data-testid="language-dropdown-btn"
-        >
-          {languages.map((language, index: number) => (
+      <DropDownButton
+        id="language-dropdown"
+        options={languageOptions}
+        selectedValue={currentLanguageCode}
+        onSelect={changeLanguage}
+        ariaLabel={tCommon('changeLanguage')}
+        dataTestIdPrefix="language-dropdown"
+        parentContainerStyle={props?.parentContainerStyle}
+        btnStyle={`${styles.changeLanguageBtn} ${props?.btnStyle ?? ''}`}
+        icon={
+          languages.find((lang) => lang.code === currentLanguageCode) && (
             <span
-              key={`dropdown-btn-${index}`}
-              data-testid={`dropdown-btn-${index}`}
-            >
-              {currentLanguageCode === language.code && (
-                <span className={`${props?.btnTextStyle ?? ''}`}>
-                  <span
-                    className={`fi fi-${language.country_code} me-2`}
-                  ></span>
-                  {language.name}
-                </span>
-              )}
-            </span>
-          ))}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {languages.map((language, index: number) => (
-            <Dropdown.Item
-              key={`dropdown-item-${index}`}
-              className="dropdown-item"
-              onClick={async (): Promise<void> => changeLanguage(language.code)}
-              disabled={currentLanguageCode === language.code}
-              data-testid={`change-language-btn-${language.code}`}
-            >
-              <span className={`fi fi-${language.country_code} me-2`}></span>
-              {language.name}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
+              className={`fi fi-${languages.find((lang) => lang.code === currentLanguageCode)?.country_code} me-2`}
+            ></span>
+          )
+        }
+      />
     </ErrorBoundaryWrapper>
   );
 };
