@@ -107,6 +107,37 @@ it('should login successfully', () => {
 
 Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
 
+### GraphQL Utilities
+
+To reduce duplication and improve reliability, use the GraphQL helpers defined in
+`cypress/support/graphql-utils.ts`. These helpers intercept GraphQL requests by
+`operationName` and provide a consistent API to mock, alias, and await calls.
+
+> The interceptor respects `CYPRESS_API_URL` via `Cypress.env('apiUrl')`, and
+> falls back to `**/graphql` if not set.
+
+```ts
+// Mock a successful operation using a fixture
+cy.mockGraphQLOperation(
+  'OrganizationListBasic',
+  'api/graphql/organizations.success.json',
+);
+
+// Wait for the mocked operation
+cy.waitForGraphQLOperation('OrganizationListBasic');
+
+// Mock a GraphQL error response
+cy.mockGraphQLError(
+  'CreateOrganization',
+  'Organization name already exists',
+  'CONFLICT',
+);
+
+// Alias a live operation and wait for it
+cy.aliasGraphQLOperation('OrganizationListBasic');
+cy.waitForGraphQLOperation('OrganizationListBasic');
+```
+
 ### Test Data
 
 Use fixtures for consistent test data:
