@@ -10,7 +10,8 @@
               "startAt": "2026-01-05T10:00:00.000Z",
               "endAt": "2026-01-05T12:00:00.000Z",
               "location": "Main Hall"
-            }
+            },
+            "cursor": "cursor-1"
           },
           {
             "node": {
@@ -19,9 +20,16 @@
               "startAt": "2026-02-10T18:00:00.000Z",
               "endAt": "2026-02-10T20:00:00.000Z",
               "location": "Remote"
-            }
+            },
+            "cursor": "cursor-2"
           }
-        ]
+        ],
+        "pageInfo": {
+          "hasNextPage": false,
+          "hasPreviousPage": false,
+          "startCursor": "cursor-1",
+          "endCursor": "cursor-2"
+        }
       }
     }
   }
