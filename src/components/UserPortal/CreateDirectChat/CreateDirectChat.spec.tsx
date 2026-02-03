@@ -305,8 +305,18 @@ describe('CreateDirectChatModal', () => {
         createdAt: dayjs.utc().toISOString(),
         members: {
           edges: [
-            { node: { user: { id: '1', name: 'Current User' }, role: 'regular' } },
-            { node: { user: { id: 'user-2', name: 'Test User 2' }, role: 'regular' } },
+            {
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              node: {
+                user: { id: 'user-2', name: 'Test User 2' },
+                role: 'regular',
+              },
+            },
           ],
         },
       },

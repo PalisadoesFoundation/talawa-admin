@@ -159,7 +159,12 @@ const mockChatsListData = {
       id: 'chat-1',
       name: 'Direct Chat 1',
       avatarURL: 'http://example.com/chat1.png',
-      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+      members: {
+        edges: [
+          { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
+          { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } },
+        ],
+      },
       unreadMessagesCount: 0,
       lastMessage: null,
       __typename: 'Chat',
@@ -168,7 +173,13 @@ const mockChatsListData = {
       id: 'chat-2',
       name: 'Group Chat 1',
       avatarURL: 'http://example.com/chat2.png',
-      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+      members: {
+        edges: [
+          { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
+          { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } },
+          { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } },
+        ],
+      },
       unreadMessagesCount: 0,
       lastMessage: null,
       __typename: 'Chat',
@@ -177,7 +188,12 @@ const mockChatsListData = {
       id: 'chat-3',
       name: 'Direct Chat 2',
       avatarURL: 'http://example.com/chat3.png',
-      members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u4', name: 'User 4' }, role: 'regular' } }] },
+      members: {
+        edges: [
+          { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
+          { node: { user: { id: 'u4', name: 'User 4' }, role: 'regular' } },
+        ],
+      },
       unreadMessagesCount: 0,
       lastMessage: null,
       __typename: 'Chat',
@@ -575,7 +591,28 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'group-chat',
               name: 'Group Chat',
               avatarURL: '',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u3', name: 'User 3' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               __typename: 'Chat',
@@ -584,7 +621,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'direct-chat',
               name: 'Direct Chat',
               avatarURL: '',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               __typename: 'Chat',
@@ -594,12 +646,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    const customMocks = [
-      groupMock,
-      groupMock,
-      groupMock,
-      mockUnreadChats,
-    ];
+    const customMocks = [groupMock, groupMock, groupMock, mockUnreadChats];
 
     renderComponent(customMocks);
 
@@ -609,15 +656,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
     await user.click(groupButton);
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('contact-card-group-chat'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('contact-card-group-chat')).toBeInTheDocument();
       expect(
         screen.queryByTestId('contact-card-direct-chat'),
       ).not.toBeInTheDocument();
     });
   });
-
 
   test('should switch back to all filter', async () => {
     renderComponent();
@@ -763,7 +807,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
                 id: 'chat-1',
                 name: 'Test Chat',
                 avatarURL: '',
-                members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        user: { id: 'u1', name: 'User 1' },
+                        role: 'regular',
+                      },
+                    },
+                    {
+                      node: {
+                        user: { id: 'u2', name: 'User 2' },
+                        role: 'regular',
+                      },
+                    },
+                  ],
+                },
                 unreadMessagesCount: 0,
                 lastMessage: null,
                 __typename: 'Chat',
@@ -804,7 +863,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'chat-1',
               name: 'Chat in Org 1',
               avatarURL: '',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               organization: { id: 'org-1', name: 'Org 1' },
@@ -814,7 +888,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'chat-2',
               name: 'Chat in Org 2',
               avatarURL: '',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u3', name: 'User 3' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               organization: { id: 'org-2', name: 'Org 2' },
@@ -1220,9 +1309,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
     ).not.toBeInTheDocument();
   });
 
-
   // ==================== CHAT TYPE HANDLING ====================
-
 
   test('should handle NewChatType with members.edges for group detection', async () => {
     const newChatTypeMock = {
@@ -1304,7 +1391,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'no-name-chat',
               name: null,
               avatarURL: '',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               __typename: 'Chat',
@@ -1314,11 +1416,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    renderComponent([
-      chatNoNameMock,
-      chatNoNameMock,
-      mockUnreadChats,
-    ]);
+    renderComponent([chatNoNameMock, chatNoNameMock, mockUnreadChats]);
 
     await waitFor(() => {
       const card = screen.getByTestId('contact-card-no-name-chat');
@@ -1369,7 +1467,6 @@ describe('Chat Component - Comprehensive Coverage', () => {
       ).not.toBeInTheDocument();
     });
   });
-
 
   // ==================== CHATROOM INTEGRATION ====================
 
@@ -1625,7 +1722,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'direct-chat',
               name: 'Direct Chat',
               avatarURL: 'http://example.com/direct.png',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 0,
               lastMessage: null,
               __typename: 'Chat',
@@ -1634,7 +1746,28 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'group-chat',
               name: 'Group Chat',
               avatarURL: 'http://example.com/group.png',
-              members: { edges: [{ node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } }, { node: { user: { id: 'u2', name: 'User 2' }, role: 'regular' } }, { node: { user: { id: 'u3', name: 'User 3' }, role: 'regular' } }] },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u3', name: 'User 3' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
               unreadMessagesCount: 3,
               lastMessage: { body: 'Latest message' },
               __typename: 'Chat',
