@@ -523,23 +523,24 @@ test_get_docker_install_guidance_wsl() {
     assert_contains "WSL" "$result" "Install guidance should detect WSL via WSL_DISTRO_NAME"
 }
 
-test_get_docker_install_guidance_wsl_proc_version() {
+test_get_docker_install_guidance_linux_fallback() {
     source_docker_detect
-    
-    local temp_proc_version
-    temp_proc_version=$(mktemp)
-    echo "Linux version 5.10.0-microsoft-standard-WSL2" > "$temp_proc_version"
     
     local result
     result=$(
         uname() { echo "Linux"; }
         unset WSL_DISTRO_NAME
-        get_docker_install_guidance < "$temp_proc_version" 2>/dev/null || get_docker_install_guidance
+        grep() {
+            if [[ "$*" == *"/proc/version"* ]]; then
+                return 1
+            fi
+            command grep "$@"
+        }
+        export -f grep
+        get_docker_install_guidance
     )
     
-    rm -f "$temp_proc_version"
-    
-    assert_contains "Docker" "$result" "Install guidance should provide guidance for Linux"
+    assert_contains "Docker Engine for Linux" "$result" "Install guidance should fall back to Linux guidance when not WSL"
 }
 
 test_get_docker_install_guidance_unknown_os() {
@@ -658,7 +659,7 @@ main() {
     run_test "Linux Docker Guidance - Default" test_linux_docker_guidance_default
     run_test "Get Install Guidance - macOS" test_get_docker_install_guidance_macos
     run_test "Get Install Guidance - WSL (env)" test_get_docker_install_guidance_wsl
-    run_test "Get Install Guidance - WSL (proc)" test_get_docker_install_guidance_wsl_proc_version
+    run_test "Get Install Guidance - Linux Fallback" test_get_docker_install_guidance_linux_fallback
     run_test "Get Install Guidance - Unknown OS" test_get_docker_install_guidance_unknown_os
     run_test "Print Status Report - All Working" test_print_docker_status_report_all_working
     run_test "Print Status Report - Nothing Installed" test_print_docker_status_report_nothing_installed

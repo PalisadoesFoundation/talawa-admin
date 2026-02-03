@@ -442,11 +442,8 @@ EOF
 _get_linux_docker_guidance() {
     local distro=""
     
-    # Detect distribution for specific guidance
     if [[ -f /etc/os-release ]]; then
-        # shellcheck source=/dev/null
-        . /etc/os-release 2>/dev/null
-        distro="${ID:-}"
+        distro="$( ( . /etc/os-release 2>/dev/null; printf '%s' "${ID:-}" ) )"
     fi
 
     cat <<EOF
