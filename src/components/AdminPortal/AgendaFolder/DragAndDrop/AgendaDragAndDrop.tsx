@@ -349,6 +349,7 @@ export default function AgendaDragAndDrop({
 
                         {/* ITEMS */}
                         <Droppable
+                          // i18n-ignore-next-line
                           droppableId={`agenda-items-${agendaFolder.id}`}
                           type="ITEM"
                         >
