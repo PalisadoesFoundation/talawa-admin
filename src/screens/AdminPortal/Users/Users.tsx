@@ -33,12 +33,24 @@ const USER_ROLES = {
 } as const;
 
 // Validation helpers
+/**
+ * Type guard that validates if a value is a valid SortingOption.
+ *
+ * @param option - The value to validate against the SortingOption union type.
+ * @returns True if option is a valid SortingOption ('newest' or 'oldest').
+ */
 export const isValidSortingOption = (
   option: unknown,
 ): option is SortingOption => {
   return option === 'newest' || option === 'oldest';
 };
 
+/**
+ * Type guard that validates if a value is a valid FilteringOption.
+ *
+ * @param option - The value to validate against the FilteringOption union type.
+ * @returns True if option is a valid FilteringOption ('admin', 'user', or 'cancel').
+ */
 export const isValidFilteringOption = (
   option: unknown,
 ): option is FilteringOption => {

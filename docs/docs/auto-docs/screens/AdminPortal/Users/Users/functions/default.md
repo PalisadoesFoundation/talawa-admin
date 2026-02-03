@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/Users/Users.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L61)
+Defined in: [src/screens/AdminPortal/Users/Users.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L73)
 
 The Users component displays a list of users with search, filter, sort, and infinite scroll capabilities.
 

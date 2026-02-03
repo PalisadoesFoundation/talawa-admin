@@ -6,7 +6,9 @@
 
 > **isValidFilteringOption**(`option`): `option is FilteringOption`
 
-Defined in: [src/screens/AdminPortal/Users/Users.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L42)
+Defined in: [src/screens/AdminPortal/Users/Users.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L54)
+
+Type guard that validates if a value is a valid FilteringOption.
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/screens/AdminPortal/Users/Users.tsx:42](https://github.com/Pali
 
 `unknown`
 
+The value to validate against the FilteringOption union type.
+
 ## Returns
 
 `option is FilteringOption`
+
+True if option is a valid FilteringOption ('admin', 'user', or 'cancel').
