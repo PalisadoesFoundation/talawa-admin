@@ -32,6 +32,7 @@ const MOCK_FILE = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -97,6 +98,7 @@ const MOCKS1 = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -257,6 +259,7 @@ const MOCKS1 = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -313,6 +316,7 @@ const MOCKS2 = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -405,6 +409,7 @@ const MOCKS2 = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -454,6 +459,7 @@ const UPDATE_USER_ERROR_MOCKS = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -525,6 +531,7 @@ const UPDATE_MOCK = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -597,7 +604,7 @@ const UPDATE_MOCK = [
           isEmailAddressVerified: true,
           maritalStatus: null,
           mobilePhoneNumber: '',
-          name: 'UpdatedUserName',
+          name: 'AdminUpdatedName',
           natalSex: null,
           naturalLanguageCode: null,
           postalCode: '',
@@ -617,6 +624,7 @@ const UPDATE_MOCK = [
         input: {
           id: '456',
         },
+        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -639,7 +647,7 @@ const UPDATE_MOCK = [
           isEmailAddressVerified: true,
           maritalStatus: null,
           mobilePhoneNumber: '',
-          name: 'UpdatedUserName',
+          name: 'AdminUpdatedName',
           natalSex: null,
           naturalLanguageCode: null,
           postalCode: '',
@@ -940,6 +948,44 @@ describe('MemberDetail', () => {
       await user.upload(input, file);
 
       expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    });
+
+    test('resets form state and avatar selection on reset', async () => {
+      renderMemberDetailScreen(createLink(MOCKS1));
+      global.URL.createObjectURL = vi.fn(() => 'mockURL');
+
+      await waitForLoadingComplete();
+
+      const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
+      await user.clear(nameInput);
+      await user.type(nameInput, 'Temp Name');
+
+      const input = screen.getByTestId('fileInput');
+      const file = new File(['test'], 'test.png', { type: 'image/png' });
+      await user.upload(input, file);
+
+      const previewImg = screen.getByTestId(
+        'profile-picture-img',
+      ) as HTMLImageElement;
+      expect(previewImg.getAttribute('src')).toBe('mockURL');
+
+      const resetButton = screen.getByTestId('resetChangesBtn');
+      expect(resetButton).toBeInTheDocument();
+
+      await user.click(resetButton);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('resetChangesBtn')).toBeNull();
+        expect(screen.queryByTestId('saveChangesBtn')).toBeNull();
+        expect(nameInput).toHaveValue('Rishav Jha');
+      });
+
+      const resetImg = screen.getByTestId(
+        'profile-picture-img',
+      ) as HTMLImageElement;
+      expect(resetImg.getAttribute('src')).toBe(
+        'http://example.com/avatar.jpg',
+      );
     });
 
     test('handles user update success', async () => {
@@ -1340,7 +1386,34 @@ describe('MemberDetail', () => {
     objectUrlSpy.mockRestore();
   });
 
-  it('falls back to avatarURL when selectedAvatar is not present', async () => {
+  it('revokes preview URL on unmount', async () => {
+    const revokeSpy = vi
+      .spyOn(URL, 'revokeObjectURL')
+      .mockImplementation(() => {});
+    const objectUrlSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:mock-avatar');
+    const { unmount } = renderMemberDetailScreen(createLink(MOCKS1));
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    const file = new File(['avatar'], 'avatar.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    await user.upload(fileInput, file);
+
+    await screen.findByTestId('profile-picture-img');
+    unmount();
+
+    expect(revokeSpy).toHaveBeenCalledWith('blob:mock-avatar');
+    objectUrlSpy.mockRestore();
+    revokeSpy.mockRestore();
+  });
+
+  it('uses avatarURL when no selected avatar is present', async () => {
     renderMemberDetailScreen(createLink(MOCKS1));
     await waitFor(
       () => {
@@ -1349,9 +1422,36 @@ describe('MemberDetail', () => {
       { timeout: 3000 },
     );
 
-    const avatarContainer = await screen.findByTestId('profile-picture');
-    // ProfileAvatarDisplay renders fallback Avatar which uses dicebear
-    expect(avatarContainer).toBeInTheDocument();
+    const avatarImg = await screen.findByTestId('profile-picture-img');
+    expect(avatarImg).toHaveAttribute('src', 'http://example.com/avatar.jpg');
+  });
+
+  it("falls back when avatarURL is string 'null'", async () => {
+    const nullAvatarMocks = [
+      {
+        ...MOCKS1[0],
+        result: {
+          data: {
+            user: {
+              ...MOCKS1[0].result.data.user,
+              avatarURL: 'null',
+            },
+          },
+        },
+      },
+      ...MOCKS1.slice(1),
+    ];
+
+    renderMemberDetailScreen(createLink(nullAvatarMocks));
+    await waitFor(
+      () => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    expect(screen.queryByTestId('profile-picture-img')).toBeNull();
+    expect(screen.getByTestId('profile-picture-fallback')).toBeInTheDocument();
   });
 
   test('sets birthDate to empty string when birthDate is null', async () => {
@@ -1363,6 +1463,7 @@ describe('MemberDetail', () => {
             input: {
               id: '456',
             },
+            fetchPolicy: 'no-cache',
           },
         },
         result: {
@@ -1506,8 +1607,8 @@ describe('MemberDetail', () => {
     await waitForLoadingComplete();
 
     const fileInput = screen.getByTestId('fileInput');
-    const invalidFile = new File(['test'], 'document.pdf', {
-      type: 'application/pdf',
+    const invalidFile = new File(['test'], 'test.bmp', {
+      type: 'image/bmp',
     });
 
     await user.upload(fileInput, [invalidFile]);
