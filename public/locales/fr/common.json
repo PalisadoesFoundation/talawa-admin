@@ -298,5 +298,6 @@
   "clearSelection": "Effacer la sélection",
   "toggleSidebar": "Basculer la barre latérale",
   "picture": "Image de {{name}}",
-  "optionsSuffix": "options"
+  "optionsSuffix": "options",
+  "userMenu": "Menu utilisateur"
 }

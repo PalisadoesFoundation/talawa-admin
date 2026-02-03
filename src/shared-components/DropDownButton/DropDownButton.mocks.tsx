@@ -80,3 +80,8 @@ export const noTestIdProps: InterfaceDropDownButtonProps = {
   onSelect: mockOnSelect,
   ariaLabel: 'No Test ID Dropdown',
 };
+
+export const dropUpProps: InterfaceDropDownButtonProps = {
+  ...baseProps,
+  drop: 'up',
+};

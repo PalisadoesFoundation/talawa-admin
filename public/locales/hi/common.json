@@ -298,5 +298,6 @@
   "clearSelection": "चयन साफ़ करें",
   "toggleSidebar": "साइडबार टॉगल करें",
   "picture": "{{name}} चित्र",
-  "optionsSuffix": "विकल्प"
+  "optionsSuffix": "विकल्प",
+  "userMenu": "उपयोगकर्ता मेनू"
 }

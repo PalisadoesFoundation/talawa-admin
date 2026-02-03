@@ -61,6 +61,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   buttonLabel,
   icon,
   disabled = false,
+  drop,
   // i18n-ignore-next-line
   placeholder = 'Select an option',
   parentContainerStyle,
@@ -75,6 +76,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
 
   return (
     <Dropdown
+      drop={drop}
       onToggle={setIsOpen}
       className={[
         styles.dropdownContainer,
