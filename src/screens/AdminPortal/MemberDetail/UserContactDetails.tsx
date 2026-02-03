@@ -27,6 +27,9 @@
  * ```
  */
 import React, { useEffect, useRef, useState } from 'react';
+import UserUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
@@ -99,6 +102,11 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
+  const {
+    isOpen: showPasswordModal,
+    open: openPasswordModal,
+    close: closePasswordModal,
+  } = useModalState();
   const resolvedUserId = currentId;
   useEffect(() => {
     document.title = t('title');
@@ -398,21 +406,16 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="password" className="form-label">
-                    {tCommon('password')}
-                  </label>
-                  <input
-                    id="password"
-                    value={formState.password}
-                    className={`form-control ${styles.inputColor}`}
-                    type="password"
-                    name="password"
-                    onChange={(e) =>
-                      handleFieldChange('password', e.target.value)
-                    }
-                    data-testid="inputPassword"
-                    placeholder={tCommon('enterPassword')}
-                  />
+                  <label className="form-label">{tCommon('password')}</label>
+                  <div>
+                    <Button
+                      variant="outline-primary"
+                      onClick={openPasswordModal}
+                      data-testid="changePasswordBtn"
+                    >
+                      {t('changePassword')}
+                    </Button>
+                  </div>
                 </Col>
                 <Col md={12}>
                   <label htmlFor="description" className="form-label">
@@ -564,6 +567,19 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
           </Col>
         )}
       </Row>
+      <BaseModal
+        show={showPasswordModal}
+        onHide={closePasswordModal}
+        title={tCommon('changePassword')}
+        showCloseButton={true}
+      >
+        <UserUpdate
+          userId={resolvedUserId}
+          requirePreviousPassword={false}
+          onCancel={closePasswordModal}
+          onSuccess={closePasswordModal}
+        />
+      </BaseModal>
     </LocalizationProvider>
   );
 };

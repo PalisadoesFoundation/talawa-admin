@@ -370,7 +370,8 @@
     "unblockUserFrom": "¿Desbloquear al usuario de {{org}}?",
     "unblockConfirmation": "¿Estás seguro de que deseas desbloquear a {{name}} de {{org}}?",
     "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
-    "noOrgError": "Error sin organización"
+    "noOrgError": "Error sin organización",
+    "userIdRequired": "Se necesita el ID de usuario para actualizar como admin"
   },
   "communityProfile": {
     "title": "Perfil de la comunidad",
@@ -1295,6 +1296,7 @@
     }
   },
   "memberDetail": {
+    "changePassword": "Cambiar contraseña",
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "noeventsAttended": "No hay eventos asistidos",
@@ -1597,6 +1599,7 @@
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
   "settings": {
+    "changePassword": "Cambiar contraseña",
     "dummyPicture": "imagen ficticia",
     "settings": "Ajustes",
     "eventAttended": "Eventos asistidos",

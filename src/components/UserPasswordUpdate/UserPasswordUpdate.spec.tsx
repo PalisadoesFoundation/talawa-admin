@@ -37,42 +37,60 @@ describe('Testing User Password Update', () => {
   });
   const formData = {
     previousPassword: 'Palisadoes',
-    newPassword: 'ThePalisadoesFoundation',
+    newPassword: 'ThePalisadoesFoundation1!',
     wrongPassword: 'This is wrong password',
-    confirmNewPassword: 'ThePalisadoesFoundation',
+    confirmNewPassword: 'ThePalisadoesFoundation1!',
   };
+
+  const onCancelMock = vi.fn();
+  const onSuccessMock = vi.fn();
 
   global.alert = vi.fn();
 
-  it('should render props and text elements it for the page component', async () => {
+  it('should render all fields in User Mode (requirePreviousPassword=true)', async () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
 
     await wait();
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/Previous Password/i),
-      formData.previousPassword,
-    );
-    await userEvent.type(
-      screen.getAllByPlaceholderText(/New Password/i)[0],
-      formData.newPassword,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Confirm New Password/i),
-      formData.confirmNewPassword,
-    );
-
-    await userEvent.click(screen.getByText(/Save Changes/i));
-
-    expect(screen.getByText(/Cancel/i)).toBeTruthy();
     expect(
       screen.getByPlaceholderText(/Previous Password/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getAllByPlaceholderText(/New Password/i)[0],
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Confirm New Password/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Save Changes/i)).toBeTruthy();
+    expect(screen.getByText(/Cancel/i)).toBeTruthy();
+  });
+
+  it('should NOT render Previous Password in Admin Mode (requirePreviousPassword=false)', async () => {
+    render(
+      <MockedProvider link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserPasswordUpdate
+            requirePreviousPassword={false}
+            userId="admin-target-user-id"
+            onCancel={onCancelMock}
+          />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(
+      screen.queryByPlaceholderText(/Previous Password/i),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getAllByPlaceholderText(/New Password/i)[0],
     ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText(/Confirm New Password/i),
@@ -83,7 +101,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -100,7 +118,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -122,18 +140,20 @@ describe('Testing User Password Update', () => {
 
     await userEvent.click(screen.getByText(/Save Changes/i));
 
-    expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'New and Confirm password do not match.',
     );
   });
 
-  it('Successfully update old password and reset form', async () => {
+  it('Successfully update old password and reset form (User Mode)', async () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate
+            onCancel={onCancelMock}
+            onSuccess={onSuccessMock}
+          />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -157,6 +177,8 @@ describe('Testing User Password Update', () => {
       );
     });
 
+    expect(onSuccessMock).toHaveBeenCalled();
+
     // Verify form fields are reset after successful update
     await waitFor(
       () => {
@@ -168,11 +190,45 @@ describe('Testing User Password Update', () => {
     );
   });
 
-  it('wrong old password', async () => {
+  it('Successfully update password (Admin Mode)', async () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate
+            requirePreviousPassword={false}
+            userId="admin-target-user-id"
+            onCancel={onCancelMock}
+            onSuccess={onSuccessMock}
+          />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const newPasswordInput = screen.getAllByPlaceholderText(/New Password/i)[0];
+    const confirmPasswordInput =
+      screen.getByPlaceholderText(/Confirm New Password/i);
+
+    await userEvent.type(newPasswordInput, formData.newPassword);
+    await userEvent.type(confirmPasswordInput, formData.confirmNewPassword);
+
+    await userEvent.click(screen.getByText(/Save Changes/i));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Password updated Successfully',
+      );
+    });
+
+    expect(onSuccessMock).toHaveBeenCalled();
+  });
+
+  it('wrong old password (User Mode)', async () => {
+    render(
+      <MockedProvider link={link}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -196,7 +252,7 @@ describe('Testing User Password Update', () => {
 
     await waitFor(() =>
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'ApolloError: Invalid previous password',
+        'Invalid previous password',
       ),
     );
   });
@@ -208,8 +264,8 @@ describe('Testing User Password Update', () => {
           query: UPDATE_USER_PASSWORD_MUTATION,
           variables: {
             previousPassword: 'NetworkErrorTest',
-            newPassword: 'ThePalisadoesFoundation',
-            confirmNewPassword: 'ThePalisadoesFoundation',
+            newPassword: 'ThePalisadoesFoundation1!',
+            confirmNewPassword: 'ThePalisadoesFoundation1!',
           },
         },
         error: new Error('Network error'),
@@ -219,7 +275,7 @@ describe('Testing User Password Update', () => {
     render(
       <MockedProvider mocks={networkErrorMock}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -230,30 +286,28 @@ describe('Testing User Password Update', () => {
     );
     await userEvent.type(
       screen.getAllByPlaceholderText(/New Password/i)[0],
-      'ThePalisadoesFoundation',
+      'ThePalisadoesFoundation1!',
     );
     await userEvent.type(
       screen.getByPlaceholderText(/Confirm New Password/i),
-      'ThePalisadoesFoundation',
+      'ThePalisadoesFoundation1!',
     );
 
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(
       () => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'ApolloError: Network error',
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith('Network error');
       },
       { timeout: 3000 },
     );
   });
 
-  it('resets form when cancel button is clicked', async () => {
+  it('resets form and calls onCancel when cancel button is clicked', async () => {
     render(
       <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
-          <UserPasswordUpdate id="1" key="123" />
+          <UserPasswordUpdate onCancel={onCancelMock} />
         </I18nextProvider>
       </MockedProvider>,
     );
@@ -266,17 +320,14 @@ describe('Testing User Password Update', () => {
       screen.getByPlaceholderText(/Confirm New Password/i);
 
     // Fill in the form
-    await userEvent.type(prevPasswordInput, 'test123');
-    await userEvent.type(newPasswordInput, 'test456');
-    await userEvent.type(confirmPasswordInput, 'test456');
-
-    // Verify fields have values
-    expect(prevPasswordInput).toHaveValue('test123');
-    expect(newPasswordInput).toHaveValue('test456');
-    expect(confirmPasswordInput).toHaveValue('test456');
+    await userEvent.type(prevPasswordInput, 'test1234');
+    await userEvent.type(newPasswordInput, 'test4567');
+    await userEvent.type(confirmPasswordInput, 'test4567');
 
     // Click cancel
     await userEvent.click(screen.getByText(/Cancel/i));
+
+    expect(onCancelMock).toHaveBeenCalled();
 
     // Verify form fields are reset
     await waitFor(() => {

@@ -370,7 +370,8 @@
     "errorOccurred": "एक त्रुटि हुई। कृपया पुनः प्रयास करें",
     "UserIdNotFound": "उपयोगकर्ता ID नहीं मिली",
     "MembershipRequestNotFound": "सदस्यता अनुरोध नहीं मिला",
-    "MembershipRequestWithdrawn": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया"
+    "MembershipRequestWithdrawn": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया",
+    "userIdRequired": "एडमिन अपडेट के लिए यूज़र आईडी चाहिए"
   },
   "communityProfile": {
     "title": "समुदाय प्रोफ़ाइल",
@@ -1312,6 +1313,7 @@
     }
   },
   "memberDetail": {
+    "changePassword": "पासवर्ड बदलें",
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
@@ -1609,6 +1611,7 @@
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
   "settings": {
+    "changePassword": "पासवर्ड बदलें",
     "dummyPicture": "डमी चित्र",
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",

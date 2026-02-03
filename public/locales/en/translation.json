@@ -367,7 +367,8 @@
     "MembershipRequestNotFound": "Membership request not found",
     "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
     "errorLoadingUsers": "Error occurred while loading Users",
-    "profilePageComingSoon": "Profile Page Coming Soon!"
+    "profilePageComingSoon": "Profile Page Coming Soon!",
+    "userIdRequired": "User ID is required for admin update"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -1361,6 +1362,7 @@
     }
   },
   "memberDetail": {
+    "changePassword": "Change Password",
     "title": "User Details",
     "to": "TO",
     "addAdmin": "Add Admin",
@@ -1597,6 +1599,7 @@
     "postImagePreview": "Post Image Preview"
   },
   "settings": {
+    "changePassword": "Change Password",
     "dummyPicture": "dummy picture",
     "eventAttended": "Events Attended",
     "noeventsAttended": "No Events Attended",

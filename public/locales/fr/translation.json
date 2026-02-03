@@ -375,7 +375,8 @@
     "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
     "UserIdNotFound": "ID utilisateur non trouvée",
     "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
-    "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
+    "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès",
+    "userIdRequired": "L'ID utilisateur est nécessaire pour mettre à jour l'admin"
   },
   "communityProfile": {
     "title": "Profil de la communauté",
@@ -1317,6 +1318,7 @@
     }
   },
   "memberDetail": {
+    "changePassword": "Changer le mot de passe",
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "noeventsAttended": "Aucun événement assisté",
@@ -1614,6 +1616,7 @@
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "settings": {
+    "changePassword": "Changer le mot de passe",
     "dummyPicture": "image factice",
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",

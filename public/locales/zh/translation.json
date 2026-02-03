@@ -370,7 +370,8 @@
     "errorOccurred": "发生错误，请重试",
     "UserIdNotFound": "未找到用户ID",
     "MembershipRequestNotFound": "未找到会员请求",
-    "MembershipRequestWithdrawn": "会员请求已成功撤回"
+    "MembershipRequestWithdrawn": "会员请求已成功撤回",
+    "userIdRequired": "管理员更新需要用户ID"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -1317,6 +1318,7 @@
     }
   },
   "memberDetail": {
+    "changePassword": "更改密码",
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
     "noeventsAttended": "未参加任何活动",
@@ -1614,6 +1616,7 @@
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
   "settings": {
+    "changePassword": "更改密码",
     "dummyPicture": "虚拟图片",
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",

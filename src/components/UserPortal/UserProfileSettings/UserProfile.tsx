@@ -30,6 +30,8 @@
  *
  */
 import Avatar from 'shared-components/Avatar/Avatar';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import UserUpdate from 'components/UserPasswordUpdate/UserPasswordUpdate';
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
@@ -63,6 +65,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   email,
   image,
 }): JSX.Element => {
+  const [showPasswordModal, setShowPasswordModal] = React.useState(false);
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
@@ -114,10 +117,28 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               </span>
             </div>
           </div>
-          <div className="mt-4 mb-1 d-flex justify-content-center">
+          <div className="mt-4 mb-1 d-flex justify-content-center gap-2">
             {/* TODO(#6707): Implement copy-to-clipboard functionality for profile link */}
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
+            <Button
+              variant="outline-primary"
+              onClick={() => setShowPasswordModal(true)}
+              data-testid="changePasswordBtn"
+            >
+              {t('changePassword')}
+            </Button>
           </div>
+          <BaseModal
+            show={showPasswordModal}
+            onHide={() => setShowPasswordModal(false)}
+            title={t('changePassword')}
+            showCloseButton={true}
+          >
+            <UserUpdate
+              onCancel={() => setShowPasswordModal(false)}
+              onSuccess={() => setShowPasswordModal(false)}
+            />
+          </BaseModal>
         </Card.Body>
       </Card>
     </>
