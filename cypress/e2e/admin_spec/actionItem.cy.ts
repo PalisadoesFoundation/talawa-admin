@@ -23,6 +23,38 @@ type GraphQLResponse = {
   body: unknown;
 };
 
+type EventsResponseShape = {
+  data?: {
+    organization?: {
+      events?: {
+        edges?: Array<{
+          node?: {
+            id?: string;
+          };
+        }>;
+      };
+    };
+  };
+};
+
+type VolunteersResponseShape = {
+  data?: {
+    event?: {
+      volunteers?: Array<{
+        id?: string;
+      }>;
+    };
+  };
+};
+
+type CurrentUserResponseShape = {
+  data?: {
+    user?: {
+      id?: string;
+    };
+  };
+};
+
 /**
  * Execute a GraphQL operation using window.fetch so browser cookies apply.
  * @param token - Optional auth token for the request.
@@ -122,8 +154,9 @@ const ensureVolunteerExistsForOrg = (
         );
         return;
       }
+      const eventsBody = eventsResponse.body as EventsResponseShape;
       const eventId =
-        eventsResponse.body?.data?.organization?.events?.edges?.[0]?.node?.id;
+        eventsBody?.data?.organization?.events?.edges?.[0]?.node?.id;
 
       if (!eventId) {
         cy.log(`Skipping volunteer seed: no events found for org ${orgId}.`);
@@ -141,7 +174,9 @@ const ensureVolunteerExistsForOrg = (
           );
           return;
         }
-        const volunteers = volunteersResponse.body?.data?.event?.volunteers;
+        const volunteersBody =
+          volunteersResponse.body as VolunteersResponseShape;
+        const volunteers = volunteersBody?.data?.event?.volunteers;
         if (Array.isArray(volunteers) && volunteers.length > 0) return;
 
         return requestGraphQL(token, {
@@ -155,7 +190,8 @@ const ensureVolunteerExistsForOrg = (
             );
             return;
           }
-          const userId = userResponse.body?.data?.user?.id;
+          const userBody = userResponse.body as CurrentUserResponseShape;
+          const userId = userBody?.data?.user?.id;
           if (!userId) {
             cy.log('Skipping volunteer seed: current user not found.');
             return;
