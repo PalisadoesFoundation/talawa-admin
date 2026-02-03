@@ -21,7 +21,6 @@ afterEach(() => {
 
 describe('install/index', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(process, 'exit').mockImplementation((() => undefined) as never);
@@ -260,21 +259,16 @@ describe('install/index', () => {
     });
 
     it('should not call main when argv[1] does not match conditions', () => {
-      const mainSpy = vi
-        .spyOn(installModule, 'main')
-        .mockResolvedValue(undefined);
+      const mainMock = vi.fn();
       const argv = ['node', '/some/other/file.ts'];
-      runIfDirectExecution(argv);
-      expect(mainSpy).not.toHaveBeenCalled();
+      runIfDirectExecution(argv, undefined, mainMock);
+      expect(mainMock).not.toHaveBeenCalled();
     });
 
     it('should not call main when argv[1] is undefined', () => {
-      const mainSpy = vi
-        .spyOn(installModule, 'main')
-        .mockResolvedValue(undefined);
-      const argv = ['node'];
-      runIfDirectExecution(argv);
-      expect(mainSpy).not.toHaveBeenCalled();
+      const mockMain = vi.fn().mockResolvedValue(undefined);
+      runIfDirectExecution(['node'], undefined, mockMain);
+      expect(mockMain).not.toHaveBeenCalled();
     });
 
     it('should handle main rejection with error handler', async () => {
