@@ -29,8 +29,8 @@ describe('GraphQL utilities', () => {
     cy.aliasGraphQLOperation('OrganizationListBasic');
     triggerGraphQLRequest('OrganizationListBasic');
     cy.waitForGraphQLOperation('OrganizationListBasic').then((interception) => {
-      expect(interception.response).to.not.be.undefined;
-      expect(interception.response?.body).to.not.be.undefined;
+      expect(interception.response).to.not.equal(undefined);
+      expect(interception.response?.body).to.not.equal(undefined);
     });
   });
 
