@@ -239,6 +239,13 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
+      - name: Checkout centralized CI/CD scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          ref: main
+          path: .github-central
+
       - name: Get PR labels
         id: check-labels
         env:
@@ -284,7 +291,8 @@ jobs:
 
           # Check for sensitive files using the python script
           if [ -n "$ALL_CHANGED_FILES" ]; then
-             python .github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files $ALL_CHANGED_FILES
+             chmod +x .github-central/.github/workflows/scripts/sensitive_file_check.py
+             .github-central/.github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files $ALL_CHANGED_FILES
           fi
 
   Count-Changed-Files:
