@@ -22,3 +22,8 @@
     transform 0.2s,
     box-shadow 0.2s;
 }
+
+.regBtn:focus-visible {
+  outline: var(--border-1) solid var(--color-blue-300);
+  outline-offset: var(--space-1);
+}

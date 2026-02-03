@@ -111,7 +111,7 @@ function AgendaFolderContainer({
       objectName: string;
       mimeType: string;
       fileHash: string;
-      preview?: string;
+      previewUrl?: string;
     }[];
   }>({
     id: '',
