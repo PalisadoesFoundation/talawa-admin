@@ -7,11 +7,11 @@
  *
  * Usage: pnpm exec tsx scripts/validate-tokens.ts
  * Options:
- *   --files \<file...\>    Validate specific files (space-separated list); checks added lines unless --all is set
- *   --staged              Validate staged files only; checks added lines unless --all is set
- *   --all                 When used with --files or --staged, scan entire files
+ *   --files \<file...\>    Validate specific files (space-separated list); entire file content is checked
+ *   --staged --all        Validate entire content of staged files only (both flags required)
  *   --scan-entire-repo    Ignore file lists and scan all source files
- *   --warn                Log warnings without failing
+ *
+ * Note: --staged cannot be combined with --files or --scan-entire-repo.
  *
  * Detected patterns:
  *   - Hex colors (#fff, #ffffff, #ffffffaa)
@@ -30,7 +30,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execSync, spawnSync } from 'child_process';
+import { execSync } from 'child_process';
 import { glob } from 'glob';
 import { fileURLToPath } from 'url';
 
@@ -89,8 +89,6 @@ interface IValidationResult {
   /** Category of the violation indicating which design token type should be used */
   type: ValidationResultType;
 }
-
-type LineFilter = (file: string, lineNumber: number) => boolean;
 
 /**
  * CSS Patterns for detecting hardcoded values
@@ -434,7 +432,6 @@ const getFlagValues = (args: string[], flag: string): string[] => {
 };
 
 const args = process.argv.slice(2);
-const warnOnly: boolean = args.includes('--warn') || args.includes('--warning');
 const scanEntireRepo: boolean = args.includes('--scan-entire-repo');
 const checkAll: boolean = args.includes('--all');
 const hasFilesFlag: boolean =
@@ -445,8 +442,6 @@ const filesFromArgs: string[] = hasFilesFlag
   : [];
 const stagedOnly: boolean =
   args.includes('--staged') && !scanEntireRepo && !hasFilesFlag;
-const checkAddedLinesOnly: boolean =
-  !checkAll && !scanEntireRepo && (hasFilesFlag || stagedOnly);
 
 export const shouldSkipFile = (file: string): boolean => {
   const normalized = normalizePath(file);
@@ -490,86 +485,6 @@ export const filterByExtensions = (
   files: string[],
   extensions: Set<string>,
 ): string[] => files.filter((file) => extensions.has(path.extname(file)));
-
-export const toRepoRelativePath = (file: string): string => {
-  const relative = path.isAbsolute(file)
-    ? path.relative(process.cwd(), file)
-    : file;
-  return normalizePath(relative);
-};
-
-export const parseAddedLineNumbers = (diff: string): Set<number> => {
-  const addedLines = new Set<number>();
-  let newLine = 0;
-
-  diff.split('\n').forEach((line) => {
-    if (line.startsWith('@@')) {
-      const match = /@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@/.exec(line);
-      if (match) {
-        newLine = Number.parseInt(match[1], 10);
-      }
-      return;
-    }
-
-    if (line.startsWith('+++') || line.startsWith('---')) {
-      return;
-    }
-
-    if (line.startsWith('+')) {
-      if (newLine > 0) {
-        addedLines.add(newLine);
-      }
-      newLine += 1;
-      return;
-    }
-
-    if (line.startsWith(' ')) {
-      newLine += 1;
-    }
-  });
-
-  return addedLines;
-};
-
-export const getStagedAddedLines = (file: string): Set<number> => {
-  const repoPath = toRepoRelativePath(file);
-  if (!repoPath) {
-    return new Set();
-  }
-
-  try {
-    const result = spawnSync(
-      'git',
-      ['diff', '--cached', '-U0', '--', repoPath],
-      {
-        encoding: 'utf-8',
-      },
-    );
-    if (result.error) {
-      throw result.error;
-    }
-    const diff = result.stdout;
-    return parseAddedLineNumbers(diff);
-  } catch (error) {
-    console.error(
-      `Error reading staged diff for ${repoPath}:`,
-      error instanceof Error ? error.message : error,
-    );
-    process.exit(1);
-  }
-};
-
-export const getAddedLinesByFile = (
-  files: string[],
-): Map<string, Set<number>> => {
-  const addedLinesByFile = new Map<string, Set<number>>();
-
-  files.forEach((file) => {
-    addedLinesByFile.set(normalizePath(file), getStagedAddedLines(file));
-  });
-
-  return addedLinesByFile;
-};
 
 export const formatCount = (count: number, label: string): string =>
   `${count} ${label}${count === 1 ? '' : 's'}`;
@@ -818,10 +733,15 @@ const validateTsxLine = (
   );
 };
 
+/**
+ * Validates files for hardcoded values using the given glob pattern.
+ * @param pattern - Glob pattern to select files when `files` is not provided.
+ * @param files - Optional explicit list of files to validate.
+ * @returns Promise resolving to the list of validation results.
+ */
 export async function validateFiles(
   pattern: string,
   files?: string[],
-  lineFilter?: LineFilter,
 ): Promise<IValidationResult[]> {
   const filesToCheck = files ?? (await glob(pattern));
   const results: IValidationResult[] = [];
@@ -846,9 +766,6 @@ export async function validateFiles(
 
     lines.forEach((line, index) => {
       const lineNumber = index + 1;
-      if (lineFilter && !lineFilter(file, lineNumber)) {
-        return;
-      }
 
       const commentState = checkCommentState(line, inBlockComment);
       inBlockComment = commentState.inBlockComment;
@@ -879,13 +796,35 @@ export async function validateFiles(
   return results;
 }
 
+/**
+ * CLI entry point for design token validation.
+ * @returns Promise<void>
+ */
 export async function main() {
   console.log('Validating design token usage...\n');
+
+  if (args.includes('--staged') && (hasFilesFlag || scanEntireRepo)) {
+    console.error(
+      'Conflicting flags: --staged cannot be combined with --files or --scan-entire-repo.',
+    );
+    process.exit(1);
+  }
+
+  if (stagedOnly && !checkAll) {
+    console.error(
+      'Use --staged --all to validate the entire content of staged files.',
+    );
+    process.exit(1);
+  }
 
   const filesFromFlags = hasFilesFlag
     ? Array.from(new Set(filesFromArgs.filter((file) => file.trim() !== '')))
     : [];
   const stagedFiles = stagedOnly ? getStagedFiles() : [];
+  if (stagedOnly && stagedFiles.length === 0) {
+    console.log('No staged files to validate.\n');
+    process.exit(0);
+  }
   const tsExtensions = new Set(['.ts', '.tsx']);
   const cssExtensions = new Set(['.css', '.scss', '.sass']);
 
@@ -900,36 +839,8 @@ export async function main() {
       ? filterByExtensions(stagedFiles, cssExtensions)
       : undefined;
 
-  const filesForDiff = new Set<string>();
-  if (tsFiles) {
-    tsFiles.forEach((file) => filesForDiff.add(file));
-  }
-  if (cssFiles) {
-    cssFiles.forEach((file) => filesForDiff.add(file));
-  }
-
-  const addedLinesByFile =
-    checkAddedLinesOnly && filesForDiff.size > 0
-      ? getAddedLinesByFile(Array.from(filesForDiff))
-      : undefined;
-
-  const lineFilter = addedLinesByFile
-    ? (file: string, lineNumber: number): boolean => {
-        const allowedLines = addedLinesByFile.get(normalizePath(file));
-        return !!allowedLines && allowedLines.has(lineNumber);
-      }
-    : undefined;
-
-  const tsResults = await validateFiles(
-    'src/**/*.{ts,tsx}',
-    tsFiles,
-    lineFilter,
-  );
-  const cssResults = await validateFiles(
-    'src/**/*.{css,scss,sass}',
-    cssFiles,
-    lineFilter,
-  );
+  const tsResults = await validateFiles('src/**/*.{ts,tsx}', tsFiles);
+  const cssResults = await validateFiles('src/**/*.{css,scss,sass}', cssFiles);
 
   const allResults = [...tsResults, ...cssResults];
 
@@ -938,16 +849,13 @@ export async function main() {
     process.exit(0);
   }
 
-  const log = warnOnly ? console.warn : console.error;
   const fileCount = new Set(
     allResults.map((result) => normalizePath(result.file)),
   ).size;
-  const heading = warnOnly
-    ? 'Design token validation warnings'
-    : 'Design token validation failed';
-  log(`\n${heading}`);
-  log('='.repeat(heading.length));
-  log(
+  const heading = 'Design token validation failed';
+  console.error(`\n${heading}`);
+  console.error('='.repeat(heading.length));
+  console.error(
     `Found ${formatCount(allResults.length, 'hardcoded value')} across ${formatCount(
       fileCount,
       'file',
@@ -988,48 +896,48 @@ export async function main() {
   // Display CSS violations
   const cssViolations = cssTypes.filter((type) => byType[type]?.length > 0);
   if (cssViolations.length > 0) {
-    log('📄 CSS/SCSS Violations:');
-    log('-'.repeat(40));
+    console.error('📄 CSS/SCSS Violations:');
+    console.error('-'.repeat(40));
     cssViolations.forEach((type) => {
       const results = byType[type];
-      log(`  ${type.toUpperCase()} (${results.length} instances):`);
+      console.error(`  ${type.toUpperCase()} (${results.length} instances):`);
       results.slice(0, 5).forEach((result) => {
-        log(`    ${result.file}:${result.line} -> ${result.match}`);
+        console.error(`    ${result.file}:${result.line} -> ${result.match}`);
       });
       if (results.length > 5) {
-        log(`    ... and ${results.length - 5} more`);
+        console.error(`    ... and ${results.length - 5} more`);
       }
     });
-    log('');
+    console.error('');
   }
 
   // Display TSX violations
   const tsxViolations = tsxTypes.filter((type) => byType[type]?.length > 0);
   if (tsxViolations.length > 0) {
-    log('⚛️  TSX/TS Inline Style Violations:');
-    log('-'.repeat(40));
+    console.error('⚛️  TSX/TS Inline Style Violations:');
+    console.error('-'.repeat(40));
     tsxViolations.forEach((type) => {
       const results = byType[type];
       const displayType = type.replace('tsx-', '').toUpperCase();
-      log(`  ${displayType} (${results.length} instances):`);
+      console.error(`  ${displayType} (${results.length} instances):`);
       results.slice(0, 5).forEach((result) => {
-        log(`    ${result.file}:${result.line} -> ${result.match}`);
+        console.error(`    ${result.file}:${result.line} -> ${result.match}`);
       });
       if (results.length > 5) {
-        log(`    ... and ${results.length - 5} more`);
+        console.error(`    ... and ${results.length - 5} more`);
       }
     });
-    log('');
+    console.error('');
   }
 
-  log('\nFix the values above and re-run the check.\n');
-  log('Replace hardcoded values with tokens from src/style/tokens.\n');
-  log(
+  console.error('\nFix the values above and re-run the check.\n');
+  console.error(
+    'Replace hardcoded values with tokens from src/style/tokens.\n',
+  );
+  console.error(
     'Refer: docs/docs/docs/developer-resources/design-token-system.md for more details.\n',
   );
-  if (!warnOnly) {
-    process.exit(1);
-  }
+  process.exit(1);
 }
 
 const isExecutedAsScript =

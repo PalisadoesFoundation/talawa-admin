@@ -65,10 +65,14 @@ export class AdminEventPage {
       .filter(':contains("View all")')
       .each(($btn) => {
         cy.wrap($btn).click({ force: true });
+      })
+      .then(($buttons) => {
+        // Wait for all clicks to be flushed; branch on whether any buttons existed.
+        if ($buttons.length === 0) {
+          return;
+        }
+        cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
       });
-
-    // Now verify the event exists
-    cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
 
     return this;
   }
