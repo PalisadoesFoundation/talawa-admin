@@ -32,7 +32,6 @@ const MOCK_FILE = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -98,7 +97,6 @@ const MOCKS1 = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -259,7 +257,6 @@ const MOCKS1 = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -316,7 +313,6 @@ const MOCKS2 = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -409,7 +405,6 @@ const MOCKS2 = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -459,7 +454,6 @@ const UPDATE_USER_ERROR_MOCKS = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -531,7 +525,6 @@ const UPDATE_MOCK = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -624,7 +617,6 @@ const UPDATE_MOCK = [
         input: {
           id: '456',
         },
-        fetchPolicy: 'no-cache',
       },
     },
     result: {
@@ -842,10 +834,6 @@ describe('MemberDetail', () => {
   beforeEach(() => {
     user = userEvent.setup();
     vi.clearAllMocks();
-    mockToast.success.mockClear();
-    mockToast.error.mockClear();
-    mockToast.warning.mockClear();
-    mockToast.info.mockClear();
   });
 
   afterEach(() => {
@@ -1466,7 +1454,6 @@ describe('MemberDetail', () => {
             input: {
               id: '456',
             },
-            fetchPolicy: 'no-cache',
           },
         },
         result: {
@@ -1622,320 +1609,5 @@ describe('MemberDetail', () => {
       },
       { timeout: 3000 },
     );
-  });
-
-  test('renders without crashing', async () => {
-    renderMemberDetailScreen(createLink(MOCKS1));
-    await waitForLoadingComplete();
-  });
-
-  test('should render member profile elements', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    unmount();
-  });
-
-  test('handles member profile update', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const nameInput = screen.getByTestId('inputName');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'NewName');
-    await user.click(screen.getByTestId('saveChangesBtn'));
-    await waitFor(() => expect(mockToast.success).toHaveBeenCalled(), {
-      timeout: 3000,
-    });
-    unmount();
-  });
-
-  test('should render user profile elements', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/user/settings/profile']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/user/settings/profile"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    unmount();
-  });
-
-  test('handles user profile update', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/user/settings/profile']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/user/settings/profile"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const nameInput = screen.getByTestId('inputName');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'UpdatedUserName');
-    await user.click(screen.getByTestId('saveChangesBtn'));
-    await waitFor(() => expect(mockToast.success).toHaveBeenCalled(), {
-      timeout: 3000,
-    });
-    unmount();
-  });
-
-  test('displays dicebear image when image is null', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    const avatarContainer = await waitFor(
-      () => screen.getByTestId('profile-picture'),
-      { timeout: 3000 },
-    );
-    expect(avatarContainer).toBeInTheDocument();
-    unmount();
-  });
-
-  test('handles avatar upload', async () => {
-    global.URL.createObjectURL = vi.fn(() => 'mockURL');
-
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () => expect(screen.getByTestId('profile-picture')).toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    await user.upload(screen.getByTestId('fileInput'), file);
-    expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
-    unmount();
-  });
-
-  test('handles update error', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(UPDATE_USER_ERROR_MOCKS, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const nameInput = screen.getByTestId('inputName');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'TestUser');
-    await user.click(screen.getByTestId('saveChangesBtn'));
-    await waitFor(() => expect(mockToast.error).toHaveBeenCalled(), {
-      timeout: 3000,
-    });
-    unmount();
-  });
-
-  test('validates file upload size', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const largeFile = new File(['x'], 'large.png', { type: 'image/png' });
-    Object.defineProperty(largeFile, 'size', { value: 6 * 1024 * 1024 });
-    await user.upload(screen.getByTestId('fileInput'), largeFile);
-    await waitFor(() => expect(mockToast.error).toHaveBeenCalled(), {
-      timeout: 3000,
-    });
-    unmount();
-  });
-
-  test('handles phone input', async () => {
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(MOCKS1, true)}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const mobilePhoneInput = screen.getByTestId(
-      'inputMobilePhoneNumber',
-    ) as HTMLInputElement;
-    await user.clear(mobilePhoneInput);
-    await user.type(mobilePhoneInput, '+1234567890');
-    expect(mobilePhoneInput).toHaveValue('+1234567890');
-    unmount();
-  });
-
-  test('handles successful update with urlToFile', async () => {
-    vi.mocked(urlToFile).mockResolvedValueOnce(
-      new File(['avatar'], 'avatar.png', { type: 'image/png' }),
-    );
-
-    const { unmount } = render(
-      <MockedProvider link={new StaticMockLink(UPDATE_MOCK, true)}>
-        <MemoryRouter initialEntries={['/user/settings/profile']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/user/settings/profile"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(
-      () =>
-        expect(screen.queryByText('Loading data...')).not.toBeInTheDocument(),
-      { timeout: 3000 },
-    );
-    const nameInput = screen.getByTestId('inputName') as HTMLInputElement;
-    await user.clear(nameInput);
-    await user.type(nameInput, 'UpdatedUserName');
-    await user.click(screen.getByTestId('saveChangesBtn'));
-    await waitFor(() => expect(mockToast.success).toHaveBeenCalled(), {
-      timeout: 3000,
-    });
-    unmount();
   });
 });

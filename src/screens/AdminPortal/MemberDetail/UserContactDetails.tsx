@@ -132,8 +132,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       input: {
         id: resolvedUserId,
       },
-      fetchPolicy: 'no-cache',
     },
+    fetchPolicy: 'no-cache',
   });
   useEffect(() => {
     if (error) {
