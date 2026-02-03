@@ -28,7 +28,11 @@
  * - `react-tooltip` for tooltips.
  * - `ProfileAvatarDisplay` for profile picture + fallback rendering.
  *
- * @param props - Partial InterfaceUser props for UserProfile.
+ * @param firstName - User first name.
+ * @param lastName - User last name.
+ * @param createdAt - Date the user joined.
+ * @param email - User email address.
+ * @param image - Profile image URL (or null/undefined).
  *
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';

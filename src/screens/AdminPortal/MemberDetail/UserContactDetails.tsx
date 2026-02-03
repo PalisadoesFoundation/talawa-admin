@@ -237,6 +237,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
           }) as string,
         );
       setSelectedAvatar(null);
+      setNewAvatarUploaded(false);
       setisUpdated(false);
     } catch (e: unknown) {
       errorHandler(t, e);
@@ -244,6 +245,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   };
   const resetChanges = (): void => {
     setisUpdated(false);
+    setSelectedAvatar(null);
+    setNewAvatarUploaded(false);
     if (data?.user) setFormState({ ...data.user });
   };
   if (loading) {
