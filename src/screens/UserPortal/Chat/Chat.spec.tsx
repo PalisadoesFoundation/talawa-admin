@@ -156,7 +156,6 @@ vi.mock('assets/svgs/newChat.svg?react', () => ({
 const mockChatsListData = {
   chatsByUser: [
     {
-      _id: 'chat-1',
       id: 'chat-1',
       name: 'Direct Chat 1',
       isGroup: false,
@@ -167,7 +166,6 @@ const mockChatsListData = {
       __typename: 'Chat',
     },
     {
-      _id: 'chat-2',
       id: 'chat-2',
       name: 'Group Chat 1',
       isGroup: true,
@@ -178,7 +176,6 @@ const mockChatsListData = {
       __typename: 'Chat',
     },
     {
-      _id: 'chat-3',
       id: 'chat-3',
       name: 'Direct Chat 2',
       isGroup: false,
@@ -584,7 +581,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
               members: {
                 edges: Array(3).fill({ node: { user: { id: 'test' } } }),
               },
-              image: '',
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
             {
@@ -594,7 +593,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
               members: {
                 edges: Array(2).fill({ node: { user: { id: 'test' } } }),
               },
-              image: '',
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -763,20 +764,26 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should pass filtered legacy chats to CreateDirectChat', async () => {
-    const legacyMocks = [
+  test('should pass filtered chats to CreateDirectChat', async () => {
+    const chatMocks = [
       {
         request: { query: CHATS_LIST, variables: { first: 10, after: null } },
         result: {
           data: {
             chatsByUser: [
               {
-                _id: 'legacy-1',
-                id: 'legacy-1',
-                name: 'Legacy Chat',
+                id: 'chat-1',
+                name: 'Chat 1',
                 isGroup: false,
-                users: [{}, {}],
-                image: '',
+                members: {
+                  edges: [
+                    { node: { user: { id: 'user-1', name: 'User 1' } } },
+                    { node: { user: { id: 'user-2', name: 'User 2' } } },
+                  ],
+                },
+                avatarURL: '',
+                lastMessage: null,
+                unreadMessagesCount: 0,
                 __typename: 'Chat',
               },
             ],
@@ -786,8 +793,8 @@ describe('Chat Component - Comprehensive Coverage', () => {
       mockUnreadChats,
     ];
 
-    renderComponent(legacyMocks);
-    await screen.findByTestId('contact-card-legacy-1');
+    renderComponent(chatMocks);
+    await screen.findByTestId('contact-card-chat-1');
 
     const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
@@ -1529,6 +1536,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
   });
 
   test('should navigate to starred messages on dropdown selection', async () => {
+    const originalHash = window.location.hash;
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
@@ -1540,6 +1548,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
     // Verify verifying window.location.hash
     expect(window.location.hash).toBe('#/action-3');
+    window.location.hash = originalHash;
   });
 
   // ==================== COVERAGE FOR MISSING LINES ====================
@@ -1731,50 +1740,6 @@ describe('Chat Component - Comprehensive Coverage', () => {
       expect(
         screen.queryByTestId('contact-card-chat-3'),
       ).not.toBeInTheDocument();
-    });
-  });
-
-  test('should handle mixed NewChatType and legacy chats', async () => {
-    const mixedChatsMock = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              _id: 'legacy-chat',
-              id: 'legacy-chat',
-              name: 'Legacy Chat',
-              isGroup: false,
-              users: [{}, {}],
-              image: 'http://example.com/legacy.png',
-              __typename: 'Chat',
-            },
-            {
-              id: 'new-chat',
-              name: 'New Chat',
-              avatarURL: 'http://example.com/new.png',
-              members: { edges: [{}, {}] },
-              unreadMessagesCount: 3,
-              lastMessage: { body: 'Latest message' },
-              __typename: 'Chat',
-            },
-          ],
-        },
-      },
-    };
-
-    renderComponent([
-      mixedChatsMock,
-      mixedChatsMock,
-      mixedChatsMock,
-      mockUnreadChats,
-    ]);
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('contact-card-legacy-chat'),
-      ).toBeInTheDocument();
-      expect(screen.getByTestId('contact-card-new-chat')).toBeInTheDocument();
     });
   });
 
@@ -1984,76 +1949,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should pass correct props to ContactCard for legacy chat', async () => {
-    const legacyChatMock = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              _id: 'legacy-props',
-              id: 'legacy-props',
-              name: 'Legacy Props Chat',
-              isGroup: true,
-              users: [{}, {}, {}],
-              image: 'http://example.com/legacy-props.png',
-              __typename: 'Chat',
-            },
-          ],
-        },
-      },
-    };
-
-    renderComponent([legacyChatMock, legacyChatMock, mockUnreadChats]);
-
-    await waitFor(() => {
-      const card = screen.getByTestId('contact-card-legacy-props');
-      expect(card).toHaveAttribute('data-title', 'Legacy Props Chat');
-      expect(card).toHaveAttribute('data-unseen', '0');
-      expect(card).toHaveAttribute('data-last-message', '');
-    });
-  });
-
   // ==================== TYPE GUARD TESTING ====================
-
-  test('should correctly use isNewChatType type guard', async () => {
-    const mixedTypesMock = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              id: 'only-id',
-              name: 'Only ID Chat',
-              avatarURL: '',
-              members: { edges: [{}, {}] },
-              unreadMessagesCount: 0,
-              lastMessage: null,
-              __typename: 'Chat',
-            },
-            {
-              _id: 'only-underscore-id',
-              id: 'only-underscore-id',
-              name: 'Only Underscore ID',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
-              __typename: 'Chat',
-            },
-          ],
-        },
-      },
-    };
-
-    renderComponent([mixedTypesMock, mixedTypesMock, mockUnreadChats]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('contact-card-only-id')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('contact-card-only-underscore-id'),
-      ).toBeInTheDocument();
-    });
-  });
 
   // ==================== MODAL REFETCH ====================
 
