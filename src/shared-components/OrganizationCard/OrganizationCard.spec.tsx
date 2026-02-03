@@ -719,4 +719,301 @@ describe('OrganizationCard', () => {
       process.env = originalEnv;
     }
   });
+
+  it('does not render address when addressLine1 is null', () => {
+    const dataWithoutAddress: InterfaceOrganizationCardProps = {
+      ...mockData,
+      addressLine1: '' as string,
+    };
+    dataWithoutAddress.addressLine1 = null as unknown as string;
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithoutAddress} />
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('123 Test St')).not.toBeInTheDocument();
+  });
+
+  it('does not render address when addressLine1 is undefined', () => {
+    const dataWithoutAddress: InterfaceOrganizationCardProps = {
+      ...mockData,
+      addressLine1: '' as string,
+    };
+    dataWithoutAddress.addressLine1 = undefined as unknown as string;
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithoutAddress} />
+      </MockedProvider>,
+    );
+
+    expect(screen.queryByText('123 Test St')).not.toBeInTheDocument();
+  });
+
+  it('calculates member count from edges when membersCount is not provided', () => {
+    const dataWithEdges = {
+      ...mockData,
+      membersCount: undefined,
+      members: {
+        edges: [
+          { node: { id: '1' } },
+          { node: { id: '2' } },
+          { node: { id: '3' } },
+        ],
+      },
+    };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithEdges} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('3')).toBeInTheDocument();
+  });
+
+  it('displays 0 members when both membersCount and edges are not available', () => {
+    const dataWithNoMembers = {
+      ...mockData,
+      membersCount: undefined,
+      members: undefined,
+    };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithNoMembers} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('0')).toBeInTheDocument();
+  });
+
+  it('displays 0 admins when adminsCount is not provided for admin role', () => {
+    const adminDataWithoutCount = {
+      ...mockData,
+      role: 'admin',
+      adminsCount: undefined,
+    };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={adminDataWithoutCount} />
+      </MockedProvider>,
+    );
+
+    const adminsText = screen.getByText('admins:');
+    expect(adminsText.nextSibling).toHaveTextContent('0');
+  });
+
+  it('renders ProfileAvatarDisplay with enableEnlarge prop', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const avatar = screen.getByTestId('emptyContainerForImage');
+    expect(avatar).toBeInTheDocument();
+  });
+
+  it('handles ALREADY_MEMBER error when sending membership request', async () => {
+    const dataWithRegistration = {
+      ...mockData,
+      userRegistrationRequired: true,
+    };
+    const mocks = [
+      {
+        request: {
+          query: SEND_MEMBERSHIP_REQUEST,
+          variables: { organizationId: '123' },
+        },
+        result: {
+          errors: [
+            {
+              message: 'Already a member',
+              extensions: { code: 'ALREADY_MEMBER' },
+            },
+          ],
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <OrganizationCard data={dataWithRegistration} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    await userEvent.click(button);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('AlreadyJoined');
+    });
+  });
+
+  it('handles generic error when sending membership request', async () => {
+    const dataWithRegistration = {
+      ...mockData,
+      userRegistrationRequired: true,
+    };
+    const mocks = [
+      {
+        request: {
+          query: SEND_MEMBERSHIP_REQUEST,
+          variables: { organizationId: '123' },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <OrganizationCard data={dataWithRegistration} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    await userEvent.click(button);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
+    });
+  });
+
+  it('renders tooltip with organization name', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const heading = screen.getByRole('heading', { name: 'Test Org' });
+    expect(heading).toBeInTheDocument();
+  });
+
+  it('applies correct CSS classes for member status chip', () => {
+    const joinedData = { ...mockData, isJoined: true };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+    expect(statusChip).toHaveAttribute('data-status', 'member');
+  });
+
+  it('applies correct CSS classes for pending status chip', () => {
+    const pendingData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: 'pending',
+    };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+    expect(statusChip).toHaveAttribute('data-status', 'pending');
+  });
+
+  it('applies correct CSS classes for not member status chip', () => {
+    const notMemberData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: undefined,
+    };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={notMemberData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+    expect(statusChip).toHaveAttribute('data-status', 'notMember');
+  });
+
+  it('renders withdraw button with danger variant', () => {
+    const pendingData = { ...mockData, membershipRequestStatus: 'pending' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent('withdraw');
+  });
+
+  it('renders organization card with data-cy attribute', () => {
+    const { container } = render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const orgCardContainer = container.querySelector(
+      '[data-cy="orgCardContainer"]',
+    );
+    expect(orgCardContainer).toBeInTheDocument();
+    expect(orgCardContainer).toHaveAttribute('data-cy', 'orgCardContainer');
+  });
+
+  it('handles null members edges gracefully', () => {
+    const dataWithNullEdges: InterfaceOrganizationCardProps = {
+      ...mockData,
+      membersCount: undefined,
+      members: { edges: [] },
+    };
+    if (dataWithNullEdges.members) {
+      dataWithNullEdges.members.edges = null as unknown as {
+        node: { id: string };
+      }[];
+    }
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithNullEdges} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('0')).toBeInTheDocument();
+  });
+
+  it('handles empty description', () => {
+    const dataWithEmptyDesc = { ...mockData, description: '' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithEmptyDesc} />
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Test Org' }),
+    ).toBeInTheDocument();
+  });
+
+  it('renders manage button with correct data-cy for admin', () => {
+    const adminData = { ...mockData, role: 'admin' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={adminData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('manageBtn');
+    expect(button).toHaveAttribute('data-cy', 'manageBtn');
+  });
+
+  it('renders visit button with correct data-cy for joined user', () => {
+    const joinedData = { ...mockData, isJoined: true };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('manageBtn');
+    expect(button).toHaveAttribute('data-cy', 'manageBtn');
+  });
 });
