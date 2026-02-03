@@ -1,8 +1,8 @@
 .customcell {
-  background-color: var(--color-gray-100) !important;
-  color: var(--color-black) !important;
-  font-size: medium !important;
-  font-weight: var(--font-weight-medium) !important;
-  padding-top: var(--space-5) !important;
-  padding-bottom: var(--space-5) !important;
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium);
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
 }
