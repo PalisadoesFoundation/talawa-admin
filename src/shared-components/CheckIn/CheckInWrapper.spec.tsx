@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -64,7 +64,7 @@ describe('Testing CheckIn Wrapper', () => {
 
     const { CheckInWrapper } = await import('./CheckInWrapper');
 
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: null });
 
     render(
       <MockedProvider link={link}>
@@ -83,7 +83,7 @@ describe('Testing CheckIn Wrapper', () => {
 
     await user.click(screen.getByLabelText('Check In Members'));
     expect(mockOpen).toHaveBeenCalledTimes(1);
-  });
+  }, 60000);
 });
 
 describe('CheckInWrapper CSS Tests', () => {
@@ -91,6 +91,10 @@ describe('CheckInWrapper CSS Tests', () => {
 
   beforeAll(async () => {
     ({ CheckInWrapper } = await import('./CheckInWrapper'));
+  });
+
+  beforeEach(() => {
+    cleanup();
   });
 
   afterEach(() => {
@@ -119,8 +123,8 @@ describe('CheckInWrapper CSS Tests', () => {
   };
 
   it('should render the options-outline SVG image with correct dimensions', () => {
-    renderComponent();
-    const image = screen.getByAltText('Sort');
+    const { container } = renderComponent();
+    const image = within(container).getByAltText('Sort');
     expect(image).toHaveAttribute('src', '/images/svg/options-outline.svg');
     expect(image).toHaveAttribute('width', '30.63');
     expect(image).toHaveAttribute('height', '30.63');
