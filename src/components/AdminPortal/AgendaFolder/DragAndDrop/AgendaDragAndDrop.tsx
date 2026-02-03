@@ -79,6 +79,10 @@ export default function AgendaDragAndDrop({
       .map((e) => e.node)
       .sort((a, b) => a.sequence - b.sequence);
 
+    const originalSequences = new Map(
+      items.map((item) => [item.id, item.sequence]),
+    );
+
     const [moved] = items.splice(source.index, 1);
     items.splice(destination.index, 0, moved);
 
@@ -100,10 +104,7 @@ export default function AgendaDragAndDrop({
     try {
       await Promise.all(
         reorderedItems
-          .filter((item, index) => {
-            const originalItem = items[index];
-            return originalItem?.sequence !== item.sequence;
-          })
+          .filter((item) => originalSequences.get(item.id) !== item.sequence)
           .map((item) =>
             updateAgendaItemSequence({
               variables: {
