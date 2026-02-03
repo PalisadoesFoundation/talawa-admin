@@ -92,7 +92,9 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span
                 className={styles.userProfileName}
                 data-tooltip-id="name"
-                data-tooltip-content={[firstName, lastName].filter(Boolean).join(' ')}
+                data-tooltip-content={[firstName, lastName]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 {firstName && firstName.length > 10
                   ? firstName?.slice(0, 5) + '..'

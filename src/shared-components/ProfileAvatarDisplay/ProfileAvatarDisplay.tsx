@@ -172,11 +172,11 @@ export const ProfileAvatarDisplay = ({
           onKeyDown={
             enableEnlarge || onClick
               ? (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleClick();
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleClick();
+                  }
                 }
-              }
               : undefined
           }
         >
