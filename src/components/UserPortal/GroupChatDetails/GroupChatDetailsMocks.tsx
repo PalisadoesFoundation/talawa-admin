@@ -411,6 +411,75 @@ export const mocks = [
 ];
 
 export const failingMocks = [
+  // Mock for adding user failure
+  {
+    request: {
+      query: CREATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user3', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    error: new Error('Failed to add user'),
+  },
+  // Organization members mock for name search 'Disha' - needed for the add user flow
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                cursor: 'cursor1',
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+  // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails when opening the add-user modal
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                cursor: 'cursor1',
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
   // Mock for role update failure
   {
     request: {

@@ -1932,19 +1932,20 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle legacy chat with undefined users array length', async () => {
-    const legacyUndefinedUsersMock = {
+  test('should handle NewChatType with undefined members', async () => {
+    const newChatUndefinedMembersMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'undefined-users',
-              id: 'undefined-users',
-              name: 'Undefined Users',
+              id: 'undefined-members',
+              name: 'Undefined Members',
               isGroup: false,
-              users: undefined,
-              image: '',
+              avatarURL: '',
+              members: undefined,
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -1953,21 +1954,21 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     renderComponent([
-      legacyUndefinedUsersMock,
-      legacyUndefinedUsersMock,
-      legacyUndefinedUsersMock,
+      newChatUndefinedMembersMock,
+      newChatUndefinedMembersMock,
+      newChatUndefinedMembersMock,
       mockUnreadChats,
     ]);
 
-    await screen.findByTestId('contact-card-undefined-users');
+    await screen.findByTestId('contact-card-undefined-members');
 
-    // Switch to group filter - should not appear
+    // Switch to group filter - should not appear (defaults to direct chat)
     const groupButton = screen.getByTestId('groupChat');
     await user.click(groupButton);
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('contact-card-undefined-users'),
+        screen.queryByTestId('contact-card-undefined-members'),
       ).not.toBeInTheDocument();
     });
   });
@@ -2012,7 +2013,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle both null and undefined avatarURL/image', async () => {
+  test('should handle both null and undefined avatarURL', async () => {
     const nullAvatarMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
@@ -2028,12 +2029,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
               __typename: 'Chat',
             },
             {
-              _id: 'null-image',
-              id: 'null-image',
-              name: 'Null Image',
-              isGroup: false,
-              users: [{}, {}],
-              image: null,
+              id: 'undefined-avatar',
+              name: 'Undefined Avatar',
+              avatarURL: undefined,
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -2052,7 +2053,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
       expect(
         screen.getByTestId('contact-card-null-avatar'),
       ).toBeInTheDocument();
-      expect(screen.getByTestId('contact-card-null-image')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('contact-card-undefined-avatar'),
+      ).toBeInTheDocument();
     });
   });
 });
