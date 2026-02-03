@@ -1145,4 +1145,67 @@ describe('OrgUpdate Component', () => {
     const userRegSwitch = screen.getByTestId('user-reg-switch');
     expect(userRegSwitch).toBeChecked();
   });
+  it('shows error toast when uploaded file is not an image', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+
+    fileInput.removeAttribute('accept');
+
+    const invalidFile = new File(['hello'], 'test.txt', {
+      type: 'text/plain',
+    });
+
+    await user.upload(fileInput, invalidFile);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18n.t('orgUpdate.invalidImageType'),
+      );
+    });
+  });
+
+  it('shows error toast when uploaded image exceeds 5MB', async () => {
+    const user = userEvent.setup();
+
+    const largeImage = new File(
+      [new Uint8Array(6 * 1024 * 1024)],
+      'large.png',
+      { type: 'image/png' },
+    );
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await screen.findByDisplayValue('Test Org');
+
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
+
+    await user.upload(fileInput, largeImage);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18n.t('orgUpdate.imageSizeTooLarge'),
+      );
+    });
+  });
 });
