@@ -1,4 +1,4 @@
-import type { GroupChat, DirectMessage } from 'types/UserPortal/Chat/type';
+import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import {
   CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT,
@@ -22,6 +22,16 @@ interface InterfaceChatUser {
   createdAt: Date;
 }
 
+interface MockMessage {
+  _id: string;
+  createdAt: Date;
+  sender: InterfaceChatUser;
+  messageContent: string;
+  replyTo?: MockMessage;
+  updatedAt: Date;
+  media?: string;
+}
+
 function createUser(
   id: string,
   firstName: string,
@@ -41,9 +51,9 @@ function createMessage(
   id: string,
   sender: InterfaceChatUser,
   content: string,
-  replyTo?: DirectMessage,
+  replyTo?: MockMessage,
   media?: string,
-): DirectMessage {
+): MockMessage {
   return {
     _id: id,
     createdAt: dayjs().toDate(),
@@ -83,19 +93,78 @@ const createGroupChat = (
   name: string,
   image: string,
   users: InterfaceChatUser[],
-  messages: DirectMessage[],
-): GroupChat => ({
-  _id: id,
-  isGroup: true,
-  name,
-  image,
-  messages,
-  admins: [alice],
-  users,
-  unseenMessagesByUsers: JSON.parse('{"user1": 0, "user2": 1}'),
-  description: 'Test Description',
-  createdAt: dayjs().toDate(),
-});
+  messages: MockMessage[],
+): ChatType => {
+  const admins = users.filter((u) => u._id === 'user1'); // Alice is admin
+
+  return {
+    id: id,
+    name: name,
+    description: 'Test Description',
+    avatarURL: image || null,
+    avatarMimeType: null,
+    isGroup: true,
+    createdAt: dayjs().toDate().toISOString(),
+    updatedAt: null,
+    members: {
+      edges: users.map((user) => ({
+        node: {
+          user: {
+            id: user._id,
+            name: user.firstName + (user.lastName ? ' ' + user.lastName : ''),
+            avatarURL: null,
+            avatarMimeType: null,
+          },
+          role: admins.some((a) => a._id === user._id)
+            ? 'administrator'
+            : 'regular',
+        },
+      })),
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: null,
+        endCursor: null,
+      },
+    },
+    messages: {
+      edges: messages.map((msg) => ({
+        node: {
+          id: msg._id,
+          body: msg.messageContent,
+          createdAt: msg.createdAt.toISOString(),
+          updatedAt: msg.updatedAt.toISOString(),
+          creator: {
+            id: msg.sender._id,
+            name: msg.sender.firstName,
+            avatarURL: null,
+            avatarMimeType: null,
+          },
+          parentMessage: msg.replyTo
+            ? {
+                id: msg.replyTo._id,
+                body: msg.replyTo.messageContent,
+                createdAt: msg.replyTo.createdAt.toISOString(),
+                creator: {
+                  id: msg.replyTo.sender._id,
+                  name: msg.replyTo.sender.firstName,
+                },
+              }
+            : null,
+        },
+      })),
+      pageInfo: {
+        hasNextPage: false,
+        hasPreviousPage: false,
+        startCursor: null,
+        endCursor: null,
+      },
+    },
+    unreadMessagesCount: 0,
+    lastMessage: null,
+    organization: { id: 'org123', name: 'Test Org' },
+  };
+};
 
 export const filledMockChat = createGroupChat(
   'chat1',

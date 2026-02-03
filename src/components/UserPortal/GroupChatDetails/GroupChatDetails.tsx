@@ -131,7 +131,7 @@ export default function GroupChatDetails({
   const [deleteChat] = useMutation(DELETE_CHAT);
   const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
 
-  const currentUserRole = chat.members.edges.find(
+  const currentUserRole = chat.members?.edges?.find(
     (edge) => edge.node.user.id === userId,
   )?.node.role;
 
@@ -376,14 +376,14 @@ export default function GroupChatDetails({
           )}
 
           <p>
-            {chat?.members.edges.length} {t('members')}
+            {chat?.members?.edges?.length || 0} {t('members')}
           </p>
           <p>{chat?.description}</p>
         </div>
 
         <div>
           <h5>
-            {chat.members.edges.length} {t('members')}
+            {chat.members?.edges?.length || 0} {t('members')}
           </h5>
           <ListGroup className={styles.memberList} variant="flush">
             <ListGroup.Item
@@ -395,7 +395,7 @@ export default function GroupChatDetails({
             >
               <Add /> {t('addMembers')}
             </ListGroup.Item>
-            {chat.members.edges.map((edge) => {
+            {chat.members?.edges?.map((edge) => {
               const user = edge.node.user;
               const role = edge.node.role;
               const isCurrentUser = user.id === userId;
@@ -535,7 +535,7 @@ export default function GroupChatDetails({
                         };
                       }) =>
                         userDetails.id !== userId &&
-                        !chat.members.edges.some(
+                        !chat.members?.edges?.some(
                           (edge) => edge.node.user.id === userDetails.id,
                         ),
                     )

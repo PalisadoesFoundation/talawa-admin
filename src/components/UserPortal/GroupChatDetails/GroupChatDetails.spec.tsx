@@ -14,7 +14,7 @@ import {
   incompleteMockChat,
   failingMocks,
 } from './GroupChatDetailsMocks';
-import type { NewChatType } from 'types/UserPortal/Chat/interface';
+import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Standardized cache configuration for Apollo MockedProvider
@@ -141,9 +141,9 @@ describe('GroupChatDetails', () => {
     vi.clearAllMocks();
   });
 
-  type MaybeChat = Partial<NewChatType> & { _id?: string };
+  type MaybeChat = Partial<ChatType> & { _id?: string };
 
-  const withSafeChat = (raw: unknown): NewChatType => {
+  const withSafeChat = (raw: unknown): ChatType => {
     const chat = (raw as MaybeChat) || {};
     const orgId = chat.organization?.id ?? 'org123';
     const createdAtValue = (chat as { createdAt?: string | Date }).createdAt;
