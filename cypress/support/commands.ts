@@ -79,9 +79,9 @@ Cypress.Commands.add('loginByApi', (role: string) => {
           throw new Error(`Login failed: ${errMsg}`);
         }
         if (!body?.data?.signIn) {
-          cy.log(
-            `Login response missing signIn data. Response: ${JSON.stringify(body)}`,
-          );
+          const message = `Login response missing signIn data. Response: ${JSON.stringify(body)}`;
+          cy.log(message);
+          throw new Error(message);
         }
       });
 

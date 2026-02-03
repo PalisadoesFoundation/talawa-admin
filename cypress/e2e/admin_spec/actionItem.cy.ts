@@ -34,7 +34,14 @@ const requestGraphQL = (
   body: Record<string, unknown>,
 ): Cypress.Chainable<GraphQLResponse> => {
   return cy.window().then((win) => {
-    const requestUrl = new URL('/graphql', win.location.origin).toString();
+    const apiBase =
+      (Cypress.env('apiUrl') as string | undefined) ||
+      (Cypress.env('API_URL') as string | undefined) ||
+      (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
+      win.location.origin;
+    const requestUrl = apiBase.endsWith('/graphql')
+      ? apiBase
+      : new URL('/graphql', apiBase).toString();
     return win
       .fetch(requestUrl, {
         method: 'POST',
