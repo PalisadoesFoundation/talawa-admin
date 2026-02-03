@@ -315,23 +315,25 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <label htmlFor="gender" className="form-label">
                     {t('gender')}
                   </label>
-                  <DropDownButton
-                    options={genderEnum.map((o) => ({
-                      value: String(o.value),
-                      label: String(o.label),
-                    }))}
-                    selectedValue={
-                      formState.natalSex
-                        ? String(formState.natalSex)
-                        : undefined
-                    }
-                    onSelect={(val: string) =>
-                      handleFieldChange('natalSex', val)
-                    }
-                    ariaLabel={t('gender')}
-                    dataTestIdPrefix="inputNatalSex"
-                    variant="outline-secondary"
-                  />
+                  <div className={styles.dropdownField}>
+                    <DropDownButton
+                      options={genderEnum.map((o) => ({
+                        value: String(o.value),
+                        label: String(o.label),
+                      }))}
+                      selectedValue={
+                        formState.natalSex
+                          ? String(formState.natalSex)
+                          : undefined
+                      }
+                      onSelect={(val: string) =>
+                        handleFieldChange('natalSex', val)
+                      }
+                      ariaLabel={t('gender')}
+                      dataTestIdPrefix="inputNatalSex"
+                      variant="outline-secondary"
+                    />
+                  </div>
                 </Col>
                 <Col md={6}>
                   <label htmlFor="birthDate" className="form-label">
@@ -407,23 +409,25 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <label htmlFor="maritalStatus" className="form-label">
                     {t('maritalStatus')}
                   </label>
-                  <DropDownButton
-                    options={maritalStatusEnum.map((o) => ({
-                      value: String(o.value),
-                      label: String(o.label),
-                    }))}
-                    selectedValue={
-                      formState.maritalStatus
-                        ? String(formState.maritalStatus)
-                        : undefined
-                    }
-                    onSelect={(val: string) =>
-                      handleFieldChange('maritalStatus', val)
-                    }
-                    ariaLabel={t('maritalStatus')}
-                    dataTestIdPrefix="marital-status-btn"
-                    variant="outline-secondary"
-                  />
+                  <div className={styles.dropdownField}>
+                    <DropDownButton
+                      options={maritalStatusEnum.map((o) => ({
+                        value: String(o.value),
+                        label: String(o.label),
+                      }))}
+                      selectedValue={
+                        formState.maritalStatus
+                          ? String(formState.maritalStatus)
+                          : undefined
+                      }
+                      onSelect={(val: string) =>
+                        handleFieldChange('maritalStatus', val)
+                      }
+                      ariaLabel={t('maritalStatus')}
+                      dataTestIdPrefix="marital-status-btn"
+                      variant="outline-secondary"
+                    />
+                  </div>
                 </Col>
                 <Col md={12}>
                   <label htmlFor="password" className="form-label">
