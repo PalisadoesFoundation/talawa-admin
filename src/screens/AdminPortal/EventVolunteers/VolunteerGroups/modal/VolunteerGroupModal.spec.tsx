@@ -985,13 +985,15 @@ describe('Testing VolunteerGroupModal', () => {
     });
 
     it('should handle clearing volunteersRequired field', async () => {
-      const user = userEvent.setup();
+      const user = userEvent.setup({ delay: null });
       renderGroupModal(successLink, modalProps[0]);
+      await wait();
       expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
-      const volunteersRequiredInput = screen.getByTestId(
+      const volunteersRequiredInput = await screen.findByTestId(
         'volunteersRequiredInput',
       );
+      await user.click(volunteersRequiredInput);
       await user.type(volunteersRequiredInput, '5');
       await waitFor(() => {
         expect(volunteersRequiredInput).toHaveValue(5);

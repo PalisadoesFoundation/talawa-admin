@@ -16,7 +16,7 @@
  * Dependencies:
  * - React,React-Bootstrap, NotificationToast, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
- * - Utility functions: `convertToBase64` and `errorHandler`.
+ * - Utility functions: `errorHandler`.
  *
  * @returns The rendered CommunityProfile component.
  *
@@ -59,7 +59,6 @@ import {
   RedditLogo,
   SlackLogo,
 } from 'assets/svgs/social-icons';
-import convertToBase64 from 'utils/convertToBase64';
 import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
@@ -81,7 +80,8 @@ const CommunityProfile = (): JSX.Element => {
     id: string;
     name: string | undefined;
     websiteURL: string | undefined;
-    logo: string | undefined;
+    logoURL: string | undefined;
+    logoMimeType: string | undefined;
     inactivityTimeoutDuration: number;
     facebookURL: string | undefined;
     instagramURL: string | undefined;
@@ -97,7 +97,6 @@ const CommunityProfile = (): JSX.Element => {
   const [profileVariable, setProfileVariable] = React.useState({
     name: '',
     websiteURL: '',
-    logo: '',
     facebookURL: '',
     instagramURL: '',
     inactivityTimeoutDuration: 0,
@@ -108,6 +107,12 @@ const CommunityProfile = (): JSX.Element => {
     redditURL: '',
     slackURL: '',
   });
+
+  // State for logo file (sent directly to mutation as Upload scalar)
+  const [logoFile, setLogoFile] = React.useState<File | null>(null);
+
+  // Ref for logo file input to keep DOM and state in sync
+  const logoInputRef = React.useRef<HTMLInputElement>(null);
 
   // Query to fetch community data
   const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
@@ -123,7 +128,6 @@ const CommunityProfile = (): JSX.Element => {
       setProfileVariable({
         name: preLoginData.name ?? '',
         websiteURL: preLoginData.websiteURL ?? '',
-        logo: preLoginData.logo ?? '',
         facebookURL: preLoginData.facebookURL ?? '',
         inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
         instagramURL: preLoginData.instagramURL ?? '',
@@ -158,6 +162,7 @@ const CommunityProfile = (): JSX.Element => {
     try {
       await uploadPreLoginImagery({
         variables: {
+          logo: logoFile || undefined,
           name: profileVariable.name,
           websiteURL: profileVariable.websiteURL,
           inactivityTimeoutDuration: data?.community?.inactivityTimeoutDuration,
@@ -186,7 +191,6 @@ const CommunityProfile = (): JSX.Element => {
       setProfileVariable({
         name: '',
         websiteURL: '',
-        logo: '',
         facebookURL: '',
         instagramURL: '',
         inactivityTimeoutDuration: 0,
@@ -197,6 +201,11 @@ const CommunityProfile = (): JSX.Element => {
         redditURL: '',
         slackURL: '',
       });
+      setLogoFile(null);
+      // Clear the file input DOM element
+      if (logoInputRef.current) {
+        logoInputRef.current.value = '';
+      }
 
       await resetPreLoginImagery({
         variables: { resetPreLoginImageryId: preLoginData?.id },
@@ -216,7 +225,7 @@ const CommunityProfile = (): JSX.Element => {
     if (
       profileVariable.name == '' &&
       profileVariable.websiteURL == '' &&
-      profileVariable.logo == ''
+      logoFile === null
     ) {
       return true;
     } else {
@@ -270,16 +279,12 @@ const CommunityProfile = (): JSX.Element => {
                 accept="image/*"
                 className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
-                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                ref={logoInputRef}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
-                  const base64file = file && (await convertToBase64(file));
-                  setProfileVariable((prev) => ({
-                    ...prev,
-                    logo: base64file ?? '',
-                  }));
+                  setLogoFile(file || null);
                 }}
                 autoComplete="off"
-                required
               />
             </FormFieldGroup>
             <FormFieldGroup label={t('social')} name="social">
