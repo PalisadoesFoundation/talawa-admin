@@ -27,7 +27,6 @@ import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/Breadcr
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button';
-import { spacing } from 'style/tokens/tokens';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -180,7 +179,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: spacing.columnMinWidth.xs,
+      minWidth: 60,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -236,7 +235,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'goalAmount',
       headerName: t('fundingGoal'),
       flex: 1,
-      minWidth: spacing.columnMinWidth.sm,
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -261,7 +260,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'fundingRaised',
       headerName: t('raised'),
       flex: 1,
-      minWidth: spacing.columnMinWidth.sm,
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -286,7 +285,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentageRaised'),
       flex: 1,
-      minWidth: spacing.columnMinWidth.md,
+      minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -340,7 +339,7 @@ const orgFundCampaign = (): JSX.Element => {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1.5,
-      minWidth: spacing.columnMinWidth.md,
+      minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
