@@ -250,12 +250,12 @@ describe('install/index', () => {
 
   describe('runIfDirectExecution', () => {
     it('should call main when argv[1] contains install/index.ts', () => {
-      const mainSpy = vi.fn().mockResolvedValue(undefined);
+      const mainMock = vi.fn().mockResolvedValue(undefined);
       const errorSpy = vi.fn();
       const fakePath = '/different/path/to/install/index.ts';
       const argv = ['node', fakePath];
-      runIfDirectExecution(argv, fakePath, mainSpy, errorSpy);
-      expect(mainSpy).toHaveBeenCalled();
+      runIfDirectExecution(argv, fakePath, mainMock, errorSpy);
+      expect(mainMock).toHaveBeenCalled();
     });
 
     it('should not call main when argv[1] does not match conditions', () => {
@@ -266,18 +266,18 @@ describe('install/index', () => {
     });
 
     it('should not call main when argv[1] is undefined', () => {
-      const mockMain = vi.fn().mockResolvedValue(undefined);
-      runIfDirectExecution(['node'], undefined, mockMain);
-      expect(mockMain).not.toHaveBeenCalled();
+      const mainMock = vi.fn().mockResolvedValue(undefined);
+      runIfDirectExecution(['node'], undefined, mainMock);
+      expect(mainMock).not.toHaveBeenCalled();
     });
 
     it('should handle main rejection with error handler', async () => {
       const testError = new Error('Main failed');
-      const mainSpy = vi.fn().mockRejectedValue(testError);
+      const mainMock = vi.fn().mockRejectedValue(testError);
       const errorSpy = vi.fn();
       const fakePath = '/some/path/install/index.ts';
       const argv = ['node', fakePath];
-      runIfDirectExecution(argv, fakePath, mainSpy, errorSpy);
+      runIfDirectExecution(argv, fakePath, mainMock, errorSpy);
       await vi.waitFor(() => {
         expect(errorSpy).toHaveBeenCalledWith(testError);
       });
