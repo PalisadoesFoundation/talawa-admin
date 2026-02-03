@@ -156,6 +156,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -187,6 +188,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -218,6 +220,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -249,6 +252,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -275,6 +279,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -283,6 +288,7 @@ export const mocks = [
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -300,6 +306,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -308,6 +315,7 @@ export const mocks = [
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },

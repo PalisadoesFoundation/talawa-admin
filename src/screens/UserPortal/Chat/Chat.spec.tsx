@@ -819,23 +819,25 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'chat-1',
               id: 'chat-1',
               name: 'Chat in Org 1',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1' },
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              organization: { id: 'org-1' },
               __typename: 'Chat',
             },
             {
-              _id: 'chat-2',
               id: 'chat-2',
               name: 'Chat in Org 2',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-2', _id: 'org-2' },
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              organization: { id: 'org-2' },
               __typename: 'Chat',
             },
           ],
@@ -987,13 +989,14 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'chat-1',
               id: 'chat-1',
               name: 'Chat in Org 1',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1' },
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              organization: { id: 'org-1' },
               __typename: 'Chat',
             },
           ],
@@ -1029,89 +1032,25 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'group-1',
               id: 'group-1',
               name: 'Group in Org 1',
               isGroup: true,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
-              members: {
-                edges: [
-                  {
-                    node: {
-                      _id: 'user1',
-                      firstName: 'A',
-                      lastName: 'B',
-                      email: 'a@b.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'user2',
-                      firstName: 'C',
-                      lastName: 'D',
-                      email: 'c@d.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'user3',
-                      firstName: 'E',
-                      lastName: 'F',
-                      email: 'e@f.com',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
+              avatarURL: '',
+              members: { edges: [{}, {}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-1' },
               __typename: 'Chat',
             },
             {
-              _id: 'group-2',
               id: 'group-2',
               name: 'Group in Org 2',
               isGroup: true,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
-              image: '',
-              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
-              members: {
-                edges: [
-                  {
-                    node: {
-                      _id: 'user4',
-                      firstName: 'G',
-                      lastName: 'H',
-                      email: 'g@h.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'user5',
-                      firstName: 'I',
-                      lastName: 'J',
-                      email: 'i@j.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'user6',
-                      firstName: 'K',
-                      lastName: 'L',
-                      email: 'k@l.com',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
+              avatarURL: '',
+              members: { edges: [{}, {}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-2' },
               __typename: 'Chat',
             },
           ],
@@ -1151,68 +1090,22 @@ describe('Chat Component - Comprehensive Coverage', () => {
               id: 'chat-new-1',
               name: 'New Type Chat Org 1',
               isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-1', name: 'Org 1' },
-              members: {
-                edges: [
-                  {
-                    node: {
-                      _id: 'u1',
-                      firstName: 'A',
-                      lastName: 'B',
-                      email: 'a@b.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'u2',
-                      firstName: 'C',
-                      lastName: 'D',
-                      email: 'c@d.com',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
+              avatarURL: '',
+              members: { edges: [{}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-1' },
               __typename: 'Chat',
             },
             {
               id: 'chat-new-2',
               name: 'New Type Chat Org 2',
               isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-2', name: 'Org 2' },
-              members: {
-                edges: [
-                  {
-                    node: {
-                      _id: 'u3',
-                      firstName: 'E',
-                      lastName: 'F',
-                      email: 'e@f.com',
-                    },
-                  },
-                  {
-                    node: {
-                      _id: 'u4',
-                      firstName: 'G',
-                      lastName: 'H',
-                      email: 'g@h.com',
-                    },
-                  },
-                ],
-                pageInfo: { hasNextPage: false, endCursor: null },
-              },
+              avatarURL: '',
+              members: { edges: [{}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-2' },
               __typename: 'Chat',
             },
           ],
@@ -1238,40 +1131,34 @@ describe('Chat Component - Comprehensive Coverage', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('should handle legacy GroupChat type in orgId filtering', async () => {
+  test('should handle NewChatType in orgId filtering', async () => {
     mockUseParams.mockReturnValue({ orgId: 'org-1' });
 
-    const mockLegacyWithOrgId = {
+    const mockWithOrgId = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-1',
-              id: 'legacy-1',
-              name: 'Legacy Chat Org 1',
+              id: 'chat-org-1',
+              name: 'Chat Org 1',
               isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
+              avatarURL: '',
+              members: { edges: [{}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-1' },
               __typename: 'Chat',
             },
             {
-              _id: 'legacy-2',
-              id: 'legacy-2',
-              name: 'Legacy Chat Org 2',
+              id: 'chat-org-2',
+              name: 'Chat Org 2',
               isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
+              avatarURL: '',
+              members: { edges: [{}, {}] },
               lastMessage: null,
               unreadMessagesCount: 0,
+              organization: { id: 'org-2' },
               __typename: 'Chat',
             },
           ],
@@ -1279,16 +1166,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    renderComponent([
-      mockLegacyWithOrgId,
-      mockLegacyWithOrgId,
-      mockUnreadChats,
-    ]);
+    renderComponent([mockWithOrgId, mockWithOrgId, mockUnreadChats]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
+      expect(screen.getByTestId('contact-card-chat-org-1')).toBeInTheDocument();
       expect(
-        screen.queryByTestId('contact-card-legacy-2'),
+        screen.queryByTestId('contact-card-chat-org-2'),
       ).not.toBeInTheDocument();
     });
   });
@@ -1365,19 +1248,20 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle legacy chat with no name', async () => {
-    const legacyChatNoNameMock = {
+  test('should handle chat with no name', async () => {
+    const chatNoNameMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'no-name-chat',
               id: 'no-name-chat',
               name: null,
               isGroup: false,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -1385,11 +1269,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    renderComponent([
-      legacyChatNoNameMock,
-      legacyChatNoNameMock,
-      mockUnreadChats,
-    ]);
+    renderComponent([chatNoNameMock, chatNoNameMock, mockUnreadChats]);
 
     await waitFor(() => {
       const card = screen.getByTestId('contact-card-no-name-chat');
@@ -1441,19 +1321,20 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should correctly identify isGroup for legacy chat with isGroup=true', async () => {
-    const legacyGroupTrueMock = {
+  test('should correctly identify isGroup for explicit group', async () => {
+    const explicitGroupMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-explicit-group',
-              id: 'legacy-explicit-group',
+              id: 'explicit-group',
               name: 'Explicit Group',
               isGroup: true,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -1462,13 +1343,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     renderComponent([
-      legacyGroupTrueMock,
-      legacyGroupTrueMock,
-      legacyGroupTrueMock,
+      explicitGroupMock,
+      explicitGroupMock,
+      explicitGroupMock,
       mockUnreadChats,
     ]);
 
-    await screen.findByTestId('contact-card-legacy-explicit-group');
+    await screen.findByTestId('contact-card-explicit-group');
 
     // Switch to group filter - should appear
     const groupButton = screen.getByTestId('groupChat');
@@ -1476,7 +1357,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('contact-card-legacy-explicit-group'),
+        screen.getByTestId('contact-card-explicit-group'),
       ).toBeInTheDocument();
     });
   });
@@ -1583,12 +1464,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'initial-chat',
               id: 'initial-chat',
               name: 'Initial Chat',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -1656,12 +1538,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'no-org-chat',
               id: 'no-org-chat',
               name: 'Chat No Org',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               organization: null,
               __typename: 'Chat',
             },
@@ -1688,12 +1571,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'no-org-chat',
               id: 'no-org-chat',
               name: 'Chat No Org',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               organization: null,
               __typename: 'Chat',
             },
@@ -1852,12 +1736,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'initial-chat',
               id: 'initial-chat',
               name: 'Initial Chat',
               isGroup: false,
-              users: [{}, {}],
-              image: '',
+              members: { edges: [{}, {}] },
+              avatarURL: '',
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],

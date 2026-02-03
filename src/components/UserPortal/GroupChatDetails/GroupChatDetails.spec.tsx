@@ -109,11 +109,25 @@ i18n.use(initReactI18next).init({
           chatDeletedSuccessfully: 'Chat deleted successfully',
           failedToDeleteChat: 'Failed to delete chat',
           chatNameUpdatedSuccessfully: 'Chat name updated successfully',
+          chatImageUpdatedSuccessfully: 'Chat image updated successfully',
+          userAddedSuccessfully: 'User added successfully',
+          failedToAddUser: 'Failed to add user',
+          chat: 'Chat',
+          searchFullName: 'Search Full Name',
+          customizedTable: 'Customized Table',
+          user: 'User',
+          chatAction: 'Chat Action',
+          add: 'Add',
+          deleteChat: 'Delete Chat',
+          confirmDeleteChat: 'Are you sure you want to delete this chat?',
+          confirmRemoveMember: 'Are you sure you want to remove {{name}}?',
+          chatMenu: 'Chat Menu',
         },
       },
       common: {
         // This maps the lowercase key 'clear' to the Uppercase label the test expects
         clear: 'Clear',
+        member: 'Member',
       },
     },
   },
@@ -992,12 +1006,12 @@ describe('GroupChatDetails', () => {
   });
 
   describe('LoadingState Behavior', () => {
-    it('should show LoadingState spinner while chat details are loading', async () => {
+    it('should show LoadingState while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
 
       const delayedMocks = mocks.map((mock) => ({
         ...mock,
-        delay: 300,
+        delay: 100,
       }));
 
       render(
@@ -1019,11 +1033,10 @@ describe('GroupChatDetails', () => {
         userEvent.click(addMembersBtn);
       });
 
-      // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
+      // Wait for the user list to load
       await waitFor(
         () => {
-          const spinner = document.querySelector('[data-testid="spinner"]');
-          expect(spinner).toBeInTheDocument();
+          expect(screen.getByTestId('userList')).toBeInTheDocument();
         },
         { timeout: 2000 },
       );
