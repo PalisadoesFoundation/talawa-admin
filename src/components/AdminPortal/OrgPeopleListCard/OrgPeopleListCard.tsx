@@ -40,6 +40,7 @@ import { useParams, Navigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPeopleListCard.module.css';
 import type { InterfaceOrgPeopleListCardProps } from 'types/AdminPortal/Organization/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function orgPeopleListCard(
   props: InterfaceOrgPeopleListCardProps,
@@ -59,6 +60,7 @@ function orgPeopleListCard(
     keyPrefix: 'orgPeopleListCard',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // Function to remove a member and handle success or error
   const removeMember = async (): Promise<void> => {
@@ -76,37 +78,44 @@ function orgPeopleListCard(
   };
 
   return (
-    <div>
-      {/* Modal to confirm member removal */}
-      <BaseModal
-        show={true}
-        onHide={props.toggleRemoveModal}
-        title={t('removeMember')}
-        headerTestId="removeMemberModal"
-        footer={
-          <>
-            <Button
-              type="button"
-              className={styles.addButton}
-              onClick={removeMember}
-              data-testid="removeMemberBtn"
-            >
-              {tCommon('yes')}
-            </Button>
-            <Button
-              type="button"
-              onClick={props.toggleRemoveModal}
-              className={styles.removeButton}
-              data-testid="closeRemoveId"
-            >
-              {tCommon('no')}
-            </Button>
-          </>
-        }
-      >
-        {t('removeMemberMsg')}
-      </BaseModal>
-    </div>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <div>
+        {/* Modal to confirm member removal */}
+        <BaseModal
+          show={true}
+          onHide={props.toggleRemoveModal}
+          title={t('removeMember')}
+          headerTestId="removeMemberModal"
+          footer={
+            <>
+              <Button
+                type="button"
+                className={styles.addButton}
+                onClick={removeMember}
+                data-testid="removeMemberBtn"
+              >
+                {tCommon('yes')}
+              </Button>
+              <Button
+                type="button"
+                onClick={props.toggleRemoveModal}
+                className={styles.removeButton}
+                data-testid="closeRemoveId"
+              >
+                {tCommon('no')}
+              </Button>
+            </>
+          }
+        >
+          {t('removeMemberMsg')}
+        </BaseModal>
+      </div>
+    </ErrorBoundaryWrapper>
   );
 }
 export {};

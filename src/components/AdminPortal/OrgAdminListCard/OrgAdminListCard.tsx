@@ -42,6 +42,7 @@ import { Navigate, useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgPeopleListCardProps } from 'types/AdminPortal/Organization/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function orgAdminListCard({
   id,
@@ -57,6 +58,7 @@ function orgAdminListCard({
     keyPrefix: 'orgAdminListCard',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   /**
    * Function to remove the admin from the organization
@@ -81,27 +83,34 @@ function orgAdminListCard({
     }
   };
   return (
-    <BaseModal
-      show={true}
-      onHide={toggleRemoveModal}
-      title={t('removeAdmin')}
-      footer={
-        <>
-          <Button variant="danger" onClick={toggleRemoveModal}>
-            {tCommon('no')}
-          </Button>
-          <Button
-            variant="success"
-            onClick={removeAdmin}
-            data-testid="removeAdminBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-        </>
-      }
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      {t('removeAdminMsg')}
-    </BaseModal>
+      <BaseModal
+        show={true}
+        onHide={toggleRemoveModal}
+        title={t('removeAdmin')}
+        footer={
+          <>
+            <Button variant="danger" onClick={toggleRemoveModal}>
+              {tCommon('no')}
+            </Button>
+            <Button
+              variant="success"
+              onClick={removeAdmin}
+              data-testid="removeAdminBtn"
+            >
+              {tCommon('yes')}
+            </Button>
+          </>
+        }
+      >
+        {t('removeAdminMsg')}
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 }
 export default orgAdminListCard;

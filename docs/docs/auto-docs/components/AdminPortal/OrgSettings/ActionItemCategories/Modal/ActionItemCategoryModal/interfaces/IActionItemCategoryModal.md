@@ -4,7 +4,7 @@
 
 # Interface: IActionItemCategoryModal
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L16)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L20)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **category**: [`IActionItemCategoryInfo`](../../../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemCategoryInfo.md)
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L21)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **hide**: () => `void`
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L18)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L22)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **isOpen**: `boolean`
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L17)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L21)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L22)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L26)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **orgId**: `string`
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L20)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L24)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/A
 
 > **refetchCategories**: () => `void`
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L19)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L23)
 
 #### Returns
 
