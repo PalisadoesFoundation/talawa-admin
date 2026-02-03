@@ -43,9 +43,9 @@
 
 .preview {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  column-gap: 16px;
-  margin-bottom: 12px;
+  grid-template-columns: 140px 1fr;
+  column-gap: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .preview p {
@@ -57,7 +57,7 @@
 .view {
   color: var(--color-gray-600);
   min-width: 0;
-  padding-left: 12px;
+  padding-left: var(--space-3);
 }
 
 .previewFile {
@@ -79,7 +79,7 @@
 .urlListItem {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   padding: 5px 0;
   list-style: none;
 

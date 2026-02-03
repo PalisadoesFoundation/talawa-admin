@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 
 import AgendaFolderUpdateModal from './AgendaFolderUpdateModal';
 import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -147,10 +147,6 @@ const renderAgendaFolderUpdateModal = (
 };
 
 describe('AgendaFolderUpdateModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
