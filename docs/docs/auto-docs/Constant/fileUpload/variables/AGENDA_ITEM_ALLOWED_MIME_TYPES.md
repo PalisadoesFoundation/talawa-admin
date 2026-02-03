@@ -6,4 +6,7 @@
 
 > `const` **AGENDA\_ITEM\_ALLOWED\_MIME\_TYPES**: `string`[]
 
-Defined in: [src/Constant/fileUpload.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/fileUpload.ts#L22)
+Defined in: [src/Constant/fileUpload.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/fileUpload.ts#L30)
+
+List of MIME types allowed for agenda item attachments.
+Used for file input validation.

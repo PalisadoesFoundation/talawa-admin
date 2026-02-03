@@ -16,7 +16,7 @@ along with edit, preview, and delete actions.
 
 ### agendaFolderConnection
 
-> **agendaFolderConnection**: `"Event"`
+> **agendaFolderConnection**: `"Organization"` \| `"Event"`
 
 Defined in: [src/types/AdminPortal/Agenda/interface.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L302)
 
