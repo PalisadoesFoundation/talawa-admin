@@ -53,7 +53,7 @@ import {
   employmentStatusEnum,
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
-import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
@@ -315,15 +315,22 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <label htmlFor="gender" className="form-label">
                     {t('gender')}
                   </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    setFormState={setFormState}
-                    fieldOptions={genderEnum}
-                    fieldName="natalSex"
-                    data-testid="inputNatalSex"
-                    handleChange={(e) =>
-                      handleFieldChange('natalSex', e.target.value)
+                  <DropDownButton
+                    options={genderEnum.map((o) => ({
+                      value: String(o.value),
+                      label: String(o.label),
+                    }))}
+                    selectedValue={
+                      formState.natalSex
+                        ? String(formState.natalSex)
+                        : undefined
                     }
+                    onSelect={(val: string) =>
+                      handleFieldChange('natalSex', val)
+                    }
+                    ariaLabel={t('gender')}
+                    dataTestIdPrefix="inputNatalSex"
+                    variant="outline-secondary"
                   />
                 </Col>
                 <Col md={6}>
@@ -356,45 +363,66 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <label htmlFor="grade" className="form-label">
                     {t('educationGrade')}
                   </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    data-testid="inputEducationGrade"
-                    setFormState={setFormState}
-                    fieldOptions={educationGradeEnum}
-                    fieldName="educationGrade"
-                    handleChange={(e) =>
-                      handleFieldChange('educationGrade', e.target.value)
+                  <DropDownButton
+                    options={educationGradeEnum.map((o) => ({
+                      value: String(o.value),
+                      label: String(o.label),
+                    }))}
+                    selectedValue={
+                      formState.educationGrade
+                        ? String(formState.educationGrade)
+                        : undefined
                     }
+                    onSelect={(val: string) =>
+                      handleFieldChange('educationGrade', val)
+                    }
+                    ariaLabel={t('educationGrade')}
+                    dataTestIdPrefix="inputEducationGrade"
+                    variant="outline-secondary"
                   />
                 </Col>
                 <Col md={6}>
                   <label htmlFor="empStatus" className="form-label">
                     {t('employmentStatus')}
                   </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    data-testid="employmentstatus-dropdown-btn"
-                    setFormState={setFormState}
-                    fieldOptions={employmentStatusEnum}
-                    fieldName="employmentStatus"
-                    handleChange={(e) =>
-                      handleFieldChange('employmentStatus', e.target.value)
+                  <DropDownButton
+                    options={employmentStatusEnum.map((o) => ({
+                      value: String(o.value),
+                      label: String(o.label),
+                    }))}
+                    selectedValue={
+                      formState.employmentStatus
+                        ? String(formState.employmentStatus)
+                        : undefined
                     }
+                    onSelect={(val: string) =>
+                      handleFieldChange('employmentStatus', val)
+                    }
+                    ariaLabel={t('employmentStatus')}
+                    dataTestIdPrefix="employmentstatus-dropdown-btn"
+                    variant="outline-secondary"
                   />
                 </Col>
                 <Col md={6}>
                   <label htmlFor="maritalStatus" className="form-label">
                     {t('maritalStatus')}
                   </label>
-                  <DynamicDropDown
-                    formState={formState}
-                    data-testid="marital-status-btn"
-                    setFormState={setFormState}
-                    fieldOptions={maritalStatusEnum}
-                    fieldName="maritalStatus"
-                    handleChange={(e) =>
-                      handleFieldChange('maritalStatus', e.target.value)
+                  <DropDownButton
+                    options={maritalStatusEnum.map((o) => ({
+                      value: String(o.value),
+                      label: String(o.label),
+                    }))}
+                    selectedValue={
+                      formState.maritalStatus
+                        ? String(formState.maritalStatus)
+                        : undefined
                     }
+                    onSelect={(val: string) =>
+                      handleFieldChange('maritalStatus', val)
+                    }
+                    ariaLabel={t('maritalStatus')}
+                    dataTestIdPrefix="marital-status-btn"
+                    variant="outline-secondary"
                   />
                 </Col>
                 <Col md={12}>

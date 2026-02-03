@@ -1225,47 +1225,49 @@ describe('MemberDetail', () => {
     await user.type(descriptionInput, 'Newdescription');
     expect(descriptionInput.value).toBe('Newdescription');
 
-    const NatalDropdownBtn = await screen.findByTestId('natalsex-dropdown-btn');
-    await user.click(NatalDropdownBtn);
-    const femaleOption = await screen.findByText('Female');
+    const natalDropdownBtn = await screen.findByTestId('inputNatalSex-toggle');
+    await user.click(natalDropdownBtn);
+
+    const femaleOption = await screen.findByTestId('inputNatalSex-item-female');
     await user.click(femaleOption);
-    expect(NatalDropdownBtn).toHaveTextContent('Female');
+
+    expect(natalDropdownBtn).toHaveTextContent('Female');
 
     //  education grade dropdown
     const educationDropdownBtn = await screen.findByTestId(
-      'educationgrade-dropdown-btn',
+      'inputEducationGrade-toggle',
     );
     await user.click(educationDropdownBtn);
+
     const grade8Option = await screen.findByTestId(
-      'change-educationgrade-btn-grade_8',
+      'inputEducationGrade-item-grade_8',
     );
     await user.click(grade8Option);
+
     expect(educationDropdownBtn).toHaveTextContent('Grade-8');
 
     // Find the dropdown button
     const employmentDropdown = await screen.findByTestId(
-      'employmentstatus-dropdown-btn',
+      'employmentstatus-dropdown-btn-toggle',
     );
     await user.click(employmentDropdown);
+
     const fullTimeOption = await screen.findByTestId(
-      'change-employmentstatus-btn-full_time',
+      'employmentstatus-dropdown-btn-item-full_time',
     );
     await user.click(fullTimeOption);
     expect(employmentDropdown).toHaveTextContent('Full-Time');
 
     // Marital Dropdown
     const maritalDropdown = await screen.findByTestId(
-      'maritalstatus-dropdown-btn',
+      'marital-status-btn-toggle',
     );
     await user.click(maritalDropdown);
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('maritalstatus-dropdown-menu'),
-      ).toBeInTheDocument();
-    });
+
     const engagedOption = await screen.findByTestId(
-      'change-maritalstatus-btn-engaged',
+      'marital-status-btn-item-engaged',
     );
+
     await user.click(engagedOption);
     expect(maritalDropdown).toHaveTextContent(/engaged/i);
 
