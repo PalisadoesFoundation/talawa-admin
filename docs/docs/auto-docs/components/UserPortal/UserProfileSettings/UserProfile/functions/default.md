@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/UserProfileSettings/UserProfile.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfileSettings/UserProfile.tsx#L61)
+Defined in: [src/components/UserPortal/UserProfileSettings/UserProfile.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserProfileSettings/UserProfile.tsx#L65)
 
 ## Parameters
 
