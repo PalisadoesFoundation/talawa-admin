@@ -6,7 +6,7 @@
 
 > `const` **spacing**: `object`
 
-Defined in: [src/style/tokens/tokens.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/style/tokens/tokens.ts#L2)
+Defined in: [src/style/tokens/tokens.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/style/tokens/tokens.ts#L1)
 
 ## Type Declaration
 

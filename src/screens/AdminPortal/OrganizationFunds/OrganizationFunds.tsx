@@ -30,6 +30,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
 import Button from 'shared-components/Button';
+import { spacing } from 'style/tokens/tokens';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -225,7 +226,7 @@ const organizationFunds = (): JSX.Element => {
       field: 'sl_no',
       headerName: tCommon('hash'),
       flex: 1,
-      minWidth: 60,
+      minWidth: spacing.columnMinWidth.xs,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -241,7 +242,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.fundName'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: spacing.columnMinWidth.sm,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -253,7 +254,7 @@ const organizationFunds = (): JSX.Element => {
       field: 'createdAt',
       headerName: tCommon('createdOn'),
       align: 'center',
-      minWidth: 100,
+      minWidth: spacing.columnMinWidth.sm,
       headerAlign: 'center',
       sortable: true,
       sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
@@ -272,7 +273,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.status'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: spacing.columnMinWidth.sm,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -285,7 +286,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: t('funds.assocCampaigns'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: spacing.columnMinWidth.sm,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -309,7 +310,7 @@ const organizationFunds = (): JSX.Element => {
       headerName: tCommon('action'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: spacing.columnMinWidth.sm,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
