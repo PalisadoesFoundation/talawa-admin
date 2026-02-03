@@ -287,7 +287,8 @@ check_docker_compose() {
         if [[ -n "$version_output" ]]; then
             # Parse version from "docker-compose version 1.29.2, build 5becea4c"
             # or "Docker Compose version v2.x.x" (some installations)
-            version="$(printf '%s' "$version_output" | awk '{print $3}' | tr -d ',v')"
+            # Extract first semantic version pattern: v?[0-9]+(\.[0-9]+)+
+            version="$(printf '%s' "$version_output" | grep -oE 'v?[0-9]+(\.[0-9]+)+' | head -n1 | sed 's/^v//')"
             if [[ -n "$version" ]]; then
                 # Determine if it's actually v1 or v2 masquerading as docker-compose
                 if [[ "$version" =~ ^1\. ]]; then

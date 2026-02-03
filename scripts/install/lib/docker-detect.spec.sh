@@ -91,7 +91,12 @@ run_test() {
     
     setup_test_env
     
-    if $test_func; then
+    set +e
+    $test_func
+    local test_result=$?
+    set -e
+    
+    if [[ $test_result -eq 0 ]]; then
         TESTS_PASSED=$((TESTS_PASSED + 1))
         echo "  ✓ PASSED"
     else
@@ -438,6 +443,148 @@ test_daemon_not_running_guidance_output() {
 }
 
 # ==============================================================================
+# OS-SPECIFIC GUIDANCE TESTS
+# ==============================================================================
+
+test_macos_docker_guidance() {
+    source_docker_detect
+    
+    local result
+    result=$(_get_macos_docker_guidance)
+    
+    assert_contains "Docker Desktop for macOS" "$result" "macOS guidance should mention Docker Desktop" && \
+    assert_contains "Applications" "$result" "macOS guidance should mention Applications folder" && \
+    assert_contains "Homebrew" "$result" "macOS guidance should mention Homebrew alternative" && \
+    assert_contains "brew install" "$result" "macOS guidance should include brew install command"
+}
+
+test_wsl_docker_guidance() {
+    source_docker_detect
+    
+    local result
+    result=$(_get_wsl_docker_guidance)
+    
+    assert_contains "WSL" "$result" "WSL guidance should mention WSL" && \
+    assert_contains "Docker Desktop for Windows" "$result" "WSL guidance should mention Docker Desktop" && \
+    assert_contains "WSL Integration" "$result" "WSL guidance should mention WSL Integration" && \
+    assert_contains "usermod -aG docker" "$result" "WSL guidance should mention docker group"
+}
+
+test_linux_docker_guidance_ubuntu() {
+    source_docker_detect
+    
+    local result
+    result=$(_get_linux_docker_guidance)
+    
+    assert_contains "Docker Engine for Linux" "$result" "Linux guidance should show header" && \
+    assert_contains "systemctl" "$result" "Linux guidance should mention systemctl" && \
+    assert_contains "usermod -aG docker" "$result" "Linux guidance should mention docker group"
+}
+
+test_linux_docker_guidance_fedora() {
+    source_docker_detect
+    
+    local result
+    result=$(_get_linux_docker_guidance)
+    
+    assert_contains "Docker Engine for Linux" "$result" "Linux guidance should show header" && \
+    assert_contains "usermod -aG docker" "$result" "Linux guidance should mention docker group"
+}
+
+test_linux_docker_guidance_default() {
+    source_docker_detect
+    
+    local result
+    result=$(_get_linux_docker_guidance)
+    
+    assert_contains "Docker" "$result" "Linux guidance should mention Docker" && \
+    assert_contains "https://docs.docker.com" "$result" "Linux guidance should include docs URL"
+}
+
+test_get_docker_install_guidance_macos() {
+    source_docker_detect
+    
+    local result
+    result=$(uname() { echo "Darwin"; }; get_docker_install_guidance)
+    
+    assert_contains "Docker Desktop for macOS" "$result" "Install guidance should detect macOS"
+}
+
+test_get_docker_install_guidance_wsl() {
+    source_docker_detect
+    
+    local result
+    result=$(
+        uname() { echo "Linux"; }
+        export WSL_DISTRO_NAME="Ubuntu"
+        get_docker_install_guidance
+    )
+    
+    assert_contains "WSL" "$result" "Install guidance should detect WSL via WSL_DISTRO_NAME"
+}
+
+test_get_docker_install_guidance_wsl_proc_version() {
+    source_docker_detect
+    
+    local temp_proc_version
+    temp_proc_version=$(mktemp)
+    echo "Linux version 5.10.0-microsoft-standard-WSL2" > "$temp_proc_version"
+    
+    local result
+    result=$(
+        uname() { echo "Linux"; }
+        unset WSL_DISTRO_NAME
+        get_docker_install_guidance < "$temp_proc_version" 2>/dev/null || get_docker_install_guidance
+    )
+    
+    rm -f "$temp_proc_version"
+    
+    assert_contains "Docker" "$result" "Install guidance should provide guidance for Linux"
+}
+
+test_get_docker_install_guidance_unknown_os() {
+    source_docker_detect
+    
+    local result
+    result=$(uname() { echo "FreeBSD"; }; get_docker_install_guidance)
+    
+    assert_contains "https://docs.docker.com/get-docker/" "$result" "Install guidance should provide generic URL for unknown OS"
+}
+
+test_print_docker_status_report_all_working() {
+    source_docker_detect
+    
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_info_output="Server Version: 24.0.7"
+    export _mock_docker_info_exit_code=0
+    export _mock_docker_compose_output="Docker Compose version v2.21.0"
+    
+    source_docker_detect
+    
+    local result
+    result=$(print_docker_status_report)
+    
+    assert_contains "Docker CLI" "$result" "Status report should mention Docker CLI" && \
+    assert_contains "Installed" "$result" "Status report should show Installed status" && \
+    assert_contains "24.0.7" "$result" "Status report should show CLI version" && \
+    assert_contains "Running" "$result" "Status report should show daemon running"
+}
+
+test_print_docker_status_report_nothing_installed() {
+    source_docker_detect
+    
+    export _mock_has_docker="false"
+    
+    source_docker_detect
+    
+    local result
+    result=$(print_docker_status_report)
+    
+    assert_contains "Not installed" "$result" "Status report should show Not installed for CLI"
+}
+
+# ==============================================================================
 # IDEMPOTENCY TESTS
 # ==============================================================================
 
@@ -502,6 +649,19 @@ main() {
     # Guidance Function Tests
     run_test "Permission Guidance Output" test_permission_guidance_output
     run_test "Daemon Not Running Guidance" test_daemon_not_running_guidance_output
+    
+    # OS-Specific Guidance Tests
+    run_test "macOS Docker Guidance" test_macos_docker_guidance
+    run_test "WSL Docker Guidance" test_wsl_docker_guidance
+    run_test "Linux Docker Guidance - Ubuntu" test_linux_docker_guidance_ubuntu
+    run_test "Linux Docker Guidance - Fedora" test_linux_docker_guidance_fedora
+    run_test "Linux Docker Guidance - Default" test_linux_docker_guidance_default
+    run_test "Get Install Guidance - macOS" test_get_docker_install_guidance_macos
+    run_test "Get Install Guidance - WSL (env)" test_get_docker_install_guidance_wsl
+    run_test "Get Install Guidance - WSL (proc)" test_get_docker_install_guidance_wsl_proc_version
+    run_test "Get Install Guidance - Unknown OS" test_get_docker_install_guidance_unknown_os
+    run_test "Print Status Report - All Working" test_print_docker_status_report_all_working
+    run_test "Print Status Report - Nothing Installed" test_print_docker_status_report_nothing_installed
     
     # Idempotency Tests
     run_test "Multiple Source Guard" test_multiple_source_guard
