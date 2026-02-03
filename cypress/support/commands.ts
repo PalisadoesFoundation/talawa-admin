@@ -31,6 +31,10 @@ declare global {
        * @param expectedMessage - The expected text (string or RegExp)
        */
       assertToast(expectedMessage: string | RegExp): Chainable<void>;
+      /**
+       * Reset GraphQL intercepts back to pass-through behavior.
+       */
+      clearAllGraphQLMocks(): Chainable<Subject>;
     }
   }
 }
@@ -39,10 +43,12 @@ Cypress.Commands.add('loginByApi', (role: string) => {
   const sessionName = `login-${role}`;
 
   return cy.session(sessionName, () => {
-    cy.fixture('users').then((users) => {
-      const user = users[role];
+    cy.fixture('auth/credentials').then((credentials) => {
+      const user = credentials[role];
       if (!user) {
-        throw new Error(`User role "${role}" not found in users fixture`);
+        throw new Error(
+          `User role "${role}" not found in auth/credentials fixture`,
+        );
       }
 
       // Intercept signIn query to capture response using operation name for robust matching
@@ -98,4 +104,15 @@ Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
   cy.get('.Toastify__toast', { timeout: 5000 })
     .should('be.visible')
     .and('contain.text', expectedMessage);
+});
+
+Cypress.Commands.add('clearAllGraphQLMocks', () => {
+  const apiPattern =
+    (Cypress.env('apiUrl') as string | undefined) ||
+    (Cypress.env('API_URL') as string | undefined) ||
+    (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
+    '**/graphql';
+  cy.intercept('POST', apiPattern, (req) => {
+    req.continue();
+  });
 });

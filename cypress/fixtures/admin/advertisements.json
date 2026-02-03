@@ -2,16 +2,16 @@
   "advertisements": [
     {
       "id": "ad_001",
-      "name": "Community Banner",
-      "type": "BANNER",
+      "name": "Advertisement 1",
+      "type": "Popup Ad",
       "status": "ACTIVE",
       "startDate": "2026-01-01T00:00:00.000Z",
       "endDate": "2026-02-01T00:00:00.000Z"
     },
     {
       "id": "ad_002",
-      "name": "Edge Ad — مرحبا 世界",
-      "type": "VIDEO",
+      "name": "Advertisement 2",
+      "type": "Popup Ad",
       "status": "INACTIVE",
       "startDate": "2026-02-01T00:00:00.000Z",
       "endDate": "2026-03-01T00:00:00.000Z"

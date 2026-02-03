@@ -38,6 +38,18 @@ cy.mockGraphQLOperation(
 );
 ```
 
+### Auth fixtures
+
+`auth/users.json` contains user metadata (id, name, emailAddress, role). Use
+`auth/credentials.json` for login/passwords:
+
+```ts
+cy.fixture('auth/credentials').then((users) => {
+  const admin = users.admin;
+  // admin.email + admin.password
+});
+```
+
 ### Using JSON fixtures directly
 
 ```ts
