@@ -1,0 +1,11 @@
+{
+  "data": {
+    "organizations": [
+      {
+        "id": "org-1",
+        "name": "Example Org",
+        "addressLine1": "Example Address"
+      }
+    ]
+  }
+}
