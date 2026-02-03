@@ -1528,6 +1528,20 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
+  test('should navigate to starred messages on dropdown selection', async () => {
+    renderComponent();
+    await screen.findByTestId('contact-card-chat-1');
+
+    const dropdown = screen.getByTestId('dropdown-toggle');
+    await user.click(dropdown);
+
+    const starredMessages = await screen.findByText('Starred Messages');
+    await user.click(starredMessages);
+
+    // Verify verifying window.location.hash
+    expect(window.location.hash).toBe('#/action-3');
+  });
+
   // ==================== COVERAGE FOR MISSING LINES ====================
 
   test('should call chatsListRefetch when switching to all filter from another filter', async () => {

@@ -1060,4 +1060,97 @@ describe('GroupChatDetails', () => {
       expect(visibleSpinners.length).toBe(0);
     });
   });
+
+  it('shows error toast when adding user fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(NotificationToast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={failingMocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Open Add User modal
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('addMembers'));
+    });
+
+    // Search for a user
+    await waitFor(async () => {
+      expect(await screen.findByTestId('searchUser')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const searchUserInput = await screen.findByTestId('searchUser');
+      await userEvent.type(searchUserInput, 'Disha');
+      userEvent.click(await screen.findByTestId('searchBtn'));
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('user')).toBeInTheDocument();
+    });
+
+    // Click Add
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('addUserBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to add user');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
+
+  it('handles chat with null or undefined members safely', () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    // Create a raw chat object without members to bypass withSafeChat normalization if we were using it directly,
+    // but here we want to test the COMPONENT handling it.
+    // We need to bypass withSafeChat or pass an object that results in members being undefined.
+    // However, withSafeChat defaults members to { edges: [] }.
+    // We should create a custom chat object that explicitly has members as null/undefined
+    // AND pass it to the component. But the component props type expects NewChatType,
+    // which might say members is optional.
+    // Let's force it for the test.
+
+    const brokenChat = {
+      ...filledMockChat,
+      members: undefined,
+    } as unknown as NewChatType;
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={brokenChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Should render without crashing
+    expect(screen.getByText('Group Info')).toBeInTheDocument();
+
+    // Member count should fallback to 0
+    // "0 members" appears twice (once in main info, once in list header)
+    const membersTexts = screen.getAllByText('0 members');
+    expect(membersTexts.length).toBeGreaterThanOrEqual(1);
+  });
 });
