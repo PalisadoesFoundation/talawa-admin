@@ -1225,16 +1225,17 @@ describe('MemberDetail', () => {
     await user.type(descriptionInput, 'Newdescription');
     expect(descriptionInput.value).toBe('Newdescription');
 
-    const natalDropdownBtn = await screen.findByTestId('inputNatalSex-toggle');
+    const natalDropdownBtn = screen.getByTestId('inputNatalSex-toggle');
     await user.click(natalDropdownBtn);
 
     const femaleOption = await screen.findByTestId('inputNatalSex-item-female');
     await user.click(femaleOption);
 
     //  education grade dropdown
-    const educationDropdownBtn = await screen.findByTestId(
+    const educationDropdownBtn = screen.getByTestId(
       'inputEducationGrade-toggle',
     );
+
     await user.click(educationDropdownBtn);
 
     const grade8Option = await screen.findByTestId(
@@ -1243,7 +1244,7 @@ describe('MemberDetail', () => {
     await user.click(grade8Option);
 
     // Find the dropdown button
-    const employmentDropdown = await screen.findByTestId(
+    const employmentDropdown = screen.getByTestId(
       'employmentstatus-dropdown-btn-toggle',
     );
     await user.click(employmentDropdown);
@@ -1254,9 +1255,8 @@ describe('MemberDetail', () => {
     await user.click(fullTimeOption);
 
     // Marital Dropdown
-    const maritalDropdown = await screen.findByTestId(
-      'marital-status-btn-toggle',
-    );
+    const maritalDropdown = screen.getByTestId('marital-status-btn-toggle');
+
     await user.click(maritalDropdown);
 
     const engagedOption = await screen.findByTestId(

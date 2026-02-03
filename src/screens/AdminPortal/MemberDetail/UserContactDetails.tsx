@@ -365,45 +365,49 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <label htmlFor="grade" className="form-label">
                     {t('educationGrade')}
                   </label>
-                  <DropDownButton
-                    options={educationGradeEnum.map((o) => ({
-                      value: String(o.value),
-                      label: String(o.label),
-                    }))}
-                    selectedValue={
-                      formState.educationGrade
-                        ? String(formState.educationGrade)
-                        : undefined
-                    }
-                    onSelect={(val: string) =>
-                      handleFieldChange('educationGrade', val)
-                    }
-                    ariaLabel={t('educationGrade')}
-                    dataTestIdPrefix="inputEducationGrade"
-                    variant="outline-secondary"
-                  />
+                  <div className={styles.dropdownField}>
+                    <DropDownButton
+                      options={educationGradeEnum.map((o) => ({
+                        value: String(o.value),
+                        label: String(o.label),
+                      }))}
+                      selectedValue={
+                        formState.educationGrade
+                          ? String(formState.educationGrade)
+                          : undefined
+                      }
+                      onSelect={(val: string) =>
+                        handleFieldChange('educationGrade', val)
+                      }
+                      ariaLabel={t('educationGrade')}
+                      dataTestIdPrefix="inputEducationGrade"
+                      variant="outline-secondary"
+                    />
+                  </div>
                 </Col>
                 <Col md={6}>
                   <label htmlFor="empStatus" className="form-label">
                     {t('employmentStatus')}
                   </label>
-                  <DropDownButton
-                    options={employmentStatusEnum.map((o) => ({
-                      value: String(o.value),
-                      label: String(o.label),
-                    }))}
-                    selectedValue={
-                      formState.employmentStatus
-                        ? String(formState.employmentStatus)
-                        : undefined
-                    }
-                    onSelect={(val: string) =>
-                      handleFieldChange('employmentStatus', val)
-                    }
-                    ariaLabel={t('employmentStatus')}
-                    dataTestIdPrefix="employmentstatus-dropdown-btn"
-                    variant="outline-secondary"
-                  />
+                  <div className={styles.dropdownField}>
+                    <DropDownButton
+                      options={employmentStatusEnum.map((o) => ({
+                        value: String(o.value),
+                        label: String(o.label),
+                      }))}
+                      selectedValue={
+                        formState.employmentStatus
+                          ? String(formState.employmentStatus)
+                          : undefined
+                      }
+                      onSelect={(val: string) =>
+                        handleFieldChange('employmentStatus', val)
+                      }
+                      ariaLabel={t('employmentStatus')}
+                      dataTestIdPrefix="employmentstatus-dropdown-btn"
+                      variant="outline-secondary"
+                    />
+                  </div>
                 </Col>
                 <Col md={6}>
                   <label htmlFor="maritalStatus" className="form-label">
