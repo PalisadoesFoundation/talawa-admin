@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceEventsAttendedMemberModalProps`](../../../../../types/Event/interface/type-aliases/InterfaceEventsAttendedMemberModalProps.md)\>
 
-Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L35)
+Defined in: [src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/EventsAttendedMemberModal.tsx#L36)
 
 EventsAttendedMemberModal component displays a paginated list of events attended by a member.
 

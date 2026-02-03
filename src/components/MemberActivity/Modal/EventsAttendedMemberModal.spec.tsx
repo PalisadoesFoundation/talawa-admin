@@ -14,27 +14,31 @@ dayjs.extend(utc);
  * Mock the `react-i18next` module to provide translation functionality.
  */
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string, params?: Record<string, unknown>) => {
-      const translations: Record<string, string> = {
-        noEventsAttended: 'No events attended',
-        title: 'Events Attended List',
-        showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
-        eventName: 'Event Name',
-        dateOfEvent: 'Date of Event',
-        recurringEvent: 'Recurring Event',
-        attendees: 'Attendees',
-        tableAriaLabel: 'Events attended table',
-        paginationAriaLabel: 'Events pagination navigation',
-        paginationGoToPage: `Go to page ${params?.page}`,
-        paginationGoToType: `Go to ${params?.type} page`,
-      };
-      return translations[key] || key;
-    },
-    i18n: { changeLanguage: () => Promise.resolve() },
-  }),
-}));
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string, params?: Record<string, unknown>) => {
+        const translations: Record<string, string> = {
+          noEventsAttended: 'No events attended',
+          title: 'Events Attended List',
+          showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
+          eventName: 'Event Name',
+          dateOfEvent: 'Date of Event',
+          recurringEvent: 'Recurring Event',
+          attendees: 'Attendees',
+          tableAriaLabel: 'Events attended table',
+          paginationAriaLabel: 'Events pagination navigation',
+          paginationGoToPage: `Go to page ${params?.page}`,
+          paginationGoToType: `Go to ${params?.type} page`,
+        };
+        return translations[key] || key;
+      },
+      i18n: { changeLanguage: () => Promise.resolve() },
+    }),
+  };
+});
 
 /**
  * Mock the `CustomTableCell` component for testing.
