@@ -50,8 +50,9 @@
   border-color: var(--color-gray-300);
   outline: none;
   box-shadow: none;
-  padding: var(--space-1);
-  margin-inline: var(--space-1);
+  background: var(--color-gray-100);
+  display: flex;
+  align-items: center;
 }
 
 .dropdownField button span {
