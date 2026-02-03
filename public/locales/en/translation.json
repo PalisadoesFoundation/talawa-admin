@@ -1884,7 +1884,8 @@
     "userAddedSuccessfully": "User Added Successfully",
     "next": "Next",
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
-    "thisUser": "this user"
+    "thisUser": "this user",
+    "deleteChatConfirmation": "Are you sure you want to delete this chat?"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",

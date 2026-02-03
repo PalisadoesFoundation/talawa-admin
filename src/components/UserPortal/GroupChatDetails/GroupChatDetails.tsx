@@ -275,9 +275,7 @@ export default function GroupChatDetails({
                 size="sm"
                 aria-label={t('deleteChat')}
                 onClick={async () => {
-                  if (
-                    window.confirm('Are you sure you want to delete this chat?')
-                  ) {
+                  if (window.confirm(t('deleteChatConfirmation'))) {
                     try {
                       await deleteChat({
                         variables: { input: { id: chat.id } },

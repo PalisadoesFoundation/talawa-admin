@@ -133,7 +133,8 @@ export const handleCreateDirectChat = async (
   const existingChat = chats.find(
     (chat) =>
       chat.members?.edges?.length === 2 &&
-      chat.members?.edges?.some((edge) => edge.node.user.id === id),
+      chat.members?.edges?.some((edge) => edge.node.user.id === id) &&
+      chat.members?.edges?.some((edge) => edge.node.user.id === userId),
   );
   if (existingChat) {
     const existingUser = existingChat.members?.edges?.find(
