@@ -1317,6 +1317,7 @@
     }
   },
   "memberDetail": {
+    "user": "Utilisateur",
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "noeventsAttended": "Aucun événement assisté",

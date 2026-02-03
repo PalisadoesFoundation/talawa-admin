@@ -1361,6 +1361,7 @@
     }
   },
   "memberDetail": {
+    "user": "User",
     "title": "User Details",
     "to": "TO",
     "addAdmin": "Add Admin",
