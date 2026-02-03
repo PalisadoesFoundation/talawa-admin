@@ -88,7 +88,7 @@ beforeEach(() => {
 
 afterEach(() => {
   clearAllItems();
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Testing Users screen', () => {
@@ -880,8 +880,9 @@ describe('Testing Users screen', () => {
         writable: true,
       });
       window.dispatchEvent(new Event('scroll'));
-      await wait();
-      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+      await waitFor(() =>
+        expect(screen.getByText(/End of results/i)).toBeInTheDocument(),
+      );
     });
 
     it('should handle search with same value without refetch', async () => {
@@ -1414,13 +1415,17 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     Object.defineProperty(window, 'scrollY', { value: 5000, writable: true });
     window.dispatchEvent(new Event('scroll'));
-    await wait(200);
+    await waitFor(() => {
+      // Wait for any potential UI updates from first scroll
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
 
     Object.defineProperty(window, 'scrollY', { value: 9000, writable: true });
     window.dispatchEvent(new Event('scroll'));
-    await wait(200);
-
-    expect(true).toBe(true);
+    await waitFor(() => {
+      // Wait for any potential UI updates from second scroll
+      expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    });
   });
 
   it('should filter only admin users (by row count change)', async () => {
@@ -1963,10 +1968,11 @@ describe('useEffect loadMoreUsers trigger', () => {
     // Trigger scroll - InfiniteScroll should not fetch more since hasNextPage is false
     Object.defineProperty(window, 'scrollY', { value: 6000, writable: true });
     window.dispatchEvent(new Event('scroll'));
-    await wait(200);
 
     // The component should show "End of results" since there are no more pages
-    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText(/End of results/i)).toBeInTheDocument(),
+    );
   });
 
   it('should sort users by oldest and verify the sorted order', async () => {
