@@ -493,7 +493,7 @@ test('Screen should be rendered properly', async () => {
   expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
   expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-  expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should search organizations when pressing Enter key', async () => {
@@ -585,7 +585,7 @@ test('Mode dropdown switches list correctly', async () => {
 
   // Wait for mode change and check if component is still working
   await wait(200);
-  expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 
   // Switch to Mode 2 (Created Organizations)
   await user.click(modeButton);
@@ -593,7 +593,7 @@ test('Mode dropdown switches list correctly', async () => {
 
   // Wait for mode change and check if component is still working
   await wait(200);
-  expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should display empty state when no organizations exist', async () => {
@@ -686,7 +686,7 @@ test('should switch between organization mode', async () => {
     expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
   });
 
-  const modeButton = screen.getByTestId('modeChangeBtn');
+  const modeButton = screen.getByTestId('modeChangeBtn-container');
   expect(modeButton).toBeInTheDocument();
 });
 
@@ -859,7 +859,7 @@ test('should handle mode switching to joined organizations', async () => {
   );
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
 
   // Switch to joined organizations mode (mode 1)
@@ -870,7 +870,7 @@ test('should handle mode switching to joined organizations', async () => {
   await wait(200);
 
   // Verify we're in mode 1 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should handle mode switching to created organizations', async () => {
@@ -887,7 +887,7 @@ test('should handle mode switching to created organizations', async () => {
   );
 
   await waitFor(() => {
-    expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
   });
 
   // Switch to created organizations mode (mode 2)
@@ -898,7 +898,7 @@ test('should handle mode switching to created organizations', async () => {
   await wait(200);
 
   // Verify we're in mode 2 by checking if the mode button still exists
-  expect(screen.getByTestId('modeChangeBtn')).toBeInTheDocument();
+  expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
 });
 
 test('should handle null user data in joined organizations', async () => {
