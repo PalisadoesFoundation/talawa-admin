@@ -1780,7 +1780,11 @@
     "creator": "Creadora",
     "alreadyRegistered": "Ya registrado",
     "register": "Registro",
-    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}"
+    "registeredSuccessfully": "Registrado exitosamente para {{eventName}}",
+    "eventCardAriaLabel": "Tarjeta de evento para {{name}}",
+    "alreadyRegisteredAriaLabel": "El evento ya está registrado",
+    "unknownCreator": "Creador Desconocido",
+    "inviteOnlyEventAriaLabel": "Evento solo con invitación"
   },
   "advertisement": {
     "title": "Anuncios",
@@ -1900,7 +1904,8 @@
       "message": "Ocurrió un error inesperado en la sala de chat",
       "resetButton": "Intentar de nuevo",
       "resetButtonAriaLabel": "Intentar de nuevo"
-    }
+    },
+    "messageActions": "Acción del mensaje"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -2390,7 +2395,9 @@
     "editComment": "Editar comentario",
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
-    "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviar.",
+    "commentBy": "Comentario de {{name}}",
+    "moreOptionsAriaLabel": "Más opciones para el comentario"
   },
   "profileAvatar": {
     "altText": "Foto de perfil de {{name}}",

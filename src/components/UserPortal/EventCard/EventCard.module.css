@@ -19,8 +19,12 @@
   margin-right: 20px;
 }
 
-.eventActions {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
+.calendarIcon {
+  font-size: 2.1875rem;
+  /* MUI 'large' size equivalent */
+}
+
+.loadingIcon {
+  font-size: 1.25rem;
+  /* MUI 'small' size equivalent */
 }

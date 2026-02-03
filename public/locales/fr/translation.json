@@ -1797,7 +1797,11 @@
     "alreadyRegistered": "Déjà enregistré",
     "location": "Lieu",
     "register": "S'inscrire",
-    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}"
+    "registeredSuccessfully": "Inscrit avec succès à {{eventName}}",
+    "eventCardAriaLabel": "Carte d'événement pour {{name}}",
+    "alreadyRegisteredAriaLabel": "L'événement est déjà enregistré",
+    "unknownCreator": "Créateur Inconnu",
+    "inviteOnlyEventAriaLabel": "Événement sur invitation uniquement"
   },
   "advertisement": {
     "title": "Annonces",
@@ -1917,7 +1921,8 @@
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
       "resetButton": "Réessayer",
       "resetButtonAriaLabel": "Réessayer"
-    }
+    },
+    "messageActions": "Actions de message"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
@@ -2390,7 +2395,9 @@
     "editComment": "Modifier le commentaire",
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
-    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
+    "commentBy": "Commentaire de {{name}}",
+    "moreOptionsAriaLabel": "Plus d'options pour le commentaire"
   },
   "profileAvatar": {
     "altText": "Photo de profil de {{name}}",

@@ -1780,7 +1780,11 @@
     "alreadyRegistered": "Already registered",
     "location": "location",
     "register": "register",
-    "registeredSuccessfully": "Successfully registered for {{eventName}}"
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "eventCardAriaLabel": "Event card for {{name}}",
+    "alreadyRegisteredAriaLabel": "Event is already registered",
+    "unknownCreator": "Unknown Creator",
+    "inviteOnlyEventAriaLabel": "Invite only event"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -1900,7 +1904,8 @@
       "message": "An unexpected error occurred in the chat room",
       "resetButton": "Try Again",
       "resetButtonAriaLabel": "Try again"
-    }
+    },
+    "messageActions": "Message actions"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
@@ -2390,7 +2395,9 @@
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
-    "emptyCommentError": "Please enter a comment before submitting."
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "commentBy": "Comment by {{name}}",
+    "moreOptionsAriaLabel": "More options for comment"
   },
   "profileAvatar": {
     "altText": "Profile picture of {{name}}",

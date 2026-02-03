@@ -258,6 +258,7 @@
   "organizationEvent": "Organization Members",
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
+  "inviteOnlyEventAriaLabel": "Invite only event",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "noCategory": "No Category",
   "sortingIcon": "sorting-icon",
@@ -296,5 +297,7 @@
   "unavailable": "Unavailable",
   "clearSelection": "Clear selection",
   "toggleSidebar": "Toggle sidebar",
-  "picture": "{{name}} Picture"
+  "picture": "{{name}} Picture",
+  "optionsSuffix": "options",
+  "userMenu": "User menu"
 }
