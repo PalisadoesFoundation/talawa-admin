@@ -391,6 +391,8 @@ describe('GroupChatDetails', () => {
   it('add user to group chat using first name', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} cache={testCache}>
@@ -433,6 +435,11 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       userEvent.click(await screen.findByTestId('addUserBtn'));
+    });
+
+    // Wait for success toast to ensure the success path is covered
+    await waitFor(() => {
+      expect(toastSuccess).toHaveBeenCalledWith('User added successfully');
     });
   });
 
@@ -1165,5 +1172,125 @@ describe('GroupChatDetails', () => {
     // "0 members" appears twice (once in main info, once in list header)
     const membersTexts = screen.getAllByText('0 members');
     expect(membersTexts.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('handles image change when file is missing', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
+    });
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+    // Simulate change event with no files
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      writable: true,
+    });
+
+    await act(async () => {
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    // Should not crash and should handle gracefully
+    await wait(100);
+  });
+
+  it('handles image change when organization id is missing', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const chatWithoutOrg = withSafeChat({
+      ...filledMockChat,
+      organization: undefined,
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={chatWithoutOrg}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('editImageBtn'));
+    });
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const file = new File(['content'], 'test.png', { type: 'image/png' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [file],
+      writable: true,
+    });
+
+    await act(async () => {
+      fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
+    // Should handle gracefully without crashing
+    await wait(100);
+  });
+
+  it('does not show delete button for non-administrator users', () => {
+    useLocalStorage().setItem('userId', 'user2');
+
+    const regularUserChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          { node: { user: { id: 'user2', name: 'Bob' }, role: 'regular' } },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={regularUserChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Delete button should not be present for regular users
+    const buttons = screen.getAllByRole('button');
+    const trashButton = buttons.find(
+      (b) => b.getAttribute('aria-label') === 'Delete Chat',
+    );
+    expect(trashButton).toBeUndefined();
   });
 });
