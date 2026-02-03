@@ -76,12 +76,20 @@ describe('SearchingButton Component', () => {
     expect(svgElement).toHaveClass('MuiSvgIcon-root');
   });
 
+  it('does not set aria-label when title is not provided', () => {
+    render(<SearchingButton dataTestIdPrefix="no-title" />);
+
+    const toggle = screen.getByTestId('no-title-toggle');
+    expect(toggle).not.toHaveAttribute('aria-label');
+  });
+
   it('applies title as aria-label on the toggle button', () => {
     render(<SearchingButton dataTestIdPrefix="test" title="Sort items" />);
 
     const toggle = screen.getByTestId('test-toggle');
     expect(toggle).toHaveAttribute('aria-label', 'Sort items');
   });
+
   it('applies className to the dropdown container', () => {
     render(
       <SearchingButton dataTestIdPrefix="test" className="custom-class" />,
