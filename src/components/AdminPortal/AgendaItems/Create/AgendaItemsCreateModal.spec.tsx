@@ -202,6 +202,62 @@ describe('AgendaItemsCreateModal', () => {
     expect(screen.queryByText('https://example.com')).not.toBeInTheDocument();
   });
 
+  it('rejects protocol-relative URLs', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+
+    await user.type(urlInput, '//example.com');
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+  });
+
+  it('accepts internationalized domain name (IDN) URLs', async () => {
+    const user = userEvent.setup();
+
+    render(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const idnUrl = 'https://bücher.de';
+    const urlInput = screen.getByTestId('urlInput');
+
+    await user.click(urlInput);
+    await user.paste(idnUrl);
+    await user.click(screen.getByTestId('linkBtn'));
+
+    expect(screen.getByRole('link', { name: idnUrl })).toBeInTheDocument();
+  });
+
   it('rejects invalid URL', async () => {
     const user = userEvent.setup();
 

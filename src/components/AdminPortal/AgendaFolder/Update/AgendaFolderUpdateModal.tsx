@@ -40,6 +40,11 @@ const AgendaFolderUpdateModal: React.FC<
 }) => {
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
 
+  /**
+   * Updates the agenda folder details.
+   * Trims user input, submits the update mutation, and refreshes
+   * agenda folder data on successful completion.
+   */
   const updateAgendaFolderHandler = async (): Promise<void> => {
     try {
       await updateAgendaFolder({

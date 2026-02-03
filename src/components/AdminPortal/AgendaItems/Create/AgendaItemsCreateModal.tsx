@@ -83,15 +83,31 @@ const AgendaItemsCreateModal: React.FC<
       categoryId: '',
     });
 
+  /**
+   * Validates user-provided URLs.
+   * Allows only absolute http(s) URLs and rejects protocol-relative or unsafe schemes.
+   */
   const isSafeUrl = (url: string): boolean => {
     try {
+      // Explicitly reject protocol-relative URLs (e.g. //example.com)
+      if (url.startsWith('//')) {
+        return false;
+      }
+
       const parsed = new URL(url);
+
+      // Allow only http(s) protocols
       return parsed.protocol === 'http:' || parsed.protocol === 'https:';
     } catch {
       return false;
     }
   };
 
+  /**
+   * Creates a new agenda item within the selected folder.
+   * Computes the next sequence value, submits the create mutation,
+   * and refreshes agenda data on success.
+   */
   const handleCreateAgendaItem = async (): Promise<void> => {
     const selectedFolder = agendaFolderData?.find(
       (f) => f.id === agendaItemFormState.folderId,
@@ -154,6 +170,10 @@ const AgendaItemsCreateModal: React.FC<
     }
   };
 
+  /**
+   * Validates and adds a new URL to the agenda item form state.
+   * Rejects invalid or unsafe URLs.
+   */
   const handleAddUrl = (): void => {
     const trimmed = newUrl.trim();
 
@@ -170,6 +190,9 @@ const AgendaItemsCreateModal: React.FC<
     setNewUrl('');
   };
 
+  /**
+   * Removes a URL entry from the agenda item form state.
+   */
   const handleRemoveUrl = (url: string): void => {
     setAgendaItemFormState((prev) => ({
       ...prev,
@@ -177,6 +200,10 @@ const AgendaItemsCreateModal: React.FC<
     }));
   };
 
+  /**
+   * Removes a selected attachment from the agenda item form state.
+   * Does not delete the file from storage until form submission.
+   */
   const handleRemoveAttachment = (objectName: string): void => {
     setAgendaItemFormState((prev) => ({
       ...prev,
@@ -186,6 +213,10 @@ const AgendaItemsCreateModal: React.FC<
     }));
   };
 
+  /**
+   * Uploads selected files to MinIO using presigned URLs,
+   * validates size and MIME type, and generates preview URLs.
+   */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {

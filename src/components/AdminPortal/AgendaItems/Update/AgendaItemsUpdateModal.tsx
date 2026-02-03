@@ -80,13 +80,30 @@ const AgendaItemsUpdateModal: React.FC<
     }));
   }, [setItemFormState]);
 
-  const isValidUrl = (url: string): boolean =>
-    /^(ftp|http|https):\/\/[^ "]+$/.test(url);
+  /**
+   * Validates user-provided URLs.
+   * Allows only absolute http(s) URLs and rejects protocol-relative or unsafe schemes.
+   */
+  const isSafeUrl = (url: string): boolean => {
+    try {
+      // Explicitly reject protocol-relative URLs (e.g. //example.com)
+      if (url.startsWith('//')) {
+        return false;
+      }
+
+      const parsed = new URL(url);
+
+      // Allow only http(s) protocols
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+    } catch {
+      return false;
+    }
+  };
 
   const handleAddUrl = (): void => {
     const trimmedUrl = newUrl.trim();
 
-    if (!trimmedUrl || !isValidUrl(trimmedUrl)) {
+    if (!trimmedUrl || !isSafeUrl(trimmedUrl)) {
       NotificationToast.error(t('invalidUrl'));
       return;
     }
@@ -169,6 +186,11 @@ const AgendaItemsUpdateModal: React.FC<
     }
   };
 
+  /**
+   * Submits updated agenda item data to the backend.
+   * Syncs edited fields, attachments, and URLs,
+   * then refreshes agenda data on success.
+   */
   const updateAgendaItemHandler = async (): Promise<void> => {
     try {
       await updateAgendaItem({

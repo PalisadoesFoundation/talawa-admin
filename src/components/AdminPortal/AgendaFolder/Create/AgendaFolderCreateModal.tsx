@@ -13,7 +13,21 @@ import type { InterfaceAgendaFolderCreateModalProps } from 'types/AdminPortal/Ag
 /**
  * AgendaFolderCreateModal
  *
- * Modal for creating a new agenda folder.
+ * Modal component for creating a new agenda folder within an event.
+ * Calculates the next folder sequence based on existing folders and
+ * submits the creation request via GraphQL.
+ *
+ * Displays validation and mutation feedback using NotificationToast
+ * and refreshes agenda folder data on successful creation.
+ *
+ * @param isOpen - Controls modal visibility
+ * @param hide - Callback to close the modal
+ * @param eventId - ID of the event the folder belongs to
+ * @param agendaFolderData - Existing agenda folder data for sequence calculation
+ * @param t - i18n translation function
+ * @param refetchAgendaFolder - Refetches agenda folder data after creation
+ *
+ * @returns JSX.Element | null
  */
 // translation-check-keyPrefix: agendaSection
 const AgendaFolderCreateModal: React.FC<
@@ -38,6 +52,11 @@ const AgendaFolderCreateModal: React.FC<
     return null;
   }
 
+  /**
+   * Creates a new agenda folder for the current event.
+   * Computes the next sequence number based on existing folders
+   * and submits the creation request via GraphQL.
+   */
   const handleCreate = async (): Promise<void> => {
     const agendaFolders = Array.isArray(
       agendaFolderData?.agendaFoldersByEventId,

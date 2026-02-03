@@ -28,6 +28,10 @@ const AgendaItemsDeleteModal: React.FC<
 > = ({ isOpen, onClose, agendaItemId, t, refetchAgendaFolder }) => {
   const [deleteAgendaItem] = useMutation(DELETE_AGENDA_ITEM_MUTATION);
 
+  /**
+   * Deletes the selected agenda item and refreshes agenda data on success.
+   * Shows user feedback for both success and error states.
+   */
   const deleteAgendaItemHandler = async (): Promise<void> => {
     try {
       await deleteAgendaItem({

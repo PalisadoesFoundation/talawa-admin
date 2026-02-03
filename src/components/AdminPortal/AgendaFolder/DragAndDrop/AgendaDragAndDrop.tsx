@@ -15,7 +15,29 @@ import {
   UPDATE_AGENDA_FOLDER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 
+/**
+ * AgendaDragAndDrop
+ *
+ * Renders draggable agenda folders and items with support for reordering.
+ * Handles folder-level and item-level drag-and-drop with optimistic UI updates
+ * and backend sequence synchronization.
+ *
+ * @param folders - List of agenda folders with their items
+ * @param setFolders - State updater for agenda folders
+ * @param agendaFolderConnection - Context in which agenda folders are rendered
+ * @param t - i18n translation function
+ * @param onEditFolder - Callback to edit an agenda folder
+ * @param onDeleteFolder - Callback to delete an agenda folder
+ * @param onPreviewItem - Callback to preview an agenda item
+ * @param onEditItem - Callback to edit an agenda item
+ * @param onDeleteItem - Callback to delete an agenda item
+ * @param refetchAgendaFolder - Refetches agenda folder data after updates
+ *
+ * @returns JSX.Element
+ */
 // translation-check-keyPrefix: agendaSection
 export default function AgendaDragAndDrop({
   folders,
@@ -32,9 +54,14 @@ export default function AgendaDragAndDrop({
   const [updateAgendaItemSequence] = useMutation(
     UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
   );
+  const { t: tErrors } = useTranslation('errors');
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
 
-  const onItemDragEnd = async (result: DropResult): Promise<void> => {
+  /**
+   * Handles reordering of agenda items within the same folder.
+   * Applies optimistic UI updates and syncs sequence changes to the backend.
+   */
+  const handleItemReorder = async (result: DropResult): Promise<void> => {
     const { source, destination } = result;
 
     if (!destination) return;
@@ -45,7 +72,7 @@ export default function AgendaDragAndDrop({
     const folderIndex = folders.findIndex((f) => f.id === folderId);
     if (folderIndex === -1) return;
 
-    const previousFolders = folders;
+    const previousFolders = [...folders];
     const updatedFolders = [...folders];
 
     const items = [...updatedFolders[folderIndex].items.edges]
@@ -99,14 +126,23 @@ export default function AgendaDragAndDrop({
     }
   };
 
-  const onFolderDragEnd = async (result: DropResult): Promise<void> => {
-    if (!result.destination) return;
-    if (result.source.index === result.destination.index) return;
+  /**
+   * Handles reordering of agenda folders.
+   * Applies optimistic UI updates and synchronizes folder sequence
+   * changes with the backend.
+   */
+  const handleFolderReorder = async (result: DropResult): Promise<void> => {
+    const { source, destination } = result;
+
+    if (!destination) return;
+    if (source.index === destination.index) return;
 
     const previousFolders = Array.from(folders);
     const updatedFolders = Array.from(folders);
-    const [moved] = updatedFolders.splice(result.source.index, 1);
-    updatedFolders.splice(result.destination.index, 0, moved);
+
+    const [moved] = updatedFolders.splice(source.index, 1);
+    updatedFolders.splice(destination.index, 0, moved);
+
     setFolders(updatedFolders);
 
     try {
@@ -137,8 +173,8 @@ export default function AgendaDragAndDrop({
   };
 
   /**
-   * Unified drag handler for both folder and item reordering.
-   * Routes behavior based on droppable type.
+   * Unified drag handler
+   * Drag events are serialized; optimistic updates with rollback prevent race conditions.
    */
   const handleDragEnd = async (result: DropResult): Promise<void> => {
     const { destination, source, type } = result;
@@ -151,12 +187,13 @@ export default function AgendaDragAndDrop({
       return;
 
     if (type === 'ITEM') {
-      await onItemDragEnd(result);
+      await handleItemReorder(result);
       return;
     }
 
     if (type === 'FOLDER') {
-      await onFolderDragEnd(result);
+      await handleFolderReorder(result);
+      return;
     }
   };
 
@@ -170,157 +207,163 @@ export default function AgendaDragAndDrop({
     isDragging ? styles.dragging : '';
 
   return (
-    <DragDropContext onDragEnd={handleDragEnd}>
-      {/* FOLDERS */}
-      <Droppable droppableId="agendaFolder" type="FOLDER">
-        {(provided) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className="mx-4 bg-light p-3"
-          >
-            {folders.map((agendaFolder, index) => {
-              const isDefault = agendaFolder.isDefaultFolder;
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <DragDropContext onDragEnd={handleDragEnd}>
+        {/* FOLDERS */}
+        <Droppable droppableId="agendaFolder" type="FOLDER">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="mx-4 bg-light p-3"
+            >
+              {folders.map((agendaFolder, index) => {
+                const isDefault = agendaFolder.isDefaultFolder;
 
-              return (
-                <Draggable
-                  key={agendaFolder.id}
-                  draggableId={agendaFolder.id}
-                  index={index}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      className={`${styles.agendaItemRow} ${getDraggingClass(
-                        snapshot.isDragging,
-                      )} py-3 mb-4 px-4`}
-                    >
-                      {/* Folder header */}
-                      <Row>
-                        <Col
-                          xs={6}
-                          sm={4}
-                          md={2}
-                          lg={2}
-                          className="text-center align-self-center"
-                        >
-                          <span
-                            {...provided.dragHandleProps}
-                            className="d-inline-flex align-items-center cursor-grab"
-                          >
-                            <i className="fas fa-bars fa-sm" />
-                          </span>
-                        </Col>
-
-                        <Col
-                          xs={6}
-                          sm={4}
-                          md={2}
-                          lg={1}
-                          className="text-center align-self-center"
-                        >
-                          <span className={styles.categoryChip}>
-                            {agendaFolder.name}
-                          </span>
-                        </Col>
-
-                        <Col
-                          xs={12}
-                          sm={4}
-                          md={2}
-                          lg={9}
-                          className="d-flex justify-content-end align-self-center"
-                        >
-                          <div className="d-flex gap-2">
-                            <Button
-                              size="sm"
-                              disabled={isDefault}
-                              variant="outline-secondary"
-                              onClick={() => onEditFolder(agendaFolder)}
-                              aria-label={t('editFolder')}
-                            >
-                              <i className="fas fa-edit fa-sm" />
-                            </Button>
-                            <Button
-                              size="sm"
-                              disabled={isDefault}
-                              variant="danger"
-                              onClick={() => onDeleteFolder(agendaFolder)}
-                              aria-label={t('deleteFolder')}
-                            >
-                              <i className="fas fa-trash" />
-                            </Button>
-                          </div>
-                        </Col>
-                      </Row>
-
+                return (
+                  <Draggable
+                    key={agendaFolder.id}
+                    draggableId={agendaFolder.id}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
                       <div
-                        className={`mx-1 ${
-                          agendaFolderConnection === 'Event' ? 'my-4' : 'my-0'
-                        }`}
-                      />
-
-                      {/* Table head */}
-                      <div
-                        className={`shadow-sm ${getRoundedTopClass(
-                          agendaFolderConnection === 'Event',
-                        )} ${agendaFolderConnection === 'Event' ? 'mx-4' : 'mx-0'}`}
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={`${styles.agendaItemRow} ${getDraggingClass(
+                          snapshot.isDragging,
+                        )} py-3 mb-4 px-4`}
                       >
-                        <Row
-                          className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${getRoundedTopClass(
-                            agendaFolderConnection === 'Event',
-                          )}`}
-                        >
-                          <Col lg={1} className="fw-bold text-center">
-                            {t('sequence')}
-                          </Col>
-                          <Col lg={2} className="fw-bold text-center">
-                            {t('title')}
-                          </Col>
+                        {/* Folder header */}
+                        <Row>
                           <Col
+                            xs={6}
+                            sm={4}
+                            md={2}
                             lg={2}
-                            className="fw-bold text-center d-none d-md-block"
+                            className="text-center align-self-center"
                           >
-                            {t('category')}
+                            <span
+                              {...provided.dragHandleProps}
+                              className="d-inline-flex align-items-center cursor-grab"
+                            >
+                              <i className="fas fa-bars fa-sm" />
+                            </span>
                           </Col>
+
                           <Col
-                            lg={3}
-                            className="fw-bold text-center d-none d-md-block"
+                            xs={6}
+                            sm={4}
+                            md={2}
+                            lg={1}
+                            className="text-center align-self-center"
                           >
-                            {t('description')}
+                            <span className={styles.categoryChip}>
+                              {agendaFolder.name}
+                            </span>
                           </Col>
+
                           <Col
-                            lg={2}
-                            className="fw-bold text-center d-none d-md-block"
+                            xs={12}
+                            sm={4}
+                            md={2}
+                            lg={9}
+                            className="d-flex justify-content-end align-self-center"
                           >
-                            {t('duration')}
-                          </Col>
-                          <Col lg={2} className="fw-bold text-center">
-                            {t('options')}
+                            <div className="d-flex gap-2">
+                              <Button
+                                size="sm"
+                                disabled={isDefault}
+                                variant="outline-secondary"
+                                onClick={() => onEditFolder(agendaFolder)}
+                                aria-label={t('editFolder')}
+                              >
+                                <i className="fas fa-edit fa-sm" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                disabled={isDefault}
+                                variant="danger"
+                                onClick={() => onDeleteFolder(agendaFolder)}
+                                aria-label={t('deleteFolder')}
+                              >
+                                <i className="fas fa-trash" />
+                              </Button>
+                            </div>
                           </Col>
                         </Row>
-                      </div>
 
-                      {/* ITEMS */}
-                      <Droppable
-                        // i18n-ignore-next-line
-                        droppableId={`agenda-items-${agendaFolder.id}`}
-                        type="ITEM"
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.droppableProps}
-                            className={`bg-light-subtle border border-top-0 shadow-sm ${getRoundedBottomClass(
+                        <div
+                          className={`mx-1 ${
+                            agendaFolderConnection === 'Event' ? 'my-4' : 'my-0'
+                          }`}
+                        />
+
+                        {/* Table head */}
+                        <div
+                          className={`shadow-sm ${getRoundedTopClass(
+                            agendaFolderConnection === 'Event',
+                          )} ${
+                            agendaFolderConnection === 'Event' ? 'mx-4' : 'mx-0'
+                          }`}
+                        >
+                          <Row
+                            className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${getRoundedTopClass(
                               agendaFolderConnection === 'Event',
                             )}`}
                           >
-                            {[...agendaFolder.items.edges]
-                              .map((edge) => edge.node)
-                              .sort((a, b) => a.sequence - b.sequence)
-                              .map((agendaItem, index) => {
-                                return (
+                            <Col lg={1} className="fw-bold text-center">
+                              {t('sequence')}
+                            </Col>
+                            <Col lg={2} className="fw-bold text-center">
+                              {t('title')}
+                            </Col>
+                            <Col
+                              lg={2}
+                              className="fw-bold text-center d-none d-md-block"
+                            >
+                              {t('category')}
+                            </Col>
+                            <Col
+                              lg={3}
+                              className="fw-bold text-center d-none d-md-block"
+                            >
+                              {t('description')}
+                            </Col>
+                            <Col
+                              lg={2}
+                              className="fw-bold text-center d-none d-md-block"
+                            >
+                              {t('duration')}
+                            </Col>
+                            <Col lg={2} className="fw-bold text-center">
+                              {t('options')}
+                            </Col>
+                          </Row>
+                        </div>
+
+                        {/* ITEMS */}
+                        <Droppable
+                          droppableId={`agenda-items-${agendaFolder.id}`}
+                          type="ITEM"
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.droppableProps}
+                              className={`bg-light-subtle border border-top-0 shadow-sm ${getRoundedBottomClass(
+                                agendaFolderConnection === 'Event',
+                              )}`}
+                            >
+                              {[...agendaFolder.items.edges]
+                                .map((edge) => edge.node)
+                                .sort((a, b) => a.sequence - b.sequence)
+                                .map((agendaItem, index) => (
                                   <Draggable
                                     key={agendaItem.id}
                                     draggableId={agendaItem.id}
@@ -409,23 +452,23 @@ export default function AgendaDragAndDrop({
                                       </div>
                                     )}
                                   </Draggable>
-                                );
-                              })}
+                                ))}
 
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                  )}
-                </Draggable>
-              );
-            })}
+                              {provided.placeholder}
+                            </div>
+                          )}
+                        </Droppable>
+                      </div>
+                    )}
+                  </Draggable>
+                );
+              })}
 
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </ErrorBoundaryWrapper>
   );
 }
