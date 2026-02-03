@@ -39,7 +39,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import type { InterfaceUser } from 'types/shared-components/User/interface';
+import type { InterfaceUserProfileProps } from 'types/UserPortal/UserProfile/interface';
 
 const joinedDate = (
   param: string | Date | null | undefined,
@@ -58,13 +58,13 @@ const joinedDate = (
   return `${day} ${month} ${year}`;
 };
 
-const UserProfile: React.FC<Partial<InterfaceUser>> = ({
+const UserProfile = ({
   firstName,
   lastName,
   createdAt,
   email,
   image,
-}): JSX.Element => {
+}: InterfaceUserProfileProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 

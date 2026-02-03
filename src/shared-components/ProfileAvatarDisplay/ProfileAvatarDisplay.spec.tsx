@@ -264,11 +264,11 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Click the backdrop element (react-bootstrap renders it with .modal-backdrop class)
     // The backdrop is a sibling to the dialog in the DOM
-    const backdrop =
-      dialog.parentElement?.querySelector('.modal') || dialog.parentElement;
-    // If backdrop exists, click it; otherwise click the modal itself (fallback behavior)
+    const backdrop = document.querySelector('.modal-backdrop');
     if (backdrop) {
       await user.click(backdrop);
+    } else {
+      await user.click(dialog);
     }
 
     await waitFor(() => {

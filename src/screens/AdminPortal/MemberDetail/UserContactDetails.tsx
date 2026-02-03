@@ -238,7 +238,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
         );
       setSelectedAvatar(null);
       setisUpdated(false);
-      window.location.reload();
     } catch (e: unknown) {
       errorHandler(t, e);
     }
