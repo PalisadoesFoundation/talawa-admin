@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -15,7 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 /**
  * Unit tests for UserNavbar component [User Portal]:
@@ -33,7 +33,14 @@ import { toast } from 'react-toastify';
  * Mocked GraphQL mutation (LOGOUT_MUTATION) and mock store are used to test the component in an isolated environment.
  */
 
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
@@ -128,6 +135,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     // NotificationIcon should render (bell); assert presence by aria or role if available
     // We just check that the language icon exists and notification icon is present as a button
     expect(screen.getByTestId('languageIcon')).toBeInTheDocument();
+    expect(screen.getByTestId('brandLogo')).toBeInTheDocument();
   });
 
   it('The language is switched to English', async () => {
@@ -145,9 +153,9 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
 
-    await userEvent.click(screen.getByTestId('changeLanguageBtn0'));
+    await userEvent.click(screen.getByTestId('language-item-en'));
 
     await wait();
 
@@ -169,9 +177,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn1'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-fr'));
 
     await wait();
 
@@ -193,9 +200,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn2'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-hi'));
 
     await wait();
 
@@ -217,9 +223,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn3'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-es'));
 
     await wait();
 
@@ -241,9 +246,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('languageIcon'));
-
-    await userEvent.click(screen.getByTestId('changeLanguageBtn4'));
+    await userEvent.click(screen.getByTestId('language-toggle'));
+    await userEvent.click(screen.getByTestId('language-item-zh'));
 
     await wait();
 
@@ -265,9 +269,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('logoutDropdown'));
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByTestId('logoutBtn')).toBeInTheDocument();
+    await userEvent.click(screen.getByTestId('user-toggle'));
+
+    expect(screen.getByTestId('user-item-settings')).toBeInTheDocument();
+    expect(screen.getByTestId('user-item-logout')).toBeInTheDocument();
   });
 
   it('User can navigate to the "Settings" page', async () => {
@@ -285,9 +290,12 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('logoutDropdown'));
-    await userEvent.click(screen.getByText('Settings'));
-    expect(window.location.pathname).toBe('/user/settings');
+    await userEvent.click(screen.getByTestId('user-toggle'));
+    await userEvent.click(screen.getByTestId('user-item-settings'));
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/user/settings');
+    });
   });
 
   it('Logs out the user and clears local storage', async () => {
@@ -308,12 +316,15 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('logoutDropdown'));
-    await userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('user-toggle'));
+    await userEvent.click(screen.getByTestId('user-item-logout'));
+
+    await waitFor(() => {
+      expect(mockClearAllItems).toHaveBeenCalled();
+    });
 
     await wait();
 
-    expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
   });
 
@@ -359,8 +370,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('logoutDropdown'));
-    await userEvent.click(screen.getByTestId('logoutBtn'));
+    await userEvent.click(screen.getByTestId('user-toggle'));
+    await userEvent.click(screen.getByTestId('user-item-logout'));
 
     await wait();
 
@@ -370,7 +381,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       expect.any(Error),
     );
     // Verify toast was shown
-    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+    expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
