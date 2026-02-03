@@ -125,4 +125,70 @@ describe('useRegistration', () => {
       expect(result.current.loading).toBe(false);
     });
   });
+
+  it('should throw error if registration data is missing', async () => {
+    const mockOnError = vi.fn();
+    const { result } = renderHook(() =>
+      useRegistration({ onError: mockOnError }),
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: '',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+    expect(mockOnError.mock.calls[0][0].message).toBe(
+      'Missing required registration data',
+    );
+    expect(result.current.loading).toBe(false);
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: '',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(2);
+    expect(mockOnError.mock.calls[1][0].message).toBe(
+      'Missing required registration data',
+    );
+  });
+
+  it('should handle registration with organizationId correctly', async () => {
+    const mockOnSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useRegistration({ onSuccess: mockOnSuccess }),
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: 'org-123',
+      });
+    });
+
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    expect(result.current.loading).toBe(false);
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '',
+      });
+    });
+
+    expect(mockOnSuccess).toHaveBeenCalledTimes(2);
+    expect(result.current.loading).toBe(false);
+  });
 });
