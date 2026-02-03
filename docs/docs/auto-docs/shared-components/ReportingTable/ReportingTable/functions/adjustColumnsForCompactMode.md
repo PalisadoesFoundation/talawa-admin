@@ -6,7 +6,7 @@
 
 > **adjustColumnsForCompactMode**(`columns`, `compactMode`): [`ReportingTableColumn`](../../../../types/ReportingTable/interface/type-aliases/ReportingTableColumn.md)[]
 
-Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L52)
+Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L23)
 
 Adjusts column widths for compact display mode.
 In compact mode:

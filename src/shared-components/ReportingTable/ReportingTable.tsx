@@ -1,42 +1,13 @@
 import React, { useMemo } from 'react';
-import { DataGrid, type GridColDef } from 'shared-components/DataGridWrapper';
+import {
+  DataGrid,
+  convertTokenColumns,
+} from 'shared-components/DataGridWrapper';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
   ReportingTableProps,
   ReportingTableColumn,
 } from '../../types/ReportingTable/interface';
-import { isSpacingToken, getSpacingValue } from '../../utils/tokenValues';
-
-/**
- * Converts token-aware column definitions to MUI-compatible GridColDef.
- */
-export function convertTokenColumns(
-  columns: ReportingTableColumn[],
-): GridColDef[] {
-  return columns.map((col) => {
-    const converted = { ...col } as GridColDef;
-
-    if (col.width !== undefined) {
-      converted.width = isSpacingToken(col.width)
-        ? getSpacingValue(col.width)
-        : col.width;
-    }
-
-    if (col.minWidth !== undefined) {
-      converted.minWidth = isSpacingToken(col.minWidth)
-        ? getSpacingValue(col.minWidth)
-        : col.minWidth;
-    }
-
-    if (col.maxWidth !== undefined) {
-      converted.maxWidth = isSpacingToken(col.maxWidth)
-        ? getSpacingValue(col.maxWidth)
-        : col.maxWidth;
-    }
-
-    return converted;
-  });
-}
 
 /**
  * Adjusts column widths for compact display mode.

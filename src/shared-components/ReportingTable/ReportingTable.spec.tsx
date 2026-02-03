@@ -1,10 +1,8 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ReportingTable, {
-  adjustColumnsForCompactMode,
-  convertTokenColumns,
-} from './ReportingTable';
+import ReportingTable, { adjustColumnsForCompactMode } from './ReportingTable';
+import { convertTokenColumns } from 'shared-components/DataGridWrapper';
 import type {
   ReportingTableColumn,
   ReportingRow,
@@ -12,7 +10,6 @@ import type {
   InfiniteScrollProps,
 } from '../../types/ReportingTable/interface';
 
-// DataGrid column config property (not CSS) - using constant to avoid lint false positive
 const COL_MIN_WIDTH = 'minWidth' as const;
 
 const sampleColumns: ReportingTableColumn[] = [
@@ -59,6 +56,10 @@ describe('ReportingTable', () => {
       { field: 'id', headerName: 'ID', width: 100, sortable: false },
     ];
 
+    // Verify convertTokenColumns passes through numeric width unchanged
+    const converted = convertTokenColumns(columnsWithNumericWidth);
+    expect(converted[0].width).toBe(100);
+
     render(
       <ReportingTable rows={sampleRows} columns={columnsWithNumericWidth} />,
     );
@@ -86,6 +87,10 @@ describe('ReportingTable', () => {
     const columnsWithNumericMaxWidth: ReportingTableColumn[] = [
       { field: 'id', headerName: 'ID', maxWidth: 200, sortable: false },
     ];
+
+    // Verify convertTokenColumns passes through numeric maxWidth unchanged
+    const converted = convertTokenColumns(columnsWithNumericMaxWidth);
+    expect(converted[0].maxWidth).toBe(200);
 
     render(
       <ReportingTable rows={sampleRows} columns={columnsWithNumericMaxWidth} />,
