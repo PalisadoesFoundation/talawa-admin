@@ -12,6 +12,7 @@ import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventForm.module.css';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type {
   IEventFormProps,
   IEventFormSubmitPayload,
@@ -78,9 +79,11 @@ const EventForm: React.FC<IEventFormProps> = ({
     );
   });
 
-  const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: customRecurrenceModalIsOpen,
+    open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
+  } = useModalState(false);
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
       (!!initialValues.recurrenceRule || !showRecurrenceToggle),
@@ -125,14 +128,13 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      setCustomRecurrenceModalIsOpen(true);
+      openCustomRecurrenceModal();
     } else {
       setFormState((prev) => ({
         ...prev,
         recurrenceRule: option.value as InterfaceRecurrenceRule | null,
       }));
     }
-    setRecurrenceDropdownOpen(false);
   };
 
   const currentRecurrenceLabel = (): string => {
@@ -479,8 +481,6 @@ const EventForm: React.FC<IEventFormProps> = ({
           <RecurrenceDropdown
             recurrenceOptions={recurrenceOptions}
             currentLabel={currentRecurrenceLabel()}
-            isOpen={recurrenceDropdownOpen}
-            onToggle={setRecurrenceDropdownOpen}
             onSelect={handleRecurrenceSelect}
             t={t}
           />
@@ -532,10 +532,10 @@ const EventForm: React.FC<IEventFormProps> = ({
             }));
           }}
           customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-          hideCustomRecurrenceModal={(): void =>
-            setCustomRecurrenceModalIsOpen(false)
+          hideCustomRecurrenceModal={closeCustomRecurrenceModal}
+          setCustomRecurrenceModalIsOpen={(val) =>
+            val ? openCustomRecurrenceModal() : closeCustomRecurrenceModal()
           }
-          setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
           t={t}
           startDate={formState.startDate}
         />

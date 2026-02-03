@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventCalender/Header/EventHeader.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Header/EventHeader.tsx#L40)
+Defined in: [src/components/EventCalender/Header/EventHeader.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Header/EventHeader.tsx#L39)
 
 ## Parameters
 

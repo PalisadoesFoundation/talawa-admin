@@ -15,7 +15,6 @@
  * - Uses `SearchBar` for searching events by name.
  * - Uses `SortingButton` for selecting calendar view type and event type.
  * - Uses `AddIcon` from MUI for the create event button.
- * - Styles from `EventHeader.module.css`.
  *
  * @example
  * ```tsx

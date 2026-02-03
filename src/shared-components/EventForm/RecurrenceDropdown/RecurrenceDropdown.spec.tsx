@@ -34,50 +34,32 @@ describe('RecurrenceDropdown', () => {
       <RecurrenceDropdown
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
-        isOpen={false}
-        onToggle={vi.fn()}
         onSelect={vi.fn()}
         t={mockT}
       />,
     );
 
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
     expect(screen.getByText('Does not repeat')).toBeInTheDocument();
   });
 
-  it('shows options when dropdown is open', () => {
-    render(
-      <RecurrenceDropdown
-        recurrenceOptions={mockOptions}
-        currentLabel="Does not repeat"
-        isOpen={true}
-        onToggle={vi.fn()}
-        onSelect={vi.fn()}
-        t={mockT}
-      />,
-    );
-
-    expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
-    expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument();
-    expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument();
-  });
-
-  it('calls onToggle when dropdown toggle is clicked', async () => {
+  it('shows options when dropdown is open', async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
     render(
       <RecurrenceDropdown
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
-        isOpen={false}
-        onToggle={onToggle}
         onSelect={vi.fn()}
         t={mockT}
       />,
     );
 
-    await user.click(screen.getByTestId('recurrenceDropdown'));
-    expect(onToggle).toHaveBeenCalled();
+    // Open dropdown
+    await user.click(screen.getByTestId('recurrence-toggle'));
+
+    expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument();
   });
 
   it('calls onSelect when an option is clicked', async () => {
@@ -87,14 +69,15 @@ describe('RecurrenceDropdown', () => {
       <RecurrenceDropdown
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
-        isOpen={true}
-        onToggle={vi.fn()}
         onSelect={onSelect}
         t={mockT}
       />,
     );
 
-    await user.click(screen.getByTestId('recurrenceOption-1'));
+    // Open dropdown
+    await user.click(screen.getByTestId('recurrence-toggle'));
+
+    await user.click(screen.getByTestId('recurrence-item-1'));
     expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({ label: 'Daily' }),
     );
@@ -105,8 +88,6 @@ describe('RecurrenceDropdown', () => {
       <RecurrenceDropdown
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
-        isOpen={false}
-        onToggle={vi.fn()}
         onSelect={vi.fn()}
         t={mockT}
       />,

@@ -34,7 +34,7 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
@@ -177,6 +177,13 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       },
     ];
   };
+
+  const recurrenceToggleOptions = getRecurrenceOptions().map(
+    (option, index) => ({
+      label: option.label,
+      value: index.toString(),
+    }),
+  );
 
   const handleRecurrenceSelect = (option: {
     label: string;
@@ -510,27 +517,20 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
           {/* Recurrence Dropdown */}
           {canEditEvent && canChangeRecurrence && (
-            <Dropdown className="mb-3">
-              <Dropdown.Toggle
+            <div className="mb-3">
+              <DropDownButton
+                options={recurrenceToggleOptions}
+                buttonLabel={getCurrentRecurrenceLabel()}
+                onSelect={(index) => {
+                  const options = getRecurrenceOptions();
+                  handleRecurrenceSelect(options[parseInt(index, 10)]);
+                }}
+                ariaLabel={t('selectRecurrencePattern')}
+                dataTestIdPrefix="recurrence"
                 variant="outline-secondary"
-                id="recurrence-dropdown"
-                data-testid="recurrenceDropdown"
-                className={`${styles.dropdown}`}
-              >
-                {getCurrentRecurrenceLabel()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="w-100">
-                {getRecurrenceOptions().map((option, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`recurrenceOption-${index}`}
-                    onClick={() => handleRecurrenceSelect(option)}
-                  >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                btnStyle={styles.dropdown}
+              />
+            </div>
           )}
         </div>
       </BaseModal>

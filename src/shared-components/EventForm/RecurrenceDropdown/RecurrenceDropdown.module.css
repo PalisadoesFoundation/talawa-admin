@@ -1,0 +1,8 @@
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: var(--space-40);
+  border: var(--border-width-1) solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}

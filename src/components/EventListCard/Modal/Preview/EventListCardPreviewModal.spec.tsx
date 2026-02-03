@@ -740,7 +740,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
   });
 
   test('shows recurrence dropdown for recurring instances with edit permissions', () => {
@@ -753,7 +753,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('recurrence-toggle')).toBeInTheDocument();
   });
 
   test('hides recurrence dropdown for non-recurring events', () => {
@@ -766,7 +766,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('recurrence-toggle')).not.toBeInTheDocument();
   });
 
   test('displays default recurrence label when no recurrence is set', () => {
@@ -792,7 +792,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
 
     // Verify dropdown exists and is clickable
     expect(dropdownToggle).toBeInTheDocument();
@@ -800,16 +800,16 @@ describe('EventListCardPreviewModal', () => {
 
     // Verify at least one option appears (using testid which is more reliable)
     await waitFor(() => {
-      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
+      expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument();
     });
 
     // Verify all options are present by their test IDs
-    expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(); // Daily
-    expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument(); // Weekly
-    expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument(); // Monthly
-    expect(screen.getByTestId('recurrenceOption-3')).toBeInTheDocument(); // Annually
-    expect(screen.getByTestId('recurrenceOption-4')).toBeInTheDocument(); // Weekday
-    expect(screen.getByTestId('recurrenceOption-5')).toBeInTheDocument(); // Custom
+    expect(screen.getByTestId('recurrence-item-0')).toBeInTheDocument(); // Daily
+    expect(screen.getByTestId('recurrence-item-1')).toBeInTheDocument(); // Weekly
+    expect(screen.getByTestId('recurrence-item-2')).toBeInTheDocument(); // Monthly
+    expect(screen.getByTestId('recurrence-item-3')).toBeInTheDocument(); // Annually
+    expect(screen.getByTestId('recurrence-item-4')).toBeInTheDocument(); // Weekday
+    expect(screen.getByTestId('recurrence-item-5')).toBeInTheDocument(); // Custom
   });
 
   test('sets recurrence when option is selected', async () => {
@@ -824,10 +824,10 @@ describe('EventListCardPreviewModal', () => {
       setRecurrence: mockSetRecurrence,
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const dailyOption = screen.getByTestId('recurrenceOption-0');
+    const dailyOption = screen.getByTestId('recurrence-item-0');
     await user.click(dailyOption);
 
     expect(mockSetRecurrence).toHaveBeenCalled();
@@ -845,10 +845,10 @@ describe('EventListCardPreviewModal', () => {
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const customOption = screen.getByTestId('recurrenceOption-5');
+    const customOption = screen.getByTestId('recurrence-item-5');
     await user.click(customOption);
 
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
@@ -869,10 +869,10 @@ describe('EventListCardPreviewModal', () => {
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const customOption = screen.getByTestId('recurrenceOption-5');
+    const customOption = screen.getByTestId('recurrence-item-5');
     await user.click(customOption);
 
     expect(mockSetRecurrence).toHaveBeenCalled();
@@ -899,10 +899,10 @@ describe('EventListCardPreviewModal', () => {
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const customOption = screen.getByTestId('recurrenceOption-5');
+    const customOption = screen.getByTestId('recurrence-item-5');
     await user.click(customOption);
 
     expect(mockSetRecurrence).not.toHaveBeenCalled();

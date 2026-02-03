@@ -4,8 +4,8 @@
  */
 // translation-check-keyPrefix: organizationEvents
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import DropDownButton from 'shared-components/DropDownButton';
+import styles from './RecurrenceDropdown.module.css';
 import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/RecurrenceDropdown/interface';
 
 /**
@@ -16,34 +16,24 @@ import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/R
 const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   recurrenceOptions,
   currentLabel,
-  isOpen,
-  onToggle,
   onSelect,
   t,
 }) => {
+  const options = recurrenceOptions.map((option, index) => ({
+    label: option.label,
+    value: index.toString(),
+  }));
+
   return (
-    <Dropdown show={isOpen} onToggle={onToggle}>
-      <Dropdown.Toggle
-        variant="outline-secondary"
-        id="recurrence-dropdown"
-        data-testid="recurrenceDropdown"
-        className={`${styles.dropdown}`}
-        aria-label={t('recurring')}
-      >
-        {currentLabel}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {recurrenceOptions.map((option, index) => (
-          <Dropdown.Item
-            key={index}
-            onClick={() => onSelect(option)}
-            data-testid={`recurrenceOption-${index}`}
-          >
-            {option.label}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+    <DropDownButton
+      options={options}
+      buttonLabel={currentLabel}
+      onSelect={(value) => onSelect(recurrenceOptions[Number(value)])}
+      ariaLabel={t('recurring')}
+      dataTestIdPrefix="recurrence"
+      variant="outline-secondary"
+      btnStyle={styles.dropdown}
+    />
   );
 };
 
