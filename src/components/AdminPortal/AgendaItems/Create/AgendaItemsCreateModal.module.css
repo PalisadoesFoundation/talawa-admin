@@ -119,7 +119,7 @@
 .previewFile img,
 .previewFile video {
   width: 100%;
-  max-width: 400px;
+  max-width: var(--space-23);
   height: auto;
   margin-bottom: var(--space-5);
 }

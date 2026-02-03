@@ -5,13 +5,13 @@
 
 .AgendaItemModal {
   max-width: 80vw;
-  margin-top: 2vh;
+  margin-top: var(--space-10);
   margin-left: var(--sidebar-offset, 13vw);
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md)) {
   .AgendaItemModal {
-    margin: 10vh auto;
+    margin: var(--space-12) auto;
     max-width: 90%;
   }
 
@@ -24,9 +24,9 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: var(--breakpoint-sm)) {
   .AgendaItemModal {
-    margin: 5vh auto;
+    margin: var(--space-9) auto;
     max-width: 95%;
   }
 
@@ -41,11 +41,11 @@
 
 .titlemodalAgendaItems {
   color: var(--color-gray-900);
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid var(--color-gray-200);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-3) solid var(--color-gray-200);
   width: 65%;
 }
 
@@ -53,7 +53,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 3px solid var(--color-gray-200);
+  border-bottom: var(--border-3) solid var(--color-gray-200);
 }
 
 .noOutline input {
@@ -62,8 +62,8 @@
 
 .noOutline input:focus-visible,
 .noOutline textarea:focus-visible {
-  outline: 2px solid var(--color-blue-500);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-2);
 }
 
 .noOutline input:disabled {
@@ -86,7 +86,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 5px 0;
+  padding: var(--space-4) var(--space-0);
 }
 
 .urlListItem a {
@@ -99,12 +99,12 @@
 }
 
 .urlIcon {
-  margin-right: 10px;
+  margin-right: var(--space-5);
 }
 
 .deleteButtonAgendaItems {
   margin-left: auto;
-  padding: 2px 5px;
+  padding: var(--space-2) var(--space-4);
 }
 
 .previewFile {
@@ -112,15 +112,15 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-5);
 }
 
 .previewFile img,
 .previewFile video {
   width: 100%;
-  max-width: 400px;
+  max-width: var(--space-23);
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-5);
 }
 
 .attachmentPreview {
@@ -130,29 +130,30 @@
 
 .closeButtonFile {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: var(--space-5);
+  right: var(--space-5);
   background: transparent;
   transform: scale(1.2);
   cursor: pointer;
   border: none;
   color: var(--color-red-500);
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
 }
 
 .greenregbtnAgendaItems {
-  margin-top: 15px;
-  border: 1px solid var(--color-green-500);
-  box-shadow: 0 2px 2px var(--color-gray-300);
-  padding: 10px 10px;
-  border-radius: 5px;
+  margin-top: var(--space-7);
+  border: var(--border-1) solid var(--color-green-500);
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-sm)
+    var(--shadow-blur-sm) var(--color-gray-300);
+  padding: var(--space-5) var(--space-5);
+  border-radius: var(--radius-sm);
   background-color: var(--color-green-500);
   width: 100%;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: var(--color-white);
   outline: none;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition:
     transform 0.2s,
@@ -160,8 +161,8 @@
 }
 
 .greenregbtnAgendaItems:focus-visible {
-  outline: 2px solid var(--color-green-500);
-  outline-offset: 2px;
+  outline: var(--border-2) solid var(--color-green-500);
+  outline-offset: var(--space-2);
 }
 
 .attachmentPlaceholder {
@@ -169,23 +170,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: var(--space-8);
   background-color: var(--color-gray-50);
-  border: 1px dashed var(--color-gray-200);
-  border-radius: 8px;
-  min-height: 100px;
+  border: var(--border-1) dashed var(--color-gray-200);
+  border-radius: var(--radius-md);
+  min-height: var(--space-15);
 }
 
 .attachmentPlaceholder i {
-  font-size: 32px;
+  font-size: var(--font-size-3xl);
   color: var(--color-gray-600);
-  margin-bottom: 8px;
+  margin-bottom: var(--space-4);
 }
 
 .fileName {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: var(--color-gray-900);
   word-break: break-word;
   text-align: center;
-  max-width: 200px;
+  max-width: var(--space-18);
 }

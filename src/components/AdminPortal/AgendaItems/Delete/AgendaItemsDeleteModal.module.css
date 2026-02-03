@@ -2,21 +2,21 @@
 
 .agendaItemModal {
   max-width: 80vw;
-  margin-top: 2vh;
+  margin-top: var(--space-10);
   margin-left: auto;
   margin-right: auto;
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md)) {
   .agendaItemModal {
-    margin: 10vh auto;
+    margin: var(--space-12) auto;
     max-width: 90%;
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: var(--breakpoint-sm)) {
   .agendaItemModal {
-    margin: 5vh auto;
+    margin: var(--space-9) auto;
     max-width: 95%;
   }
 }
