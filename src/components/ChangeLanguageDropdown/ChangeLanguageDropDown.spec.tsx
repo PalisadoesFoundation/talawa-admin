@@ -141,10 +141,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -163,10 +165,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -184,13 +188,13 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
     await waitFor(() => {
       languages.forEach((language) => {
         const option = screen.getByTestId(
-          `change-language-btn-${language.code}`,
+          `language-dropdown-item-${language.code}`,
         );
         expect(option).toBeInTheDocument();
       });
@@ -221,11 +225,12 @@ describe('ChangeLanguageDropDown', () => {
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
-
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -255,10 +260,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -303,10 +310,12 @@ describe('ChangeLanguageDropDown', () => {
         </MockedProvider>,
       );
 
-      const dropdown = screen.getByTestId('language-dropdown-btn');
+      const dropdown = screen.getByTestId('language-dropdown-toggle');
       await userEvent.click(dropdown);
 
-      const spanishOption = await screen.findByTestId('change-language-btn-es');
+      const spanishOption = await screen.findByTestId(
+        'language-dropdown-item-es',
+      );
       await userEvent.click(spanishOption);
 
       await waitFor(() => {
@@ -340,7 +349,9 @@ describe('ChangeLanguageDropDown', () => {
 
     // The component should render without errors even when cookies.get returns null
     // This tests the fallback branch: cookies.get('i18next') || 'en'
-    expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('language-dropdown-container'),
+    ).toBeInTheDocument();
   });
 
   it('changes language locally without calling mutation when user is not logged in', async () => {
@@ -377,10 +388,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -431,10 +444,12 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const spanishOption = await screen.findByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId(
+      'language-dropdown-item-es',
+    );
     await userEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -480,10 +495,10 @@ describe('ChangeLanguageDropDown', () => {
       </MockedProvider>,
     );
 
-    const dropdown = screen.getByTestId('language-dropdown-btn');
+    const dropdown = screen.getByTestId('language-dropdown-toggle');
     await userEvent.click(dropdown);
 
-    const frenchOption = await screen.findByTestId('change-language-btn-fr');
+    const frenchOption = await screen.findByTestId('language-dropdown-item-fr');
     await userEvent.click(frenchOption);
 
     await waitFor(() => {
