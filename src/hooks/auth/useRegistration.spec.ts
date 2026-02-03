@@ -75,10 +75,9 @@ describe('useRegistration', () => {
     const { result } = renderHook(() => useRegistration({}));
 
     // Mock setTimeout to throw an error
-    const originalSetTimeout = global.setTimeout;
-    global.setTimeout = vi.fn().mockImplementation(() => {
+    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
       throw new Error('Registration failed');
-    }) as unknown as typeof setTimeout;
+    });
 
     await act(async () => {
       try {
@@ -92,9 +91,6 @@ describe('useRegistration', () => {
         // Expected to catch error
       }
     });
-
-    // Restore original setTimeout
-    global.setTimeout = originalSetTimeout;
 
     expect(result.current.loading).toBe(false);
   });
@@ -157,6 +153,7 @@ describe('useRegistration', () => {
     expect(mockOnError.mock.calls[1][0].message).toBe(
       'Missing required registration data',
     );
+    expect(result.current.loading).toBe(false);
 
     await act(async () => {
       await result.current.register({
@@ -171,6 +168,7 @@ describe('useRegistration', () => {
     expect(mockOnError.mock.calls[2][0].message).toBe(
       'Missing required registration data',
     );
+    expect(result.current.loading).toBe(false);
   });
 
   it('should handle registration with organizationId correctly', async () => {
