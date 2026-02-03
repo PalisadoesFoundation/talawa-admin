@@ -43,11 +43,11 @@ import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 
+import type { InterfaceOrganizationMember } from 'types/UserPortal/Chat/interface';
 import type {
-  InterfaceOrganizationMember,
   InterfaceCreateDirectChatProps,
   InterfaceHandleCreateDirectChatParams,
-} from 'types/UserPortal/Chat/interface';
+} from 'types/UserPortal/CreateDirectChat/interface';
 
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';

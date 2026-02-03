@@ -14,7 +14,7 @@ Handles the logic for checking existing chats and creating a new direct chat if 
 
 ### params
 
-[`InterfaceHandleCreateDirectChatParams`](../../../../../types/UserPortal/Chat/interface/interfaces/InterfaceHandleCreateDirectChatParams.md)
+[`InterfaceHandleCreateDirectChatParams`](../../../../../types/UserPortal/CreateDirectChat/interface/interfaces/InterfaceHandleCreateDirectChatParams.md)
 
 The parameters object containing user info, chat data, and mutation functions.
 

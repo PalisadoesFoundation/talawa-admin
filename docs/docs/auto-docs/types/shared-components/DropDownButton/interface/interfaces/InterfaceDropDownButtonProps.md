@@ -42,7 +42,7 @@ Custom styles for the dropdown button.
 
 > `optional` **buttonLabel**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L99)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L100)
 
 The label of the button.
 
@@ -62,7 +62,7 @@ Data test id prefix for testing purposes.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L109)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L110)
 
 Whether the dropdown button is disabled.
 
@@ -82,7 +82,7 @@ Direction the dropdown menu opens.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L104)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L105)
 
 The icon to be displayed on the button.
 
@@ -146,7 +146,7 @@ Custom styles for the parent container.
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L114)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L115)
 
 Placeholder text when no option is selected.
 

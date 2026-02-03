@@ -116,12 +116,12 @@ export interface InterfaceGroupChatDetailsProps {
   chatRefetch: (
     variables?:
       | Partial<{
-          input: { id: string };
-          first?: number;
-          after?: string | null;
-          lastMessages?: number;
-          beforeMessages?: string | null;
-        }>
+        input: { id: string };
+        first?: number;
+        after?: string | null;
+        lastMessages?: number;
+        beforeMessages?: string | null;
+      }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chat: NewChatType }>>;
 }
@@ -147,53 +147,3 @@ export interface InterfaceOrganizationMember {
   role: string;
 }
 
-/**
- * Props for CreateDirectChat modal.
- */
-export interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  chats: NewChatType[];
-}
-
-/**
- * Parameters for creating a direct chat with another user.
- * Encapsulates user info, chat data, mutation functions, and UI handlers.
- */
-export interface InterfaceHandleCreateDirectChatParams {
-  id: string;
-  userName: string;
-  chats: NewChatType[];
-  t: TFunction<'translation', 'userChat'>;
-  tCommon: TFunction<'common', undefined>;
-  createChat: (
-    options?:
-      | MutationFunctionOptions<
-          unknown,
-          OperationVariables,
-          DefaultContext,
-          ApolloCache<unknown>
-        >
-      | undefined,
-  ) => Promise<FetchResult<unknown>>;
-  createChatMembership: (
-    options?:
-      | MutationFunctionOptions<
-          unknown,
-          OperationVariables,
-          DefaultContext,
-          ApolloCache<unknown>
-        >
-      | undefined,
-  ) => Promise<FetchResult<unknown>>;
-  organizationId: string | undefined;
-  userId: string | null;
-  currentUserName: string;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  toggleCreateDirectChatModal: () => void;
-}

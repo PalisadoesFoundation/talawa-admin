@@ -125,7 +125,7 @@ export default function GroupChatDetails({
       after: null,
       where: {},
     },
-    skip: !userId,
+    skip: !userId || !chat.organization?.id,
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -207,9 +207,10 @@ export default function GroupChatDetails({
   };
 
   const handleUserModalSearchChange = (value: string): void => {
+    if (!chat.organization?.id) return;
     const trimmedName = value.trim();
     allUsersRefetch({
-      input: { id: chat.organization?.id },
+      input: { id: chat.organization.id },
       first: 20,
       after: null,
       where: trimmedName ? { name_contains: trimmedName } : {},
