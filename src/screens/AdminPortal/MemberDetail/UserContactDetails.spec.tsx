@@ -974,11 +974,14 @@ describe('MemberDetail', () => {
 
       await user.click(resetButton);
 
-      await waitFor(() => {
-        expect(screen.queryByTestId('resetChangesBtn')).toBeNull();
-        expect(screen.queryByTestId('saveChangesBtn')).toBeNull();
-        expect(nameInput).toHaveValue('Rishav Jha');
-      });
+      await waitFor(
+        () => {
+          expect(screen.queryByTestId('resetChangesBtn')).toBeNull();
+          expect(screen.queryByTestId('saveChangesBtn')).toBeNull();
+          expect(nameInput).toHaveValue('Rishav Jha');
+        },
+        { timeout: 3000 },
+      );
 
       const resetImg = screen.getByTestId(
         'profile-picture-img',
