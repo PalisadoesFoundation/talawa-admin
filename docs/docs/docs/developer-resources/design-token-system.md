@@ -108,16 +108,13 @@ These guardrails catch new hardcoded values before merge and keep token usage co
 
 ```bash
 # Check staged files (for pre-commit)
-pnpm exec tsx scripts/validate-tokens.ts --staged
+pnpm exec tsx scripts/validate-tokens.ts --staged --all
 
 # Check specific files
 pnpm exec tsx scripts/validate-tokens.ts --files src/path/to/file.tsx src/path/to/style.css
 
 # Scan entire repository
 pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo
-
-# Warn only (don't fail)
-pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo --warn
 ```
 
 ## MUI DataGrid Column Widths
