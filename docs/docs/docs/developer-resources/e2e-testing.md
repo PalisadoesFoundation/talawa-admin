@@ -164,7 +164,7 @@ deterministic and consistent:
 Datasets are intentionally minimal, include edge cases (empty arrays, long
 names, Unicode), and avoid PII.
 
-Note: `auth/users.json` contains user metadata (id, name, emailAddress, role).
+Note: `auth/users.json` contains user metadata (id, name, email, role).
 Use `auth/credentials.json` for login credentials in Cypress tests.
 
 Example usage with GraphQL utilities:

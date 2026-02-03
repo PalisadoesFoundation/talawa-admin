@@ -29,7 +29,7 @@ type GqlOperationConfig = GqlOperationOptions & {
   timeout?: number;
 };
 
-const getApiPattern = (): string => {
+export const getApiPattern = (): string => {
   const apiUrl =
     (Cypress.env('apiUrl') as string | undefined) ||
     (Cypress.env('API_URL') as string | undefined) ||

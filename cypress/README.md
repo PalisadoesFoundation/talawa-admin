@@ -40,7 +40,7 @@ cy.mockGraphQLOperation(
 
 ### Auth fixtures
 
-`auth/users.json` contains user metadata (id, name, emailAddress, role). Use
+`auth/users.json` contains user metadata (id, name, email, role). Use
 `auth/credentials.json` for login/passwords:
 
 ```ts

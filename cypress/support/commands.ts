@@ -1,4 +1,6 @@
 /// <reference types="cypress" />
+import { getApiPattern } from './graphql-utils';
+
 export {};
 
 /** Type definitions for GraphQL signIn response */
@@ -33,6 +35,7 @@ declare global {
       assertToast(expectedMessage: string | RegExp): Chainable<void>;
       /**
        * Reset GraphQL intercepts back to pass-through behavior.
+       * @returns Chainable
        */
       clearAllGraphQLMocks(): Chainable<Subject>;
     }
@@ -107,12 +110,7 @@ Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
 });
 
 Cypress.Commands.add('clearAllGraphQLMocks', () => {
-  const apiPattern =
-    (Cypress.env('apiUrl') as string | undefined) ||
-    (Cypress.env('API_URL') as string | undefined) ||
-    (Cypress.env('CYPRESS_API_URL') as string | undefined) ||
-    '**/graphql';
-  cy.intercept('POST', apiPattern, (req) => {
+  cy.intercept('POST', getApiPattern(), (req) => {
     req.continue();
   });
 });

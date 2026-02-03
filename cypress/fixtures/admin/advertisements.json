@@ -3,6 +3,7 @@
     {
       "id": "ad_001",
       "name": "Advertisement 1",
+      "description": "This is a test advertisement",
       "type": "Popup Ad",
       "status": "ACTIVE",
       "startDate": "2026-01-01T00:00:00.000Z",
@@ -11,6 +12,7 @@
     {
       "id": "ad_002",
       "name": "Advertisement 2",
+      "description": "Updated advertisement text",
       "type": "Popup Ad",
       "status": "INACTIVE",
       "startDate": "2026-02-01T00:00:00.000Z",
