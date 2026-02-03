@@ -146,11 +146,8 @@
 .greenregbtnAgendaItems {
   margin-top: var(--space-7);
   border: var(--border-1) solid var(--color-green-500);
-  box-shadow:
-    var(--shadow-offset-none)
-    var(--shadow-offset-sm)
-    var(--shadow-blur-sm)
-    var(--color-gray-300);
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-sm)
+    var(--shadow-blur-sm) var(--color-gray-300);
   padding: var(--space-5) var(--space-5);
   border-radius: var(--radius-sm);
   background-color: var(--color-green-500);

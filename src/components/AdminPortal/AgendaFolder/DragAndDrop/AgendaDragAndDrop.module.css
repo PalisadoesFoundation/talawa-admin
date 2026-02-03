@@ -10,11 +10,8 @@
 }
 
 .dragging {
-  box-shadow:
-    var(--shadow-offset-none)
-    var(--shadow-offset-md)
-    var(--shadow-blur-lg)
-    var(--dragging-box-shadow);
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-md)
+    var(--shadow-blur-lg) var(--dragging-box-shadow);
   z-index: 1000;
   background-color: var(--dragging-bg);
 }
@@ -34,10 +31,7 @@
 .tableHeadAgendaItems {
   background-color: var(--tableHeadAgendaItems-bg) !important;
   color: var(--tableHeadAgendaItems-color);
-  border-radius:
-    var(--radius-lg)
-    var(--radius-lg)
-    var(--radius-none)
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-none)
     var(--radius-none) !important;
   padding: var(--space-8);
 }

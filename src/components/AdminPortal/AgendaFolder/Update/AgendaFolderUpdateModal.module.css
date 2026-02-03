@@ -7,11 +7,8 @@
 .regBtn {
   margin-top: var(--space-5);
   border: var(--border-1) solid var(--regBtn-border);
-  box-shadow:
-    var(--shadow-offset-none)
-    var(--shadow-offset-sm)
-    var(--shadow-blur-sm)
-    var(--regBtn-box-shadow);
+  box-shadow: var(--shadow-offset-none) var(--shadow-offset-sm)
+    var(--shadow-blur-sm) var(--regBtn-box-shadow);
   padding: var(--space-5) var(--space-5);
   border-radius: var(--radius-sm);
   background-color: var(--regBtn-bg);
