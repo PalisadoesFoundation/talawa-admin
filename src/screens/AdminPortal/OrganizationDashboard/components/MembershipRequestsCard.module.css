@@ -1,3 +1,11 @@
+.row {
+  margin-bottom: var(--space-7);
+}
+
+.card {
+  border-radius: var(--radius-md);
+}
+
 .requestsIcon {
   color: var(--color-gray-700);
 }

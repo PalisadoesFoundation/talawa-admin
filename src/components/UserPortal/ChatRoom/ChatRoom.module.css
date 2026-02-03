@@ -78,7 +78,7 @@
   margin: var(--space-2) var(--space-3);
   width: fit-content;
   max-width: 75%;
-  background-color: color-mix(in srgb, var(--color-green-50), transparent 70%);
+  background-color: color-mix(in srgb, var(--color-green-100), transparent 70%);
   min-width: var(--space-6);
   padding-bottom: 0;
   display: flex;
@@ -216,8 +216,7 @@
 }
 
 .customToggle:hover {
-  background-color: var(--color-black);
-  opacity: 0.05;
+  background-color: color-mix(in srgb, var(--color-black), transparent 95%);
 }
 
 .customToggle svg {

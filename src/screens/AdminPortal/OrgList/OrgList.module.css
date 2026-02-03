@@ -307,5 +307,38 @@
 }
 
 .shimmerText {
-  composes: shimmer from global;
+  animation-duration: 2.2s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: shimmer;
+  animation-timing-function: linear;
+  background: var(--color-gray-200);
+  background: linear-gradient(
+    to right,
+    var(--color-gray-50) 8%,
+    var(--color-gray-100) 18%,
+    var(--color-gray-50) 33%
+  );
+  background-size: calc(var(--space-25)+var(--space-50)) 100%;
+}
+
+@-webkit-keyframes shimmer {
+  0% {
+    background-position: -100% var(--space-0);
+  }
+
+  100% {
+    background-position: 100% var(--space-0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: calc((var(--space-25) + var(--space-50)) * -1)
+      var(--space-0);
+  }
+
+  100% {
+    background-position: calc(var(--space-25) + var(--space-50)) var(--space-0);
+  }
 }

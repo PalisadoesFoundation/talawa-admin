@@ -8,10 +8,20 @@
 }
 
 .roleBadge {
-  composes: badge from global;
-  composes: bg-success from global;
-  composes: text-dark from global;
+  --badge-padding-x: 0.65em;
+  --badge-padding-y: 0.35em;
+
+  display: inline-block;
+  padding: var(--badge-padding-y) var(--badge-padding-x);
   font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: calc(var(--radius-xs) + var(--radius-sm));
+  background-color: var(--color-green-500);
+  color: var(--color-gray-900);
   margin-left: var(--space-3);
 }
 
@@ -20,7 +30,6 @@
 }
 
 .dropdownToggle {
-  composes: btn-sm from global;
   color: var(--color-black);
   border: none;
   padding: var(--space-0);
@@ -164,8 +173,9 @@
 }
 
 .headerGroupInfo {
-  composes: modal-title from global;
-  composes: h4 from global;
+  margin-bottom: 0;
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-xl);
 }
 
 .userName {
