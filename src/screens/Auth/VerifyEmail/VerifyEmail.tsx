@@ -14,7 +14,7 @@
  * @returns The VerifyEmail component
  */
 import { useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
@@ -25,12 +25,11 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import useLocalStorage from 'utils/useLocalstorage';
+import { removeItem, PREFIX } from 'utils/useLocalstorage';
 import styles from './VerifyEmail.module.css';
 
 type VerificationState = 'loading' | 'success' | 'error';
@@ -47,7 +46,9 @@ type VerificationState = 'loading' | 'success' | 'error';
 const VerifyEmail = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'verifyEmail' });
   const { t: tCommon } = useTranslation('common');
-  const { removeItem } = useLocalStorage();
+
+  // Ref to track if verification has already been attempted to prevent race conditions
+  const verificationAttemptedRef = useRef(false);
 
   useEffect(() => {
     document.title = t('title');
@@ -59,16 +60,20 @@ const VerifyEmail = (): JSX.Element => {
   const [verificationState, setVerificationState] =
     useState<VerificationState>('loading');
 
-  const [verifyEmail, { loading: verifyLoading }] = useMutation(
-    VERIFY_EMAIL_MUTATION,
-  );
+  const [verifyEmail] = useMutation(VERIFY_EMAIL_MUTATION);
   const [resendVerification, { loading: resendLoading }] = useMutation(
     RESEND_VERIFICATION_EMAIL_MUTATION,
   );
 
-  // Verify email on component mount
+  // Verify email on component mount - runs only once per token
   useEffect(() => {
+    // Prevent duplicate verification attempts (fixes race condition)
+    if (verificationAttemptedRef.current) {
+      return;
+    }
+
     let isActive = true;
+
     const verifyEmailToken = async (): Promise<void> => {
       if (!token) {
         if (isActive) {
@@ -76,6 +81,9 @@ const VerifyEmail = (): JSX.Element => {
         }
         return;
       }
+
+      // Mark as attempted before starting the async operation
+      verificationAttemptedRef.current = true;
 
       try {
         const { data } = await verifyEmail({
@@ -89,8 +97,9 @@ const VerifyEmail = (): JSX.Element => {
         if (data?.verifyEmail?.success) {
           setVerificationState('success');
           NotificationToast.success(t('success'));
-          removeItem('emailNotVerified');
-          removeItem('unverifiedEmail');
+          // Use static imports to avoid unstable function references
+          removeItem(PREFIX, 'emailNotVerified');
+          removeItem(PREFIX, 'unverifiedEmail');
         } else {
           setVerificationState('error');
         }
@@ -119,7 +128,9 @@ const VerifyEmail = (): JSX.Element => {
     return () => {
       isActive = false;
     };
-  }, [token, verifyEmail, t, removeItem]);
+    // Only depend on token - verifyEmail mutation function is stable from Apollo
+    // Using static removeItem import eliminates unstable hook dependencies
+  }, [token, verifyEmail, t]);
 
   /**
    * Handles resending verification email
@@ -141,94 +152,92 @@ const VerifyEmail = (): JSX.Element => {
   };
 
   return (
-    <LoadingState isLoading={verifyLoading || resendLoading} variant="spinner">
-      <div className={styles.pageWrapper}>
-        <div className="row container-fluid d-flex justify-content-center items-center">
-          <div className="col-12 col-lg-4 px-0">
-            <div className={styles.cardTemplate}>
-              <TalawaLogo className={styles.logo} />
+    <div className={styles.pageWrapper}>
+      <div className="row container-fluid d-flex justify-content-center items-center">
+        <div className="col-12 col-lg-4 px-0">
+          <div className={styles.cardTemplate}>
+            <TalawaLogo className={styles.logo} />
 
-              {verificationState === 'loading' && (
-                <div className={styles.stateContainer}>
-                  <output
-                    className="spinner-border text-primary"
-                    role="status"
-                    data-testid="loading-spinner"
-                  >
-                    <span className="visually-hidden">{t('verifying')}</span>
-                  </output>
-                  <h3 className="text-center fw-bold mt-4">{t('verifying')}</h3>
-                </div>
-              )}
-
-              {verificationState === 'success' && (
-                <div
-                  className={styles.stateContainer}
-                  data-testid="success-state"
+            {verificationState === 'loading' && (
+              <div className={styles.stateContainer}>
+                <output
+                  className="spinner-border text-primary"
+                  role="status"
+                  data-testid="loading-spinner"
                 >
-                  <CheckCircleOutline
-                    className={styles.successIcon}
-                    data-testid="success-icon"
-                  />
-                  <h3 className="text-center fw-bold mt-3">{t('success')}</h3>
-                  <p className="text-center text-muted mt-2">
-                    {t('successMessage')}
-                  </p>
-                  <Link to="/" className="w-100">
-                    <Button
-                      className={`mt-4 w-100 ${styles.actionBtn}`}
-                      data-testid="goToLoginBtn"
-                    >
-                      {t('goToLogin')}
-                    </Button>
+                  <span className="visually-hidden">{t('verifying')}</span>
+                </output>
+                <h3 className="text-center fw-bold mt-4">{t('verifying')}</h3>
+              </div>
+            )}
+
+            {verificationState === 'success' && (
+              <div
+                className={styles.stateContainer}
+                data-testid="success-state"
+              >
+                <CheckCircleOutline
+                  className={styles.successIcon}
+                  data-testid="success-icon"
+                />
+                <h3 className="text-center fw-bold mt-3">{t('success')}</h3>
+                <p className="text-center text-muted mt-2">
+                  {t('successMessage')}
+                </p>
+                <Link to="/" className="w-100">
+                  <Button
+                    className={`mt-4 w-100 ${styles.actionBtn}`}
+                    data-testid="goToLoginBtn"
+                  >
+                    {t('goToLogin')}
+                  </Button>
+                </Link>
+              </div>
+            )}
+
+            {verificationState === 'error' && (
+              <div
+                className={styles.stateContainer}
+                data-testid="error-state"
+              >
+                <ErrorOutline
+                  className={styles.errorIcon}
+                  data-testid="error-icon"
+                />
+                <h3 className="text-center fw-bold mt-3">{t('error')}</h3>
+                <p className="text-center text-muted mt-2">
+                  {t('invalidToken')}
+                </p>
+
+                <Button
+                  variant="outline-primary"
+                  className="mt-4 w-100"
+                  onClick={handleResendEmail}
+                  disabled={resendLoading}
+                  data-testid="resendVerificationBtn"
+                >
+                  {resendLoading ? tCommon('loading') : t('resendButton')}
+                </Button>
+
+                <div className="d-flex justify-content-center mt-4">
+                  <Link
+                    to="/"
+                    className="d-flex align-items-center text-secondary"
+                    data-testid="backToLoginLink"
+                  >
+                    <ArrowRightAlt
+                      fontSize="medium"
+                      sx={{ transform: 'rotate(180deg)' }}
+                    />
+                    {tCommon('login')}
                   </Link>
                 </div>
-              )}
-
-              {verificationState === 'error' && (
-                <div
-                  className={styles.stateContainer}
-                  data-testid="error-state"
-                >
-                  <ErrorOutline
-                    className={styles.errorIcon}
-                    data-testid="error-icon"
-                  />
-                  <h3 className="text-center fw-bold mt-3">{t('error')}</h3>
-                  <p className="text-center text-muted mt-2">
-                    {t('invalidToken')}
-                  </p>
-
-                  <Button
-                    variant="outline-primary"
-                    className="mt-4 w-100"
-                    onClick={handleResendEmail}
-                    disabled={resendLoading}
-                    data-testid="resendVerificationBtn"
-                  >
-                    {resendLoading ? tCommon('loading') : t('resendButton')}
-                  </Button>
-
-                  <div className="d-flex justify-content-center mt-4">
-                    <Link
-                      to="/"
-                      className="d-flex align-items-center text-secondary"
-                      data-testid="backToLoginLink"
-                    >
-                      <ArrowRightAlt
-                        fontSize="medium"
-                        sx={{ transform: 'rotate(180deg)' }}
-                      />
-                      {tCommon('login')}
-                    </Link>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
-    </LoadingState>
+    </div>
   );
 };
 

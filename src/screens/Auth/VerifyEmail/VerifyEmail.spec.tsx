@@ -367,8 +367,8 @@ describe('Testing VerifyEmail screen', () => {
     expect(backLink).toHaveAttribute('href', '/');
   });
 
-  describe('LoadingState Behavior', () => {
-    it('should show LoadingState spinner while verification is in progress', async () => {
+  describe('Loading State Behavior', () => {
+    it('should show loading spinner while verification is in progress', async () => {
       const loadingMocks = [
         {
           request: {
@@ -402,9 +402,8 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
-      });
+      // The component shows its own loading spinner (not LoadingState wrapper)
+      expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
     });
   });
 
