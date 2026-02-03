@@ -1907,7 +1907,8 @@
       "message": "An unexpected error occurred in the chat room",
       "resetButton": "Try Again",
       "resetButtonAriaLabel": "Try again"
-    }
+    },
+    "messageActions": "Message actions"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

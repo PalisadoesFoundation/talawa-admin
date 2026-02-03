@@ -3,6 +3,7 @@ import { useRegistration } from './useRegistration';
 
 describe('useRegistration', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
@@ -34,10 +35,9 @@ describe('useRegistration', () => {
     );
 
     // Mock setTimeout to throw an error
-    const originalSetTimeout = global.setTimeout;
-    global.setTimeout = vi.fn().mockImplementation(() => {
+    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
       throw new Error('Registration failed');
-    }) as unknown as typeof setTimeout;
+    });
 
     await act(async () => {
       try {
@@ -51,9 +51,6 @@ describe('useRegistration', () => {
         // Expected to catch error
       }
     });
-
-    // Restore original setTimeout
-    global.setTimeout = originalSetTimeout;
 
     expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
     expect(result.current.loading).toBe(false);
@@ -78,10 +75,9 @@ describe('useRegistration', () => {
     const { result } = renderHook(() => useRegistration({}));
 
     // Mock setTimeout to throw an error
-    const originalSetTimeout = global.setTimeout;
-    global.setTimeout = vi.fn().mockImplementation(() => {
+    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
       throw new Error('Registration failed');
-    }) as unknown as typeof setTimeout;
+    });
 
     await act(async () => {
       try {
@@ -95,9 +91,6 @@ describe('useRegistration', () => {
         // Expected to catch error
       }
     });
-
-    // Restore original setTimeout
-    global.setTimeout = originalSetTimeout;
 
     expect(result.current.loading).toBe(false);
   });
@@ -124,5 +117,87 @@ describe('useRegistration', () => {
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
+  });
+
+  it('should throw error if registration data is missing', async () => {
+    const mockOnError = vi.fn();
+    const { result } = renderHook(() =>
+      useRegistration({ onError: mockOnError }),
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: '',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+    expect(mockOnError.mock.calls[0][0].message).toBe(
+      'Missing required registration data',
+    );
+    expect(result.current.loading).toBe(false);
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: '',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(2);
+    expect(mockOnError.mock.calls[1][0].message).toBe(
+      'Missing required registration data',
+    );
+    expect(result.current.loading).toBe(false);
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: '',
+        organizationId: '1',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(3);
+    expect(mockOnError.mock.calls[2][0].message).toBe(
+      'Missing required registration data',
+    );
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('should handle registration with organizationId correctly', async () => {
+    const mockOnSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useRegistration({ onSuccess: mockOnSuccess }),
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: 'org-123',
+      });
+    });
+
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    expect(result.current.loading).toBe(false);
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '',
+      });
+    });
+
+    expect(mockOnSuccess).toHaveBeenCalledTimes(2);
+    expect(result.current.loading).toBe(false);
   });
 });

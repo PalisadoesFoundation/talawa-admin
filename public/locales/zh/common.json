@@ -299,5 +299,6 @@
   "toggleSidebar": "切换侧边栏",
   "picture": "{{name}}的图片",
   "unknownUser": "未知用户",
-  "optionsSuffix": "选项"
+  "optionsSuffix": "选项",
+  "userMenu": "用户菜单"
 }

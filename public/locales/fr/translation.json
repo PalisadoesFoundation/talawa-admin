@@ -1924,7 +1924,8 @@
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
       "resetButton": "Réessayer",
       "resetButtonAriaLabel": "Réessayer"
-    }
+    },
+    "messageActions": "Actions de message"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

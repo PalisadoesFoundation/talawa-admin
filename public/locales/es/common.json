@@ -299,5 +299,6 @@
   "toggleSidebar": "Alternar barra lateral",
   "picture": "Imagen de {{name}}",
   "unknownUser": "Usuario desconocido",
-  "optionsSuffix": "opciones"
+  "optionsSuffix": "opciones",
+  "userMenu": "Menú de usuario"
 }

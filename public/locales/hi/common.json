@@ -299,5 +299,6 @@
   "toggleSidebar": "साइडबार टॉगल करें",
   "picture": "{{name}} चित्र",
   "unknownUser": "अज्ञात उपयोगकर्ता",
-  "optionsSuffix": "विकल्प"
+  "optionsSuffix": "विकल्प",
+  "userMenu": "उपयोगकर्ता मेनू"
 }

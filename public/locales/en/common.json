@@ -299,5 +299,6 @@
   "toggleSidebar": "Toggle sidebar",
   "picture": "{{name}} Picture",
   "unknownUser": "Unknown user",
-  "optionsSuffix": "options"
+  "optionsSuffix": "options",
+  "userMenu": "User menu"
 }

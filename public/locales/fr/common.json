@@ -299,5 +299,6 @@
   "toggleSidebar": "Basculer la barre latérale",
   "picture": "Image de {{name}}",
   "unknownUser": "Utilisateur inconnu",
-  "optionsSuffix": "options"
+  "optionsSuffix": "options",
+  "userMenu": "Menu utilisateur"
 }
