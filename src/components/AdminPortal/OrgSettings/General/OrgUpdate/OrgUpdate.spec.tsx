@@ -39,6 +39,8 @@ i18n.init({
           'Is Public': 'Is Public',
           nameDescriptionRequired: 'Name and description are required',
           updateFailed: 'Failed to update organization',
+          invalidImageType: 'Please upload a valid image file',
+          imageSizeTooLarge: 'Image size must be less than 5MB',
         },
       },
       common: {
