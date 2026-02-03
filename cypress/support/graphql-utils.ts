@@ -55,7 +55,7 @@ const interceptGraphQLOperation = (
  * @returns void
  */
 export const aliasGraphQLOperation = (operationName: string): void => {
-  interceptGraphQLOperation(operationName, () => undefined);
+  interceptGraphQLOperation(operationName, (req) => req.continue());
 };
 
 /**
