@@ -1,7 +1,7 @@
 /* -- EventAgenda.tsx -- */
 
 .container {
-  min-height: 100vh;
+  min-height: var(--space-29);
 }
 
 .message {
@@ -13,52 +13,52 @@
 }
 
 .errorIcon {
-  font-size: var(--error-icon-size, 40px);
+  font-size: var(--error-icon-size, var(--font-size-3xl));
   color: var(--bs-danger, var(--errorIcon-color));
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-5);
 
   /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
-    margin-right: 0.5rem;
+    margin-right: var(--space-4);
   }
 }
 
 .eventAgendaItemContainer h2 {
-  margin: 0.6rem 0;
+  margin: var(--space-4) var(--space-0);
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md)) {
   .btnsContainer {
-    margin-bottom: 0;
+    margin-bottom: var(--space-0);
     display: flex;
     flex-direction: column;
   }
 
   .createAgendaItemButton {
     position: absolute;
-    top: 1rem;
-    right: 2rem;
+    top: var(--space-5);
+    right: var(--space-8);
   }
 }
 
 .btnsContainer {
   display: flex;
-  margin: 2.5rem 0;
+  margin: var(--space-9) var(--space-0);
   align-items: center;
-  gap: 12px;
+  gap: var(--space-6);
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 320px;
-  min-width: 240px;
+  flex: 1 1 var(--space-22);
+  min-width: var(--space-21);
   max-width: 100%;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -67,5 +67,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 0;
+  margin-top: var(--space-0);
 }

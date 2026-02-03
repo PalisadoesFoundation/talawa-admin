@@ -72,16 +72,21 @@ export default function AgendaDragAndDrop({
 
     try {
       await Promise.all(
-        reorderedItems.map((item) =>
-          updateAgendaItemSequence({
-            variables: {
-              input: {
-                id: item.id,
-                sequence: item.sequence,
+        reorderedItems
+          .filter((item, index) => {
+            const originalItem = items[index];
+            return originalItem?.sequence !== item.sequence;
+          })
+          .map((item) =>
+            updateAgendaItemSequence({
+              variables: {
+                input: {
+                  id: item.id,
+                  sequence: item.sequence,
+                },
               },
-            },
-          }),
-        ),
+            }),
+          ),
       );
 
       NotificationToast.success(t('itemSequenceUpdateSuccessMsg'));
