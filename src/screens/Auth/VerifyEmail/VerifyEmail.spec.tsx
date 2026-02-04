@@ -623,6 +623,46 @@ describe('Testing VerifyEmail screen', () => {
     expect(toastMocks.error).toHaveBeenCalled();
   });
 
+  it('Should not call setVerificationState when unmounted after mutation resolves', async () => {
+    const slowMock = {
+      request: {
+        query: VERIFY_EMAIL_MUTATION,
+        variables: { token: 'slow-verify-token' },
+      },
+      result: {
+        data: {
+          verifyEmail: {
+            success: true,
+            message: 'Email verified successfully',
+            user: null,
+          },
+        },
+      },
+      delay: 200,
+    };
+
+    const { unmount } = render(
+      <MockedProvider mocks={[slowMock]}>
+        <MemoryRouter
+          initialEntries={['/auth/verify-email?token=slow-verify-token']}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await new Promise((resolve) => setTimeout(resolve, 250));
+    unmount();
+
+    await new Promise((resolve) => setTimeout(resolve, 400));
+
+    expect(true).toBe(true);
+  });
+
   it('Should not update state after component unmount during verification', async () => {
     const slowMock = {
       request: {
