@@ -63,6 +63,10 @@ function CreatePostModal({
     setIspinned(false);
     setFile(null);
     setPreview(null);
+    setPreviewType(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
     onHide();
   };
 
@@ -231,10 +235,7 @@ function CreatePostModal({
           }
         >
           <PushPin
-            sx={{
-              transform: 'rotate(45deg)',
-              color: isPinned ? '#0a66c2' : '',
-            }}
+            className={isPinned ? styles.pinIconActive : styles.pinIcon}
           />
         </button>
       </div>
@@ -317,16 +318,25 @@ function CreatePostModal({
           data-testid="postBodyInput"
         />
         {(() => {
-          const isSafePreviewUrl =
-            typeof preview === 'string' && preview.startsWith('blob:');
+          const sanitizeBlobUrl = (url: string | null): string | null => {
+            if (!url || typeof url !== 'string') return null;
+            try {
+              const parsed = new URL(url);
+              if (parsed.protocol !== 'blob:') return null;
+              return url;
+            } catch {
+              return null;
+            }
+          };
+
+          const safeBlobUrl = sanitizeBlobUrl(preview);
           return (
-            preview &&
-            previewType &&
-            isSafePreviewUrl && (
+            safeBlobUrl &&
+            previewType && (
               <div className={styles.imagePreviewContainer}>
                 {previewType === 'image' && (
                   <img
-                    src={preview}
+                    src={safeBlobUrl}
                     alt={t('createPostModal.selectedImage')}
                     className={styles.imagePreview}
                     data-testid="imagePreview"
@@ -335,7 +345,7 @@ function CreatePostModal({
 
                 {previewType === 'video' && (
                   <video
-                    src={preview}
+                    src={safeBlobUrl}
                     controls
                     className={styles.videoPreview}
                     data-testid="videoPreview"
