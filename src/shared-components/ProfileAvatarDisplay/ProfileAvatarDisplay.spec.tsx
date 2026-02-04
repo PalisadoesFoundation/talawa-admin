@@ -38,7 +38,6 @@ vi.mock('react-i18next', () => ({
 describe('ProfileAvatarDisplay Component', () => {
   let user: ReturnType<typeof userEvent.setup>;
   beforeEach(() => {
-    vi.clearAllMocks();
     user = userEvent.setup();
   });
 

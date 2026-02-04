@@ -1333,7 +1333,7 @@ describe('MemberDetail', () => {
     await waitFor(
       () => {
         expect(
-          screen.getByTestId('maritalstatus-dropdown-menu'),
+          screen.getByTestId('marital-status-btn-menu'),
         ).toBeInTheDocument();
       },
       { timeout: 3000 },
