@@ -4,9 +4,7 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent, {
-  PointerEventsCheckLevel,
-} from '@testing-library/user-event';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
@@ -64,12 +62,11 @@ const setupLocationMock = () => {
 };
 
 // Helper function to create mock Apollo responses
+// CursorPaginationManager only uses first/after for forward pagination
 type MemberConnectionVariables = {
   orgId: string;
   first?: number | null;
   after?: string | null;
-  last?: number | null;
-  before?: string | null;
   where?: { role?: { equal: string } };
 };
 
@@ -170,11 +167,8 @@ const createMemberConnectionMock = (
 };
 
 type UserListVariables = {
-  orgId: string;
   first?: number | null;
   after?: string | null;
-  last?: number | null;
-  before?: string | null;
 };
 
 type UserEdge = {
@@ -287,8 +281,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       }),
     ];
 
@@ -318,8 +310,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       }),
     ];
 
@@ -377,8 +367,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       }),
     ];
 
@@ -441,8 +429,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const adminMock = createMemberConnectionMock(
@@ -450,8 +436,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
         where: { role: { equal: 'administrator' } },
       },
       {
@@ -472,11 +456,8 @@ describe('OrganizationPeople', () => {
     );
 
     const usersMock = createUserListMock({
-      orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const mocks = [initialMock, adminMock, usersMock];
@@ -542,8 +523,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const mocks = [initialMock];
@@ -582,8 +561,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const initialAdminMock = createMemberConnectionMock(
@@ -591,8 +568,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
         where: { role: { equal: 'administrator' } },
       },
       {
@@ -661,16 +636,11 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const initialUsersMock = createUserListMock({
-      orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const mocks = [initialMemberMock, initialUsersMock];
@@ -716,8 +686,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const initialAdminMock = createMemberConnectionMock(
@@ -725,8 +693,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
         where: { role: { equal: 'administrator' } },
       },
       {
@@ -809,8 +775,6 @@ describe('OrganizationPeople', () => {
           orgId: 'orgid',
           first: 10,
           after: null,
-          last: null,
-          before: null,
         },
       },
       error: new Error('An error occurred'),
@@ -835,9 +799,11 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for error handling
+    // CursorPaginationManager handles errors internally with its own UI
+    // Check for error state display with retry button
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('Retry')).toBeInTheDocument();
     });
   });
 
@@ -846,19 +812,14 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const errorMock = {
       request: {
         query: USER_LIST_FOR_TABLE,
         variables: {
-          orgId: 'orgid',
           first: 10,
           after: null,
-          last: null,
-          before: null,
         },
       },
       error: new Error('An error occurred'),
@@ -888,16 +849,18 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Switch to admin tab
+    // Switch to users tab
     const sortingButton = screen.getByTestId('sort-toggle');
     await userEvent.click(sortingButton);
 
-    const adminOption = screen.getByText(/user/i);
-    await userEvent.click(adminOption);
+    const usersOption = screen.getByText(/users/i);
+    await userEvent.click(usersOption);
 
-    // Wait for error handling
+    // CursorPaginationManager handles errors internally with its own UI
+    // Check for error state display with retry button
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('Retry')).toBeInTheDocument();
     });
   });
 
@@ -907,8 +870,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       },
       {
         edges: [],
@@ -956,8 +917,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
     const removeMemberMock = {
@@ -1023,8 +982,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       },
       {
         edges: [
@@ -1082,28 +1039,16 @@ describe('OrganizationPeople', () => {
     });
   });
 
-  test('handles backward navigation with missing page cursors', async () => {
-    const user = userEvent.setup({
-      pointerEventsCheck: PointerEventsCheckLevel.Never,
-    });
+  test('DataGridWrapper handles pagination', async () => {
+    // CursorPaginationManager handles cursor pagination with Load More,
+    // DataGridWrapper handles client-side pagination for display
     const initialMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
     });
 
-    // Mock for backward navigation without stored cursors
-    const backwardMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: null,
-      after: null,
-      last: 10,
-      before: null, // This will test the fallback to null
-    });
-
-    const link = new StaticMockLink([initialMock, backwardMock], true);
+    const link = new StaticMockLink([initialMock], true);
 
     render(
       <MockedProvider link={link}>
@@ -1125,18 +1070,8 @@ describe('OrganizationPeople', () => {
     // Wait for initial data
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
-
-    // Manually trigger pagination to page 1 to simulate being on a later page
-    // without having proper cursor data stored
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    await user.click(nextPageButton);
-
-    // Now try to go back - this should trigger the fallback to null
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    await user.click(prevPageButton);
   });
 
   test('prevents forward pagination when hasNextPage is false', async () => {
@@ -1145,8 +1080,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       },
       {
         edges: [
@@ -1195,7 +1128,7 @@ describe('OrganizationPeople', () => {
   });
 
   test('skips storing cursors when startCursor or endCursor is missing', async () => {
-    // This test targets line 256 - the ELSE path (when condition is false)
+    // This test verifies the component handles partial cursor data gracefully
     const mockWithPartialCursors = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -1203,8 +1136,6 @@ describe('OrganizationPeople', () => {
           orgId: 'orgid',
           first: 10,
           after: null,
-          last: null,
-          before: null,
         },
       },
       result: {
@@ -1267,8 +1198,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       },
       {
         edges: [
@@ -1336,8 +1265,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       },
       {
         edges: [
@@ -1400,8 +1327,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
       }),
     ];
 

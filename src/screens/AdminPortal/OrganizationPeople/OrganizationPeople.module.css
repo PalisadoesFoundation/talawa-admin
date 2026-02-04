@@ -96,3 +96,20 @@
 .memberNameFontSize {
   font-size: var(--font-size-md);
 }
+
+.hidden {
+  display: none;
+}
+
+/* DatagridWrapper's Column min-width classes using spacing tokens */
+.colMinWidthXs {
+  min-width: var(--space-10);
+}
+
+.colMinWidthSm {
+  min-width: var(--space-13);
+}
+
+.colMinWidthMd {
+  min-width: var(--space-15);
+}
