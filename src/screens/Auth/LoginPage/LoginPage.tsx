@@ -204,13 +204,10 @@ const LoginPage = (): JSX.Element => {
     if (orgData) {
       const options = orgData.organizations.map(
         (org: InterfaceQueryOrganizationListObject) => {
-          const tempObj: { label: string; value: string } | null = {} as {
-            label: string;
-            value: string;
+          return {
+            label: `${org.name}(${org.addressLine1})`,
+            value: org.id,
           };
-          tempObj['label'] = `${org.name}(${org.addressLine1})`;
-          tempObj['value'] = org.id;
-          return tempObj;
         },
       );
       setOrganizations(options);
