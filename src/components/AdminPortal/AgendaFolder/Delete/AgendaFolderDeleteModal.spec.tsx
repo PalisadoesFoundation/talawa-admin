@@ -91,6 +91,10 @@ const renderAgendaFolderDeleteModal = (
 };
 
 describe('AgendaFolderDeleteModal', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Rendering', () => {
     it('renders modal when isOpen is true', () => {
       renderAgendaFolderDeleteModal();
