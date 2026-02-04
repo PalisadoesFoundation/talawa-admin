@@ -58,14 +58,22 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   },
 });
 
-// Queries in People.tsx use these variables (orgId, firstName_contains, first, after)
-const makeQueryVars = (overrides = {}) => ({
-  orgId: DEFAULT_ORG_ID,
-  firstName_contains: DEFAULT_SEARCH,
-  first: DEFAULT_FIRST,
-  after: null,
-  ...overrides,
-});
+// Queries in People.tsx use these variables (orgId, where, first, after)
+const makeQueryVars = (overrides: Record<string, unknown> = {}) => {
+  const { where: overrideWhere, ...rest } = overrides as {
+    where?: Record<string, unknown>;
+  };
+  return {
+    orgId: DEFAULT_ORG_ID,
+    where: {
+      firstName_contains: DEFAULT_SEARCH,
+      ...(overrideWhere ?? {}),
+    },
+    first: DEFAULT_FIRST,
+    after: null,
+    ...rest,
+  };
+};
 
 // Mocks for default render (All Members mode)
 const defaultMembersEdges = [
@@ -181,7 +189,7 @@ const adminsOnlyMock = {
 const adminSearchMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Admin' }),
+    variables: makeQueryVars({ where: { firstName_contains: 'Admin' } }),
   },
   result: {
     data: {
@@ -212,7 +220,7 @@ const adminSearchMock = {
 const adSearchMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Ad' }),
+    variables: makeQueryVars({ where: { firstName_contains: 'Ad' } }),
   },
   result: {
     data: {

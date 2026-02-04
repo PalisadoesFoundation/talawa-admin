@@ -19,13 +19,7 @@
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useCallback,
-  useRef,
-} from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
@@ -135,9 +129,7 @@ function OrganizationPeople(): JSX.Element {
 
   // Rows for all modes (will be populated by CursorPaginationManager)
   const [memberRows, setMemberRows] = useState<IProcessedRow[]>([]);
-  const [refetchTrigger, setRefetchTrigger] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const didMountRef = useRef(false);
 
   const processMemberNodes = useCallback((nodes: IMemberNode[]) => {
     const rows = nodes.map((node, index) => ({
@@ -145,21 +137,17 @@ function OrganizationPeople(): JSX.Element {
       name: node.name,
       email: node.emailAddress,
       image: node.avatarURL,
-      createdAt: node.createdAt || new Date().toISOString(),
+      createdAt: node.createdAt || '',
       rowNumber: index + 1,
     }));
     setMemberRows(rows);
     setIsLoading(false);
   }, []);
 
-  // trigger refetch in CursorPaginationManager (skip initial mount)
+  // reset rows on filter or org change; CursorPaginationManager refetches via variables
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      return;
-    }
+    setMemberRows([]);
     setIsLoading(true);
-    setRefetchTrigger((prev) => prev + 1);
   }, [state, currentUrl]);
 
   const currentRows = memberRows;
@@ -305,15 +293,17 @@ function OrganizationPeople(): JSX.Element {
         const locale = currentLang
           ? `${currentLang.code}-${currentLang.country_code}`
           : 'en-US';
-        return (
-          <div data-testid={`org-people-joined-${params.row.id}`}>
-            {t('joined')} :{' '}
-            {new Intl.DateTimeFormat(locale, {
+        const joinedDate = params.row.createdAt
+          ? new Intl.DateTimeFormat(locale, {
               year: 'numeric',
               month: '2-digit',
               day: '2-digit',
               timeZone: 'UTC',
-            }).format(new Date(params.row.createdAt))}
+            }).format(new Date(params.row.createdAt))
+          : 'Unknown';
+        return (
+          <div data-testid={`org-people-joined-${params.row.id}`}>
+            {t('joined')} : {joinedDate}
           </div>
         );
       },
@@ -384,7 +374,6 @@ function OrganizationPeople(): JSX.Element {
             itemsPerPage={PAGE_SIZE}
             onDataChange={processMemberNodes}
             onError={() => setIsLoading(false)}
-            refetchTrigger={refetchTrigger}
             renderItem={() => null}
             loadingComponent={<></>}
             emptyStateComponent={<></>}
@@ -402,7 +391,6 @@ function OrganizationPeople(): JSX.Element {
             itemsPerPage={PAGE_SIZE}
             onDataChange={processMemberNodes}
             onError={() => setIsLoading(false)}
-            refetchTrigger={refetchTrigger}
             renderItem={() => null}
             loadingComponent={<></>}
             emptyStateComponent={<></>}

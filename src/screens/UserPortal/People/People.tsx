@@ -22,7 +22,7 @@
  * - Styles:
  *   - `./People.module.css`
  */
-import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import styles from './People.module.css';
@@ -59,9 +59,6 @@ export default function People(): React.JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [mode, setMode] = useState<number>(0); // 0: All Members, 1: Admins
-  const [refetchTrigger, setRefetchTrigger] = useState<number>(0);
-  const didMountRef = useRef(false);
-
   // Bridge state: data from CursorPaginationManager → DataTable
   const [members, setMembers] = useState<IMemberNode[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -70,15 +67,10 @@ export default function People(): React.JSX.Element {
 
   const modes = [t('allMembers'), t('admins')];
 
-  // Trigger refetch when mode or search term changes (skip initial mount)
+  // Reset rows on filter or search change; CursorPaginationManager refetches via variables
   useEffect(() => {
-    if (!didMountRef.current) {
-      didMountRef.current = true;
-      return;
-    }
-    setRefetchTrigger((prev) => prev + 1);
-    setIsLoading(true);
     setMembers([]);
+    setIsLoading(true);
   }, [mode, searchTerm]);
 
   const handleSearch = (newFilter: string): void => {
@@ -95,11 +87,15 @@ export default function People(): React.JSX.Element {
   const queryVariables = useMemo(() => {
     const vars: Record<string, unknown> = {
       orgId: organizationId,
-      firstName_contains: searchTerm,
+      where: {
+        firstName_contains: searchTerm,
+      },
     };
     // Add admin filter when in admin mode
     if (mode === 1) {
-      vars.where = { role: { equal: 'administrator' } };
+      (vars.where as Record<string, unknown>).role = {
+        equal: 'administrator',
+      };
     }
     return vars;
   }, [organizationId, searchTerm, mode]);
@@ -203,7 +199,6 @@ export default function People(): React.JSX.Element {
           queryVariables={queryVariables}
           dataPath="organization.members"
           itemsPerPage={ITEMS_PER_PAGE}
-          refetchTrigger={refetchTrigger}
           onDataChange={handleDataChange}
           renderItem={() => null}
           loadingComponent={<></>}
