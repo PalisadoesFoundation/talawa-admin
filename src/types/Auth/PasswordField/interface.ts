@@ -12,6 +12,8 @@ export interface InterfacePasswordFieldProps {
   placeholder?: string;
   error?: string | null;
   testId?: string;
+  /** Optional data-cy for e2e (Cypress) selectors */
+  dataCy?: string;
   showPassword?: boolean;
   onToggleVisibility?: () => void;
 }

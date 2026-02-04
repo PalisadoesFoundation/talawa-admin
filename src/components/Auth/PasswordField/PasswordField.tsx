@@ -1,13 +1,13 @@
-import React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import React, { type ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { usePasswordVisibility } from '../../../hooks/usePasswordVisibility';
 import type { InterfacePasswordFieldProps } from '../../../types/Auth/PasswordField/interface';
 
 /**
  * Reusable password field component with visibility toggle functionality.
- * Uses usePasswordVisibility hook by default but supports external control.
+ * Uses the shared FormTextField with endAdornment for show/hide password.
  */
 export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   label,
@@ -17,6 +17,7 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   placeholder,
   error,
   testId,
+  dataCy,
   showPassword: externalShowPassword,
   onToggleVisibility: externalToggle,
 }) => {
@@ -25,41 +26,46 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   const showPassword = externalShowPassword ?? internal.showPassword;
   const togglePassword = externalToggle ?? internal.togglePassword;
 
-  return (
-    <Form.Group className="mb-3" controlId={name}>
-      {label && <Form.Label>{label}</Form.Label>}
-      <InputGroup>
-        <Form.Control
-          type={showPassword ? 'text' : 'password'}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          isInvalid={!!error}
-          data-testid={testId}
-        />
-        <InputGroup.Text
-          as="button"
-          type="button"
-          onClick={togglePassword}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              togglePassword();
-            }
-          }}
-          aria-label={showPassword ? t('hidePassword') : t('showPassword')}
-          aria-pressed={showPassword}
-          className="bg-white"
-        >
-          {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-        </InputGroup.Text>
-      </InputGroup>
-      {error && (
-        <Form.Control.Feedback type="invalid" className="d-block">
-          {error}
-        </Form.Control.Feedback>
+  const visibilityToggle = (
+    <button
+      type="button"
+      onClick={togglePassword}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          togglePassword();
+        }
+      }}
+      aria-label={showPassword ? t('hidePassword') : t('showPassword')}
+      aria-pressed={showPassword}
+      className="input-group-text bg-white border-start-0"
+      tabIndex={0}
+    >
+      {showPassword ? (
+        <AiOutlineEyeInvisible aria-hidden />
+      ) : (
+        <AiOutlineEye aria-hidden />
       )}
-    </Form.Group>
+    </button>
+  );
+
+  return (
+    <FormTextField
+      name={name}
+      label={label ?? ''}
+      hideLabel={!label}
+      type={showPassword ? 'text' : 'password'}
+      placeholder={placeholder}
+      value={value}
+      onChange={(v) =>
+        onChange({ target: { value: v } } as ChangeEvent<HTMLInputElement>)
+      }
+      error={error ?? undefined}
+      touched={!!error}
+      endAdornment={visibilityToggle}
+      data-testid={testId}
+      data-cy={dataCy}
+      className="mb-3"
+    />
   );
 };

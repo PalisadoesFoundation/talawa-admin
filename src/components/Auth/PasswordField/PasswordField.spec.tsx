@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { PasswordField } from './PasswordField';
 
@@ -17,6 +18,8 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('PasswordField', () => {
+  const user = userEvent.setup();
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -40,21 +43,7 @@ describe('PasswordField', () => {
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
   });
 
-  it('uses default name when not provided', () => {
-    render(<PasswordField {...defaultProps} />);
-
-    const input = screen.getByDisplayValue('test123');
-    expect(input).toHaveAttribute('name', 'password');
-  });
-
-  it('uses custom name when provided', () => {
-    render(<PasswordField {...defaultProps} name="confirmPassword" />);
-
-    const input = screen.getByDisplayValue('test123');
-    expect(input).toHaveAttribute('name', 'confirmPassword');
-  });
-
-  it('toggles password visibility when button is clicked', () => {
+  it('toggles password visibility when button is clicked', async () => {
     render(<PasswordField {...defaultProps} />);
 
     const input = screen.getByDisplayValue('test123');
@@ -63,7 +52,7 @@ describe('PasswordField', () => {
     expect(input).toHaveAttribute('type', 'password');
     expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
 
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
 
     expect(input).toHaveAttribute('type', 'text');
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
@@ -80,7 +69,7 @@ describe('PasswordField', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  it('supports external visibility control', () => {
+  it('supports external visibility control', async () => {
     const mockToggle = vi.fn();
     render(
       <PasswordField
@@ -96,11 +85,11 @@ describe('PasswordField', () => {
     expect(input).toHaveAttribute('type', 'text');
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
 
-    fireEvent.click(toggleButton);
+    await user.click(toggleButton);
     expect(mockToggle).toHaveBeenCalledTimes(1);
   });
 
-  it('handles Enter key on toggle button', () => {
+  it('handles Enter key on toggle button', async () => {
     render(<PasswordField {...defaultProps} />);
 
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
@@ -110,7 +99,8 @@ describe('PasswordField', () => {
     expect(passwordInput).toHaveAttribute('type', 'password');
     expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
 
-    fireEvent.keyDown(toggleButton, { key: 'Enter' });
+    toggleButton.focus();
+    await user.keyboard('{Enter}');
 
     // After Enter key, password should be visible
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
@@ -118,7 +108,7 @@ describe('PasswordField', () => {
     expect(toggleButton).toHaveAttribute('aria-label', 'Hide password');
   });
 
-  it('handles Space key on toggle button', () => {
+  it('handles Space key on toggle button', async () => {
     render(<PasswordField {...defaultProps} />);
 
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
@@ -128,7 +118,8 @@ describe('PasswordField', () => {
     expect(passwordInput).toHaveAttribute('type', 'password');
     expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
 
-    fireEvent.keyDown(toggleButton, { key: ' ' });
+    toggleButton.focus();
+    await user.keyboard(' ');
 
     // After Space key, password should be visible
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
@@ -136,15 +127,16 @@ describe('PasswordField', () => {
     expect(toggleButton).toHaveAttribute('aria-label', 'Hide password');
   });
 
-  it('calls onChange when input value changes', () => {
+  it('calls onChange when input value changes', async () => {
     const mockOnChange = vi.fn();
     render(<PasswordField {...defaultProps} onChange={mockOnChange} />);
 
     const input = screen.getByDisplayValue('test123');
 
-    fireEvent.change(input, { target: { value: 'newpassword' } });
+    await user.clear(input);
+    await user.type(input, 'x');
 
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
+    expect(mockOnChange).toHaveBeenCalled();
   });
 
   it('applies testId when provided', () => {

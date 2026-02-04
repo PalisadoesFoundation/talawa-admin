@@ -15,6 +15,16 @@ Supports optional validator callbacks via the error prop, which accepts string o
 
 ## Properties
 
+### dataCy?
+
+> `optional` **dataCy**: `string`
+
+Defined in: [src/types/shared-components/Auth/EmailField/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/EmailField/interface.ts#L33)
+
+Optional data-cy for e2e (Cypress) selectors
+
+***
+
 ### error?
 
 > `optional` **error**: `string`

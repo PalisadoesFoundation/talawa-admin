@@ -118,6 +118,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         value={formData.email}
         onChange={handleEmailChange}
         testId={`${testId}-email`}
+        dataCy="loginEmail"
       />
 
       <PasswordField
@@ -126,6 +127,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         onChange={handlePasswordChange}
         placeholder={tCommon('enterPassword')}
         testId={`${testId}-password`}
+        dataCy="loginPassword"
       />
 
       {enableRecaptcha && RECAPTCHA_SITE_KEY && (
@@ -147,6 +149,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
           (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
         }
         data-testid={`${testId}-submit`}
+        data-cy="loginBtn"
         className="w-100 mt-3"
       >
         {loading ? t('loading') : tCommon('login')}

@@ -11,6 +11,16 @@ Extends basic form field functionality with password visibility toggle features.
 
 ## Properties
 
+### dataCy?
+
+> `optional` **dataCy**: `string`
+
+Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L16)
+
+Optional data-cy for e2e (Cypress) selectors
+
+***
+
 ### error?
 
 > `optional` **error**: `string`
@@ -57,7 +67,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:11](https://github.com/Pa
 
 > `optional` **onToggleVisibility**: () => `void`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L16)
+Defined in: [src/types/Auth/PasswordField/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L18)
 
 #### Returns
 
@@ -77,7 +87,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/Pa
 
 > `optional` **showPassword**: `boolean`
 
-Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L15)
+Defined in: [src/types/Auth/PasswordField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L17)
 
 ***
 
