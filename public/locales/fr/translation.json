@@ -163,7 +163,9 @@
     "notAuthorised": "Non autorisé",
     "notFound": "Non trouvé",
     "OR": "OU",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "previousYear": "Année précédente",
+    "nextYear": "Année suivante"
   },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",

@@ -1483,7 +1483,9 @@
     "email": "Email",
     "role": "Role",
     "loading": "Loading...",
-    "emailNotAvailable": "Email not available"
+    "emailNotAvailable": "Email not available",
+    "previousYear": "Previous Year",
+    "nextYear": "Next Year"
   },
   "userLogin": {
     "login": "Login",
