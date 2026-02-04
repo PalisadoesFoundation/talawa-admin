@@ -191,7 +191,6 @@ const mocks = [
 
 describe('CreateDirectChatModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
   const { setItem } = useLocalStorage();
@@ -200,7 +199,6 @@ describe('CreateDirectChatModal', () => {
 
   beforeEach(() => {
     setItem('userId', '1');
-    vi.clearAllMocks();
   });
 
   const renderComponent = (props = {}) => {

@@ -1552,12 +1552,27 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'initial-chat',
               id: 'initial-chat',
               name: 'Initial Chat',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -1625,12 +1640,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'no-org-chat',
               id: 'no-org-chat',
               name: 'Chat No Org',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               organization: null,
               __typename: 'Chat',
             },
@@ -1657,12 +1672,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'no-org-chat',
               id: 'no-org-chat',
               name: 'Chat No Org',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               organization: null,
               __typename: 'Chat',
             },
@@ -1901,12 +1916,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'initial-chat',
               id: 'initial-chat',
               name: 'Initial Chat',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -1998,19 +2013,19 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should pass correct props to ContactCard for legacy chat', async () => {
-    const legacyChatMock = {
+  test('should pass correct props to ContactCard for group chat', async () => {
+    const groupChatMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'legacy-props',
               id: 'legacy-props',
               name: 'Legacy Props Chat',
-              isGroup: true,
-              users: [{}, {}, {}],
-              image: 'http://example.com/legacy-props.png',
+              avatarURL: 'http://example.com/legacy-props.png',
+              members: { edges: [{}, {}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -2018,7 +2033,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    renderComponent([legacyChatMock, legacyChatMock, mockUnreadChats]);
+    renderComponent([groupChatMock, groupChatMock, mockUnreadChats]);
 
     await waitFor(() => {
       const card = screen.getByTestId('contact-card-legacy-props');
@@ -2028,10 +2043,10 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  // ==================== TYPE GUARD TESTING ====================
+  // ==================== UNIFIED CHAT SCHEMA TESTING ====================
 
-  test('should correctly use isNewChatType type guard', async () => {
-    const mixedTypesMock = {
+  test('should handle different chat data shapes correctly', async () => {
+    const unifiedChatsMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
@@ -2046,12 +2061,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
               __typename: 'Chat',
             },
             {
-              _id: 'only-underscore-id',
               id: 'only-underscore-id',
               name: 'Only Underscore ID',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -2059,7 +2074,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
       },
     };
 
-    renderComponent([mixedTypesMock, mixedTypesMock, mockUnreadChats]);
+    renderComponent([unifiedChatsMock, unifiedChatsMock, mockUnreadChats]);
 
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-only-id')).toBeInTheDocument();
@@ -2163,19 +2178,19 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
   });
 
-  test('should handle legacy chat with undefined users array length', async () => {
-    const legacyUndefinedUsersMock = {
+  test('should handle chat with undefined members array', async () => {
+    const undefinedMembersMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
         data: {
           chatsByUser: [
             {
-              _id: 'undefined-users',
               id: 'undefined-users',
               name: 'Undefined Users',
-              isGroup: false,
-              users: undefined,
-              image: '',
+              avatarURL: '',
+              members: { edges: undefined },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
@@ -2184,9 +2199,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
     };
 
     renderComponent([
-      legacyUndefinedUsersMock,
-      legacyUndefinedUsersMock,
-      legacyUndefinedUsersMock,
+      undefinedMembersMock,
+      undefinedMembersMock,
+      undefinedMembersMock,
       mockUnreadChats,
     ]);
 
@@ -2259,12 +2274,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
               __typename: 'Chat',
             },
             {
-              _id: 'null-image',
               id: 'null-image',
               name: 'Null Image',
-              isGroup: false,
-              users: [{}, {}],
-              image: null,
+              avatarURL: null,
+              members: { edges: [{}, {}] },
+              unreadMessagesCount: 0,
+              lastMessage: null,
               __typename: 'Chat',
             },
           ],
