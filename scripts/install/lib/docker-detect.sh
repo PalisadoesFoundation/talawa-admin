@@ -274,8 +274,9 @@ check_docker_compose() {
         if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
             version_output="${_mock_docker_compose_output:-}"
             if [[ -n "$version_output" ]]; then
-                # Parse version from "Docker Compose version v2.21.0"
-                version="$(printf '%s' "$version_output" | awk '{print $NF}' | tr -d 'v')"
+                # Parse version from "Docker Compose version v2.21.0" or "Docker Compose version v2.21.0+azure"
+                # Extract first semantic version to ignore build metadata
+                version="$(printf '%s' "$version_output" | grep -oE 'v?[0-9]+(\.[0-9]+)+' | head -n1 | sed 's/^v//')"
                 if [[ -n "$version" ]]; then
                     printf 'v2:%s' "$version"
                     return 0
@@ -283,8 +284,9 @@ check_docker_compose() {
             fi
         else
             version_output="$(docker compose version 2>/dev/null)" && {
-                # Parse version from "Docker Compose version v2.21.0"
-                version="$(printf '%s' "$version_output" | awk '{print $NF}' | tr -d 'v')"
+                # Parse version from "Docker Compose version v2.21.0" or "Docker Compose version v2.21.0+azure"
+                # Extract first semantic version to ignore build metadata
+                version="$(printf '%s' "$version_output" | grep -oE 'v?[0-9]+(\.[0-9]+)+' | head -n1 | sed 's/^v//')"
                 if [[ -n "$version" ]]; then
                     printf 'v2:%s' "$version"
                     return 0
