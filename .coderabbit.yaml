@@ -106,13 +106,6 @@ reviews:
         - No duplicate or conflicting operations; watch pagination params (first/last).
         - Components using these operations must handle loading and error states in UI.
 
-    # 4) Docs (keep short; ensure consistency)
-    - path: '**/*.md'
-      instructions: |
-        Post a single, structured comment; reference file:line.
-        - Update examples to use pnpm.
-        - Maintain clear headings and link to related docs; ensure ToC anchors are correct where applicable.
-
   pre_merge_checks:
     # Enforce test file updates for modified source files
     custom_checks:
