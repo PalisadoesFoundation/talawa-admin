@@ -156,6 +156,7 @@ describe('EventListCardPreviewModal', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
   beforeEach(() => {
     vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (

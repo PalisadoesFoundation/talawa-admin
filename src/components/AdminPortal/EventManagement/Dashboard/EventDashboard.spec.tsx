@@ -113,21 +113,21 @@ const { mockEventListCardModals } = vi.hoisted(() => ({
   mockEventListCardModals: vi.fn(),
 }));
 
-mockEventListCardModals.mockImplementation(() => {
-  const [visible, setVisible] = React.useState(true);
-
-  return visible ? (
-    <div data-testid="event-list-card-modals">
-      <button
-        type="button"
-        data-testid="modal-close-btn"
-        onClick={() => setVisible(false)}
-      >
-        Close
-      </button>
-    </div>
-  ) : null;
-});
+mockEventListCardModals.mockImplementation(
+  ({ eventModalIsOpen, hideViewModal }) => {
+    return eventModalIsOpen ? (
+      <div data-testid="event-list-card-modals">
+        <button
+          type="button"
+          data-testid="modal-close-btn"
+          onClick={hideViewModal}
+        >
+          Close
+        </button>
+      </div>
+    ) : null;
+  },
+);
 
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
