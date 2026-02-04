@@ -1478,10 +1478,11 @@ describe('Organization Autocomplete Component', () => {
     return screen.getByTestId('selectOrg');
   };
 
-  it('renders Select Organization autocomplete with placeholder', async () => {
+  it('renders Select Organization drop down with placeholder', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
+    const input = within(autocomplete).getByTestId('selectOrg-toggle');
 
+    expect(input).toBeInTheDocument();
     expect(input).toBeInTheDocument();
     expect(input).toHaveAttribute(
       'placeholder',
@@ -1489,92 +1490,48 @@ describe('Organization Autocomplete Component', () => {
     );
   });
 
-  it('opens organization list when input is clicked', async () => {
+  it('opens organization list when input key is clicked', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
+    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
 
-    await user.click(input);
+    await user.click(dropdownToggle);
 
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
   });
 
-  it('filters and selects an organization using keyboard', async () => {
+  it('filters and selects an organization using search input', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
+    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
 
-    await user.type(input, 'Unity');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
+    // Open dropdown
+    await user.click(dropdownToggle);
+
+    // Get search input inside menu
+    const searchInput = await screen.findByTestId('selectOrg-search-input');
+    await user.type(searchInput, 'Unity');
+
+    // Select the filtered item
+    const option = await screen.findByText(
+      'Unity Foundation(123 Random Street)',
+    );
+    await user.click(option);
 
     await waitFor(() => {
-      expect(input).not.toHaveValue('');
+      expect(
+        within(dropdownToggle).getByText('Unity Foundation(123 Random Street)'),
+      ).toBeInTheDocument();
     });
   });
 
-  it('opens organization list using dropdown icon', async () => {
+  it('opens organization list using input click', async () => {
     const autocomplete = await setupRegistrationForm();
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    const buttons = within(autocomplete).getAllByRole('button');
-    const dropdownButton = buttons[0];
-
-    await user.click(dropdownButton);
-
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-  });
-
-  it('should have full width input as per w-100 class', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
-
-    expect(input).toHaveClass('w-100');
-    expect(input).toHaveClass('form-control');
-  });
-  it('clears selected organization using clear icon', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
-
-    await user.type(input, 'Unity');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
-
-    await waitFor(() => {
-      expect(input).not.toHaveValue('');
-    });
-
-    const clearButton = screen.getByLabelText(/clear/i);
-    await user.click(clearButton);
-
-    await waitFor(() => {
-      expect(input).toHaveValue('');
-    });
-  });
-
-  it('allows reopening list after clearing selection', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
-
-    await user.type(input, 'Unity');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
-
-    await wait();
-
-    const clearButton = screen.getByLabelText(/clear/i);
-    await user.click(clearButton);
-
-    await waitFor(() => {
-      expect(input).toHaveValue('');
-    });
-
-    // Click to reopen dropdown
     await user.click(input);
 
     await waitFor(() => {
-      // Dropdown should open
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
   });
@@ -1619,14 +1576,11 @@ describe('Organization Autocomplete Component', () => {
     await user.click(registerButton);
     await wait();
 
-    const autocomplete = screen.getByTestId('selectOrg');
-    const input = within(autocomplete).getByRole('combobox');
+    const autocomplete = screen.getByTestId('selectOrg-container');
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
+    expect(autocomplete).toBeInTheDocument();
     expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute(
-      'placeholder',
-      i18nForTest.t('loginPage.clickToSelectOrg'),
-    );
   });
 
   it('updates form state when organization is selected', async () => {
@@ -1653,15 +1607,14 @@ describe('Organization Autocomplete Component', () => {
 
   it('displays organizations in correct format', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
-
-    await user.click(input);
-    await wait();
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
     await user.type(input, 'Unity');
+    const item = await screen.findByText('Unity Foundation(123 Random Street)');
+    await user.click(item);
 
     await waitFor(() => {
-      expect(input).toHaveValue('Unity');
+      expect(input).toHaveValue('Unity Foundation(123 Random Street)');
     });
   });
 
@@ -1701,67 +1654,39 @@ describe('Organization Autocomplete Component', () => {
     await user.click(registerButton);
     await wait();
 
-    const autocomplete = screen.getByTestId('selectOrg');
-    const input = within(autocomplete).getByRole('combobox');
+    const autocomplete = screen.getByTestId('selectOrg-container');
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
     expect(autocomplete).toBeInTheDocument();
     expect(input).toBeEnabled();
   });
 
-  it('only shows clear button when organization is selected', async () => {
+  it('maintains search focus during interactions', async () => {
     const autocomplete = await setupRegistrationForm();
+    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
 
-    // Check that dropdown button exists
-    const dropdownButton = within(autocomplete).getByRole('button', {
-      name: /open/i,
-    });
-    expect(dropdownButton).toBeInTheDocument();
+    // Click toggle to open
+    await user.click(dropdownToggle);
 
-    // Select organization
-    const input = within(autocomplete).getByRole('combobox');
-    await user.type(input, 'Unity');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
-
-    await waitFor(() => {
-      expect(input).not.toHaveValue('');
-
-      within(autocomplete).queryByRole('button', {
-        name: /clear/i,
-      });
-    });
-  });
-
-  it('maintains focus during interactions', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
-
-    // Click input to focus
-    await user.click(input);
-    expect(input).toHaveFocus();
+    // Check search input focus
+    const searchInput = await screen.findByTestId('selectOrg-search-input');
+    expect(searchInput).toHaveFocus();
 
     // Type something
-    await user.type(input, 'Test');
-    expect(input).toHaveFocus();
-
-    // Clear input
-    await user.keyboard('{Control>}a{/Control}'); // Select all
-    await user.keyboard('{Delete}');
-    expect(input).toHaveFocus();
+    await user.type(searchInput, 'Test');
+    expect(searchInput).toHaveFocus();
   });
 
   it('handles special characters in organization names', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
     // Test with special characters
     await user.type(input, 'Mills &');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
 
-    await waitFor(() => {
-      expect(input).not.toHaveValue('');
-    });
+    // Should find the item
+    const item = await screen.findByText('Mills & Group(5112 Dare Centers)');
+    expect(item).toBeInTheDocument();
   });
 });
 

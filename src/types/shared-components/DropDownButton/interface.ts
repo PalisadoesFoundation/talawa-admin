@@ -112,4 +112,14 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text when no option is selected.
    */
   placeholder?: string;
+
+  /**
+   * Whether the dropdown should be searchable.
+   */
+  searchable?: boolean;
+
+  /**
+   * Placeholder text for the search input.
+   */
+  searchPlaceholder?: string;
 }

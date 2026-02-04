@@ -1,0 +1,40 @@
+.dropdownToggle {
+  min-width: var(--space-16);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-4);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+}
+
+.dropdownToggle:focus {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-2);
+}
+
+.dropdownToggle:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dropdownCaret {
+  transition: transform 0.2s;
+  margin-right: var(--space-3);
+}
+
+.dropdownIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-left: var(--space-3);
+}
+
+.searchToggleContainer {
+  position: relative;
+}
+
+.searchToggleInput {
+  background: transparent;
+}
