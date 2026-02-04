@@ -69,10 +69,13 @@ export _DOCKER_DETECT_TEST_MODE="${_DOCKER_DETECT_TEST_MODE:-}"
 # ==============================================================================
 
 # Default timeout for daemon connectivity check (in seconds)
-# Sanitize to ensure valid positive integer; default to 5 if empty/invalid
+# Sanitize to base-10 positive integer; clamp to at least 1
 DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-5}"
 DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT//[^0-9]/}"
-DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-5}"
+DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-1}"
+# Force base-10 to avoid octal parsing (leading zeros); clamp to minimum 1
+DOCKER_DAEMON_TIMEOUT=$((10#${DOCKER_DAEMON_TIMEOUT:-1}))
+[[ $DOCKER_DAEMON_TIMEOUT -lt 1 ]] && DOCKER_DAEMON_TIMEOUT=1
 
 # ==============================================================================
 # UTILITY FUNCTIONS
