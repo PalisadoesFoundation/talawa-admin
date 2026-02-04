@@ -1,9 +1,7 @@
 import React, { type FormEvent, type FC, useEffect, useState } from 'react';
 import Button from 'shared-components/Button/Button';
-import {
-  FormTextField,
-  FormFieldGroup,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import styles from './ActionItemCategoryModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -167,6 +165,10 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
   const handleDelete = async (): Promise<void> => {
     if (!category?.id) return;
 
+    if (!window.confirm(tCommon('deleteConfirmation'))) {
+      return;
+    }
+
     try {
       await deleteActionItemCategory({
         variables: {
@@ -237,18 +239,18 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
           />
 
           {/* Disabled Toggle */}
-          <FormFieldGroup name="isDisabled" label={tCommon('disabled')}>
-            <input
-              id="isDisabledSwitch"
-              type="checkbox"
-              checked={isDisabled}
-              data-testid="isDisabledSwitch"
-              className="form-check-input mt-2 ms-2"
-              onChange={() =>
-                setFormState({ ...formState, isDisabled: !isDisabled })
-              }
-            />
-          </FormFieldGroup>
+          <FormCheckField
+            name="isDisabled"
+            label={tCommon('disabled')}
+            id="isDisabledSwitch"
+            type="checkbox"
+            checked={isDisabled}
+            data-testid="isDisabledSwitch"
+            className="form-check-input mt-2 ms-2"
+            onChange={() =>
+              setFormState({ ...formState, isDisabled: !isDisabled })
+            }
+          />
 
           {/* Action Buttons */}
           <div className="d-flex gap-2 justify-content-between">

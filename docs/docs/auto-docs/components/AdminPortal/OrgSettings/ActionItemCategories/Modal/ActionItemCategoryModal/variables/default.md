@@ -6,4 +6,4 @@
 
 > `const` **default**: `FC`\<[`IActionItemCategoryModal`](../interfaces/IActionItemCategoryModal.md)\>
 
-Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L29)
+Defined in: [src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L27)

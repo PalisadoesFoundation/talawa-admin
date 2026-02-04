@@ -48,11 +48,6 @@ function orgPeopleListCard(
   // Get the current organization ID from the URL parameters
   const { orgId: currentUrl } = useParams();
 
-  // If the member ID is not provided, navigate to the organization list
-  if (!props.id) {
-    return <Navigate to={'/admin/orglist'} />;
-  }
-
   // Mutation to remove a member from the organization
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION_PG);
 
@@ -61,6 +56,11 @@ function orgPeopleListCard(
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+
+  // If the member ID is not provided, navigate to the organization list
+  if (!props.id) {
+    return <Navigate to={'/admin/orglist'} />;
+  }
 
   // Function to remove a member and handle success or error
   const removeMember = async (): Promise<void> => {
@@ -118,5 +118,4 @@ function orgPeopleListCard(
     </ErrorBoundaryWrapper>
   );
 }
-export {};
 export default orgPeopleListCard;

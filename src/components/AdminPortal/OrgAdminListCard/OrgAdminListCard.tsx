@@ -48,9 +48,6 @@ function orgAdminListCard({
   id,
   toggleRemoveModal,
 }: InterfaceOrgPeopleListCardProps): JSX.Element {
-  if (!id) {
-    return <Navigate to={'/admin/orglist'} />;
-  }
   const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
@@ -59,6 +56,10 @@ function orgAdminListCard({
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+
+  if (!id) {
+    return <Navigate to={'/admin/orglist'} />;
+  }
 
   /**
    * Function to remove the admin from the organization

@@ -7,7 +7,7 @@
 .titlemodal {
   color: var(--titlemodal-color);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--space-8--font-size-3xl);
+  font-size: var(--font-size-3xl);
   width: 65%;
   margin-bottom: var(--space-0);
 }
