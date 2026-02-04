@@ -197,15 +197,11 @@ check_docker_daemon() {
             local tmpfile pid
             tmpfile="$(mktemp 2>/dev/null || mktemp -t docker_check)"
             
-            _cleanup_daemon_check() {
-                [[ -n "${pid:-}" ]] && kill -9 "$pid" 2>/dev/null || true
-                [[ -n "${pid:-}" ]] && wait "$pid" 2>/dev/null || true
-                [[ -n "${tmpfile:-}" ]] && rm -f "$tmpfile"
-            }
-            trap '_cleanup_daemon_check' INT TERM EXIT
-            
             (docker info > "$tmpfile" 2>&1) &
             pid=$!
+            
+            # Use inline trap to avoid polluting global function namespace
+            trap '[[ -n "${pid:-}" ]] && kill -9 "$pid" 2>/dev/null; wait "$pid" 2>/dev/null; [[ -n "${tmpfile:-}" ]] && rm -f "$tmpfile"' INT TERM EXIT
             
             # Wait for completion or timeout
             local count=0
@@ -213,7 +209,9 @@ check_docker_daemon() {
                 sleep 1
                 count=$((count + 1))
                 if [[ $count -ge $DOCKER_DAEMON_TIMEOUT ]]; then
-                    _cleanup_daemon_check
+                    kill -9 "$pid" 2>/dev/null || true
+                    wait "$pid" 2>/dev/null || true
+                    rm -f "$tmpfile"
                     trap - INT TERM EXIT
                     printf 'unresponsive'
                     return 1
@@ -454,7 +452,9 @@ EOF
 _get_linux_docker_guidance() {
     local distro=""
     
-    if [[ -f /etc/os-release ]]; then
+    if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]] && [[ -n "${_mock_distro_id:-}" ]]; then
+        distro="${_mock_distro_id}"
+    elif [[ -f /etc/os-release ]]; then
         distro="$( ( . /etc/os-release 2>/dev/null; printf '%s' "${ID:-}" ) )"
     fi
 

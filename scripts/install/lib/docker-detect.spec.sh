@@ -45,6 +45,7 @@ reset_mock_env() {
     unset _mock_docker_info_timeout
     unset _mock_docker_compose_output
     unset _mock_docker_compose_v1_output
+    unset _mock_distro_id
     unset TALAWA_DOCKER_DETECT_SOURCED
 }
 
@@ -522,6 +523,28 @@ test_linux_docker_guidance_common_docs_url() {
     assert_contains "https://docs.docker.com" "$result" "Linux guidance should include docs URL"
 }
 
+test_linux_docker_guidance_ubuntu_branch() {
+    export _mock_distro_id="ubuntu"
+    source_docker_detect
+    
+    local result
+    result=$(_get_linux_docker_guidance)
+    
+    assert_contains "Ubuntu/Debian" "$result" "Ubuntu branch should mention Ubuntu/Debian" && \
+    assert_contains "apt-get" "$result" "Ubuntu branch should mention apt-get"
+}
+
+test_linux_docker_guidance_fedora_branch() {
+    export _mock_distro_id="fedora"
+    source_docker_detect
+    
+    local result
+    result=$(_get_linux_docker_guidance)
+    
+    assert_contains "Fedora/RHEL/CentOS" "$result" "Fedora branch should mention Fedora/RHEL/CentOS" && \
+    assert_contains "dnf" "$result" "Fedora branch should mention dnf"
+}
+
 test_get_docker_install_guidance_macos() {
     source_docker_detect
     
@@ -675,6 +698,8 @@ main() {
     run_test "Linux Docker Guidance - Common Header" test_linux_docker_guidance_common_header
     run_test "Linux Docker Guidance - Common Footer" test_linux_docker_guidance_common_footer
     run_test "Linux Docker Guidance - Common Docs URL" test_linux_docker_guidance_common_docs_url
+    run_test "Linux Docker Guidance - Ubuntu Branch" test_linux_docker_guidance_ubuntu_branch
+    run_test "Linux Docker Guidance - Fedora Branch" test_linux_docker_guidance_fedora_branch
     run_test "Get Install Guidance - macOS" test_get_docker_install_guidance_macos
     run_test "Get Install Guidance - WSL (env)" test_get_docker_install_guidance_wsl
     run_test "Get Install Guidance - Linux Fallback" test_get_docker_install_guidance_linux_fallback
