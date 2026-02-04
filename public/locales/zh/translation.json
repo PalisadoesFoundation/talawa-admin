@@ -163,9 +163,7 @@
     "notAuthorised": "未授权",
     "notFound": "未找到",
     "OR": "或",
-    "loading": "加载中",
-    "previousYear": "上一年",
-    "nextYear": "下一年"
+    "loading": "加载中"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",

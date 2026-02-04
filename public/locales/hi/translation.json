@@ -163,9 +163,7 @@
     "notAuthorised": "अनधिकृत",
     "notFound": "नहीं मिला",
     "OR": "या",
-    "loading": "लोड हो रहा है",
-    "previousYear": "पिछला वर्ष",
-    "nextYear": "अगला वर्ष"
+    "loading": "लोड हो रहा है"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",

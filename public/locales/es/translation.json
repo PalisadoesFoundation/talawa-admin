@@ -163,9 +163,7 @@
     "afterRegister": "Registrado exitosamente. Espere a que el administrador apruebe su solicitud.",
     "OR": "O",
     "loading": "Cargando...",
-    "selectOrg": "Seleccione una organización",
-    "previousYear": "Año anterior",
-    "nextYear": "Año siguiente"
+    "selectOrg": "Seleccione una organización"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
