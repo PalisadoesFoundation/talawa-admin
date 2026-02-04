@@ -1418,6 +1418,10 @@
     "name": "Nom",
     "email": "E-mail",
     "role": "Rôle",
+    "allMembers": "Tous les membres",
+    "admins": "Administrateurs",
+    "admin": "Administrateur",
+    "member": "Membre",
     "loading": "Chargement...",
     "emailNotAvailable": "E-mail non disponible"
   },

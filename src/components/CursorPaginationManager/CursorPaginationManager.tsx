@@ -141,6 +141,7 @@ export function CursorPaginationManager<
     loadingComponent,
     emptyStateComponent,
     onDataChange,
+    onError,
     refetchTrigger,
     paginationType = 'forward',
     variableKeyMap,
@@ -240,6 +241,12 @@ export function CursorPaginationManager<
     })(),
     notifyOnNetworkStatusChange: true,
   });
+
+  useEffect(() => {
+    if (error && onError) {
+      onError(error);
+    }
+  }, [error, onError]);
 
   // Data synchronization effect
   useEffect(() => {

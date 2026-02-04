@@ -1462,6 +1462,10 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
+    "allMembers": "All Members",
+    "admins": "Admins",
+    "admin": "Admin",
+    "member": "Member",
     "loading": "Loading...",
     "emailNotAvailable": "Email not available"
   },

@@ -22,7 +22,7 @@
  * - Styles:
  *   - `./People.module.css`
  */
-import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import styles from './People.module.css';
@@ -60,6 +60,7 @@ export default function People(): React.JSX.Element {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [mode, setMode] = useState<number>(0); // 0: All Members, 1: Admins
   const [refetchTrigger, setRefetchTrigger] = useState<number>(0);
+  const didMountRef = useRef(false);
 
   // Bridge state: data from CursorPaginationManager → DataTable
   const [members, setMembers] = useState<IMemberNode[]>([]);
@@ -67,10 +68,14 @@ export default function People(): React.JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const modes = ['All Members', 'Admins'];
+  const modes = [t('allMembers'), t('admins')];
 
-  // Trigger refetch when mode or search term changes
+  // Trigger refetch when mode or search term changes (skip initial mount)
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
     setRefetchTrigger((prev) => prev + 1);
     setIsLoading(true);
     setMembers([]);

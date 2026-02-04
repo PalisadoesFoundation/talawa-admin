@@ -19,7 +19,13 @@
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+} from 'react';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
@@ -130,6 +136,8 @@ function OrganizationPeople(): JSX.Element {
   // Rows for all modes (will be populated by CursorPaginationManager)
   const [memberRows, setMemberRows] = useState<IProcessedRow[]>([]);
   const [refetchTrigger, setRefetchTrigger] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const didMountRef = useRef(false);
 
   const processMemberNodes = useCallback((nodes: IMemberNode[]) => {
     const rows = nodes.map((node, index) => ({
@@ -141,10 +149,16 @@ function OrganizationPeople(): JSX.Element {
       rowNumber: index + 1,
     }));
     setMemberRows(rows);
+    setIsLoading(false);
   }, []);
 
-  // trigger refetch in CursorPaginationManager
+  // trigger refetch in CursorPaginationManager (skip initial mount)
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+    setIsLoading(true);
     setRefetchTrigger((prev) => prev + 1);
   }, [state, currentUrl]);
 
@@ -171,8 +185,6 @@ function OrganizationPeople(): JSX.Element {
     }
     return vars;
   }, [currentUrl, state]);
-
-  const isLoading = false;
 
   const toggleRemoveMemberModal = (id: string) => {
     setSelectedMemId(id);
@@ -371,6 +383,7 @@ function OrganizationPeople(): JSX.Element {
             dataPath="organization.members"
             itemsPerPage={PAGE_SIZE}
             onDataChange={processMemberNodes}
+            onError={() => setIsLoading(false)}
             refetchTrigger={refetchTrigger}
             renderItem={() => null}
             loadingComponent={<></>}
@@ -388,6 +401,7 @@ function OrganizationPeople(): JSX.Element {
             dataPath="allUsers"
             itemsPerPage={PAGE_SIZE}
             onDataChange={processMemberNodes}
+            onError={() => setIsLoading(false)}
             refetchTrigger={refetchTrigger}
             renderItem={() => null}
             loadingComponent={<></>}

@@ -32,7 +32,7 @@ The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
 > `optional` **actionRef**: `Ref`\<[`InterfaceCursorPaginationManagerRef`](InterfaceCursorPaginationManagerRef.md)\<`TNode`\>\>
 
-Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L166)
+Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L171)
 
 Ref to access imperative actions
 
@@ -42,7 +42,7 @@ Ref to access imperative actions
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L171)
+Defined in: [src/types/CursorPagination/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L176)
 
 Custom class name for the container
 
@@ -82,7 +82,7 @@ Custom component to show when no items are available
 
 > `optional` **infiniteScroll**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L176)
+Defined in: [src/types/CursorPagination/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L181)
 
 Enable infinite scroll behavior (auto-load when reaching threshold)
 
@@ -154,7 +154,7 @@ Custom loading component to show during initial data fetch
 
 > `optional` **onContentScroll**: (`e`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L161)
+Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L166)
 
 Callback to handle scroll events or restoration.
 If provided, the manager might delegate some scroll logic to the parent.
@@ -191,11 +191,31 @@ Callback invoked when the data changes (initial load or after loading more)
 
 ***
 
+### onError()?
+
+> `optional` **onError**: (`error`) => `void`
+
+Defined in: [src/types/CursorPagination/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L129)
+
+Callback invoked when the query encounters an error
+
+#### Parameters
+
+##### error
+
+`Error`
+
+#### Returns
+
+`void`
+
+***
+
 ### onQueryResult()?
 
 > `optional` **onQueryResult**: (`data`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L155)
+Defined in: [src/types/CursorPagination/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L160)
 
 Callback to return the full query result data.
 Useful when the parent component needs access to metadata in the response
@@ -217,7 +237,7 @@ Useful when the parent component needs access to metadata in the response
 
 > `optional` **paginationType**: `"forward"` \| `"backward"`
 
-Defined in: [src/types/CursorPagination/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L137)
+Defined in: [src/types/CursorPagination/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L142)
 
 Direction of pagination.
 'forward': Uses 'first' and 'after' (default)
@@ -249,7 +269,7 @@ Query variables (excluding pagination variables like 'first' and 'after')
 
 > `optional` **refetchTrigger**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L130)
+Defined in: [src/types/CursorPagination/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L135)
 
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
@@ -306,7 +326,7 @@ for append-only pagination but may cause issues if items are reordered.
 
 > `optional` **scrollThreshold**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L182)
+Defined in: [src/types/CursorPagination/interface.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L187)
 
 Distance from edge (top for backward, bottom for forward) to trigger load more.
 Default: 50px
@@ -317,7 +337,7 @@ Default: 50px
 
 > `optional` **variableKeyMap**: `object`
 
-Defined in: [src/types/CursorPagination/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L143)
+Defined in: [src/types/CursorPagination/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L148)
 
 Map generic pagination variables (first, after, last, before) to custom query variable names.
 Useful when the query uses different variable names (e.g., 'lastMessages' instead of 'last').
