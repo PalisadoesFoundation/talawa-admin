@@ -12,7 +12,7 @@ Defined in: [src/shared-components/EventListCard/Modal/EventListCardModals.tsx:5
 
 ### \_\_namedParameters
 
-[`InterfaceEventListCardModalsProps`](../../../../../types/EventListCard/interface/interfaces/InterfaceEventListCardModalsProps.md)
+[`InterfaceEventListCardModalsProps`](../../../../../types/shared-components/EventListCard/interface/interfaces/InterfaceEventListCardModalsProps.md)
 
 ## Returns
 

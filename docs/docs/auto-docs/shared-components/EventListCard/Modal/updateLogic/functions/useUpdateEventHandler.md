@@ -25,7 +25,7 @@ An object containing the update logic:
 
 ##### \_\_namedParameters
 
-[`InterfaceUpdateEventHandlerProps`](../../../../../types/EventListCard/interface/interfaces/InterfaceUpdateEventHandlerProps.md)
+[`InterfaceUpdateEventHandlerProps`](../../../../../types/shared-components/EventListCard/interface/interfaces/InterfaceUpdateEventHandlerProps.md)
 
 #### Returns
 

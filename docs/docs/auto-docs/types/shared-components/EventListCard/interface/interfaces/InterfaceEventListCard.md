@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventListCard
 
-Defined in: [src/types/EventListCard/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L9)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L9)
 
 Event list card props extending InterfaceEvent.
 
@@ -14,7 +14,7 @@ refetchEvents is optional and triggers a refresh when provided.
 
 ## Extends
 
-- [`InterfaceEvent`](../../../Event/interface/type-aliases/InterfaceEvent.md)
+- [`InterfaceEvent`](../../../../Event/interface/type-aliases/InterfaceEvent.md)
 
 ## Properties
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFound
 
 ### attendees
 
-> **attendees**: `Partial`\<[`User`](../../../Event/type/type-aliases/User.md)\>[]
+> **attendees**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>[]
 
 Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L63)
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/interface.ts:69](https://github.com/PalisadoesFound
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](../../../Event/type/type-aliases/User.md)\>
+> **creator**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>
 
 Defined in: [src/types/Event/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L64)
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFound
 
 ### feedback?
 
-> `optional` **feedback**: [`Feedback`](../../../Event/type/type-aliases/Feedback.md)[]
+> `optional` **feedback**: [`Feedback`](../../../../Event/type/type-aliases/Feedback.md)[]
 
 Defined in: [src/types/Event/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L66)
 
@@ -270,7 +270,7 @@ Defined in: [src/types/Event/interface.ts:77](https://github.com/PalisadoesFound
 
 ### recurrenceRule?
 
-> `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
+> `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
 Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L78)
 
@@ -284,7 +284,7 @@ Defined in: [src/types/Event/interface.ts:78](https://github.com/PalisadoesFound
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/EventListCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L10)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L10)
 
 #### Returns
 

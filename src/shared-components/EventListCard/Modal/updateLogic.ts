@@ -13,7 +13,7 @@ import utc from 'dayjs/plugin/utc';
 import type {
   InterfaceEventUpdateInput,
   InterfaceUpdateEventHandlerProps,
-} from 'types/EventListCard/interface';
+} from 'types/shared-components/EventListCard/interface';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);

@@ -45,7 +45,7 @@ function EventListCard(props: IEventListCard): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   // const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
-  const { isOpen: setEventModalIsOpen, open, close } = useModalState();
+  const { isOpen: eventModalIsOpen, open, close } = useModalState();
 
   const { orgId } = useParams();
 
@@ -84,7 +84,7 @@ function EventListCard(props: IEventListCard): JSX.Element {
 
       <EventListCardModals
         eventListCardProps={props}
-        eventModalIsOpen={setEventModalIsOpen}
+        eventModalIsOpen={eventModalIsOpen}
         hideViewModal={hideViewModal}
         t={t}
         tCommon={tCommon}

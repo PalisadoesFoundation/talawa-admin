@@ -17,7 +17,7 @@
 .cardsEventListCard > p {
   font-size: var(--font-size-sm);
   margin-top: 0px;
-  bottom: var(--space-1);
+  margin-bottom: var(--space-1);
 }
 
 .cardsEventListCard a {
@@ -41,14 +41,14 @@
   display: flex;
   cursor: pointer;
   justify-content: space-between;
-  margin: top right bottom left;
+  margin: var(--space-1) var(--space-2) var(--space-1) var(--space-2);
 }
 
 .dispflexEventListCard > input {
   width: 20%;
   border: none;
   box-shadow: none;
-  top: var(--space-1);
+  margin-top: var(--space-1);
 }
 
 .eventtitle {

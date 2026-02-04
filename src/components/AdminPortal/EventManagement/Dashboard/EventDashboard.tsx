@@ -175,6 +175,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                 onClick={showViewModal}
                 data-testid="edit-event-button"
+                aria-label={tEventList('editEvent')}
               >
                 <Edit fontSize="medium" />
               </button>
