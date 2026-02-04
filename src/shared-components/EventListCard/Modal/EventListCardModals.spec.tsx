@@ -1169,4 +1169,19 @@ describe('EventListCardModals', () => {
     expect(mockDeleteStandaloneEvent).toHaveBeenCalled();
     expect(NotificationToast.success).toHaveBeenCalledWith('eventDeleted');
   });
+
+  it('passes openCustomRecurrenceModal to preview modal', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        recurrenceRuleId: 'rule123',
+      },
+    });
+
+    // Grab the first call to the mocked preview modal
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+
+    expect(previewProps.setCustomRecurrenceModalIsOpen).toBeDefined();
+    expect(typeof previewProps.setCustomRecurrenceModalIsOpen).toBe('function');
+  });
 });

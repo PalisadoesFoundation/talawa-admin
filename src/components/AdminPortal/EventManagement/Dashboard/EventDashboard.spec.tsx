@@ -493,4 +493,15 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('start-date')).toBeInTheDocument();
     expect(getByTestId('end-date')).toBeInTheDocument();
   });
+
+  it('should have correct aria-label on edit button', async () => {
+    const { getByTestId } = renderEventDashboard(mockWithTime);
+    await wait();
+
+    // Select the edit button
+    const editButton = getByTestId('edit-event-button');
+
+    // Assert the aria-label is correctly set
+    expect(editButton).toHaveAttribute('aria-label', 'Edit Event');
+  });
 });
