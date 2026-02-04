@@ -118,7 +118,11 @@ mockEventListCardModals.mockImplementation(() => {
 
   return visible ? (
     <div data-testid="event-list-card-modals">
-      <button data-testid="modal-close-btn" onClick={() => setVisible(false)}>
+      <button
+        type="button"
+        data-testid="modal-close-btn"
+        onClick={() => setVisible(false)}
+      >
         Close
       </button>
     </div>
@@ -510,7 +514,10 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Assert the aria-label is correctly set
-    expect(editButton).toHaveAttribute('aria-label', 'Edit Event');
+    expect(editButton).toHaveAttribute(
+      'aria-label',
+      i18nForTest.t('eventListCard.editEvent'),
+    );
   });
 
   it('opens and closes modal', async () => {

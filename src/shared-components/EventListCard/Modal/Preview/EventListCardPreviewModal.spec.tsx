@@ -880,7 +880,7 @@ describe('EventListCardPreviewModal', () => {
     const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const customOption = screen.getByText('customOption'); // or t('customOption')
+    const customOption = await screen.findByText(/custom/i);
     await user.click(customOption);
 
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
