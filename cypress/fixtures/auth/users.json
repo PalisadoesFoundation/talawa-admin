@@ -2,19 +2,19 @@
   "superAdmin": {
     "id": "user_0001",
     "name": "Super Admin",
-    "email": "superadmin@example.org",
+    "email": "testsuperadmin@example.com",
     "role": "superadmin"
   },
   "admin": {
     "id": "user_0002",
     "name": "Admin User",
-    "email": "admin@example.org",
+    "email": "testadmin1@example.com",
     "role": "administrator"
   },
   "user": {
     "id": "user_0003",
     "name": "Regular User",
-    "email": "user@example.org",
+    "email": "testuser1@example.com",
     "role": "user"
   }
 }
