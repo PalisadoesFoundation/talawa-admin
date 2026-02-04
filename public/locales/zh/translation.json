@@ -1901,7 +1901,8 @@
     "userAddedSuccessfully": "用户添加成功",
     "next": "下一步",
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
-    "thisUser": "此用户"
+    "thisUser": "此用户",
+    "deleteChatConfirmation": "您确定要删除此聊天吗？"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

@@ -1884,7 +1884,8 @@
     "userAddedSuccessfully": "Usuario agregado exitosamente",
     "next": "Siguiente",
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
-    "thisUser": "este usuario"
+    "thisUser": "este usuario",
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

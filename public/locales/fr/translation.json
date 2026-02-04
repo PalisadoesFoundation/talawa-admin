@@ -1901,7 +1901,8 @@
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
     "userAddedSuccessfully": "Utilisateur ajouté avec succès",
     "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
-    "thisUser": "cet utilisateur"
+    "thisUser": "cet utilisateur",
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

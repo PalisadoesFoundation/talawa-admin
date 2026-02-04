@@ -90,6 +90,14 @@ export const wrapperExemptions = [
     componentName: 'DropDownButton',
     allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
   }),
+  // Exempt Chat-related components that use Dropdown for action menus (not simple select dropdowns)
+  {
+    files: [
+      'src/screens/UserPortal/Chat/**/*.{ts,tsx}',
+      'src/components/UserPortal/GroupChatDetails/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-dropdown', 'rb-dropdown-path']),
+  },
 ];
 
 export const avatarExemption = createWrapperExemption({

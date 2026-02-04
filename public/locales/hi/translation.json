@@ -1896,7 +1896,8 @@
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
     "next": "अगला",
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
-    "thisUser": "इस उपयोगकर्ता"
+    "thisUser": "इस उपयोगकर्ता",
+    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
