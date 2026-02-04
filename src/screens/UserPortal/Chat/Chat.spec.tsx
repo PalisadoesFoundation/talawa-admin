@@ -356,7 +356,6 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   const renderComponent = (customMocks: MockType[] = mocks as MockType[]) =>
@@ -1058,13 +1057,28 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'chat-1',
               id: 'chat-1',
               name: 'Chat in Org 1',
-              isGroup: false,
-              users: [{}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1' },
+              avatarURL: '',
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: { id: 'u1', name: 'User 1' },
+                      role: 'regular',
+                    },
+                  },
+                  {
+                    node: {
+                      user: { id: 'u2', name: 'User 2' },
+                      role: 'regular',
+                    },
+                  },
+                ],
+              },
+              unreadMessagesCount: 0,
+              lastMessage: null,
+              organization: { id: 'org-1', name: 'Org 1' },
               __typename: 'Chat',
             },
           ],
@@ -1100,86 +1114,62 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'group-1',
               id: 'group-1',
               name: 'Group in Org 1',
-              isGroup: true,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
-              image: '',
-              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
+              avatarURL: '',
+              organization: { id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [
                   {
                     node: {
-                      _id: 'user1',
-                      firstName: 'A',
-                      lastName: 'B',
-                      email: 'a@b.com',
+                      user: { id: 'user1', name: 'A B' },
+                      role: 'regular',
                     },
                   },
                   {
                     node: {
-                      _id: 'user2',
-                      firstName: 'C',
-                      lastName: 'D',
-                      email: 'c@d.com',
+                      user: { id: 'user2', name: 'C D' },
+                      role: 'regular',
                     },
                   },
                   {
                     node: {
-                      _id: 'user3',
-                      firstName: 'E',
-                      lastName: 'F',
-                      email: 'e@f.com',
+                      user: { id: 'user3', name: 'E F' },
+                      role: 'regular',
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
               __typename: 'Chat',
             },
             {
-              _id: 'group-2',
               id: 'group-2',
               name: 'Group in Org 2',
-              isGroup: true,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
-              image: '',
-              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
+              avatarURL: '',
+              organization: { id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [
                   {
                     node: {
-                      _id: 'user4',
-                      firstName: 'G',
-                      lastName: 'H',
-                      email: 'g@h.com',
+                      user: { id: 'user4', name: 'G H' },
+                      role: 'regular',
                     },
                   },
                   {
                     node: {
-                      _id: 'user5',
-                      firstName: 'I',
-                      lastName: 'J',
-                      email: 'i@j.com',
+                      user: { id: 'user5', name: 'I J' },
+                      role: 'regular',
                     },
                   },
                   {
                     node: {
-                      _id: 'user6',
-                      firstName: 'K',
-                      lastName: 'L',
-                      email: 'k@l.com',
+                      user: { id: 'user6', name: 'K L' },
+                      role: 'regular',
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -1221,32 +1211,17 @@ describe('Chat Component - Comprehensive Coverage', () => {
             {
               id: 'chat-new-1',
               name: 'New Type Chat Org 1',
-              isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
               organization: { id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [
                   {
-                    node: {
-                      _id: 'u1',
-                      firstName: 'A',
-                      lastName: 'B',
-                      email: 'a@b.com',
-                    },
+                    node: { user: { id: 'u1', name: 'A B' }, role: 'regular' },
                   },
                   {
-                    node: {
-                      _id: 'u2',
-                      firstName: 'C',
-                      lastName: 'D',
-                      email: 'c@d.com',
-                    },
+                    node: { user: { id: 'u2', name: 'C D' }, role: 'regular' },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -1255,32 +1230,17 @@ describe('Chat Component - Comprehensive Coverage', () => {
             {
               id: 'chat-new-2',
               name: 'New Type Chat Org 2',
-              isGroup: false,
-              description: '',
-              createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}],
-              image: '',
+              avatarURL: '',
               organization: { id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [
                   {
-                    node: {
-                      _id: 'u3',
-                      firstName: 'E',
-                      lastName: 'F',
-                      email: 'e@f.com',
-                    },
+                    node: { user: { id: 'u3', name: 'E F' }, role: 'regular' },
                   },
                   {
-                    node: {
-                      _id: 'u4',
-                      firstName: 'G',
-                      lastName: 'H',
-                      email: 'g@h.com',
-                    },
+                    node: { user: { id: 'u4', name: 'G H' }, role: 'regular' },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
