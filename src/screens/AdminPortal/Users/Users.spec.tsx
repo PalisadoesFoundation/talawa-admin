@@ -281,8 +281,6 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Scroll to trigger loadMoreUsers
     Object.defineProperty(window, 'scrollY', { value: 6000, writable: true });
     window.dispatchEvent(new Event('scroll'));
@@ -647,9 +645,11 @@ describe('Testing Users screen', () => {
           writable: true,
         });
         window.dispatchEvent(new Event('scroll'));
+        // Wait for debounce timeout to allow scroll handler to execute
+        await new Promise((resolve) => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
       });
 
-      await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
+      // Test passes if scroll event handler doesn't crash the component
     });
   });
 
@@ -1139,12 +1139,11 @@ describe('useEffect loadMoreUsers trigger', () => {
     await userEvent.click(screen.getByTestId('filterUsers-toggle'));
     await userEvent.click(screen.getByTestId('filterUsers-item-user'));
 
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    expect(rows.length).toBe(2); // header + 1 row
-    expect(rows[1]).toHaveTextContent('Regular User');
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows.length).toBe(2); // header + 1 row
+      expect(rows[1]).toHaveTextContent('Regular User');
+    });
   });
 
   it('should return all users when filter is cancel', async () => {
@@ -1241,11 +1240,10 @@ describe('useEffect loadMoreUsers trigger', () => {
     await userEvent.click(screen.getByTestId('sortUsers-toggle'));
     await userEvent.click(screen.getByTestId('sortUsers-item-newest'));
 
-    await wait();
-
-    const rows = screen.getAllByRole('row');
-
-    expect(rows[1]).toHaveTextContent('New User');
+    await waitFor(() => {
+      const rows = screen.getAllByRole('row');
+      expect(rows[1]).toHaveTextContent('New User');
+    });
   });
 
   it('should NOT update filtering when same option is clicked', async () => {

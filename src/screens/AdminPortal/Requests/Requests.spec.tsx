@@ -349,8 +349,12 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('testComp')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify basic page elements are rendered
     expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -442,11 +446,15 @@ describe('Testing Requests screen', () => {
     await userEvent.clear(searchInput);
     const search2 = 'Pete';
     await userEvent.type(searchInput, search2);
-    await wait(100);
-    expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('requests-search-empty-message'),
-    ).toHaveTextContent(/no results found for john/i);
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for john/i);
+      },
+      { timeout: 3000 },
+    );
 
     const search3 = 'Sam';
     await userEvent.type(searchInput, search3);
@@ -483,13 +491,16 @@ describe('Testing Requests screen', () => {
     const search = 'hello';
     await userEvent.type(searchInput, search);
     await userEvent.keyboard('{Enter}');
-    await wait(200);
-
-    // When there are no requests at all, show "no requests found" message
-    expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('requests-search-empty-message'),
-    ).toHaveTextContent(/no results found for hello/i);
+    await waitFor(
+      () => {
+        // When there are no requests at all, show "no requests found" message
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for hello/i);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Testing Request data is not present', async () => {
@@ -770,12 +781,15 @@ describe('Testing Requests screen', () => {
       });
     }
 
-    await wait(500);
-
-    expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('requests-search-empty-message'),
-    ).toHaveTextContent(/no results found for user/i);
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for user/i);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('should handle loading more requests when no previous data exists', async () => {
