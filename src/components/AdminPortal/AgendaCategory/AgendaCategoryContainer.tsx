@@ -34,7 +34,7 @@ import { Button } from 'shared-components/Button';
 import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import {
   DELETE_AGENDA_ITEM_CATEGORY_MUTATION,

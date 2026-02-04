@@ -1,5 +1,6 @@
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing/react';
 import {
   render,
   screen,
@@ -660,7 +661,7 @@ describe('PostCard', () => {
       .mockRejectedValue(new Error('Network error occurred'));
 
     // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
+    const apolloMock = await import('@apollo/client/react');
     const originalUseMutation = apolloMock.useMutation;
 
     // Override just for this test
@@ -699,7 +700,7 @@ describe('PostCard', () => {
       .mockRejectedValue(new Error('Network error occurred'));
 
     // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
+    const apolloMock = await import('@apollo/client/react');
     const originalUseMutation = apolloMock.useMutation;
 
     // Override just for this test to return the error mock for CREATE_COMMENT_POST

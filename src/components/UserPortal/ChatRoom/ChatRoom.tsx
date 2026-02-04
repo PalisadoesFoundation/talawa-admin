@@ -19,8 +19,8 @@ import type { ChangeEvent } from 'react';
 import styles from './ChatRoom.module.css';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import type { ApolloQueryResult } from '@apollo/client/react';
+import { useMutation, useQuery, useSubscription } from '@apollo/client/react';
 import {
   EDIT_CHAT_MESSAGE,
   MESSAGE_SENT_TO_CHAT,

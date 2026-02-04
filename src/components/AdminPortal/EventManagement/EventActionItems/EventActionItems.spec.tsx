@@ -1,5 +1,6 @@
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing/react';
 import {
   LocalizationProvider,
   AdapterDayjs,

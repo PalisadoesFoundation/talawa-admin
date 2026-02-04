@@ -47,8 +47,8 @@ import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client';
+import type { ApolloQueryResult } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,

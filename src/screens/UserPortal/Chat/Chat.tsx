@@ -27,7 +27,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';

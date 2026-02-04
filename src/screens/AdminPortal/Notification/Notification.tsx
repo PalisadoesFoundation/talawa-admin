@@ -7,7 +7,7 @@
  * items than the page size.
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client/react';
 import {
   GET_USER_NOTIFICATIONS,
   MARK_NOTIFICATION_AS_READ,

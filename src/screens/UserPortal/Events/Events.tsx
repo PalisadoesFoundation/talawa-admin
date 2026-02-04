@@ -48,7 +48,7 @@
  * <Events />
  *
  */
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
   ORGANIZATIONS_LIST,

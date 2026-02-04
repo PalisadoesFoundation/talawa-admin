@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';

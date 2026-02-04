@@ -40,7 +40,7 @@ import styles from './AdvertisementEntry.module.css';
 import { Card, Col, Row, Carousel } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';

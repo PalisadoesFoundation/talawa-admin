@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -18,7 +18,7 @@ import {
   MOCKS_ERROR_SUB_TAGS,
 } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import * as Apollo from '@apollo/client/react';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 // Mock react-infinite-scroll-component to easily trigger 'next'

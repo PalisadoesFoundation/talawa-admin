@@ -21,7 +21,7 @@ import {
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';

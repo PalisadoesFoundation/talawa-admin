@@ -30,8 +30,8 @@ import type {
   FetchResult,
   MutationFunctionOptions,
   OperationVariables,
-} from '@apollo/client';
-import { useQuery, useMutation } from '@apollo/client';
+} from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,

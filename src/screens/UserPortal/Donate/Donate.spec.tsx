@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {

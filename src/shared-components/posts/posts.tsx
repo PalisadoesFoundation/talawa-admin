@@ -39,7 +39,7 @@
  * ```
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   ORGANIZATION_PINNED_POST_LIST,
   ORGANIZATION_POST_BY_ID,

@@ -285,7 +285,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
 }));
 
 // Prepare mock for useMutation
-vi.mock('@apollo/client', () => ({
+vi.mock('@apollo/client/react', () => ({
   useMutation: vi.fn(),
 }));
 
@@ -296,7 +296,7 @@ import {
   validateRecurrenceInput,
   formatRecurrenceForApi,
 } from 'utils/recurrenceUtils';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 const mockToast = {
   success: mockToastSuccess,

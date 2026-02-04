@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -14,8 +14,9 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
 import styles from './EventAttendance.module.css';
-import { ApolloError, useLazyQuery } from '@apollo/client';
-import * as ApolloClientModule from '@apollo/client';
+import { ApolloError } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
+import * as ApolloClientModule from '@apollo/client/react';
 
 // Mock chart.js to avoid canvas errors
 vi.mock('react-chartjs-2', async () => ({
@@ -56,7 +57,7 @@ function mockLazyQuery(returned: {
   error?: ApolloError | null;
 }) {
   vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
-    () => {},
+    () => { },
     {
       data: returned.data,
       loading: returned.loading ?? false,

@@ -144,9 +144,9 @@ vi.mock('components/EventListCard/EventListCard', () => {
 });
 
 // Mock Apollo useMutation to avoid needing an ApolloProvider context
-vi.mock('@apollo/client', async () => {
+vi.mock('@apollo/client/react', async () => {
   const actual =
-    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+    await vi.importActual<typeof import('@apollo/client/react')>('@apollo/client/react');
   return {
     ...actual,
     useMutation: vi.fn().mockImplementation(() => {
@@ -160,7 +160,7 @@ vi.mock('@apollo/client', async () => {
       };
       return [mutate, result] as const;
     }),
-  } as unknown as typeof import('@apollo/client');
+  } as unknown as typeof import('@apollo/client/react');
 });
 
 const renderWithRouterAndPath = (

@@ -4,7 +4,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_ACTION_ITEM_CATEGORY_MUTATION,
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,

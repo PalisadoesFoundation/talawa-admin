@@ -40,7 +40,7 @@
  * Returns:
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
  */
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {

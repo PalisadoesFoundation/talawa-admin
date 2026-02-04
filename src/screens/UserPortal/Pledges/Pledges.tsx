@@ -19,7 +19,7 @@ import {
   type ApolloError,
   type ApolloQueryResult,
   useQuery,
-} from '@apollo/client';
+} from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {

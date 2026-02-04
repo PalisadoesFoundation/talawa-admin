@@ -24,7 +24,7 @@
  * ```
  *
  */
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';

@@ -147,8 +147,8 @@ vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
 }));
 
 // Mock @apollo/client with factory function
-vi.mock('@apollo/client', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@apollo/client')>();
+vi.mock('@apollo/client/react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@apollo/client/react')>();
 
   // Create mock function inside the factory
   const mockUseQuery = vi.fn();
@@ -168,7 +168,7 @@ describe('UserOrganizations', () => {
     vi.clearAllMocks();
 
     // Get the mocked useQuery function
-    const apolloClient = await import('@apollo/client');
+    const apolloClient = await import('@apollo/client/react');
     mockUseQuery = apolloClient.useQuery as ReturnType<typeof vi.fn>;
 
     // Define interface for query variables

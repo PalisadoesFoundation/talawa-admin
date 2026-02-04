@@ -4,7 +4,7 @@
  * Renders a table row for a user, managing organization membership and role.
  */
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   REMOVE_MEMBER_MUTATION,
   UNBLOCK_USER_MUTATION_PG,

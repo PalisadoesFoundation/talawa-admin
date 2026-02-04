@@ -50,7 +50,7 @@ import type {
 
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,

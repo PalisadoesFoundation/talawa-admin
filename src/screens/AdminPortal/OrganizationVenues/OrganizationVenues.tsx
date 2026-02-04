@@ -50,7 +50,7 @@ import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationVenues.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

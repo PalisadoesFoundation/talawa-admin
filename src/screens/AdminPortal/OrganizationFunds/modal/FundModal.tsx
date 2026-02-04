@@ -5,7 +5,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,

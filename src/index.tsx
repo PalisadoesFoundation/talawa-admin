@@ -4,12 +4,12 @@ import { BrowserRouter } from 'react-router';
 import type { NormalizedCacheObject } from '@apollo/client';
 import {
   ApolloClient,
-  ApolloProvider,
   InMemoryCache,
   split,
   Observable,
   fromPromise,
 } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -21,7 +21,7 @@ import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap i
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import 'react-toastify/dist/ReactToastify.css'; // React Toastify Styles
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import { UploadHttpLink } from 'apollo-upload-client';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -166,7 +166,7 @@ const errorLink = onError(
   },
 );
 
-const uploadLink = createUploadLink({
+const uploadLink = new UploadHttpLink({
   uri: BACKEND_URL,
   headers: { 'Apollo-Require-Preflight': 'true' },
   credentials: 'include',
@@ -214,7 +214,7 @@ const splitLink = split(
 // Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

@@ -38,7 +38,7 @@
  */
 import React, { useRef, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 

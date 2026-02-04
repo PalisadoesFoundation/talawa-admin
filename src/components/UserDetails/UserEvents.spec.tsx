@@ -41,8 +41,8 @@ vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
 }));
 
 // Mock Apollo useQuery
-vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual('@apollo/client');
+vi.mock('@apollo/client/react', async () => {
+  const actual = await vi.importActual('@apollo/client/react');
   return {
     ...actual,
     useQuery: vi.fn(() => ({

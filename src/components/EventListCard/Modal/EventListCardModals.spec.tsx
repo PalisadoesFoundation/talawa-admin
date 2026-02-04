@@ -1,12 +1,12 @@
 import { render, screen, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, test, expect, vi, beforeEach, Mock } from 'vitest';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -35,8 +35,8 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 
 // Mock dependencies
-vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual('@apollo/client');
+vi.mock('@apollo/client/react', async () => {
+  const actual = await vi.importActual('@apollo/client/react');
   return {
     ...actual,
     useMutation: vi.fn(),

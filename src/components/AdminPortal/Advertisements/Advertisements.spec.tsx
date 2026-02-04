@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, test, expect, vi, it } from 'vitest';
-import { ApolloProvider } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { ApolloProvider } from '@apollo/client/react';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -65,8 +65,8 @@ const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
 let mockUseMutation: ReturnType<typeof vi.fn>;
-vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual('@apollo/client');
+vi.mock('@apollo/client/react', async () => {
+  const actual = await vi.importActual('@apollo/client/react');
   return {
     ...actual,
     useMutation: () => mockUseMutation(),

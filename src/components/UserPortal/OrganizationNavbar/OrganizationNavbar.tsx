@@ -24,7 +24,7 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';

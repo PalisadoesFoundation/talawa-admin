@@ -29,7 +29,7 @@ import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';

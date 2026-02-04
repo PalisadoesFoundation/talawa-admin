@@ -20,7 +20,7 @@
  * @returns  The rendered OrganizationTags component.
  *
  */
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { FormEvent } from 'react';

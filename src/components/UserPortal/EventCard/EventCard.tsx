@@ -3,7 +3,7 @@ import styles from './EventCard.module.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import Button from 'shared-components/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';

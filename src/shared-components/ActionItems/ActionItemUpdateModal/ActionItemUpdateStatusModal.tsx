@@ -31,7 +31,7 @@ import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './ActionItemUpdateStatusModal.module.css';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,

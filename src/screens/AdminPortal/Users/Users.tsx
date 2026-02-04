@@ -60,7 +60,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -76,7 +76,7 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { ApolloError } from '@apollo/client';
+import type { ApolloError } from '@apollo/client/react';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';

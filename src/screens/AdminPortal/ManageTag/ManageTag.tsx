@@ -52,7 +52,7 @@
  */
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';

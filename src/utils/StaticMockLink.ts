@@ -2,8 +2,8 @@ import { print } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
-import type { Operation, FetchResult } from '@apollo/client/link/core';
-import { ApolloLink } from '@apollo/client/link/core';
+import type { Operation, FetchResult } from '@apollo/client';
+import { ApolloLink } from '@apollo/client';
 
 import {
   Observable,
@@ -13,7 +13,7 @@ import {
   cloneDeep,
 } from '@apollo/client/utilities';
 
-import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
+import type { MockedResponse, ResultFunction } from '@apollo/client/testing/react';
 
 /**
  * Extended MockedResponse type that supports variableMatcher for flexible matching
@@ -25,7 +25,7 @@ interface IMockedResponseWithMatcher extends MockedResponse {
 function requestToKey(
   request:
     | Operation
-    | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
+    | import('@apollo/client').GraphQLRequest,
   addTypename: boolean,
 ): string {
   const queryString =
@@ -69,7 +69,7 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public request(operation: Operation): Observable<FetchResult> | null {
+  public request(operation: Operation): Observable<FetchResult> {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
@@ -141,8 +141,8 @@ export class StaticMockLink extends ApolloLink {
                 observer.next(
                   typeof response.result === 'function'
                     ? (response.result as ResultFunction<FetchResult>)(
-                        operation.variables,
-                      )
+                      operation.variables,
+                    )
                     : response.result,
                 );
               }

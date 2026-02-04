@@ -38,7 +38,7 @@
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
  */
 // translation-check-keyPrefix: manageTag
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type {
   GridCellParams,
   GridColDef,

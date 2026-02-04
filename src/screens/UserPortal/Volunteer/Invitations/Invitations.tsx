@@ -45,7 +45,7 @@ import { FaUserGroup } from 'react-icons/fa6';
 import { Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

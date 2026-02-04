@@ -29,7 +29,7 @@ import styles from './ActionItemViewModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';

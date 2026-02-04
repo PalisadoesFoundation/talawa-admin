@@ -21,7 +21,7 @@
  * - Shows an error message if the query fails.
  */
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

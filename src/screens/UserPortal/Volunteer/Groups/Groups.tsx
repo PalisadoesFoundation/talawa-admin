@@ -47,7 +47,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
   type GridCellParams,

@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMinioDownload } from './MinioDownload';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
-vi.mock('@apollo/client', () => ({
+vi.mock('@apollo/client/react', () => ({
   useMutation: vi.fn(),
 }));
 

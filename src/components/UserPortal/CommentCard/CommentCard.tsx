@@ -18,7 +18,7 @@ import {
   EditOutlined,
   DeleteOutline,
 } from '@mui/icons-material';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

@@ -29,7 +29,7 @@
  * @returns A React functional component that renders a tag node with optional subtags.
  */
 // translation-check-keyPrefix: manageTag
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
 import type {

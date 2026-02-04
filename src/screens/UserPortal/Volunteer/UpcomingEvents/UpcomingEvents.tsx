@@ -7,7 +7,7 @@ import { Navigate, useParams } from 'react-router';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import { WarningAmberRounded, ExpandMore, Event } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   InterfaceVolunteerMembership,
   InterfaceEventEdge,

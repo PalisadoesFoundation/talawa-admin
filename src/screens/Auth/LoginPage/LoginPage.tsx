@@ -12,7 +12,7 @@
  * <LoginPage />
  * ```
  */
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client/react';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';

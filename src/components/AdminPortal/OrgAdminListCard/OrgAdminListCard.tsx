@@ -35,7 +35,7 @@
 import React from 'react';
 import { BaseModal } from 'shared-components/BaseModal';
 import Button from 'shared-components/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';

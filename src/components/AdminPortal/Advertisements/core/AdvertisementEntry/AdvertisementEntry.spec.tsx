@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { BrowserRouter } from 'react-router';
 import AdvertisementEntry from './AdvertisementEntry';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -26,8 +26,8 @@ const translations = JSON.parse(
 );
 
 let mockUseMutation: ReturnType<typeof vi.fn>;
-vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual('@apollo/client');
+vi.mock('@apollo/client/react', async () => {
+  const actual = await vi.importActual('@apollo/client/react');
   return {
     ...actual,
     useMutation: () => mockUseMutation(),
