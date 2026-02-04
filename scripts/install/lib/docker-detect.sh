@@ -194,8 +194,11 @@ check_docker_daemon() {
         else
             # Fallback: run without timeout (macOS without coreutils)
             # Use a background process with sleep to implement basic timeout
-            local tmpfile pid
+            local tmpfile pid saved_traps
             tmpfile="$(mktemp 2>/dev/null || mktemp -t docker_check)"
+            
+            # Save existing traps before overwriting
+            saved_traps="$(trap -p INT TERM EXIT)"
             
             (docker info > "$tmpfile" 2>&1) &
             pid=$!
@@ -212,7 +215,9 @@ check_docker_daemon() {
                     kill -9 "$pid" 2>/dev/null || true
                     wait "$pid" 2>/dev/null || true
                     rm -f "$tmpfile"
+                    # Restore caller's traps
                     trap - INT TERM EXIT
+                    [[ -n "$saved_traps" ]] && eval "$saved_traps"
                     printf 'unresponsive'
                     return 1
                 fi
@@ -222,7 +227,9 @@ check_docker_daemon() {
             exit_code=$?
             docker_info_output="$(cat "$tmpfile" 2>/dev/null)"
             rm -f "$tmpfile"
+            # Restore caller's traps
             trap - INT TERM EXIT
+            [[ -n "$saved_traps" ]] && eval "$saved_traps"
         fi
     fi
 
