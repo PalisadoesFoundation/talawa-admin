@@ -12,7 +12,13 @@ interface InterfaceSearchToggleProps {
   className?: string;
 }
 
-// Custom Toggle for Search functionality
+/**
+ * Custom Toggle for Search functionality.
+ * Renders an input field that acts as a dropdown toggle.
+ *
+ * @param props - The props for the SearchToggle component.
+ * @param ref - The ref forwarded to the div element.
+ */
 const SearchToggle = React.forwardRef<
   HTMLDivElement,
   InterfaceSearchToggleProps
