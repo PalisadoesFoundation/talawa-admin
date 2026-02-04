@@ -76,12 +76,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     loading: agendaCategoryLoading,
     error: agendaCategoryError,
     refetch: refetchAgendaCategory,
-  }: {
-    data: InterfaceAgendaItemCategoryList | undefined;
-    loading: boolean;
-    error?: unknown | undefined;
-    refetch: () => void;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: { organizationId: orgId, where: { name_contains: searchTerm } },
     notifyOnNetworkStatusChange: true,
   });

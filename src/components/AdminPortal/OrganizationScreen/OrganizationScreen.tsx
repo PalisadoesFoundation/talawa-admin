@@ -35,7 +35,10 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './OrganizationScreen.module.css';
-import type { InterfaceMapType } from 'utils/interfaces';
+import type {
+  InterfaceMapType,
+  InterfaceOrganizationEventsQuery,
+} from 'utils/interfaces';
 import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -70,14 +73,17 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
-      id: orgId ?? '',
-      first: EVENTS_PAGE_SIZE,
-      after: null,
+  const { data: eventsData } = useQuery<InterfaceOrganizationEventsQuery>(
+    GET_ORGANIZATION_EVENTS_PG,
+    {
+      variables: {
+        id: orgId ?? '',
+        first: EVENTS_PAGE_SIZE,
+        after: null,
+      },
+      skip: !shouldFetchEventName,
     },
-    skip: !shouldFetchEventName,
-  });
+  );
 
   // Update targets whenever the organization ID changes
   useEffect(() => {

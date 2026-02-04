@@ -970,6 +970,14 @@ export interface InterfaceOrganizationPg {
     pinnedPostsCount: number;
     adminsCount: number;
     membersCount: number;
+    eventsCount: number;
+    blockedUsersCount: number;
+    venuesCount: number;
+    membershipRequests?: Array<{
+      membershipRequestId: string;
+      status: string;
+      user: { name: string; avatarURL?: string };
+    }>;
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
 
@@ -1877,4 +1885,453 @@ export interface InterfaceUserEvents {
   location: string | null;
   volunteerGroups: InterfaceVolunteerGroupInfo[];
   volunteers: InterfaceEventVolunteerInfo[];
+}
+
+/**
+ * Defines the structure for EVENT_DETAILS query result
+ */
+export interface InterfaceEventDetailsQuery {
+  event: {
+    id: string;
+    name: string;
+    description: string | null;
+    startAt: string;
+    endAt: string;
+    location: string | null;
+    allDay: boolean;
+    isPublic: boolean;
+    isRegisterable: boolean;
+    isInviteOnly?: boolean;
+    creator: InterfaceUserPg;
+    attachments?: InterfaceEventAttachmentPg[];
+  };
+}
+
+/**
+ * Defines the structure for GET_COMMUNITY_DATA_PG query result
+ */
+export interface InterfaceCommunityQuery {
+  community: {
+    id: string;
+    name: string;
+    logoURL: string;
+    logoMimeType?: string;
+    websiteURL: string;
+    inactivityTimeoutDuration: number;
+    facebookURL?: string;
+    instagramURL?: string;
+    xURL?: string;
+    linkedinURL?: string;
+    githubURL?: string;
+    youtubeURL?: string;
+    redditURL?: string;
+    slackURL?: string;
+    [key: string]: any;
+  } | null;
+}
+
+/**
+ * Defines the structure for SIGNIN_QUERY result
+ */
+
+/**
+ * Defines the structure for ORGANIZATION_LIST_NO_MEMBERS query result
+ */
+export interface InterfaceOrganizationListQuery {
+  organizations: Array<{
+    id: string;
+    name: string;
+    addressLine1: string;
+  }>;
+}
+
+/**
+ * Defines the structure for SIGNUP_MUTATION result
+ */
+export interface InterfaceSignUpMutation {
+  signUp: {
+    user: {
+      id: string;
+    };
+  };
+}
+
+/**
+ * Shared organization fields fragment equivalent
+ */
+export interface InterfaceOrgFields {
+  id: string;
+  name: string;
+  addressLine1: string | null;
+  description: string | null;
+  avatarURL: string | null;
+  membersCount: number;
+  adminsCount: number;
+  createdAt: string;
+}
+
+/**
+ * Defines the structure for CURRENT_USER query result
+ */
+export interface InterfaceCurrentUserQuery {
+  currentUser: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    isEmailAddressVerified: boolean;
+    avatarURL: string | null;
+  } | null;
+}
+
+/**
+ * Defines the structure for ORGANIZATION_FILTER_LIST query result
+ */
+export interface InterfaceOrganizationFilterListQuery {
+  organizations: Array<InterfaceOrgFields & { isMember: boolean }>;
+}
+
+/**
+ * Defines the structure for USER_JOINED_ORGANIZATIONS_NO_MEMBERS query result
+ */
+export interface InterfaceUserJoinedOrgsQuery {
+  user: {
+    organizationsWhereMember: {
+      pageInfo: {
+        hasNextPage: boolean;
+      };
+      edges: Array<{
+        node: InterfaceOrgFields;
+      }>;
+    };
+  } | null;
+}
+
+/**
+ * Defines the structure for USER_CREATED_ORGANIZATIONS query result
+ */
+export interface InterfaceUserCreatedOrgsQuery {
+  user: {
+    id: string;
+    createdOrganizations: Array<InterfaceOrgFields & { isMember: boolean }>;
+  } | null;
+}
+
+/**
+ * Defines the structure for GET_ORGANIZATION_EVENTS_USER_PORTAL_PG query result
+ */
+export interface InterfaceGetOrgEventsUserPortalQuery {
+  organization: {
+    events: {
+      edges: Array<{
+        cursor: string;
+        node: {
+          id: string;
+          name: string;
+          description: string | null;
+          startAt: string;
+          endAt: string;
+          allDay: boolean;
+          location: string | null;
+          isPublic: boolean;
+          isRegisterable: boolean;
+          isInviteOnly: boolean;
+          creator: {
+            id: string;
+            name: string;
+          };
+          attendees: Array<{
+            id: string;
+            name: string;
+          }>;
+          isRecurringEventTemplate: boolean;
+          baseEvent?: string;
+          sequenceNumber?: number;
+          totalCount?: number;
+          hasExceptions?: boolean;
+          progressLabel?: string;
+          recurrenceDescription?: string;
+          recurrenceRule?: string;
+        };
+      }> | null;
+    } | null;
+  } | null;
+}
+
+/**
+ * Defines the structure for ORGANIZATIONS_MEMBER_CONNECTION_LIST query result
+ */
+export interface InterfaceOrgMemberConnectionQuery {
+  organization: {
+    members: {
+      pageInfo: {
+        endCursor: string;
+        hasPreviousPage: boolean;
+        hasNextPage: boolean;
+        startCursor: string;
+      };
+      edges: Array<{
+        cursor: string;
+        node: {
+          id: string;
+          name: string;
+          role: string;
+          avatarURL?: string;
+          createdAt: string;
+          emailAddress?: string;
+        };
+      }>;
+    } | null;
+  } | null;
+}
+
+/**
+ * Defines the structure for GET_USER_BY_ID query result
+ */
+export interface InterfaceGetUserByIdQuery {
+  user: InterfaceUserPg | null;
+}
+
+/**
+ * Defines the structure for UPDATE_COMMUNITY_PG mutation result
+ */
+export interface InterfaceUpdateCommunityMutation {
+  updateCommunity: {
+    id: string;
+    logoMimeType: string | null;
+    logoURL: string | null;
+  };
+}
+
+/**
+ * Defines the structure for RESET_COMMUNITY mutation result
+ */
+export interface InterfaceResetCommunityMutation {
+  resetCommunity: any;
+}
+
+/**
+ * Defines the structure for membership request list item
+ */
+export interface InterfaceRequestsListItem {
+  membershipRequestId: string;
+  createdAt: string;
+  status: string;
+  user: {
+    avatarURL?: string;
+    id: string;
+    name: string;
+    emailAddress: string;
+  };
+}
+
+/**
+ * Defines the structure for MEMBERSHIP_REQUEST_PG query result
+ */
+export interface InterfaceMembershipRequestQuery {
+  organization: {
+    id: string;
+    membershipRequests: InterfaceRequestsListItem[];
+  } | null;
+}
+
+/**
+ * Defines the structure for ACCEPT_ORGANIZATION_REQUEST_MUTATION result
+ */
+export interface InterfaceAcceptMembershipRequestMutation {
+  acceptMembershipRequest: {
+    success: boolean;
+    message: string;
+  };
+}
+
+/**
+ * Defines the structure for REJECT_ORGANIZATION_REQUEST_MUTATION result
+ */
+export interface InterfaceRejectMembershipRequestMutation {
+  rejectMembershipRequest: {
+    success: boolean;
+    message: string;
+  };
+}
+
+/**
+ * Defines the structure for GET_EVENT_VOLUNTEERS query result
+ */
+export interface InterfaceGetEventVolunteersQuery {
+  event: {
+    id: string;
+    recurrenceRule?: { id: string } | null;
+    baseEvent?: { id: string } | null;
+    volunteers: InterfaceEventVolunteerInfo[];
+  } | null;
+}
+
+/**
+ * Defines the structure for GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG query result
+ */
+export interface InterfaceCommunitySessionTimeoutQuery {
+  community: {
+    inactivityTimeoutDuration: number;
+  } | null;
+}
+
+/**
+ * Defines the structure for BLOCK_USER_MUTATION_PG mutation result
+ */
+export interface InterfaceBlockUserMutation {
+  blockUser: {
+    id: string;
+    name: string;
+  };
+}
+
+/**
+ * Defines the structure for UNBLOCK_USER_MUTATION_PG mutation result
+ */
+export interface InterfaceUnblockUserMutation {
+  unBlockUser: {
+    id: string;
+    name: string;
+  };
+}
+
+/**
+ * Defines the structure for UPDATE_USER_MUTATION mutation result
+ */
+export interface InterfaceUpdateUserMutation {
+  updateUser: InterfaceUserPg;
+}
+
+/**
+ * Defines the structure for GET_EVENT_ACTION_ITEMS query result
+ */
+export interface InterfaceGetEventActionItemsQuery {
+  event: {
+    id: string;
+    recurrenceRule: { id: string } | null;
+    baseEvent: { id: string } | null;
+    actionItems: {
+      edges: Array<{
+        node: any;
+      }>;
+      pageInfo: {
+        hasNextPage: boolean;
+        endCursor: string;
+      };
+    };
+  } | null;
+}
+
+/**
+ * Defines the structure for SIGNIN_QUERY query result
+ */
+export interface InterfaceSignInQuery {
+  signIn: {
+    user: {
+      id: string;
+      name: string;
+      emailAddress: string;
+      role: string;
+      avatarURL: string | null;
+      isEmailAddressVerified: boolean;
+      countryCode: string | null;
+    };
+    authenticationToken: string;
+    refreshToken: string;
+  } | null;
+}
+
+/**
+ * Defines the structure for EVENT_ATTENDEES query result
+ */
+export interface InterfaceEventAttendeesQuery {
+  event: {
+    attendees: Array<{
+      id: string;
+      name: string;
+      emailAddress: string;
+      avatarURL?: string;
+      createdAt: string;
+      role: string;
+      natalSex: string;
+      birthDate: string;
+      eventsAttended: Array<{ id: string }>;
+    }>;
+  } | null;
+}
+
+/**
+ * Defines the structure for GET_USER_NOTIFICATIONS query result
+ */
+export interface InterfaceGetUserNotificationsQuery {
+  user: {
+    id: string;
+    name: string;
+    notifications: Array<{
+      id: string;
+      title: string;
+      body: string;
+      isRead: boolean;
+      navigation?: string;
+    }>;
+  } | null;
+}
+
+/**
+ * Defines the structure for USER_DETAILS query result
+ */
+export interface InterfaceUserDetailsQuery {
+  user: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    avatarURL?: string;
+    birthDate: string;
+    city: string;
+    countryCode: string;
+    createdAt: string;
+    updatedAt: string;
+    educationGrade: string;
+    employmentStatus: string;
+    isEmailAddressVerified: boolean;
+    maritalStatus: string;
+    natalSex: string;
+    naturalLanguageCode: string;
+    postalCode: string;
+    role: string;
+    state: string;
+    mobilePhoneNumber: string;
+    homePhoneNumber: string;
+    workPhoneNumber: string;
+    eventsAttended: Array<{ id: string }>;
+    organizationsWhereMember: {
+      edges: Array<{
+        node: {
+          id: string;
+          name: string;
+          membersCount: number;
+          adminsCount: number;
+          description: string;
+          avatarURL?: string;
+        };
+      }>;
+    };
+    createdOrganizations: Array<{
+      id: string;
+      name: string;
+      membersCount: number;
+      adminsCount: number;
+      description: string;
+      avatarURL?: string;
+    }>;
+  } | null;
+}
+
+/**
+ * Defines the structure for GET_ORGANIZATION_EVENTS_PG query result
+ */
+export interface InterfaceOrganizationEventsQuery {
+  organization: {
+    events: InterfaceOrganizationEventsConnectionPg;
+  } | null;
 }

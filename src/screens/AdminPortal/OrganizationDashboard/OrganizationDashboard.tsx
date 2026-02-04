@@ -53,6 +53,10 @@ import type {
   IEvent,
   InterfaceOrganizationPg,
   InterfaceOrganizationPostsConnectionEdgePg,
+  InterfaceOrganizationEventsConnectionPg,
+  InterfaceOrganizationBlockedUsersConnectionPg,
+  InterfaceOrganizationPostsConnectionPg,
+  InterfaceMembershipRequestQuery,
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -79,7 +83,7 @@ function OrganizationDashboard(): JSX.Element {
    */
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery(MEMBERSHIP_REQUEST_PG, {
+    useQuery<InterfaceMembershipRequestQuery>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: orgId ?? '',
@@ -108,7 +112,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_POSTS_COUNT_PG, {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -119,7 +123,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgEventsData,
     loading: orgEventsLoading,
     error: orgEventsError,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId ?? '', first: 8, after: null },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -130,7 +134,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgBlockedUsersData,
     loading: orgBlockedUsersLoading,
     error: orgBlockedUsersError,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
@@ -141,7 +145,7 @@ function OrganizationDashboard(): JSX.Element {
     data: orgVenuesData,
     loading: orgVenuesLoading,
     error: orgVenuesError,
-  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_VENUES_COUNT, {
     variables: { id: orgId ?? '' },
     skip: !orgId,
     notifyOnNetworkStatusChange: true,
@@ -162,10 +166,12 @@ function OrganizationDashboard(): JSX.Element {
 
       const allEvents = orgEventsData.organization.events.edges;
 
-      const upcomingEvents = allEvents.filter((event: IEvent) => {
-        // Filter events that start after the current date
-        return new Date(event?.node?.startAt) > now;
-      });
+      const upcomingEvents = allEvents
+        .map((edge: any) => edge.node)
+        .filter((event: IEvent) => {
+          // Filter events that start after the current date
+          return new Date(event.node?.startAt) > now;
+        });
 
       // Set to actual total count since fetchMore accumulates results
       setEventCount(orgEventsData.organization.eventsCount);
@@ -240,7 +246,7 @@ function OrganizationDashboard(): JSX.Element {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
+  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',

@@ -11,6 +11,7 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
+import type { InterfaceGetUserNotificationsQuery } from 'utils/interfaces';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -41,16 +42,19 @@ const NotificationIcon = (): JSX.Element => {
   );
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
-  const { loading, error, data } = useQuery(GET_USER_NOTIFICATIONS, {
-    variables: {
-      userId: userId,
-      input: {
-        first: 5,
-        skip: 0,
+  const { loading, error, data } = useQuery<InterfaceGetUserNotificationsQuery>(
+    GET_USER_NOTIFICATIONS,
+    {
+      variables: {
+        userId: userId,
+        input: {
+          first: 5,
+          skip: 0,
+        },
       },
+      skip: !userId,
     },
-    skip: !userId,
-  });
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const notificationPath = getNotificationPath(location.pathname);
@@ -69,23 +73,23 @@ const NotificationIcon = (): JSX.Element => {
       ? [{ value: 'status-error', label: t('errorFetching'), disabled: true }]
       : notifications.length === 0
         ? [
-            {
-              value: 'status-empty',
-              label: t('noNewNotifications'),
-              disabled: true,
-            },
-            { value: 'view-all', label: t('viewAllNotifications') },
-          ]
+          {
+            value: 'status-empty',
+            label: t('noNewNotifications'),
+            disabled: true,
+          },
+          { value: 'view-all', label: t('viewAllNotifications') },
+        ]
         : [
-            ...notifications.map((notification) => ({
-              value: notification.id,
-              label:
-                notification.body.length > 48
-                  ? `${notification.body.slice(0, 48)}...`
-                  : notification.body,
-            })),
-            { value: 'view-all', label: t('viewAllNotifications') },
-          ];
+          ...notifications.map((notification) => ({
+            value: notification.id,
+            label:
+              notification.body.length > 48
+                ? `${notification.body.slice(0, 48)}...`
+                : notification.body,
+          })),
+          { value: 'view-all', label: t('viewAllNotifications') },
+        ];
 
   const handleSelectNotification = (value: string) => {
     if (value === 'view-all') {

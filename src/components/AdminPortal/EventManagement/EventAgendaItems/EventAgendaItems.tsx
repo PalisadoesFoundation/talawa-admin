@@ -90,11 +90,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     data: agendaCategoryData,
     loading: agendaCategoryLoading,
     error: agendaCategoryError,
-  }: {
-    data: InterfaceAgendaItemCategoryList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: { organizationId: orgId },
     notifyOnNetworkStatusChange: true,
   });
@@ -105,12 +101,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     loading: agendaItemLoading,
     error: agendaItemError,
     refetch: refetchAgendaItem,
-  }: {
-    data: InterfaceAgendaItemList | undefined;
-    loading: boolean;
-    error?: unknown | undefined;
-    refetch: () => void;
-  } = useQuery(AgendaItemByEvent, {
+  } = useQuery<InterfaceAgendaItemList>(AgendaItemByEvent, {
     variables: { relatedEventId: eventId }, //eventId
     notifyOnNetworkStatusChange: true,
   });

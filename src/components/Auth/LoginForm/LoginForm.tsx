@@ -9,6 +9,7 @@ import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
 } from '../../../types/Auth/LoginForm/interface';
+import type { InterfaceSignInQuery } from 'utils/interfaces';
 
 /**
  * Reusable login form component that composes EmailField and PasswordField.
@@ -61,9 +62,12 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     password: '',
   });
 
-  const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
-    fetchPolicy: 'network-only',
-  });
+  const [signin, { loading, data, error }] = useLazyQuery<InterfaceSignInQuery>(
+    SIGNIN_QUERY,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
 
   // Handle successful login
   useEffect(() => {

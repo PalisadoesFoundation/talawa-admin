@@ -80,6 +80,7 @@ import type {
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
+import type { InterfaceGetOrgEventsUserPortalQuery, InterfaceOrganizationListQuery } from 'utils/interfaces';
 
 import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
 dayjs.extend(utc);
@@ -191,7 +192,7 @@ export default function Events(): JSX.Element {
     data,
     error: eventDataError,
     refetch,
-  } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
+  } = useQuery<InterfaceGetOrgEventsUserPortalQuery>(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
     variables: {
       id: organizationId,
       first: 100,
@@ -210,12 +211,12 @@ export default function Events(): JSX.Element {
   });
 
   // Query to fetch organization details
-  const { data: orgData } = useQuery(ORGANIZATIONS_LIST, {
+  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATIONS_LIST, {
     variables: { id: organizationId },
   });
 
   // Mutation to create a new event
-  const [create] = useMutation(CREATE_EVENT_MUTATION, {
+  const [create] = useMutation<any>(CREATE_EVENT_MUTATION, {
     errorPolicy: 'all',
   });
 
@@ -269,9 +270,11 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
-      const { data: createEventData, errors } = await create({
+      const mutationResult = (await create({
         variables: { input },
-      });
+      })) as any;
+      const createEventData = mutationResult.data;
+      const errors = mutationResult.errors;
 
       // Handle partial success: prioritize data over errors
       // If createEventData exists, treat as success even if errors are present
@@ -298,7 +301,7 @@ export default function Events(): JSX.Element {
 
   // Normalize event data for EventCalendar with proper typing
   const events = (data?.organization?.events?.edges || []).map(
-    (edge: IEventEdge) => ({
+    (edge: any) => ({
       id: edge.node.id || '',
 
       name: edge.node.name || '',
@@ -403,9 +406,9 @@ export default function Events(): JSX.Element {
       {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
-        eventData={events}
+        eventData={events as any}
         refetchEvents={refetch}
-        orgData={orgData}
+        orgData={orgData as any}
         userRole={userRole}
         userId={userId}
         onMonthChange={(month, year) => {

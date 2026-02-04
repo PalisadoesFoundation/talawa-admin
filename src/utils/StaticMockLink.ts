@@ -1,25 +1,96 @@
-import { print } from 'graphql';
+import { print, visit, DocumentNode, DefinitionNode, SelectionSetNode, FieldNode } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
 import type { Operation, FetchResult } from '@apollo/client';
-import { ApolloLink } from '@apollo/client';
+import { ApolloLink, Observable } from '@apollo/client';
+import { addTypenameToDocument } from '@apollo/client/utilities';
 
-import {
-  Observable,
-  addTypenameToDocument,
-  removeClientSetsFromDocument,
-  removeConnectionDirectiveFromDocument,
-  cloneDeep,
-} from '@apollo/client/utilities';
+import type { MockedResponse, ResultFunction } from '@apollo/client/testing';
 
-import type { MockedResponse, ResultFunction } from '@apollo/client/testing/react';
+// Local implementation of cloneDeep since it's no longer exported from @apollo/client/utilities
+function cloneDeep<T>(obj: T): T {
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map((item) => cloneDeep(item)) as unknown as T;
+  }
+  const result: Record<string, unknown> = {};
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) {
+      result[key] = cloneDeep((obj as Record<string, unknown>)[key]);
+    }
+  }
+  return result as T;
+}
+
+// Local implementation since it's no longer exported from @apollo/client/utilities
+function removeConnectionDirectiveFromDocument(doc: DocumentNode): DocumentNode | null {
+  if (!doc) return null;
+  return visit(doc, {
+    Directive(node) {
+      if (node.name.value === 'connection') {
+        return null;
+      }
+      return undefined;
+    },
+  });
+}
+
+// Local implementation since it's no longer exported from @apollo/client/utilities
+function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
+  if (!doc) return null;
+
+  const isClientField = (field: FieldNode): boolean => {
+    return field.directives?.some((directive) => directive.name.value === 'client') ?? false;
+  };
+
+  const removeClientFields = (selectionSet: SelectionSetNode): SelectionSetNode | null => {
+    const selections = selectionSet.selections.filter((selection) => {
+      if (selection.kind === 'Field') {
+        return !isClientField(selection);
+      }
+      return true;
+    });
+    if (selections.length === 0) {
+      return null;
+    }
+    return { ...selectionSet, selections };
+  };
+
+  const newDefinitions: DefinitionNode[] = [];
+  for (const definition of doc.definitions) {
+    if (definition.kind === 'OperationDefinition' || definition.kind === 'FragmentDefinition') {
+      if (definition.selectionSet) {
+        const newSelectionSet = removeClientFields(definition.selectionSet);
+        if (newSelectionSet) {
+          newDefinitions.push({ ...definition, selectionSet: newSelectionSet });
+        }
+      } else {
+        newDefinitions.push(definition);
+      }
+    } else {
+      newDefinitions.push(definition);
+    }
+  }
+
+  if (newDefinitions.length === 0) {
+    return null;
+  }
+
+  return { ...doc, definitions: newDefinitions };
+}
+
 
 /**
- * Extended MockedResponse type that supports variableMatcher for flexible matching
+ * Extended MockedResponse type that supports variableMatcher for flexible matching,
+ * delay, and dynamic newData generation.
  */
-interface IMockedResponseWithMatcher extends MockedResponse {
-  variableMatcher?: (variables: Record<string, unknown>) => boolean;
+export interface IStaticMockedResponse extends MockedResponse {
+  variableMatcher?: (variables: Record<string, any>) => boolean;
+  newData?: (variables: Record<string, any>) => any;
+  delay?: number;
 }
 
 function requestToKey(
@@ -42,9 +113,12 @@ function requestToKey(
 export class StaticMockLink extends ApolloLink {
   public operation?: Operation;
   public addTypename = true;
-  private _mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
+  private _mockedResponsesByKey: { [key: string]: IStaticMockedResponse[] } = {};
 
-  constructor(mockedResponses: readonly MockedResponse[], addTypename = true) {
+  constructor(
+    mockedResponses: readonly IStaticMockedResponse[],
+    addTypename = true,
+  ) {
     super();
     this.addTypename = addTypename;
     if (mockedResponses) {
@@ -54,7 +128,7 @@ export class StaticMockLink extends ApolloLink {
     }
   }
 
-  public addMockedResponse(mockedResponse: MockedResponse): void {
+  public addMockedResponse(mockedResponse: IStaticMockedResponse): void {
     const normalizedMockedResponse =
       this._normalizeMockedResponse(mockedResponse);
     const key = requestToKey(
@@ -81,7 +155,7 @@ export class StaticMockLink extends ApolloLink {
         // Support variableMatcher function for flexible matching
         // If matcher exists and returns true, use this mock
         // If matcher returns false, fall back to deep-equal check
-        const matcher = (res as IMockedResponseWithMatcher).variableMatcher;
+        const matcher = res.variableMatcher;
         if (typeof matcher === 'function' && matcher(requestVariables)) {
           responseIndex = index;
           return true;
@@ -104,6 +178,7 @@ export class StaticMockLink extends ApolloLink {
         )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
+      const response = this._mockedResponsesByKey[key][responseIndex];
       const { newData } = response;
       if (newData) {
         response.result = newData(operation.variables);
@@ -116,6 +191,8 @@ export class StaticMockLink extends ApolloLink {
         );
       }
     }
+
+    const currentResponse = response as IStaticMockedResponse | undefined;
 
     return new Observable((observer) => {
       const timer = setTimeout(
@@ -133,24 +210,24 @@ export class StaticMockLink extends ApolloLink {
             } catch (error) {
               observer.error(error);
             }
-          } else if (response) {
-            if (response.error) {
-              observer.error(response.error);
+          } else if (currentResponse) {
+            if (currentResponse.error) {
+              observer.error(currentResponse.error);
             } else {
-              if (response.result) {
+              if (currentResponse.result) {
                 observer.next(
-                  typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)(
+                  typeof currentResponse.result === 'function'
+                    ? (currentResponse.result as ResultFunction<FetchResult>)(
                       operation.variables,
                     )
-                    : response.result,
+                    : currentResponse.result,
                 );
               }
               observer.complete();
             }
           }
         },
-        (response && response.delay) || 0,
+        (currentResponse && currentResponse.delay) || 0,
       );
 
       return () => {
@@ -159,17 +236,20 @@ export class StaticMockLink extends ApolloLink {
     });
   }
 
+  public onError(error: Error, _observer?: any): boolean | void {
+    return false;
+  }
+
   private _normalizeMockedResponse(
-    mockedResponse: MockedResponse,
-  ): MockedResponse {
-    const newMockedResponse = cloneDeep(
-      mockedResponse,
-    ) as IMockedResponseWithMatcher;
+    mockedResponse: IStaticMockedResponse,
+  ): IStaticMockedResponse {
+    const newMockedResponse = cloneDeep(mockedResponse);
     // cloneDeep might strip functions, so we restore the variableMatcher if it existed
-    if ((mockedResponse as IMockedResponseWithMatcher).variableMatcher) {
-      newMockedResponse.variableMatcher = (
-        mockedResponse as IMockedResponseWithMatcher
-      ).variableMatcher;
+    if (mockedResponse.variableMatcher) {
+      newMockedResponse.variableMatcher = mockedResponse.variableMatcher;
+    }
+    if (mockedResponse.newData) {
+      newMockedResponse.newData = mockedResponse.newData;
     }
 
     const queryWithoutConnection = removeConnectionDirectiveFromDocument(
@@ -193,7 +273,7 @@ export interface InterfaceMockApolloLink extends ApolloLink {
 // making multiple queries to the server.
 // NOTE: The last arg can optionally be an `addTypename` arg.
 export function mockSingleLink(
-  ...mockedResponses: (MockedResponse | boolean)[]
+  ...mockedResponses: (IStaticMockedResponse | boolean)[]
 ): InterfaceMockApolloLink {
   // To pull off the potential typename. If this isn't a boolean, we'll just
   // set it true later.
@@ -205,9 +285,9 @@ export function mockSingleLink(
     maybeTypename = true;
   }
 
-  // Ensure mocks is of type MockedResponse[]
+  // Ensure mocks is of type IStaticMockedResponse[]
   return new StaticMockLink(
-    mocks as MockedResponse[],
+    mocks as IStaticMockedResponse[],
     maybeTypename as boolean,
   );
 }

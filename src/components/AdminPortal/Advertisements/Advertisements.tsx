@@ -47,6 +47,7 @@ import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import type { InterfaceOrganizationPg } from 'utils/interfaces';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -66,7 +67,7 @@ export default function Advertisements(): JSX.Element {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
     error: completedError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<InterfaceOrganizationPg>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterCompleted,
@@ -80,7 +81,7 @@ export default function Advertisements(): JSX.Element {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
     error: activeError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<InterfaceOrganizationPg>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterActive,
@@ -107,7 +108,7 @@ export default function Advertisements(): JSX.Element {
     ) {
       const ads: Advertisement[] =
         orgCompletedAdvertisementListData.organization.advertisements.edges.map(
-          (edge: { node: Advertisement }) => edge.node,
+          (edge: any) => edge.node as Advertisement,
         );
       if (afterCompleted) {
         setCompletedAdvertisements((prevAds) => {
@@ -124,7 +125,7 @@ export default function Advertisements(): JSX.Element {
     if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
       const ads: Advertisement[] =
         orgActiveAdvertisementListData.organization.advertisements.edges.map(
-          (edge: { node: Advertisement }) => edge.node,
+          (edge: any) => edge.node as Advertisement,
         );
       if (afterActive) {
         setActiveAdvertisements((prevAds) => {

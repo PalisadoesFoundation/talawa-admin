@@ -33,6 +33,13 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+import type {
+  InterfaceMembershipRequestQuery,
+  InterfaceAcceptMembershipRequestMutation,
+  InterfaceRejectMembershipRequestMutation,
+  InterfaceRequestsListItem,
+  InterfaceOrganizationListQuery,
+} from 'utils/interfaces';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
   GridCellParams,
@@ -50,17 +57,6 @@ import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 
-interface InterfaceRequestsListItem {
-  membershipRequestId: string;
-  createdAt: string;
-  status: string;
-  user: {
-    avatarURL?: string;
-    id: string;
-    name: string;
-    emailAddress: string;
-  };
-}
 
 /**
  * Renders the Membership Requests screen.
@@ -98,7 +94,7 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, refetch } = useQuery(MEMBERSHIP_REQUEST_PG, {
+  const { data, loading, refetch } = useQuery<InterfaceMembershipRequestQuery>(MEMBERSHIP_REQUEST_PG, {
     variables: {
       input: {
         id: organizationId,
@@ -110,7 +106,7 @@ const Requests = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgsData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);
@@ -371,8 +367,8 @@ const Requests = (): JSX.Element => {
   ];
 
   // Mutations for accept/reject
-  const [acceptUser] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
-  const [rejectUser] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
+  const [acceptUser] = useMutation<InterfaceAcceptMembershipRequestMutation>(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
+  const [rejectUser] = useMutation<InterfaceRejectMembershipRequestMutation>(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
   const handleAcceptUser = async (membershipRequestId: string) => {
     try {

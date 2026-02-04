@@ -63,7 +63,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import styles from './Volunteers.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+import type { InterfaceEventVolunteerInfo, InterfaceGetEventVolunteersQuery } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
@@ -144,19 +144,7 @@ function Volunteers(): JSX.Element {
     loading: volunteersLoading,
     error: volunteersError,
     refetch: refetchVolunteers,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteers: InterfaceEventVolunteerInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEERS, {
+  } = useQuery<InterfaceGetEventVolunteersQuery>(GET_EVENT_VOLUNTEERS, {
     variables: {
       input: {
         id: eventId,

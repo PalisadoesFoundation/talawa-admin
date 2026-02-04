@@ -51,6 +51,7 @@ import {
   InterfaceOrgRelationType,
   InterfaceUserOrg,
 } from 'types/AdminPortal/UserDetails/UserOrganization/type';
+import type { InterfaceUserDetailsQuery } from 'utils/interfaces';
 const UserOrganizations: React.FC<InterfaceUserOrganizationsProps> = ({
   id,
 }): JSX.Element => {
@@ -73,7 +74,7 @@ const UserOrganizations: React.FC<InterfaceUserOrganizationsProps> = ({
       },
     );
 
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<InterfaceUserDetailsQuery>(USER_DETAILS, {
     variables: { input: { id: currentId } },
   });
 

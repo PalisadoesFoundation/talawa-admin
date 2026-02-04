@@ -45,6 +45,7 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
+import type { InterfaceEventAttendeesQuery } from 'utils/interfaces';
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
@@ -77,12 +78,12 @@ function EventAttendance(): JSX.Element {
     return filteringBy === 'All'
       ? attendees
       : attendees.filter((attendee) => {
-          const attendeeDate = new Date(attendee.createdAt);
-          const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
-          return filteringBy === 'This Month'
-            ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-            : isSameYear;
-        });
+        const attendeeDate = new Date(attendee.createdAt);
+        const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
+        return filteringBy === 'This Month'
+          ? isSameYear && attendeeDate.getMonth() === now.getMonth()
+          : isSameYear;
+      });
   };
 
   const filterAndSortAttendees = (
@@ -94,7 +95,7 @@ function EventAttendance(): JSX.Element {
     const searchValueLower = value.toLowerCase().trim();
 
     const filtered = (memberData?.event?.attendees ?? []).filter(
-      (attendee: InterfaceMember) => {
+      (attendee: any) => {
         const name = attendee.name?.toLowerCase() || '';
         const email = attendee.emailAddress?.toLowerCase() || '';
         return (
@@ -123,7 +124,7 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
+    useLazyQuery<InterfaceEventAttendeesQuery>(EVENT_ATTENDEES, {
       variables: { eventId: eventId },
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',

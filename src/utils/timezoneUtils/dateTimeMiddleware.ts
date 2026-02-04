@@ -92,7 +92,7 @@ export const requestMiddleware = new ApolloLink((operation, forward) => {
 
 // Response middleware to convert UTC time to local time
 export const responseMiddleware = new ApolloLink((operation, forward) => {
-  return forward(operation).map((response) => {
+  return (forward(operation) as any).map((response: any) => {
     if (response.data) {
       traverseAndConvertDates(
         response.data as Record<string, unknown>,

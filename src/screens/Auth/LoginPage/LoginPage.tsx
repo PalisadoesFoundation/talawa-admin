@@ -44,7 +44,7 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
+import type { InterfaceQueryOrganizationListObject, InterfaceCommunityQuery, InterfaceSignInQuery, InterfaceOrganizationListQuery, InterfaceSignUpMutation } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
@@ -130,7 +130,7 @@ const LoginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<{ label: string; id: string }[]>([]);
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -192,26 +192,23 @@ const LoginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data, refetch } = useQuery<InterfaceCommunityQuery>(GET_COMMUNITY_DATA_PG);
   useEffect(() => {
     refetch();
   }, [data]);
-  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
-  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const [signin, { loading: loginLoading }] = useLazyQuery<InterfaceSignInQuery>(SIGNIN_QUERY, {
+    fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
+  });
+  const [signup, { loading: signinLoading }] = useMutation<InterfaceSignUpMutation>(SIGNUP_MUTATION);
+  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
-        (org: InterfaceQueryOrganizationListObject) => {
-          const tempObj: { label: string; id: string } | null = {} as {
-            label: string;
-            id: string;
-          };
-          tempObj['label'] = `${org.name}(${org.addressLine1})`;
-          tempObj['id'] = org.id;
-          return tempObj;
-        },
+        (org) => ({
+          label: `${org.name}(${org.addressLine1})`,
+          id: org.id,
+        }),
       );
       setOrganizations(options);
     }
@@ -348,13 +345,12 @@ const LoginPage = (): JSX.Element => {
           password: formState.password,
           ...(recaptchaToken && { recaptchaToken }),
         },
-        fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });
 
       // Check for GraphQL errors (like account_locked) first
       if (signInError) {
         // Check if this is an account_locked error with retryAfter timestamp
-        const graphQLError = signInError.graphQLErrors?.[0];
+        const graphQLError = (signInError as any).graphQLErrors?.[0];
         const extensions = graphQLError?.extensions as
           | { code?: string; retryAfter?: string }
           | undefined;
@@ -503,15 +499,13 @@ const LoginPage = (): JSX.Element => {
                 btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
-                className={`${styles.talawa_logo}  ${
-                  showTab === 'REGISTER' && styles.marginTopForReg
-                }`}
+                className={`${styles.talawa_logo}  ${showTab === 'REGISTER' && styles.marginTopForReg
+                  }`}
               />
               {/* LOGIN FORM */}
               <div
-                className={`${
-                  showTab === 'LOGIN' ? styles.active_tab : 'd-none'
-                }`}
+                className={`${showTab === 'LOGIN' ? styles.active_tab : 'd-none'
+                  }`}
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
@@ -652,9 +646,8 @@ const LoginPage = (): JSX.Element => {
               </div>
               {/* REGISTER FORM */}
               <div
-                className={`${
-                  showTab === 'REGISTER' ? styles.active_tab : 'd-none'
-                }`}
+                className={`${showTab === 'REGISTER' ? styles.active_tab : 'd-none'
+                  }`}
               >
                 <form onSubmit={signupLink}>
                   <h1
@@ -837,11 +830,10 @@ const LoginPage = (): JSX.Element => {
                         )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.lowercaseChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
+                          className={`form-text ${showAlert.lowercaseChar
+                            ? 'text-danger'
+                            : 'text-success'
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.lowercaseChar ? (
                             <span>
@@ -857,11 +849,10 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.uppercaseChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
+                          className={`form-text ${showAlert.uppercaseChar
+                            ? 'text-danger'
+                            : 'text-success'
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.uppercaseChar ? (
                             <span>
@@ -877,11 +868,10 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.numericValue
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element}`}
+                          className={`form-text ${showAlert.numericValue
+                            ? 'text-danger'
+                            : 'text-success'
+                            } ${styles.password_check_element}`}
                         >
                           {showAlert.numericValue ? (
                             <span>
@@ -897,13 +887,11 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${
-                            showAlert.specialChar
-                              ? 'text-danger'
-                              : 'text-success'
-                          } ${styles.password_check_element} ${
-                            styles.password_check_element_bottom
-                          }`}
+                          className={`form-text ${showAlert.specialChar
+                            ? 'text-danger'
+                            : 'text-success'
+                            } ${styles.password_check_element} ${styles.password_check_element_bottom
+                            }`}
                         >
                           {showAlert.specialChar ? (
                             <span>

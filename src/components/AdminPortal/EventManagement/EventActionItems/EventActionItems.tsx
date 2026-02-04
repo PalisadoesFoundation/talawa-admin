@@ -32,6 +32,10 @@ import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client/react';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
+import type {
+  InterfaceGetEventActionItemsQuery,
+  InterfaceOrganizationPg,
+} from 'utils/interfaces';
 
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
@@ -128,7 +132,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     loading: eventInfoLoading,
     error: eventInfoError,
     refetch: eventActionItemsRefetch,
-  } = useQuery(GET_EVENT_ACTION_ITEMS, {
+  } = useQuery<InterfaceGetEventActionItemsQuery>(GET_EVENT_ACTION_ITEMS, {
     variables: {
       input: {
         id: eventId,
@@ -150,7 +154,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   useEffect(() => {
     if (eventData && eventData.event) {
       const items = eventData.event.actionItems.edges.map(
-        (edge: { node: IActionItemInfo }) => edge.node,
+        (edge: any) => edge.node as IActionItemInfo,
       );
       let filteredItems = items;
 

@@ -9,6 +9,7 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { toast } from 'react-toastify';
+import type { InterfaceCommunitySessionTimeoutQuery } from 'utils/interfaces';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -41,7 +42,7 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [logout] = useMutation(LOGOUT_MUTATION);
-  const { data, error: queryError } = useQuery(
+  const { data, error: queryError } = useQuery<InterfaceCommunitySessionTimeoutQuery>(
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 

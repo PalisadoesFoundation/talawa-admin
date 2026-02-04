@@ -38,6 +38,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { InterfaceEventDetailsQuery } from 'utils/interfaces';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -57,12 +58,13 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  const { data: eventData, loading: eventInfoLoading } = useQuery(
-    EVENT_DETAILS,
-    {
-      variables: { eventId },
-    },
-  );
+  const {
+    data: eventData,
+    loading: eventInfoLoading,
+    error: eventInfoError,
+  } = useQuery<InterfaceEventDetailsQuery>(EVENT_DETAILS, {
+    variables: { eventId },
+  });
 
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
@@ -120,7 +122,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     isRegisterable: eventData.event.isRegisterable,
     isInviteOnly: eventData.event.isInviteOnly ?? false,
     attendees: [],
-    creator: eventData.event.creator,
+    creator: eventData.event.creator as any,
     userId: userId as string,
   };
 

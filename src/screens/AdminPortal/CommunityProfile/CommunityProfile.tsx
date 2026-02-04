@@ -63,6 +63,14 @@ import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import type {
+  InterfaceUserPg,
+  InterfaceOrganizationPg,
+  InterfaceUpdateUserMutation,
+  InterfaceCommunityQuery,
+  InterfaceUpdateCommunityMutation,
+  InterfaceResetCommunityMutation,
+} from 'utils/interfaces';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -78,19 +86,19 @@ const CommunityProfile = (): JSX.Element => {
   // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
     id: string;
-    name: string | undefined;
-    websiteURL: string | undefined;
-    logoURL: string | undefined;
-    logoMimeType: string | undefined;
+    name?: string | undefined;
+    websiteURL?: string | undefined;
+    logoURL?: string | undefined;
+    logoMimeType?: string | undefined;
     inactivityTimeoutDuration: number;
-    facebookURL: string | undefined;
-    instagramURL: string | undefined;
-    xURL: string | undefined;
-    linkedinURL: string | undefined;
-    githubURL: string | undefined;
-    youtubeURL: string | undefined;
-    redditURL: string | undefined;
-    slackURL: string | undefined;
+    facebookURL?: string | undefined;
+    instagramURL?: string | undefined;
+    xURL?: string | undefined;
+    linkedinURL?: string | undefined;
+    githubURL?: string | undefined;
+    youtubeURL?: string | undefined;
+    redditURL?: string | undefined;
+    slackURL?: string | undefined;
   };
 
   // State hook for managing profile variables
@@ -115,15 +123,15 @@ const CommunityProfile = (): JSX.Element => {
   const logoInputRef = React.useRef<HTMLInputElement>(null);
 
   // Query to fetch community data
-  const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data, loading } = useQuery<InterfaceCommunityQuery>(GET_COMMUNITY_DATA_PG);
 
   // Mutations for updating and resetting community data
-  const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY_PG);
-  const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);
+  const [uploadPreLoginImagery] = useMutation<InterfaceUpdateCommunityMutation>(UPDATE_COMMUNITY_PG);
+  const [resetPreLoginImagery] = useMutation<InterfaceResetCommunityMutation>(RESET_COMMUNITY);
 
   // Effect to set profile data from fetched data
   React.useEffect(() => {
-    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined | null = data?.community;
     if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
@@ -186,7 +194,7 @@ const CommunityProfile = (): JSX.Element => {
    * Resets profile data to initial values and performs a reset operation.
    */
   const resetData = async (): Promise<void> => {
-    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined | null = data?.community;
     try {
       setProfileVariable({
         name: '',

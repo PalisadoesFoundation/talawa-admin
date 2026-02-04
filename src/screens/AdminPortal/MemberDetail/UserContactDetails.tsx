@@ -36,6 +36,7 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceGetUserByIdQuery, InterfaceUpdateUserMutation } from 'utils/interfaces';
 import { Card, Row, Col } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -103,8 +104,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   useEffect(() => {
     document.title = t('title');
   }, [t]);
-  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const { data, loading, error } = useQuery(GET_USER_BY_ID, {
+  const [updateUser] = useMutation<InterfaceUpdateUserMutation>(UPDATE_USER_MUTATION);
+  const { data, loading, error } = useQuery<InterfaceGetUserByIdQuery>(GET_USER_BY_ID, {
     variables: {
       input: {
         id: resolvedUserId,

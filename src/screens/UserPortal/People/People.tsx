@@ -56,6 +56,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import type { InterfaceOrgMemberConnectionQuery } from 'utils/interfaces';
 
 interface IMemberNode {
   id: string;
@@ -98,7 +99,7 @@ export default function People(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query the current page of members
-  const { data, loading, fetchMore, refetch } = useQuery(
+  const { data, loading, fetchMore, refetch } = useQuery<InterfaceOrgMemberConnectionQuery>(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
       variables: {
