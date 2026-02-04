@@ -1,47 +1,70 @@
-import { useState } from 'react';
+import { useMutation } from '@apollo/client';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+
+/**
+ * Result passed to onSuccess so the parent can handle session and redirect.
+ */
+export interface IRegistrationSuccessResult {
+  signUp: { user: { id: string } };
+  name: string;
+  email: string;
+}
 
 /**
  * Props for the useRegistration hook
  */
 interface IUseRegistrationProps {
-  /** Callback function called on successful registration */
-  onSuccess?: () => void;
+  /** Callback function called on successful registration with result and form data */
+  onSuccess?: (result: IRegistrationSuccessResult) => void;
   /** Callback function called on registration error */
   onError?: (error: Error) => void;
 }
 
 /**
- * Custom hook for user registration
+ * Input for the register function (matches SIGNUP_MUTATION variables).
+ */
+export interface IRegisterInput {
+  name: string;
+  email: string;
+  password: string;
+  organizationId: string;
+  recaptchaToken?: string | null;
+}
+
+/**
+ * Custom hook for user registration using SIGNUP_MUTATION.
  */
 export const useRegistration = ({
   onSuccess,
   onError,
 }: IUseRegistrationProps) => {
-  const [loading, setLoading] = useState(false);
+  const [signup, { loading }] = useMutation(SIGNUP_MUTATION);
 
-  const register = async (data: {
-    name: string;
-    email: string;
-    password: string;
-    organizationId: string;
-  }) => {
-    setLoading(true);
+  const register = async (data: IRegisterInput): Promise<void> => {
     try {
-      // Mock registration - in real implementation, this would call GraphQL mutation
-      // For now, we validate that data is provided
-      if (!data.name || !data.email || !data.password) {
-        throw new Error('Missing required registration data');
+      if (!data.name?.trim() || !data.email?.trim() || !data.password?.trim()) {
+        onError?.(new Error('Missing required registration data'));
+        return;
       }
-      await new Promise((resolve) => setTimeout(resolve, 100));
-      if (onSuccess) {
-        onSuccess();
+      const { data: signUpData } = await signup({
+        variables: {
+          ID: data.organizationId || '',
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          ...(data.recaptchaToken && { recaptchaToken: data.recaptchaToken }),
+        },
+      });
+
+      if (signUpData?.signUp) {
+        onSuccess?.({
+          signUp: signUpData.signUp,
+          name: data.name,
+          email: data.email,
+        });
       }
     } catch (error) {
-      if (onError) {
-        onError(error as Error);
-      }
-    } finally {
-      setLoading(false);
+      onError?.(error as Error);
     }
   };
 

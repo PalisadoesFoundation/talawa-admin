@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import { FormField } from '../../../shared-components/Auth/FormField/FormField';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
@@ -41,7 +43,16 @@ export const RegistrationForm = ({
     password: '',
     confirmPassword: '',
   });
-  const { register, loading } = useRegistration({ onSuccess, onError });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { register, loading } = useRegistration({
+    onSuccess,
+    onError: (err) => {
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+      onError?.(err);
+    },
+  });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,6 +95,7 @@ export const RegistrationForm = ({
       email: formData.email,
       password: formData.password,
       organizationId: formData.orgId || '',
+      recaptchaToken: recaptchaToken ?? undefined,
     });
   };
 
@@ -101,6 +113,7 @@ export const RegistrationForm = ({
         value={formData.email}
         error={errors.email}
         onChange={(e) => setFormData((s) => ({ ...s, email: e.target.value }))}
+        testId="signInEmail"
       />
 
       <PasswordField
@@ -111,6 +124,7 @@ export const RegistrationForm = ({
         onChange={(e) =>
           setFormData((s) => ({ ...s, password: e.target.value }))
         }
+        testId="passwordField"
       />
 
       <PasswordField
@@ -121,19 +135,36 @@ export const RegistrationForm = ({
         onChange={(e) =>
           setFormData((s) => ({ ...s, confirmPassword: e.target.value }))
         }
+        testId="cpassword"
       />
       <PasswordStrengthIndicator password={formData.password} isVisible />
       <OrgSelector
         options={organizations}
         value={formData.orgId}
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
+        testId="selectOrg"
       />
       {enableRecaptcha && (
-        <div data-testid="recaptcha-placeholder" data-content="recaptcha-ready">
-          {/* reCAPTCHA component will be rendered here */}
+        <div data-testid="recaptcha-placeholder">
+          {RECAPTCHA_SITE_KEY && (
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={(token): void => setRecaptchaToken(token)}
+              onExpired={(): void => setRecaptchaToken(null)}
+              data-testid="recaptcha-container"
+            />
+          )}
         </div>
       )}
-      <button type="submit" disabled={loading}>
+      <button
+        type="submit"
+        disabled={
+          loading ||
+          (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
+        }
+        data-testid="registrationBtn"
+      >
         {loading ? t('loading') : t('register')}
       </button>
     </form>

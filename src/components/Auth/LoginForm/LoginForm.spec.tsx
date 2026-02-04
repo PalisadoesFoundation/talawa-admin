@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LoginForm } from './LoginForm';
@@ -97,12 +98,14 @@ const mockSignInGraphQLError: MockedResponse = {
 };
 
 describe('LoginForm', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   const defaultProps = {
     onSuccess: vi.fn(),
     onError: vi.fn(),
   };
 
   beforeEach(() => {
+    user = userEvent.setup();
     vi.clearAllMocks();
   });
 
@@ -181,7 +184,7 @@ describe('LoginForm', () => {
   });
 
   describe('Form Input Handling', () => {
-    test('updates email field value on change', () => {
+    test('updates email field value on change', async () => {
       render(
         <MockedProvider mocks={[]}>
           <LoginForm {...defaultProps} />
@@ -189,12 +192,12 @@ describe('LoginForm', () => {
       );
 
       const emailInput = screen.getByTestId('login-form-email');
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+      await user.type(emailInput, 'test@example.com');
 
       expect(emailInput).toHaveValue('test@example.com');
     });
 
-    test('updates password field value on change', () => {
+    test('updates password field value on change', async () => {
       render(
         <MockedProvider mocks={[]}>
           <LoginForm {...defaultProps} />
@@ -202,14 +205,14 @@ describe('LoginForm', () => {
       );
 
       const passwordInput = screen.getByTestId('login-form-password');
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
+      await user.type(passwordInput, 'password123');
 
       expect(passwordInput).toHaveValue('password123');
     });
   });
 
   describe('Form Submission - Success', () => {
-    test('calls onSuccess with token on successful login', async () => {
+    test('calls onSuccess with full signIn result on successful login', async () => {
       const onSuccess = vi.fn();
 
       render(
@@ -222,17 +225,20 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'test@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('test-auth-token');
+        const mockResult = mockSignInSuccess.result as
+          | { data?: { signIn: unknown } }
+          | undefined;
+        expect(onSuccess).toHaveBeenCalledWith(mockResult?.data?.signIn);
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
 
-    test('calls onSuccess for admin login', async () => {
+    test('calls onSuccess with full signIn result for admin login', async () => {
       const onSuccess = vi.fn();
 
       render(
@@ -245,12 +251,15 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'adminpass123' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'admin@example.com');
+      await user.type(passwordInput, 'adminpass123');
+      await user.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('admin-auth-token');
+        const mockResult = mockSignInAdminSuccess.result as
+          | { data?: { signIn: unknown } }
+          | undefined;
+        expect(onSuccess).toHaveBeenCalledWith(mockResult?.data?.signIn);
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
@@ -270,9 +279,9 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'wrong@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'wrong@example.com');
+      await user.type(passwordInput, 'wrongpassword');
+      await user.click(submitButton);
 
       await waitFor(() => {
         expect(onError).toHaveBeenCalled();
@@ -293,9 +302,9 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'error@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'errorpassword' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'error@example.com');
+      await user.type(passwordInput, 'errorpassword');
+      await user.click(submitButton);
 
       await waitFor(() => {
         expect(onError).toHaveBeenCalled();
@@ -314,11 +323,9 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'wrong@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
-
-      // Should not throw
-      expect(() => fireEvent.click(submitButton)).not.toThrow();
+      await user.type(emailInput, 'wrong@example.com');
+      await user.type(passwordInput, 'wrongpassword');
+      await user.click(submitButton);
     });
   });
 
@@ -340,9 +347,9 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'test@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
 
       // Button should be disabled immediately after click
       await waitFor(() => {
@@ -368,9 +375,9 @@ describe('LoginForm', () => {
       const submitButton = screen.getByTestId('login-form-submit');
       const form = screen.getByTestId('login-form');
 
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-      fireEvent.click(submitButton);
+      await user.type(emailInput, 'test@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
 
       await waitFor(() => {
         expect(form).toHaveAttribute('aria-busy', 'true');
@@ -404,11 +411,9 @@ describe('LoginForm', () => {
       const passwordInput = screen.getByTestId('login-form-password');
       const submitButton = screen.getByTestId('login-form-submit');
 
-      fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-      fireEvent.change(passwordInput, { target: { value: 'password123' } });
-
-      // Should not throw
-      expect(() => fireEvent.click(submitButton)).not.toThrow();
+      await user.type(emailInput, 'test@example.com');
+      await user.type(passwordInput, 'password123');
+      await user.click(submitButton);
     });
 
     test('callbacks are optional', () => {

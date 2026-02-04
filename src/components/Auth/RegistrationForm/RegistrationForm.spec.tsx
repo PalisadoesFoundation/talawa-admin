@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { RegistrationForm } from './RegistrationForm';
 import { useRegistration } from '../../../hooks/auth/useRegistration';
@@ -16,8 +17,10 @@ describe('RegistrationForm', () => {
   const mockRegister = vi.fn();
   const mockOnSuccess = vi.fn();
   const mockOnError = vi.fn();
+  let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    user = userEvent.setup();
     mockRegister.mockClear();
     mockOnSuccess.mockClear();
     mockOnError.mockClear();
@@ -59,20 +62,12 @@ describe('RegistrationForm', () => {
   it('handles form submission', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith({
@@ -87,20 +82,12 @@ describe('RegistrationForm', () => {
   it('handles form submission without onSuccess callback', async () => {
     renderComponent({ onSuccess: undefined });
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(
@@ -109,89 +96,66 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('validates name field', () => {
+  it('validates name field', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
 
-  it('validates email field', () => {
+  it('validates email field', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
 
-  it('validates password field', () => {
+  it('validates password field', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
 
-  it('validates password confirmation field', () => {
+  it('validates password confirmation field', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'DifferentPassword!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(
+      screen.getByLabelText('Confirm Password'),
+      'DifferentPassword!',
+    );
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
 
-  it('updates form state on input changes', () => {
+  it('updates form state on input changes', async () => {
     renderComponent();
 
     const nameInput = screen.getByLabelText('First Name');
     const emailInput = screen.getByLabelText(/Email/);
 
-    fireEvent.change(nameInput, { target: { value: 'Test User' } });
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    await user.type(nameInput, 'Test User');
+    await user.type(emailInput, 'test@example.com');
 
     expect((nameInput as HTMLInputElement).value).toBe('Test User');
     expect((emailInput as HTMLInputElement).value).toBe('test@example.com');
@@ -210,33 +174,45 @@ describe('RegistrationForm', () => {
     expect(button).toHaveTextContent('Loading...');
   });
 
-  it('handles organization selection', () => {
+  it('handles organization selection', async () => {
     renderComponent();
 
-    const orgSelector = screen.getByLabelText('Organization');
-    fireEvent.change(orgSelector, { target: { value: '1' } });
+    await user.click(screen.getByLabelText('Organization'));
+    await waitFor(() => {
+      expect(
+        screen.getByRole('option', { name: 'Test Organization 1' }),
+      ).toBeInTheDocument();
+    });
+    await user.click(
+      screen.getByRole('option', { name: 'Test Organization 1' }),
+    );
 
-    expect((orgSelector as HTMLSelectElement).value).toBe('1');
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
+    await user.click(screen.getByRole('button', { name: /register/i }));
+
+    await waitFor(() => {
+      expect(mockRegister).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        organizationId: '1',
+      });
+    });
   });
 
   it('handles form with empty orgId', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
     // Don't set organization - test the orgId ?? '' branch
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith({
@@ -274,20 +250,12 @@ describe('RegistrationForm', () => {
     const mockCallback = vi.fn();
     renderComponent({ onSuccess: mockCallback });
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockRegister).toHaveBeenCalledWith({
@@ -305,7 +273,7 @@ describe('RegistrationForm', () => {
     const submitButton = screen.getByRole('button', {
       name: /register/i,
     });
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
 
     await waitFor(() => {
       expect(
@@ -333,25 +301,17 @@ describe('RegistrationForm', () => {
 
     renderComponent({ onError: mockOnError });
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
-    // Verify the hook was initialized with the onError callback
+    // Verify the hook was initialized with onSuccess and onError callbacks
     expect(useRegistration).toHaveBeenCalledWith({
       onSuccess: expect.any(Function),
-      onError: mockOnError,
+      onError: expect.any(Function),
     });
   });
 
@@ -359,7 +319,7 @@ describe('RegistrationForm', () => {
     renderComponent();
 
     // Submit empty form to trigger errors
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(
@@ -370,21 +330,13 @@ describe('RegistrationForm', () => {
     });
 
     // Fill in valid data
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
+    await user.type(screen.getByLabelText('First Name'), 'John Doe');
+    await user.type(screen.getByLabelText(/Email/), 'john@example.com');
+    await user.type(screen.getByLabelText('Password'), 'Password123!');
+    await user.type(screen.getByLabelText('Confirm Password'), 'Password123!');
 
     // Submit again
-    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+    await user.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(

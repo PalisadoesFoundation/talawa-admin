@@ -1,5 +1,55 @@
+import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { useRegistration } from './useRegistration';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+
+const SUCCESS_MOCK: MockedResponse[] = [
+  {
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        ID: '1',
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+      },
+    },
+    result: {
+      data: {
+        signUp: {
+          user: { id: 'user-1' },
+          authenticationToken: 'token',
+          refreshToken: 'refresh',
+        },
+      },
+    },
+  },
+];
+
+const ERROR_MOCK: MockedResponse[] = [
+  {
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        ID: '1',
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+      },
+    },
+    error: new Error('Registration failed'),
+  },
+];
+
+const createWrapper = (mocks: MockedResponse[]) =>
+  function Wrapper({ children }: { children: React.ReactNode }) {
+    return React.createElement(MockedProvider, {
+      mocks,
+      addTypename: false,
+      children,
+    });
+  };
 
 describe('useRegistration', () => {
   afterEach(() => {
@@ -9,8 +59,11 @@ describe('useRegistration', () => {
 
   it('should handle successful registration', async () => {
     const mockOnSuccess = vi.fn();
-    const { result } = renderHook(() =>
-      useRegistration({ onSuccess: mockOnSuccess }),
+    const { result } = renderHook(
+      () => useRegistration({ onSuccess: mockOnSuccess }),
+      {
+        wrapper: createWrapper(SUCCESS_MOCK),
+      },
     );
 
     expect(result.current.loading).toBe(false);
@@ -24,40 +77,24 @@ describe('useRegistration', () => {
       });
     });
 
-    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+      const call = mockOnSuccess.mock.calls[0][0];
+      expect(call.signUp.user.id).toBe('user-1');
+      expect(call.name).toBe('Test User');
+      expect(call.email).toBe('test@example.com');
+    });
     expect(result.current.loading).toBe(false);
   });
 
   it('should handle registration error', async () => {
     const mockOnError = vi.fn();
-    const { result } = renderHook(() =>
-      useRegistration({ onError: mockOnError }),
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      {
+        wrapper: createWrapper(ERROR_MOCK),
+      },
     );
-
-    // Mock setTimeout to throw an error
-    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
-      throw new Error('Registration failed');
-    });
-
-    await act(async () => {
-      try {
-        await result.current.register({
-          name: 'Test User',
-          email: 'test@example.com',
-          password: 'password123',
-          organizationId: '1',
-        });
-      } catch {
-        // Expected to catch error
-      }
-    });
-
-    expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
-    expect(result.current.loading).toBe(false);
-  });
-
-  it('should handle registration without callbacks', async () => {
-    const { result } = renderHook(() => useRegistration({}));
 
     await act(async () => {
       await result.current.register({
@@ -68,39 +105,57 @@ describe('useRegistration', () => {
       });
     });
 
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+    });
     expect(result.current.loading).toBe(false);
   });
 
-  it('should handle error without onError callback', async () => {
-    const { result } = renderHook(() => useRegistration({}));
-
-    // Mock setTimeout to throw an error
-    vi.spyOn(global, 'setTimeout').mockImplementation(() => {
-      throw new Error('Registration failed');
+  it('should handle registration without callbacks', async () => {
+    const { result } = renderHook(() => useRegistration({}), {
+      wrapper: createWrapper(SUCCESS_MOCK),
     });
 
     await act(async () => {
-      try {
-        await result.current.register({
-          name: 'Test User',
-          email: 'test@example.com',
-          password: 'password123',
-          organizationId: '1',
-        });
-      } catch {
-        // Expected to catch error
-      }
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
     });
 
-    expect(result.current.loading).toBe(false);
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
+  });
+
+  it('should handle error without onError callback', async () => {
+    const { result } = renderHook(() => useRegistration({}), {
+      wrapper: createWrapper(ERROR_MOCK),
+    });
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '1',
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
   });
 
   it('should set loading state during registration', async () => {
-    const { result } = renderHook(() => useRegistration({}));
+    const { result } = renderHook(() => useRegistration({}), {
+      wrapper: createWrapper(SUCCESS_MOCK),
+    });
 
     expect(result.current.loading).toBe(false);
 
-    // Start registration and check loading state immediately
     act(() => {
       result.current.register({
         name: 'Test User',
@@ -110,10 +165,8 @@ describe('useRegistration', () => {
       });
     });
 
-    // Should be loading now
     expect(result.current.loading).toBe(true);
 
-    // Wait for completion
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });
@@ -121,8 +174,9 @@ describe('useRegistration', () => {
 
   it('should throw error if registration data is missing', async () => {
     const mockOnError = vi.fn();
-    const { result } = renderHook(() =>
-      useRegistration({ onError: mockOnError }),
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      { wrapper: createWrapper(SUCCESS_MOCK) },
     );
 
     await act(async () => {
@@ -173,8 +227,51 @@ describe('useRegistration', () => {
 
   it('should handle registration with organizationId correctly', async () => {
     const mockOnSuccess = vi.fn();
-    const { result } = renderHook(() =>
-      useRegistration({ onSuccess: mockOnSuccess }),
+    const orgMocks: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: 'org-123',
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: { id: 'user-1' },
+              authenticationToken: 'token',
+              refreshToken: 'refresh',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '',
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: { id: 'user-2' },
+              authenticationToken: 'token2',
+              refreshToken: 'refresh2',
+            },
+          },
+        },
+      },
+    ];
+    const { result } = renderHook(
+      () => useRegistration({ onSuccess: mockOnSuccess }),
+      { wrapper: createWrapper(orgMocks) },
     );
 
     await act(async () => {

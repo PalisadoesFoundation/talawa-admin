@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
+import ReCAPTCHA from 'react-google-recaptcha';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
+import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
@@ -39,6 +41,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   onSuccess,
   onError,
   testId = 'login-form',
+  enableRecaptcha = false,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
@@ -60,21 +63,25 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     email: '',
     password: '',
   });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
     fetchPolicy: 'network-only',
   });
 
-  // Handle successful login
+  // Handle successful login - pass full signIn so parent can do session/redirect
   useEffect(() => {
     if (data?.signIn?.authenticationToken) {
-      onSuccessRef.current?.(data.signIn.authenticationToken);
+      onSuccessRef.current?.(data.signIn);
     }
   }, [data]);
 
-  // Handle login error
+  // Handle login error - reset ReCAPTCHA when login fails
   useEffect(() => {
     if (error) {
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
       onErrorRef.current?.(error);
     }
   }, [error]);
@@ -87,6 +94,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       variables: {
         email: formData.email,
         password: formData.password,
+        ...(recaptchaToken && { recaptchaToken: recaptchaToken }),
       },
     });
   };
@@ -120,9 +128,24 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         testId={`${testId}-password`}
       />
 
+      {enableRecaptcha && RECAPTCHA_SITE_KEY && (
+        <div data-testid="recaptcha-placeholder">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={(token): void => setRecaptchaToken(token)}
+            onExpired={(): void => setRecaptchaToken(null)}
+            data-testid="recaptcha-container"
+          />
+        </div>
+      )}
+
       <Button
         type="submit"
-        disabled={loading}
+        disabled={
+          loading ||
+          (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
+        }
         data-testid={`${testId}-submit`}
         className="w-100 mt-3"
       >
