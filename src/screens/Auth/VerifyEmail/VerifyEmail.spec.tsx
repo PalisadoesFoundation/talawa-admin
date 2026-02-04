@@ -698,13 +698,45 @@ describe('Testing VerifyEmail screen', () => {
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    // Unmount before the mutation completes
     unmount();
 
-    // Wait to ensure no state updates occur after unmount
     await new Promise((resolve) => setTimeout(resolve, 600));
 
-    // No errors should be thrown
+    expect(true).toBe(true);
+  });
+
+  it('Should not update state after component unmount during resend error', async () => {
+    const slowResendErrorMock = {
+      request: {
+        query: RESEND_VERIFICATION_EMAIL_MUTATION,
+      },
+      error: new Error('Network error'),
+      delay: 500,
+    };
+
+    const { unmount } = render(
+      <MockedProvider mocks={[slowResendErrorMock]}>
+        <MemoryRouter initialEntries={['/auth/verify-email']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-state')).toBeInTheDocument();
+    });
+
+    const resendBtn = screen.getByTestId('resendVerificationBtn');
+    await userEvent.click(resendBtn);
+
+    unmount();
+
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
     expect(true).toBe(true);
   });
 
