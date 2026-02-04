@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  RenderResult,
-} from '@testing-library/react';
+import { render, screen, waitFor, RenderResult } from '@testing-library/react';
 
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -15,6 +9,22 @@ import { store } from '../../../../state/store'; // Update path based on your pr
 import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
+
+/**
+ * Helper to set input value natively (simulates paste behavior).
+ * This avoids userEvent.type() which triggers onChange per character.
+ */
+const setNativeInputValue = (
+  input: HTMLInputElement | HTMLTextAreaElement,
+  value: string,
+): void => {
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+    Object.getPrototypeOf(input),
+    'value',
+  )?.set;
+  nativeInputValueSetter?.call(input, value);
+  input.dispatchEvent(new Event('input', { bubbles: true }));
+};
 
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
@@ -76,15 +86,6 @@ describe('OrganizationModal Component', () => {
     vi.restoreAllMocks();
   });
 
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn((file) => {
-      if (file.size > 5000000) {
-        return Promise.reject(new Error('File too large'));
-      }
-      return Promise.resolve('mockBase64String');
-    }),
-  }));
-
   const setup = (): RenderResult => {
     return render(
       <Provider store={store}>
@@ -115,7 +116,7 @@ describe('OrganizationModal Component', () => {
   test('updates input fields correctly', async () => {
     setup();
     const nameInput = screen.getByTestId('modalOrganizationName');
-    fireEvent.change(nameInput, { target: { value: 'Test Organization' } });
+    setNativeInputValue(nameInput as HTMLInputElement, 'Test Organization');
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ name: 'Test Organization' }),
     );
@@ -163,7 +164,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'example.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await userEvent.upload(fileInput, file);
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -181,7 +182,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'example.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await userEvent.upload(fileInput, file);
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -194,10 +195,10 @@ describe('OrganizationModal Component', () => {
     consoleSpy.mockRestore();
   });
 
-  test('closes modal when close button is clicked', () => {
+  test('closes modal when close button is clicked', async () => {
     setup();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
+    await userEvent.click(closeButton);
     expect(mockToggleModal).toHaveBeenCalled();
   });
 
@@ -264,7 +265,7 @@ describe('OrganizationModal Component', () => {
     ];
     fields.forEach(({ testId, key, value }) => {
       const input = screen.getByTestId(testId);
-      fireEvent.change(input, { target: { value } });
+      setNativeInputValue(input as HTMLInputElement, value);
       expect(mockSetFormState).toHaveBeenCalledWith(
         expect.objectContaining({ [key]: value }),
       );
@@ -281,8 +282,8 @@ describe('OrganizationModal Component', () => {
     // Clear any previous calls
     mockSetFormState.mockClear();
 
-    // Use fireEvent.change to test the validation logic directly
-    fireEvent.change(descInput, { target: { value: longText } });
+    // Use native setter to test the validation logic (simulates paste)
+    setNativeInputValue(descInput, longText);
 
     // Should not call setFormState when input exceeds limit
     expect(mockSetFormState).not.toHaveBeenCalled();
@@ -293,7 +294,7 @@ describe('OrganizationModal Component', () => {
     const countrySelect = screen.getByTestId(
       'modalOrganizationCountryCode',
     ) as HTMLSelectElement;
-    fireEvent.change(countrySelect, { target: { value: 'us' } });
+    await userEvent.selectOptions(countrySelect, 'us');
 
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ countryCode: 'us' }),
@@ -313,7 +314,7 @@ describe('OrganizationModal Component', () => {
     mockSetFormState.mockClear();
 
     // Simulate user selecting this long option
-    fireEvent.change(countrySelect, { target: { value: longCode } });
+    await userEvent.selectOptions(countrySelect, longCode);
 
     // Expect setFormState NOT to be called because 51 > 50
     expect(mockSetFormState).not.toHaveBeenCalled();
@@ -423,8 +424,8 @@ describe('OrganizationModal Component', () => {
       // Clear any previous calls
       mockSetFormState.mockClear();
 
-      // Use fireEvent.change to test the validation logic directly
-      fireEvent.change(input, { target: { value: longText } });
+      // Use native setter to test validation logic (simulates paste)
+      setNativeInputValue(input as HTMLInputElement, longText);
 
       // Should not call setFormState when input exceeds limit
       expect(mockSetFormState).not.toHaveBeenCalled();
@@ -447,9 +448,16 @@ describe('OrganizationModal Component', () => {
     const invalidFile = new File(['content'], 'test.txt', {
       type: 'text/plain',
     });
-    const fileInput = screen.getByTestId('organisationImage');
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [invalidFile] } });
+    // Use Object.defineProperty to set files directly (bypasses accept filter)
+    Object.defineProperty(fileInput, 'files', {
+      value: [invalidFile],
+      writable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
@@ -460,20 +468,26 @@ describe('OrganizationModal Component', () => {
 
   test('should handle null file selection', async () => {
     setup();
-    const fileInput = screen.getByTestId('organisationImage');
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    // Simulate a file input change event with no files
-    fireEvent.change(fileInput, { target: { files: null } });
+    // Simulate null files using native property setter
+    Object.defineProperty(fileInput, 'files', { value: null, writable: true });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should handle empty file selection', async () => {
     setup();
-    const fileInput = screen.getByTestId('organisationImage');
+    const fileInput = screen.getByTestId(
+      'organisationImage',
+    ) as HTMLInputElement;
 
-    // Simulate a file input change event with empty files array
-    fireEvent.change(fileInput, { target: { files: [] } });
+    // Simulate empty files using native property setter
+    Object.defineProperty(fileInput, 'files', { value: [], writable: true });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
@@ -601,7 +615,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('organisationImage');
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await userEvent.upload(fileInput, file);
 
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
@@ -617,7 +631,7 @@ describe('OrganizationModal Component', () => {
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('organisationImage');
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    await userEvent.upload(fileInput, file);
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
