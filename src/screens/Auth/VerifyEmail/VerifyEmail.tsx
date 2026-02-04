@@ -99,11 +99,10 @@ const VerifyEmail = (): JSX.Element => {
     isMountedRef.current = true;
 
     const verifyEmailToken = async (): Promise<void> => {
+      if (!isMountedRef.current) {
+        return;
+      }
       try {
-        if (!isMountedRef.current) {
-          return;
-        }
-
         const { data } = await verifyEmail({
           variables: { token },
         });
@@ -120,9 +119,6 @@ const VerifyEmail = (): JSX.Element => {
           );
         }
       } catch (error: unknown) {
-        if (!isMountedRef.current) {
-          return;
-        }
         setVerificationState('error');
         const err = error as {
           message?: string;
