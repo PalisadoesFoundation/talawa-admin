@@ -12,10 +12,11 @@
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  border: var(--border-1) solid rgb(220, 220, 220);
+  border: var(--border-1) solid var(--color-gray-200);
   border-radius: var(--radius-xl);
   background-color: var(--color-white);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg) rgba(0, 0, 0, 0.1);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    var(--color-gray-200);
 }
 
 .chatContainer {
@@ -23,7 +24,7 @@
   display: flex;
   flex-direction: column;
   margin: var(--space-5);
-  border: var(--border-1) solid rgb(220, 220, 220);
+  border: var(--border-1) solid var(--color-gray-200);
   border-radius: var(--radius-lg);
   overflow-y: auto;
   background-color: var(--color-gray-50);
@@ -41,7 +42,7 @@
   flex-direction: column;
   min-width: var(--space-21);
   max-width: var(--space-23);
-  border-right: var(--border-1) solid rgb(220, 220, 220);
+  border-right: var(--border-1) solid var(--color-gray-200);
   background-color: var(--color-gray-50);
 }
 
@@ -102,7 +103,7 @@
   width: var(--space-9);
   height: 100vh;
   z-index: 9999;
-  background-color: rgba(245, 245, 245);
+  background-color: var(--color-gray-50);
   border: none;
   border-radius: var(--radius-none);
   margin-right: var(--space-6);
@@ -213,6 +214,16 @@
 
 .dropdownToggle {
   cursor: pointer;
+}
+
+/* Hide label and caret for icon-only dropdown button */
+.customToggle [class*='buttonLabel'],
+.customToggle [class*='dropdownCaret'] {
+  display: none;
+}
+
+.customToggle {
+  min-width: auto !important;
 }
 
 .contactCardList {
