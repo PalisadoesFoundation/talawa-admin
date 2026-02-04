@@ -6,7 +6,9 @@
 }
 
 .expand {
-  padding-left: calc(var(--sidebar-collapsed-width, 80px) + 1.5rem);
+  margin-left: var(--space-13);
+  padding-left: var(--space-11);
+  padding-right: var(--space-6);
   animation: moveLeft 0.5s ease-in-out;
 }
 
@@ -68,7 +70,8 @@
 }
 
 .contract {
-  padding-left: calc(300px + 2rem + 1.5rem);
+  padding-left: var(--space-22);
+  padding-right: var(--space-6);
   animation: moveRight 0.5s ease-in-out;
 }
 
@@ -140,7 +143,7 @@
 
 @media (max-width: 1120px) {
   .contract {
-    padding-left: calc(276px + 2rem + 1.5rem);
+    padding-left: var(--space-21);
   }
 
   .collapseSidebarButton {
@@ -187,6 +190,9 @@
   .contract,
   .expand {
     animation: none;
+    margin-left: 0;
+    padding-left: var(--space-5);
+    padding-right: var(--space-5);
   }
 
   .collapseSidebarButton {
@@ -198,10 +204,16 @@
 
 /* -- OrganizationScreen specific styles -- */
 
-.flexContainerColumn {
-  flex: 1;
+.titleContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
 }
 
-.titleMargin {
-  margin-top: 0.75rem;
+.titleContainer h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-500);
+  margin-top: var(--space-2);
 }

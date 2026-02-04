@@ -18,26 +18,39 @@
  * ```
  */
 
-import React, { useState, useEffect, useMemo, JSX } from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useState, useEffect, JSX } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
+import EventHeader from 'components/EventCalender/Header/EventHeader';
 import styles from './OrganizationEvents.module.css';
 import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import dayjs from 'dayjs';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
+import utc from 'dayjs/plugin/utc';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEvent, ICreateEventInput } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
-import CreateEventModal from './CreateEventModal';
-import PageHeader from 'shared-components/Navbar/Navbar';
-import { Button } from 'shared-components/Button';
-import AddIcon from '@mui/icons-material/Add';
+import {
+  CRUDModalTemplate,
+  useModalState,
+} from 'shared-components/CRUDModalTemplate';
+import EventForm, {
+  formatRecurrenceForPayload,
+} from 'shared-components/EventForm/EventForm';
+import type {
+  IEventFormSubmitPayload,
+  IEventFormValues,
+} from 'types/EventForm/interface';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
+
+dayjs.extend(utc);
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -85,37 +98,32 @@ interface IEventEdge {
 
 export enum ViewType {
   DAY = 'Day',
-  MONTH = 'Month View',
-  YEAR = 'Year View',
+  MONTH = 'Month',
+  YEAR = 'Year',
 }
 
 function organizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
+  const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
 
   useEffect(() => {
     document.title = t('title');
   }, [t]);
-  const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
+  const createEventModal = useModalState();
+  const { orgId: currentUrl } = useParams();
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [searchByName, setSearchByName] = useState('');
-  const { orgId: currentUrl } = useParams();
 
-  const showInviteModal = (): void => setCreateEventmodalisOpen(true);
-  const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
+  const showInviteModal = (): void => createEventModal.open();
+  const closeCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
-  };
-
-  const handleMonthChange = (month: number, year: number): void => {
-    setCurrentMonth(month);
-    setCurrentYear(year);
-    // No manual refetch - let useQuery handle it automatically with cache-first policy
   };
 
   const {
@@ -142,7 +150,6 @@ function organizationEvents(): JSX.Element {
 
   const {
     data: orgData,
-    loading: orgLoading,
     error: orgDataError,
   } = useQuery(GET_ORGANIZATION_DATA_PG, {
     variables: {
@@ -152,26 +159,94 @@ function organizationEvents(): JSX.Element {
     },
   });
 
+  // Mutation to create a new event
+  const [create] = useMutation(CREATE_EVENT_MUTATION, {
+    errorPolicy: 'all',
+  });
+
   const userId = getItem('id') as string;
   const storedRole = getItem('role') as string | null;
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
+  const defaultEventValues = React.useMemo<IEventFormValues>(
+    () => ({
+      name: '',
+      description: '',
+      location: '',
+      startDate: new Date(),
+      endDate: new Date(),
+      startTime: '08:00:00',
+      endTime: '10:00:00',
+      allDay: true,
+      isPublic: false,
+      isInviteOnly: true,
+      isRegisterable: true,
+      recurrenceRule: null,
+      createChat: false,
+    }),
+    [],
+  );
+  const [formResetKey, setFormResetKey] = useState(0);
+
+  const handleCreateEvent = async (
+    payload: IEventFormSubmitPayload,
+  ): Promise<void> => {
+    try {
+      const recurrenceInput = payload.recurrenceRule
+        ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
+        : undefined;
+
+      const input: ICreateEventInput = {
+        name: payload.name,
+        startAt: payload.startAtISO,
+        endAt: payload.endAtISO,
+        organizationId: currentUrl,
+        allDay: payload.allDay,
+        isPublic: payload.isPublic,
+        isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
+        ...(payload.description && { description: payload.description }),
+        ...(payload.location && { location: payload.location }),
+        ...(recurrenceInput && { recurrence: recurrenceInput }),
+      };
+
+      const { data: createEventData, errors } = await create({
+        variables: { input },
+      });
+
+      if (createEventData) {
+        NotificationToast.success(t('eventCreated') as string);
+        try {
+          await refetchEvents();
+        } catch {
+          // Refetch failure is non-critical
+        }
+        setFormResetKey((prev) => prev + 1);
+        createEventModal.close();
+      } else if (errors && errors.length > 0) {
+        throw new Error(errors[0].message);
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
+  };
+
   // Normalize event data for EventCalendar with proper typing
-  const allEvents: InterfaceEvent[] = (
+  const events: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => ({
     id: edge.node.id,
     name: edge.node.name,
     description: edge.node.description || '',
-    startAt: edge.node.startAt,
-    endAt: edge.node.endAt,
+    startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+    endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
     startTime: edge.node.allDay
       ? null
-      : dayjs(edge.node.startAt).format('HH:mm:ss'),
+      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
     endTime: edge.node.allDay
       ? null
-      : dayjs(edge.node.endAt).format('HH:mm:ss'),
+      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
     allDay: edge.node.allDay,
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
@@ -189,113 +264,79 @@ function organizationEvents(): JSX.Element {
       id: edge.node.creator.id,
       name: edge.node.creator.name,
     },
-    attendees: [], // Adjust if attendees are added to schema
+    attendees: [],
   }));
 
-  // Filter events based on search term (case-insensitive search across name, description, and location)
-  const events: InterfaceEvent[] = useMemo(() => {
-    if (!searchByName.trim()) {
-      return allEvents;
-    }
-    const lowerSearchTerm = searchByName.toLowerCase();
-    return allEvents.filter((event) => {
-      const matchesName = event.name.toLowerCase().includes(lowerSearchTerm);
-      const matchesDescription = event.description
-        .toLowerCase()
-        .includes(lowerSearchTerm);
-      const matchesLocation = event.location
-        .toLowerCase()
-        .includes(lowerSearchTerm);
-      return matchesName || matchesDescription || matchesLocation;
-    });
-  }, [allEvents, searchByName]);
-
   useEffect(() => {
-    // Only navigate away for serious errors, not for empty results or month navigation
-    if (eventDataError || orgDataError) {
-      // Handle rate limiting errors more gracefully - check multiple variations
-      const isRateLimitError =
-        eventDataError?.message?.toLowerCase().includes('too many requests') ||
-        eventDataError?.message?.toLowerCase().includes('rate limit') ||
-        eventDataError?.message?.includes('Please try again later');
+    if (eventDataError) {
+      const hasData =
+        Array.isArray(eventData?.organization?.events?.edges) &&
+        eventData.organization.events.edges.length > 0;
 
-      if (isRateLimitError) {
-        // Just suppress rate limit errors silently
+      const errorMessage = eventDataError.message?.toLowerCase() || '';
+      const isRateLimitError =
+        errorMessage.includes('too many requests') ||
+        errorMessage.includes('rate limit') ||
+        eventDataError.message?.includes('Please try again later');
+      const isAuthError = errorMessage.includes('not authorized');
+
+      if (isRateLimitError || (isAuthError && hasData)) {
         return;
       }
 
-      // For other errors (like empty results), just log them but don't redirect
-      console.warn('Non-critical error in events page:', {
-        eventDataError: eventDataError?.message,
-        orgDataError: orgDataError?.message,
-      });
+      errorHandler(t, eventDataError);
     }
-  }, [eventDataError, orgDataError]);
+  }, [eventDataError, eventData, t]);
 
   return (
-    <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
-      <>
-        <div className={styles.mainpageright}>
-          <div className={styles.justifyspOrganizationEvents}>
-            <PageHeader
-              search={{
-                placeholder: t('searchEventName'),
-                onSearch: (value: string) => {
-                  setSearchByName(value);
-                },
-                inputTestId: 'searchEvent',
-                buttonTestId: 'searchButton',
-              }}
-              sorting={[
-                {
-                  title: t('viewType'),
-                  selected: viewType,
-                  options: [
-                    { label: ViewType.MONTH, value: ViewType.MONTH },
-                    { label: ViewType.DAY, value: ViewType.DAY },
-                    { label: ViewType.YEAR, value: ViewType.YEAR },
-                  ],
-                  onChange: (value) => handleChangeView(value.toString()),
-                  testIdPrefix: 'selectViewType',
-                },
-              ]}
-              showEventTypeFilter={true}
-              actions={
-                <Button
-                  className={styles.dropdown}
-                  onClick={showInviteModal}
-                  data-testid="createEventModalBtn"
-                  data-cy="createEventModalBtn"
-                >
-                  <div>
-                    <AddIcon className={styles.addIconStyle} />
-                    <span>{t('createEvent')}</span>
-                  </div>
-                </Button>
-              }
-            />
-          </div>
+    <>
+      <div className={styles.mainpageright}>
+        <div className={styles.justifyspOrganizationEvents}>
+          <EventHeader
+            viewType={viewType}
+            showInviteModal={showInviteModal}
+            handleChangeView={handleChangeView}
+          />
         </div>
-        <EventCalendar
-          eventData={events}
-          refetchEvents={refetchEvents}
-          orgData={orgData?.organization}
-          userId={userId}
-          userRole={userRole}
-          viewType={viewType}
-          onMonthChange={handleMonthChange}
-          currentMonth={currentMonth}
-          currentYear={currentYear}
-        />
+      </div>
 
-        <CreateEventModal
-          isOpen={createEventmodalisOpen}
-          onClose={hideCreateEventModal}
-          onEventCreated={refetchEvents}
-          currentUrl={currentUrl || ''}
+      <EventCalendar
+        viewType={viewType}
+        eventData={events}
+        refetchEvents={refetchEvents}
+        orgData={orgData?.organization}
+        userRole={userRole}
+        userId={userId}
+        onMonthChange={(month, year) => {
+          setCurrentMonth(month);
+          setCurrentYear(year);
+        }}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
+      />
+
+      <CRUDModalTemplate
+        open={createEventModal.isOpen}
+        onClose={closeCreateEventModal}
+        title={t('eventDetails')}
+        data-testid="createEventModal"
+        showFooter={false}
+      >
+        <EventForm
+          key={formResetKey}
+          initialValues={defaultEventValues}
+          onSubmit={handleCreateEvent}
+          onCancel={closeCreateEventModal}
+          submitLabel={t('createEvent')}
+          t={t}
+          tCommon={tCommon}
+          showCreateChat
+          showRegisterable
+          showPublicToggle
+          showRecurrenceToggle
         />
-      </>
-    </LoadingState>
+      </CRUDModalTemplate>
+    </>
   );
 }
 

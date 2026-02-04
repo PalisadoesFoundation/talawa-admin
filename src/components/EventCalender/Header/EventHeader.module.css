@@ -33,17 +33,41 @@
 }
 
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
-  position: relative;
+  min-width: 120px;
+}
+
+.dropdown button {
+  background-color: var(--color-white) !important;
+  border: 1px solid var(--color-gray-300) !important;
+  color: var(--color-gray-700) !important;
+  height: 40px;
+  border-radius: var(--radius-md);
+}
+
+.dropdown button:hover,
+.dropdown button:focus {
+  background-color: var(--color-gray-50) !important;
+  border-color: var(--color-gray-400) !important;
+}
+
+.createButton {
+  background-color: var(--color-white) !important;
+  border: 1px solid var(--color-gray-300) !important;
+  color: var(--color-gray-700) !important;
+  height: 40px;
+  min-width: 100px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  height: 48px;
-  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  padding: 0 var(--space-4);
+}
+
+.createButton:hover,
+.createButton:focus {
+  background-color: var(--color-gray-50) !important;
+  border-color: var(--color-gray-400) !important;
 }
 
 .addButtonIcon {

@@ -21,11 +21,13 @@
 .expand {
   margin-left: var(--space-13);
   padding-left: var(--space-11);
+  padding-right: var(--space-6);
   animation: moveLeft 0.9s ease-in-out;
 }
 
 .contract {
   padding-left: var(--space-22);
+  padding-right: var(--space-6);
   animation: moveRight 0.5s ease-in-out;
 }
 
@@ -42,6 +44,7 @@
     animation: none;
     margin-left: 0;
     padding-left: var(--space-5);
+    padding-right: var(--space-5);
   }
 
   .contentContainer {

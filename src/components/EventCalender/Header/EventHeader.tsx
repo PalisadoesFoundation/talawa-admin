@@ -46,6 +46,19 @@ function EventHeader({
     keyPrefix: 'organizationEvents',
   });
   const { t: tCommon } = useTranslation('common');
+
+  const getViewLabel = (): string => {
+    switch (viewType) {
+      case ViewType.MONTH:
+        return tCommon('month');
+      case ViewType.DAY:
+        return tCommon('day');
+      case ViewType.YEAR:
+        return tCommon('year');
+      default:
+        return tCommon('month');
+    }
+  };
   return (
     <div
       className={styles.calendarEventHeader}
@@ -70,17 +83,18 @@ function EventHeader({
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
-              { label: t('selectMonth'), value: ViewType.MONTH },
-              { label: t('selectDay'), value: ViewType.DAY },
-              { label: t('selectYear'), value: ViewType.YEAR },
+              { label: tCommon('month'), value: ViewType.MONTH },
+              { label: tCommon('day'), value: ViewType.DAY },
+              { label: tCommon('year'), value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
             onSortChange={(value) => handleChangeView(value as ViewType)}
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
+            buttonLabel={getViewLabel()}
           />
           <Button
-            className={styles.dropdown}
+            className={styles.createButton}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
             data-cy="createEventModalBtn"

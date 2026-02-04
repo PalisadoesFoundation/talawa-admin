@@ -11,17 +11,14 @@
  * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `DateRangePicker`: Used for selecting arbitrary event date ranges.
  * - `EventForm`: Form component for event creation with validation.
  *
  * State:
- * - `dateRange`: Selected date range with `startDate` and `endDate` controlling event queries.
+ * - `currentMonth`: Current month for calendar display.
+ * - `currentYear`: Current year for calendar display.
  * - `viewType`: Current calendar view type (e.g., month, week).
  * - `createEventModal`: Controls visibility of the event creation modal.
  * - `formResetKey`: Key used to reset the event form after successful creation.
- * Computed Values:
- * - `calendarMonth`: Derived from `dateRange.startDate` for calendar display.
- * - `calendarYear`: Derived from `dateRange.startDate` for calendar display.
  *
  * Methods:
  * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
@@ -38,13 +35,6 @@
  * @returns The rendered events component.
  *
  * @example
- * ```tsx
- * // Returns current month/year
- * const { month, year } = computeCalendarFromStartDate(null);
- *
- * // Returns June 2025 (month = 5)
- * const { month, year } = computeCalendarFromStartDate(new Date(2025, 5, 15));
- * ```
  * <Events />
  *
  */
@@ -79,32 +69,7 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
-
-import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
 dayjs.extend(utc);
-
-export function computeCalendarFromStartDate(
-  startDate: Date | null,
-  refDate: Date = new Date(),
-): {
-  month: number;
-  year: number;
-} {
-  if (!startDate) {
-    const now = dayjs(refDate);
-    return {
-      month: now.month(),
-      year: now.year(),
-    };
-  }
-
-  const d = dayjs(startDate);
-  return {
-    month: d.month(),
-    year: d.year(),
-  };
-}
 
 export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
@@ -112,79 +77,12 @@ export default function Events(): JSX.Element {
 
   const { getItem } = useLocalStorage();
 
-  // Define date presets using translations (inside component to access t)
-  const datePresets: IDateRangePreset[] = React.useMemo(
-    () => [
-      {
-        key: 'today',
-        label: t('presetToday'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'thisWeek',
-        label: t('presetThisWeek'),
-        getRange: () => ({
-          startDate: dayjs().startOf('week').toDate(),
-          endDate: dayjs().endOf('week').toDate(),
-        }),
-      },
-      {
-        key: 'thisMonth',
-        label: t('presetThisMonth'),
-        getRange: () => ({
-          startDate: dayjs().startOf('month').toDate(),
-          endDate: dayjs().endOf('month').toDate(),
-        }),
-      },
-      {
-        key: 'next7Days',
-        label: t('presetNext7Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(7, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'next30Days',
-        label: t('presetNext30Days'),
-        getRange: () => ({
-          startDate: dayjs().startOf('day').toDate(),
-          endDate: dayjs().add(30, 'days').endOf('day').toDate(),
-        }),
-      },
-      {
-        key: 'nextMonth',
-        label: t('presetNextMonth'),
-        getRange: () => ({
-          startDate: dayjs().add(1, 'month').startOf('month').toDate(),
-          endDate: dayjs().add(1, 'month').endOf('month').toDate(),
-        }),
-      },
-    ],
-    [t],
-  );
 
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const createEventModal = useModalState();
   const { orgId: organizationId } = useParams();
-  const [dateRange, setDateRange] = React.useState<{
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    startDate: dayjs().startOf('month').toDate(),
-    endDate: dayjs().endOf('month').toDate(),
-  });
-  // Defensive fallback: startDate is typed as nullable, but is always initialized
-  // and cannot be set to null via DateRangePicker in normal usage.
-  // Kept for future-proofing; null handling is covered at the utility level
-  // (computeCalendarFromStartDate) to avoid unrealistic UI scenarios.
-  const { month: calendarMonth, year: calendarYear } = React.useMemo(
-    () => computeCalendarFromStartDate(dateRange.startDate, new Date()),
-    [dateRange.startDate],
-  );
+  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
 
   // Query to fetch events for the organization
   const {
@@ -196,12 +94,12 @@ export default function Events(): JSX.Element {
       id: organizationId,
       first: 100,
       after: null,
-      startDate: dateRange.startDate
-        ? dayjs(dateRange.startDate).startOf('day').toISOString()
-        : null,
-      endDate: dateRange.endDate
-        ? dayjs(dateRange.endDate).endOf('day').toISOString()
-        : null,
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
+        .startOf('month')
+        .toISOString(),
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
+        .endOf('month')
+        .toISOString(),
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
@@ -392,15 +290,6 @@ export default function Events(): JSX.Element {
         </div>
       </div>
 
-      <DateRangePicker
-        value={dateRange}
-        onChange={setDateRange}
-        dataTestId="events-date-range"
-        showPresets
-        presets={datePresets}
-      />
-
-      {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
         eventData={events}
@@ -409,17 +298,11 @@ export default function Events(): JSX.Element {
         userRole={userRole}
         userId={userId}
         onMonthChange={(month, year) => {
-          // month assumed 0-indexed (align with Date.getMonth / dayjs().month()).
-          const start = dayjs(new Date(year, month, 1))
-            .startOf('month')
-            .toDate();
-          const end = dayjs(new Date(year, month, 1))
-            .endOf('month')
-            .toDate();
-          setDateRange({ startDate: start, endDate: end });
+          setCurrentMonth(month);
+          setCurrentYear(year);
         }}
-        currentMonth={calendarMonth}
-        currentYear={calendarYear}
+        currentMonth={currentMonth}
+        currentYear={currentYear}
       />
       {/* </div> */}
       <CRUDModalTemplate

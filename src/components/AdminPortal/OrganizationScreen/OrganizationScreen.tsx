@@ -151,8 +151,8 @@ const OrganizationScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.flexContainerColumn}>
-            <h1 className={styles.titleMargin}>{t('title')}</h1>
+          <div className={styles.titleContainer}>
+            <h1>{t('title')}</h1>
             {eventName && <h4>{eventName}</h4>}
           </div>
         </div>
