@@ -10,8 +10,8 @@
  * <LoginPage />
  * ```
  */
-import { useQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import { ApolloError, useQuery } from '@apollo/client';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
@@ -47,6 +47,7 @@ const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+  const tRef = useRef(t);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,6 +67,10 @@ const LoginPage = (): JSX.Element => {
     setShowTab(location.pathname === '/register' ? 'REGISTER' : 'LOGIN');
     setRole(location.pathname === '/admin' ? 'admin' : 'user');
   }, [location.pathname]);
+
+  useEffect(() => {
+    tRef.current = t;
+  }, [t]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -106,11 +111,11 @@ const LoginPage = (): JSX.Element => {
           body: JSON.stringify({ query: '{ __typename }' }),
         });
       } catch (error) {
-        errorHandler(t, error);
+        errorHandler(tRef.current, error);
       }
     }
     loadResource();
-  }, [t]);
+  }, []);
 
   const handleLoginSuccess = (signInResult: InterfaceSignInResult): void => {
     const { user } = signInResult;
@@ -151,24 +156,28 @@ const LoginPage = (): JSX.Element => {
   };
 
   const handleLoginError = (error: Error): void => {
-    const apolloError = error as {
-      graphQLErrors?: Array<{
-        extensions?: { code?: string; retryAfter?: string };
-      }>;
-    };
-    const graphQLError = apolloError.graphQLErrors?.[0];
-    const extensions = graphQLError?.extensions;
+    if (error instanceof ApolloError) {
+      const graphQLError = error.graphQLErrors?.[0];
+      const extensions = graphQLError?.extensions;
+      const code = extensions?.code;
+      const retryAfter = extensions?.retryAfter;
+      const retryAfterDate =
+        typeof retryAfter === 'string' || typeof retryAfter === 'number'
+          ? new Date(retryAfter)
+          : retryAfter instanceof Date
+            ? retryAfter
+            : null;
 
-    if (extensions?.code === 'account_locked' && extensions?.retryAfter) {
-      const retryAfterDate = new Date(extensions.retryAfter);
-      const diffMs = retryAfterDate.getTime() - Date.now();
-      const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
-      NotificationToast.error(
-        tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
-      );
-    } else {
-      errorHandler(t, error);
+      if (code === 'account_locked' && retryAfterDate) {
+        const diffMs = retryAfterDate.getTime() - Date.now();
+        const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
+        NotificationToast.error(
+          tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
+        );
+        return;
+      }
     }
+    errorHandler(t, error);
   };
 
   const handleRegisterSuccess = (result: IRegistrationSuccessResult): void => {
@@ -308,11 +317,12 @@ const LoginPage = (): JSX.Element => {
                       variant="outline-secondary"
                       className={styles.reg_btn}
                       data-testid="goToRegisterPortion"
-                      onClick={(): void => setShowTab('REGISTER')}
+                      onClick={(): void => {
+                        setShowTab('REGISTER');
+                        navigate('/register');
+                      }}
                     >
-                      <Link to="/register" className="text-decoration-none">
-                        {tCommon('register')}
-                      </Link>
+                      {tCommon('register')}
                     </Button>
                   </div>
                 )}
