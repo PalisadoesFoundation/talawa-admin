@@ -42,6 +42,7 @@ reset_mock_env() {
     unset _mock_docker_cli_output
     unset _mock_docker_info_output
     unset _mock_docker_info_exit_code
+    unset _mock_docker_info_timeout
     unset _mock_docker_compose_output
     unset _mock_docker_compose_v1_output
     unset TALAWA_DOCKER_DETECT_SOURCED
@@ -222,6 +223,19 @@ test_daemon_connection_refused() {
     result=$(check_docker_daemon)
     
     assert_equals "not_running" "$result" "Connection refused should be detected as not_running"
+}
+
+test_daemon_unresponsive() {
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_info_timeout="true"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_daemon)
+    
+    assert_equals "unresponsive" "$result" "Timeout should be detected as unresponsive"
 }
 
 # ==============================================================================
@@ -477,7 +491,7 @@ test_wsl_docker_guidance() {
     assert_contains "usermod -aG docker" "$result" "WSL guidance should mention docker group"
 }
 
-test_linux_docker_guidance_ubuntu() {
+test_linux_docker_guidance_common_header() {
     source_docker_detect
     
     local result
@@ -488,7 +502,7 @@ test_linux_docker_guidance_ubuntu() {
     assert_contains "usermod -aG docker" "$result" "Linux guidance should mention docker group"
 }
 
-test_linux_docker_guidance_fedora() {
+test_linux_docker_guidance_common_footer() {
     source_docker_detect
     
     local result
@@ -498,7 +512,7 @@ test_linux_docker_guidance_fedora() {
     assert_contains "usermod -aG docker" "$result" "Linux guidance should mention docker group"
 }
 
-test_linux_docker_guidance_default() {
+test_linux_docker_guidance_common_docs_url() {
     source_docker_detect
     
     local result
@@ -560,8 +574,6 @@ test_get_docker_install_guidance_unknown_os() {
 }
 
 test_print_docker_status_report_all_working() {
-    source_docker_detect
-    
     export _mock_has_docker="true"
     export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
     export _mock_docker_info_output="Server Version: 24.0.7"
@@ -580,8 +592,6 @@ test_print_docker_status_report_all_working() {
 }
 
 test_print_docker_status_report_nothing_installed() {
-    source_docker_detect
-    
     export _mock_has_docker="false"
     
     source_docker_detect
@@ -631,6 +641,7 @@ main() {
     run_test "Daemon Permission Denied Detection" test_daemon_permission_denied
     run_test "Daemon CLI Not Installed" test_daemon_cli_not_installed
     run_test "Daemon Connection Refused" test_daemon_connection_refused
+    run_test "Daemon Unresponsive (Timeout)" test_daemon_unresponsive
     
     # Compose Detection Tests
     run_test "Compose v2 Installed Detection" test_compose_v2_installed
@@ -661,9 +672,9 @@ main() {
     # OS-Specific Guidance Tests
     run_test "macOS Docker Guidance" test_macos_docker_guidance
     run_test "WSL Docker Guidance" test_wsl_docker_guidance
-    run_test "Linux Docker Guidance - Ubuntu" test_linux_docker_guidance_ubuntu
-    run_test "Linux Docker Guidance - Fedora" test_linux_docker_guidance_fedora
-    run_test "Linux Docker Guidance - Default" test_linux_docker_guidance_default
+    run_test "Linux Docker Guidance - Common Header" test_linux_docker_guidance_common_header
+    run_test "Linux Docker Guidance - Common Footer" test_linux_docker_guidance_common_footer
+    run_test "Linux Docker Guidance - Common Docs URL" test_linux_docker_guidance_common_docs_url
     run_test "Get Install Guidance - macOS" test_get_docker_install_guidance_macos
     run_test "Get Install Guidance - WSL (env)" test_get_docker_install_guidance_wsl
     run_test "Get Install Guidance - Linux Fallback" test_get_docker_install_guidance_linux_fallback

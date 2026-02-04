@@ -162,6 +162,11 @@ check_docker_daemon() {
 
     # Test mode: use mock output
     if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+        # Check for timeout mock first
+        if [[ "${_mock_docker_info_timeout:-}" == "true" ]]; then
+            printf 'unresponsive'
+            return 1
+        fi
         docker_info_output="${_mock_docker_info_output:-}"
         exit_code="${_mock_docker_info_exit_code:-1}"
     else
