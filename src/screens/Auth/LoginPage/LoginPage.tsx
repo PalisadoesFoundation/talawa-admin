@@ -45,7 +45,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import DropDownButton from 'shared-components/DropDownButton';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
