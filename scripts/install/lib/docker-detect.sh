@@ -69,9 +69,10 @@ export _DOCKER_DETECT_TEST_MODE="${_DOCKER_DETECT_TEST_MODE:-}"
 # ==============================================================================
 
 # Default timeout for daemon connectivity check (in seconds)
-if [[ -z "${DOCKER_DAEMON_TIMEOUT:-}" ]]; then
-    DOCKER_DAEMON_TIMEOUT=5
-fi
+# Sanitize to ensure valid positive integer; default to 5 if empty/invalid
+DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-5}"
+DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT//[^0-9]/}"
+DOCKER_DAEMON_TIMEOUT="${DOCKER_DAEMON_TIMEOUT:-5}"
 
 # ==============================================================================
 # UTILITY FUNCTIONS
@@ -269,13 +270,22 @@ check_docker_compose() {
     local version_output
     local version
 
-    # Try Docker Compose v2 (plugin) first: "docker compose version"
+    # Try Docker Compose v2 (plugin) first: prefer "docker compose version --short"
     if _docker_command_exists docker; then
         if [[ -n "${_DOCKER_DETECT_TEST_MODE:-}" ]]; then
+            # Test mode: check _mock_docker_compose_short_output first, then _mock_docker_compose_output
+            version_output="${_mock_docker_compose_short_output:-}"
+            if [[ -n "$version_output" ]]; then
+                # --short output is already clean (e.g., "2.21.0")
+                version="$(printf '%s' "$version_output" | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1)"
+                if [[ -n "$version" ]]; then
+                    printf 'v2:%s' "$version"
+                    return 0
+                fi
+            fi
+            # Fallback to full version output mock
             version_output="${_mock_docker_compose_output:-}"
             if [[ -n "$version_output" ]]; then
-                # Parse version from "Docker Compose version v2.21.0" or "Docker Compose version v2.21.0+azure"
-                # Extract first semantic version to ignore build metadata
                 version="$(printf '%s' "$version_output" | grep -oE 'v?[0-9]+(\.[0-9]+)+' | head -n1 | sed 's/^v//')"
                 if [[ -n "$version" ]]; then
                     printf 'v2:%s' "$version"
@@ -283,9 +293,16 @@ check_docker_compose() {
                 fi
             fi
         else
+            # Try --short first for clean output (e.g., "2.21.0")
+            version_output="$(docker compose version --short 2>/dev/null)" && {
+                version="$(printf '%s' "$version_output" | grep -oE '[0-9]+(\.[0-9]+)+' | head -n1)"
+                if [[ -n "$version" ]]; then
+                    printf 'v2:%s' "$version"
+                    return 0
+                fi
+            }
+            # Fallback to full version output
             version_output="$(docker compose version 2>/dev/null)" && {
-                # Parse version from "Docker Compose version v2.21.0" or "Docker Compose version v2.21.0+azure"
-                # Extract first semantic version to ignore build metadata
                 version="$(printf '%s' "$version_output" | grep -oE 'v?[0-9]+(\.[0-9]+)+' | head -n1 | sed 's/^v//')"
                 if [[ -n "$version" ]]; then
                     printf 'v2:%s' "$version"
