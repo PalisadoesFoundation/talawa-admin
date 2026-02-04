@@ -909,7 +909,7 @@ describe('MemberDetail', () => {
 
     test('handles avatar upload and preview', async () => {
       renderMemberDetailScreen(createLink(MOCKS1));
-      global.URL.createObjectURL = vi.fn(() => 'mockURL');
+      vi.spyOn(URL, 'createObjectURL').mockReturnValue('mockURL');
 
       await waitFor(
         () => {
@@ -927,7 +927,7 @@ describe('MemberDetail', () => {
 
     test('resets form state and avatar selection on reset', async () => {
       renderMemberDetailScreen(createLink(MOCKS1));
-      global.URL.createObjectURL = vi.fn(() => 'mockURL');
+      vi.spyOn(URL, 'createObjectURL').mockReturnValue('mockURL');
 
       await waitForLoadingComplete();
 
