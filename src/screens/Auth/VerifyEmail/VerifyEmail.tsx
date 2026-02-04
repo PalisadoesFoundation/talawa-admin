@@ -82,19 +82,21 @@ const VerifyEmail = (): JSX.Element => {
 
   // Verify email on component mount
   useEffect(() => {
-    isMountedRef.current = true;
-
     // Prevent duplicate verification requests
     if (verificationInitiatedRef.current) {
-      return;
+      return () => {
+        isMountedRef.current = false;
+      };
     }
 
     if (!token) {
-      setVerificationState('error');
-      return;
+      return () => {
+        isMountedRef.current = false;
+      };
     }
 
     verificationInitiatedRef.current = true;
+    isMountedRef.current = true;
 
     const verifyEmailToken = async (): Promise<void> => {
       try {

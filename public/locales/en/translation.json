@@ -106,6 +106,20 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying...",
+    "success": "Email Verified",
+    "successMessage": "Your email has been successfully verified. You can now log in.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "noToken": "No verification token provided. Please check your email for the verification link.",
+    "verificationFailed": "Email verification failed. Please try again.",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "resendButton": "Resend Verification Email",
+    "goToLogin": "Go to Login"
+  },
   "adminProfile": {
     "title": "Admin Profile",
     "settings": "Settings",
@@ -2510,19 +2524,6 @@
       "emptyState": "Please ask attendees to submit feedback for insights!",
       "filledByCount": "{{count}} people have filled feedback for this event."
     }
-  },
-  "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
   },
   "plugins": {
     "loading": "Loading plugin...",

@@ -101,6 +101,20 @@
     "resendVerification": "重新发送验证邮件",
     "resendFailed": "重新发送验证邮件失败，请重试。"
   },
+  "verifyEmail": {
+    "title": "验证邮箱",
+    "verifying": "正在验证...",
+    "success": "邮箱已验证",
+    "successMessage": "您的邮箱已成功验证。您现在可以登录。",
+    "error": "验证失败",
+    "invalidToken": "验证链接无效或已过期。",
+    "noToken": "未提供验证令牌。请检查您的邮箱中的验证链接。",
+    "verificationFailed": "邮箱验证失败。请重试。",
+    "resendSuccess": "验证邮件已成功重新发送。",
+    "resendFailed": "重新发送验证邮件失败，请重试。",
+    "resendButton": "重新发送验证邮件",
+    "goToLogin": "去登录"
+  },
   "adminProfile": {
     "title": "管理员资料",
     "settings": "设置",
@@ -2510,19 +2524,6 @@
       "emptyState": "請要求與會者提交反饋以獲取見解！",
       "filledByCount": "{{count}} 人已為此活動填寫反饋。"
     }
-  },
-  "verifyEmail": {
-    "title": "验证您的邮箱",
-    "verifying": "正在验证您的邮箱...",
-    "success": "验证成功!",
-    "successMessage": "您的邮箱已成功验证。您现在可以登录了。",
-    "error": "验证失败",
-    "invalidToken": "无效或过期的验证链接。",
-    "loginRequired": "请登录以继续。",
-    "resendButton": "重新发送验证邮件",
-    "resendSuccess": "验证邮件发送成功!",
-    "resendFailed": "发送验证邮件失败。请稍后再试。",
-    "goToLogin": "前往登录"
   },
   "plugins": {
     "loading": "正在加载插件...",
