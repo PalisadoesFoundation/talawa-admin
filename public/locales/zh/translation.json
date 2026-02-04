@@ -1903,7 +1903,7 @@
     "next": "下一步"
   },
   "userChatRoom": {
-    "selectContact": "选择联系人开始对话",
+    "selectContact": "点击 + 图标以开始新的聊天",
     "sendMessage": "发信息",
     "loading": "正在加载…",
     "loadOlderMessages": "加载旧消息",

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import OrganizationScreen from './OrganizationScreen';
+import OrganizationScreen, { translationKeyMap } from './OrganizationScreen';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from './OrganizationScreen.module.css';
@@ -341,5 +341,11 @@ describe('Testing OrganizationScreen', () => {
     // Verify that the main page renders without event name
     const h4Elements = screen.queryAllByRole('heading', { level: 4 });
     expect(h4Elements.length).toBe(0);
+  });
+
+  test('should have correct translation key mapping for orgchat route', () => {
+    // This test ensures the orgchat route uses the userChat translation namespace
+    // by asserting against the actual exported translationKeyMap
+    expect(translationKeyMap.orgchat).toBe('userChat');
   });
 });

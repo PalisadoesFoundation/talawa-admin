@@ -1903,7 +1903,7 @@
     "userAddedSuccessfully": "Utilisateur ajouté avec succès"
   },
   "userChatRoom": {
-    "selectContact": "Sélectionnez un contact pour démarrer la conversation",
+    "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",
     "sendMessage": "Envoyer le message",
     "loading": "Chargement...",
     "loadOlderMessages": "Charger les messages plus anciens",
