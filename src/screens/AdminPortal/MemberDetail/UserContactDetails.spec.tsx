@@ -909,7 +909,9 @@ describe('MemberDetail', () => {
 
     test('handles avatar upload and preview', async () => {
       renderMemberDetailScreen(createLink(MOCKS1));
-      vi.spyOn(URL, 'createObjectURL').mockReturnValue('mockURL');
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('mockURL');
 
       await waitFor(
         () => {
@@ -923,11 +925,14 @@ describe('MemberDetail', () => {
       await user.upload(input, file);
 
       expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+      objectUrlSpy.mockRestore();
     });
 
     test('resets form state and avatar selection on reset', async () => {
       renderMemberDetailScreen(createLink(MOCKS1));
-      vi.spyOn(URL, 'createObjectURL').mockReturnValue('mockURL');
+      const objectUrlSpy = vi
+        .spyOn(URL, 'createObjectURL')
+        .mockReturnValue('mockURL');
 
       await waitForLoadingComplete();
 
@@ -964,6 +969,7 @@ describe('MemberDetail', () => {
       expect(resetImg.getAttribute('src')).toBe(
         'http://example.com/avatar.jpg',
       );
+      objectUrlSpy.mockRestore();
     });
 
     test('handles user update success', async () => {
