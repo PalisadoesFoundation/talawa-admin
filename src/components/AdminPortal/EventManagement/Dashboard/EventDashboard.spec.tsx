@@ -524,7 +524,6 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('opens and closes modal', async () => {
-    const user = userEvent.setup();
     renderEventDashboard(mockWithTime);
 
     const editButton = await screen.findByTestId('edit-event-button');
