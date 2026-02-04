@@ -30,7 +30,7 @@
  * @param mode - The current filter mode (0 for "All Members", 1 for "Admins").
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -58,13 +58,18 @@ export default function People(): React.JSX.Element {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [mode, setMode] = useState<number>(0); // 0: All Members, 1: Admins
   const [refetchTrigger, setRefetchTrigger] = useState<number>(0);
+  const didMountRef = useRef(false);
 
   const { orgId: organizationId } = useParams();
 
-  const modes = ['All Members', 'Admins'];
+  const modes = [t('allMembers'), t('admins')];
 
   // Trigger refetch when mode or search term changes
   useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
     setRefetchTrigger((prev) => prev + 1);
   }, [mode, searchTerm]);
 
@@ -145,7 +150,7 @@ export default function People(): React.JSX.Element {
               refetchTrigger={refetchTrigger}
               renderItem={(member: IMemberNode, index: number) => {
                 const userType =
-                  member.role === 'administrator' ? 'Admin' : 'Member';
+                  member.role === 'administrator' ? t('admin') : t('member');
                 return (
                   <PeopleCard
                     key={member.id}

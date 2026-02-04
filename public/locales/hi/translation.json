@@ -1388,6 +1388,10 @@
     "name": "नाम",
     "email": "ईमेल",
     "role": "भूमिका",
+    "allMembers": "सभी सदस्य",
+    "admins": "प्रशासक",
+    "admin": "प्रशासक",
+    "member": "सदस्य",
     "loading": "लोड हो रहा है...",
     "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
   },

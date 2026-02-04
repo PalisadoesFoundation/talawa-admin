@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCursorPaginationManagerRef\<TNode\>
 
-Defined in: [src/types/CursorPagination/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L185)
+Defined in: [src/types/CursorPagination/interface.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L190)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/types/CursorPagination/interface.ts:185](https://github.com/Pal
 
 > **addItem**: (`item`, `position?`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L186)
+Defined in: [src/types/CursorPagination/interface.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L191)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/types/CursorPagination/interface.ts:186](https://github.com/Pal
 
 > **getItems**: () => `TNode`[]
 
-Defined in: [src/types/CursorPagination/interface.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L192)
+Defined in: [src/types/CursorPagination/interface.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L197)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/types/CursorPagination/interface.ts:192](https://github.com/Pal
 
 > **removeItem**: (`predicate`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L187)
+Defined in: [src/types/CursorPagination/interface.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L192)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [src/types/CursorPagination/interface.ts:187](https://github.com/Pal
 
 > **updateItem**: (`predicate`, `updater`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L188)
+Defined in: [src/types/CursorPagination/interface.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L193)
 
 #### Parameters
 

@@ -124,6 +124,11 @@ export interface InterfaceCursorPaginationManagerProps<
   onDataChange?: (data: TNode[]) => void;
 
   /**
+   * Callback invoked when the query encounters an error
+   */
+  onError?: (error: Error) => void;
+
+  /**
    * Trigger value that causes a refetch when changed
    * Can be a number (counter) or any value that changes
    */

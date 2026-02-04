@@ -1407,6 +1407,10 @@
     "name": "姓名",
     "email": "邮箱",
     "role": "角色",
+    "allMembers": "所有成员",
+    "admins": "管理员",
+    "admin": "管理员",
+    "member": "成员",
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用"
   },

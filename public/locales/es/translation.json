@@ -1390,6 +1390,10 @@
     "name": "Nombre",
     "email": "Correo Electrónico",
     "role": "Rol",
+    "allMembers": "Todos los miembros",
+    "admins": "Administradores",
+    "admin": "Administrador",
+    "member": "Miembro",
     "loading": "Cargando...",
     "emailNotAvailable": "Correo electrónico no disponible"
   },
