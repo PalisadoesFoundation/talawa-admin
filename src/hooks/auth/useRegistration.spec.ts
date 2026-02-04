@@ -1,7 +1,11 @@
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { useRegistration } from './useRegistration';
+import {
+  useRegistration,
+  RegistrationError,
+  RegistrationErrorCode,
+} from './useRegistration';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 const SUCCESS_MOCK: MockedResponse[] = [
@@ -172,7 +176,7 @@ describe('useRegistration', () => {
     });
   });
 
-  it('should throw error if registration data is missing', async () => {
+  it('should call onError with RegistrationError (MISSING_REQUIRED_FIELDS) when registration data is missing', async () => {
     const mockOnError = vi.fn();
     const { result } = renderHook(
       () => useRegistration({ onError: mockOnError }),
@@ -189,8 +193,10 @@ describe('useRegistration', () => {
     });
 
     expect(mockOnError).toHaveBeenCalledTimes(1);
-    expect(mockOnError.mock.calls[0][0].message).toBe(
-      'Missing required registration data',
+    const err0 = mockOnError.mock.calls[0][0];
+    expect(err0).toBeInstanceOf(RegistrationError);
+    expect((err0 as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
     );
     expect(result.current.loading).toBe(false);
 
@@ -204,8 +210,10 @@ describe('useRegistration', () => {
     });
 
     expect(mockOnError).toHaveBeenCalledTimes(2);
-    expect(mockOnError.mock.calls[1][0].message).toBe(
-      'Missing required registration data',
+    const err1 = mockOnError.mock.calls[1][0];
+    expect(err1).toBeInstanceOf(RegistrationError);
+    expect((err1 as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
     );
     expect(result.current.loading).toBe(false);
 
@@ -219,8 +227,52 @@ describe('useRegistration', () => {
     });
 
     expect(mockOnError).toHaveBeenCalledTimes(3);
-    expect(mockOnError.mock.calls[2][0].message).toBe(
-      'Missing required registration data',
+    const err2 = mockOnError.mock.calls[2][0];
+    expect(err2).toBeInstanceOf(RegistrationError);
+    expect((err2 as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_REQUIRED_FIELDS,
+    );
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('should call onError with RegistrationError (MISSING_ORGANIZATION_ID) when organizationId is missing or empty', async () => {
+    const mockOnError = vi.fn();
+    const { result } = renderHook(
+      () => useRegistration({ onError: mockOnError }),
+      { wrapper: createWrapper(SUCCESS_MOCK) },
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(1);
+    const err = mockOnError.mock.calls[0][0];
+    expect(err).toBeInstanceOf(RegistrationError);
+    expect((err as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_ORGANIZATION_ID,
+    );
+    expect(result.current.loading).toBe(false);
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: '   ',
+      });
+    });
+
+    expect(mockOnError).toHaveBeenCalledTimes(2);
+    const err2 = mockOnError.mock.calls[1][0];
+    expect(err2).toBeInstanceOf(RegistrationError);
+    expect((err2 as RegistrationError).code).toBe(
+      RegistrationErrorCode.MISSING_ORGANIZATION_ID,
     );
     expect(result.current.loading).toBe(false);
   });
@@ -248,26 +300,6 @@ describe('useRegistration', () => {
           },
         },
       },
-      {
-        request: {
-          query: SIGNUP_MUTATION,
-          variables: {
-            ID: '',
-            name: 'Test User',
-            email: 'test@example.com',
-            password: 'password123',
-          },
-        },
-        result: {
-          data: {
-            signUp: {
-              user: { id: 'user-2' },
-              authenticationToken: 'token2',
-              refreshToken: 'refresh2',
-            },
-          },
-        },
-      },
     ];
     const { result } = renderHook(
       () => useRegistration({ onSuccess: mockOnSuccess }),
@@ -285,16 +317,49 @@ describe('useRegistration', () => {
 
     expect(mockOnSuccess).toHaveBeenCalledTimes(1);
     expect(result.current.loading).toBe(false);
+  });
+
+  it('should pass valid organizationId to signup (no empty string)', async () => {
+    const mockOnSuccess = vi.fn();
+    const mockOnError = vi.fn();
+    const orgMocks: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: 'valid-org-id',
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'password123',
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: { id: 'user-1' },
+              authenticationToken: 'token',
+              refreshToken: 'refresh',
+            },
+          },
+        },
+      },
+    ];
+    const { result } = renderHook(
+      () => useRegistration({ onSuccess: mockOnSuccess, onError: mockOnError }),
+      { wrapper: createWrapper(orgMocks) },
+    );
+
     await act(async () => {
       await result.current.register({
         name: 'Test User',
         email: 'test@example.com',
         password: 'password123',
-        organizationId: '',
+        organizationId: '  valid-org-id  ',
       });
     });
 
-    expect(mockOnSuccess).toHaveBeenCalledTimes(2);
+    expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    expect(mockOnError).not.toHaveBeenCalled();
     expect(result.current.loading).toBe(false);
   });
 });

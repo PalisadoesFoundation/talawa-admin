@@ -4,7 +4,7 @@
 
 # Interface: IRegisterInput
 
-Defined in: [src/hooks/auth/useRegistration.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L26)
+Defined in: [src/hooks/auth/useRegistration.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L52)
 
 Input for the register function (matches SIGNUP_MUTATION variables).
 
@@ -14,7 +14,7 @@ Input for the register function (matches SIGNUP_MUTATION variables).
 
 > **email**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L28)
+Defined in: [src/hooks/auth/useRegistration.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L54)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/hooks/auth/useRegistration.ts:28](https://github.com/Palisadoes
 
 > **name**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L27)
+Defined in: [src/hooks/auth/useRegistration.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L53)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/hooks/auth/useRegistration.ts:27](https://github.com/Palisadoes
 
 > **organizationId**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L30)
+Defined in: [src/hooks/auth/useRegistration.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L56)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/hooks/auth/useRegistration.ts:30](https://github.com/Palisadoes
 
 > **password**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L29)
+Defined in: [src/hooks/auth/useRegistration.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L55)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/hooks/auth/useRegistration.ts:29](https://github.com/Palisadoes
 
 > `optional` **recaptchaToken**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L31)
+Defined in: [src/hooks/auth/useRegistration.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L57)

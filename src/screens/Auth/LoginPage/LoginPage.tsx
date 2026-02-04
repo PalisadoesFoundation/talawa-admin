@@ -29,6 +29,7 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import { LoginForm } from 'components/Auth/LoginForm/LoginForm';
 import { RegistrationForm } from 'components/Auth/RegistrationForm/RegistrationForm';
+import { RegistrationError } from 'hooks/auth/useRegistration';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
@@ -196,6 +197,10 @@ const LoginPage = (): JSX.Element => {
   };
 
   const handleRegisterError = (error: Error): void => {
+    if (error instanceof RegistrationError) {
+      NotificationToast.error({ key: error.code, namespace: 'errors' });
+      return;
+    }
     errorHandler(t, error);
   };
 

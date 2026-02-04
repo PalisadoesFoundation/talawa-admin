@@ -4,7 +4,7 @@
 
 # Interface: IRegistrationSuccessResult
 
-Defined in: [src/hooks/auth/useRegistration.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L7)
+Defined in: [src/hooks/auth/useRegistration.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L33)
 
 Result passed to onSuccess so the parent can handle session and redirect.
 
@@ -14,7 +14,7 @@ Result passed to onSuccess so the parent can handle session and redirect.
 
 > **email**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L10)
+Defined in: [src/hooks/auth/useRegistration.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L36)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/hooks/auth/useRegistration.ts:10](https://github.com/Palisadoes
 
 > **name**: `string`
 
-Defined in: [src/hooks/auth/useRegistration.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L9)
+Defined in: [src/hooks/auth/useRegistration.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L35)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/hooks/auth/useRegistration.ts:9](https://github.com/PalisadoesF
 
 > **signUp**: `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L8)
+Defined in: [src/hooks/auth/useRegistration.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L34)
 
 #### user
 
