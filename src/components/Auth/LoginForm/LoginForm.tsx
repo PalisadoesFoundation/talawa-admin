@@ -21,7 +21,7 @@ import type {
  * and user login modes via the isAdmin prop.
  *
  * @param isAdmin - Whether the login form is rendered for an admin user
- * @param onSuccess - Callback invoked with the authentication token on successful login
+ * @param onSuccess - Callback invoked with the full sign-in result (user + tokens)
  * @param onError - Callback invoked when the login request fails
  * @param testId - Optional test ID used for querying the component in tests
  *

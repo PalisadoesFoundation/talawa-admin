@@ -57,7 +57,6 @@ const createWrapper = (mocks: MockedResponse[]) =>
 
 describe('useRegistration', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 

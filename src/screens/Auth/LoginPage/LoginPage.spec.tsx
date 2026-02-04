@@ -1,6 +1,12 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  within,
+  waitFor,
+  cleanup,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -317,6 +323,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   vi.clearAllMocks();
   // Restore original window.location to prevent cross-test bleed
   Object.defineProperty(window, 'location', {
@@ -412,7 +419,9 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-    expect(screen.getByText(/Admin Login/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('loginPage.adminLogin')),
+    ).toBeInTheDocument();
     expect(window.location.pathname).toBe('/admin');
   });
 
@@ -473,13 +482,16 @@ describe('Testing Login Page Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+    });
 
-    // Check if goToRegisterPortion exists before clicking
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
       await user.click(registerButton);
-      await wait();
+      await waitFor(() => {
+        expect(screen.getByTestId('registrationBtn')).toBeInTheDocument();
+      });
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
@@ -492,6 +504,9 @@ describe('Testing Login Page Screen', () => {
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
         await user.click(registrationBtn);
+        await waitFor(() => {
+          expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+        });
       }
     }
   });
@@ -780,7 +795,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing toggle login register portion', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -804,18 +818,17 @@ describe('Testing Login Page Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+    });
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
-
-    // Only test this if we're not on the admin path and the register button exists
     if (registerButton) {
       await user.click(registerButton);
-
-      // The goToLoginPortion button has been removed, so this test is no longer valid
-      // Skip this part or check for a different condition
-
-      await wait();
+      await waitFor(() => {
+        expect(screen.getByTestId('registrationBtn')).toBeInTheDocument();
+        expect(screen.getByTestId('register-text')).toBeInTheDocument();
+      });
     }
   });
 
@@ -835,7 +848,9 @@ describe('Testing Login Page Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+    });
 
     await user.type(screen.getByTestId('login-form-email'), formData.email);
     await user.type(
@@ -1218,7 +1233,9 @@ describe('Testing Login Page Screen', () => {
     );
 
     await wait();
-    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('loginPage.userLogin')),
+    ).toBeInTheDocument();
     expect(window.location.pathname).toBe('/');
   });
 

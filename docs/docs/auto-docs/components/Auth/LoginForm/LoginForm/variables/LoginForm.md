@@ -22,7 +22,7 @@ Whether the login form is rendered for an admin user
 
 ## Param
 
-Callback invoked with the authentication token on successful login
+Callback invoked with the full sign-in result (user + tokens)
 
 ## Param
 

@@ -21,6 +21,11 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+vi.mock('Constant/constant', async () => ({
+  ...(await vi.importActual<object>('Constant/constant')),
+  RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
+}));
+
 const mockSignInSuccess: MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
@@ -39,6 +44,7 @@ const mockSignInSuccess: MockedResponse = {
           role: 'user',
           countryCode: 'US',
           avatarURL: null,
+          isEmailAddressVerified: true,
         },
         authenticationToken: 'test-auth-token',
         refreshToken: 'test-refresh-token',
@@ -65,6 +71,7 @@ const mockSignInAdminSuccess: MockedResponse = {
           role: 'administrator',
           countryCode: 'US',
           avatarURL: null,
+          isEmailAddressVerified: true,
         },
         authenticationToken: 'admin-auth-token',
         refreshToken: 'admin-refresh-token',
@@ -110,7 +117,7 @@ describe('LoginForm', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -396,6 +403,19 @@ describe('LoginForm', () => {
       expect(screen.getByTestId('login-form-heading')).toHaveTextContent(
         'User Login',
       );
+    });
+  });
+
+  describe('reCAPTCHA gating', () => {
+    test('submit button is disabled when enableRecaptcha is true and no token', () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <LoginForm {...defaultProps} enableRecaptcha={true} />
+        </MockedProvider>,
+      );
+
+      const submitButton = screen.getByTestId('login-form-submit');
+      expect(submitButton).toBeDisabled();
     });
   });
 

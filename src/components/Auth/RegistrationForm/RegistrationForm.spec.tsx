@@ -8,6 +8,11 @@ import i18nForTest from '../../../utils/i18nForTest';
 
 vi.mock('../../../hooks/auth/useRegistration');
 
+vi.mock('Constant/constant', async () => ({
+  ...(await vi.importActual<object>('Constant/constant')),
+  RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
+}));
+
 const mockOrganizations = [
   { _id: '1', name: 'Test Organization 1' },
   { _id: '2', name: 'Test Organization 2' },
@@ -244,6 +249,13 @@ describe('RegistrationForm', () => {
     expect(
       screen.queryByTestId('recaptcha-placeholder'),
     ).not.toBeInTheDocument();
+  });
+
+  it('disables submit button when enableRecaptcha is true and no recaptcha token', () => {
+    renderComponent({ enableRecaptcha: true });
+
+    const submitButton = screen.getByRole('button', { name: /register/i });
+    expect(submitButton).toBeDisabled();
   });
 
   it('calls onSuccess callback when provided', async () => {
