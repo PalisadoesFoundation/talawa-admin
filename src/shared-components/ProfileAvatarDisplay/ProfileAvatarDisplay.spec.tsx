@@ -179,6 +179,7 @@ describe('ProfileAvatarDisplay Component', () => {
     // onClick should be called
     expect(onClickMock).toHaveBeenCalled();
   });
+
   test('closes modal when close button is clicked', async () => {
     render(
       <ProfileAvatarDisplay
@@ -264,11 +265,9 @@ describe('ProfileAvatarDisplay Component', () => {
     // Click the backdrop element (react-bootstrap renders it with .modal-backdrop class)
     // The backdrop is a sibling to the dialog in the DOM
     const backdrop = document.querySelector('.modal-backdrop');
-    if (backdrop) {
-      await user.click(backdrop);
-    } else {
-      await user.click(dialog);
-    }
+
+    expect(backdrop).not.toBeNull();
+    await user.click(backdrop as Element);
 
     await waitFor(() => {
       expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
@@ -371,6 +370,7 @@ describe('ProfileAvatarDisplay Component', () => {
     expect(modalFallback).toBeInTheDocument();
     expect(modalFallback.textContent).toContain('Mocked Avatar: John Doe');
   });
+
   test('opens modal when Enter key is pressed on fallback avatar', async () => {
     render(
       <ProfileAvatarDisplay
@@ -586,6 +586,7 @@ describe('ProfileAvatarDisplay Component', () => {
     // Modal should show the translated 'Profile Picture' title
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
   });
+
   test('applies correct data-testid to img element', () => {
     const { getByTestId } = render(
       <ProfileAvatarDisplay

@@ -833,7 +833,6 @@ describe('MemberDetail', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -1449,7 +1448,7 @@ describe('MemberDetail', () => {
     const MOCK_NO_BIRTHDATE = [
       {
         request: {
-          query: MOCKS1[0].request.query,
+          query: GET_USER_BY_ID,
           variables: {
             input: {
               id: '456',
@@ -1459,29 +1458,35 @@ describe('MemberDetail', () => {
         result: {
           data: {
             user: {
-              id: '456',
-              name: 'TestUser',
-              firstName: 'Test',
-              lastName: 'User',
-              email: 'test@example.com',
-              birthDate: null,
-              gender: 'MALE',
-              mobilePhoneNumber: '+1234567890',
-              workPhoneNumber: '+0987654321',
-              homePhoneNumber: '+1111111111',
               addressLine1: '123 Main St',
               addressLine2: 'Apt 4',
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
               city: 'City',
-              state: 'State',
               countryCode: 'US',
-              postalCode: '12345',
-              maritalStatus: 'SINGLE',
-              employmentStatus: 'FULL_TIME',
-              educationGrade: 'GRADUATE',
-              image: null,
-              emailVerified: true,
+              createdAt: dayjs().toISOString(),
               description: 'Test description',
+              educationGrade: null,
+              emailAddress: 'test@example.com',
+              employmentStatus: 'full_time',
+              homePhoneNumber: '+1111111111',
+              id: '456',
+              isEmailAddressVerified: true,
+              maritalStatus: 'single',
+              mobilePhoneNumber: '+1234567890',
+              name: 'TestUser',
+              natalSex: 'male',
+              naturalLanguageCode: 'en',
+              postalCode: '12345',
+              role: 'regular',
+              state: 'State',
+              updatedAt: dayjs().toISOString(),
+              workPhoneNumber: '+0987654321',
+              organizationsWhereMember: { edges: [] },
+              createdOrganizations: [],
               eventsAttended: [],
+              __typename: 'User',
             },
           },
         },
