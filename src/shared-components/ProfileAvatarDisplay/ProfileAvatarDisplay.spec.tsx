@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ProfileAvatarDisplay } from './ProfileAvatarDisplay';
 
 // Mock the Avatar component since we want to test ProfileAvatarDisplay's logic, not Avatar's.

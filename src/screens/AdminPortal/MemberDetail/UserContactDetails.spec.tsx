@@ -664,18 +664,6 @@ const createLink = (mocks: ReadonlyArray<MockedResponse>) =>
 
 let user: ReturnType<typeof userEvent.setup>;
 
-const { mockReload } = vi.hoisted(() => ({
-  mockReload: vi.fn(),
-}));
-
-Object.defineProperty(window, 'location', {
-  value: {
-    ...window.location,
-    reload: mockReload,
-  },
-  writable: true,
-});
-
 const { mockToast } = vi.hoisted(() => ({
   mockToast: {
     success: vi.fn(),
