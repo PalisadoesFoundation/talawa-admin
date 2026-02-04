@@ -1948,7 +1948,8 @@
     "next": "下一步",
     "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
     "thisUser": "此用户",
-    "deleteChatConfirmation": "您确定要删除此聊天吗？"
+    "deleteChatConfirmation": "您确定要删除此聊天吗？",
+    "memberActionsMenu": "成员操作菜单"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",

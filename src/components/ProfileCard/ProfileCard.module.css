@@ -8,8 +8,8 @@
 .profileContainer {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
-  padding: var(--spacing-3);
+  gap: var(--space-3);
+  padding: var(--space-3);
 }
 
 .imageContainer {
@@ -17,8 +17,8 @@
 }
 
 .avatarStyle {
-  width: var(--space-11);
-  height: var(--space-11);
+  width: var(--space-10);
+  height: var(--space-10);
   border-radius: var(--border-radius-full);
   object-fit: cover;
 }

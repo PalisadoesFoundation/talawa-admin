@@ -1943,7 +1943,8 @@
     "next": "अगला",
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
-    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?"
+    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",

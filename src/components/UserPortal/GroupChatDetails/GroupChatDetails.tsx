@@ -469,6 +469,7 @@ export default function GroupChatDetails({
                         drop="start"
                         // i18n-ignore-next-line
                         dataTestIdPrefix={`member-actions-${user.id}`}
+                        aria-label={t('memberActionsMenu')}
                       />
                     )}
                   </div>

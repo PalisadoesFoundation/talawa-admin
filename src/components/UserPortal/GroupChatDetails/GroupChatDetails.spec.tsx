@@ -365,7 +365,7 @@ describe('GroupChatDetails', () => {
 
   it('add user to group chat using first name', async () => {
     useLocalStorage().setItem('userId', 'user1');
-
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} cache={testCache}>
@@ -405,6 +405,9 @@ describe('GroupChatDetails', () => {
 
     await act(async () => {
       userEvent.click(await screen.findByTestId('addUserBtn'));
+    });
+    await waitFor(() => {
+      expect(toastSuccess).toHaveBeenCalledWith('User added successfully');
     });
   });
 
@@ -564,7 +567,7 @@ describe('GroupChatDetails', () => {
     await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteItem = await screen.findByTestId(
-      'member-actions-user2-item-toggleRole',
+      'member-actions-user2-item-roleChange',
     );
     await act(async () => await userEvent.click(promoteItem));
 
@@ -1071,6 +1074,308 @@ describe('GroupChatDetails', () => {
     consoleError.mockRestore();
   });
 
+  it('demotes administrator to regular member', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          {
+            node: {
+              user: { id: 'user2', name: 'Charlie' },
+              role: 'administrator',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      const charlieElements = screen.getAllByText('Charlie');
+      expect(charlieElements.length).toBeGreaterThan(0);
+    });
+
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
+    );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
+
+    await waitFor(async () => {
+      expect(
+        await screen.findByTestId('member-actions-user2-item-roleChange'),
+      ).toBeInTheDocument();
+    });
+
+    const demoteItem = await screen.findByTestId(
+      'member-actions-user2-item-roleChange',
+    );
+    await act(async () => {
+      userEvent.click(demoteItem);
+    });
+
+    await waitFor(() =>
+      expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'),
+    );
+  });
+  it('does not show remove option for administrator members', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          {
+            node: {
+              user: { id: 'user2', name: 'Dave' },
+              role: 'administrator',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      const daveElements = screen.getAllByText('Dave');
+      expect(daveElements.length).toBeGreaterThan(0);
+    });
+
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
+    );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
+
+    const removeItem = screen.queryByTestId(
+      'member-actions-user2-item-removeMember',
+    );
+    expect(removeItem).not.toBeInTheDocument();
+  });
+
+  it('removes a regular member with confirmation', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          {
+            node: {
+              user: { id: 'user2', name: 'Eve' },
+              role: 'regular',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      const eveElements = screen.getAllByText('Eve');
+      expect(eveElements.length).toBeGreaterThan(0);
+    });
+
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
+    );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
+
+    const removeItem = await screen.findByTestId(
+      'member-actions-user2-item-removeMember',
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    await act(async () => {
+      userEvent.click(removeItem);
+    });
+
+    await waitFor(() =>
+      expect(toastSuccess).toHaveBeenCalledWith('Member removed successfully'),
+    );
+  });
+
+  it('cancels member removal when user declines confirmation', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          {
+            node: {
+              user: { id: 'user2', name: 'Frank' },
+              role: 'regular',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      const frankElements = screen.getAllByText('Frank');
+      expect(frankElements.length).toBeGreaterThan(0);
+    });
+
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
+    );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
+
+    const removeItem = await screen.findByTestId(
+      'member-actions-user2-item-removeMember',
+    );
+    vi.spyOn(window, 'confirm').mockReturnValue(false);
+    await act(async () => {
+      userEvent.click(removeItem);
+    });
+
+    expect(toastSuccess).not.toHaveBeenCalled();
+  });
+
+  it('shows error toast when adding user fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(NotificationToast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={failingMocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('addMembers'));
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('searchUser')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const searchUserInput = await screen.findByTestId('searchUser');
+      await userEvent.type(searchUserInput, 'Disha');
+    });
+
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('searchBtn'));
+    });
+
+    await waitFor(
+      async () => {
+        expect(await screen.findByTestId('user')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    await act(async () => {
+      userEvent.click(await screen.findByTestId('addUserBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to add user');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
+
   describe('LoadingState Behavior', () => {
     it('should show LoadingState spinner while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
@@ -1220,52 +1525,6 @@ describe('GroupChatDetails', () => {
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
-      expect(consoleError).toHaveBeenCalled();
-    });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
-  });
-
-  it('shows error toast when adding user fails', async () => {
-    useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(NotificationToast, 'error');
-    const consoleError = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    render(
-      <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={[...failingMocks, ...mocks]} cache={testCache}>
-          <GroupChatDetails
-            toggleGroupChatDetailsModal={vi.fn()}
-            groupChatDetailsModalisOpen={true}
-            chat={withSafeChat(filledMockChat)}
-            chatRefetch={vi.fn()}
-          />
-        </MockedProvider>
-      </I18nextProvider>,
-    );
-
-    // Open User Modal
-    const addMembersBtn = await screen.findByTestId('addMembers');
-    await userEvent.click(addMembersBtn);
-
-    // Search for user
-    const searchInput = await screen.findByTestId('searchUser');
-    await userEvent.type(searchInput, 'Disha');
-
-    // Check if search button is enabled/present and click it
-    // Wait for button to be clickable if needed, but here assuming it's ready
-    const searchBtn = await screen.findByTestId('searchBtn');
-    await userEvent.click(searchBtn);
-
-    // Wait for user to appear
-    const addBtn = await screen.findByTestId('addUserBtn');
-    await userEvent.click(addBtn);
-
-    await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to add user');
       expect(consoleError).toHaveBeenCalled();
     });
 

@@ -45,7 +45,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import styles from './ProfileCard.module.css';
-import DropDownButton from 'shared-components/DropDownButton';
 
 interface InterfaceProfileCardProps {
   portal?: 'admin' | 'user';
@@ -76,44 +75,37 @@ const ProfileCard = ({
   });
 
   return (
-    <DropDownButton
-      id="profile-card"
-      options={[
-        {
-          value: 'viewProfile',
-          label: 'View Profile',
-        },
-      ]}
-      onSelect={() => navigate(profileDestination)}
-      icon={
-        <div className={styles.profileContainer}>
-          <div className={styles.imageContainer}>
-            <ProfileAvatarDisplay
-              dataTestId="display-img"
-              className={styles.avatarStyle}
-              size="medium"
-              fallbackName={`${firstName} ${lastName}`}
-              imageUrl={userImage}
-            />
-          </div>
-          <div className={styles.profileTextUserSidebarOrg}>
-            <span
-              className={`${styles.primaryText} ${styles.displayName}`}
-              data-testid="display-name"
-            >
-              {displayedName}
-            </span>
-            <span className={styles.secondaryText} data-testid="display-type">
-              {`${userRole}`}
-            </span>
-          </div>
-          <ChevronRightIcon className={styles.chevronIcon} />
+    <div className={styles.dropdownContainer}>
+      <div className={styles.profileContainer}>
+        <div className={styles.imageContainer}>
+          <ProfileAvatarDisplay
+            dataTestId="display-img"
+            className={styles.avatarStyle}
+            size="medium"
+            fallbackName={`${firstName} ${lastName}`}
+            imageUrl={userImage}
+          />
         </div>
-      }
-      variant="light"
-      btnStyle={styles.chevronRightbtn}
-      dataTestIdPrefix="profile-card"
-    />
+        <div className={styles.profileTextUserSidebarOrg}>
+          <span
+            className={`${styles.primaryText} ${styles.displayName}`}
+            data-testid="display-name"
+          >
+            {displayedName}
+          </span>
+          <span className={styles.secondaryText} data-testid="display-type">
+            {`${userRole}`}
+          </span>
+        </div>
+        <button
+          className={styles.chevronRightbtn}
+          data-testid="profileBtn"
+          onClick={() => navigate(profileDestination)}
+        >
+          <ChevronRightIcon className={styles.chevronIcon} />
+        </button>
+      </div>
+    </div>
   );
 };
 

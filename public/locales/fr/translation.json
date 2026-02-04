@@ -1948,7 +1948,8 @@
     "userAddedSuccessfully": "Utilisateur ajouté avec succès",
     "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
     "thisUser": "cet utilisateur",
-    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?",
+    "memberActionsMenu": "Menu des actions des membres"
   },
   "userChatRoom": {
     "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",
