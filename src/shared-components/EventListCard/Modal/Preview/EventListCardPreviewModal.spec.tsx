@@ -827,9 +827,10 @@ describe('EventListCardPreviewModal', () => {
     expect(customOption).toBeInTheDocument();
   });
 
-  test('sets recurrence when option is selected', async () => {
+  test('sets recurrence correctly for a non-custom option and opens custom modal for custom option', async () => {
     const user = userEvent.setup();
     const mockSetRecurrence = vi.fn();
+    const mockSetCustomRecurrenceModalIsOpen = vi.fn();
 
     renderComponent({
       eventListCardProps: {
@@ -838,15 +839,31 @@ describe('EventListCardPreviewModal', () => {
         userRole: UserRole.ADMINISTRATOR,
       },
       setRecurrence: mockSetRecurrence,
+      setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
     });
 
     const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const dailyOption = screen.getByText('daily');
+    // Select daily option
+    const dailyOption = await screen.findByText(/daily/i);
     await user.click(dailyOption);
 
-    expect(mockSetRecurrence).toHaveBeenCalled();
+    // Check the recurrence object that your component actually sets
+    expect(mockSetRecurrence).toHaveBeenCalledWith(
+      expect.objectContaining({
+        frequency: Frequency.DAILY,
+        interval: 1,
+        never: true, // matches actual object returned
+      }),
+    );
+
+    // Select custom option
+    await user.click(dropdownToggle);
+    const customOption = await screen.findByText(/custom/i);
+    await user.click(customOption);
+
+    expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
   test('opens custom recurrence modal when custom option is selected', async () => {
