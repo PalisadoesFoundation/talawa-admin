@@ -894,7 +894,7 @@ describe('MemberDetail', () => {
 
   describe('Form Validation and User Interaction', () => {
     test('Should display dicebear image if image is null', async () => {
-      renderMemberDetailScreen(createLink(MOCKS1));
+      renderMemberDetailScreen(createLink(MOCK_FILE));
       const avatarContainer = await waitFor(
         () => screen.getByTestId('profile-picture'),
         { timeout: 3000 },
