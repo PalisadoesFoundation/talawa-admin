@@ -208,6 +208,24 @@ cy.mockGraphQLOperation(
   'OrganizationListBasic',
   'api/graphql/organizations.success.json',
 );
+
+cy.mockGraphQLOperation(
+  'CreateOrganization',
+  'api/graphql/createOrganization.success.json',
+);
+
+cy.mockGraphQLOperation(
+  'CreateOrganization',
+  'api/graphql/createOrganization.error.conflict.json',
+);
+```
+
+Example usage with JSON fixtures:
+
+```ts
+cy.fixture('admin/organizations').then((data) => {
+  expect(data.organizations).to.have.length(2);
+});
 ```
 
 ### Test Coverage Report
