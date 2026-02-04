@@ -139,6 +139,40 @@ cy.aliasGraphQLOperation('OrganizationListBasic');
 cy.waitForGraphQLOperation('OrganizationListBasic');
 ```
 
+#### Mock cleanup and test isolation
+
+Because `testIsolation` is set to `false`, Cypress intercepts can persist
+between tests in the same spec. Always clear GraphQL mocks after each test to
+avoid leaking intercepts across tests or shards:
+
+```ts
+afterEach(() => {
+  cy.clearAllGraphQLMocks();
+});
+```
+
+If multiple tests in the same spec target the same operationName, explicitly
+clean up at the end of each test:
+
+```ts
+it('mocks a successful query', () => {
+  cy.mockGraphQLOperation(
+    'OrganizationListBasic',
+    'api/graphql/organizations.success.json',
+  );
+  // test steps...
+  cy.clearAllGraphQLMocks();
+});
+```
+
+Best practices:
+
+- Prefer `testIsolation: true` for new specs when possible.
+- In parallel/sharded runs, mocks can race if not cleared; keep mocks scoped per
+  test and always reset intercepts after each test.
+- If multiple mocks target the same operation, ensure explicit cleanup between
+  them or scope each mock to a single test to avoid collisions.
+
 ### Test Data
 
 Use fixtures for consistent test data:
