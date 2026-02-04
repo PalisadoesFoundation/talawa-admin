@@ -1,0 +1,223 @@
+import type { InterfaceEvent } from 'types/Event/interface';
+import dayjs from 'dayjs';
+
+interface IEventListCardProps extends InterfaceEvent {
+  refetchEvents?: () => void;
+}
+
+export const props: IEventListCardProps[] = [
+  {
+    key: '',
+    id: '',
+    location: '',
+    name: '',
+    description: '',
+    startAt: '',
+    endAt: '',
+    startTime: '',
+    endTime: '',
+    allDay: false,
+    isPublic: false,
+    isRegisterable: false,
+    isInviteOnly: false,
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    attendees: [],
+    creator: {},
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(17, 'days').toISOString(),
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: false,
+    isPublic: true,
+    isRegisterable: false,
+    isInviteOnly: false,
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    attendees: [],
+    creator: {},
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    userRole: 'REGULAR',
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(17, 'days').toISOString(),
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    isPublic: true,
+    isRegisterable: true,
+    isInviteOnly: false,
+    creator: {
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
+    },
+    attendees: [
+      {
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
+      },
+    ],
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    userRole: 'REGULAR',
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Dogs',
+    description: 'This is shelter for dogs event',
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(17, 'days').toISOString(),
+    startTime: '02:00',
+    endTime: '06:00',
+    allDay: true,
+    isPublic: true,
+    isRegisterable: true,
+    isInviteOnly: false,
+    creator: {
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
+    },
+    attendees: [
+      {
+        id: '456',
+        name: 'Attendee 2',
+        emailAddress: 'attendee2@example.com',
+      },
+    ],
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    userRole: 'ADMINISTRATOR',
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(10, 'days').add(8, 'hours').toISOString(),
+    startTime: '09:00:00',
+    endTime: '17:00:00',
+    allDay: false,
+    isPublic: true,
+    isRegisterable: false,
+    isInviteOnly: false,
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    attendees: [],
+    creator: {},
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    userRole: 'ADMINISTRATOR',
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
+    startAt: dayjs().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs().add(10, 'days').endOf('day').toISOString(),
+    startTime: null,
+    endTime: null,
+    allDay: true,
+    isPublic: true,
+    isRegisterable: false,
+    isInviteOnly: false,
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    attendees: [],
+    creator: {},
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+  {
+    userRole: 'ADMINISTRATOR',
+    key: '123',
+    id: '1',
+    location: 'India',
+    name: 'Shelter for Cats',
+    description: 'This is shelter for cat event',
+    startAt: dayjs().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs().add(10, 'days').endOf('day').toISOString(),
+    startTime: null,
+    endTime: null,
+    allDay: true,
+    isPublic: true,
+    isRegisterable: false,
+    isInviteOnly: false,
+    refetchEvents: (): void => {
+      /* refetch function */
+    },
+    attendees: [],
+    creator: {},
+    // Recurring event fields
+    isRecurringEventTemplate: false,
+    baseEvent: null,
+    sequenceNumber: null,
+    totalCount: null,
+    hasExceptions: false,
+    progressLabel: null,
+  },
+];

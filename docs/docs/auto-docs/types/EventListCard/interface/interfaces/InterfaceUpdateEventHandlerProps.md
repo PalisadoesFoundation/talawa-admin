@@ -18,6 +18,18 @@ Defined in: [src/types/EventListCard/interface.ts:68](https://github.com/Palisad
 
 ***
 
+### closeUpdateModal()
+
+> **closeUpdateModal**: () => `void`
+
+Defined in: [src/types/EventListCard/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L80)
+
+#### Returns
+
+`void`
+
+***
+
 ### eventEndDate
 
 > **eventEndDate**: `Date`
@@ -39,6 +51,14 @@ Defined in: [src/types/EventListCard/interface.ts:66](https://github.com/Palisad
 > **eventStartDate**: `Date`
 
 Defined in: [src/types/EventListCard/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L72)
+
+***
+
+### eventUpdateModalIsOpen
+
+> **eventUpdateModalIsOpen**: `boolean`
+
+Defined in: [src/types/EventListCard/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L79)
 
 ***
 
@@ -98,7 +118,7 @@ Defined in: [src/types/EventListCard/interface.ts:74](https://github.com/Palisad
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/EventListCard/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L80)
+Defined in: [src/types/EventListCard/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L81)
 
 #### Returns
 
@@ -111,24 +131,6 @@ Defined in: [src/types/EventListCard/interface.ts:80](https://github.com/Palisad
 > **registerableChecked**: `boolean`
 
 Defined in: [src/types/EventListCard/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L70)
-
-***
-
-### setEventUpdateModalIsOpen()
-
-> **setEventUpdateModalIsOpen**: (`isOpen`) => `void`
-
-Defined in: [src/types/EventListCard/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventListCard/interface.ts#L79)
-
-#### Parameters
-
-##### isOpen
-
-`boolean`
-
-#### Returns
-
-`void`
 
 ***
 

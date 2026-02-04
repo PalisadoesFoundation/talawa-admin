@@ -76,6 +76,7 @@ export interface InterfaceUpdateEventHandlerProps {
   hasRecurrenceChanged?: boolean;
   t: TFunction<'translation', undefined>;
   hideViewModal: () => void;
-  setEventUpdateModalIsOpen: (isOpen: boolean) => void;
+  eventUpdateModalIsOpen: boolean;
+  closeUpdateModal: () => void;
   refetchEvents?: () => void;
 }
