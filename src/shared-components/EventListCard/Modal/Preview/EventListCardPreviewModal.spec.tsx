@@ -848,15 +848,13 @@ describe('EventListCardPreviewModal', () => {
     // Select daily option
     const dailyOption = await screen.findByText(/daily/i);
     await user.click(dailyOption);
-
-    // Check the recurrence object that your component actually sets
-    expect(mockSetRecurrence).toHaveBeenCalledWith(
-      expect.objectContaining({
+    await waitFor(() => {
+      expect(mockSetRecurrence).toHaveBeenCalledWith({
         frequency: Frequency.DAILY,
         interval: 1,
-        never: true, // matches actual object returned
-      }),
-    );
+        never: true,
+      });
+    });
 
     // Select custom option
     await user.click(dropdownToggle);

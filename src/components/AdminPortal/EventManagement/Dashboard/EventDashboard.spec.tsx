@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, act, waitFor, screen } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -113,9 +113,17 @@ const { mockEventListCardModals } = vi.hoisted(() => ({
   mockEventListCardModals: vi.fn(),
 }));
 
-mockEventListCardModals.mockImplementation(() => (
-  <div data-testid="event-list-card-modals" />
-));
+mockEventListCardModals.mockImplementation(() => {
+  const [visible, setVisible] = React.useState(true);
+
+  return visible ? (
+    <div data-testid="event-list-card-modals">
+      <button data-testid="modal-close-btn" onClick={() => setVisible(false)}>
+        Close
+      </button>
+    </div>
+  ) : null;
+});
 
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
@@ -503,5 +511,27 @@ describe('Testing Event Dashboard Screen', () => {
 
     // Assert the aria-label is correctly set
     expect(editButton).toHaveAttribute('aria-label', 'Edit Event');
+  });
+
+  it('opens and closes modal', async () => {
+    const user = userEvent.setup();
+    renderEventDashboard(mockWithTime);
+
+    const editButton = await screen.findByTestId('edit-event-button');
+
+    await user.click(editButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('event-list-card-modals')).toBeVisible();
+    });
+
+    const closeButton = screen.getByTestId('modal-close-btn');
+    await user.click(closeButton);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('event-list-card-modals'),
+      ).not.toBeInTheDocument();
+    });
   });
 });
