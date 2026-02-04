@@ -109,13 +109,17 @@ const resendErrorMock = {
 
 const link = new StaticMockLink(MOCKS, true);
 
+let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
 beforeEach(() => {
   vi.clearAllMocks();
+  consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
+  consoleErrorSpy.mockRestore();
 });
 
 describe('Testing VerifyEmail screen', () => {
@@ -623,7 +627,7 @@ describe('Testing VerifyEmail screen', () => {
     expect(toastMocks.error).toHaveBeenCalled();
   });
 
-  it('Should not call setVerificationState when unmounted after mutation resolves', async () => {
+  it('Should not call setState when unmounted after mutation resolves', async () => {
     const slowMock = {
       request: {
         query: VERIFY_EMAIL_MUTATION,
@@ -655,12 +659,16 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 250));
+    await new Promise((resolve) => setTimeout(resolve, 50));
     unmount();
 
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
-    expect(true).toBe(true);
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Can't perform a React state update on an unmounted component/,
+      ),
+    );
   });
 
   it('Should not update state after component unmount during verification', async () => {
@@ -699,8 +707,11 @@ describe('Testing VerifyEmail screen', () => {
     // Wait to ensure no state updates occur after unmount
     await new Promise((resolve) => setTimeout(resolve, 600));
 
-    // No errors should be thrown
-    expect(true).toBe(true);
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Can't perform a React state update on an unmounted component/,
+      ),
+    );
   });
 
   it('Should not update state after component unmount during resend', async () => {
@@ -742,7 +753,11 @@ describe('Testing VerifyEmail screen', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 600));
 
-    expect(true).toBe(true);
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Can't perform a React state update on an unmounted component/,
+      ),
+    );
   });
 
   it('Should not update state after component unmount during resend error', async () => {
@@ -777,7 +792,11 @@ describe('Testing VerifyEmail screen', () => {
 
     await new Promise((resolve) => setTimeout(resolve, 600));
 
-    expect(true).toBe(true);
+    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+      expect.stringMatching(
+        /Can't perform a React state update on an unmounted component/,
+      ),
+    );
   });
 
   it('Should prevent duplicate verification requests on strict mode', async () => {
@@ -1053,8 +1072,11 @@ describe('Testing VerifyEmail screen', () => {
       // Wait for the request to complete
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      // No errors should be thrown
-      expect(true).toBe(true);
+      expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+        expect.stringMatching(
+          /Can't perform a React state update on an unmounted component/,
+        ),
+      );
     });
 
     it('Should handle rapid clicks with error response', async () => {
