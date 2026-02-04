@@ -17,8 +17,19 @@ describe('Testing Admin Advertisement Management', () => {
   let adData: InterfaceAdvertisementData;
 
   before(() => {
-    cy.fixture('advertisementData').then((data) => {
-      adData = data;
+    cy.fixture('admin/advertisements').then((data) => {
+      const ad1 = data.advertisements?.[0];
+      adData = {
+        ad1: {
+          name: ad1?.name ?? 'Advertisement 1',
+          description: ad1?.description ?? 'This is a test advertisement',
+          mediaPath: 'cypress/fixtures/advertisement_banner.png',
+          type: ad1?.type ?? 'Popup Ad',
+        },
+        ad2: {
+          updatedName: data.advertisements?.[1]?.name ?? 'Advertisement 2',
+        },
+      };
     });
   });
 

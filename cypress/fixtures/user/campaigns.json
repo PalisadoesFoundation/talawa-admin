@@ -1,0 +1,19 @@
+{
+  "campaigns": [
+    {
+      "id": "camp_001",
+      "name": "Community Drive",
+      "goalAmount": 5000,
+      "raisedAmount": 1250,
+      "endsAt": "2026-02-15T00:00:00.000Z"
+    },
+    {
+      "id": "camp_002",
+      "name": "Long Campaign — مرحبا 世界",
+      "goalAmount": 10000,
+      "raisedAmount": 0,
+      "endsAt": "2026-03-15T00:00:00.000Z"
+    }
+  ],
+  "emptyCampaigns": []
+}

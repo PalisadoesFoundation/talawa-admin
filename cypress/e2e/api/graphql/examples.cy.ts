@@ -54,6 +54,7 @@ describe('GraphQL utilities', () => {
     Cypress.env('apiUrl', originalApiUrl);
     Cypress.env('API_URL', originalApiUrlEnv);
     Cypress.env('CYPRESS_API_URL', originalCypressApiUrl);
+    cy.clearAllGraphQLMocks();
   });
 
   it('aliases and waits for a live operation', () => {
