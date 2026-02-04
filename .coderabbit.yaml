@@ -39,320 +39,214 @@ reviews:
     - '!*.md'
     - '!*.svg'
   path_instructions:
-    - path: '**/*'
+    - path: '**/*.{ts,tsx,spec.ts,spec.tsx,test.ts,test.tsx}'
       instructions: |
-        Conduct a comprehensive review and reevaluate all resolved and dismissed items.
+        ## Review Scope
 
-        # VALIDATION FRAMEWORK
+        Reevaluate all resolved/dismissed items. Validate issue goals are met. Ensure tests are shard-safe and non-flaky. Report findings in a single comprehensive comment.
 
-        ## 1. Test Coverage & Quality
+        ## 1. Issue Goal Validation (Priority `#1`)
 
-        ### 1.1 Test File Requirements
-        For each modified source file with logic or UI:
-        - ✅ Test file exists: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, or `*.test.ts`
-        - ✅ Test file colocated with component (same directory)
-        - ✅ Test file updated to reflect source changes
-        - ✅ Target ≥95% code coverage for new/modified code
-        - ✅ **List specific line numbers** lacking test coverage
+        - Parse linked issue from PR description (Fixes/Resolves/Closes #)
+        - Verify ALL acceptance criteria are addressed by PR changes
+        - Flag out-of-scope changes not related to issue requirements
+        - List any unimplemented requirements with specific line references
+        - Confirm no feature-creep beyond stated goals
 
-        ### 1.2 Test Quality Standards
-        - ✅ **Framework Compliance** (Vitest + React Testing Library):
-          - Use `vi.mock()` for mocking (not `jest.mock()`)
-          - Use `describe()`, `it()`, `test()` for structure
-          - Use `@testing-library/react` queries (getByRole, getByText, etc.)
-          - Use `@testing-library/user-event` for interactions
+        ## 2. Test Coverage & Quality
 
-        - ✅ **Coverage Completeness** - All scenarios tested:
-          - Success paths with valid data
-          - Error scenarios (network failures, GraphQL errors, validation errors)
-          - Edge cases (empty data, null/undefined, boundary values)
-          - Loading and pending states
-          - User interactions and state changes
+        ### 2.1 Test File Existence
+        - Every modified source file with logic/UI must have colocated test: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, `*.test.ts`
+        - Tests updated to reflect source changes
+        - List specific uncovered line numbers in source files
 
-        - ✅ **Mock Quality**:
-          - GraphQL: `MockedProvider` or `StaticMockLink`
-          - Realistic, comprehensive mock data
-          - Proper cleanup (reset mocks, clear timers)
+        ### 2.2 Test Quality (Vitest + React Testing Library)
+        - Use `vi.mock()` for mocking (never `jest.mock()`)
+        - Structure: `describe()`, `it()`, `test()`
+        - Queries: `getByRole`, `getByText`, `getByLabelText` (prefer accessible queries)
+        - Interactions: `@testing-library/user-event` for clicks, typing, etc.
+        - Coverage paths: success, errors (network/GraphQL/validation), edge cases (empty/null/undefined), loading states, user interactions
+        - Mocks: Use `MockedProvider` or `StaticMockLink` for GraphQL; realistic mock data; proper typing
 
-        - ✅ **Test Structure**:
-          - Isolated tests (no execution order dependency)
-          - No disabled tests (`*.skip`) without documented reason + linked issue
-          - Proper async utilities (`waitFor`, `act`)
-          - Shard-compatible (12-shard strategy, no shared state, <30s timeout)
-          - Tests won't be flaky when CI/CD response times are highly variable
+        ### 2.3 Flaky Test Detection (Critical for 12-shard parallel execution)
 
-        ## 2. Code Quality & Implementation
+        **Mock Cleanup Patterns:**
+        - Every test file MUST have `afterEach` with `cleanup()` and `vi.clearAllMocks()` or `vi.restoreAllMocks()`
+        - Reference pattern: AdvertisementRegister.spec.tsx shows proper cleanup structure
+        - Flag tests missing cleanup—causes intermittent failures in sharded runs
 
-        ### 2.1 TypeScript Standards
-        - ✅ **No `any` type** without JSDoc justification
-        - ✅ Proper typing for:
-          - Component props (interface declarations)
-          - Function parameters and return types
-          - GraphQL variables and responses
-          - State and context
-        - ✅ No `@ts-ignore` without explanation
-        - ✅ Zero TypeScript compilation errors
+        **Timing & Async Issues:**
+        - NEVER use hardcoded `setTimeout` delays in tests
+        - ALWAYS use `waitFor` for async assertions: `await waitFor(() => expect(...))`
+        - Avoid assumptions about synchronous mock responses—network timing varies across shards
+        - Flag any fixed-delay patterns (e.g., `await new Promise(resolve => setTimeout(resolve, 1000))`)
 
-        ### 2.2 React & GraphQL Implementation
-        - ✅ **React Best Practices**:
-          - Functional components with proper hooks (useState, useEffect, useMemo, useCallback)
-          - Material-UI v7 patterns (import from `@mui/material`, emotion styling)
-          - Avoid prop drilling (use Context/Redux)
-          - Proper `useEffect` cleanup for subscriptions/timers
+        **Shared State & Isolation:**
+        - No module-level variables that persist between tests
+        - No global state modifications without cleanup (localStorage, sessionStorage, window properties)
+        - Each test independent—no execution order dependencies
+        - `beforeEach` must reset ALL test-specific state
+        - Flag any test relying on previous test results
 
-        - ✅ **GraphQL Patterns**:
-          - Follow patterns in `src/GraphQl/Queries/` and `src/GraphQl/Mutations/`
-          - Proper `gql` template tag usage
-          - No duplicate queries (check pagination patterns)
-          - Error handling for all operations (handle `error` state in UI)
-          - Correct Apollo Client hooks (`useQuery`, `useMutation`, `useSubscription`)
+        **Shard Safety:**
+        - Tests respect 30s timeout (`testTimeout: 30000ms`)
+        - No race conditions from concurrent shard execution
+        - No assumptions about test execution order or file load sequence
 
-        ### 2.3 Internationalization (i18n)
-        - ✅ **Zero hardcoded user-facing strings** in UI
-        - ✅ Use `useTranslation()` hook with translation keys:
-          ```typescript
-          const { t } = useTranslation('translation', { keyPrefix: 'componentName' });
-          <Button>{t('buttonLabel')}</Button>
-          ```
-        - ✅ New keys added to **all** locale files:
-          - `public/locales/en/translation.json`
-          - `public/locales/es/translation.json`
-          - `public/locales/fr/translation.json`
-          - `public/locales/hi/translation.json`
-          - `public/locales/zh/translation.json`
-        - ✅ Keys follow nested structure matching component hierarchy
+        ### 2.4 Test Structure
+        - Tests isolated, order-independent
+        - No skipped tests (`it.skip`, `describe.skip`) unless documented with reason + linked issue
+        - Proper `act()` wrapping for state updates
 
-        ### 2.4 Accessibility (a11y)
-        - ✅ Proper ARIA attributes:
-          - `aria-label` for icon-only buttons
-          - `aria-describedby` for form hints/errors
-          - `aria-live` for dynamic content
-        - ✅ Semantic HTML and proper `role` attributes
-        - ✅ Keyboard navigation support (focusable elements, tab order)
-        - ✅ Screen reader compatibility (text alternatives)
+        ## 3. Code Quality Standards
 
-        ### 2.5 Package Manager
-        - ✅ Use **pnpm** commands (not npm or yarn)
-        - ✅ No `package-lock.json` or `yarn.lock` changes (use `pnpm-lock.yaml`)
+        ### 3.1 TypeScript
+        - No `any` type without explicit JSDoc justification
+        - Proper interfaces for: component props, function params/returns, GraphQL types, state/context
+        - No `@ts-ignore` without explanation
 
-        ## 3. Reusable Component Architecture (CRITICAL)
+        ### 3.2 Reusable Component Policy (https://docs-admin.talawa.io/docs/developer-resources/reusable-components)
 
-        **Reference**: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/
+        **Folder Placement:**
+        - Admin-only: `src/components/AdminPortal/**` + types in `src/types/AdminPortal/**`
+        - User-only: `src/components/UserPortal/**` + types in `src/types/UserPortal/**`
+        - Shared (both portals): `src/shared-components/**` + types in `src/types/shared-components/**`
+        - Don't place Admin components in UserPortal (or vice versa)
+        - Don't duplicate—promote to `shared-components/` if used by both
 
-        ### 3.1 Directory Structure & Placement
+        **Naming & Structure:**
+        - PascalCase for folders, files, component names—must all match
+        - NO inline prop interfaces—all props in `src/types/<Portal>/ComponentName/interface.ts`
+        - Interface naming: `Interface<ComponentName>Props`
+        - Test files colocated: `ComponentName.spec.tsx`
+        - Target 100% test coverage
 
-        **Strict Portal Separation**:
-        - ✅ **Admin-only**: `src/components/AdminPortal/**` + `src/types/AdminPortal/**`
-        - ✅ **User-only**: `src/components/UserPortal/**` + `src/types/UserPortal/**`
-        - ✅ **Shared** (both portals): `src/shared-components/**` + `src/types/shared-components/**`
+        **Restricted Imports (ESLint-enforced):**
+        - ❌ `@mui/x-data-grid` → ✅ Use `DataGridWrapper` from `shared-components/`
+        - ❌ `react-bootstrap` `Spinner` → ✅ Use `LoadingState` from `shared-components/`
+        - ❌ `react-bootstrap` `Modal` → ✅ Use `BaseModal` from `shared-components/`
+        - ❌ `@mui/x-date-pickers` → ✅ Use `DateRangePicker`/`DatePicker`/`TimePicker` wrappers
+        - Direct imports ONLY allowed in wrapper implementations
 
-        **Rules**:
-        - ❌ Never place Admin components in UserPortal or vice versa
-        - ❌ Never duplicate components across portals
-        - ✅ Promote to `shared-components/` if used by both portals
-        - ✅ Portal-specific hooks stay under that portal (e.g., `AdminPortal/hooks/`)
+        **TSDoc:**
+        - All exported components/interfaces need brief JSDoc headers
 
-        ### 3.2 Naming Conventions
-        - ✅ **Component folders/files**: PascalCase (e.g., `UserTableRow/`, `UserTableRow.tsx`)
-        - ✅ **Component name matches** folder and file name exactly
-        - ✅ **Test files**: `Component.spec.tsx` or `Component.test.tsx`
-        - ✅ **Mock files**: `ComponentMock.ts` or `ComponentMocks.ts`
-        - ✅ **Interface files**: `interface.ts` in corresponding types directory
-        - ✅ Exception: `types/shared-components` folder uses kebab-case
+        ### 3.3 GraphQL Implementation
+        - Queries in `src/GraphQl/Queries/`, mutations in `src/GraphQl/Mutations/`
+        - Use `gql` template tag from `graphql-tag`, proper typing
+        - No duplicate queries—check pagination patterns (`first`/`last` inconsistencies)
+        - Error handling: all operations must handle `error` state in UI
+        - Apollo hooks: `useQuery`, `useMutation`, `useSubscription` with proper typing
 
-        ### 3.3 Interface & Type Definitions
-        - ❌ **NO inline prop interfaces** in component files
-        - ✅ All props **must** be defined in: `src/types/<Portal or shared-components>/<ComponentName>/interface.ts`
-        - ✅ Interface naming: `Interface<ComponentName>Props`
-        - ✅ Single source of truth—import from `interface.ts`
+        ### 3.4 React & Material-UI v7
+        - Functional components with proper hooks (useState, useEffect, useMemo, useCallback)
+        - MUI imports from `@mui/material`, styling with `@emotion/react`
+        - No prop drilling—use Context/Redux for deep state
+        - `useEffect` cleanup: return cleanup function for subscriptions/timers/listeners
 
-        **Correct Import Patterns**:
-        ```typescript
-        // ✅ Shared component
-        import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-        import type { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/ProfileAvatarDisplay/interface';
+        ### 3.5 Internationalization (i18n)
+        - ZERO hardcoded user-facing strings in UI
+        - All text uses `useTranslation()` hook with translation keys
+        - New keys added to ALL 5 locale files: `public/locales/{en,es,fr,hi,zh}/translation.json`
+        - Keys follow nested structure matching component hierarchy
 
-        // ✅ Admin component
-        import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
-        import type { InterfaceUserTableRowProps } from 'types/AdminPortal/UserTableRow/interface';
+        ### 3.6 Accessibility (a11y)
+        - ARIA attributes: `aria-label`, `aria-describedby`, `aria-live` where needed
+        - Semantic HTML with proper `role` attributes
+        - Keyboard navigation support (focusable elements, correct tab order)
+        - Screen reader compatibility
 
-        // ❌ Inline interface (WRONG)
-        interface UserTableRowProps { ... }
-        ```
+        ### 3.7 Package Manager
+        - Use `pnpm` commands in documentation (not npm/yarn)
+        - No unnecessary `package-lock.json`/`yarn.lock` changes (use `pnpm-lock.yaml`)
 
-        ### 3.4 Restricted Library Imports
+        ## 4. Code Issues to Flag (with specific line numbers)
 
-        **ESLint enforces** via `no-restricted-imports`:
+        - ❌ Missing test coverage (list line numbers)
+        - ❌ Unnecessary files: build artifacts, IDE configs, `.env` files, lockfile churn
+        - ❌ Debug code: `console.log/debug/info` in non-script files, commented blocks, undocumented TODOs
+        - ❌ Skipped tests without documented reason
+        - ❌ Inline prop interfaces (should be in `interface.ts`)
+        - ❌ Restricted library imports (should use wrappers)
+        - ❌ Components in wrong portal directory
+        - ❌ Missing TSDoc on exported components
+        - ❌ Flaky test patterns (missing cleanup, hardcoded delays, shared state)
 
-        - ❌ **DataGrid**: No `@mui/x-data-grid` or `@mui/x-data-grid-pro`
-          - ✅ Use: `DataGridWrapper` from `shared-components/DataGridWrapper/`
+        ## 5. PR Validation
 
-        - ❌ **Spinner**: No `Spinner` from `react-bootstrap`
-          - ✅ Use: `LoadingState` from `shared-components/LoadingState/`
+        ### 5.1 Issue Alignment
+        - All acceptance criteria addressed
+        - No out-of-scope changes
+        - Bugs in tested files fixed in this PR; unrelated bugs deferred to separate issues
 
-        - ❌ **Modal**: No `Modal` from `react-bootstrap`
-          - ✅ Use: `BaseModal` from `shared-components/BaseModal/`
+        ### 5.2 Review Compliance
+        - Previous feedback addressed/acknowledged
+        - Changes implemented correctly
+        - No unresolved conversations without explanation
 
-        - ❌ **Date Pickers**: No direct imports from `@mui/x-date-pickers`
-          - ✅ Use: `DateRangePicker`, `DatePicker`, or `TimePicker` wrappers
+        ### 5.3 Metadata
+        - Title follows convention: `feat:`, `fix:`, `refactor:`, etc.
+        - Linked to issue(s) with GitHub keywords (Fixes `#1234`)
+        - Target branch correct (typically `develop`)
+        - No exposed sensitive data
 
-        **Exception**: Direct imports ONLY allowed in wrapper implementations.
+        ## 6. CI/CD Compatibility
 
-        ### 3.5 TSDoc Requirements
-        - ✅ All exported components must have JSDoc:
-          ```typescript
-          /**
-           * Brief description of component purpose and usage.
-           * @param props - Component props from Interface<ComponentName>Props
-           * @returns JSX.Element
-           */
-          export const ComponentName = (props: InterfaceComponentNameProps): JSX.Element => { ... }
-          ```
-        - ✅ Interfaces must have JSDoc:
-          ```typescript
-          /**
-           * Props for ComponentName component.
-           */
-          export interface InterfaceComponentNameProps { ... }
-          ```
+        Note: CI already validates linting, formatting, type-checking, knip, docs generation, TOC updates, sensitive files, POM checks. Focus review on semantic correctness CI cannot catch.
 
-        ### 3.6 Validation Checklist
-        For new/modified components, verify:
-        1. ❓ Component in correct portal directory (Admin/User/shared)?
-        2. ❓ Folder/file/component name follows PascalCase?
-        3. ❓ Colocated `.spec.tsx` test file exists?
-        4. ❓ Props defined in `src/types/.../interface.ts` (not inline)?
-        5. ❓ Uses wrapper components (not restricted imports)?
-        6. ❓ TSDoc comments on component and interface?
-        7. ❓ Import path follows correct pattern?
-        8. ❓ If shared, actually used by both portals? (else move to specific portal)
+        - Changes compatible with 12-shard Vitest execution
+        - No performance regressions in test execution time
+        - Won't break coverage reporting or MinIO compliance
 
-        ## 4. Documentation & Comments
+        ## 7. Security
 
-        - ✅ **TSDoc/JSDoc comments** on:
-          - All exported functions, classes, interfaces
-          - All components (purpose, params, returns)
-          - Complex logic requiring explanation
-          - GraphQL queries/mutations
-        - ✅ Auto-generated docs updated (Check-AutoDocs job)
-        - ✅ README.md or feature docs updated for new features
-        - ✅ Table of Contents updated (pre-commit hook)
+        - No exposed credentials (API keys, tokens, passwords, connection strings)
+        - Proper input validation and sanitization
+        - No XSS vulnerabilities in user-generated content
+        - Secure handling of PII and auth tokens
 
-        ## 5. Code Issues to Report
+        ## 8. Implementation Correctness
 
-        **Provide specific line numbers for**:
-        - ❌ Lines missing test coverage
-        - ❌ Unnecessary files:
-          - Build artifacts (`dist/`, `build/`, `coverage/`)
-          - Dependencies (unnecessary `node_modules/`, `pnpm-lock.yaml` changes)
-          - Environment files (`.env`, `.env.local`)
-          - IDE configs (`.vscode/`, `.idea/`)
-        - ❌ Unused imports/dead code (checked by knip)
-        - ❌ Debug code in production:
-          - `console.log()`, `console.debug()`, `console.info()` in non-script files
-          - Commented-out code blocks
-          - TODO/FIXME without linked issues
-        - ❌ Skipped tests without documentation
-        - ❌ **Architecture violations**:
-          - Inline prop interfaces
-          - Restricted library imports
-          - Components in wrong portal directory
-          - Missing TSDoc on exported components
+        - Logic is correct and bug-free
+        - GraphQL queries target correct schema fields
+        - Data transformations accurate
+        - Error handling covers all failure scenarios
+        - State management (Redux/Context) properly implemented
+        - No race conditions or memory leaks
 
-        ## 6. PR & Issue Compliance
+        ## 9. Approval Decision
 
-        ### 6.1 Issue Requirements
-        - ✅ All acceptance criteria from linked issue addressed
-        - ✅ No out-of-scope changes
-        - ✅ Bugs in **files being tested** must be fixed in this PR
-        - ✅ Bugs in **unrelated files** deferred to separate issues
-
-        ### 6.2 Review Feedback
-        - ✅ All previous comments addressed or acknowledged
-        - ✅ Requested changes implemented correctly
-        - ✅ No unresolved conversations without explanation
-
-        ### 6.3 PR Metadata
-        - ✅ Descriptive title with convention (e.g., "feat:", "fix:", "refactor:")
-        - ✅ Linked to issue(s) using keywords (Fixes #1234, Resolves #5678)
-        - ✅ Target branch correct (typically `develop`)
-        - ✅ No sensitive information exposed (Check-Sensitive-Files job)
-
-        ## 7. CI/CD & Security
-
-        ### 7.1 CI Pipeline Compatibility
-        - ✅ Won't break CI jobs:
-          - Code Quality (linting, formatting, type-checking)
-          - Vitest execution (12 shards)
-          - Code coverage reporting
-          - Documentation generation
-          - Sensitive files check, MinIO compliance, Knip
-
-        - ✅ Pre-commit requirements met:
-          - `pnpm run format:fix` (Prettier)
-          - `pnpm run lint-staged` (ESLint, zero warnings, no-restricted-imports)
-          - `pnpm run typecheck` (TypeScript)
-          - `pnpm run update:toc` (Table of Contents)
-          - `pnpm run check:pom` (Page Object Model)
-          - `npx knip` (unused files)
-
-        - ✅ No performance regressions in test execution
-
-        ### 7.2 Security
-        - ✅ No security vulnerabilities introduced
-        - ✅ No exposed credentials (API keys, tokens, passwords, connection strings)
-        - ✅ Proper input validation and sanitization
-        - ✅ No XSS vulnerabilities in user-generated content
-        - ✅ Secure handling of sensitive data (PII, auth tokens)
-
-        ## 8. Review Decision Framework
-
-        ### 8.1 When to Require Changes (DO NOT approve)
-        - Critical bugs in implementation
+        **DO NOT approve if any of:**
+        - Issue goals not fully met
+        - Flaky test patterns detected
         - Missing test coverage for new/modified code
-        - Security vulnerabilities or TypeScript errors
-        - Missing i18n translations or accessibility violations
-        - **Reusable component policy violations** (see §3)
-        - Unaddressed review feedback
-        - Out-of-scope changes without justification
+        - Security vulnerabilities
+        - Missing i18n translations
+        - Accessibility violations
+        - Reusable component policy violations
+        - Unaddressed feedback
 
-        ### 8.2 Approval Criteria
+        **Append `[approve]` tag ONLY when ALL met:**
+        1. Issue goals 100% complete
+        2. Tests comprehensive, non-flaky, shard-safe
+        3. Zero code quality issues
+        4. No security concerns
+        5. Complete i18n support
+        6. Accessibility requirements met
+        7. Reusable component policy followed
+        8. All bugs fixed (in tested files)
+        9. Full compliance with feedback
+        10. Zero changes needed (even minor)
 
-        **Append [approve] tag ONLY when ALL criteria met**:
-        1. ✅ Complete test coverage (target ≥95%) with quality tests (§1)
-        2. ✅ Zero code quality issues (§2)
-        3. ✅ **Full reusable component policy compliance** (§3)
-        4. ✅ Complete documentation and TSDoc (§4)
-        5. ✅ No code issues identified (§5)
-        6. ✅ Full PR & issue compliance (§6)
-        7. ✅ All CI checks pass, no security concerns (§7)
-        8. ✅ **Zero changes needed** — even minor improvements block approval
+        **Be strict:** If you suggest any improvement, do not approve.
 
-        **Be strict**: If you suggest any improvement, do not approve.
+        ## 10. Review Style
 
-        ## 9. Review Priorities & Scope
-
-        ### 9.1 Focus Areas (in priority order)
-        1. **CI-breaking issues** and production bugs
-        2. **Component architecture violations** (affects long-term maintainability)
-        3. **Security vulnerabilities** and data handling issues
-        4. **Test coverage gaps** and quality issues
-        5. **Code quality** and pattern deviations
-
-        ### 9.2 Scope Boundaries
-        - **In-scope bugs**: Files being tested MUST be fixed in same PR
-        - **Out-of-scope bugs**: Unrelated files deferred to separate issues
-        - **Component refactoring**:
-          - New components must follow policy
-          - Significantly modified components should be refactored to policy
-          - Bulk refactoring of existing components → separate PRs
-        - Document scope decisions clearly
-
-        ### 9.3 Feedback Quality
-        - **Be specific**: Exact line numbers, not just file names
-        - **Be constructive**: Suggest concrete solutions with correct paths/patterns
-        - **Prioritize substance** over style
-        - **Highlight pattern deviations** that cause maintenance issues
+        - Prioritize substantive issues over style
+        - Focus on CI-breaking issues and production bugs
+        - Be specific: exact line numbers, not just file names
+        - Be constructive: suggest concrete solutions with correct paths/patterns
+        - Post findings in single, well-organized comment
 
   pre_merge_checks:
     # Enforce test file updates for modified source files
