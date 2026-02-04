@@ -507,11 +507,9 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('should have correct aria-label on edit button', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
-
+    renderEventDashboard(mockWithTime);
     // Select the edit button
-    const editButton = getByTestId('edit-event-button');
+    const editButton = await screen.findByTestId('edit-event-button');
 
     // Assert the aria-label is correctly set
     expect(editButton).toHaveAttribute(
