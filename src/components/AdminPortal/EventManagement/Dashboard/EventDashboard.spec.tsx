@@ -154,9 +154,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('The page should display event details correctly and also show the time if provided', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -177,9 +178,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('The page should display event details correctly and should not show the time if all day event', async () => {
     const { getByTestId } = renderEventDashboard(mockWithoutTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-description')).toHaveTextContent(
       'Test Description',
     );
@@ -231,7 +233,9 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     expect(getByTestId('event-location')).toHaveTextContent('N/A');
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
   });
 
   it('Should handle empty description gracefully', async () => {
@@ -257,9 +261,10 @@ describe('Testing Event Dashboard Screen', () => {
 
   it('Should handle invalid date formats with fallback time', async () => {
     const { getByTestId } = renderEventDashboard(mockInvalidDateTime);
-    await wait();
 
-    expect(getByTestId('event-name')).toHaveTextContent('Test Event');
+    expect(await screen.findByTestId('event-name')).toHaveTextContent(
+      'Test Event',
+    );
     expect(getByTestId('event-details')).toBeInTheDocument();
 
     // Time is displayed from startTime/endTime fields
@@ -505,7 +510,6 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('start-date')).toBeInTheDocument();
     expect(getByTestId('end-date')).toBeInTheDocument();
   });
-
   it('should have correct aria-label on edit button', async () => {
     renderEventDashboard(mockWithTime);
     // Select the edit button
