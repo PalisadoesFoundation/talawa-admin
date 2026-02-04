@@ -189,11 +189,18 @@ check_docker_daemon() {
         else
             # Fallback: run without timeout (macOS without coreutils)
             # Use a background process with sleep to implement basic timeout
-            local tmpfile
+            local tmpfile pid
             tmpfile="$(mktemp 2>/dev/null || mktemp -t docker_check)"
             
+            _cleanup_daemon_check() {
+                [[ -n "${pid:-}" ]] && kill -9 "$pid" 2>/dev/null || true
+                [[ -n "${pid:-}" ]] && wait "$pid" 2>/dev/null || true
+                [[ -n "${tmpfile:-}" ]] && rm -f "$tmpfile"
+            }
+            trap '_cleanup_daemon_check' INT TERM EXIT
+            
             (docker info > "$tmpfile" 2>&1) &
-            local pid=$!
+            pid=$!
             
             # Wait for completion or timeout
             local count=0
@@ -201,9 +208,8 @@ check_docker_daemon() {
                 sleep 1
                 count=$((count + 1))
                 if [[ $count -ge $DOCKER_DAEMON_TIMEOUT ]]; then
-                    kill -9 "$pid" 2>/dev/null || true
-                    wait "$pid" 2>/dev/null || true
-                    rm -f "$tmpfile"
+                    _cleanup_daemon_check
+                    trap - INT TERM EXIT
                     printf 'unresponsive'
                     return 1
                 fi
@@ -213,6 +219,7 @@ check_docker_daemon() {
             exit_code=$?
             docker_info_output="$(cat "$tmpfile" 2>/dev/null)"
             rm -f "$tmpfile"
+            trap - INT TERM EXIT
         fi
     fi
 

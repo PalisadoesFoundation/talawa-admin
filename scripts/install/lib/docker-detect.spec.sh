@@ -18,6 +18,13 @@
 #   - Status parsing
 #   - Helper functions (is_docker_operational, is_compose_available)
 #   - Guidance functions
+#
+# Execution Model:
+#   Tests run serially (not in parallel). Each test uses setup_test_env() and
+#   reset_mock_env() to isolate mock variables (_mock_has_docker, _mock_docker_cli_output,
+#   _mock_docker_info_output, etc.). The run_test() wrapper ensures mocks are reset
+#   between tests so state does not leak. Some tests use subshells for additional
+#   isolation when overriding shell functions (e.g., uname, grep).
 # ==============================================================================
 
 set -euo pipefail
