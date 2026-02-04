@@ -1317,6 +1317,7 @@
     }
   },
   "memberDetail": {
+    "user": "用户",
     "title": "用户详细信息",
     "addAdmin": "添加管理员",
     "noeventsAttended": "未参加任何活动",
