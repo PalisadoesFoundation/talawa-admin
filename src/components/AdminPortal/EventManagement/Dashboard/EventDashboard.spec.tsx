@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, waitFor, screen } from '@testing-library/react';
+import { render, act, waitFor, screen, cleanup } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -150,6 +150,7 @@ describe('Testing Event Dashboard Screen', () => {
     // Clean up after each test
     localStorageMock.clear();
     vi.clearAllMocks();
+    cleanup();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
