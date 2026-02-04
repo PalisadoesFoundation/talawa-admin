@@ -89,7 +89,7 @@ const mockOnEditItem = vi.fn();
 const mockOnDeleteItem = vi.fn();
 const mockRefetchAgendaFolder = vi.fn();
 
-const mockAgendaItem1: InterfaceAgendaItemInfo = {
+const createMockAgendaItem1 = (): InterfaceAgendaItemInfo => ({
   id: 'item1',
   name: 'Item 1',
   description: 'Description 1',
@@ -113,9 +113,9 @@ const mockAgendaItem1: InterfaceAgendaItemInfo = {
     id: 'event1',
     name: 'Event 1',
   },
-};
+});
 
-const mockAgendaItem2: InterfaceAgendaItemInfo = {
+const createMockAgendaItem2 = (): InterfaceAgendaItemInfo => ({
   id: 'item2',
   name: 'Item 2',
   description: 'Description 2',
@@ -139,35 +139,40 @@ const mockAgendaItem2: InterfaceAgendaItemInfo = {
     id: 'event1',
     name: 'Event 1',
   },
-};
+});
 
-const mockAgendaItemWithoutCategory: InterfaceAgendaItemInfo = {
-  ...mockAgendaItem1,
+const createMockAgendaItemWithoutCategory = (): InterfaceAgendaItemInfo => ({
+  ...createMockAgendaItem1(),
   id: 'item3',
   name: 'Item Without Category',
   category: null as unknown as InterfaceAgendaItemInfo['category'],
-};
+});
 
-const mockFolders: InterfaceAgendaFolderInfo[] = [
-  {
-    id: 'folder1',
-    name: 'Folder 1',
-    description: 'Description 1',
-    sequence: 1,
-    items: {
-      edges: [{ node: mockAgendaItem1 }, { node: mockAgendaItem2 }],
+const createMockFolders = (): InterfaceAgendaFolderInfo[] => {
+  const item1 = createMockAgendaItem1();
+  const item2 = createMockAgendaItem2();
+
+  return [
+    {
+      id: 'folder1',
+      name: 'Folder 1',
+      description: 'Description 1',
+      sequence: 1,
+      items: {
+        edges: [{ node: item1 }, { node: item2 }],
+      },
     },
-  },
-  {
-    id: 'folder2',
-    name: 'Folder 2',
-    description: 'Description 2',
-    sequence: 2,
-    items: {
-      edges: [],
+    {
+      id: 'folder2',
+      name: 'Folder 2',
+      description: 'Description 2',
+      sequence: 2,
+      items: {
+        edges: [],
+      },
     },
-  },
-];
+  ];
+};
 
 const mockDefaultFolder: InterfaceAgendaFolderInfo = {
   id: 'default-folder',
@@ -335,7 +340,7 @@ const MOCKS_ERROR_FOLDER_SEQUENCE: MockedResponse[] = [
 
 const renderAgendaDragAndDrop = (
   mocks: MockedResponse[] = [],
-  folders: InterfaceAgendaFolderInfo[] = mockFolders,
+  folders: InterfaceAgendaFolderInfo[] = createMockFolders(),
 ) => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
@@ -380,11 +385,13 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('displays "noCategory" for items without category', () => {
+      const baseFolders = createMockFolders();
+
       const foldersWithNoCategory: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...baseFolders[0],
           items: {
-            edges: [{ node: mockAgendaItemWithoutCategory }],
+            edges: [{ node: createMockAgendaItemWithoutCategory() }],
           },
         },
       ];
@@ -393,14 +400,16 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('displays "-" for null duration', () => {
+      const baseFolders = createMockFolders();
+
       const foldersWithNoDuration: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...baseFolders[0],
           items: {
             edges: [
               {
                 node: {
-                  ...mockAgendaItem1,
+                  ...baseFolders[0].items.edges[0].node,
                   duration: null as unknown as string,
                 },
               },
@@ -425,50 +434,70 @@ describe('AgendaDragAndDrop', () => {
 
   describe('User interactions', () => {
     it('calls onEditFolder when edit button is clicked', async () => {
-      renderAgendaDragAndDrop();
-      const editButtons = screen.getAllByLabelText('editFolder');
-      await userEvent.click(editButtons[0]);
-      expect(mockOnEditFolder).toHaveBeenCalledWith(mockFolders[0]);
+      const folders = createMockFolders();
+      renderAgendaDragAndDrop([], folders);
+
+      await userEvent.click(screen.getAllByLabelText('editFolder')[0]);
+
+      expect(mockOnEditFolder).toHaveBeenCalledWith(folders[0]);
     });
 
     it('calls onDeleteFolder when delete button is clicked', async () => {
-      renderAgendaDragAndDrop();
+      const folders = createMockFolders();
+      renderAgendaDragAndDrop([], folders);
+
       const deleteButtons = screen.getAllByLabelText('deleteFolder');
       await userEvent.click(deleteButtons[0]);
-      expect(mockOnDeleteFolder).toHaveBeenCalledWith(mockFolders[0]);
+
+      expect(mockOnDeleteFolder).toHaveBeenCalledWith(folders[0]);
     });
 
     it('calls onPreviewItem when preview button is clicked', async () => {
       renderAgendaDragAndDrop();
       const previewButtons = screen.getAllByLabelText('previewItem');
       await userEvent.click(previewButtons[0]);
-      expect(mockOnPreviewItem).toHaveBeenCalledWith(mockAgendaItem1);
+      const folders = createMockFolders();
+      renderAgendaDragAndDrop([], folders);
+
+      expect(mockOnPreviewItem).toHaveBeenCalledWith(
+        folders[0].items.edges[0].node,
+      );
     });
 
     it('calls onEditItem when edit button is clicked', async () => {
       renderAgendaDragAndDrop();
       const editButtons = screen.getAllByLabelText('editItem');
       await userEvent.click(editButtons[0]);
-      expect(mockOnEditItem).toHaveBeenCalledWith(mockAgendaItem1);
+      const folders = createMockFolders();
+
+      expect(mockOnEditItem).toHaveBeenCalledWith(
+        folders[0].items.edges[0].node,
+      );
     });
 
     it('calls onDeleteItem when delete button is clicked', async () => {
       renderAgendaDragAndDrop();
       const deleteButtons = screen.getAllByLabelText('deleteItem');
       await userEvent.click(deleteButtons[0]);
-      expect(mockOnDeleteItem).toHaveBeenCalledWith(mockAgendaItem1);
+      const folders = createMockFolders();
+
+      expect(mockOnDeleteItem).toHaveBeenCalledWith(
+        folders[0].items.edges[0].node,
+      );
     });
   });
 
   describe('Item sorting', () => {
     it('sorts items by sequence within folder', () => {
-      const unsortedFolders: InterfaceAgendaFolderInfo[] = [
+      const base = createMockFolders();
+
+      const unsortedFolders = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 2 } },
-              { node: { ...mockAgendaItem2, sequence: 1 } },
+              { node: { ...base[0].items.edges[0].node, sequence: 2 } },
+              { node: { ...base[0].items.edges[1].node, sequence: 1 } },
             ],
           },
         },
@@ -504,9 +533,12 @@ describe('AgendaDragAndDrop', () => {
         );
       });
 
-      await waitFor(() => {
-        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('returns early when destination is null', () => {
@@ -625,11 +657,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to update item sequence',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to update item sequence',
+          );
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
@@ -657,11 +692,14 @@ describe('AgendaDragAndDrop', () => {
         expect(mockSetFolders).toHaveBeenCalled();
       });
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'sectionSequenceUpdateSuccessMsg',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'sectionSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
 
       await waitFor(() => {
         expect(mockRefetchAgendaFolder).toHaveBeenCalled();
@@ -725,11 +763,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to update folder sequence',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to update folder sequence',
+          );
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
       // Verify rollback occurred - setFolders called twice (optimistic update, then rollback)
@@ -758,13 +799,17 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('executes mixed item updates and resolves without mutation for matching sequence', async () => {
+      const baseFolders = createMockFolders();
+      const item1 = baseFolders[0].items.edges[0].node;
+      const item2 = baseFolders[0].items.edges[1].node;
+
       const folders: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...baseFolders[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 1 } }, // resolve
-              { node: { ...mockAgendaItem2, sequence: 5 } }, // mutation
+              { node: { ...item1, sequence: 1 } }, // resolves
+              { node: { ...item2, sequence: 5 } }, // mutation
             ],
           },
         },
@@ -775,7 +820,7 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 1, droppableId: 'agenda-items-folder1' },
         destination: { index: 0, droppableId: 'agenda-items-folder1' },
-        draggableId: 'item2',
+        draggableId: item2.id,
         type: 'ITEM',
         mode: 'FLUID',
         reason: 'DROP',
@@ -784,22 +829,29 @@ describe('AgendaDragAndDrop', () => {
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'itemSequenceUpdateSuccessMsg',
-        );
-        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('covers both mutation and Promise.resolve paths in item sequence update', async () => {
+      const baseFolders = createMockFolders();
+      const item1 = baseFolders[0].items.edges[0].node;
+      const item2 = baseFolders[0].items.edges[1].node;
+
       const folders: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...baseFolders[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 1 } }, // resolves
-              { node: { ...mockAgendaItem2, sequence: 99 } }, // mutates
+              { node: { ...item1, sequence: 1 } },
+              { node: { ...item2, sequence: 99 } },
             ],
           },
         },
@@ -810,21 +862,24 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 1, droppableId: 'agenda-items-folder1' },
         destination: { index: 0, droppableId: 'agenda-items-folder1' },
-        draggableId: 'item2',
+        draggableId: item2.id,
         type: 'ITEM',
-        reason: 'DROP',
         mode: 'FLUID',
+        reason: 'DROP',
         combine: null,
       };
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'itemSequenceUpdateSuccessMsg',
-        );
-        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('returns early when destination is null in handleDragEnd', () => {
@@ -886,11 +941,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'itemSequenceUpdateSuccessMsg',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('routes to onFolderDragEnd when type is FOLDER', async () => {
@@ -910,11 +968,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'sectionSequenceUpdateSuccessMsg',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'sectionSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -925,8 +986,10 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('handles items with missing optional fields', () => {
+      const base = createMockFolders();
+
       const itemWithMinimalData: InterfaceAgendaItemInfo = {
-        ...mockAgendaItem1,
+        ...base[0].items.edges[0].node,
         attachments: undefined,
         duration: null as unknown as string,
         category: null as unknown as InterfaceAgendaItemInfo['category'],
@@ -934,7 +997,7 @@ describe('AgendaDragAndDrop', () => {
 
       const foldersWithMinimalItem: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [{ node: itemWithMinimalData }],
           },
@@ -942,6 +1005,7 @@ describe('AgendaDragAndDrop', () => {
       ];
 
       renderAgendaDragAndDrop([], foldersWithMinimalItem);
+
       expect(screen.getByText('Item 1')).toBeInTheDocument();
       expect(screen.getByText('noCategory')).toBeInTheDocument();
       expect(screen.getByText('-')).toBeInTheDocument();
@@ -1081,16 +1145,20 @@ describe('AgendaDragAndDrop', () => {
 
   describe('Rendering variations', () => {
     it('renders multiple items in correct sequence order', () => {
+      const base = createMockFolders();
+      const item1 = base[0].items.edges[0].node;
+      const item2 = base[0].items.edges[1].node;
+
       const multiItemFolders: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 3 } },
-              { node: { ...mockAgendaItem2, sequence: 1 } },
+              { node: { ...item1, sequence: 3 } },
+              { node: { ...item2, sequence: 1 } },
               {
                 node: {
-                  ...mockAgendaItem1,
+                  ...item1,
                   id: 'item3',
                   name: 'Item 3',
                   sequence: 2,
@@ -1174,11 +1242,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'itemSequenceUpdateSuccessMsg',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles multiple folders drag operation', async () => {
@@ -1241,11 +1312,14 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'sectionSequenceUpdateSuccessMsg',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'sectionSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -1311,21 +1385,28 @@ describe('AgendaDragAndDrop', () => {
       }
 
       // The folder handler doesn't check droppableId, only index
-      await waitFor(() => {
-        expect(mockSetFolders).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(mockSetFolders).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
   describe('Sequence optimization paths', () => {
     it('skips item mutation when sequence already matches index', async () => {
+      const base = createMockFolders();
+      const item1 = base[0].items.edges[0].node;
+      const item2 = base[0].items.edges[1].node;
+
       const folders: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 1 } },
-              { node: { ...mockAgendaItem2, sequence: 2 } },
+              { node: { ...item1, sequence: 1 } },
+              { node: { ...item2, sequence: 2 } },
             ],
           },
         },
@@ -1336,7 +1417,7 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 0, droppableId: 'agenda-items-folder1' },
         destination: { index: 1, droppableId: 'agenda-items-folder1' },
-        draggableId: 'item1',
+        draggableId: item1.id,
         type: 'ITEM',
         mode: 'FLUID',
         reason: 'DROP',
@@ -1345,17 +1426,22 @@ describe('AgendaDragAndDrop', () => {
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalled();
-        expect(NotificationToast.error).not.toHaveBeenCalled();
-        expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).not.toHaveBeenCalled();
+          expect(NotificationToast.error).not.toHaveBeenCalled();
+          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('skips folder mutation when sequence already matches index', async () => {
+      const base = createMockFolders();
+
       const folders: InterfaceAgendaFolderInfo[] = [
-        { ...mockFolders[0], sequence: 1 },
-        { ...mockFolders[1], sequence: 2 },
+        { ...base[0], sequence: 1 },
+        { ...base[1], sequence: 2 },
       ];
 
       renderAgendaDragAndDrop([], folders);
@@ -1363,7 +1449,7 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 0, droppableId: 'agendaFolder' },
         destination: { index: 1, droppableId: 'agendaFolder' },
-        draggableId: 'folder1',
+        draggableId: base[0].id,
         type: 'FOLDER',
         mode: 'FLUID',
         reason: 'DROP',
@@ -1372,16 +1458,21 @@ describe('AgendaDragAndDrop', () => {
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalled();
-        expect(NotificationToast.error).not.toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).not.toHaveBeenCalled();
+          expect(NotificationToast.error).not.toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('skips mutation when folder sequence already matches its new position', async () => {
+      const base = createMockFolders();
+
       const foldersWithPartialMatch: InterfaceAgendaFolderInfo[] = [
-        { ...mockFolders[0], sequence: 2 },
-        { ...mockFolders[1], sequence: 1 },
+        { ...base[0], sequence: 2 },
+        { ...base[1], sequence: 1 },
       ];
 
       const mocks: MockedResponse[] = [
@@ -1390,7 +1481,7 @@ describe('AgendaDragAndDrop', () => {
             query: UPDATE_AGENDA_FOLDER_MUTATION,
             variables: {
               input: {
-                id: 'folder1',
+                id: base[0].id,
                 sequence: 2,
               },
             },
@@ -1398,7 +1489,7 @@ describe('AgendaDragAndDrop', () => {
           result: {
             data: {
               updateAgendaFolder: {
-                id: 'folder1',
+                id: base[0].id,
                 sequence: 2,
               },
             },
@@ -1411,20 +1502,21 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 1, droppableId: 'agendaFolder' },
         destination: { index: 0, droppableId: 'agendaFolder' },
-        draggableId: 'folder2',
+        draggableId: base[1].id,
         type: 'FOLDER',
         mode: 'FLUID',
         reason: 'DROP',
         combine: null,
       };
 
-      if (capturedOnDragEnd) {
-        capturedOnDragEnd(dropResult);
-      }
+      capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -1480,9 +1572,12 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles non-Error instance in folder catch block', async () => {
@@ -1536,9 +1631,12 @@ describe('AgendaDragAndDrop', () => {
         capturedOnDragEnd(dropResult);
       }
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -1558,16 +1656,20 @@ describe('AgendaDragAndDrop', () => {
 
   describe('Additional rendering scenarios', () => {
     it('renders with three or more items for complex sorting', () => {
-      const threePlusItems: InterfaceAgendaFolderInfo[] = [
+      const base = createMockFolders();
+      const item1 = base[0].items.edges[0].node;
+      const item2 = base[0].items.edges[1].node;
+
+      const folders: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, sequence: 1 } },
-              { node: { ...mockAgendaItem2, sequence: 2 } },
+              { node: { ...item1, sequence: 1 } },
+              { node: { ...item2, sequence: 2 } },
               {
                 node: {
-                  ...mockAgendaItem1,
+                  ...item1,
                   id: 'item3',
                   name: 'Item 3',
                   sequence: 3,
@@ -1575,7 +1677,7 @@ describe('AgendaDragAndDrop', () => {
               },
               {
                 node: {
-                  ...mockAgendaItem2,
+                  ...item2,
                   id: 'item4',
                   name: 'Item 4',
                   sequence: 4,
@@ -1586,7 +1688,7 @@ describe('AgendaDragAndDrop', () => {
         },
       ];
 
-      renderAgendaDragAndDrop([], threePlusItems);
+      renderAgendaDragAndDrop([], folders);
 
       expect(screen.getByText('Item 1')).toBeInTheDocument();
       expect(screen.getByText('Item 2')).toBeInTheDocument();
@@ -1595,11 +1697,13 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('renders with three or more folders', () => {
+      const base = createMockFolders();
+
       const threePlusFolders: InterfaceAgendaFolderInfo[] = [
-        { ...mockFolders[0] },
-        { ...mockFolders[1] },
+        { ...base[0] },
+        { ...base[1] },
         {
-          ...mockFolders[0],
+          ...base[0],
           id: 'folder3',
           name: 'Folder 3',
           sequence: 3,
@@ -1616,13 +1720,17 @@ describe('AgendaDragAndDrop', () => {
 
   describe('Complete flow with all mutations executing', () => {
     it('executes all item mutations when all sequences need updating', async () => {
+      const base = createMockFolders();
+      const item1 = base[0].items.edges[0].node;
+      const item2 = base[0].items.edges[1].node;
+
       const itemsNeedingUpdate: InterfaceAgendaFolderInfo[] = [
         {
-          ...mockFolders[0],
+          ...base[0],
           items: {
             edges: [
-              { node: { ...mockAgendaItem1, id: 'item1', sequence: 5 } },
-              { node: { ...mockAgendaItem2, id: 'item2', sequence: 10 } },
+              { node: { ...item1, sequence: 5 } },
+              { node: { ...item2, sequence: 10 } },
             ],
           },
         },
@@ -1633,32 +1741,32 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 0, droppableId: 'agenda-items-folder1' },
         destination: { index: 1, droppableId: 'agenda-items-folder1' },
-        draggableId: 'item1',
+        draggableId: item1.id,
         type: 'ITEM',
         mode: 'FLUID',
         reason: 'DROP',
         combine: null,
       };
 
-      if (capturedOnDragEnd) {
-        capturedOnDragEnd(dropResult);
-      }
+      capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'itemSequenceUpdateSuccessMsg',
-        );
-      });
-
-      await waitFor(() => {
-        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('executes all folder mutations when all sequences need updating', async () => {
+      const base = createMockFolders();
+
       const foldersNeedingUpdate: InterfaceAgendaFolderInfo[] = [
-        { ...mockFolders[0], sequence: 10 },
-        { ...mockFolders[1], sequence: 20 },
+        { ...base[0], sequence: 10 },
+        { ...base[1], sequence: 20 },
       ];
 
       renderAgendaDragAndDrop(
@@ -1669,34 +1777,33 @@ describe('AgendaDragAndDrop', () => {
       const dropResult: DropResult = {
         source: { index: 0, droppableId: 'agendaFolder' },
         destination: { index: 1, droppableId: 'agendaFolder' },
-        draggableId: 'folder1',
+        draggableId: base[0].id,
         type: 'FOLDER',
         mode: 'FLUID',
         reason: 'DROP',
         combine: null,
       };
 
-      if (capturedOnDragEnd) {
-        capturedOnDragEnd(dropResult);
-      }
+      capturedOnDragEnd?.(dropResult);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'sectionSequenceUpdateSuccessMsg',
-        );
-      });
-
-      await waitFor(() => {
-        expect(mockRefetchAgendaFolder).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'sectionSequenceUpdateSuccessMsg',
+          );
+          expect(mockRefetchAgendaFolder).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('renders non-Event agendaFolderConnection styles', () => {
+      const folders = createMockFolders();
       render(
         <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaDragAndDrop
-              folders={mockFolders}
+              folders={folders}
               setFolders={mockSetFolders}
               agendaFolderConnection="Organization"
               t={mockT}

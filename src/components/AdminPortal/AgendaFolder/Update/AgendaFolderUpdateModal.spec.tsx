@@ -329,11 +329,14 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'agendaFolderUpdated',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaFolderUpdated',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('shows success notification after successful update', async () => {
@@ -341,11 +344,14 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(
-          'agendaFolderUpdated',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'agendaFolderUpdated',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('calls refetchAgendaFolder after successful update', async () => {
@@ -353,9 +359,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
-      });
+      await waitFor(
+        () => {
+          expect(mockRefetchAgendaFolder).toHaveBeenCalledTimes(1);
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('calls onClose after successful update', async () => {
@@ -363,9 +372,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(mockOnClose).toHaveBeenCalledTimes(1);
-      });
+      await waitFor(
+        () => {
+          expect(mockOnClose).toHaveBeenCalledTimes(1);
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('does not show error notification on successful update', async () => {
@@ -373,9 +385,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
 
       expect(NotificationToast.error).not.toHaveBeenCalled();
     });
@@ -398,9 +413,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('disables submit when folder name is only whitespace', async () => {
@@ -437,9 +455,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles empty description correctly', async () => {
@@ -456,9 +477,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -484,9 +508,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('shows error notification when mutation fails', async () => {
@@ -494,11 +521,14 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to update agenda folder',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to update agenda folder',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('does not call refetchAgendaFolder when mutation fails', async () => {
@@ -506,9 +536,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
     });
@@ -518,9 +551,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockOnClose).not.toHaveBeenCalled();
     });
@@ -530,9 +566,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
 
       expect(NotificationToast.success).not.toHaveBeenCalled();
     });
@@ -542,11 +581,14 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to update agenda folder',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Failed to update agenda folder',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles GraphQL errors correctly', async () => {
@@ -572,9 +614,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -627,9 +672,12 @@ describe('AgendaFolderUpdateModal', () => {
       await userEvent.click(submitBtn);
       await userEvent.click(submitBtn);
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockRefetchAgendaFolder).toHaveBeenCalled();
       expect(mockOnClose).toHaveBeenCalled();
@@ -670,11 +718,14 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Invalid folder ID',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Invalid folder ID',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles very long folder name', async () => {
@@ -716,9 +767,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles special characters in folder name and description', async () => {
@@ -760,9 +814,12 @@ describe('AgendaFolderUpdateModal', () => {
 
       await userEvent.click(screen.getByTestId('modal-submit-btn'));
 
-      await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      });
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalled();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 

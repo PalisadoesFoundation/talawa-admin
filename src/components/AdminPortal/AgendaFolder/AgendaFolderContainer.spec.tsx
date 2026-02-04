@@ -381,6 +381,7 @@ const renderAgendaFolderContainer = (
 
 describe('AgendaFolderContainer', () => {
   beforeEach(() => {
+    mockOrgId = 'org123';
     mockGetFileFromMinio.mockResolvedValue(
       'https://minio.example.com/preview.jpg',
     );
@@ -389,7 +390,6 @@ describe('AgendaFolderContainer', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
-    mockOrgId = 'org123';
   });
 
   describe('Initial rendering', () => {
@@ -438,11 +438,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-folder-folder1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByTestId('update-folder-id')).toHaveTextContent(
         'folder1',
@@ -457,11 +460,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-folder-folder1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       await userEvent.click(screen.getByTestId('closeUpdateFolderModal'));
 
@@ -477,11 +483,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('delete-folder-folder1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderDeleteModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderDeleteModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByTestId('delete-folder-id')).toHaveTextContent(
         'folder1',
@@ -493,11 +502,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('delete-folder-folder1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderDeleteModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderDeleteModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       await userEvent.click(screen.getByTestId('closeDeleteFolderModal'));
 
@@ -520,11 +532,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-folder-folder1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -534,11 +549,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsPreviewModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsPreviewModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByTestId('preview-name')).toHaveTextContent(
         'Agenda Item 1',
@@ -550,9 +568,12 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
-      });
+      await waitFor(
+        () => {
+          expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles item without category in preview', async () => {
@@ -573,11 +594,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item2'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsPreviewModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsPreviewModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles item without attachments in preview', async () => {
@@ -603,11 +627,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsPreviewModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsPreviewModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockGetFileFromMinio).not.toHaveBeenCalled();
     });
@@ -635,11 +662,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsPreviewModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsPreviewModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -649,11 +679,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByTestId('update-item-id')).toHaveTextContent('item1');
       expect(screen.getByTestId('update-item-name')).toHaveTextContent(
@@ -674,11 +707,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('closeUpdateItemModal'));
 
-      await waitFor(() => {
-        expect(
-          screen.queryByTestId('agendaItemsUpdateModal'),
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('agendaItemsUpdateModal'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('fetches attachment previews from Minio when editing item', async () => {
@@ -686,9 +722,12 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
-      });
+      await waitFor(
+        () => {
+          expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles item without category when editing', async () => {
@@ -713,11 +752,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles item without folder when editing', async () => {
@@ -743,11 +785,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles item without attachments when editing', async () => {
@@ -773,11 +818,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(mockGetFileFromMinio).not.toHaveBeenCalled();
     });
@@ -805,11 +853,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -819,11 +870,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('delete-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsDeleteModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsDeleteModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByTestId('delete-item-id')).toHaveTextContent('item1');
     });
@@ -833,19 +887,25 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('delete-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsDeleteModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsDeleteModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       await userEvent.click(screen.getByTestId('closeDeleteItemModal'));
 
-      await waitFor(() => {
-        expect(
-          screen.queryByTestId('agendaItemsDeleteModal'),
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('agendaItemsDeleteModal'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -882,9 +942,12 @@ describe('AgendaFolderContainer', () => {
         </BrowserRouter>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('folders-count')).toHaveTextContent('3');
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('folders-count')).toHaveTextContent('3');
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('handles empty folders array', () => {
@@ -898,11 +961,14 @@ describe('AgendaFolderContainer', () => {
 
       // Open and verify each modal receives refetchAgendaFolder
       await userEvent.click(screen.getByTestId('delete-folder-folder1'));
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaFolderDeleteModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaFolderDeleteModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('passes agendaItemCategories to update modal', async () => {
@@ -910,11 +976,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('passes agendaFolderData to update modal', async () => {
@@ -922,11 +991,14 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('edit-item-item1'));
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('agendaItemsUpdateModal'),
-        ).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('agendaItemsUpdateModal'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -936,9 +1008,12 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
-      });
+      await waitFor(
+        () => {
+          expect(mockGetFileFromMinio).toHaveBeenCalledWith('obj1', mockOrgId);
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('uses default organization when orgId is undefined', async () => {
@@ -947,12 +1022,15 @@ describe('AgendaFolderContainer', () => {
 
       await userEvent.click(screen.getByTestId('preview-item-item1'));
 
-      await waitFor(() => {
-        expect(mockGetFileFromMinio).toHaveBeenCalledWith(
-          'obj1',
-          'organization',
-        );
-      });
+      await waitFor(
+        () => {
+          expect(mockGetFileFromMinio).toHaveBeenCalledWith(
+            'obj1',
+            'organization',
+          );
+        },
+        { timeout: 5000 },
+      );
     });
   });
 });

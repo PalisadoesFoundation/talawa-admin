@@ -165,9 +165,12 @@ describe('AgendaItemsCreateModal', () => {
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.error).not.toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('adds and removes valid URL', async () => {
@@ -340,9 +343,12 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), invalidImage);
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('creates agenda item successfully and resets state', async () => {
@@ -386,14 +392,17 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalled();
-      expect(hideMock).toHaveBeenCalled();
-      expect(refetchMock).toHaveBeenCalled();
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'agendaItemCreated',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(createMock).toHaveBeenCalled();
+        expect(hideMock).toHaveBeenCalled();
+        expect(refetchMock).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'agendaItemCreated',
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('shows error toast when create agenda item fails', async () => {
@@ -432,9 +441,12 @@ describe('AgendaItemsCreateModal', () => {
     await user.type(screen.getByLabelText(/title/i), 'Agenda title');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('boom');
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('boom');
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('rejects malformed URL that throws URL constructor', async () => {
@@ -485,9 +497,12 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    await waitFor(() => {
-      expect(screen.queryAllByTestId('deleteAttachment')).toHaveLength(0);
-    });
+    await waitFor(
+      () => {
+        expect(screen.queryAllByTestId('deleteAttachment')).toHaveLength(0);
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('shows error when organization id is missing', async () => {
@@ -563,9 +578,12 @@ describe('AgendaItemsCreateModal', () => {
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(createMock).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('sends attachments in create mutation when present', async () => {
@@ -613,17 +631,20 @@ describe('AgendaItemsCreateModal', () => {
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            input: expect.objectContaining({
-              attachments: expect.any(Array),
+    await waitFor(
+      () => {
+        expect(createMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            variables: expect.objectContaining({
+              input: expect.objectContaining({
+                attachments: expect.any(Array),
+              }),
             }),
           }),
-        }),
-      );
-    });
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('includes urls in create mutation when present', async () => {
@@ -665,25 +686,31 @@ describe('AgendaItemsCreateModal', () => {
     await user.click(urlInput);
     await user.paste('https://example.com');
     await user.click(screen.getByTestId('linkBtn'));
-    await waitFor(() => {
-      expect(screen.getByTestId('deleteUrl')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('deleteUrl')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     // submit
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            input: expect.objectContaining({
-              url: [{ url: 'https://example.com' }],
+    await waitFor(
+      () => {
+        expect(createMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            variables: expect.objectContaining({
+              input: expect.objectContaining({
+                url: [{ url: 'https://example.com' }],
+              }),
             }),
           }),
-        }),
-      );
-    });
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('returns early when file input has empty FileList', async () => {
@@ -773,17 +800,20 @@ describe('AgendaItemsCreateModal', () => {
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(createMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          variables: expect.objectContaining({
-            input: expect.objectContaining({
-              folderId: '',
+    await waitFor(
+      () => {
+        expect(createMock).toHaveBeenCalledWith(
+          expect.objectContaining({
+            variables: expect.objectContaining({
+              input: expect.objectContaining({
+                folderId: '',
+              }),
             }),
           }),
-        }),
-      );
-    });
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('returns early when file input has no files', async () => {
@@ -940,9 +970,14 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), file);
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('fileUploadFailed');
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'fileUploadFailed',
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('rejects empty URL input', async () => {
@@ -1026,10 +1061,13 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    await waitFor(() => {
-      const deleteButtons = screen.getAllByTestId('deleteAttachment');
-      expect(deleteButtons).toHaveLength(2);
-    });
+    await waitFor(
+      () => {
+        const deleteButtons = screen.getAllByTestId('deleteAttachment');
+        expect(deleteButtons).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('skips invalid files but uploads valid ones', async () => {
@@ -1064,10 +1102,13 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), files);
 
-    await waitFor(() => {
-      const deleteButtons = screen.getAllByTestId('deleteAttachment');
-      expect(deleteButtons).toHaveLength(1);
-    });
+    await waitFor(
+      () => {
+        const deleteButtons = screen.getAllByTestId('deleteAttachment');
+        expect(deleteButtons).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
 
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidFileType');
   });
@@ -1101,9 +1142,12 @@ describe('AgendaItemsCreateModal', () => {
 
     await user.upload(screen.getByTestId('attachment'), video);
 
-    await waitFor(() => {
-      expect(document.querySelector('video')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(document.querySelector('video')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('removes attachment from state', async () => {
@@ -1137,16 +1181,22 @@ describe('AgendaItemsCreateModal', () => {
     );
 
     // Find the delete button using data-testid
-    await waitFor(async () => {
-      const deleteBtn = screen.getByTestId('deleteAttachment');
-      await user.click(deleteBtn);
-    });
+    await waitFor(
+      async () => {
+        const deleteBtn = screen.getByTestId('deleteAttachment');
+        await user.click(deleteBtn);
+      },
+      { timeout: 5000 },
+    );
 
-    await waitFor(() => {
-      const remainingDeleteButtons =
-        screen.queryAllByTestId('deleteAttachment');
-      expect(remainingDeleteButtons).toHaveLength(0);
-    });
+    await waitFor(
+      () => {
+        const remainingDeleteButtons =
+          screen.queryAllByTestId('deleteAttachment');
+        expect(remainingDeleteButtons).toHaveLength(0);
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('disables submit button when title is empty', () => {

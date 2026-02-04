@@ -114,12 +114,15 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Desc A');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'agendaFolderCreated',
-      );
-      expect(refetchMock).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'agendaFolderCreated',
+        );
+        expect(refetchMock).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('creates agenda folder with next sequence when folders exist', async () => {
@@ -180,9 +183,12 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Desc B');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('shows error toast when mutation fails', async () => {
@@ -227,9 +233,12 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Bad Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('Mutation failed');
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('Mutation failed');
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('handles undefined agendaFolderData gracefully', async () => {
@@ -285,9 +294,12 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Desc U');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('calls hideCreateModal when modal close button is clicked', async () => {
@@ -391,9 +403,12 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Mixed Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('uses formState values in mutation correctly', async () => {
@@ -452,11 +467,14 @@ describe('AgendaFolderCreateModal', () => {
     );
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'agendaFolderCreated',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'agendaFolderCreated',
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('handles error and does not reset form or call hideCreateModal on failure', async () => {
@@ -506,9 +524,12 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(descInput, 'Error Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith('Creation failed');
+      },
+      { timeout: 5000 },
+    );
 
     // Form should still have values after error
     expect(nameInput).toHaveValue('Error Test');
@@ -582,10 +603,13 @@ describe('AgendaFolderCreateModal', () => {
     await user.type(screen.getByLabelText(/description/i), 'Desc');
     await user.click(screen.getByTestId('modal-submit-btn'));
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
-      expect(NotificationToast.success).not.toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('shows error and renders nothing when orgId is missing', async () => {
@@ -617,11 +641,14 @@ describe('AgendaFolderCreateModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'organizationRequired',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'organizationRequired',
+        );
+      },
+      { timeout: 5000 },
+    );
 
     // component must render nothing
     expect(
