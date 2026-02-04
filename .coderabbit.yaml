@@ -27,6 +27,7 @@ reviews:
   collapse_walkthrough: false
   auto_apply_labels: false
   suggested_labels: false
+  assess_linked_issues: true
   auto_review:
     enabled: true
     drafts: false
@@ -38,215 +39,78 @@ reviews:
     - '!*.html'
     - '!*.md'
     - '!*.svg'
+
+  # Keep instructions concise and scoped by file patterns to stay far under limits
   path_instructions:
-    - path: '**/*.{ts,tsx,spec.ts,spec.tsx,test.ts,test.tsx}'
+    # 1) Tests — Vitest + RTL + sharded stability
+    - path: '**/*.{spec,test}.{ts,tsx}'
       instructions: |
-        ## Review Scope
+        Post a single, structured comment with these sections: Issue Goals, Tests (incl. Flakiness), Components/Policy, GraphQL, i18n & a11y, Security, Action Items.
+        Reference exact file:line for each finding.
 
-        Reevaluate all resolved/dismissed items. Validate issue goals are met. Ensure tests are shard-safe and non-flaky. Report findings in a single comprehensive comment.
+        Issue goals (Priority `#1`):
+        - Parse the first PR comment for "Fixes/Closes/Resolves #<id>". Confirm every acceptance criterion is tested; list gaps with file:line.
 
-        ## 1. Issue Goal Validation (Priority `#1`)
+        Test quality (Vitest + RTL):
+        - Use vi.mock; prefer accessible queries (getByRole/LabelText); use user-event.
+        - Cover success, error (network/GraphQL/validation), edge/empty states, loading, and user interactions.
+        - List uncovered line numbers in changed source files.
 
-        - Parse linked issue from PR description (Fixes/Resolves/Closes #)
-        - Verify ALL acceptance criteria are addressed by PR changes
-        - Flag out-of-scope changes not related to issue requirements
-        - List any unimplemented requirements with specific line references
-        - Confirm no feature-creep beyond stated goals
+        Flaky test guard (12 shards):
+        - Each file: afterEach(() => cleanup()); and vi.clearAllMocks() or vi.restoreAllMocks().
+        - No hardcoded setTimeout/fixed delays; use waitFor for async assertions.
+        - No shared module/global state without cleanup (localStorage/sessionStorage/window); tests independent, no order dependence.
+        - Respect 30s timeout; avoid race conditions across shards.
 
-        ## 2. Test Coverage & Quality
+        Structure:
+        - No it.skip/describe.skip unless commented with reason + linked issue.
+        - Wrap state updates in act() when needed.
 
-        ### 2.1 Test File Existence
-        - Every modified source file with logic/UI must have colocated test: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, `*.test.ts`
-        - Tests updated to reflect source changes
-        - List specific uncovered line numbers in source files
+    # 2) React components/screens/pages — enforce architecture & policy
+    - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
+      instructions: |
+        Post a single, structured comment; reference file:line for each item.
 
-        ### 2.2 Test Quality (Vitest + React Testing Library)
-        - Use `vi.mock()` for mocking (never `jest.mock()`)
-        - Structure: `describe()`, `it()`, `test()`
-        - Queries: `getByRole`, `getByText`, `getByLabelText` (prefer accessible queries)
-        - Interactions: `@testing-library/user-event` for clicks, typing, etc.
-        - Coverage paths: success, errors (network/GraphQL/validation), edge cases (empty/null/undefined), loading states, user interactions
-        - Mocks: Use `MockedProvider` or `StaticMockLink` for GraphQL; realistic mock data; proper typing
+        Issue goals:
+        - Map changes to the linked issue’s acceptance criteria; flag unaddressed or out‑of‑scope work.
 
-        ### 2.3 Flaky Test Detection (Critical for 12-shard parallel execution)
+        Reusable component policy (see: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/):
+        - Placement: Admin-only → src/components/AdminPortal/** (+ src/types/AdminPortal/**);
+          User-only → src/components/UserPortal/** (+ src/types/UserPortal/**);
+          Shared → src/shared-components/** (+ src/types/shared-components/**).
+        - Naming: PascalCase folder/file/component; names must match.
+        - Props: NO inline prop interfaces; define in src/types/<Portal or shared-components>/<Component>/interface.ts (e.g., Interface<Component>Props).
+        - Restricted imports: use shared wrappers (DataGridWrapper, LoadingState, BaseModal, Date/Time pickers, etc.); direct imports allowed only inside wrappers.
+        - Brief TSDoc on exported components and interfaces.
 
-        **Mock Cleanup Patterns:**
-        - Every test file MUST have `afterEach` with `cleanup()` and `vi.clearAllMocks()` or `vi.restoreAllMocks()`
-        - Reference pattern: AdvertisementRegister.spec.tsx shows proper cleanup structure
-        - Flag tests missing cleanup—causes intermittent failures in sharded runs
+        TypeScript & React:
+        - No any without JSDoc justification; strong types for props/params/returns/state/GQL types.
+        - Hooks: proper cleanup in useEffect; avoid prop drilling (use Context/Redux).
+        - MUI v7: import from `@mui/material`; styling via `@emotion/react`.
 
-        **Timing & Async Issues:**
-        - NEVER use hardcoded `setTimeout` delays in tests
-        - ALWAYS use `waitFor` for async assertions: `await waitFor(() => expect(...))`
-        - Avoid assumptions about synchronous mock responses—network timing varies across shards
-        - Flag any fixed-delay patterns (e.g., `await new Promise(resolve => setTimeout(resolve, 1000))`)
+        i18n & a11y:
+        - No hardcoded UI strings; use useTranslation with keys; add new keys to all 5 locales (en, es, fr, hi, zh).
+        - Ensure roles/ARIA (aria-label/aria-describedby/aria-live), keyboard navigation, and semantic markup.
 
-        **Shared State & Isolation:**
-        - No module-level variables that persist between tests
-        - No global state modifications without cleanup (localStorage, sessionStorage, window properties)
-        - Each test independent—no execution order dependencies
-        - `beforeEach` must reset ALL test-specific state
-        - Flag any test relying on previous test results
+    # 3) GraphQL operations
+    - path: 'src/GraphQl/**/*.ts'
+      instructions: |
+        Post a single, structured comment; reference file:line.
 
-        **Shard Safety:**
-        - Tests respect 30s timeout (`testTimeout: 30000ms`)
-        - No race conditions from concurrent shard execution
-        - No assumptions about test execution order or file load sequence
+        Organization & typing:
+        - Queries in src/GraphQl/Queries/; mutations in src/GraphQl/Mutations/.
+        - Use gql (graphql-tag) with typed variables/results; add brief JSDoc.
 
-        ### 2.4 Test Structure
-        - Tests isolated, order-independent
-        - No skipped tests (`it.skip`, `describe.skip`) unless documented with reason + linked issue
-        - Proper `act()` wrapping for state updates
+        Correctness & duplication:
+        - No duplicate or conflicting operations; watch pagination params (first/last).
+        - Components using these operations must handle loading and error states in UI.
 
-        ## 3. Code Quality Standards
-
-        ### 3.1 TypeScript
-        - No `any` type without explicit JSDoc justification
-        - Proper interfaces for: component props, function params/returns, GraphQL types, state/context
-        - No `@ts-ignore` without explanation
-
-        ### 3.2 Reusable Component Policy (https://docs-admin.talawa.io/docs/developer-resources/reusable-components)
-
-        **Folder Placement:**
-        - Admin-only: `src/components/AdminPortal/**` + types in `src/types/AdminPortal/**`
-        - User-only: `src/components/UserPortal/**` + types in `src/types/UserPortal/**`
-        - Shared (both portals): `src/shared-components/**` + types in `src/types/shared-components/**`
-        - Don't place Admin components in UserPortal (or vice versa)
-        - Don't duplicate—promote to `shared-components/` if used by both
-
-        **Naming & Structure:**
-        - PascalCase for folders, files, component names—must all match
-        - NO inline prop interfaces—all props in `src/types/<Portal>/ComponentName/interface.ts`
-        - Interface naming: `Interface<ComponentName>Props`
-        - Test files colocated: `ComponentName.spec.tsx`
-        - Target 100% test coverage
-
-        **Restricted Imports (ESLint-enforced):**
-        - ❌ `@mui/x-data-grid` → ✅ Use `DataGridWrapper` from `shared-components/`
-        - ❌ `react-bootstrap` `Spinner` → ✅ Use `LoadingState` from `shared-components/`
-        - ❌ `react-bootstrap` `Modal` → ✅ Use `BaseModal` from `shared-components/`
-        - ❌ `@mui/x-date-pickers` → ✅ Use `DateRangePicker`/`DatePicker`/`TimePicker` wrappers
-        - Direct imports ONLY allowed in wrapper implementations
-
-        **TSDoc:**
-        - All exported components/interfaces need brief JSDoc headers
-
-        ### 3.3 GraphQL Implementation
-        - Queries in `src/GraphQl/Queries/`, mutations in `src/GraphQl/Mutations/`
-        - Use `gql` template tag from `graphql-tag`, proper typing
-        - No duplicate queries—check pagination patterns (`first`/`last` inconsistencies)
-        - Error handling: all operations must handle `error` state in UI
-        - Apollo hooks: `useQuery`, `useMutation`, `useSubscription` with proper typing
-
-        ### 3.4 React & Material-UI v7
-        - Functional components with proper hooks (useState, useEffect, useMemo, useCallback)
-        - MUI imports from `@mui/material`, styling with `@emotion/react`
-        - No prop drilling—use Context/Redux for deep state
-        - `useEffect` cleanup: return cleanup function for subscriptions/timers/listeners
-
-        ### 3.5 Internationalization (i18n)
-        - ZERO hardcoded user-facing strings in UI
-        - All text uses `useTranslation()` hook with translation keys
-        - New keys added to ALL 5 locale files: `public/locales/{en,es,fr,hi,zh}/translation.json`
-        - Keys follow nested structure matching component hierarchy
-
-        ### 3.6 Accessibility (a11y)
-        - ARIA attributes: `aria-label`, `aria-describedby`, `aria-live` where needed
-        - Semantic HTML with proper `role` attributes
-        - Keyboard navigation support (focusable elements, correct tab order)
-        - Screen reader compatibility
-
-        ### 3.7 Package Manager
-        - Use `pnpm` commands in documentation (not npm/yarn)
-        - No unnecessary `package-lock.json`/`yarn.lock` changes (use `pnpm-lock.yaml`)
-
-        ## 4. Code Issues to Flag (with specific line numbers)
-
-        - ❌ Missing test coverage (list line numbers)
-        - ❌ Unnecessary files: build artifacts, IDE configs, `.env` files, lockfile churn
-        - ❌ Debug code: `console.log/debug/info` in non-script files, commented blocks, undocumented TODOs
-        - ❌ Skipped tests without documented reason
-        - ❌ Inline prop interfaces (should be in `interface.ts`)
-        - ❌ Restricted library imports (should use wrappers)
-        - ❌ Components in wrong portal directory
-        - ❌ Missing TSDoc on exported components
-        - ❌ Flaky test patterns (missing cleanup, hardcoded delays, shared state)
-
-        ## 5. PR Validation
-
-        ### 5.1 Issue Alignment
-        - All acceptance criteria addressed
-        - No out-of-scope changes
-        - Bugs in tested files fixed in this PR; unrelated bugs deferred to separate issues
-
-        ### 5.2 Review Compliance
-        - Previous feedback addressed/acknowledged
-        - Changes implemented correctly
-        - No unresolved conversations without explanation
-
-        ### 5.3 Metadata
-        - Title follows convention: `feat:`, `fix:`, `refactor:`, etc.
-        - Linked to issue(s) with GitHub keywords (Fixes `#1234`)
-        - Target branch correct (typically `develop`)
-        - No exposed sensitive data
-
-        ## 6. CI/CD Compatibility
-
-        Note: CI already validates linting, formatting, type-checking, knip, docs generation, TOC updates, sensitive files, POM checks. Focus review on semantic correctness CI cannot catch.
-
-        - Changes compatible with 12-shard Vitest execution
-        - No performance regressions in test execution time
-        - Won't break coverage reporting or MinIO compliance
-
-        ## 7. Security
-
-        - No exposed credentials (API keys, tokens, passwords, connection strings)
-        - Proper input validation and sanitization
-        - No XSS vulnerabilities in user-generated content
-        - Secure handling of PII and auth tokens
-
-        ## 8. Implementation Correctness
-
-        - Logic is correct and bug-free
-        - GraphQL queries target correct schema fields
-        - Data transformations accurate
-        - Error handling covers all failure scenarios
-        - State management (Redux/Context) properly implemented
-        - No race conditions or memory leaks
-
-        ## 9. Approval Decision
-
-        **DO NOT approve if any of:**
-        - Issue goals not fully met
-        - Flaky test patterns detected
-        - Missing test coverage for new/modified code
-        - Security vulnerabilities
-        - Missing i18n translations
-        - Accessibility violations
-        - Reusable component policy violations
-        - Unaddressed feedback
-
-        **Append `[approve]` tag ONLY when ALL met:**
-        1. Issue goals 100% complete
-        2. Tests comprehensive, non-flaky, shard-safe
-        3. Zero code quality issues
-        4. No security concerns
-        5. Complete i18n support
-        6. Accessibility requirements met
-        7. Reusable component policy followed
-        8. All bugs fixed (in tested files)
-        9. Full compliance with feedback
-        10. Zero changes needed (even minor)
-
-        **Be strict:** If you suggest any improvement, do not approve.
-
-        ## 10. Review Style
-
-        - Prioritize substantive issues over style
-        - Focus on CI-breaking issues and production bugs
-        - Be specific: exact line numbers, not just file names
-        - Be constructive: suggest concrete solutions with correct paths/patterns
-        - Post findings in single, well-organized comment
+    # 4) Docs (keep short; ensure consistency)
+    - path: '**/*.md'
+      instructions: |
+        Post a single, structured comment; reference file:line.
+        - Update examples to use pnpm.
+        - Maintain clear headings and link to related docs; ensure ToC anchors are correct where applicable.
 
   pre_merge_checks:
     # Enforce test file updates for modified source files
