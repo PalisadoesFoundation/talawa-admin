@@ -1920,7 +1920,8 @@
       "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
       "resetButton": "फिर से प्रयास करें",
       "resetButtonAriaLabel": "फिर से प्रयास करें"
-    }
+    },
+    "messageActions": "संदेश क्रियाएं"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

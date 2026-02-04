@@ -1925,7 +1925,8 @@
       "message": "聊天室中发生了意外错误",
       "resetButton": "重试",
       "resetButtonAriaLabel": "重试"
-    }
+    },
+    "messageActions": "消息操作"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
