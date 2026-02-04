@@ -14,7 +14,7 @@
  * @returns The VerifyEmail component
  */
 import { useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
@@ -56,33 +56,53 @@ const VerifyEmail = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  const [verificationState, setVerificationState] =
-    useState<VerificationState>('loading');
+  const [verificationState, setVerificationState] = useState<VerificationState>(
+    () => {
+      return token ? 'loading' : 'error';
+    },
+  );
+
+  const verificationInitiatedRef = useRef(false);
+  const isMountedRef = useRef(true);
+  const [isResending, setIsResending] = useState(false);
 
   const [verifyEmail, { loading: verifyLoading }] = useMutation(
     VERIFY_EMAIL_MUTATION,
+    {
+      // Prevent caching issues
+      fetchPolicy: 'no-cache',
+    },
   );
   const [resendVerification, { loading: resendLoading }] = useMutation(
     RESEND_VERIFICATION_EMAIL_MUTATION,
+    {
+      fetchPolicy: 'no-cache',
+    },
   );
 
   // Verify email on component mount
   useEffect(() => {
-    let isActive = true;
-    const verifyEmailToken = async (): Promise<void> => {
-      if (!token) {
-        if (isActive) {
-          setVerificationState('error');
-        }
-        return;
-      }
+    isMountedRef.current = true;
 
+    // Prevent duplicate verification requests
+    if (verificationInitiatedRef.current) {
+      return;
+    }
+
+    if (!token) {
+      setVerificationState('error');
+      return;
+    }
+
+    verificationInitiatedRef.current = true;
+
+    const verifyEmailToken = async (): Promise<void> => {
       try {
         const { data } = await verifyEmail({
           variables: { token },
         });
 
-        if (!isActive) {
+        if (!isMountedRef.current) {
           return;
         }
 
@@ -93,9 +113,12 @@ const VerifyEmail = (): JSX.Element => {
           removeItem('unverifiedEmail');
         } else {
           setVerificationState('error');
+          NotificationToast.error(
+            data?.verifyEmail?.message || t('verificationFailed'),
+          );
         }
       } catch (error: unknown) {
-        if (!isActive) {
+        if (!isMountedRef.current) {
           return;
         }
         setVerificationState('error');
@@ -105,10 +128,11 @@ const VerifyEmail = (): JSX.Element => {
         };
         if (
           err.message?.toLowerCase().includes('authenticated') ||
-          err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED' ||
-          err.message?.toLowerCase().includes('invalid arguments')
+          err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED'
         ) {
           NotificationToast.error(t('loginRequired'));
+        } else if (err.message?.toLowerCase().includes('invalid arguments')) {
+          NotificationToast.error(t('invalidToken'));
         } else {
           errorHandler(t, error);
         }
@@ -117,7 +141,7 @@ const VerifyEmail = (): JSX.Element => {
 
     void verifyEmailToken();
     return () => {
-      isActive = false;
+      isMountedRef.current = false;
     };
   }, [token, verifyEmail, t, removeItem]);
 
@@ -125,8 +149,15 @@ const VerifyEmail = (): JSX.Element => {
    * Handles resending verification email
    */
   const handleResendEmail = async (): Promise<void> => {
+    // Debounce
+    if (isResending) return;
+
+    setIsResending(true);
     try {
       const { data } = await resendVerification();
+      if (!isMountedRef.current) {
+        return;
+      }
 
       if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(t('resendSuccess'));
@@ -136,12 +167,22 @@ const VerifyEmail = (): JSX.Element => {
         );
       }
     } catch (error: unknown) {
+      if (!isMountedRef.current) {
+        return;
+      }
       errorHandler(t, error);
+    } finally {
+      if (isMountedRef.current) {
+        setIsResending(false);
+      }
     }
   };
 
   return (
-    <LoadingState isLoading={verifyLoading || resendLoading} variant="spinner">
+    <LoadingState
+      isLoading={verifyLoading || resendLoading || isResending}
+      variant="spinner"
+    >
       <div className={styles.pageWrapper}>
         <div className="row container-fluid d-flex justify-content-center items-center">
           <div className="col-12 col-lg-4 px-0">
@@ -150,13 +191,13 @@ const VerifyEmail = (): JSX.Element => {
 
               {verificationState === 'loading' && (
                 <div className={styles.stateContainer}>
-                  <output
+                  <div
                     className="spinner-border text-primary"
                     role="status"
                     data-testid="loading-spinner"
                   >
                     <span className="visually-hidden">{t('verifying')}</span>
-                  </output>
+                  </div>
                   <h3 className="text-center fw-bold mt-4">{t('verifying')}</h3>
                 </div>
               )}
@@ -196,17 +237,19 @@ const VerifyEmail = (): JSX.Element => {
                   />
                   <h3 className="text-center fw-bold mt-3">{t('error')}</h3>
                   <p className="text-center text-muted mt-2">
-                    {t('invalidToken')}
+                    {token ? t('invalidToken') : t('noToken')}
                   </p>
 
                   <Button
                     variant="outline-primary"
                     className="mt-4 w-100"
                     onClick={handleResendEmail}
-                    disabled={resendLoading}
+                    disabled={verifyLoading || resendLoading || isResending}
                     data-testid="resendVerificationBtn"
                   >
-                    {resendLoading ? tCommon('loading') : t('resendButton')}
+                    {verifyLoading || resendLoading || isResending
+                      ? tCommon('loading')
+                      : t('resendButton')}
                   </Button>
 
                   <div className="d-flex justify-content-center mt-4">
