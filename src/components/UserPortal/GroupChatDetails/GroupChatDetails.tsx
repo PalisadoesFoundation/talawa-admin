@@ -47,7 +47,6 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -80,6 +79,7 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import DropDownButton from 'shared-components/DropDownButton';
 
 export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
@@ -467,6 +467,8 @@ export default function GroupChatDetails({
                         btnStyle={styles.dropdownToggle}
                         parentContainerStyle="ms-auto"
                         drop="start"
+                        // i18n-ignore-next-line
+                        dataTestIdPrefix={`member-actions-${user.id}`}
                       />
                     )}
                   </div>

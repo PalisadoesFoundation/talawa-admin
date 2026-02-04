@@ -5,3 +5,55 @@
 .displayName {
   white-space: nowrap;
 }
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+}
+
+.imageContainer {
+  flex-shrink: 0;
+}
+
+.avatarStyle {
+  width: var(--space-11);
+  height: var(--space-11);
+  border-radius: var(--border-radius-full);
+  object-fit: cover;
+}
+
+.profileTextUserSidebarOrg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  flex: 1;
+}
+
+.primaryText {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-900);
+}
+
+.secondaryText {
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-600);
+}
+
+.chevronRightbtn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+}
+
+.chevronIcon {
+  color: var(--color-gray-600);
+  font-size: var(--font-size-lg);
+}

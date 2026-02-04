@@ -557,19 +557,17 @@ describe('GroupChatDetails', () => {
       expect(aliceElements.length).toBeGreaterThan(0);
     });
 
-    const toggles = await screen.findAllByRole('button');
-    const dropdownToggle = toggles.find(
-      (btn) => btn.id && btn.id.startsWith('dropdown-'),
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
     );
     if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));
 
-    const promoteText = await screen.findByText(
-      /Promote to Admin|Demote to Regular/,
+    const promoteItem = await screen.findByTestId(
+      'member-actions-user2-item-toggleRole',
     );
-    await act(async () => await userEvent.click(promoteText));
+    await act(async () => await userEvent.click(promoteItem));
 
-    // wait for role change toast
     await waitFor(() =>
       expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'),
     );
@@ -627,10 +625,12 @@ describe('GroupChatDetails', () => {
       expect(aliceElements.length).toBeGreaterThan(0);
     });
 
-    const toggles = screen.getAllByRole('button');
-    const dropdownToggle = toggles.find(
-      (btn) => btn.id && btn.id.startsWith('dropdown-'),
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
     );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
 
     if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));
@@ -689,10 +689,12 @@ describe('GroupChatDetails', () => {
       const aliceElements = screen.getAllByText('Alice');
       expect(aliceElements.length).toBeGreaterThan(0);
     });
-    const toggles = screen.getAllByRole('button');
-    const dropdownToggle = toggles.find(
-      (btn) => btn.id && btn.id.startsWith('dropdown-'),
+    const dropdownToggle = await screen.findByTestId(
+      'member-actions-user2-toggle',
     );
+    await act(async () => {
+      userEvent.click(dropdownToggle);
+    });
 
     if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));

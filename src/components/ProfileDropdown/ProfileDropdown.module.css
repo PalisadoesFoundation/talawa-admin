@@ -1,3 +1,44 @@
 .logoutBtn {
   color: var(--color-red-500);
 }
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.imageContainer {
+  flex-shrink: 0;
+}
+
+.avatarStyle {
+  width: var(--size-45);
+  height: var(--size-45);
+  border-radius: var(--border-radius-full);
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+.primaryText {
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-900);
+}
+
+.secondaryText {
+  font-weight: var(--font-weight-normal);
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+}
+
+.dropdownToggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}

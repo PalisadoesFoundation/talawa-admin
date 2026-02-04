@@ -173,10 +173,12 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
-    await userEvent.click(screen.getByTestId('logoutBtn'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profile-item-logout'));
+    });
 
     expect(global.window.location.pathname).toBe('/');
   });
@@ -195,11 +197,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -224,11 +226,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/admin/profile');
@@ -247,11 +249,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-viewProfile'));
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
@@ -280,11 +282,11 @@ describe('ProfileDropdown Component', () => {
     );
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
+      await userEvent.click(screen.getByTestId('profile-toggle'));
     });
 
     await act(async () => {
-      await userEvent.click(screen.getByTestId('logoutBtn'));
+      await userEvent.click(screen.getByTestId('profile-item-logout'));
     });
 
     expect(consoleSpy).toHaveBeenCalledWith(
