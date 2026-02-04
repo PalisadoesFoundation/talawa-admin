@@ -50,6 +50,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
         if (req.body?.operationName === 'SignIn') {
           req.alias = 'signInRequest';
         }
+        req.continue();
       });
 
       const loginPath = role === 'user' ? '/' : '/admin';
@@ -78,9 +79,9 @@ Cypress.Commands.add('loginByApi', (role: string) => {
           throw new Error(`Login failed: ${errMsg}`);
         }
         if (!body?.data?.signIn) {
-          throw new Error(
-            `Login failed: No signIn data in response. Response: ${JSON.stringify(body)}`,
-          );
+          const message = `Login response missing signIn data. Response: ${JSON.stringify(body)}`;
+          cy.log(message);
+          throw new Error(message);
         }
       });
 

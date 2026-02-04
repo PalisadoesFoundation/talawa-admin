@@ -4,7 +4,7 @@
 
 # Interface: ILeftDrawerProps
 
-Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L30)
+Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L31)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:30](https://gi
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L31)
+Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L32)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:31](https://gi
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L32)
+Defined in: [src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/LeftDrawer/LeftDrawer.tsx#L33)
