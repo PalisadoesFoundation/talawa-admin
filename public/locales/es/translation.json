@@ -1904,7 +1904,8 @@
       "message": "Ocurrió un error inesperado en la sala de chat",
       "resetButton": "Intentar de nuevo",
       "resetButtonAriaLabel": "Intentar de nuevo"
-    }
+    },
+    "messageActions": "Acción del mensaje"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

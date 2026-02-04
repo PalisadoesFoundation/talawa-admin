@@ -46,4 +46,4 @@ Object containing monthly recurrence display strings and values
 
 #### weekdayValue.week
 
-> **week**: `number` = `weekOfMonth`
+> **week**: `number` = `weekdayOccurrence`

@@ -6,9 +6,9 @@
 
 > **getWeekOfMonth**(`date`): `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L324)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L323)
 
-Calculates which week of the month a given date falls in
+Calculates which week of the month a given date falls in (calendar row), using UTC.
 
 ## Parameters
 
@@ -22,4 +22,4 @@ The date to calculate the week for
 
 `number`
 
-The week number (1-5) within the month
+The week number (1-6) within the month
