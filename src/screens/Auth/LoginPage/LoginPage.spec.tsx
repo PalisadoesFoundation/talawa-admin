@@ -268,13 +268,30 @@ const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
   };
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+const withMockedLocation = async (
+  pathname: string,
+  testFn: () => Promise<void>,
+): Promise<void> => {
+  const original = window.location;
+  try {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        ...original,
+        pathname,
+        origin: 'https://localhost:4321',
+        href: `https://localhost:4321${pathname}`,
+        reload: vi.fn(),
+      },
     });
-  });
-}
+    await testFn();
+  } finally {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: original,
+    });
+  }
+};
 
 const mockUseLocalStorage = {
   getItem: vi.fn(),
@@ -374,99 +391,85 @@ beforeEach(() => {
 
 describe('Testing Login Page Screen', () => {
   it('Component Should be rendered properly', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/admin',
-        origin: 'https://localhost:4321',
-        pathname: '/admin',
-      },
-    });
-    const history = createMemoryHistory({ initialEntries: ['/admin'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/admin', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/admin'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
-    expect(screen.getByText(/Admin Login/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/admin');
+      await screen.findByText(/Admin Login/i);
+      expect(window.location.pathname).toBe('/admin');
+    });
   });
 
   it('There should be default values of pre-login data when queried result is null', async () => {
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    expect(screen.getByTestId('PalisadoesLogo')).toBeInTheDocument();
-    expect(
-      screen.getAllByTestId('PalisadoesSocialMedia')[0],
-    ).toBeInTheDocument();
+      await screen.findByTestId('PalisadoesLogo');
+      expect(
+        screen.getAllByTestId('PalisadoesSocialMedia')[0],
+      ).toBeInTheDocument();
 
-    await wait();
-    expect(screen.queryByTestId('preLoginLogo')).not.toBeInTheDocument();
-    expect(screen.queryAllByTestId('preLoginSocialMedia')[0]).toBeUndefined();
+      await waitFor(() => {
+        expect(screen.queryByTestId('preLoginLogo')).not.toBeInTheDocument();
+        expect(
+          screen.queryAllByTestId('preLoginSocialMedia')[0],
+        ).toBeUndefined();
+      });
+    });
   });
 
   it('Testing registration functionality', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'John@123',
+        confirmPassword: 'John@123',
+      };
 
-    const formData = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      password: 'John@123',
-      confirmPassword: 'John@123',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Check if goToRegisterPortion exists before clicking
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      // Check if goToRegisterPortion exists before clicking
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -481,49 +484,39 @@ describe('Testing Login Page Screen', () => {
       if (registrationBtn) {
         await user.click(registrationBtn);
       }
-    }
+    });
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: '124',
+        email: 'j@l.co',
+        password: 'john@123',
+        confirmPassword: 'john@123',
+      };
 
-    const formData = {
-      name: '124',
-      email: 'j@l.co',
-      password: 'john@123',
-      confirmPassword: 'john@123',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -538,49 +531,39 @@ describe('Testing Login Page Screen', () => {
       if (registrationBtn) {
         await user.click(registrationBtn);
       }
-    }
+    });
   });
 
   it('Testing registration functionality, when password and confirm password is not same', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'johnDoe@1',
+        confirmPassword: 'doeJohn@2',
+      };
 
-    const formData = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      password: 'johnDoe@1',
-      confirmPassword: 'doeJohn@2',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -595,49 +578,39 @@ describe('Testing Login Page Screen', () => {
       if (registrationBtn) {
         await user.click(registrationBtn);
       }
-    }
+    });
   });
 
   it('Testing registration functionality, when input is not filled correctly', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: 'J D',
+        email: 'johndoe@gmail.com',
+        password: 'joe',
+        confirmPassword: 'joe',
+      };
 
-    const formData = {
-      name: 'J D',
-      email: 'johndoe@gmail.com',
-      password: 'joe',
-      confirmPassword: 'joe',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -652,49 +625,39 @@ describe('Testing Login Page Screen', () => {
       if (registrationBtn) {
         await user.click(registrationBtn);
       }
-    }
+    });
   });
 
   it('switches to login tab on successful registration', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'johndoe',
+        confirmPassword: 'johndoe',
+      };
 
-    const formData = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      password: 'johndoe',
-      confirmPassword: 'johndoe',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -708,55 +671,44 @@ describe('Testing Login Page Screen', () => {
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
         await user.click(registrationBtn);
-        await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
-        expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+        await screen.findByTestId('loginBtn');
       }
-    }
+    });
   });
 
   it('switches to login tab on successful registration correct data', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const formData = {
+        name: 'John Doe',
+        email: 'johndoe@gmail.com',
+        password: 'Johndoe@123',
+        confirmPassword: 'Johndoe@123',
+        orgId: 'abc',
+      };
 
-    const formData = {
-      name: 'John Doe',
-      email: 'johndoe@gmail.com',
-      password: 'Johndoe@123',
-      confirmPassword: 'Johndoe@123',
-      orgId: 'abc',
-    };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
-    if (registerButton) {
+      const registerButton = await screen.findByTestId(/goToRegisterPortion/i);
       await user.click(registerButton);
-      await wait();
 
-      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(
+        await screen.findByPlaceholderText(/Name/i),
+        formData.name,
+      );
       await user.type(screen.getByTestId(/signInEmail/i), formData.email);
       await user.type(
         screen.getByPlaceholderText('Password'),
@@ -770,81 +722,66 @@ describe('Testing Login Page Screen', () => {
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
         await user.click(registrationBtn);
-        await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
-        expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+        await screen.findByTestId('loginBtn');
       }
-    }
+    });
   });
 
   it('Testing toggle login register portion', async () => {
-    // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
 
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-
-    // Only test this if we're not on the admin path and the register button exists
-    if (registerButton) {
+      // Only test this if we're not on the admin path and the register button exists
+      // In this mock context (admin path not specified in history), it should exist.
       await user.click(registerButton);
 
       // The goToLoginPortion button has been removed, so this test is no longer valid
       // Skip this part or check for a different condition
-
-      await wait();
-    }
+      // Just waiting for the switch to happen
+      await screen.findByTestId('registrationBtn');
+    });
   });
 
   it('Testing login functionality', async () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      await user.type(await screen.findByTestId(/loginEmail/i), formData.email);
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        formData.password,
+      );
 
-    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      formData.password,
-    );
-
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
+      await user.click(screen.getByTestId('loginBtn'));
+    });
   });
 
   it('Testing wrong login functionality', async () => {
@@ -852,198 +789,161 @@ describe('Testing Login Page Screen', () => {
 
     const localLink4 = new StaticMockLink(createMocks4(), true);
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={localLink4}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={localLink4}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      // Wait for component to render
+      await screen.findByTestId(/loginEmail/i);
 
-    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      formData.password,
-    );
+      await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        formData.password,
+      );
 
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
+      await user.click(screen.getByTestId('loginBtn'));
+    });
   });
 
   it('Testing password preview feature for login', async () => {
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
-
-    const input = screen.getByTestId('password') as HTMLInputElement;
-    const toggleText = screen.getByTestId('showLoginPassword');
-    expect(input.type).toBe('password');
-    await user.click(toggleText);
-    expect(input.type).toBe('text');
-    await user.click(toggleText);
-    expect(input.type).toBe('password');
-
-    await wait();
+      const input = (await screen.findByTestId('password')) as HTMLInputElement;
+      const toggleText = screen.getByTestId('showLoginPassword');
+      expect(input.type).toBe('password');
+      await user.click(toggleText);
+      expect(input.type).toBe('text');
+      await user.click(toggleText);
+      expect(input.type).toBe('password');
+    });
   });
 
   it('Testing password preview feature for register', async () => {
     // Skip this test for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
-      const input = screen.getByTestId('passwordField') as HTMLInputElement;
+      const input = (await screen.findByTestId(
+        'passwordField',
+      )) as HTMLInputElement;
       const toggleText = screen.getByTestId('showPassword');
       expect(input.type).toBe('password');
       await user.click(toggleText);
       expect(input.type).toBe('text');
       await user.click(toggleText);
       expect(input.type).toBe('password');
-    }
-
-    await wait();
+    });
   });
 
   it('Testing confirm password preview feature', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
-      const input = screen.getByTestId('cpassword') as HTMLInputElement;
+      const input = (await screen.findByTestId(
+        'cpassword',
+      )) as HTMLInputElement;
       const toggleText = screen.getByTestId('showPasswordCon');
       expect(input.type).toBe('password');
       await user.click(toggleText);
       expect(input.type).toBe('text');
       await user.click(toggleText);
       expect(input.type).toBe('password');
-    }
-
-    await wait();
+    });
   });
 
   it('Testing for the password error warning when user firsts lands on a page', async () => {
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+      await screen.findByTestId('PalisadoesLogo');
 
-    expect(screen.queryByTestId('passwordCheck')).toBeNull();
+      expect(screen.queryByTestId('passwordCheck')).toBeNull();
+    });
   });
 
   it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const password = { password: '7' };
 
-    const password = { password: '7' };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
       await user.type(
-        screen.getByPlaceholderText('Password'),
+        await screen.findByPlaceholderText('Password'),
         password.password,
       );
 
@@ -1051,44 +951,34 @@ describe('Testing Login Page Screen', () => {
 
       expect(password.password.length).toBeLessThan(8);
 
-      expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
-    }
+      await waitFor(() => {
+        expect(screen.queryByTestId('passwordCheck')).toBeInTheDocument();
+      });
+    });
   });
 
   it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const password = { password: '12345678' };
 
-    const password = { password: '12345678' };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
       await user.type(
-        screen.getByPlaceholderText('Password'),
+        await screen.findByPlaceholderText('Password'),
         password.password,
       );
 
@@ -1097,151 +987,110 @@ describe('Testing Login Page Screen', () => {
       expect(password.password.length).toBeGreaterThanOrEqual(8);
 
       expect(screen.queryByTestId('passwordCheck')).toBeNull();
-    }
+    });
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const password = { password: '1234567' };
 
-    const password = { password: '1234567' };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
-
       await user.type(
-        screen.getByPlaceholderText('Password'),
+        await screen.findByPlaceholderText('Password'),
         password.password,
       );
 
       expect(password.password.length).toBeLessThan(8);
-    }
+    });
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const password = { password: '12345678' };
 
-    const password = { password: '12345678' };
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
       await user.type(
-        screen.getByPlaceholderText('Password'),
+        await screen.findByPlaceholderText('Password'),
         password.password,
       );
 
       expect(password.password.length).toBeGreaterThanOrEqual(8);
 
       expect(screen.queryByTestId('passwordCheck')).toBeNull();
-    }
+    });
   });
 
   it('Component Should be rendered properly for user login', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
-    expect(screen.getByText(/User Login/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/');
+      await screen.findByText(/User Login/i);
+      expect(window.location.pathname).toBe('/');
+    });
   });
 
   it('Component Should be rendered properly for user registration', async () => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/register',
-        origin: 'https://localhost:4321',
-        pathname: '/register',
-      },
-    });
-    const history = createMemoryHistory({ initialEntries: ['/register'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/register', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/register'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
-    expect(screen.getByTestId('register-text')).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/register');
+      await screen.findByTestId('register-text');
+      expect(window.location.pathname).toBe('/register');
+    });
   });
 });
 
@@ -1253,20 +1102,25 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+      await waitFor(() => {
+        expect(routerMocks.navigate).toHaveBeenCalledWith(
+          '/user/organizations',
+        );
+      });
+    });
   });
 
   it('Logged in as Admin or SuperAdmin', async () => {
@@ -1276,20 +1130,25 @@ describe('Testing redirect if already logged in', () => {
       return null;
     });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+      await waitFor(() => {
+        expect(routerMocks.navigate).toHaveBeenCalledWith(
+          '/user/organizations',
+        );
+      });
+    });
   });
 });
 
@@ -1318,30 +1177,36 @@ describe('Testing invitation functionality', () => {
     const mockRemoveItem = vi.fn();
     mockUseLocalStorage.removeItem = mockRemoveItem;
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      await user.type(
+        await screen.findByTestId('loginEmail'),
+        'johndoe@gmail.com',
+      );
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        'johndoe',
+      );
+      await user.click(screen.getByTestId('loginBtn'));
 
-    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
-    await user.click(screen.getByTestId('loginBtn'));
+      await waitFor(() => {
+        expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
 
-    await wait();
-
-    expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
-
-    expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+        expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+      });
+    });
   });
 
   it('should handle pending invitation token on successful registration', async () => {
@@ -1355,39 +1220,26 @@ describe('Testing invitation functionality', () => {
     const mockRemoveItem = vi.fn();
     mockUseLocalStorage.removeItem = mockRemoveItem;
 
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Click register button
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
+      // Click register button
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
-      await wait();
 
       // Fill registration form
-      await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+      await user.type(await screen.findByPlaceholderText(/Name/i), 'John Doe');
       await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
       await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
       await user.type(
@@ -1398,15 +1250,16 @@ describe('Testing invitation functionality', () => {
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
         await user.click(registrationBtn);
-        await wait();
 
-        // Verify that removeItem was called with the pending invitation token
-        expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
+        await waitFor(() => {
+          // Verify that removeItem was called with the pending invitation token
+          expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
 
-        // Verify that window.location.href was set to the invitation URL
-        expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+          // Verify that window.location.href was set to the invitation URL
+          expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+        });
       }
-    }
+    });
   });
 
   it('should not redirect when no pending invitation token exists', async () => {
@@ -1416,31 +1269,39 @@ describe('Testing invitation functionality', () => {
       return null;
     });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      // Fill login form
+      await user.type(
+        await screen.findByTestId('loginEmail'),
+        'johndoe@gmail.com',
+      );
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        'johndoe',
+      );
+      await user.click(screen.getByTestId('loginBtn'));
 
-    // Fill login form
-    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-
-    // Verify normal navigation (no invitation redirect)
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
-    expect(window.location.href).toBe('http://localhost:3000/');
+      // Verify normal navigation (no invitation redirect)
+      await waitFor(() => {
+        expect(routerMocks.navigate).toHaveBeenCalledWith(
+          '/user/organizations',
+        );
+        expect(window.location.href).toContain('https://localhost:4321');
+      });
+    });
   });
 });
 
@@ -1455,83 +1316,91 @@ describe('Organization Autocomplete Component', () => {
     vi.clearAllMocks();
   });
 
-  const setupRegistrationForm = async () => {
+  const runRegistrationTest = async (
+    testFn: (autocompleteContainer: HTMLElement) => Promise<void>,
+  ) => {
     const localLink = new StaticMockLink(createMocks3(), true);
-    render(
-      <MockedProvider link={localLink}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      render(
+        <MockedProvider link={localLink}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
+      await user.click(registerButton);
 
-    const registerButton = screen.getByTestId('goToRegisterPortion');
-    await user.click(registerButton);
-    await wait();
-
-    return screen.getByTestId('selectOrg-container');
+      const container = await screen.findByTestId('selectOrg-container');
+      await testFn(container);
+    });
   };
 
   it('renders Select Organization drop down with placeholder', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    expect(input).toBeInTheDocument();
-    expect(input).toBeInTheDocument();
-    expect(input).toHaveAttribute(
-      'placeholder',
-      i18nForTest.t('loginPage.clickToSelectOrg'),
-    );
+      expect(input).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
+      expect(input).toHaveAttribute(
+        'placeholder',
+        i18nForTest.t('loginPage.clickToSelectOrg'),
+      );
+    });
   });
 
   it('opens organization list when input key is clicked', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
-    await user.click(dropdownInput);
+      await user.click(dropdownInput);
 
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
     });
   });
 
   it('filters and selects an organization using search input', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
-    // Open dropdown
-    await user.click(dropdownInput);
+      // Open dropdown
+      await user.click(dropdownInput);
 
-    // Get search input inside menu (which is same as toggle input in this design)
-    // In our new design, the toggle IS the search input.
-    // So we just type into dropdownInput
-    await user.type(dropdownInput, 'Unity');
+      // Get search input inside menu (which is same as toggle input in this design)
+      // In our new design, the toggle IS the search input.
+      // So we just type into dropdownInput
+      await user.type(dropdownInput, 'Unity');
 
-    // Select the filtered item
-    const option = await screen.findByText(
-      'Unity Foundation(123 Random Street)',
-    );
-    await user.click(option);
+      // Select the filtered item
+      const option = await screen.findByText(
+        'Unity Foundation(123 Random Street)',
+      );
+      await user.click(option);
 
-    await waitFor(() => {
-      expect(dropdownInput).toHaveValue('Unity Foundation(123 Random Street)');
+      await waitFor(() => {
+        expect(dropdownInput).toHaveValue(
+          'Unity Foundation(123 Random Street)',
+        );
+      });
     });
   });
 
   it('opens organization list using input click', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    await user.click(input);
+      await user.click(input);
 
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
     });
   });
 
@@ -1557,65 +1426,68 @@ describe('Organization Autocomplete Component', () => {
 
     const emptyLink = new StaticMockLink(EMPTY_ORGS_MOCK, true);
 
-    render(
-      <MockedProvider link={emptyLink}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      render(
+        <MockedProvider link={emptyLink}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
+      await user.click(registerButton);
 
-    const registerButton = screen.getByTestId('goToRegisterPortion');
-    await user.click(registerButton);
-    await wait();
+      const autocomplete = await screen.findByTestId('selectOrg-container');
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    const autocomplete = screen.getByTestId('selectOrg-container');
-    const input = within(autocomplete).getByTestId('selectOrg-input');
-
-    expect(autocomplete).toBeInTheDocument();
-    expect(input).toBeInTheDocument();
+      expect(autocomplete).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
+    });
   });
 
   it('updates form state when organization is selected', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    await user.type(input, 'Unity');
-    // In search mode, keyboard navigation might differ based on library
-    // For our component, we click the item.
-    const item = await screen.findByText('Unity Foundation(123 Random Street)');
-    await user.click(item);
+      await user.type(input, 'Unity');
+      // In search mode, keyboard navigation might differ based on library
+      // For our component, we click the item.
+      const item = await screen.findByText(
+        'Unity Foundation(123 Random Street)',
+      );
+      await user.click(item);
 
-    await wait();
+      await user.type(screen.getByPlaceholderText(/Name/i), 'Test User');
+      await user.type(screen.getByTestId('signInEmail'), 'test@example.com');
+      await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+      await user.type(
+        screen.getByPlaceholderText('Confirm Password'),
+        'Test@123',
+      );
 
-    await user.type(screen.getByPlaceholderText(/Name/i), 'Test User');
-    await user.type(screen.getByTestId('signInEmail'), 'test@example.com');
-    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'Test@123',
-    );
-
-    const registrationBtn = screen.getByTestId('registrationBtn');
-    expect(registrationBtn).toBeEnabled();
+      const registrationBtn = screen.getByTestId('registrationBtn');
+      expect(registrationBtn).toBeEnabled();
+    });
   });
 
   it('displays organizations in correct format', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    await user.type(input, 'Unity');
-    const item = await screen.findByText('Unity Foundation(123 Random Street)');
-    await user.click(item);
+      await user.type(input, 'Unity');
+      const item = await screen.findByText(
+        'Unity Foundation(123 Random Street)',
+      );
+      await user.click(item);
 
-    await waitFor(() => {
-      expect(input).toHaveValue('Unity Foundation(123 Random Street)');
+      await waitFor(() => {
+        expect(input).toHaveValue('Unity Foundation(123 Random Street)');
+      });
     });
   });
 
@@ -1637,689 +1509,138 @@ describe('Organization Autocomplete Component', () => {
 
     const errorLink = new StaticMockLink(ERROR_MOCK, true);
 
-    render(
-      <MockedProvider link={errorLink}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    await withMockedLocation('/', async () => {
+      render(
+        <MockedProvider link={errorLink}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
 
-    await wait();
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
+      await user.click(registerButton);
 
-    const registerButton = screen.getByTestId('goToRegisterPortion');
-    await user.click(registerButton);
-    await wait();
+      const autocomplete = await screen.findByTestId('selectOrg-container');
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    const autocomplete = screen.getByTestId('selectOrg-container');
-    const input = within(autocomplete).getByTestId('selectOrg-input');
-
-    expect(autocomplete).toBeInTheDocument();
-    expect(input).toBeEnabled();
+      expect(autocomplete).toBeInTheDocument();
+      expect(input).toBeEnabled();
+    });
   });
 
   it('maintains search focus during interactions', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
-    // Click input to open (it also acts as the toggle)
-    await user.click(dropdownInput);
+      // Click input to open (it also acts as the toggle)
+      await user.click(dropdownInput);
 
-    // Check search input focus (it should be the same element)
-    expect(dropdownInput).toHaveFocus();
+      // Check search input focus (it should be the same element)
+      expect(dropdownInput).toHaveFocus();
 
-    // Type something
-    await user.type(dropdownInput, 'Test');
-    expect(dropdownInput).toHaveFocus();
+      // Type something
+      await user.type(dropdownInput, 'Test');
+      expect(dropdownInput).toHaveFocus();
+    });
   });
 
   it('handles special characters in organization names', async () => {
-    const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-input');
+    await runRegistrationTest(async (autocomplete) => {
+      const input = within(autocomplete).getByTestId('selectOrg-input');
 
-    // Test with special characters
-    await user.type(input, 'Mills &');
+      // Test with special characters
+      await user.type(input, 'Mills &');
 
-    // Should find the item
-    const item = await screen.findByText('Mills & Group(5112 Dare Centers)');
-    expect(item).toBeInTheDocument();
-  });
-});
-
-describe('Talawa-API server fetch check', () => {
-  beforeEach(() => {
-    vi.spyOn(global, 'fetch').mockResolvedValue(
-      new Response(JSON.stringify({ data: { __typename: 'Query' } })),
-    );
+      // Should find the item
+      const item = await screen.findByText('Mills & Group(5112 Dare Centers)');
+      expect(item).toBeInTheDocument();
+    });
   });
 
-  const expectApiHealthCheckFetchCalled = () => {
-    expect(fetch).toHaveBeenCalledWith(
-      BACKEND_URL,
-      expect.objectContaining({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: '{ __typename }' }),
-      }),
-    );
-  };
-
-  it('Checks if Talawa-API resource is loaded successfully', async () => {
-    await act(async () => {
-      const history = createMemoryHistory({ initialEntries: ['/'] });
-      render(
-        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-          <Router location={history.location} navigator={history}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </Router>
-        </MockedProvider>,
+  describe('Talawa-API server fetch check', () => {
+    beforeEach(() => {
+      vi.spyOn(global, 'fetch').mockResolvedValue(
+        new Response(JSON.stringify({ data: { __typename: 'Query' } })),
       );
     });
 
-    expectApiHealthCheckFetchCalled();
-  });
-
-  it('displays warning message when resource loading fails', async () => {
-    const mockError = new Error('Network error');
-    vi.spyOn(global, 'fetch').mockRejectedValue(mockError);
-
-    await act(async () => {
-      const history = createMemoryHistory({ initialEntries: ['/'] });
-      render(
-        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-          <Router location={history.location} navigator={history}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <LoginPage />
-              </I18nextProvider>
-            </Provider>
-          </Router>
-        </MockedProvider>,
+    const expectApiHealthCheckFetchCalled = () => {
+      expect(fetch).toHaveBeenCalledWith(
+        BACKEND_URL,
+        expect.objectContaining({
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: '{ __typename }' }),
+        }),
       );
-    });
+    };
 
-    expectApiHealthCheckFetchCalled();
-  });
-});
-
-/* ------------------------------------------------------------------ */
-/*  NEW TESTS TO HIT 100 % COVERAGE FOR LoginPage.tsx                 */
-/* ------------------------------------------------------------------ */
-
-// Helper functions to reduce code duplication
-const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
-): ReturnType<typeof render> => {
-  const isLink = mocksOrLink instanceof StaticMockLink;
-  const history = createMemoryHistory({ initialEntries: ['/'] });
-
-  return render(
-    <MockedProvider
-      {...(isLink
-        ? { link: mocksOrLink }
-        : {
-            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-          })}
-    >
-      <Router location={history.location} navigator={history}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <LoginPage />
-          </I18nextProvider>
-        </Provider>
-      </Router>
-    </MockedProvider>,
-  );
-};
-
-const setLocationPath = (pathname: string): void => {
-  Object.defineProperty(window, 'location', {
-    configurable: true,
-    writable: true,
-    value: {
-      reload: vi.fn(),
-      href: `https://localhost:4321${pathname}`,
-      origin: 'https://localhost:4321',
-      pathname,
-    },
-  });
-};
-
-describe('Extra coverage for 100 %', () => {
-  afterEach(() => {
-    vi.doUnmock('Constant/constant.ts');
-  });
-
-  it('bypasses recaptcha when feature is off', async () => {
-    // Ensure pathname exists to prevent i18n language detector crash
-    setLocationPath('/');
-    vi.resetModules();
-    vi.doMock('Constant/constant.ts', async () => ({
-      ...(await vi.importActual('Constant/constant.ts')),
-      REACT_APP_USE_RECAPTCHA: 'NO',
-      RECAPTCHA_SITE_KEY: 'xxx',
-    }));
-    // re-import component so mock applies
-    const { default: LoginPageFresh } = await import('./LoginPage');
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider mocks={createMocks()}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPageFresh />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-    // Recaptcha should not render when feature flag is off
-    expect(screen.queryByTestId('mock-recaptcha')).toBeNull();
-    // Verify recaptcha is bypassed by submitting login without token
-    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-    // Should succeed without recaptcha interaction
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
-  });
-
-  it('shows toast for invalid name during registration', async () => {
-    setLocationPath('/');
-    renderLoginPage();
-    await wait();
-    await user.click(screen.getByTestId('goToRegisterPortion'));
-    await user.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
-    await user.type(screen.getByPlaceholderText('Password'), 'Valid@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'Valid@123',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('registrationBtn'));
-    await wait();
-    expect(toastMocks.warn).toHaveBeenNthCalledWith(
-      1,
-      i18nForTest.t('loginPage.nameInvalid'),
-    );
-  });
-
-  it('shows toast for weak password', async () => {
-    setLocationPath('/');
-    renderLoginPage();
-    await wait();
-    await user.click(screen.getByTestId('goToRegisterPortion'));
-    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
-    await user.type(screen.getByPlaceholderText('Password'), 'weak');
-    await user.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('registrationBtn'));
-    await wait();
-    expect(toastMocks.warn).toHaveBeenNthCalledWith(
-      1,
-      i18nForTest.t('loginPage.passwordInvalid'),
-    );
-  });
-
-  it('warns when non-admin logs in from admin portal', async () => {
-    const NON_ADMIN_MOCK = [
-      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'user@example.com', password: 'pass' },
-        },
-        result: {
-          data: {
-            signIn: {
-              user: {
-                id: '1',
-                role: 'user',
-                name: 'U',
-                emailAddress: 'user@example.com',
-              },
-              authenticationToken: 'token',
-              refreshToken: 'refreshToken',
-            },
-          },
-        },
-      },
-    ];
-    const history = createMemoryHistory({ initialEntries: ['/admin'] });
-    render(
-      <MockedProvider mocks={NON_ADMIN_MOCK}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-    await wait();
-    await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith(
-      'Sorry! you are not Authorised!',
-    );
-  });
-
-  it('renders component after mount', async () => {
-    renderLoginPage();
-    await wait();
-    expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
-  });
-
-  it('handles Talawa-API unreachable', async () => {
-    // Mock fetch to reject before rendering
-    const fetchSpy = vi
-      .spyOn(global, 'fetch')
-      .mockRejectedValue(new Error('Network error'));
-
-    try {
+    it('Checks if Talawa-API resource is loaded successfully', async () => {
       await act(async () => {
-        renderLoginPage();
-      });
-
-      // Wait for fetch to be called and errorHandler to show toast
-      await waitFor(() => {
-        expect(fetchSpy).toHaveBeenCalledWith(
-          BACKEND_URL,
-          expect.objectContaining({
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }),
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
         );
       });
 
-      // errorHandler should call NotificationToast.error with the error message (single arg)
-      await waitFor(() => {
-        expect(toastMocks.error).toHaveBeenCalledWith('Network error');
+      expectApiHealthCheckFetchCalled();
+    });
+
+    it('displays warning message when resource loading fails', async () => {
+      const mockError = new Error('Network error');
+      vi.spyOn(global, 'fetch').mockRejectedValue(mockError);
+
+      await act(async () => {
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
       });
-    } finally {
-      fetchSpy.mockRestore();
-    }
-  });
 
-  it('resets signup recaptcha when signup fails', async () => {
-    const FAIL_MOCK = [
-      {
-        request: {
-          query: SIGNUP_MUTATION,
-          variables: {
-            ID: '',
-            name: 'John Doe',
-            email: 'johndoe@gmail.com',
-            password: 'Johndoe@123',
-          },
-        },
-        error: new Error('Signup failed'),
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              facebookURL: null,
-              githubURL: null,
-              id: '1',
-              inactivityTimeoutDuration: 3600,
-              instagramURL: null,
-              linkedinURL: null,
-              logoMimeType: null,
-              logoURL: null,
-              name: 'Test Community',
-              redditURL: null,
-              slackURL: null,
-              updatedAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              websiteURL: null,
-              xURL: null,
-              youtubeURL: null,
-            },
-          },
-        },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-    setLocationPath('/');
-    renderLoginPage(FAIL_MOCK);
-    await wait();
-    await user.click(screen.getByTestId('goToRegisterPortion'));
-    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
-    await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'Johndoe@123',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('registrationBtn'));
-    await wait();
-
-    expect(resetReCAPTCHA).toHaveBeenCalled();
-  });
-
-  it('shows error toast when recaptcha verification fails during signup', async () => {
-    const RECAPTCHA_ERROR_MOCK = [
-      {
-        request: {
-          query: SIGNUP_MUTATION,
-          variables: {
-            ID: '',
-            name: 'John',
-            email: 'john@doe.com',
-            password: 'John@123',
-          },
-        },
-        result: {
-          errors: [{ message: 'Invalid reCAPTCHA token' }],
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-    setLocationPath('/');
-    renderLoginPage(RECAPTCHA_ERROR_MOCK);
-    await wait();
-    await user.click(screen.getByTestId('goToRegisterPortion'));
-    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
-    await user.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'John@123',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('registrationBtn'));
-    await wait();
-    expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
-    );
-  });
-
-  it('shows email invalid toast when email is too short', async () => {
-    setLocationPath('/');
-    renderLoginPage();
-    await wait();
-    await user.click(screen.getByTestId('goToRegisterPortion'));
-    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
-    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'Test@123',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('registrationBtn'));
-    await wait();
-    expect(toastMocks.warn).toHaveBeenNthCalledWith(
-      1,
-      i18nForTest.t('loginPage.emailInvalid'),
-    );
-  });
-
-  it('shows not found warning when signIn returns null', async () => {
-    const NULL_SIGNIN_MOCK = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'test@test.com', password: 'pass' },
-        },
-        result: { data: null },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-    setLocationPath('/');
-    renderLoginPage(NULL_SIGNIN_MOCK);
-    await wait();
-    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
-  });
-
-  it('shows account locked message with countdown when retryAfter is provided', async () => {
-    // Set retryAfter to 15 minutes from now
-    const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
-
-    const ACCOUNT_LOCKED_MOCK = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'locked@test.com', password: 'wrongpass' },
-        },
-        result: {
-          errors: [
-            new GraphQLError('Account temporarily locked', {
-              extensions: {
-                code: 'account_locked',
-                retryAfter: retryAfterDate,
-              },
-            }),
-          ],
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-
-    setLocationPath('/');
-    renderLoginPage(ACCOUNT_LOCKED_MOCK);
-    await wait();
-
-    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'wrongpass',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-
-    // Should show the account locked message with countdown (15 minutes)
-    // Verify the message contains "locked" and a number for minutes
-    expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
-    );
-
-    // Verify navigation does NOT occur (early return on error)
-    expect(routerMocks.navigate).not.toHaveBeenCalled();
-  });
-
-  it('shows generic account locked message when retryAfter is missing', async () => {
-    const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'locked@test.com', password: 'wrongpass' },
-        },
-        result: {
-          errors: [
-            new GraphQLError('Account temporarily locked', {
-              extensions: {
-                code: 'account_locked',
-                // No retryAfter provided
-              },
-            }),
-          ],
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-
-    setLocationPath('/');
-    renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
-    await wait();
-
-    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'wrongpass',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-
-    // Should show generic account locked message (without countdown)
-    expect(toastMocks.error).toHaveBeenCalledWith({
-      key: 'accountLocked',
-      namespace: 'errors',
+      expectApiHealthCheckFetchCalled();
     });
-
-    // Verify navigation does NOT occur (early return on error)
-    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
-  it('handles non-account_locked GraphQL errors via errorHandler', async () => {
-    const OTHER_GRAPHQL_ERROR_MOCK = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'test@test.com', password: 'wrongpass' },
-        },
-        result: {
-          errors: [
-            new GraphQLError('Invalid credentials', {
-              extensions: {
-                code: 'UNAUTHENTICATED',
-              },
-            }),
-          ],
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
+  /* ------------------------------------------------------------------ */
+  /*  NEW TESTS TO HIT 100 % COVERAGE FOR LoginPage.tsx                 */
+  /* ------------------------------------------------------------------ */
 
-    setLocationPath('/');
-    renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
-    await wait();
-
-    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'wrongpass',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-    await wait();
-
-    // Should call errorHandler which shows the error message
-    // Note: errorHandler passes raw backend error messages directly without i18n wrapping
-    expect(toastMocks.error).toHaveBeenCalledWith('Invalid credentials');
-
-    // Verify navigation does NOT occur (early return on error)
-    expect(routerMocks.navigate).not.toHaveBeenCalled();
-  });
-});
-
-describe('Cookie-based authentication verification', () => {
-  it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
-    const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'test@gmail.com', password: 'testPassword' },
-        },
-        result: {
-          data: {
-            signIn: {
-              user: {
-                id: 'userId123',
-                name: 'Test User',
-                emailAddress: 'test@gmail.com',
-                role: 'user',
-              },
-              authenticationToken: 'newAuthToken123',
-              refreshToken: 'newRefreshToken456',
-            },
-          },
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
-
+  // Helper functions to reduce code duplication
+  const renderLoginPage = (
+    mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = createMocks(),
+  ): ReturnType<typeof render> => {
+    const isLink = mocksOrLink instanceof StaticMockLink;
     const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
+
+    return render(
+      <MockedProvider
+        {...(isLink
+          ? { link: mocksOrLink }
+          : {
+              mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+            })}
+      >
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2329,527 +1650,1130 @@ describe('Cookie-based authentication verification', () => {
         </Router>
       </MockedProvider>,
     );
+  };
 
-    await wait();
-
-    await user.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'testPassword',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-
-    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
-    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
-      'token',
-      expect.any(String),
-    );
-    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
-      'refreshToken',
-      expect.any(String),
-    );
-
-    // Verify that user session state IS stored in localStorage
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'IsLoggedIn',
-      'TRUE',
-    );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'name',
-      'Test User',
-    );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'email',
-      'test@gmail.com',
-    );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'userId',
-      'userId123',
-    );
-  });
-
-  // Test case for registration/signup flow
-  it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
-    const SIGNUP_SUCCESS_MOCK = [
-      {
-        request: {
-          query: SIGNUP_MUTATION,
-          variables: {
-            ID: '',
-            name: 'New User',
-            email: 'newuser@example.com',
-            password: 'Password@123',
-          },
-        },
-        result: {
-          data: {
-            signUp: {
-              user: {
-                id: 'newUser123',
-              },
-              authenticationToken: 'newAuthTokenSignup',
-              refreshToken: 'newRefreshTokenSignup',
-            },
-          },
-        },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
+  describe('Extra coverage for 100 %', () => {
+    afterEach(() => {
+      vi.doUnmock('Constant/constant.ts');
     });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider mocks={SIGNUP_SUCCESS_MOCK}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    it('bypasses recaptcha when feature is off', async () => {
+      await withMockedLocation('/', async () => {
+        // Ensure pathname exists to prevent i18n language detector crash
+        vi.resetModules();
+        vi.doMock('Constant/constant.ts', async () => ({
+          ...(await vi.importActual('Constant/constant.ts')),
+          REACT_APP_USE_RECAPTCHA: 'NO',
+          RECAPTCHA_SITE_KEY: 'xxx',
+        }));
+        // re-import component so mock applies
+        const { default: LoginPageFresh } = await import('./LoginPage');
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider mocks={createMocks()}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPageFresh />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+        await screen.findByTestId('loginEmail');
+        // Recaptcha should not render when feature flag is off
+        expect(screen.queryByTestId('mock-recaptcha')).toBeNull();
+        // Verify recaptcha is bypassed by submitting login without token
+        await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'johndoe',
+        );
+        await user.click(screen.getByTestId('loginBtn'));
+        await waitFor(() => {
+          // Should succeed without recaptcha interaction
+          expect(routerMocks.navigate).toHaveBeenCalledWith(
+            '/user/organizations',
+          );
+        });
+      });
+    });
 
-    await wait();
+    it('shows toast for invalid name during registration', async () => {
+      await withMockedLocation('/', async () => {
+        renderLoginPage();
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
+        await user.type(await screen.findByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
+        await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
+        await user.type(screen.getByPlaceholderText('Password'), 'Valid@123');
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'Valid@123',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('registrationBtn'));
+        await waitFor(() => {
+          expect(toastMocks.warn).toHaveBeenNthCalledWith(
+            1,
+            i18nForTest.t('loginPage.nameInvalid'),
+          );
+        });
+      });
+    });
 
-    // Switch to Register tab
-    await user.click(screen.getByTestId('goToRegisterPortion'));
+    it('shows toast for weak password', async () => {
+      await withMockedLocation('/', async () => {
+        renderLoginPage();
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
+        await user.type(
+          await screen.findByPlaceholderText(/Name/i),
+          'John Doe',
+        );
+        await user.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
+        await user.type(screen.getByPlaceholderText('Password'), 'weak');
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'weak',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('registrationBtn'));
+        await waitFor(() => {
+          expect(toastMocks.warn).toHaveBeenNthCalledWith(
+            1,
+            i18nForTest.t('loginPage.passwordInvalid'),
+          );
+        });
+      });
+    });
 
-    // Fill registration form
-    await user.type(screen.getByPlaceholderText(/Name/i), 'New User');
-    await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
-    await user.type(screen.getByPlaceholderText('Password'), 'Password@123');
-    await user.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'Password@123',
-    );
-    // reCAPTCHA is now integrated directly in the mutation
-
-    // Submit registration
-    await user.click(screen.getByTestId('registrationBtn'));
-
-    await wait();
-
-    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
-    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
-      'token',
-      expect.any(String),
-    );
-    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
-      'refreshToken',
-      expect.any(String),
-    );
-
-    // Verify IsLoggedIn is TRUE
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'IsLoggedIn',
-      'TRUE',
-    );
-
-    // Verify user details are stored (name/email from form input, userId from API)
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'name',
-      'New User',
-    );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'email',
-      'newuser@example.com',
-    );
-    // Verify userId and role are now stored during signup
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'userId',
-      'newUser123',
-    );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
-  });
-
-  it('Testing login error handling (catch block)', async () => {
-    const ERROR_MOCKS = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: { email: 'error@gmail.com', password: 'password' },
-        },
-        error: new Error('Network Error'),
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
-        result: {
-          data: {
-            community: {
-              id: '1',
-              name: 'Test Community',
-              logoURL: 'http://example.com/logo.png',
-              websiteURL: 'http://example.com',
-              facebookURL: 'http://facebook.com/test',
-              linkedinURL: 'http://linkedin.com/test',
-              xURL: 'http://twitter.com/test',
-              githubURL: 'http://github.com/test',
-              instagramURL: 'http://instagram.com/test',
-              youtubeURL: 'http://youtube.com/test',
-              slackURL: 'http://slack.com/test',
-              redditURL: 'http://reddit.com/test',
-              inactivityTimeoutDuration: 3600,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              updatedAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              logoMimeType: 'image/png',
-              __typename: 'Community',
+    it('warns when non-admin logs in from admin portal', async () => {
+      const NON_ADMIN_MOCK = [
+        ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'user@example.com', password: 'pass' },
+          },
+          result: {
+            data: {
+              signIn: {
+                user: {
+                  id: '1',
+                  role: 'user',
+                  name: 'U',
+                  emailAddress: 'user@example.com',
+                },
+                authenticationToken: 'token',
+                refreshToken: 'refreshToken',
+              },
             },
           },
         },
-      },
-      // LoginPage refetches community data when `data` changes, so provide a second identical response
-      {
-        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
-        result: {
-          data: {
-            community: {
-              id: '1',
-              name: 'Test Community',
-              logoURL: 'http://example.com/logo.png',
-              websiteURL: 'http://example.com',
-              facebookURL: 'http://facebook.com/test',
-              linkedinURL: 'http://linkedin.com/test',
-              xURL: 'http://twitter.com/test',
-              githubURL: 'http://github.com/test',
-              instagramURL: 'http://instagram.com/test',
-              youtubeURL: 'http://youtube.com/test',
-              slackURL: 'http://slack.com/test',
-              redditURL: 'http://reddit.com/test',
-              inactivityTimeoutDuration: 3600,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              updatedAt: dayjs()
-                .subtract(1, 'year')
-                .startOf('year')
-                .format('YYYY-MM-DD'),
-              logoMimeType: 'image/png',
-              __typename: 'Community',
-            },
-          },
-        },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: {
-          data: {
-            organizations: [],
-          },
-        },
-      },
-    ];
+      ];
+      await withMockedLocation('/admin', async () => {
+        const history = createMemoryHistory({ initialEntries: ['/admin'] });
+        render(
+          <MockedProvider mocks={NON_ADMIN_MOCK}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+        await screen.findByTestId('loginEmail');
+        await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
+        await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+        await waitFor(() => {
+          expect(toastMocks.warn).toHaveBeenCalledWith(
+            'Sorry! you are not Authorised!',
+          );
+        });
+      });
+    });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    it('renders component after mount', async () => {
+      renderLoginPage();
+      await screen.findByTestId('loginBtn');
+    });
 
-    await wait();
+    it('handles Talawa-API unreachable', async () => {
+      // Mock fetch to reject before rendering
+      const fetchSpy = vi
+        .spyOn(global, 'fetch')
+        .mockRejectedValue(new Error('Network error'));
 
-    await user.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'password');
+      try {
+        await act(async () => {
+          renderLoginPage();
+        });
 
-    // reCAPTCHA is now integrated directly in the mutation
+        // Wait for fetch to be called and errorHandler to show toast
+        await waitFor(() => {
+          expect(fetchSpy).toHaveBeenCalledWith(
+            BACKEND_URL,
+            expect.objectContaining({
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }),
+          );
+        });
 
-    await wait();
-
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-
-    // Verify error toast is shown for the SIGNIN_QUERY network error
-    // (GET_COMMUNITY_DATA_PG might also show an error, so check the last call)
-    const errorCalls = toastMocks.error.mock.calls;
-    const networkErrorCall = errorCalls.find((call) =>
-      call[0]?.toString().includes('Network Error'),
-    );
-    expect(networkErrorCall).toBeDefined();
-    if (networkErrorCall) {
-      expect(networkErrorCall[0]).toEqual(
-        expect.stringContaining('Network Error'),
-      );
-      // errorHandler may call NotificationToast.error with just a string (no options)
-      // or with an object, so options is optional
-      if (networkErrorCall[1] !== undefined) {
-        expect(networkErrorCall[1]).toEqual(expect.any(Object));
+        // errorHandler should call NotificationToast.error with the error message (single arg)
+        await waitFor(() => {
+          expect(toastMocks.error).toHaveBeenCalledWith('Network error');
+        });
+      } finally {
+        fetchSpy.mockRestore();
       }
-    }
-  });
-
-  describe('Checks presence of back to login button', () => {
-    it('shows back to login button on /register path', async () => {
-      setLocationPath('/register');
-      renderLoginPage();
-      await wait();
-      expect(screen.getByTestId('goToLoginPortion')).toBeInTheDocument();
     });
 
-    it('redirects to login on back to login button click', async () => {
-      setLocationPath('/register');
-      renderLoginPage();
-      await wait();
-      await user.click(screen.getByTestId('goToLoginPortion'));
-      await wait();
-      expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
-    });
-  });
-
-  // Note: Registration uses the same code path as login for storing refreshToken
-  // The login test above verifies the refreshToken storage behavior
-  it('Testing Community Data Rendering (social icons and logo)', async () => {
-    const COMMUNITY_MOCKS = [
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              name: 'Test Community',
-              logoURL: 'http://example.com/logo.png',
-              websiteURL: 'http://example.com',
-              facebookURL: 'http://facebook.com/test',
-              linkedinURL: 'http://linkedin.com/test',
-              xURL: 'http://twitter.com/test',
-              githubURL: 'http://github.com/test',
-              instagramURL: 'http://instagram.com/test',
-              youtubeURL: 'http://youtube.com/test',
-              slackURL: 'http://slack.com/test',
-              redditURL: 'http://reddit.com/test',
+    it('resets signup recaptcha when signup fails', async () => {
+      const FAIL_MOCK = [
+        {
+          request: {
+            query: SIGNUP_MUTATION,
+            variables: {
+              ID: '',
+              name: 'John Doe',
+              email: 'johndoe@gmail.com',
+              password: 'Johndoe@123',
             },
           },
+          error: new Error('Signup failed'),
         },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: {
-          data: {
-            organizations: [],
-          },
-        },
-      },
-    ];
-
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Verify community logo is rendered
-    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
-    expect(screen.getByText('Test Community')).toBeInTheDocument();
-
-    // Verify social media icons are rendered (checking for at least one)
-    const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
-    expect(socialLinks.length).toBeGreaterThan(0);
-    expect(socialLinks[0]).toHaveAttribute('href');
-  });
-
-  it('sets recaptcha token when recaptcha is completed', async () => {
-    // Create test-specific mock that matches the variables used in this test
-    const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
-      {
-        request: {
-          query: SIGNIN_QUERY,
-          variables: {
-            email: 'testadmin2@example.com',
-            password: 'Pass@123',
-            recaptchaToken: 'fake-recaptcha-token',
-          },
-        },
-        result: {
-          data: {
-            signIn: {
-              user: {
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: {
+            data: {
+              community: {
+                createdAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                facebookURL: null,
+                githubURL: null,
                 id: '1',
-                role: 'administrator',
-                name: 'Test Admin',
-                emailAddress: 'testadmin2@example.com',
-                countryCode: 'US',
-                avatarURL: null,
-                isEmailAddressVerified: true,
+                inactivityTimeoutDuration: 3600,
+                instagramURL: null,
+                linkedinURL: null,
+                logoMimeType: null,
+                logoURL: null,
+                name: 'Test Community',
+                redditURL: null,
+                slackURL: null,
+                updatedAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                websiteURL: null,
+                xURL: null,
+                youtubeURL: null,
               },
-              authenticationToken: 'authenticationToken',
-              refreshToken: 'refreshToken',
             },
           },
         },
-      },
-      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
-    ];
-    const localLink = new StaticMockLink(RECAPTCHA_LOGIN_MOCKS, true);
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={localLink}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+      await withMockedLocation('/', async () => {
+        renderLoginPage(FAIL_MOCK);
 
-    await wait();
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
 
-    const [loginRecaptcha] = screen.getAllByTestId('mock-recaptcha');
+        await user.type(
+          await screen.findByPlaceholderText(/Name/i),
+          'John Doe',
+        );
+        await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+        await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'Johndoe@123',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('registrationBtn'));
 
-    await user.type(loginRecaptcha, 'fake-recaptcha-token');
-
-    await user.type(screen.getByTestId('loginEmail'), 'testadmin2@example.com');
-    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'Pass@123');
-
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-
-    expect(localLink.operation?.variables?.recaptchaToken).toBe(
-      'fake-recaptcha-token',
-    );
-  });
-
-  it('Testing login functionality with verified email clears storage flags', async () => {
-    const formData = { email: 'verified@gmail.com', password: 'password123' };
-
-    const verifiedEmailLink = new StaticMockLink(
-      createMocksVerifiedEmail(),
-      true,
-    );
-
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={verifiedEmailLink}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await user.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      formData.password,
-    );
-
-    await user.click(screen.getByTestId('loginBtn'));
-
-    await wait();
-
-    // Verify that removeItem was called for the email verification flags
-    expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
-      'emailNotVerified',
-    );
-    expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
-      'unverifiedEmail',
-    );
-  });
-
-  it('Redirects to /admin/orglist if user is already logged in as administrator', async () => {
-    mockUseLocalStorage.getItem.mockImplementation((key) => {
-      if (key === 'IsLoggedIn') return 'TRUE';
-      if (key === 'role') return 'administrator';
-      return null;
+        await waitFor(() => {
+          expect(resetReCAPTCHA).toHaveBeenCalled();
+        });
+      });
     });
 
-    const history = createMemoryHistory({ initialEntries: ['/'] });
-    render(
-      <MockedProvider link={new StaticMockLink(createMocks(), true)}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <LoginPage />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
-    );
+    it('shows error toast when recaptcha verification fails during signup', async () => {
+      const RECAPTCHA_ERROR_MOCK = [
+        {
+          request: {
+            query: SIGNUP_MUTATION,
+            variables: {
+              ID: '',
+              name: 'John',
+              email: 'john@doe.com',
+              password: 'John@123',
+            },
+          },
+          result: {
+            errors: [{ message: 'Invalid reCAPTCHA token' }],
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+      await withMockedLocation('/', async () => {
+        renderLoginPage(RECAPTCHA_ERROR_MOCK);
 
-    await waitFor(() => {
-      expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
+
+        await user.type(await screen.findByPlaceholderText(/Name/i), 'John');
+        await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+        await user.type(screen.getByPlaceholderText('Password'), 'John@123');
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'John@123',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('registrationBtn'));
+
+        await waitFor(() => {
+          expect(toastMocks.error).toHaveBeenCalledWith(
+            expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
+          );
+        });
+      });
+    });
+
+    it('shows email invalid toast when email is too short', async () => {
+      await withMockedLocation('/', async () => {
+        renderLoginPage();
+
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
+
+        await user.type(await screen.findByPlaceholderText(/Name/i), 'John');
+        await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
+        await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'Test@123',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('registrationBtn'));
+
+        await waitFor(() => {
+          expect(toastMocks.warn).toHaveBeenNthCalledWith(
+            1,
+            i18nForTest.t('loginPage.emailInvalid'),
+          );
+        });
+      });
+    });
+
+    it('shows not found warning when signIn returns null', async () => {
+      const NULL_SIGNIN_MOCK = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'test@test.com', password: 'pass' },
+          },
+          result: { data: null },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+      await withMockedLocation('/', async () => {
+        renderLoginPage(NULL_SIGNIN_MOCK);
+
+        const emailInput = await screen.findByTestId('loginEmail');
+        await user.type(emailInput, 'test@test.com');
+        await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+
+        await waitFor(() => {
+          expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
+        });
+      });
+    });
+
+    it('shows account locked message with countdown when retryAfter is provided', async () => {
+      // Set retryAfter to 15 minutes from now
+      const retryAfterDate = new Date(
+        Date.now() + 15 * 60 * 1000,
+      ).toISOString();
+
+      const ACCOUNT_LOCKED_MOCK = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'locked@test.com', password: 'wrongpass' },
+          },
+          result: {
+            errors: [
+              new GraphQLError('Account temporarily locked', {
+                extensions: {
+                  code: 'account_locked',
+                  retryAfter: retryAfterDate,
+                },
+              }),
+            ],
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+
+      await withMockedLocation('/', async () => {
+        renderLoginPage(ACCOUNT_LOCKED_MOCK);
+        // await wait(); // removed
+
+        const emailInput = await screen.findByTestId('loginEmail');
+        await user.type(emailInput, 'locked@test.com');
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'wrongpass',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+        // await wait(); // removed
+
+        // Should show the account locked message with countdown (15 minutes)
+        // Verify the message contains "locked" and a number for minutes
+        await waitFor(() => {
+          expect(toastMocks.error).toHaveBeenCalledWith(
+            expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
+          );
+        });
+
+        // Verify navigation does NOT occur (early return on error)
+        expect(routerMocks.navigate).not.toHaveBeenCalled();
+      });
+    });
+
+    it('shows generic account locked message when retryAfter is missing', async () => {
+      const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'locked@test.com', password: 'wrongpass' },
+          },
+          result: {
+            errors: [
+              new GraphQLError('Account temporarily locked', {
+                extensions: {
+                  code: 'account_locked',
+                  // No retryAfter provided
+                },
+              }),
+            ],
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+
+      await withMockedLocation('/', async () => {
+        renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
+
+        const emailInput = await screen.findByTestId('loginEmail');
+        await user.type(emailInput, 'locked@test.com');
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'wrongpass',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+
+        // Should show generic account locked message (without countdown)
+        await waitFor(() => {
+          expect(toastMocks.error).toHaveBeenCalledWith({
+            key: 'accountLocked',
+            namespace: 'errors',
+          });
+        });
+
+        // Verify navigation does NOT occur (early return on error)
+        expect(routerMocks.navigate).not.toHaveBeenCalled();
+      });
+    });
+
+    it('handles non-account_locked GraphQL errors via errorHandler', async () => {
+      const OTHER_GRAPHQL_ERROR_MOCK = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'test@test.com', password: 'wrongpass' },
+          },
+          result: {
+            errors: [
+              new GraphQLError('Invalid credentials', {
+                extensions: {
+                  code: 'UNAUTHENTICATED',
+                },
+              }),
+            ],
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+
+      await withMockedLocation('/', async () => {
+        renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
+
+        const emailInput = await screen.findByTestId('loginEmail');
+        await user.type(emailInput, 'test@test.com');
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'wrongpass',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+
+        // Should call errorHandler which shows the error message
+        // Note: errorHandler passes raw backend error messages directly without i18n wrapping
+        await waitFor(() => {
+          expect(toastMocks.error).toHaveBeenCalledWith('Invalid credentials');
+        });
+
+        // Verify navigation does NOT occur (early return on error)
+        expect(routerMocks.navigate).not.toHaveBeenCalled();
+      });
     });
   });
-});
 
-// Unit checks for createMocks3 override behavior
-describe('createMocks3 factory', () => {
-  it('should handle empty community', () => {
-    const mocks = createMocks3({ communityData: null, organizationsData: [] });
-    const communityMocks = mocks.filter(
-      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
-    );
-    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
-    for (const mock of communityMocks) {
-      // @ts-expect-error runtime shape check in test
-      expect(mock.result?.data?.community ?? null).toBeNull();
-    }
+  describe('Cookie-based authentication verification', () => {
+    it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
+      const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'test@gmail.com', password: 'testPassword' },
+          },
+          result: {
+            data: {
+              signIn: {
+                user: {
+                  id: 'userId123',
+                  name: 'Test User',
+                  emailAddress: 'test@gmail.com',
+                  role: 'user',
+                },
+                authenticationToken: 'newAuthToken123',
+                refreshToken: 'newRefreshToken456',
+              },
+            },
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+
+      await withMockedLocation('/', async () => {
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+
+        const emailInput = await screen.findByTestId('loginEmail');
+        await user.type(emailInput, 'test@gmail.com');
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'testPassword',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+        await user.click(screen.getByTestId('loginBtn'));
+
+        // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+        await waitFor(() => {
+          expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+            'token',
+            expect.any(String),
+          );
+        });
+        expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+          'refreshToken',
+          expect.any(String),
+        );
+
+        // Verify that user session state IS stored in localStorage
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'IsLoggedIn',
+          'TRUE',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'name',
+          'Test User',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'email',
+          'test@gmail.com',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'role',
+          'user',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'userId',
+          'userId123',
+        );
+      });
+    });
+
+    // Test case for registration/signup flow
+    it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
+      const SIGNUP_SUCCESS_MOCK = [
+        {
+          request: {
+            query: SIGNUP_MUTATION,
+            variables: {
+              ID: '',
+              name: 'New User',
+              email: 'newuser@example.com',
+              password: 'Password@123',
+            },
+          },
+          result: {
+            data: {
+              signUp: {
+                user: {
+                  id: 'newUser123',
+                },
+                authenticationToken: 'newAuthTokenSignup',
+                refreshToken: 'newRefreshTokenSignup',
+              },
+            },
+          },
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: { data: { community: null } },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: { data: { organizations: [] } },
+        },
+      ];
+
+      await withMockedLocation('/', async () => {
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider mocks={SIGNUP_SUCCESS_MOCK}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+
+        // Switch to Register tab
+        const registerButton = await screen.findByTestId('goToRegisterPortion');
+        await user.click(registerButton);
+
+        // Fill registration form
+        await user.type(
+          await screen.findByPlaceholderText(/Name/i),
+          'New User',
+        );
+        await user.type(
+          screen.getByTestId('signInEmail'),
+          'newuser@example.com',
+        );
+        await user.type(
+          screen.getByPlaceholderText('Password'),
+          'Password@123',
+        );
+        await user.type(
+          screen.getByPlaceholderText('Confirm Password'),
+          'Password@123',
+        );
+        // reCAPTCHA is now integrated directly in the mutation
+
+        // Submit registration
+        await user.click(screen.getByTestId('registrationBtn'));
+
+        // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+        await waitFor(() => {
+          expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+            'token',
+            expect.any(String),
+          );
+        });
+        expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+          'refreshToken',
+          expect.any(String),
+        );
+
+        // Verify IsLoggedIn is TRUE
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'IsLoggedIn',
+          'TRUE',
+        );
+
+        // Verify user details are stored (name/email from form input, userId from API)
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'name',
+          'New User',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'email',
+          'newuser@example.com',
+        );
+        // Verify userId and role are now stored during signup
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'userId',
+          'newUser123',
+        );
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'role',
+          'user',
+        );
+      });
+    });
+
+    it('Testing login error handling (catch block)', async () => {
+      const ERROR_MOCKS = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: { email: 'error@gmail.com', password: 'password' },
+          },
+          error: new Error('Network Error'),
+        },
+        {
+          request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+          result: {
+            data: {
+              community: {
+                id: '1',
+                name: 'Test Community',
+                logoURL: 'http://example.com/logo.png',
+                websiteURL: 'http://example.com',
+                facebookURL: 'http://facebook.com/test',
+                linkedinURL: 'http://linkedin.com/test',
+                xURL: 'http://twitter.com/test',
+                githubURL: 'http://github.com/test',
+                instagramURL: 'http://instagram.com/test',
+                youtubeURL: 'http://youtube.com/test',
+                slackURL: 'http://slack.com/test',
+                redditURL: 'http://reddit.com/test',
+                inactivityTimeoutDuration: 3600,
+                createdAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                updatedAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                logoMimeType: 'image/png',
+                __typename: 'Community',
+              },
+            },
+          },
+        },
+        // LoginPage refetches community data when `data` changes, so provide a second identical response
+        {
+          request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+          result: {
+            data: {
+              community: {
+                id: '1',
+                name: 'Test Community',
+                logoURL: 'http://example.com/logo.png',
+                websiteURL: 'http://example.com',
+                facebookURL: 'http://facebook.com/test',
+                linkedinURL: 'http://linkedin.com/test',
+                xURL: 'http://twitter.com/test',
+                githubURL: 'http://github.com/test',
+                instagramURL: 'http://instagram.com/test',
+                youtubeURL: 'http://youtube.com/test',
+                slackURL: 'http://slack.com/test',
+                redditURL: 'http://reddit.com/test',
+                inactivityTimeoutDuration: 3600,
+                createdAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                updatedAt: dayjs()
+                  .subtract(1, 'year')
+                  .startOf('year')
+                  .format('YYYY-MM-DD'),
+                logoMimeType: 'image/png',
+                __typename: 'Community',
+              },
+            },
+          },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: {
+            data: {
+              organizations: [],
+            },
+          },
+        },
+      ];
+
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+
+      const emailInput = await screen.findByTestId(/loginEmail/i);
+      await user.type(emailInput, 'error@gmail.com');
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        'password',
+      );
+
+      // reCAPTCHA is now integrated directly in the mutation
+
+      await user.click(screen.getByTestId('loginBtn'));
+
+      // Verify error toast is shown for the SIGNIN_QUERY network error
+      // (GET_COMMUNITY_DATA_PG might also show an error, so check the last call)
+      await waitFor(() => {
+        const errorCalls = toastMocks.error.mock.calls;
+        const networkErrorCall = errorCalls.find((call) =>
+          call[0]?.toString().includes('Network Error'),
+        );
+        expect(networkErrorCall).toBeDefined();
+        if (networkErrorCall) {
+          expect(networkErrorCall[0]).toEqual(
+            expect.stringContaining('Network Error'),
+          );
+          // errorHandler may call NotificationToast.error with just a string (no options)
+          // or with an object, so options is optional
+          if (networkErrorCall[1] !== undefined) {
+            expect(networkErrorCall[1]).toEqual(expect.any(Object));
+          }
+        }
+      });
+    });
+
+    describe('Checks presence of back to login button', () => {
+      it('shows back to login button on /register path', async () => {
+        await withMockedLocation('/register', async () => {
+          renderLoginPage();
+          await waitFor(() => {
+            expect(screen.getByTestId('goToLoginPortion')).toBeInTheDocument();
+          });
+        });
+      });
+
+      it('redirects to login on back to login button click', async () => {
+        await withMockedLocation('/register', async () => {
+          renderLoginPage();
+          const loginInButton = await screen.findByTestId('goToLoginPortion');
+          await user.click(loginInButton);
+          await waitFor(() => {
+            expect(
+              screen.getByTestId('goToRegisterPortion'),
+            ).toBeInTheDocument();
+          });
+        });
+      });
+    });
+
+    // Note: Registration uses the same code path as login for storing refreshToken
+    // The login test above verifies the refreshToken storage behavior
+    it('Testing Community Data Rendering (social icons and logo)', async () => {
+      const COMMUNITY_MOCKS = [
+        {
+          request: { query: GET_COMMUNITY_DATA_PG },
+          result: {
+            data: {
+              community: {
+                name: 'Test Community',
+                logoURL: 'http://example.com/logo.png',
+                websiteURL: 'http://example.com',
+                facebookURL: 'http://facebook.com/test',
+                linkedinURL: 'http://linkedin.com/test',
+                xURL: 'http://twitter.com/test',
+                githubURL: 'http://github.com/test',
+                instagramURL: 'http://instagram.com/test',
+                youtubeURL: 'http://youtube.com/test',
+                slackURL: 'http://slack.com/test',
+                redditURL: 'http://reddit.com/test',
+              },
+            },
+          },
+        },
+        {
+          request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+          result: {
+            data: {
+              organizations: [],
+            },
+          },
+        },
+      ];
+
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+
+      // Verify community logo is rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+      });
+      expect(screen.getByText('Test Community')).toBeInTheDocument();
+
+      // Verify social media icons are rendered (checking for at least one)
+      const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
+      expect(socialLinks.length).toBeGreaterThan(0);
+      expect(socialLinks[0]).toHaveAttribute('href');
+    });
+
+    it('sets recaptcha token when recaptcha is completed', async () => {
+      // Create test-specific mock that matches the variables used in this test
+      const RECAPTCHA_LOGIN_MOCKS: MockedResponse[] = [
+        {
+          request: {
+            query: SIGNIN_QUERY,
+            variables: {
+              email: 'testadmin2@example.com',
+              password: 'Pass@123',
+              recaptchaToken: 'fake-recaptcha-token',
+            },
+          },
+          result: {
+            data: {
+              signIn: {
+                user: {
+                  id: '1',
+                  role: 'administrator',
+                  name: 'Test Admin',
+                  emailAddress: 'testadmin2@example.com',
+                  countryCode: 'US',
+                  avatarURL: null,
+                  isEmailAddressVerified: true,
+                },
+                authenticationToken: 'authenticationToken',
+                refreshToken: 'refreshToken',
+              },
+            },
+          },
+        },
+        ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+      ];
+      const localLink = new StaticMockLink(RECAPTCHA_LOGIN_MOCKS, true);
+
+      await withMockedLocation('/', async () => {
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider link={localLink}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+
+        const [loginRecaptcha] = await screen.findAllByTestId('mock-recaptcha');
+
+        await user.type(loginRecaptcha, 'fake-recaptcha-token');
+
+        await user.type(
+          screen.getByTestId('loginEmail'),
+          'testadmin2@example.com',
+        );
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          'Pass@123',
+        );
+
+        await user.click(screen.getByTestId('loginBtn'));
+
+        await waitFor(() => {
+          expect(localLink.operation?.variables?.recaptchaToken).toBe(
+            'fake-recaptcha-token',
+          );
+        });
+      });
+    });
+
+    it('Testing login functionality with verified email clears storage flags', async () => {
+      const formData = { email: 'verified@gmail.com', password: 'password123' };
+
+      const verifiedEmailLink = new StaticMockLink(
+        createMocksVerifiedEmail(),
+        true,
+      );
+
+      await withMockedLocation('/', async () => {
+        const history = createMemoryHistory({ initialEntries: ['/'] });
+        render(
+          <MockedProvider link={verifiedEmailLink}>
+            <Router location={history.location} navigator={history}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <LoginPage />
+                </I18nextProvider>
+              </Provider>
+            </Router>
+          </MockedProvider>,
+        );
+
+        const emailInput = await screen.findByTestId(/loginEmail/i);
+        await user.type(emailInput, formData.email);
+        await user.type(
+          screen.getByPlaceholderText(/Enter Password/i),
+          formData.password,
+        );
+
+        await user.click(screen.getByTestId('loginBtn'));
+
+        // Verify that removeItem was called for the email verification flags
+        await waitFor(() => {
+          expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
+            'emailNotVerified',
+          );
+        });
+        expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
+          'unverifiedEmail',
+        );
+      });
+    });
+
+    it('Redirects to /admin/orglist if user is already logged in as administrator', async () => {
+      mockUseLocalStorage.getItem.mockImplementation((key) => {
+        if (key === 'IsLoggedIn') return 'TRUE';
+        if (key === 'role') return 'administrator';
+        return null;
+      });
+
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(createMocks(), true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPage />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
+      });
+    });
   });
 
-  it('should handle community with data', () => {
-    const community = {
-      id: '1',
-      name: 'Test Org',
-      description: 'Description',
-      typename: 'Organization',
-    };
-    const mocks = createMocks3({ communityData: community });
-    const communityMocks = mocks.filter(
-      (m) => m.request.query === GET_COMMUNITY_DATA_PG,
-    );
-    expect(communityMocks.length).toBeGreaterThanOrEqual(2);
-    for (const mock of communityMocks) {
-      // @ts-expect-error runtime shape check in test
-      expect(mock.result?.data?.community).toEqual(community);
-    }
+  // Unit checks for createMocks3 override behavior
+  describe('createMocks3 factory', () => {
+    it('should handle empty community', () => {
+      const mocks = createMocks3({
+        communityData: null,
+        organizationsData: [],
+      });
+      const communityMocks = mocks.filter(
+        (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+      );
+      expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+      for (const mock of communityMocks) {
+        // @ts-expect-error runtime shape check in test
+        expect(mock.result?.data?.community ?? null).toBeNull();
+      }
+    });
+
+    it('should handle community with data', () => {
+      const community = {
+        id: '1',
+        name: 'Test Org',
+        description: 'Description',
+        typename: 'Organization',
+      };
+      const mocks = createMocks3({ communityData: community });
+      const communityMocks = mocks.filter(
+        (m) => m.request.query === GET_COMMUNITY_DATA_PG,
+      );
+      expect(communityMocks.length).toBeGreaterThanOrEqual(2);
+      for (const mock of communityMocks) {
+        // @ts-expect-error runtime shape check in test
+        expect(mock.result?.data?.community).toEqual(community);
+      }
+    });
   });
 });
