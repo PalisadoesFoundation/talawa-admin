@@ -777,7 +777,7 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.queryByTestId('recurrenceDropdown')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('recurrence-toggle')).not.toBeInTheDocument();
   });
 
   test('displays default recurrence label when no recurrence is set', () => {
@@ -1242,7 +1242,7 @@ describe('EventListCardPreviewModal', () => {
       ).toBeInTheDocument();
     });
 
-    test('returns recurrenceDescription when recurrence is not set', () => {
+    test('does not display recurrenceDescription when recurrence is not set', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,
@@ -1254,7 +1254,7 @@ describe('EventListCardPreviewModal', () => {
       expect(screen.queryByText('Custom Rule')).not.toBeInTheDocument();
     });
 
-    test('returns default label as a fallback', () => {
+    test('does not display default recurrence label when recurrence is not set', () => {
       renderComponent({
         eventListCardProps: {
           ...mockEventListCardProps,

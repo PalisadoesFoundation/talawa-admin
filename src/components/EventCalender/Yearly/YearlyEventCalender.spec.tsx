@@ -1248,7 +1248,7 @@ describe('Calendar Component', () => {
   });
 
   test('handles calendar navigation across year boundaries', async () => {
-    const { getByLabelText, getByTestId } = render(
+    const { getByLabelText } = render(
       <BrowserRouter>
         <Calendar
           eventData={[]}
@@ -1262,7 +1262,7 @@ describe('Calendar Component', () => {
 
     const currentYear = new Date().getFullYear();
     const prevButton = getByLabelText('previousYear'); // fixed
-    const nextButton = getByTestId('nextYear');
+    const nextButton = getByLabelText('nextYear');
 
     await user.click(prevButton);
     await waitFor(() => {

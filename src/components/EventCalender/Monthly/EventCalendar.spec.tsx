@@ -176,18 +176,14 @@ describe('Calendar', () => {
       </MockedProvider>,
     );
     await wait();
-    const prevButtons = screen.getAllByTestId('prevYear');
-    // Use for...of to handle awaits sequentially
-    for (const button of prevButtons) {
-      await userEvent.click(button);
-    }
-    await wait();
-    //testing next year button
-    const nextButton = screen.getAllByTestId('prevYear');
-    // Use for...of to handle awaits sequentially
-    for (const button of nextButton) {
-      await userEvent.click(button);
-    }
+    const prevButton = screen.getByLabelText(/previousYear/i);
+    const nextButton = screen.getByTestId('nextYear');
+
+    // click previous year
+    await userEvent.click(prevButton);
+
+    // click next year
+    await userEvent.click(nextButton);
   });
 
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
@@ -333,7 +329,8 @@ describe('Calendar', () => {
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const day = String(now.getDate()).padStart(2, '0');
     const date = `${year}-${month}-${day}`;
-    const multipleEventData = [
+
+    const multipleEventData: InterfaceEvent[] = [
       {
         id: '1',
         name: 'Event 1',
@@ -348,7 +345,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u1', name: 'Alice' },
       },
       {
         id: '2',
@@ -364,7 +361,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u2', name: 'Bob' },
       },
       {
         id: '3',
@@ -380,7 +377,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u3', name: 'Charlie' },
       },
       {
         id: '4',
@@ -396,7 +393,7 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u4', name: 'David' },
       },
       {
         id: '5',
@@ -412,9 +409,10 @@ describe('Calendar', () => {
         isRegisterable: true,
         isInviteOnly: false,
         attendees: [],
-        creator: {},
+        creator: { id: 'u5', name: 'Eve' },
       },
     ];
+
     render(
       <Router>
         <MockedProvider link={link}>
@@ -431,34 +429,34 @@ describe('Calendar', () => {
       </Router>,
     );
 
-    // Simulate window resize and check if components respond correctly
+    // Resize window
     await act(async () => {
-      window.innerWidth = 500; // Set the window width to <= 700
-      window.dispatchEvent(new globalThis.Event('resize'));
+      window.innerWidth = 500;
+      window.dispatchEvent(new Event('resize'));
     });
 
-    // Check for "View all" button if there are more than 2 events
-    const viewAllButton = await screen.findAllByTestId('more');
-    expect(viewAllButton.length).toBeGreaterThan(0);
+    // Find and click "View All"
+    const viewAllButtons = screen.getAllByText(/view all/i);
+    expect(viewAllButtons.length).toBeGreaterThan(0);
+    await userEvent.click(viewAllButtons[0]);
 
-    // Simulate clicking the "View all" button to expand the list
-    await userEvent.click(viewAllButton[0]);
-
+    // Ensure Event 5 is not shown yet if collapsed by default
     const event5 = screen.queryByText('Event 5');
     expect(event5).toBeNull();
 
-    const viewLessButtons = screen.getAllByText('View less');
+    // Click "View Less" to collapse
+    const viewLessButtons = screen.getAllByText(/view less/i);
     expect(viewLessButtons.length).toBeGreaterThan(0);
-
-    // Simulate clicking "View less" to collapse the list
     await userEvent.click(viewLessButtons[0]);
-    const viewAllButtons = screen.getAllByText('View all');
-    expect(viewAllButtons.length).toBeGreaterThan(0);
 
-    // Reset the window size to avoid side effects for other tests
+    // Check "View All" appears again
+    const viewAllButtonsAfter = screen.getAllByText(/view all/i);
+    expect(viewAllButtonsAfter.length).toBeGreaterThan(0);
+
+    // Reset window size
     await act(async () => {
       window.innerWidth = 1024;
-      window.dispatchEvent(new globalThis.Event('resize'));
+      window.dispatchEvent(new Event('resize'));
     });
   });
 
@@ -979,7 +977,7 @@ describe('Calendar', () => {
       // Check that "View all" button exists, indicating multiple events are available
       const viewAllButton = screen.queryByTestId('more');
       expect(viewAllButton).toBeInTheDocument();
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent('View All');
     });
 
     it('should filter events for regular users who are organization members', async () => {
@@ -1642,8 +1640,9 @@ describe('Calendar', () => {
       // 1. Events are processed (day has events class)
       // 2. Multiple events are available (View all button exists)
       // 3. The filtering allows both public and private events for org members
-      expect(viewAllButton).toHaveTextContent('View all');
+      expect(viewAllButton).toHaveTextContent(/view all/i);
     });
+
     it('should show invite-only events only to creator and admins', async () => {
       const today = dayjs();
 
@@ -1905,15 +1904,17 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      const viewAllBtn = await screen.findByText('View all');
+      const viewAllBtn = await screen.findByText(/view all/i); // regex, case-insensitive
       expect(viewAllBtn).toBeInTheDocument();
 
       await userEvent.click(viewAllBtn);
-      const viewLessBtn = await screen.findByText('View less');
+
+      const viewLessBtn = await screen.findByText(/view less/i);
       expect(viewLessBtn).toBeInTheDocument();
 
       await userEvent.click(viewLessBtn);
-      const viewAllBtnAgain = await screen.findByText('View all');
+
+      const viewAllBtnAgain = await screen.findByText(/view all/i);
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
 
