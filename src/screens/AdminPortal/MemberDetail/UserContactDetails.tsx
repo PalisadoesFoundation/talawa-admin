@@ -26,7 +26,7 @@
  * <UserContactDetails id="12345" />
  * ```
  */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
@@ -38,7 +38,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'shared-components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import DatePicker from 'shared-components/DatePicker';
 import {
   AdapterDayjs,
@@ -74,6 +74,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     location.state?.id || id || params.userId || storedUserId || '';
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [newAvatarUploaded, setNewAvatarUploaded] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   document.title = t('title');
   const [formState, setFormState] = useState({
@@ -99,6 +100,28 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
+
+  // Handle preview URL for selected avatar file
+  useEffect(() => {
+    if (selectedAvatar) {
+      const url = URL.createObjectURL(selectedAvatar);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [selectedAvatar]);
+
+  // Compute the avatar URL to display
+  const avatarDisplayUrl = useMemo(() => {
+    if (previewUrl) {
+      return previewUrl;
+    }
+    return formState.avatarURL && formState.avatarURL !== 'null'
+      ? formState.avatarURL
+      : undefined;
+  }, [previewUrl, formState.avatarURL]);
+
   const resolvedUserId = currentId;
   useEffect(() => {
     document.title = t('title');
@@ -109,8 +132,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       input: {
         id: resolvedUserId,
       },
-      fetchPolicy: 'no-cache',
     },
+    fetchPolicy: 'no-cache',
   });
   useEffect(() => {
     if (error) {
@@ -214,14 +237,16 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
           }) as string,
         );
       setSelectedAvatar(null);
+      setNewAvatarUploaded(false);
       setisUpdated(false);
-      window.location.reload();
     } catch (e: unknown) {
       errorHandler(t, e);
     }
   };
   const resetChanges = (): void => {
     setisUpdated(false);
+    setSelectedAvatar(null);
+    setNewAvatarUploaded(false);
     if (data?.user) setFormState({ ...data.user });
   };
   if (loading) {
@@ -249,27 +274,18 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
               <Col lg={12} className="mb-2">
                 <div className="text-center mb-3">
                   <div className="position-relative d-inline-block">
-                    {selectedAvatar || formState?.avatarURL ? (
-                      <img
-                        className={`rounded-circle ${styles.userContactDetailContactAvatarUrl}`}
-                        src={
-                          selectedAvatar
-                            ? URL.createObjectURL(selectedAvatar)
-                            : formState.avatarURL
-                        }
-                        alt={tCommon('user')}
-                        data-testid="profile-picture"
-                        crossOrigin="anonymous"
-                      />
-                    ) : (
-                      <Avatar
-                        name={sanitizeInput(formState.name)}
-                        alt={tCommon('userImage')}
-                        size={60}
-                        dataTestId="profile-picture"
-                        radius={150}
-                      />
-                    )}
+                    <ProfileAvatarDisplay
+                      imageUrl={avatarDisplayUrl}
+                      fallbackName={sanitizeInput(formState.name) || t('user')}
+                      size="custom"
+                      customSize={60}
+                      shape="circle"
+                      objectFit="cover"
+                      dataTestId="profile-picture"
+                      crossOrigin="anonymous"
+                      className={styles.userContactDetailContactAvatarUrl}
+                      enableEnlarge={true}
+                    />
                     <button
                       type="button"
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}

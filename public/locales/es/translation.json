@@ -1295,6 +1295,7 @@
     }
   },
   "memberDetail": {
+    "user": "Usuario",
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "noeventsAttended": "No hay eventos asistidos",
