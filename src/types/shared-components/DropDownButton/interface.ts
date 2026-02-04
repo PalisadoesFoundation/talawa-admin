@@ -123,3 +123,17 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    */
   searchPlaceholder?: string;
 }
+
+/**
+ * Interface for SearchToggle component props.
+ */
+export interface InterfaceSearchToggleProps {
+  onClick: (e: React.MouseEvent) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputClick: (e: React.MouseEvent) => void;
+  placeholder?: string;
+  icon?: React.ReactNode;
+  dataTestIdPrefix: string;
+  className?: string;
+}

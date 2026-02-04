@@ -969,10 +969,14 @@ const LoginPage = (): JSX.Element => {
                       </div>
                     )}
                   <div className="position-relative  my-2">
-                    <label className="form-label">{t('selectOrg')}</label>
+                    <label className="form-label" htmlFor="selectOrg">
+                      {t('selectOrg')}
+                    </label>
                     <div className="position-relative">
                       <DropDownButton
                         id="selectOrg"
+                        ariaLabel={t('selectOrg')}
+                        dataTestIdPrefix="selectOrg"
                         options={organizations}
                         selectedValue={signformState.signOrg}
                         onSelect={(value) =>
@@ -993,7 +997,6 @@ const LoginPage = (): JSX.Element => {
                         parentContainerStyle="w-100"
                         btnStyle="w-100 text-start d-flex justify-content-between align-items-center"
                         variant="outline-secondary"
-                        dataTestIdPrefix="selectOrg"
                         searchable={true}
                         searchPlaceholder={t('clickToSelectOrg')}
                       />

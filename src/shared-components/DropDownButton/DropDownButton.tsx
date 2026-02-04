@@ -68,9 +68,11 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   parentContainerStyle,
   btnStyle,
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
 }) => {
   const { t: tCommon } = useTranslation('common');
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? tCommon('searchPlaceholder');
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -110,11 +112,11 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         drop={drop}
         show={isOpen}
         onToggle={(nextIsOpen, metadata) => {
-          if (metadata.source === 'select') {
+          if (metadata.source === 'select' || metadata.source === 'rootClose') {
             setIsOpen(false);
-          } else if (metadata.source === 'rootClose') {
-            setIsOpen(false);
+            return;
           }
+          setIsOpen(nextIsOpen);
         }}
         className={[
           styles.dropdownContainer,
@@ -137,7 +139,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             }) as unknown as React.FormEventHandler<HTMLButtonElement>
           }
           onInputClick={() => setIsOpen(true)}
-          placeholder={searchPlaceholder}
+          placeholder={resolvedSearchPlaceholder}
           icon={icon}
           dataTestIdPrefix={dataTestIdPrefix}
           className={`${styles.dropdownToggle} ${btnStyle || ''}`}
@@ -171,7 +173,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             ))
           ) : (
             <div className="px-3 py-2 text-muted text-center">
-              {tCommon('noOptionsFound') || 'No options found'}
+              {tCommon('noOptionsFound')}
             </div>
           )}
         </Dropdown.Menu>

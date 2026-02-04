@@ -1,16 +1,6 @@
 import React from 'react';
+import { InterfaceSearchToggleProps } from 'types/shared-components/DropDownButton/interface';
 import styles from './SearchToggle.module.css';
-
-interface InterfaceSearchToggleProps {
-  onClick: (e: React.MouseEvent) => void;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onInputClick: (e: React.MouseEvent) => void;
-  placeholder?: string;
-  icon?: React.ReactNode;
-  dataTestIdPrefix: string;
-  className?: string;
-}
 
 /**
  * Custom Toggle for Search functionality.

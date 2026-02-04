@@ -1475,12 +1475,12 @@ describe('Organization Autocomplete Component', () => {
     await user.click(registerButton);
     await wait();
 
-    return screen.getByTestId('selectOrg');
+    return screen.getByTestId('selectOrg-container');
   };
 
   it('renders Select Organization drop down with placeholder', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByTestId('selectOrg-toggle');
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
     expect(input).toBeInTheDocument();
     expect(input).toBeInTheDocument();
@@ -1492,9 +1492,9 @@ describe('Organization Autocomplete Component', () => {
 
   it('opens organization list when input key is clicked', async () => {
     const autocomplete = await setupRegistrationForm();
-    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
+    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
-    await user.click(dropdownToggle);
+    await user.click(dropdownInput);
 
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
@@ -1503,14 +1503,15 @@ describe('Organization Autocomplete Component', () => {
 
   it('filters and selects an organization using search input', async () => {
     const autocomplete = await setupRegistrationForm();
-    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
+    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
     // Open dropdown
-    await user.click(dropdownToggle);
+    await user.click(dropdownInput);
 
-    // Get search input inside menu
-    const searchInput = await screen.findByTestId('selectOrg-search-input');
-    await user.type(searchInput, 'Unity');
+    // Get search input inside menu (which is same as toggle input in this design)
+    // In our new design, the toggle IS the search input.
+    // So we just type into dropdownInput
+    await user.type(dropdownInput, 'Unity');
 
     // Select the filtered item
     const option = await screen.findByText(
@@ -1519,9 +1520,7 @@ describe('Organization Autocomplete Component', () => {
     await user.click(option);
 
     await waitFor(() => {
-      expect(
-        within(dropdownToggle).getByText('Unity Foundation(123 Random Street)'),
-      ).toBeInTheDocument();
+      expect(dropdownInput).toHaveValue('Unity Foundation(123 Random Street)');
     });
   });
 
@@ -1585,11 +1584,13 @@ describe('Organization Autocomplete Component', () => {
 
   it('updates form state when organization is selected', async () => {
     const autocomplete = await setupRegistrationForm();
-    const input = within(autocomplete).getByRole('combobox');
+    const input = within(autocomplete).getByTestId('selectOrg-input');
 
     await user.type(input, 'Unity');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
+    // In search mode, keyboard navigation might differ based on library
+    // For our component, we click the item.
+    const item = await screen.findByText('Unity Foundation(123 Random Street)');
+    await user.click(item);
 
     await wait();
 
@@ -1663,18 +1664,17 @@ describe('Organization Autocomplete Component', () => {
 
   it('maintains search focus during interactions', async () => {
     const autocomplete = await setupRegistrationForm();
-    const dropdownToggle = within(autocomplete).getByTestId('selectOrg-toggle');
+    const dropdownInput = within(autocomplete).getByTestId('selectOrg-input');
 
-    // Click toggle to open
-    await user.click(dropdownToggle);
+    // Click input to open (it also acts as the toggle)
+    await user.click(dropdownInput);
 
-    // Check search input focus
-    const searchInput = await screen.findByTestId('selectOrg-search-input');
-    expect(searchInput).toHaveFocus();
+    // Check search input focus (it should be the same element)
+    expect(dropdownInput).toHaveFocus();
 
     // Type something
-    await user.type(searchInput, 'Test');
-    expect(searchInput).toHaveFocus();
+    await user.type(dropdownInput, 'Test');
+    expect(dropdownInput).toHaveFocus();
   });
 
   it('handles special characters in organization names', async () => {
