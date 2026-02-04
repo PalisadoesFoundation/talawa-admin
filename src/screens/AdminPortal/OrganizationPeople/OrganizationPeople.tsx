@@ -26,7 +26,7 @@ import { useLazyQuery } from '@apollo/client';
 import {
   DataGridWrapper,
   GridCellParams,
-  TokenAwareGridColDef,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
@@ -257,12 +257,12 @@ function OrganizationPeople(): JSX.Element {
   };
 
   // Column definitions
-  const columns: TokenAwareGridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: 'sl_no',
       headerName: tCommon('sl_no'),
       flex: 1,
-      minWidth: 'space-10',
+      minWidth: 50,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -279,7 +279,7 @@ function OrganizationPeople(): JSX.Element {
       field: 'profile',
       headerName: tCommon('profile'),
       flex: 1,
-      minWidth: 'space-10',
+      minWidth: 50,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -322,7 +322,7 @@ function OrganizationPeople(): JSX.Element {
       field: 'name',
       headerName: tCommon('name'),
       flex: 2,
-      minWidth: 'space-15',
+      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -342,7 +342,7 @@ function OrganizationPeople(): JSX.Element {
     {
       field: 'email',
       headerName: tCommon('email'),
-      minWidth: 'space-15',
+      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -353,7 +353,7 @@ function OrganizationPeople(): JSX.Element {
       field: 'joined',
       headerName: tCommon('joinedOn'),
       flex: 2,
-      minWidth: 'space-13',
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -383,7 +383,7 @@ function OrganizationPeople(): JSX.Element {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1,
-      minWidth: 'space-13',
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,

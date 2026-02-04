@@ -39,9 +39,8 @@ import styles from './EventActionItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
-  convertTokenColumns,
   type GridCellParams,
-  type TokenAwareGridColDef,
+  type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
@@ -223,13 +222,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     );
   }
 
-  const columns: TokenAwareGridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: 'assignee',
       headerName: t('assignedTo'),
       flex: 1,
       align: 'left',
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -280,7 +279,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('itemCategory'),
       flex: 1,
       align: 'center',
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -335,7 +334,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('options'),
       align: 'center',
       flex: 1,
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -380,7 +379,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerName: t('completed'),
       align: 'center',
       flex: 1,
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -500,7 +499,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         getRowId={(row) => row.id}
         sx={{
           backgroundColor: 'white',
-          borderRadius: 'var(--radius-xl)',
+          borderRadius: '16px',
           '& .MuiDataGrid-columnHeaders': { border: 'none' },
           '& .MuiDataGrid-cell': { border: 'none' },
           '& .MuiDataGrid-columnSeparator': { display: 'none' },
@@ -519,7 +518,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           index: index + 1,
           ...actionItem,
         }))}
-        columns={convertTokenColumns(columns)}
+        columns={columns}
         isRowSelectable={() => false}
       />
 

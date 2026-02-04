@@ -10,8 +10,7 @@ import {
   restrictedImportPaths,
   securityRestrictions,
   searchInputRestrictions,
-  // TODO: Re-enable after PR for issue #6871 is merged
-  // modalStateRestrictions,
+  modalStateRestrictions,
 } from '../rules/rules.ts';
 
 export const baseTypeScriptConfig = {
@@ -124,8 +123,7 @@ export const baseTypeScriptConfig = {
       'error',
       ...securityRestrictions,
       ...searchInputRestrictions,
-      // TODO: Re-enable after PR for issue #6871 is merged
-      // ...modalStateRestrictions,
+      ...modalStateRestrictions,
     ],
     'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
   },

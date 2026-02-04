@@ -29,7 +29,7 @@ import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type {
   GridCellParams,
-  TokenAwareGridColDef,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -189,13 +189,13 @@ function VolunteerGroups(): JSX.Element {
     );
   }
 
-  const columns: TokenAwareGridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: 'group',
       headerName: t('eventVolunteers.groupHeader'),
       flex: 1,
       align: 'left',
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -215,7 +215,7 @@ function VolunteerGroups(): JSX.Element {
       headerName: t('eventVolunteers.leaderHeader'),
       flex: 1,
       align: 'center',
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -270,7 +270,7 @@ function VolunteerGroups(): JSX.Element {
       headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

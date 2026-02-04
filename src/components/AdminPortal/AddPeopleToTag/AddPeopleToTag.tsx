@@ -41,19 +41,16 @@
 import { useMutation, useQuery } from '@apollo/client';
 import type {
   GridCellParams,
-  TokenAwareGridColDef,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
-import {
-  DataGrid,
-  convertTokenColumns,
-} from 'shared-components/DataGridWrapper';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import Button from 'shared-components/Button';
+import { Form, Button } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
-import styles from './AddPeopleToTag.module.css';
+import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -71,6 +68,7 @@ import {
   dataGridStyle,
 } from 'types/AdminPortal/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import componentStyles from './AddPeopleToTag.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -231,11 +229,11 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     );
   }
 
-  const columns: TokenAwareGridColDef[] = [
+  const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: '#',
-      minWidth: 'space-13',
+      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -248,7 +246,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       field: 'userName',
       headerName: t('userName'),
       flex: 2,
-      minWidth: 'space-13',
+      minWidth: 100,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -264,7 +262,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       headerName: t('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 'space-13',
+      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -331,7 +329,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         footer={modalFooter}
         dataTestId="addPeopleToTagModal"
       >
-        <form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
+        <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
             className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
           >
@@ -395,7 +393,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               <div
                 id="addPeopleToTagScrollableDiv"
                 data-testid="addPeopleToTagScrollableDiv"
-                className={styles.dataGridContainer}
+                className={componentStyles.dataGridContainer}
               >
                 <InfiniteScroll
                   dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
@@ -439,14 +437,14 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                         ...membersToAssignTo,
                       }),
                     )}
-                    columns={convertTokenColumns(columns)}
+                    columns={columns}
                     isRowSelectable={() => false}
                   />
                 </InfiniteScroll>
               </div>
             </>
           )}
-        </form>
+        </Form>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );
