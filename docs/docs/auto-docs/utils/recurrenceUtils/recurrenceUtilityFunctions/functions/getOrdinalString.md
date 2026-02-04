@@ -6,7 +6,7 @@
 
 > **getOrdinalString**(`num`): `string`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L345)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:373](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L373)
 
 Converts a number to its ordinal string representation
 
