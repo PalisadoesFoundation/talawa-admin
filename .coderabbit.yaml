@@ -70,6 +70,7 @@ reviews:
     - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
       instructions: |
         Post a single, structured comment; reference file:line for each item.
+        If the file is a test (*.spec|*.test), apply the test checklist instead and skip this block.
 
         Issue goals:
         - Map changes to the linked issue’s acceptance criteria; flag unaddressed or out‑of‑scope work.
