@@ -1453,9 +1453,7 @@
     "email": "邮箱",
     "role": "角色",
     "loading": "加载中...",
-    "emailNotAvailable": "邮箱不可用",
-    "previousYear": "上一年",
-    "nextYear": "下一年"
+    "emailNotAvailable": "邮箱不可用"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
@@ -2491,7 +2489,9 @@
     "clear": "清除",
     "clearSelection": "清除选择",
     "loading": "加载中...",
-    "selectRow": "选择第 {{rowKey}} 行"
+    "selectRow": "选择第 {{rowKey}} 行",
+    "previousYear": "上一年",
+    "nextYear": "下一年"
   },
   "donation": {
     "amount_label": "金额",

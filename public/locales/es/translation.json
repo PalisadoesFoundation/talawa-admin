@@ -1436,9 +1436,7 @@
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible",
-    "previousYear": "Año anterior",
-    "nextYear": "Siguiente año"
+    "emailNotAvailable": "Correo electrónico no disponible"
   },
   "userRegister": {
     "register": "Registro",
@@ -2491,7 +2489,9 @@
     "clear": "Limpiar",
     "clearSelection": "Limpiar selección",
     "loading": "Cargando...",
-    "selectRow": "Seleccionar fila {{rowKey}}"
+    "selectRow": "Seleccionar fila {{rowKey}}",
+    "previousYear": "Año anterior",
+    "nextYear": "Siguiente año"
   },
   "donation": {
     "amount_label": "Cantidad",

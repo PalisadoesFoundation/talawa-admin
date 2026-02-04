@@ -740,7 +740,12 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    // Check the dropdown toggle exists
+    const toggle = screen.getByTestId('recurrence-toggle');
+    expect(toggle).toBeInTheDocument();
+
+    // Optionally check default label
+    expect(toggle).toHaveTextContent(/select an option/i);
   });
 
   test('shows recurrence dropdown for recurring instances with edit permissions', () => {
@@ -751,9 +756,15 @@ describe('EventListCardPreviewModal', () => {
         baseEvent: { id: 'base123' },
         userRole: UserRole.ADMINISTRATOR,
       },
+      recurrence: null,
     });
 
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    // Check the dropdown toggle exists
+    const toggle = screen.getByTestId('recurrence-toggle');
+    expect(toggle).toBeInTheDocument();
+
+    // Optionally check default text
+    expect(toggle).toHaveTextContent(/select an option/i);
   });
 
   test('hides recurrence dropdown for non-recurring events', () => {
@@ -779,11 +790,14 @@ describe('EventListCardPreviewModal', () => {
       recurrence: null,
     });
 
-    expect(screen.getByText('selectRecurrencePattern')).toBeInTheDocument();
+    const toggle = screen.getByTestId('recurrence-toggle');
+    expect(toggle).toBeInTheDocument();
+    expect(toggle).toHaveTextContent(/select an option/i);
   });
 
   test('opens recurrence dropdown and shows options', async () => {
     const user = userEvent.setup();
+
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
@@ -792,29 +806,31 @@ describe('EventListCardPreviewModal', () => {
       },
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
-
-    // Verify dropdown exists and is clickable
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     expect(dropdownToggle).toBeInTheDocument();
+
     await user.click(dropdownToggle);
 
-    // Verify at least one option appears (using testid which is more reliable)
-    await waitFor(() => {
-      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
-    });
+    // Wait for the dropdown options to appear
+    const dailyOption = await screen.findByText(/daily/i);
+    const weeklyOption = await screen.findByText(/weekly/i);
+    const monthlyOption = await screen.findByText(/monthly/i);
+    const annuallyOption = await screen.findByText(/annually/i);
+    const weekdayOption = await screen.findByText(/weekday/i);
+    const customOption = await screen.findByText(/custom/i);
 
-    // Verify all options are present by their test IDs
-    expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(); // Daily
-    expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument(); // Weekly
-    expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument(); // Monthly
-    expect(screen.getByTestId('recurrenceOption-3')).toBeInTheDocument(); // Annually
-    expect(screen.getByTestId('recurrenceOption-4')).toBeInTheDocument(); // Weekday
-    expect(screen.getByTestId('recurrenceOption-5')).toBeInTheDocument(); // Custom
+    expect(dailyOption).toBeInTheDocument();
+    expect(weeklyOption).toBeInTheDocument();
+    expect(monthlyOption).toBeInTheDocument();
+    expect(annuallyOption).toBeInTheDocument();
+    expect(weekdayOption).toBeInTheDocument();
+    expect(customOption).toBeInTheDocument();
   });
 
   test('sets recurrence when option is selected', async () => {
     const user = userEvent.setup();
     const mockSetRecurrence = vi.fn();
+
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
@@ -824,10 +840,10 @@ describe('EventListCardPreviewModal', () => {
       setRecurrence: mockSetRecurrence,
     });
 
-    const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
     await user.click(dropdownToggle);
 
-    const dailyOption = screen.getByTestId('recurrenceOption-0');
+    const dailyOption = screen.getByText('daily');
     await user.click(dailyOption);
 
     expect(mockSetRecurrence).toHaveBeenCalled();
@@ -842,12 +858,15 @@ describe('EventListCardPreviewModal', () => {
         ...mockEventListCardProps,
         isRecurringEventTemplate: true,
         userRole: UserRole.ADMINISTRATOR,
-        recurrence: { frequency: 'daily' },
       },
       setCustomRecurrenceModalIsOpen: mockSetCustomRecurrenceModalIsOpen,
     });
 
-    await user.click(screen.getByTestId('mock-dropdown'));
+    const dropdownToggle = screen.getByTestId('recurrence-toggle');
+    await user.click(dropdownToggle);
+
+    const customOption = screen.getByText('customOption'); // or t('customOption')
+    await user.click(customOption);
 
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });

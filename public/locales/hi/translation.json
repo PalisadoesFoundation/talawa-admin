@@ -1434,9 +1434,7 @@
     "email": "ईमेल",
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
-    "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
-    "previousYear": "पिछला वर्ष",
-    "nextYear": "अगला वर्ष"
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -2491,7 +2489,9 @@
     "clear": "साफ़ करें",
     "clearSelection": "चयन साफ़ करें",
     "loading": "लोड हो रहा है...",
-    "selectRow": "पंक्ति {{rowKey}} चुनें"
+    "selectRow": "पंक्ति {{rowKey}} चुनें",
+    "previousYear": "पिछला वर्ष",
+    "nextYear": "अगला वर्ष"
   },
   "donation": {
     "amount_label": "राशि",

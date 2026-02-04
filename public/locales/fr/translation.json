@@ -1439,9 +1439,7 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible",
-    "previousYear": "Année précédente",
-    "nextYear": "Année suivante"
+    "emailNotAvailable": "E-mail non disponible"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -2491,7 +2489,9 @@
     "clear": "Effacer",
     "clearSelection": "Effacer la sélection",
     "loading": "Chargement...",
-    "selectRow": "Sélectionner la ligne {{rowKey}}"
+    "selectRow": "Sélectionner la ligne {{rowKey}}",
+    "previousYear": "Année précédente",
+    "nextYear": "Année suivante"
   },
   "donation": {
     "amount_label": "Montant",

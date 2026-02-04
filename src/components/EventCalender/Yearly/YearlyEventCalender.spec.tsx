@@ -134,7 +134,7 @@ i18n.init({
 });
 
 // Simplify EventListCard rendering to avoid router/i18n dependencies in tests
-vi.mock('components/EventListCard/EventListCard', () => {
+vi.mock('shared-components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
     default: (props: { name?: string } & Record<string, unknown>) => (
@@ -315,18 +315,23 @@ describe('Calendar Component', () => {
   });
 
   it('handles year navigation correctly', async () => {
-    const { getByTestId, getByText } = renderWithRouterAndPath(
+    const user = userEvent.setup();
+
+    const { getByText } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
     const currentYear = new Date().getFullYear();
 
-    await user.click(getByTestId('prevYear'));
+    const prevButton = screen.getByLabelText('previousYear');
+    const nextButton = screen.getByLabelText('nextYear');
+
+    await user.click(prevButton);
     await waitFor(() => {
       expect(getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    await user.click(getByTestId('nextYear'));
+    await user.click(nextButton);
     await waitFor(() => {
       expect(getByText(String(currentYear))).toBeInTheDocument();
     });
@@ -568,19 +573,36 @@ describe('Calendar Component', () => {
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
-    // Use the helper with default route for consistency
-    const { getByTestId, getByText, rerender } = renderWithRouterAndPath(
-      <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
+    const user = userEvent.setup();
+
+    const { rerender } = render(
+      <MemoryRouter initialEntries={['/organization/org1']}>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Calendar
+            eventData={mockEventData}
+            refetchEvents={mockRefetchEvents}
+            orgData={mockOrgData}
+          />
+        </Suspense>
+      </MemoryRouter>,
     );
 
-    await user.click(getByTestId('prevYear'));
-    await user.click(getByTestId('prevYear'));
-
-    await user.click(getByTestId('nextYear'));
-    await user.click(getByTestId('nextYear'));
-
     const currentYear = new Date().getFullYear();
-    expect(getByText(String(currentYear))).toBeInTheDocument();
+
+    const prevButton = screen.getByLabelText('previousYear');
+    const nextButton = screen.getByLabelText('nextYear');
+
+    await user.click(prevButton);
+    await user.click(prevButton);
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear - 2))).toBeInTheDocument();
+    });
+
+    await user.click(nextButton);
+    await user.click(nextButton);
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
+    });
 
     rerender(
       <MemoryRouter initialEntries={['/organization/org1']}>
@@ -594,7 +616,7 @@ describe('Calendar Component', () => {
       </MemoryRouter>,
     );
 
-    expect(getByText(String(currentYear))).toBeInTheDocument();
+    expect(screen.getByText(String(currentYear))).toBeInTheDocument();
   });
 
   it('collapses expanded event list when clicked again', async () => {
@@ -1226,7 +1248,7 @@ describe('Calendar Component', () => {
   });
 
   test('handles calendar navigation across year boundaries', async () => {
-    const { getByTestId } = render(
+    const { getByLabelText, getByTestId } = render(
       <BrowserRouter>
         <Calendar
           eventData={[]}
@@ -1239,26 +1261,20 @@ describe('Calendar Component', () => {
     );
 
     const currentYear = new Date().getFullYear();
-    const prevButton = getByTestId('prevYear');
+    const prevButton = getByLabelText('previousYear'); // fixed
     const nextButton = getByTestId('nextYear');
 
-    // Test navigation to previous year
     await user.click(prevButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    // Test navigation to next year (back to current)
     await user.click(nextButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear))).toBeInTheDocument();
     });
 
-    // Test navigation to future year
     await user.click(nextButton);
-
     await waitFor(() => {
       expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
     });

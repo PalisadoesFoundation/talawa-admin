@@ -119,10 +119,13 @@ mockEventListCardModals.mockImplementation(() => (
 
 describe('Testing Event Dashboard Screen', () => {
   beforeAll(() => {
-    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
-      __esModule: true,
-      default: mockEventListCardModals,
-    }));
+    vi.mock(
+      'shared-components/EventListCard/Modal/EventListCardModals',
+      () => ({
+        __esModule: true,
+        default: mockEventListCardModals,
+      }),
+    );
   });
 
   beforeEach(() => {
