@@ -152,6 +152,26 @@ Placeholder text when no option is selected.
 
 ***
 
+### searchable?
+
+> `optional` **searchable**: `boolean`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L119)
+
+Whether the dropdown should be searchable.
+
+***
+
+### searchPlaceholder?
+
+> `optional` **searchPlaceholder**: `string`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L124)
+
+Placeholder text for the search input.
+
+***
+
 ### selectedValue?
 
 > `optional` **selectedValue**: `string`

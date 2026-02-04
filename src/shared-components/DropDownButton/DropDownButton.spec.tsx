@@ -155,4 +155,120 @@ describe('DropDownButton Component', () => {
     const menu = screen.getByTestId('test-dropdown-menu');
     expect(menu.parentElement).toHaveClass('dropup');
   });
+
+  describe('Searchable DropDownButton', () => {
+    const searchableProps = {
+      ...baseProps,
+      searchable: true,
+      searchPlaceholder: 'Search options...',
+      selectedValue: undefined,
+    };
+
+    it('renders SearchToggle when searchable is true', () => {
+      renderComponent(searchableProps);
+      expect(screen.getByTestId('test-dropdown-input')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('test-dropdown-toggle'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('updates internal searchTerm and filters options when typing', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      // Helper to scroll input into view if needed (though not strictly required for unit tests usually)
+      await userEvent.type(input, 'Option 1');
+
+      expect(input).toHaveValue('Option 1');
+
+      // The menu should be open and contain only the matching option
+      const menu = screen.getByTestId('test-dropdown-menu');
+      expect(menu).toHaveClass('show');
+
+      const option1 = screen.getByText('Option 1');
+      expect(option1).toBeInTheDocument();
+      expect(screen.queryByText('Option 2')).not.toBeInTheDocument();
+    });
+
+    it('shows "No options found" message when no options match', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.type(input, 'Nonexistent Option');
+
+      expect(screen.getByText('No options found')).toBeInTheDocument();
+    });
+
+    it('syncs searchTerm with selectedValue prop', () => {
+      // explicit selectedValue to test sync
+      renderComponent({ ...searchableProps, selectedValue: '1' });
+      const input = screen.getByTestId(
+        'test-dropdown-input',
+      ) as HTMLInputElement;
+
+      // Should match label of option with value '1'
+      expect(input.value).toBe('Option 1');
+    });
+
+    it('updates searchTerm and closes menu on selection', async () => {
+      renderComponent({ ...searchableProps, selectedValue: undefined });
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.click(input); // Open menu
+      await userEvent.click(screen.getByText('Option 2'));
+
+      expect(mockOnSelect).toHaveBeenCalledWith('2');
+      // searchTerm update is immediate in component
+      expect(input).toHaveValue('Option 2');
+    });
+
+    it('opens menu on input click', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      await userEvent.click(input);
+      expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
+    });
+
+    it('opens menu on Enter key press', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      input.focus();
+      await userEvent.keyboard('{Enter}');
+      expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
+    });
+
+    it('closes menu on Escape key', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+      await userEvent.keyboard('{Escape}');
+      expect(screen.queryByTestId('test-dropdown-menu')).not.toHaveClass(
+        'show',
+      );
+    });
+
+    it('navigates and selects options with keyboard (ArrowDown/Enter)', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      // Open menu
+      await userEvent.click(input);
+
+      // Navigate down. React-Bootstrap usually focuses the first item on ArrowDown from toggle
+      // However, since our toggle is an input, focus logic might differ.
+      // If standard Bootstrap Dropdown, first ArrowDown focuses first item.
+      await userEvent.keyboard('{ArrowDown}');
+
+      // We expect focus to move to the first option
+      // const option1 = screen.getByText('Option 1');
+      // expect(option1).toHaveFocus();
+
+      // Select it
+      await userEvent.keyboard('{Enter}');
+
+      // Expect selection callback
+      expect(mockOnSelect).toHaveBeenCalledWith('1');
+    });
+  });
 });

@@ -157,6 +157,19 @@ const restrictedImports = [
     message:
       'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
   },
+  {
+    id: 'mui-autocomplete',
+    name: '@mui/material',
+    importNames: ['Autocomplete'],
+    message:
+      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead. If you genuinely need Autocomplete (not for a dropdown), add your file to "scripts/eslint/config/exemptions.ts".',
+  },
+  {
+    id: 'mui-autocomplete-path',
+    name: '@mui/material/Autocomplete',
+    message:
+      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead. If you genuinely need Autocomplete (not for a dropdown), add your file to "scripts/eslint/config/exemptions.ts".',
+  },
 ];
 
 // Helper functions for rule processing

@@ -299,5 +299,7 @@
   "toggleSidebar": "Alternar barra lateral",
   "picture": "Imagen de {{name}}",
   "optionsSuffix": "opciones",
-  "userMenu": "Menú de usuario"
+  "userMenu": "Menú de usuario",
+  "searchPlaceholder": "Buscar...",
+  "noOptionsFound": "No se encontraron opciones"
 }
