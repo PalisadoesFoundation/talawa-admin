@@ -1,3 +1,44 @@
+
+/**
+ * EventRegistrantsModal Component
+ *
+ * This component renders a modal to manage event registrants. It allows users to:
+ * - View the list of registered attendees for a specific event.
+ * - Add new attendees from the organization's member list or through on-spot registration.
+ * - Remove existing attendees from the event.
+ *
+ * @param props - The properties passed to the component.
+ * @param show - Determines whether the modal is visible.
+ * @param eventId - The ID of the event for which registrants are being managed.
+ * @param orgId - The ID of the organization associated with the event.
+ * @param handleClose - Callback function to close the modal.
+ *
+ * @returns The rendered EventRegistrantsModal component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
+ * - Displays a loading spinner while data is being fetched.
+ * - Integrates with `NotificationToast` for user notifications..
+ * - Supports translations using `react-i18next`.
+ *
+ * @example
+ * ```tsx
+ * <EventRegistrantsModal
+ *   show={true}
+ *   eventId="event123"
+ *   orgId="org456"
+ *   handleClose={() => setShowModal(false)}
+ * />
+ * ```
+ *
+ * Dependencies:
+ * - shared-components/Button for button components.
+ * - shared-components/BaseModal for modal components.
+ * - `@apollo/client` for GraphQL queries and mutations.
+ * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
+ * - `NotificationToast` for toast notifications.
+ * - `react-i18next` for translations.
+ */
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Autocomplete from '@mui/material/Autocomplete';
