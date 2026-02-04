@@ -130,7 +130,9 @@ const LoginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -984,11 +986,8 @@ const LoginPage = (): JSX.Element => {
                         }
                         placeholder={t('clickToSelectOrg')}
                         buttonLabel={
-                          (
-                            organizations.find(
-                              (org: { label: string; value: string }) =>
-                                org.value === signformState.signOrg,
-                            ) as { label: string; value: string } | undefined
+                          organizations.find(
+                            (org) => org.value === signformState.signOrg,
                           )?.label
                         }
                         parentContainerStyle="w-100"
