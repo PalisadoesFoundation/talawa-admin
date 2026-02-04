@@ -185,6 +185,9 @@ const ALLOWLIST_PATTERNS = [
   // Common allowed numeric values in specific contexts
   /z-index:\s*\d+/,
   /opacity:\s*[\d.]+/,
+  // MUI DataGrid numeric properties (library limitation)
+  /minWidth:\s*\d+/g,
+  /maxWidth:\s*\d+/g,
   /flex:\s*[\d.]+/,
   /flex-grow:\s*[\d.]+/,
   /flex-shrink:\s*[\d.]+/,
