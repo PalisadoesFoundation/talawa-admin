@@ -50,6 +50,11 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import type {
+  InterfaceEventDetailsQuery,
+  InterfaceEventRegistrantsQuery,
+  InterfaceEventCheckInsQuery,
+} from 'utils/interfaces';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -67,10 +72,13 @@ function EventRegistrants(): JSX.Element {
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: eventId },
-    fetchPolicy: 'cache-first',
-  });
+  const { data: eventData } = useQuery<InterfaceEventDetailsQuery>(
+    EVENT_DETAILS,
+    {
+      variables: { eventId: eventId },
+      fetchPolicy: 'cache-first',
+    },
+  );
 
   // Determine event type and set appropriate variables
   useEffect(() => {
@@ -83,10 +91,25 @@ function EventRegistrants(): JSX.Element {
     ? { recurringEventInstanceId: eventId }
     : { eventId: eventId };
 
-  const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
-    variables: registrantVariables,
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
+  const [getEventRegistrants] = useLazyQuery<InterfaceEventRegistrantsQuery>(
+    EVENT_REGISTRANTS,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
+
+  // Fetch check-in status
+  const [getEventCheckIns] = useLazyQuery<InterfaceEventCheckInsQuery>(
+    EVENT_CHECKINS,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
+  // callback function to refresh the data
+  const refreshData = useCallback(() => {
+    getEventRegistrants({
+      variables: registrantVariables,
+    }).then(({ data }) => {
       if (data?.getEventAttendeesByEventId) {
         const mappedData = data.getEventAttendeesByEventId.map(
           (attendee: {
@@ -105,27 +128,19 @@ function EventRegistrants(): JSX.Element {
         );
         setRegistrants(mappedData);
       }
-    },
-  });
+    });
 
-  // Fetch check-in status
-  const [getEventCheckIns] = useLazyQuery(EVENT_CHECKINS, {
-    variables: { eventId: eventId },
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
+    getEventCheckIns({
+      variables: { eventId: eventId },
+    }).then(({ data }) => {
       if (data?.event?.attendeesCheckInStatus) {
         const checkedInUserIds = data.event.attendeesCheckInStatus
           .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
           .map((status: { user: { id: string } }) => status.user.id);
         setCheckedInUsers(checkedInUserIds);
       }
-    },
-  });
-  // callback function to refresh the data
-  const refreshData = useCallback(() => {
-    getEventRegistrants();
-    getEventCheckIns();
-  }, [getEventRegistrants, getEventCheckIns]);
+    });
+  }, [getEventRegistrants, getEventCheckIns, registrantVariables, eventId]);
 
   // Function to remove a registrant from the event
   const deleteRegistrant = useCallback(
@@ -202,56 +217,55 @@ function EventRegistrants(): JSX.Element {
       __serial: number;
     }
   >[] = [
-    {
-      id: 'serial',
-      header: t('serialNumber'),
-      accessor: '__serial',
-    },
-    {
-      id: 'registrant',
-      header: t('registrant'),
-      accessor: 'name',
-    },
-    {
-      id: 'registeredAt',
-      header: t('registeredAt'),
-      accessor: 'createdAt',
-    },
-    {
-      id: 'createdAt',
-      header: t('createdAt'),
-      accessor: (row) =>
-        row.time && row.time !== 'N/A'
-          ? new Date(`1970-01-01T${row.time}`).toLocaleTimeString([], {
+      {
+        id: 'serial',
+        header: t('serialNumber'),
+        accessor: '__serial',
+      },
+      {
+        id: 'registrant',
+        header: t('registrant'),
+        accessor: 'name',
+      },
+      {
+        id: 'registeredAt',
+        header: t('registeredAt'),
+        accessor: 'createdAt',
+      },
+      {
+        id: 'createdAt',
+        header: t('createdAt'),
+        accessor: (row) =>
+          row.time && row.time !== 'N/A'
+            ? new Date(`1970-01-01T${row.time}`).toLocaleTimeString([], {
               hour: 'numeric',
               minute: '2-digit',
               hour12: true,
             })
-          : 'N/A',
-    },
-    {
-      id: 'options',
-      header: t('options'),
-      accessor: () => null,
-      render: (_val, row) => (
-        <button
-          type="button"
-          className={`btn btn-sm ${
-            row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
-          }`}
-          onClick={() => deleteRegistrant(row.user.id)}
-          disabled={row.isCheckedIn}
-          title={
-            row.isCheckedIn
-              ? t('cannotUnregisterCheckedInTooltip')
-              : t('unregister')
-          }
-        >
-          {row.isCheckedIn ? t('checkedIn') : t('unregister')}
-        </button>
-      ),
-    },
-  ];
+            : 'N/A',
+      },
+      {
+        id: 'options',
+        header: t('options'),
+        accessor: () => null,
+        render: (_val, row) => (
+          <button
+            type="button"
+            className={`btn btn-sm ${row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
+              }`}
+            onClick={() => deleteRegistrant(row.user.id)}
+            disabled={row.isCheckedIn}
+            title={
+              row.isCheckedIn
+                ? t('cannotUnregisterCheckedInTooltip')
+                : t('unregister')
+            }
+          >
+            {row.isCheckedIn ? t('checkedIn') : t('unregister')}
+          </button>
+        ),
+      },
+    ];
 
   return (
     <ErrorBoundaryWrapper

@@ -13,7 +13,7 @@
  * @example
  * ```tsx
  * import { getActiveAdvertisementMocks } from './AdvertisementsMocks';
- * import { MockedProvider } from '@apollo/client/testing/react';
+ * import { MockedProvider } from '@apollo/client/testing';
  *
  * render(
  * <MockedProvider mocks={getActiveAdvertisementMocks} addTypename={false}>

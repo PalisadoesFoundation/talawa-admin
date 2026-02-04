@@ -67,6 +67,10 @@ import type {
 import styles from './EventStatistics.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
+import type {
+  InterfaceEventDetailsQuery,
+  InterfaceRecurringEventsQuery,
+} from 'utils/interfaces';
 
 ChartJS.register(
   CategoryScale,
@@ -87,7 +91,7 @@ const DESIGN_TOKEN = {
   BW: 2,
 } as const;
 
-const calculateAge = (birthDate: Date): number => {
+const calculateAge = (birthDate: Date | string): number => {
   const today = new Date();
   const birth = new Date(birthDate);
   let age = today.getFullYear() - birth.getFullYear();
@@ -107,9 +111,10 @@ export const AttendanceStatisticsModal: React.FC<
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
-  const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
+  const [loadEventDetails, { data: eventData }] =
+    useLazyQuery<InterfaceEventDetailsQuery>(EVENT_DETAILS);
   const [loadRecurringEvents, { data: recurringData }] =
-    useLazyQuery(RECURRING_EVENTS);
+    useLazyQuery<InterfaceRecurringEventsQuery>(RECURRING_EVENTS);
   const currentEventIndex = useMemo(() => {
     if (!recurringData?.getRecurringEvents || !eventId) return -1;
     return recurringData.getRecurringEvents.findIndex(
@@ -289,31 +294,34 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       selectedCategory === 'Gender'
         ? [
-            memberData.filter((member) => member.natalSex === 'male').length,
-            memberData.filter((member) => member.natalSex === 'female').length,
-            memberData.filter(
-              (member) =>
-                member.natalSex === 'intersex' ||
-                member.natalSex === null ||
-                member.natalSex === '',
-            ).length,
-          ]
+          memberData.filter((member) => member.natalSex === 'male').length,
+          memberData.filter((member) => member.natalSex === 'female').length,
+          memberData.filter(
+            (member) =>
+              member.natalSex === 'intersex' ||
+              member.natalSex === null ||
+              member.natalSex === '',
+          ).length,
+        ]
         : [
-            memberData.filter((member) => {
-              const age = calculateAge(member.birthDate);
-              return age < MIN_ADULT_AGE;
-            }).length,
-            memberData.filter((member) => {
-              const memberAge = calculateAge(member.birthDate);
-              const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
-              const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
-              return isAtLeastAdult && isAtMostYoungAdult;
-            }).length,
-            memberData.filter((member) => {
-              const age = calculateAge(member.birthDate);
-              return age > MAX_YOUNG_ADULT_AGE;
-            }).length,
-          ],
+          memberData.filter((member) => {
+            if (!member.birthDate) return false;
+            const age = calculateAge(member.birthDate);
+            return age < MIN_ADULT_AGE;
+          }).length,
+          memberData.filter((member) => {
+            if (!member.birthDate) return false;
+            const memberAge = calculateAge(member.birthDate);
+            const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
+            const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
+            return isAtLeastAdult && isAtMostYoungAdult;
+          }).length,
+          memberData.filter((member) => {
+            if (!member.birthDate) return false;
+            const age = calculateAge(member.birthDate);
+            return age > MAX_YOUNG_ADULT_AGE;
+          }).length,
+        ],
     [selectedCategory, memberData],
   );
 

@@ -9,7 +9,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { GraphQLError } from 'graphql';
@@ -844,7 +844,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should render the Events screen properly', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -869,7 +869,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should open and close the create event modal', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -973,7 +973,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 2), allDayEventMock]}
@@ -1093,7 +1093,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={[...MOCKS, nonAllDayMock]} cache={cache}>
         <BrowserRouter>
@@ -1164,7 +1164,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event error', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={CREATE_EVENT_ERROR_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1218,7 +1218,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1272,7 +1272,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1318,7 +1318,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle date picker changes', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1363,7 +1363,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1416,7 +1416,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle null date values gracefully', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1454,9 +1454,9 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={ERROR_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1484,9 +1484,9 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={RATE_LIMIT_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1522,7 +1522,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle input changes for title, description, and location', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1566,7 +1566,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as administrator', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1594,7 +1594,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should test userRole as regular user', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1621,7 +1621,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should change view type', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1656,7 +1656,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1700,7 +1700,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1730,7 +1730,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle create event returning null (no data) gracefully', async () => {
     mockToast.success.mockClear();
     mockToast.error.mockClear();
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={CREATE_EVENT_NULL_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1784,7 +1784,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={CREATOR_NULL_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1901,7 +1901,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     mockToast.success.mockClear();
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 2), MOCKS[0], createEventWithRecurrenceMock]}
@@ -2028,7 +2028,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={[partialDataMock, MOCKS[2]]} cache={cache}>
         <BrowserRouter>
@@ -2133,7 +2133,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 2), thisWeekMock]}
@@ -2256,7 +2256,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 3), manualRangeMock]}
@@ -2390,7 +2390,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={[...MOCKS.slice(0, 2), todayMock]} cache={cache}>
         <BrowserRouter>
@@ -2445,7 +2445,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event returning GraphQL errors', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={CREATE_EVENT_WITH_GRAPHQL_ERRORS_MOCKS}
@@ -2488,7 +2488,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle refetch failure gracefully during event creation', async () => {
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider mocks={REFETCH_FAILURE_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -2563,12 +2563,12 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache({ addTypename: false });
+    const cache = new InMemoryCache({});
     render(
       <MockedProvider
         mocks={[...MOCKS, mutationErrorMock]}
         cache={cache}
-        addTypename={false}
+
       >
         <BrowserRouter>
           <ThemeProvider theme={theme}>

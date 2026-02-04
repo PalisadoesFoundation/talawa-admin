@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { EventStats } from './EventStats';
 import { BrowserRouter } from 'react-router';
 import { mockData } from '../EventStatsMocks';

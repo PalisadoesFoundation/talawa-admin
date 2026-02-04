@@ -19,7 +19,7 @@ import type { ChangeEvent } from 'react';
 import styles from './ChatRoom.module.css';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client/react';
+import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client/react';
 import {
   EDIT_CHAT_MESSAGE,
@@ -46,8 +46,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-          id: string;
-        }>
+        id: string;
+      }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: INewChat[] }>>;
 }
@@ -276,14 +276,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
           parentMessage: replyToDirectMessage
             ? {
-                id: replyToDirectMessage.id,
-                body: replyToDirectMessage.body,
-                createdAt: replyToDirectMessage.createdAt,
-                creator: {
-                  id: replyToDirectMessage.creator.id,
-                  name: replyToDirectMessage.creator.name,
-                },
-              }
+              id: replyToDirectMessage.id,
+              body: replyToDirectMessage.body,
+              createdAt: replyToDirectMessage.createdAt,
+              creator: {
+                id: replyToDirectMessage.creator.id,
+                name: replyToDirectMessage.creator.name,
+              },
+            }
             : undefined,
         };
 
@@ -327,12 +327,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     },
     skip: !props.selectedContact,
     onData: async (messageSubscriptionData) => {
+      const data: any = messageSubscriptionData.data.data;
       if (
-        messageSubscriptionData?.data.data.chatMessageCreate &&
-        messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+        data?.chatMessageCreate &&
+        data?.chatMessageCreate.chat?.id ===
+        props.selectedContact
       ) {
-        const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
+        const newMessage = data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           const el = document.querySelector(`.${styles.chatMessages}`);
           if (el) {
@@ -340,7 +341,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           }
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => {},
+          () => { },
         );
 
         // Soft-append the new message to local state
@@ -357,16 +358,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
           parentMessage: newMessage.parentMessage
             ? {
-                id: newMessage.parentMessage.id,
-                body: newMessage.parentMessage.body,
-                createdAt: newMessage.parentMessage.createdAt,
-                creator: newMessage.parentMessage.creator
-                  ? {
-                      id: newMessage.parentMessage.creator.id,
-                      name: newMessage.parentMessage.creator.name,
-                    }
-                  : { id: '', name: '' },
-              }
+              id: newMessage.parentMessage.id,
+              body: newMessage.parentMessage.body,
+              createdAt: newMessage.parentMessage.createdAt,
+              creator: newMessage.parentMessage.creator
+                ? {
+                  id: newMessage.parentMessage.creator.id,
+                  name: newMessage.parentMessage.creator.name,
+                }
+                : { id: '', name: '' },
+            }
             : undefined,
         };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
 import EventsAttendedMemberModal from './EventsAttendedMemberModal';
 import { vi } from 'vitest';

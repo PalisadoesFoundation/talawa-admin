@@ -1,6 +1,6 @@
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import React from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing/react';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
   render,
   screen,

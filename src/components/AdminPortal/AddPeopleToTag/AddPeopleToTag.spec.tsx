@@ -1,6 +1,6 @@
 import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';

@@ -11,7 +11,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   checkInMutationSuccess,
   checkInMutationUnsuccess,

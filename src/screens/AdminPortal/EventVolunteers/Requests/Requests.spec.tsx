@@ -6,7 +6,7 @@
  *
  */
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   LocalizationProvider,
   AdapterDayjs,

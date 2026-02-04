@@ -47,8 +47,9 @@ import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import type { ApolloQueryResult } from '@apollo/client/react';
+import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
+import type { InterfaceOrgMemberConnectionQuery } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
@@ -170,7 +171,7 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<InterfaceOrgMemberConnectionQuery>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: currentOrg },
       first: 20,
@@ -364,8 +365,8 @@ export default function CreateGroupChat({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allUsersData &&
-                    allUsersData.organization?.members?.edges?.length > 0 &&
+                  {allUsersData?.organization?.members?.edges &&
+                    allUsersData.organization.members.edges.length > 0 &&
                     allUsersData.organization.members.edges
                       .filter(
                         ({

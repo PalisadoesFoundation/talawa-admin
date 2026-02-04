@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   LocalizationProvider,
   AdapterDayjs,

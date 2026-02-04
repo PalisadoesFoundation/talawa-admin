@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -23,7 +23,7 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { CREATE_VOLUNTEER_GROUP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import type { MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),

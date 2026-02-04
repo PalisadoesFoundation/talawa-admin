@@ -21,16 +21,15 @@
  * ```
  */
 import { Paper, TableBody } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from 'shared-components/Button';
 import type {
   ApolloCache,
-  ApolloQueryResult,
   DefaultContext,
   FetchResult,
-  MutationFunctionOptions,
   OperationVariables,
-} from '@apollo/client/react';
+  ApolloQueryResult,
+} from '@apollo/client';
 import { useQuery, useMutation } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -54,6 +53,8 @@ import { type GroupChat } from 'types/UserPortal/Chat/type';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
+import type { InterfaceOrgMemberConnectionQuery } from 'utils/interfaces';
+
 interface InterfaceOrganizationMember {
   id: string;
   name: string;
@@ -76,49 +77,8 @@ export const handleCreateDirectChat = async (
   userName: string,
   chats: GroupChat[],
   t: TFunction<'translation', 'userChat'>,
-  createChat: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          organizationId: string;
-          name: string;
-          description: string;
-          avatar: null;
-        };
-      };
-    }): unknown;
-  },
-  createChatMembership: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          memberId: string;
-          chatId: string;
-          role: string;
-        };
-      };
-    }): unknown;
-  },
+  createChat: any,
+  createChatMembership: any,
   organizationId: string | undefined,
   userId: string | null,
   currentUserName: string,
@@ -210,7 +170,7 @@ export default function createDirectChatModal({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<InterfaceOrgMemberConnectionQuery>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: organizationId },
       first: 20,
@@ -293,8 +253,8 @@ export default function createDirectChatModal({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allUsersData &&
-                    allUsersData.organization?.members?.edges?.length > 0 &&
+                  {allUsersData?.organization?.members?.edges &&
+                    allUsersData.organization.members.edges.length > 0 &&
                     allUsersData.organization.members.edges
                       .filter(
                         ({

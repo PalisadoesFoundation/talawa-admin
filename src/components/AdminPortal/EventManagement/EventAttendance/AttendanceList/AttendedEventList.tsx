@@ -36,19 +36,20 @@ import { Link, useParams } from 'react-router';
 import { formatDate } from 'utils/dateFormatter';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEventDetailsQuery } from 'utils/interfaces';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
   const { t: tCommon } = useTranslation('common');
   const { orgId: currentOrg } = useParams();
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error } = useQuery<InterfaceEventDetailsQuery>(EVENT_DETAILS, {
     variables: { eventId: id },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
   });
 
-  if (error || data?.error) {
+  if (error) {
     return <p>{tCommon('errorLoadingEventDetails')}</p>;
   }
 

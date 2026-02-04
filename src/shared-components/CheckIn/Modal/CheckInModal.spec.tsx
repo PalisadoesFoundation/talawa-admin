@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS, EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
 import { render, waitFor, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { CheckInModal } from './CheckInModal';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';

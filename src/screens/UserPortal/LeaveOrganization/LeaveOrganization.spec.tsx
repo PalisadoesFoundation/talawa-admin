@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 

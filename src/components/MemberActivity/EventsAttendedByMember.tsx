@@ -28,6 +28,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import styles from './EventsAttendedByMember.module.css';
 import type { InterfaceEventsAttendedByMemberProps } from 'types/MemberActivity/interface';
+import type { InterfaceEventDetailsBasicQuery } from 'utils/interfaces';
 
 function EventsAttendedByMember({
   eventsId,
@@ -37,7 +38,7 @@ function EventsAttendedByMember({
     data: events,
     loading,
     error,
-  } = useQuery(EVENT_DETAILS_BASIC, {
+  } = useQuery<InterfaceEventDetailsBasicQuery>(EVENT_DETAILS_BASIC, {
     variables: { eventId: eventsId },
   });
 
@@ -54,19 +55,18 @@ function EventsAttendedByMember({
     );
   // Support both legacy and current schema fields from EVENT_DETAILS
   const eventData = events?.event;
-  const { organization, id, _id, startAt, startDate, name, title, location } =
-    eventData || {};
+  const { organization, id, startAt, name, location } = eventData || {};
 
   return (
     <LoadingState isLoading={loading} variant="spinner">
       {eventData && (
         <EventAttendedCard
-          orgId={organization._id ?? organization.id}
-          eventId={_id ?? id}
-          key={_id ?? id}
-          startdate={startDate ?? startAt}
-          title={title ?? name}
-          location={location}
+          orgId={organization?.id}
+          eventId={id}
+          key={id}
+          startdate={startAt ?? ''}
+          title={name ?? ''}
+          location={location ?? undefined}
         />
       )}
     </LoadingState>

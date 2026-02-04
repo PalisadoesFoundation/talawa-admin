@@ -23,10 +23,10 @@ export interface IMember {
   eventsAttended?: {
     id: string;
   }[];
-  birthDate: Date;
+  birthDate?: Date | string;
   role: string;
   id: string;
-  tagsAssignedWith: {
+  tagsAssignedWith?: {
     edges: {
       cursor: string;
       node: {
@@ -286,10 +286,10 @@ export interface ICreateEventInput {
   description?: string;
   location?: string;
   recurrence?:
-    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
-        endDate?: string;
-      })
-    | null;
+  | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+    endDate?: string;
+  })
+  | null;
 }
 
 // Legacy interface exports for backward compatibility

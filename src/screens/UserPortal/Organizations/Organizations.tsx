@@ -79,7 +79,7 @@ interface IOrganization {
   description: string;
   adminsCount?: number;
   membersCount?: number;
-  admins: [];
+  admins: any[];
   members?: InterfaceMembersConnection;
   address: {
     city: string;

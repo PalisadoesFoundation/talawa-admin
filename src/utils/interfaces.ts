@@ -1,3 +1,5 @@
+import { IEvent as IEventCommon } from 'types/Event/interface';
+
 /**
  * Represents the ISO 3166-1 alpha-2 country codes.
  */
@@ -723,7 +725,7 @@ export interface InterfaceOrganizationEventsConnectionPg {
  */
 export interface InterfaceOrganizationEventsConnectionEdgePg {
   cursor: string;
-  node: IEvent;
+  node: IEventCommon;
 }
 
 export interface IEvent {
@@ -742,6 +744,7 @@ export interface IEvent {
   };
 }
 
+import type { IMember, IEvent as InterfaceEvent } from 'types/Event/interface';
 /**
  * Defines the structure for an event attachment with PostgreSQL-specific fields.
  */
@@ -1904,6 +1907,13 @@ export interface InterfaceEventDetailsQuery {
     isInviteOnly?: boolean;
     creator: InterfaceUserPg;
     attachments?: InterfaceEventAttachmentPg[];
+    isRecurringEventTemplate?: boolean;
+    baseEvent?: {
+      id: string;
+    } | null;
+    recurrenceRule?: {
+      id: string;
+    } | null;
   };
 }
 
@@ -2246,16 +2256,36 @@ export interface InterfaceSignInQuery {
  */
 export interface InterfaceEventAttendeesQuery {
   event: {
-    attendees: Array<{
+    attendees: Array<IMember>;
+  } | null;
+}
+
+/**
+ * Defines the structure for EVENT_REGISTRANTS query result
+ */
+export interface InterfaceEventRegistrantsQuery {
+  getEventAttendeesByEventId: Array<{
+    id: string;
+    isRegistered: boolean;
+    createdAt: string;
+    user: {
       id: string;
       name: string;
       emailAddress: string;
-      avatarURL?: string;
-      createdAt: string;
-      role: string;
-      natalSex: string;
-      birthDate: string;
-      eventsAttended: Array<{ id: string }>;
+    };
+  }>;
+}
+
+/**
+ * Defines the structure for EVENT_CHECKINS query result
+ */
+export interface InterfaceEventCheckInsQuery {
+  event: {
+    attendeesCheckInStatus: Array<{
+      isCheckedIn: boolean;
+      user: {
+        id: string;
+      };
     }>;
   } | null;
 }
@@ -2333,5 +2363,28 @@ export interface InterfaceUserDetailsQuery {
 export interface InterfaceOrganizationEventsQuery {
   organization: {
     events: InterfaceOrganizationEventsConnectionPg;
+  } | null;
+}
+
+/**
+ * Defines the structure for RECURRING_EVENTS query result
+ */
+export interface InterfaceRecurringEventsQuery {
+  getRecurringEvents: InterfaceEvent[];
+}
+
+/**
+ * Defines the structure for EVENT_DETAILS_BASIC query result
+ */
+export interface InterfaceEventDetailsBasicQuery {
+  event: {
+    id: string;
+    name: string;
+    location: string | null;
+    startAt: string;
+    organization: {
+      id: string;
+      name: string;
+    };
   } | null;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, test, expect, vi, it } from 'vitest';
 import { ApolloProvider } from '@apollo/client/react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';

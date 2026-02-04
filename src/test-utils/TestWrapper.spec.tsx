@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from './I18nextProviderMock';
 import { TestErrorBoundary } from './TestErrorBoundary';
 import AsyncComponent from './AsyncComponent';

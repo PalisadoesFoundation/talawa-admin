@@ -30,6 +30,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import DropDownButton from 'shared-components/DropDownButton';
 import { InterfaceNavbarProps } from 'types/UserPortal/OrganizationNavbar/interface';
+import type { InterfaceOrganizationListQuery } from 'utils/interfaces';
 
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -45,7 +46,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
+  const { data } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 

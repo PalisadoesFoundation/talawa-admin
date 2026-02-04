@@ -43,6 +43,7 @@ import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { InterfaceEventEdge } from 'types/Event/interface';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -111,7 +112,7 @@ const OrganizationScreen = (): JSX.Element => {
       return;
     }
     const edges = eventsData.organization.events.edges ?? [];
-    const matched = edges.find((edge: { node?: { id?: string } }) => {
+    const matched = edges.find((edge) => {
       return edge?.node?.id === eventId;
     });
     if (!matched?.node?.id) {

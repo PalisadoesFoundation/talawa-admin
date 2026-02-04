@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as apolloClient from '@apollo/client/react';
-import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -14,7 +14,7 @@ import {
 } from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import type { MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import EventAgendaItems from './EventAgendaItems';
 import { vi } from 'vitest';
 import { AgendaItemByEvent } from 'GraphQl/Queries/AgendaItemQueries';
