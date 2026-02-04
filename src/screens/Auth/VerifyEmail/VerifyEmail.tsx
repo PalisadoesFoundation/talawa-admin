@@ -100,13 +100,13 @@ const VerifyEmail = (): JSX.Element => {
 
     const verifyEmailToken = async (): Promise<void> => {
       try {
-        const { data } = await verifyEmail({
-          variables: { token },
-        });
-
         if (!isMountedRef.current) {
           return;
         }
+
+        const { data } = await verifyEmail({
+          variables: { token },
+        });
 
         if (data?.verifyEmail?.success) {
           setVerificationState('success');
