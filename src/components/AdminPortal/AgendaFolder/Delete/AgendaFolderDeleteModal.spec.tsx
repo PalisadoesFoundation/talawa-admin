@@ -286,12 +286,9 @@ describe('AgendaFolderDeleteModal', () => {
       const yesButton = screen.getByTestId('modal-delete-btn');
       await userEvent.click(yesButton);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
 
       expect(mockRefetchAgendaFolder).toHaveBeenCalled();
       expect(mockOnClose).toHaveBeenCalled();
