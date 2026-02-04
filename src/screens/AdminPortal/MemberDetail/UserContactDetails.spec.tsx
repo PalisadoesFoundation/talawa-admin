@@ -997,7 +997,7 @@ describe('MemberDetail', () => {
 
       const nameInput = screen.getByTestId('inputName');
       await user.clear(nameInput);
-      await user.type(nameInput, 'TestUser');
+      await user.type(nameInput, 'Test User');
 
       const saveButton = screen.getByTestId('saveChangesBtn');
       await user.click(saveButton);
@@ -1260,26 +1260,26 @@ describe('MemberDetail', () => {
       'inputAddressLine2',
     ) as HTMLInputElement;
     await user.clear(addressLine2);
-    await user.type(addressLine2, 'Apt123');
+    await user.paste('Apt123');
     expect(addressLine2).toHaveValue('Apt123');
 
     const postalCode = screen.getByTestId(
       'inputPostalCode',
     ) as HTMLInputElement;
     await user.clear(postalCode);
-    await user.type(postalCode, '12345');
+    await user.paste('12345');
     expect(postalCode).toHaveValue('12345');
 
     const addressLine1Input = screen.getByTestId(
       'inputAddressLine1',
     ) as HTMLInputElement;
     await user.clear(addressLine1Input);
-    await user.type(addressLine1Input, '221BBakerStreet');
+    await user.paste('221BBakerStreet');
     expect(addressLine1Input).toHaveValue('221BBakerStreet');
 
     const cityInput = screen.getByTestId('inputCity') as HTMLInputElement;
     await user.clear(cityInput);
-    await user.type(cityInput, 'Bengaluru');
+    await user.paste('Bengaluru');
     expect(cityInput).toHaveValue('Bengaluru');
 
     const descriptionInput = await waitFor(
@@ -1287,7 +1287,7 @@ describe('MemberDetail', () => {
       { timeout: 3000 },
     );
     await user.clear(descriptionInput);
-    await user.type(descriptionInput, 'Newdescription');
+    await user.paste('Newdescription');
     expect(descriptionInput.value).toBe('Newdescription');
 
     const natalDropdownBtn = screen.getByTestId('inputNatalSex-toggle');
@@ -1343,7 +1343,7 @@ describe('MemberDetail', () => {
       { timeout: 3000 },
     );
     await user.clear(stateInput);
-    await user.type(stateInput, 'California');
+    await user.paste('California');
     expect(stateInput.value).toBe('California');
   });
 
