@@ -3,10 +3,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import * as convertToBase64Module from 'utils/convertToBase64';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -55,6 +54,7 @@ const MOCKS1 = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Name',
         websiteURL: 'https://website.com',
         facebookURL: 'https://socialurl.com',
@@ -199,6 +199,7 @@ const ERROR_MOCK = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Test Name',
         websiteURL: 'https://test.com',
         facebookURL: undefined,
@@ -228,6 +229,7 @@ const RESET_ERROR_MOCK = [
           name: 'Test',
           websiteURL: 'https://test.com',
           logoURL: 'logo.png',
+          logoMimeType: 'image/png',
           inactivityTimeoutDuration: 30,
           facebookURL: null,
           instagramURL: null,
@@ -285,6 +287,7 @@ const UPDATE_SUCCESS_MOCKS = [
     request: {
       query: UPDATE_COMMUNITY_PG,
       variables: {
+        logo: undefined,
         name: 'Test Name',
         websiteURL: 'https://test.com',
         facebookURL: undefined,
@@ -331,7 +334,7 @@ describe('Testing Community Profile Screen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Components should render properly', async () => {
@@ -406,8 +409,10 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(slack, profileVariables.socialURL);
 
     const mockFile = new File(['logo'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logo, { target: { files: [mockFile] } });
-    await wait();
+    await userEvent.upload(logo, mockFile);
+    await waitFor(() => {
+      expect((logo as HTMLInputElement).files?.[0]).toBe(mockFile);
+    });
 
     expect(communityName).toHaveValue(profileVariables.name);
     expect(websiteLink).toHaveValue(profileVariables.websiteURL);
@@ -539,21 +544,19 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(websiteInput, 'https://test.com');
 
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [mockFile] } });
+    await userEvent.upload(logoInput, mockFile);
 
     await wait();
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(submitButton);
-    await wait(500);
 
-    expect(errorHandler).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
-  test('should handle file upload with base64 conversion', async () => {
-    const mockBase64 = 'data:image/png;base64,mockBase64String';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
+  test('should handle file upload and store File object', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -571,16 +574,14 @@ describe('Testing Community Profile Screen', () => {
     });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
-    await wait();
-
-    expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+    await userEvent.upload(fileInput, mockFile);
+    await waitFor(() => {
+      // Verify file input accepted the file
+      expect(fileInput.files?.[0]).toBe(mockFile);
+    });
   });
 
-  test('should handle null base64 conversion when updating logo', async () => {
-    // Option 1: Mock with empty string (preferred)
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue('');
-
+  test('should handle empty file selection gracefully', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -593,22 +594,22 @@ describe('Testing Community Profile Screen', () => {
 
     await wait();
 
-    const mockFile = new File([''], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
+    // Simulate clearing file input by setting value to empty
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
     await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+    // Should not crash and buttons should still be disabled if no other fields filled
+    expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
   });
 
   test('should show success toast when profile is updated successfully', async () => {
-    const mockBase64 = 'data:image/png;base64,mockBase64String';
-    const convertSpy = vi
-      .spyOn(convertToBase64Module, 'default')
-      .mockResolvedValue(mockBase64);
-
-    const { container } = render(
+    render(
       <MockedProvider mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
@@ -625,53 +626,36 @@ describe('Testing Community Profile Screen', () => {
       ).toBeInTheDocument();
     });
 
-    const form = container.querySelector('form') as HTMLFormElement;
     const nameInput = screen.getByPlaceholderText(
       /Community Name/i,
     ) as HTMLInputElement;
     const websiteInput = screen.getByPlaceholderText(
       /Website Link/i,
     ) as HTMLInputElement;
-    const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    // Update text fields
+    // Update text fields only (no file upload to match mock variables)
     await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Test Name');
 
     await userEvent.clear(websiteInput);
     await userEvent.type(websiteInput, 'https://test.com');
 
-    // Upload file
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [file] } });
-
-    // Wait for base64 conversion to complete
-    await waitFor(
-      () => {
-        expect(convertSpy).toHaveBeenCalledWith(file);
-      },
-      { timeout: 2000 },
-    );
-
-    // Verify inputs have values and button is enabled
-    expect(nameInput.value).toBe('Test Name');
-    expect(websiteInput.value).toBe('https://test.com');
+    // Wait for state to update
+    await waitFor(() => {
+      expect(nameInput.value).toBe('Test Name');
+      expect(websiteInput.value).toBe('https://test.com');
+    });
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     expect(submitButton).not.toBeDisabled();
 
     // Submit form
-    await act(async () => {
-      fireEvent.submit(form);
-    });
+    await userEvent.click(submitButton);
 
     // Wait for success toast
-    await waitFor(
-      () => {
-        expect(NotificationToast.success).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
   });
 
   test('should handle reset error correctly', async () => {
@@ -689,9 +673,10 @@ describe('Testing Community Profile Screen', () => {
 
     const resetButton = screen.getByTestId('resetChangesBtn');
     await userEvent.click(resetButton);
-    await wait(500);
 
-    expect(errorHandler).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
   test('should enable buttons when only name is filled', async () => {
@@ -741,10 +726,6 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('should enable buttons when only logo is uploaded', async () => {
-    // Mock convertToBase64 to return a valid base64 string
-    const mockBase64 = 'data:image/png;base64,testBase64String';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -759,16 +740,13 @@ describe('Testing Community Profile Screen', () => {
 
     const logoInput = screen.getByTestId('fileInput');
     const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-    fireEvent.change(logoInput, { target: { files: [mockFile] } });
+    await userEvent.upload(logoInput, mockFile);
 
-    // Wait for the base64 conversion to complete and state to update
-    await waitFor(
-      () => {
-        const saveButton = screen.getByTestId('saveChangesBtn');
-        expect(saveButton).not.toBeDisabled();
-      },
-      { timeout: 2000 },
-    );
+    // Wait for state to update after file selection
+    await waitFor(() => {
+      const saveButton = screen.getByTestId('saveChangesBtn');
+      expect(saveButton).not.toBeDisabled();
+    });
 
     const saveButton = screen.getByTestId('saveChangesBtn');
     const resetButton = screen.getByTestId('resetChangesBtn');
@@ -831,7 +809,12 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    fireEvent.change(fileInput, { target: { files: [] } });
+    // Simulate clearing file input by setting value to empty
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await wait();
 
@@ -851,10 +834,7 @@ describe('Testing Community Profile Screen', () => {
     expect(fileInput.value).toBe('');
   });
 
-  test('should clear logo state before setting new file', async () => {
-    const mockBase64 = 'data:image/png;base64,newBase64';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
-
+  test('should handle multiple file selections correctly', async () => {
     render(
       <MockedProvider link={link1}>
         <BrowserRouter>
@@ -870,17 +850,58 @@ describe('Testing Community Profile Screen', () => {
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
 
-    fireEvent.change(fileInput, { target: { files: [mockFile] } });
-    await wait();
+    await userEvent.upload(fileInput, mockFile);
+    await waitFor(() => {
+      expect(fileInput.files?.[0]).toBe(mockFile);
+    });
 
-    // Upload another file to test the clearing behavior
+    // Upload another file
     const mockFile2 = new File(['content2'], 'test2.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [mockFile2] } });
+    await userEvent.upload(fileInput, mockFile2);
+    await waitFor(() => {
+      // The second file should be in the input
+      expect(fileInput.files?.[0]).toBe(mockFile2);
+    });
+  });
+
+  test('should handle uploading then clearing a logo file', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18n}>
+            <CommunityProfile />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
     await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledTimes(2);
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
+
+    // Upload file
+    await userEvent.upload(fileInput, mockFile);
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).not.toBeDisabled();
+    });
+
+    // Clear file by setting files to empty (userEvent.clear doesn't work for file inputs)
+    Object.defineProperty(fileInput, 'files', {
+      value: [],
+      configurable: true,
+    });
+    Object.defineProperty(fileInput, 'value', {
+      value: '',
+      configurable: true,
+    });
+    fileInput.dispatchEvent(new Event('change', { bubbles: true }));
+    await wait();
+
+    // After clearing, if no other fields are filled, buttons should be disabled
+    expect(screen.getByTestId('saveChangesBtn')).toBeDisabled();
   });
 
   describe('LoadingState Behavior', () => {

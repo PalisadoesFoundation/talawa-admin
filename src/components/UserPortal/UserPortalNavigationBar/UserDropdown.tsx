@@ -1,4 +1,4 @@
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import { InterfaceUserDropdownProps } from 'types/UserPortal/UserPortalNavigationBar/interface';
 /**
  * UserProfileDropdown Component
@@ -43,48 +43,60 @@ const UserProfileDropdown = (
   const {
     showUserProfile,
     testIdPrefix,
-    dropDirection,
     handleLogout,
     finalUserName,
     navigate,
     tCommon,
     styles,
     PermIdentityIcon,
+    dropDirection,
   } = props;
   if (!showUserProfile) return null;
+  const handleUserAction = (action: string): void => {
+    switch (action) {
+      case 'settings':
+        navigate('/user/settings');
+        break;
+      case 'logout':
+        handleLogout();
+        break;
+    }
+  };
 
   return (
-    <Dropdown drop={dropDirection}>
-      <Dropdown.Toggle
-        variant="white"
-        id="dropdown-basic"
-        data-testid={`${testIdPrefix}logoutDropdown`}
-        className={styles.colorWhite}
-        aria-label={tCommon('userMenu')}
-      >
-        <PermIdentityIcon
-          className={styles.colorWhite}
-          data-testid={`${testIdPrefix}personIcon`}
-        />
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        <Dropdown.ItemText>
-          <b>{finalUserName || ''}</b>
-        </Dropdown.ItemText>
-        <Dropdown.Item
-          onClick={() => navigate('/user/settings')}
-          className={styles.link}
-        >
-          {tCommon('settings')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          onClick={handleLogout}
-          data-testid={`${testIdPrefix}logoutBtn`}
-        >
-          {tCommon('logout')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+    <div className={styles.userMenuContainer}>
+      <span className={styles.userName}>
+        <b>{finalUserName || ''}</b>
+      </span>
+      <DropDownButton
+        // i18n-ignore-next-line
+        id={`${testIdPrefix}user-dropdown`}
+        options={[
+          {
+            value: 'settings',
+            label: tCommon('settings'),
+          },
+          {
+            value: 'logout',
+            label: tCommon('logout'),
+          },
+        ]}
+        drop={dropDirection}
+        onSelect={handleUserAction}
+        // i18n-ignore-next-line
+        dataTestIdPrefix={`${testIdPrefix}user`}
+        variant="light"
+        btnStyle={styles.colorWhite}
+        icon={
+          <PermIdentityIcon
+            className={styles.colorWhite}
+            data-testid={`${testIdPrefix}personIcon`}
+          />
+        }
+        ariaLabel={tCommon('userMenu')}
+        placeholder=""
+      />
+    </div>
   );
 };
 export default UserProfileDropdown;
