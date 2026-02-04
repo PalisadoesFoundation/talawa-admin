@@ -390,7 +390,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           data-testid="userName"
                         >
                           <ProfileAvatarDisplay
-                            key={id + '1'}
+                            key={id}
                             imageUrl={avatarURL}
                             fallbackName={name}
                             dataTestId={'image-' + id}

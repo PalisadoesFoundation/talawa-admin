@@ -661,14 +661,10 @@ describe('Testing GroupModal', () => {
 
     // Wait for the image to be rendered
     // ProfileAvatarDisplay uses profileAvatar.altText which generates "Profile picture of {{name}}"
-    const avatarImage = await screen.findByAltText(
-      'Profile picture of John Doe',
-    );
-    expect(avatarImage).toBeInTheDocument();
-    expect(avatarImage).toHaveAttribute(
-      'src',
-      'https://example.com/avatar.jpg',
-    );
+    const avatarDisplay = await screen.findByTestId('image-userId1');
+    expect(avatarDisplay).toBeInTheDocument();
+    const img = avatarDisplay.querySelector('img');
+    expect(img).toHaveAttribute('src', 'https://example.com/avatar.jpg');
   });
 
   it('GroupModal -> Requests -> Accept -> Error', async () => {
