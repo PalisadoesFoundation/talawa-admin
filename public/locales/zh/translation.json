@@ -1455,7 +1455,9 @@
     "email": "邮箱",
     "role": "角色",
     "loading": "加载中...",
-    "emailNotAvailable": "邮箱不可用"
+    "emailNotAvailable": "邮箱不可用",
+    "previousYear": "上一年",
+    "nextYear": "下一年"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
@@ -2460,7 +2462,9 @@
     "holidays": "节假日",
     "events": "活动",
     "eventsCreatedByOrganization": "组织创建的活动",
-    "today": "今天"
+    "today": "今天",
+    "viewAll": "查看全部",
+    "viewLess": "查看较少"
   },
   "contact": {
     "card_aria": "联系人卡片"

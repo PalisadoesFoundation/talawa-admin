@@ -1436,7 +1436,9 @@
     "email": "ईमेल",
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
-    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
+    "previousYear": "पिछला वर्ष",
+    "nextYear": "अगला वर्ष"
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -2460,7 +2462,9 @@
     "holidays": "छुट्टियाँ",
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
-    "today": "आज"
+    "today": "आज",
+    "viewAll": "सभी देखें",
+    "viewLess": "कम देखें"
   },
   "contact": {
     "card_aria": "संपर्क कार्ड"

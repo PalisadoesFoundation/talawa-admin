@@ -1441,7 +1441,9 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "previousYear": "Année précédente",
+    "nextYear": "Année suivante"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -2460,7 +2462,9 @@
     "holidays": "Jours fériés",
     "events": "Événements",
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
-    "today": "Aujourd'hui"
+    "today": "Aujourd'hui",
+    "viewAll": "Tout afficher",
+    "viewLess": "Afficher moins"
   },
   "contact": {
     "card_aria": "Carte de contact"
