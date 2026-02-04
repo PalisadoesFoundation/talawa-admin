@@ -81,11 +81,15 @@ export default function People(): React.JSX.Element {
   const queryVariables = useMemo(() => {
     const vars: Record<string, unknown> = {
       orgId: organizationId,
-      firstName_contains: searchTerm,
+      where: {
+        firstName_contains: searchTerm,
+      },
     };
     // Add admin filter when in admin mode
     if (mode === 1) {
-      vars.where = { role: { equal: 'administrator' } };
+      (vars.where as Record<string, unknown>).role = {
+        equal: 'administrator',
+      };
     }
     return vars;
   }, [organizationId, searchTerm, mode]);
