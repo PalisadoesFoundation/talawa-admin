@@ -1,16 +1,19 @@
 .dropdownToggle {
-  min-width: var(--space-16);
+  min-width: var(--space-18);
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-4);
+  padding: var(--space-4);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   border-radius: var(--radius-md);
-  transition: all 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
-.dropdownToggle:focus {
+.dropdownToggle:focus-visible {
   outline: var(--border-2) solid var(--color-blue-500);
   outline-offset: var(--space-2);
 }

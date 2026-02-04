@@ -44,7 +44,7 @@
  * Ensure to pass appropriate props for optimal usage.
  *
  */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import type { InterfaceDropDownButtonProps } from 'types/shared-components/DropDownButton/interface';
 import styles from './DropDownButton.module.css';
@@ -100,11 +100,15 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
     [onSelect, options],
   );
 
-  const filteredOptions = searchable
-    ? options.filter((opt) =>
-        opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-    : options;
+  const filteredOptions = useMemo(
+    () =>
+      searchable
+        ? options.filter((opt) =>
+            opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
+          )
+        : options,
+    [searchable, options, searchTerm],
+  );
 
   if (searchable) {
     return (
@@ -132,6 +136,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           disabled={disabled}
           // Pass props needed by SearchToggle
           value={searchTerm}
+          // Type assertion needed: Dropdown.Toggle expects FormEventHandler,
+          // but SearchToggle uses ChangeEventHandler for the input element
           onChange={
             ((e: React.ChangeEvent<HTMLInputElement>) => {
               setSearchTerm(e.target.value);

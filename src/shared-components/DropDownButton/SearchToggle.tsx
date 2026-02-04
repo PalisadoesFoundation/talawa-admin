@@ -27,7 +27,7 @@ const SearchToggle = React.forwardRef<
     ref,
   ) => (
     <div
-      className={`${className} ${styles.searchToggleContainer} d-flex align-items-center bg-white border rounded p-0`}
+      className={`${className ?? ''} ${styles.searchToggleContainer} d-flex align-items-center border rounded p-0 bg-light`}
       ref={ref}
     >
       {icon && (
@@ -44,9 +44,17 @@ const SearchToggle = React.forwardRef<
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        aria-label={placeholder}
         onClick={(e) => {
           onInputClick(e);
           onClick(e);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            onInputClick(e as unknown as React.MouseEvent<HTMLInputElement>);
+            onClick(e as unknown as React.MouseEvent<HTMLElement>);
+          }
         }}
         data-testid={`${dataTestIdPrefix}-input`}
       />

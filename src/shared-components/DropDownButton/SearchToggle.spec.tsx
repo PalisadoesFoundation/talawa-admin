@@ -62,6 +62,14 @@ describe('SearchToggle Component', () => {
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 
+  it('handles keyboard activation via Enter key', async () => {
+    render(<SearchToggle {...defaultProps} />);
+    const input = screen.getByTestId('test-toggle-input');
+    input.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(mockOnClick).toHaveBeenCalled();
+  });
+
   it('applies custom className to the container', () => {
     const { container } = render(
       <SearchToggle {...defaultProps} className="custom-test-class" />,

@@ -229,5 +229,46 @@ describe('DropDownButton Component', () => {
       await userEvent.click(input);
       expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
     });
+
+    it('opens menu on Enter key press', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      input.focus();
+      await userEvent.keyboard('{Enter}');
+      expect(screen.getByTestId('test-dropdown-menu')).toHaveClass('show');
+    });
+
+    it('closes menu on Escape key', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+      await userEvent.keyboard('{Escape}');
+      expect(screen.queryByTestId('test-dropdown-menu')).not.toHaveClass(
+        'show',
+      );
+    });
+
+    it('navigates and selects options with keyboard (ArrowDown/Enter)', async () => {
+      renderComponent(searchableProps);
+      const input = screen.getByTestId('test-dropdown-input');
+
+      // Open menu
+      await userEvent.click(input);
+
+      // Navigate down. React-Bootstrap usually focuses the first item on ArrowDown from toggle
+      // However, since our toggle is an input, focus logic might differ.
+      // If standard Bootstrap Dropdown, first ArrowDown focuses first item.
+      await userEvent.keyboard('{ArrowDown}');
+
+      // We expect focus to move to the first option
+      // const option1 = screen.getByText('Option 1');
+      // expect(option1).toHaveFocus();
+
+      // Select it
+      await userEvent.keyboard('{Enter}');
+
+      // Expect selection callback
+      expect(mockOnSelect).toHaveBeenCalledWith('1');
+    });
   });
 });

@@ -56,7 +56,7 @@
   border: var(--border-1) solid var(--color-gray-200);
   background: var(--color-white);
   box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--color-gray-900);
+    var(--color-gray-600);
   max-height: var(--space-17);
   overflow-y: auto;
 }
