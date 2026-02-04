@@ -38,6 +38,10 @@ cy.mockGraphQLOperation(
 );
 ```
 
+Note: Always clean up mocks after each test. See
+`docs/docs/docs/developer-resources/e2e-testing.md#mock-cleanup-and-test-isolation`
+to prevent test flakiness in parallel/sharded runs.
+
 ### Auth fixtures
 
 `auth/users.json` contains user metadata (id, name, email, role). Use
