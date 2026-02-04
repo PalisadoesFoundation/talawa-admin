@@ -103,6 +103,7 @@
   },
   "verifyEmail": {
     "title": "验证邮箱",
+    "loginRequired": "需要登录",
     "verifying": "正在验证...",
     "success": "邮箱已验证",
     "successMessage": "您的邮箱已成功验证。您现在可以登录。",

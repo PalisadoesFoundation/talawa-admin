@@ -103,6 +103,7 @@
   },
   "verifyEmail": {
     "title": "Vérifier l'Email",
+    "loginRequired": "Connexion requise",
     "verifying": "Vérification...",
     "success": "Email Vérifié",
     "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",

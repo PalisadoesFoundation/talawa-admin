@@ -108,6 +108,7 @@
   },
   "verifyEmail": {
     "title": "Verify Email",
+    "loginRequired": "Login Required",
     "verifying": "Verifying...",
     "success": "Email Verified",
     "successMessage": "Your email has been successfully verified. You can now log in.",
