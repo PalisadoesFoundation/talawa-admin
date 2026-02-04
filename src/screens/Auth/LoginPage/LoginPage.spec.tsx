@@ -120,7 +120,7 @@ const createMocks = (): MockedResponse[] => [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        ID: '',
+        ID: '6437904485008f171cf29924',
         name: 'John Doe',
         email: 'johndoe@gmail.com',
         password: 'Johndoe@123',
@@ -129,7 +129,9 @@ const createMocks = (): MockedResponse[] => [
     variableMatcher: (vars: Record<string, unknown> | undefined) =>
       vars?.email === 'johndoe@gmail.com' &&
       vars?.name === 'John Doe' &&
-      vars?.password === 'Johndoe@123',
+      vars?.password === 'Johndoe@123' &&
+      typeof vars?.ID === 'string' &&
+      vars.ID.length > 0,
     result: {
       data: {
         signUp: {
@@ -760,6 +762,10 @@ describe('Testing Login Page Screen', () => {
       await user.type(
         screen.getByTestId('cpassword'),
         formData.confirmPassword,
+      );
+      await user.click(screen.getByLabelText('Organization'));
+      await user.click(
+        screen.getByRole('option', { name: 'Unity Foundation' }),
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
@@ -1417,6 +1423,8 @@ describe('Testing invitation functionality', () => {
     await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
     await user.type(screen.getByTestId('passwordField'), 'Johndoe@123');
     await user.type(screen.getByTestId('cpassword'), 'Johndoe@123');
+    await user.click(screen.getByLabelText('Organization'));
+    await user.click(screen.getByRole('option', { name: 'Unity Foundation' }));
 
     await user.click(screen.getByTestId('registrationBtn'));
 
@@ -2610,7 +2618,17 @@ describe('Cookie-based authentication verification', () => {
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'org-cookie-test',
+                name: 'Test Org',
+                addressLine1: null,
+              },
+            ],
+          },
+        },
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
@@ -2620,7 +2638,7 @@ describe('Cookie-based authentication verification', () => {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
-            ID: '',
+            ID: 'org-cookie-test',
             name: 'New User',
             email: 'newuser@example.com',
             password: 'Password@123',
@@ -2629,7 +2647,9 @@ describe('Cookie-based authentication verification', () => {
         variableMatcher: (vars: Record<string, unknown> | undefined) =>
           vars?.name === 'New User' &&
           vars?.email === 'newuser@example.com' &&
-          vars?.password === 'Password@123',
+          vars?.password === 'Password@123' &&
+          typeof vars?.ID === 'string' &&
+          vars.ID.length > 0,
         result: {
           data: {
             signUp: {
@@ -2677,6 +2697,8 @@ describe('Cookie-based authentication verification', () => {
     await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
     await user.type(screen.getByTestId('passwordField'), 'Password@123');
     await user.type(screen.getByTestId('cpassword'), 'Password@123');
+    await user.click(screen.getByLabelText('Organization'));
+    await user.click(screen.getByRole('option', { name: 'Test Org' }));
 
     // Submit registration
     await user.click(screen.getByTestId('registrationBtn'));

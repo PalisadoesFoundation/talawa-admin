@@ -29,7 +29,10 @@ import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 import { LoginForm } from 'components/Auth/LoginForm/LoginForm';
 import { RegistrationForm } from 'components/Auth/RegistrationForm/RegistrationForm';
-import { RegistrationError } from 'hooks/auth/useRegistration';
+import {
+  IRegistrationSuccessResult,
+  RegistrationError,
+} from 'hooks/auth/useRegistration';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
@@ -60,7 +63,7 @@ const LoginPage = (): JSX.Element => {
   );
 
   useEffect(() => {
-    if (location.pathname === '/register') setShowTab('REGISTER');
+    setShowTab(location.pathname === '/register' ? 'REGISTER' : 'LOGIN');
     setRole(location.pathname === '/admin' ? 'admin' : 'user');
   }, [location.pathname]);
 
@@ -77,10 +80,9 @@ const LoginPage = (): JSX.Element => {
     }
   }, [navigate, getItem, extendSession]);
 
-  const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
-  useEffect(() => {
-    refetch();
-  }, [data, refetch]);
+  const { data } = useQuery(GET_COMMUNITY_DATA_PG, {
+    fetchPolicy: 'cache-and-network',
+  });
 
   const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   useEffect(() => {
@@ -115,7 +117,8 @@ const LoginPage = (): JSX.Element => {
     if (user.countryCode !== null) {
       i18n.changeLanguage(user.countryCode);
     }
-    const isAdminUser = user.role === 'administrator';
+    const isAdminUser =
+      user.role === 'administrator' || user.role === 'superuser';
     if (role === 'admin' && !isAdminUser) {
       NotificationToast.warning(tErrors('notAuthorised') as string);
       return;
@@ -168,11 +171,7 @@ const LoginPage = (): JSX.Element => {
     }
   };
 
-  const handleRegisterSuccess = (result: {
-    signUp: { user: { id: string } };
-    name: string;
-    email: string;
-  }): void => {
+  const handleRegisterSuccess = (result: IRegistrationSuccessResult): void => {
     NotificationToast.success(t('signupSuccessVerifyEmail') as string);
     setShowTab('LOGIN');
     if (result.signUp) {
