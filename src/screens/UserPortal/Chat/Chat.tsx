@@ -88,7 +88,6 @@ export default function chat(): JSX.Element {
   const newChatOptions = [
     { value: 'newDirectChat', label: t('newChat') },
     { value: 'newGroupChat', label: t('newGroupChat') },
-    { value: 'starredMessages', label: t('starredMessages') },
   ];
 
   // Handle dropdown selection for new chat options
@@ -100,9 +99,6 @@ export default function chat(): JSX.Element {
           break;
         case 'newGroupChat':
           openCreateGroupChatModal();
-          break;
-        case 'starredMessages':
-          // TODO: Implement starred messages functionality
           break;
       }
     },

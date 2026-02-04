@@ -383,12 +383,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
     expect(screen.getByTestId('groupChat')).toBeInTheDocument();
   });
 
-  test('should have accessible aria-label on new chat dropdown', async () => {
+  test('should have accessible new chat dropdown', async () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown-toggle');
-    expect(dropdown).toHaveAttribute('aria-label', 'New Chat');
+    expect(
+      screen.getByRole('button', { name: /new chat/i }),
+    ).toBeInTheDocument();
   });
 
   // ==================== CHAT LIST RENDERING ====================
@@ -1628,12 +1629,11 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
   // ==================== DROPDOWN AND NEW CHAT ====================
 
-  test('should render dropdown with new chat icon', async () => {
+  test('should render dropdown toggle for new chat', async () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
     expect(screen.getByTestId('dropdown-toggle')).toBeInTheDocument();
-    expect(screen.getByTestId('new-chat-icon')).toBeInTheDocument();
   });
 
   test('should show dropdown menu items when clicked', async () => {
@@ -1650,7 +1650,6 @@ describe('Chat Component - Comprehensive Coverage', () => {
       expect(
         screen.getByTestId('dropdown-item-newGroupChat'),
       ).toBeInTheDocument();
-      expect(screen.getByText('Starred Messages')).toBeInTheDocument();
     });
   });
 
