@@ -35,6 +35,10 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import UserPortalCard from '../UserPortalCard/UserPortalCard';
 import type { InterfaceCommentCardProps } from 'types/UserPortal/CommentCard/interface';
 import { IDENTIFIER_USER_ID } from 'Constant/common';
+import type {
+  InterfaceLikeCommentMutation,
+  InterfaceUnlikeCommentMutation,
+} from 'utils/interfaces';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -89,8 +93,10 @@ function CommentCard({
   const [showEditComment, setShowEditComment] = React.useState(false);
   const [editedCommentText, setEditedCommentText] = React.useState(text);
   const menuAnchorRef = React.useRef<HTMLButtonElement>(null);
-  const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
-  const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
+  const [likeComment, { loading: liking }] =
+    useMutation<InterfaceLikeCommentMutation>(LIKE_COMMENT);
+  const [unlikeComment, { loading: unliking }] =
+    useMutation<InterfaceUnlikeCommentMutation>(UNLIKE_COMMENT);
   const [deleteComment, { loading: deletingComment }] =
     useMutation(DELETE_COMMENT);
   const [updateComment, { loading: updatingComment }] =

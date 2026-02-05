@@ -23,6 +23,10 @@ import {
   InterfaceDonation,
   InterfaceDonationCardProps,
 } from 'types/UserPortal/Donation/interface';
+import type {
+  InterfaceOrganizationListQuery,
+  InterfaceOrganizationDonationConnectionQuery,
+} from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
@@ -56,11 +60,14 @@ export default function Donate(): JSX.Element {
     data: donationData,
     loading,
     refetch,
-  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
+  } = useQuery<InterfaceOrganizationDonationConnectionQuery>(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    {
     variables: { orgId: organizationId },
-  });
+    },
+  );
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
+  const { data } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 

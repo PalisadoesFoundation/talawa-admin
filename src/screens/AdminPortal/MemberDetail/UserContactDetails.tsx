@@ -223,7 +223,16 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   };
   const resetChanges = (): void => {
     setisUpdated(false);
-    if (data?.user) setFormState({ ...data.user });
+    if (data?.user) {
+      const { birthDate, ...rest } = data.user;
+      setFormState((prev) => ({
+        ...prev,
+        ...rest,
+        birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
+        avatar: null,
+        password: '',
+      }));
+    }
   };
   if (loading) {
     return <div data-testid="loader">{tCommon('loading')}</div>;

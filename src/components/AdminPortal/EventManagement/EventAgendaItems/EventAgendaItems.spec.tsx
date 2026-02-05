@@ -128,8 +128,13 @@ describe('Testing Agenda Items Components', () => {
 
   type GenericMock = IStaticMockedResponse;
 
+  // Treat the shared MOCKS array as a fixed-length tuple for stronger typing
   const [BASE_CATEGORY_MOCK, BASE_AGENDA_MOCK, BASE_MUTATION_MOCK] =
-    MOCKS as [GenericMock, GenericMock, GenericMock];
+    MOCKS as unknown as [
+      GenericMock,
+      GenericMock,
+      GenericMock,
+    ];
 
   const agendaErrorBase =
     (MOCKS_ERROR_QUERY[1] as GenericMock) ?? BASE_AGENDA_MOCK;

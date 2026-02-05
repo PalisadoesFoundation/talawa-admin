@@ -25,7 +25,7 @@
  * ```
  */
 
-import type { InterfaceUserInfo } from 'utils/interfaces';
+import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -81,7 +81,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
     variables: { organizationId: orgId },
   });
 
-  const members = useMemo(() => {
+  const members = useMemo<InterfaceUserInfoPG[]>(() => {
     const typed = membersData as
       | { usersByOrganizationId: InterfaceUserInfoPG[] }
       | undefined;
@@ -186,12 +186,10 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           limitTags={2}
           data-testid="membersSelect"
           options={members}
-          value={
-            members.find((m: InterfaceUserInfo) => m.id === userId) || null
-          }
+          value={members.find((m) => m.id === userId) || null}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfo): string => member.name}
+          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
           onChange={(_, newVolunteer): void => {
             setUserId(newVolunteer?.id ?? '');
           }}

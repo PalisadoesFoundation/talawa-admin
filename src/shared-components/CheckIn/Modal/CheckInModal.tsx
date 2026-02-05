@@ -32,6 +32,10 @@ import styles from 'style/app-fixed.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import { BaseModal } from 'shared-components/BaseModal';
+import type {
+  InterfaceEventCheckInsQuery,
+  InterfaceEventDetailsQuery,
+} from 'utils/interfaces';
 
 export const CheckInModal = ({
   show,
@@ -54,17 +58,20 @@ export const CheckInModal = ({
   });
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: eventId },
-    fetchPolicy: 'cache-first',
-  });
+  const { data: eventData } = useQuery<InterfaceEventDetailsQuery>(
+    EVENT_DETAILS,
+    {
+      variables: { eventId: eventId },
+      fetchPolicy: 'cache-first',
+    },
+  );
 
   // Query to get check-in data from the server
   const {
     data: checkInData,
     loading: checkInLoading,
     refetch: checkInRefetch,
-  } = useQuery(EVENT_CHECKINS, {
+  } = useQuery<InterfaceEventCheckInsQuery>(EVENT_CHECKINS, {
     variables: { eventId: eventId },
   });
 
@@ -82,24 +89,26 @@ export const CheckInModal = ({
       setTableData([]); // Clear table data while loading
     } else if (checkInData?.event?.attendeesCheckInStatus) {
       // Map the check-in data to table rows
+      const statuses =
+        checkInData.event
+          .attendeesCheckInStatus as InterfaceAttendeeCheckIn[];
+
       setTableData(
-        checkInData.event.attendeesCheckInStatus.map(
-          (checkIn: InterfaceAttendeeCheckIn) => ({
-            userName: checkIn.user.name || t('unknownUser'),
-            id: checkIn.id,
-            checkInData: {
-              id: checkIn.id,
-              name: checkIn.user.name || t('unknownUser'),
-              userId: checkIn.user.id,
-              checkInTime: checkIn.checkInTime,
-              checkOutTime: checkIn.checkOutTime,
-              isCheckedIn: checkIn.isCheckedIn,
-              isCheckedOut: checkIn.isCheckedOut,
-              eventId,
-              isRecurring: isRecurring,
-            },
-          }),
-        ),
+        statuses.map((checkIn) => ({
+          userName: checkIn.user.name || t('unknownUser'),
+          id: checkIn.user.id,
+          checkInData: {
+            id: checkIn.user.id,
+            name: checkIn.user.name || t('unknownUser'),
+            userId: checkIn.user.id,
+            checkInTime: checkIn.checkInTime,
+            checkOutTime: checkIn.checkOutTime,
+            isCheckedIn: checkIn.isCheckedIn,
+            isCheckedOut: checkIn.isCheckedOut,
+            eventId,
+            isRecurring: isRecurring,
+          },
+        })),
       );
     }
   }, [checkInData, eventId, checkInLoading, isRecurring]);

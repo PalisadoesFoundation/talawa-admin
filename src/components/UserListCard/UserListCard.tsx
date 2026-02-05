@@ -46,6 +46,7 @@ import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceCreateAdminMutation } from 'utils/interfaces';
 
 interface InterfaceUserListCardProps {
   key: number;
@@ -54,7 +55,7 @@ interface InterfaceUserListCardProps {
 
 function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
-  const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const [adda] = useMutation<InterfaceCreateAdminMutation>(ADD_ADMIN_MUTATION);
   const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });

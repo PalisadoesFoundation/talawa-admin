@@ -22,7 +22,7 @@ import DatePicker from 'shared-components/DatePicker';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
-import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import type { IActionItemInfo, IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from './ActionItemViewModal.module.css';
@@ -60,14 +60,18 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     organizationId,
   } = item;
 
-  const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
+  const { data: categoryData } = useQuery<{
+    actionItemCategory: IActionItemCategoryInfo;
+  }>(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
     },
     skip: !categoryId,
   });
 
-  const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
+  const { data: membersData } = useQuery<{
+    usersByOrganizationId: InterfaceUser[];
+  }>(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
   });
 
@@ -102,9 +106,14 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const category = categoryData?.actionItemCategory || item.category;
 
-  const getUserDisplayName = (
-    user: InterfaceUser | null | undefined,
-  ): string => {
+  type UserLike = {
+    id: string;
+    name?: string;
+    firstName?: string;
+    lastName?: string;
+  };
+
+  const getUserDisplayName = (user: UserLike | null | undefined): string => {
     if (!user) return 'Unknown';
 
     if (user.name && user.name.trim()) {

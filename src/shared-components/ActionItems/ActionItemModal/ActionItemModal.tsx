@@ -46,6 +46,7 @@ import type {
   IEventVolunteerGroup,
   IFormStateType,
   IItemModalProps,
+  IActionItemCategoryList,
 } from 'types/shared-components/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
@@ -61,7 +62,10 @@ import {
   GET_EVENT_VOLUNTEERS,
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
-import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+import type {
+  InterfaceEventVolunteerInfo,
+  InterfaceGetEventVolunteersQuery,
+} from 'utils/interfaces';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -133,31 +137,42 @@ const ItemModal: FC<IItemModalProps> = ({
     isCompleted,
   } = formState;
 
-  const { data: actionItemCategoriesData } = useQuery(
-    ACTION_ITEM_CATEGORY_LIST,
-    {
+  const { data: actionItemCategoriesData } =
+    useQuery<IActionItemCategoryList>(ACTION_ITEM_CATEGORY_LIST, {
       variables: {
         input: {
           organizationId: orgId,
         },
       },
+    });
+
+  const { data: volunteersData } = useQuery<InterfaceGetEventVolunteersQuery>(
+    GET_EVENT_VOLUNTEERS,
+    {
+      variables: {
+        input: { id: eventId },
+        where: {},
+      },
+      skip: !eventId,
     },
   );
 
-  const { data: volunteersData } = useQuery(GET_EVENT_VOLUNTEERS, {
-    variables: {
-      input: { id: eventId },
-      where: {},
-    },
-    skip: !eventId,
-  });
+  interface IGetEventVolunteerGroupsQuery {
+    event: {
+      id: string;
+      recurrenceRule?: { id: string } | null;
+      baseEvent?: { id: string } | null;
+      volunteerGroups: IEventVolunteerGroup[];
+    } | null;
+  }
 
-  const { data: volunteerGroupsData } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
-    variables: {
-      input: { id: eventId },
-    },
-    skip: !eventId,
-  });
+  const { data: volunteerGroupsData } =
+    useQuery<IGetEventVolunteerGroupsQuery>(GET_EVENT_VOLUNTEER_GROUPS, {
+      variables: {
+        input: { id: eventId },
+      },
+      skip: !eventId,
+    });
 
   const isApplyToRelevant =
     Boolean(isRecurring) &&
@@ -200,7 +215,8 @@ const ItemModal: FC<IItemModalProps> = ({
     editMode && Boolean(actionItem?.volunteer?.id);
 
   const actionItemCategories = useMemo(
-    () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
+    () =>
+      actionItemCategoriesData?.actionItemCategoriesByOrganization || [],
     [actionItemCategoriesData],
   );
 

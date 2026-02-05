@@ -1,4 +1,5 @@
 import { IEvent as IEventCommon } from 'types/Event/interface';
+import type { InterfaceDonation } from 'types/UserPortal/Donation/interface';
 
 /**
  * Represents the ISO 3166-1 alpha-2 country codes.
@@ -1816,7 +1817,7 @@ export interface InterfaceVolunteerGroupInfo {
 export interface InterfaceCreateVolunteerGroup {
   name: string;
   description: string | null;
-  leader: InterfaceUserInfo | null;
+  leader: InterfaceUserInfo | InterfaceUserInfoPG | null;
   volunteersRequired: number | null;
   volunteerUsers: InterfaceUserInfoPG[];
 }
@@ -1964,6 +1965,40 @@ export interface InterfaceSignUpMutation {
       id: string;
     };
   };
+}
+
+/**
+ * Defines the structure for ADD_ADMIN_MUTATION result.
+ */
+export interface InterfaceCreateAdminMutation {
+  createAdmin: {
+    id: string;
+  };
+}
+
+/**
+ * Defines the structure for LIKE_COMMENT mutation result.
+ */
+export interface InterfaceLikeCommentMutation {
+  createCommentVote: {
+    id: string;
+  };
+}
+
+/**
+ * Defines the structure for UNLIKE_COMMENT mutation result.
+ */
+export interface InterfaceUnlikeCommentMutation {
+  deleteCommentVote: {
+    id: string;
+  } | null;
+}
+
+/**
+ * Defines the structure for organization donation connection query result.
+ */
+export interface InterfaceOrganizationDonationConnectionQuery {
+  getDonationByOrgIdConnection: InterfaceDonation[];
 }
 
 /**

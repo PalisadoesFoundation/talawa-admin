@@ -140,9 +140,9 @@ export default function Organizations(): React.JSX.Element {
     fetchPolicy: 'network-only', // Ensure fresh data
   });
 
-  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-  );
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation<{
+    sendVerificationEmail: { success: boolean; message?: string };
+  }>(RESEND_VERIFICATION_EMAIL_MUTATION);
 
   // Check for email verification status on component mount and sync with backend
   useEffect(() => {
@@ -229,14 +229,20 @@ export default function Organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
+    error: allOrganizationsError,
   } = useQuery<InterfaceOrganizationFilterListQuery>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
-    onError: (error) => console.error('All orgs error:', error),
   });
+
+  useEffect(() => {
+    if (allOrganizationsError) {
+      console.error('All orgs error:', allOrganizationsError);
+    }
+  }, [allOrganizationsError]);
 
   const {
     data: joinedOrganizationsData,
@@ -270,22 +276,31 @@ export default function Organizations(): React.JSX.Element {
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
-          const isMember = org.isMember;
-          return {
-            id: org.id,
-            name: org.name,
-            avatarURL: org.avatarURL || '',
-            description: org.description || '',
-            addressLine1: org.addressLine1 || '',
-            membersCount: org.membersCount || 0,
-            admins: [],
-            membershipRequestStatus: isMember ? 'accepted' : '',
-            userRegistrationRequired: false,
-            membershipRequests: [],
-            isJoined: isMember,
-          };
-        });
+        const orgs = allOrganizationsData.organizations.map(
+          (org) =>
+            ({
+              id: org.id,
+              name: org.name,
+              avatarURL: org.avatarURL || '',
+              description: org.description || '',
+              addressLine1: org.addressLine1 || '',
+              membersCount: org.membersCount || 0,
+              adminsCount: org.adminsCount,
+              admins: [],
+              members: undefined,
+              address: {
+                city: '',
+                countryCode: '',
+                line1: org.addressLine1 || '',
+                postalCode: '',
+                state: '',
+              },
+              membershipRequestStatus: org.isMember ? 'accepted' : '',
+              userRegistrationRequired: false,
+              membershipRequests: [],
+              isJoined: org.isMember,
+            } satisfies IOrganization),
+        );
         setOrganizations(orgs);
       }
     } else if (mode === 1) {

@@ -90,7 +90,7 @@ function Leaderboard(): JSX.Element {
   );
   const [timeFrame, setTimeFrame] = useState<TimeFrame>(TimeFrame.All);
 
-  const { data, loading, error } = useQuery(VOLUNTEER_RANKING, {
+const { data, loading, error } = useQuery(VOLUNTEER_RANKING, {
     variables: {
       orgId,
       where: {
@@ -102,9 +102,9 @@ function Leaderboard(): JSX.Element {
     skip: !orgId,
   });
 
-  const rankings = useMemo(() => {
+  const rankings = useMemo<InterfaceVolunteerRank[]>(() => {
     const typed = data as
-      | { getVolunteerRanks?: Array<Record<string, unknown>> }
+      | { getVolunteerRanks?: InterfaceVolunteerRank[] }
       | undefined;
     return typed?.getVolunteerRanks ?? [];
   }, [data]);
