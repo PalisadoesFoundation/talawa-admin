@@ -1,8 +1,9 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import { describe, it, vi, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';

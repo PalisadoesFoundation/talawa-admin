@@ -1,8 +1,8 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import type { Mock } from 'vitest';
@@ -32,7 +32,7 @@ vi.mock('react-i18next', () => ({
     },
   }),
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: { type: '3rdParty', init: () => {} },
+  initReactI18next: { type: '3rdParty', init: () => { } },
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -135,7 +135,7 @@ describe('SignOut Component', () => {
   test('handles error during logout', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
     const mockErrorLogout = {
       request: {
         query: LOGOUT_MUTATION,
@@ -181,7 +181,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -240,7 +240,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -297,7 +297,7 @@ describe('SignOut Component', () => {
 
     const consoleErrorMock = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
@@ -473,7 +473,7 @@ describe('SignOut Component', () => {
 
       const consoleErrorMock = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       const mockEndSession = vi.fn();
       (useSession as Mock).mockReturnValue({

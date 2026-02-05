@@ -4,7 +4,7 @@ import type { RenderResult } from '@testing-library/react';
 import { render, act, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   LocalizationProvider,
   AdapterDayjs,

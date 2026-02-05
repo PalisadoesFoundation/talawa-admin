@@ -5,7 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import type { FetchResult } from '@apollo/client';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { type MockedResponse } from '@apollo/client/testing/react';
+import { type MockedResponse } from '@apollo/client/testing';
 import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';

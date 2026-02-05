@@ -76,7 +76,7 @@ const dataGridStyle = {
  *
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
  */
-const orgFundCampaign = (): JSX.Element => {
+const OrgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -106,14 +106,9 @@ const orgFundCampaign = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaign,
-  }: {
-    data?: {
-      fund: InterfaceQueryOrganizationFundCampaigns;
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_CAMPAIGN, {
+  } = useQuery<{
+    fund: InterfaceQueryOrganizationFundCampaigns;
+  }>(FUND_CAMPAIGN, {
     variables: {
       input: { id: fundId },
     },
@@ -247,7 +242,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -272,7 +267,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.fundingRaised ?? 0}
@@ -318,13 +313,12 @@ const orgFundCampaign = (): JSX.Element => {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={percentage}
-                className={`${styles.progressCircleForeground} ${
-                  percentage >= 100
+                className={`${styles.progressCircleForeground} ${percentage >= 100
                     ? styles.progressComplete
                     : percentage >= 50
                       ? styles.progressHalf
                       : styles.progressLow
-                }`}
+                  }`}
               />
             </Box>
             <Typography variant="body2" className={styles.progressTypography}>
@@ -419,9 +413,9 @@ const orgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-      campaignData &&
-      filteredCampaigns.length === 0 &&
-      searchText.length > 0 ? (
+        campaignData &&
+        filteredCampaigns.length === 0 &&
+        searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"
@@ -479,4 +473,4 @@ const orgFundCampaign = (): JSX.Element => {
     </div>
   );
 };
-export default orgFundCampaign;
+export default OrgFundCampaign;

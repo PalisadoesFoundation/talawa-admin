@@ -4,7 +4,6 @@ import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import SaveIcon from '@mui/icons-material/Save';
-import type { ApolloError } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
@@ -83,12 +82,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     loading,
     refetch,
     error,
-  }: {
-    data?: { organization: InterfaceOrganization };
-    loading: boolean;
-    refetch: (variables: { id: string }) => void;
-    error?: ApolloError;
-  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+  } = useQuery<{ organization: InterfaceOrganization }>(GET_ORGANIZATION_BASIC_DATA, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });

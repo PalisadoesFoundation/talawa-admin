@@ -1,7 +1,7 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -306,7 +306,7 @@ const createRegisterMutationMock = (variables: Record<string, unknown>) => {
             id: 'newUser1',
             name:
               'name' in defaultVariables &&
-              typeof defaultVariables.name === 'string'
+                typeof defaultVariables.name === 'string'
                 ? defaultVariables.name
                 : 'New User',
           },

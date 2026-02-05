@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -14,7 +14,6 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
 import styles from './EventAttendance.module.css';
-import { ApolloError } from '@apollo/client';
 import { useLazyQuery } from '@apollo/client/react';
 import * as ApolloClientModule from '@apollo/client/react';
 
@@ -54,7 +53,7 @@ const renderEventAttendanceWithSpy = (): RenderResult => {
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
-  error?: ApolloError | null;
+  error?: Error | null;
 }) {
   vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
     () => { },
@@ -323,7 +322,7 @@ describe('Event Attendance Component', () => {
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: new ApolloError({ errorMessage: 'Network Error' }),
+      error: new Error('Network Error'),
     });
 
     renderEventAttendanceWithSpy();

@@ -55,14 +55,16 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
     30,
   ); // Timeout from database for the community
 
+  type TimeoutDataType = { inactivityTimeoutDuration: number };
+
   const {
     data,
     loading,
     error: queryError,
-  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
+  } = useQuery<{ community: TimeoutDataType }>(
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+  );
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
-
-  type TimeoutDataType = { inactivityTimeoutDuration: number };
 
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.
@@ -147,8 +149,8 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
                 >
                   {communityTimeout !== undefined
                     ? t('communityProfile.sessionTimeout.minutes', {
-                        count: communityTimeout,
-                      })
+                      count: communityTimeout,
+                    })
                     : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
               </div>

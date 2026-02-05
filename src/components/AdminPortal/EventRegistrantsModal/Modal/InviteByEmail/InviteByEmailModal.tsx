@@ -24,7 +24,6 @@ import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
 import { useMutation } from '@apollo/client/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './InviteByEmailModal.module.css';
@@ -114,7 +113,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
       if (onInvitesSent) onInvitesSent();
       handleClose();
     } catch (err) {
-      const error = err as ApolloError;
+      const error = err as Error;
       NotificationToast.error(
         t('errorSendingInvites') || 'Error sending invites',
       );

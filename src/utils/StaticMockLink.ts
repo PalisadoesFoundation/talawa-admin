@@ -88,8 +88,8 @@ function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
  * delay, and dynamic newData generation.
  */
 export interface IStaticMockedResponse extends MockedResponse {
-  variableMatcher?: (variables: Record<string, any>) => boolean;
-  newData?: (variables: Record<string, any>) => any;
+  variableMatcher?: (variables: any) => boolean;
+  newData?: (variables: any) => any;
   delay?: number;
 }
 

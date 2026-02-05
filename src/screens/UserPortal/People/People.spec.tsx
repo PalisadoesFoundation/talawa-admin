@@ -1,7 +1,7 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor, act } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';

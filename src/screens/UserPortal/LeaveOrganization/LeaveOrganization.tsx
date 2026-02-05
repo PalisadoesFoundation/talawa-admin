@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ApolloError } from '@apollo/client';
 import { useQuery, useMutation } from '@apollo/client/react';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -92,8 +91,9 @@ const LeaveOrganization = (): JSX.Element => {
       NotificationToast.success(t('leaveOrganization.leftOrganizationSuccess'));
       navigate(`/user/organizations`);
     },
-    onError: (err: ApolloError) => {
-      const isNetworkError = err.networkError !== null;
+    onError: (err: Error) => {
+      const networkError = 'networkError' in err ? (err as { networkError: unknown }).networkError : null;
+      const isNetworkError = networkError !== null;
       setError(
         isNetworkError
           ? t('leaveOrganization.networkError')

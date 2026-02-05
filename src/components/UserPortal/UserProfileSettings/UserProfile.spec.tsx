@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import UserProfile from './UserProfile';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';

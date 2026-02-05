@@ -9,7 +9,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { GraphQLError } from 'graphql';

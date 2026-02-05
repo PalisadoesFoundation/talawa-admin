@@ -101,7 +101,7 @@ const dataGridStyle = {
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-const organizationFunds = (): JSX.Element => {
+const OrgFundsList = (): JSX.Element => {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
@@ -131,18 +131,13 @@ const organizationFunds = (): JSX.Element => {
     loading: fundLoading,
     error: fundError,
     refetch: refetchFunds,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: { node: InterfaceFundInfo }[];
-        };
+  } = useQuery<{
+    organization: {
+      funds: {
+        edges: { node: InterfaceFundInfo }[];
       };
     };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_LIST, {
+  }>(FUND_LIST, {
     skip: !orgId,
     variables: {
       input: {
@@ -383,9 +378,9 @@ const organizationFunds = (): JSX.Element => {
       </div>
 
       {!fundLoading &&
-      fundData &&
-      filteredAndSortedFunds.length === 0 &&
-      searchText.length > 0 ? (
+        fundData &&
+        filteredAndSortedFunds.length === 0 &&
+        searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"
@@ -442,4 +437,4 @@ const organizationFunds = (): JSX.Element => {
   );
 };
 
-export default organizationFunds;
+export default OrgFundsList;

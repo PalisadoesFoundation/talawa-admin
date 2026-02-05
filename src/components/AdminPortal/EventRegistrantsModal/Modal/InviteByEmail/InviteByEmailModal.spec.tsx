@@ -1,4 +1,4 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +6,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -74,7 +75,7 @@ const renderComponent = (
   customMocks: MockedResponse[] = mocks as MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks} addTypename={false}>
+    <MockedProvider mocks={customMocks} >
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>
@@ -433,7 +434,7 @@ describe('InviteByEmailModal', () => {
       };
 
       render(
-        <MockedProvider mocks={[successMock]} addTypename={false}>
+        <MockedProvider mocks={[successMock]} >
           <I18nextProvider i18n={i18nForTest}>
             <InviteByEmailModal {...minimalProps} />
           </I18nextProvider>

@@ -1,7 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {
@@ -364,7 +364,7 @@ const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
 const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
 const renderDonate = (mocks = MOCKS) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks} >
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

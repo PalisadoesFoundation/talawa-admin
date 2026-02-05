@@ -3,7 +3,7 @@ import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { InMemoryCache } from '@apollo/client';
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';

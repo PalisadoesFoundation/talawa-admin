@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, screen, cleanup } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';

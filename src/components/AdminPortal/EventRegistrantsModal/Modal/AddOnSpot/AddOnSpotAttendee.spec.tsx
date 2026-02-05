@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { BrowserRouter } from 'react-router';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
@@ -81,7 +81,7 @@ const ERROR_MOCKS = [
 
 const renderAddOnSpotAttendee = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
+    <MockedProvider mocks={MOCKS} >
       <Provider store={store}>
         <I18nextProvider i18n={i18nForTest}>
           <BrowserRouter>

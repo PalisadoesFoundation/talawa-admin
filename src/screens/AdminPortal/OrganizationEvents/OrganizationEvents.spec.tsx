@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';

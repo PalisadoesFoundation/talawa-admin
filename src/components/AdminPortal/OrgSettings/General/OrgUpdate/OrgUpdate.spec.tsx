@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -765,7 +765,7 @@ describe('OrgUpdate Component', () => {
       const user = userEvent.setup();
 
       render(
-        <MockedProvider mocks={emptyResponseMocks} addTypename={false}>
+        <MockedProvider mocks={emptyResponseMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -345,7 +345,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
   const renderComponent = (customMocks: MockType[] = mocks as MockType[]) =>
     render(
-      <MockedProvider mocks={customMocks} addTypename={false}>
+      <MockedProvider mocks={customMocks} >
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <Chat />

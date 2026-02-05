@@ -10,7 +10,7 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor, within } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
 import { MemoryRouter, Route, Routes } from 'react-router';

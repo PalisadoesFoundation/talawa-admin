@@ -78,7 +78,17 @@ function AddMember(): JSX.Element {
   const [
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
-  ] = useLazyQuery(USER_LIST_FOR_TABLE, {
+  ] = useLazyQuery<{
+    allUsers: {
+      edges: IEdge[];
+      pageInfo: {
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+        startCursor: string;
+        endCursor: string;
+      };
+    };
+  }>(USER_LIST_FOR_TABLE, {
     variables: { first: PAGE_SIZE, after: null, last: null, before: null },
   });
 
@@ -120,9 +130,15 @@ function AddMember(): JSX.Element {
   const [userName, setUserName] = useState('');
   const {
     data: organizationData,
-  }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
-    useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
-  const [registerMutation] = useMutation(CREATE_MEMBER_PG);
+  } = useQuery<{ organization: InterfaceQueryOrganizationsListObject }>(
+    GET_ORGANIZATION_BASIC_DATA,
+    {
+      variables: { id: currentUrl },
+    },
+  );
+  const [registerMutation] = useMutation<{
+    createUser: { user: { id: string } };
+  }>(CREATE_MEMBER_PG);
   const [createUserVariables, setCreateUserVariables] = React.useState({
     name: '',
     email: '',

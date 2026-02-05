@@ -1,5 +1,5 @@
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   LocalizationProvider,
   AdapterDayjs,

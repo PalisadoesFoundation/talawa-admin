@@ -1,4 +1,4 @@
-import { MockedResponse } from '@apollo/client/testing/react';
+import { MockedResponse } from '@apollo/client/testing';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,

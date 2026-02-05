@@ -51,6 +51,7 @@ interface IEventEdge {
     location?: string | null;
     isPublic: boolean;
     isRegisterable: boolean;
+    isInviteOnly: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
@@ -89,7 +90,7 @@ export enum ViewType {
   YEAR = 'Year View',
 }
 
-function organizationEvents(): JSX.Element {
+function OrganizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
@@ -122,29 +123,32 @@ function organizationEvents(): JSX.Element {
     data: eventData,
     error: eventDataError,
     refetch: refetchEvents,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
-      id: currentUrl,
-      first: 100,
-      after: null,
-      startDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .startOf('month')
-        .toISOString(),
-      endDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .endOf('month')
-        .toISOString(),
-      includeRecurring: true,
+  } = useQuery<{ organization: { events: { edges: IEventEdge[] } } }>(
+    GET_ORGANIZATION_EVENTS_PG,
+    {
+      variables: {
+        id: currentUrl,
+        first: 100,
+        after: null,
+        startDate: dayjs(new Date(currentYear, currentMonth, 1))
+          .startOf('month')
+          .toISOString(),
+        endDate: dayjs(new Date(currentYear, currentMonth, 1))
+          .endOf('month')
+          .toISOString(),
+        includeRecurring: true,
+      },
+      notifyOnNetworkStatusChange: true,
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-and-network',
     },
-    notifyOnNetworkStatusChange: true,
-    errorPolicy: 'all',
-    fetchPolicy: 'cache-and-network',
-  });
+  );
 
   const {
     data: orgData,
     loading: orgLoading,
     error: orgDataError,
-  } = useQuery(GET_ORGANIZATION_DATA_PG, {
+  } = useQuery<{ organization: any }>(GET_ORGANIZATION_DATA_PG, {
     variables: {
       id: currentUrl,
       first: 10,
@@ -176,6 +180,7 @@ function organizationEvents(): JSX.Element {
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
+    isInviteOnly: edge.node.isInviteOnly,
     // Add recurring event information
     isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
     baseEvent: edge.node.baseEvent,
@@ -299,4 +304,4 @@ function organizationEvents(): JSX.Element {
   );
 }
 
-export default organizationEvents;
+export default OrganizationEvents;

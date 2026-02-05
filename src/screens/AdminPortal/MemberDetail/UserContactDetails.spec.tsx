@@ -1,8 +1,9 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
@@ -982,7 +983,7 @@ describe('MemberDetail', () => {
 
     test('sets formState correctly when data.user is returned', async () => {
       render(
-        <MockedProvider mocks={MOCKS1} addTypename={false}>
+        <MockedProvider mocks={MOCKS1} >
           <BrowserRouter>
             <MemberDetail />
           </BrowserRouter>
@@ -1349,7 +1350,7 @@ describe('MemberDetail', () => {
     ];
 
     render(
-      <MockedProvider mocks={MOCK_NO_BIRTHDATE} addTypename={false}>
+      <MockedProvider mocks={MOCK_NO_BIRTHDATE} >
         <BrowserRouter>
           <MemberDetail />
         </BrowserRouter>

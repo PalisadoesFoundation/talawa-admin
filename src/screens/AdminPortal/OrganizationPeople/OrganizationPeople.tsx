@@ -136,33 +136,44 @@ function OrganizationPeople(): JSX.Element {
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
   const [data, setData] = useState<
     | {
-        edges: IEdges[];
-        pageInfo: {
-          startCursor?: string;
-          endCursor?: string;
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-        };
-      }
+      edges: IEdges[];
+      pageInfo: {
+        startCursor?: string;
+        endCursor?: string;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    }
     | undefined
   >();
 
   // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
-
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
+  const [
+    fetchMembers,
+    { data: memberData, loading: memberLoading, error: memberError },
+  ] = useLazyQuery<{ organization: { members: any } }>(
+    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   );
+
+  const [
+    fetchUsers,
+    { data: userData, loading: userLoading, error: userError },
+  ] = useLazyQuery<{
+    allUsers: any;
+  }>(USER_LIST_FOR_TABLE);
+
+  // Sync query data with local state
+  useEffect(() => {
+    if (state === 2) {
+      if (userData?.allUsers) {
+        setData(userData.allUsers);
+      }
+    } else {
+      if (memberData?.organization?.members) {
+        setData(memberData.organization.members);
+      }
+    }
+  }, [memberData, userData, state]);
 
   // Handle data changes
   useEffect(() => {

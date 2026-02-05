@@ -15,11 +15,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import {
-  type ApolloError,
-  type ApolloQueryResult,
-  useQuery,
-} from '@apollo/client/react';
+import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
@@ -57,9 +53,12 @@ const Pledges = (): JSX.Element => {
     close: closeDeleteModal,
   } = useModalState();
 
-  type PledgeQueryResult = ApolloQueryResult<{
-    getPledgesByUserId: InterfacePledgeInfo[];
-  }>;
+  type PledgeQueryResult = {
+    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
+    loading: boolean;
+    networkStatus: number;
+    errors?: readonly Error[];
+  };
   interface IPledgeRefetchFn {
     (): Promise<PledgeQueryResult>;
   }
@@ -71,20 +70,15 @@ const Pledges = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: IPledgeRefetchFn;
-  } = useQuery(USER_PLEDGES, {
+  } = useQuery<{ getPledgesByUserId: InterfacePledgeInfo[] }>(USER_PLEDGES, {
     skip: shouldSkip,
     variables: shouldSkip
       ? undefined
       : {
-          input: { userId: userId as string },
-          where: {},
-          orderBy: 'endDate_DESC',
-        },
+        input: { userId: userId as string },
+        where: {},
+        orderBy: 'endDate_DESC',
+      },
     fetchPolicy: 'cache-and-network',
   });
 
@@ -109,11 +103,13 @@ const Pledges = (): JSX.Element => {
   );
 
   const isNoPledgesFoundError =
-    pledgeError?.graphQLErrors.some((graphQLError) => {
-      const code = (graphQLError.extensions as { code?: string } | undefined)
-        ?.code;
-      return code === 'arguments_associated_resources_not_found';
-    }) ?? false;
+    pledgeError && 'graphQLErrors' in pledgeError
+      ? (pledgeError as { graphQLErrors: Array<{ extensions?: { code?: string } }> }).graphQLErrors.some((graphQLError) => {
+        const code = (graphQLError.extensions as { code?: string } | undefined)
+          ?.code;
+        return code === 'arguments_associated_resources_not_found';
+      })
+      : false;
 
   useEffect(() => {
     if (pledgeData?.getPledgesByUserId) {
@@ -237,8 +233,8 @@ const Pledges = (): JSX.Element => {
           label={
             params.row.goalAmount > 0
               ? `${Math.round(
-                  (params.row.amount / params.row.goalAmount) * 100,
-                )}%`
+                (params.row.amount / params.row.goalAmount) * 100,
+              )}%`
               : '0%'
           }
           data-testid="progressBar"

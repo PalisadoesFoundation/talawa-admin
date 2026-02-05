@@ -1,4 +1,4 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {

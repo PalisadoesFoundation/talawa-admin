@@ -45,7 +45,7 @@ import { Tooltip } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { ApolloError, useMutation } from '@apollo/client/react';
+import { useMutation } from '@apollo/client/react';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -98,11 +98,11 @@ function OrganizationCard({
   const joinedRefetch =
     userId != null
       ? [
-          {
-            query: USER_JOINED_ORGANIZATIONS_PG,
-            variables: { id: userId, first: 5 },
-          },
-        ]
+        {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: userId, first: 5 },
+        },
+      ]
       : [];
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [{ query: ORGANIZATION_LIST }, ...joinedRefetch],
@@ -126,8 +126,8 @@ function OrganizationCard({
         NotificationToast.success(t('users.orgJoined'));
       }
     } catch (error: unknown) {
-      if (error instanceof ApolloError) {
-        const apolloError = error;
+      if (error instanceof Error && 'graphQLErrors' in error) {
+        const apolloError = error as { graphQLErrors?: Array<{ extensions?: { code?: string } }> };
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           NotificationToast.error(t('users.AlreadyJoined'));

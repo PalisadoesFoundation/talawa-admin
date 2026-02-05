@@ -1,6 +1,5 @@
 // This file will contain the utililities for organization tags
 
-import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceQueryOrganizationUserTagsPG,
@@ -58,7 +57,7 @@ export type SortedByType = 'ASCENDING' | 'DESCENDING';
 // 1. Base interface for Apollo query results
 interface InterfaceBaseQueryResult {
   loading: boolean;
-  error?: ApolloError;
+  error?: Error;
   refetch?: () => void;
 }
 

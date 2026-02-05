@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import type { RenderResult } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
