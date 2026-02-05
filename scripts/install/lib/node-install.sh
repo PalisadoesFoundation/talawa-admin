@@ -127,14 +127,22 @@ version_satisfies() {
 # ==============================================================================
 
 # Check if fnm is installed and available
+# Honors FNM_DIR if set, then checks PATH and common locations
 # Returns: 0 if fnm is available, 1 otherwise
 check_fnm() {
-    # First check if fnm is in PATH
+    if [[ -n "${FNM_DIR:-}" ]]; then
+        if [[ -x "$FNM_DIR/fnm" ]]; then
+            return 0
+        fi
+        if [[ -x "$FNM_DIR/bin/fnm" ]]; then
+            return 0
+        fi
+    fi
+    
     if command_exists fnm; then
         return 0
     fi
     
-    # Check common fnm installation locations
     if [[ -x "$HOME/.local/share/fnm/fnm" ]]; then
         return 0
     fi
@@ -427,7 +435,7 @@ required_pnpm_version() {
         local pm_version
         # Extract pnpm version from packageManager field
         # Format: "pnpm@10.4.1" or "pnpm@9.0.0+sha256...."
-        pm_version="$(grep -oE '"packageManager"\s*:\s*"pnpm@[0-9]+\.[0-9]+\.[0-9]+' package.json 2>/dev/null | \
+        pm_version="$(grep -oE '"packageManager"[[:space:]]*:[[:space:]]*"pnpm@[0-9]+\.[0-9]+\.[0-9]+' package.json 2>/dev/null | \
                      sed -E 's/.*pnpm@([0-9]+\.[0-9]+\.[0-9]+).*/\1/' | \
                      head -1)"
         if [[ -n "$pm_version" ]]; then

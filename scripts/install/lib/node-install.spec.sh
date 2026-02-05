@@ -744,9 +744,11 @@ test_ensure_node_toolchain_fail_fast() {
     eval 'check_node() { return 1; }'
     eval 'install_node() { return 1; }'
     
-    local output result=0
+    local output exit_code result=0
+    set +e
     output=$(ensure_node_toolchain --fail-fast 2>&1)
-    local exit_code=$?
+    exit_code=$?
+    set -euo pipefail
     
     if [[ $exit_code -eq 0 ]]; then
         echo "  ensure_node_toolchain --fail-fast should return non-zero on fnm failure"
@@ -781,9 +783,11 @@ test_ensure_node_toolchain_no_fail_fast() {
     eval 'check_node() { return 0; }'
     eval 'check_pnpm() { return 0; }'
     
-    local output result=0
+    local output exit_code result=0
+    set +e
     output=$(ensure_node_toolchain 2>&1)
-    local exit_code=$?
+    exit_code=$?
+    set -euo pipefail
     
     if [[ $exit_code -eq 0 ]]; then
         echo "  ensure_node_toolchain should return non-zero when install fails"
