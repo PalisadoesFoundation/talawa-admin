@@ -39,6 +39,7 @@
  * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -187,6 +188,24 @@ export const EventRegistrantsModal = ({
             onChange={(_, newMember): void => {
               setMember(newMember);
             }}
+            getOptionLabel={(member: InterfaceUser): string =>
+              member.name || t('unknownUser')
+            }
+            renderOption={(props, option: InterfaceUser) => (
+              <li {...props} key={option.id}>
+                <div className="d-flex align-items-center">
+                  <ProfileAvatarDisplay
+                    imageUrl={option.avatarURL}
+                    fallbackName={option.name || t('unknownUser')}
+                    size="small"
+                    enableEnlarge={true}
+                  />
+                  <span className="ms-2">
+                    {option.name || t('unknownUser')}
+                  </span>
+                </div>
+              </li>
+            )}
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
@@ -208,9 +227,6 @@ export const EventRegistrantsModal = ({
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
-            getOptionLabel={(member: InterfaceUser): string =>
-              member.name || t('unknownUser')
-            }
             renderInput={(params): React.ReactNode => (
               <FormTextField
                 name="addRegistrant"

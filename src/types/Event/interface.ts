@@ -19,6 +19,7 @@ export interface IMember {
   createdAt: string;
   name: string;
   emailAddress: `${string}@${string}.${string}`;
+  avatarURL?: string;
   natalSex: string;
   eventsAttended?: {
     id: string;

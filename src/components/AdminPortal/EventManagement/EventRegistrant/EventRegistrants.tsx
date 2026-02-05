@@ -34,6 +34,7 @@
  *   to display and manage event registrants and attendees.
  */
 import React, { useEffect, useState, useCallback } from 'react';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { useTranslation } from 'react-i18next';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
@@ -91,7 +92,12 @@ function EventRegistrants(): JSX.Element {
         const mappedData = data.getEventAttendeesByEventId.map(
           (attendee: {
             id: string;
-            user: { id: string; name: string; emailAddress: string };
+            user: {
+              id: string;
+              name: string;
+              emailAddress: string;
+              avatarURL?: string;
+            };
             isRegistered: boolean;
             createdAt: string;
           }) => ({
@@ -211,6 +217,20 @@ function EventRegistrants(): JSX.Element {
       id: 'registrant',
       header: t('registrant'),
       accessor: 'name',
+      render: (_value: unknown, row) => {
+        const name = row.name || '';
+        return (
+          <div className="d-flex align-items-center">
+            <ProfileAvatarDisplay
+              imageUrl={row.user?.avatarURL}
+              fallbackName={name}
+              size="small"
+              enableEnlarge={true}
+            />
+            <span className="ms-2">{name}</span>
+          </div>
+        );
+      },
     },
     {
       id: 'registeredAt',

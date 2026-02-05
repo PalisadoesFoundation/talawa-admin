@@ -1548,6 +1548,7 @@
     "Admin": "Administrador",
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes",
+    "unknownMember": "Miembro desconocido",
     "attendeeCount": "Número de asistentes",
     "maleAttendees": "Asistentes masculinos",
     "femaleAttendees": "Asistentes femeninas",

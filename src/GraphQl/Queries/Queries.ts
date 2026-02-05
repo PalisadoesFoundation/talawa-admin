@@ -379,6 +379,7 @@ export const EVENT_REGISTRANTS = gql`
         id
         name
         emailAddress
+        avatarURL
       }
       isRegistered
       isInvited
