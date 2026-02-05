@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
   useRegistration,
@@ -57,6 +57,7 @@ const createWrapper = (mocks: MockedResponse[]) =>
 
 describe('useRegistration', () => {
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -359,6 +360,53 @@ describe('useRegistration', () => {
 
     expect(mockOnSuccess).toHaveBeenCalledTimes(1);
     expect(mockOnError).not.toHaveBeenCalled();
+    expect(result.current.loading).toBe(false);
+  });
+
+  it('should include recaptchaToken in signup variables when provided', async () => {
+    const mockOnSuccess = vi.fn();
+    const recaptchaToken = 'test-recaptcha-token-value';
+    const recaptchaMocks: MockedResponse[] = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: 'org-1',
+            name: 'Test User',
+            email: 'test@example.com',
+            password: 'password123',
+            recaptchaToken,
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: { id: 'user-1' },
+              authenticationToken: 'token',
+              refreshToken: 'refresh',
+            },
+          },
+        },
+      },
+    ];
+    const { result } = renderHook(
+      () => useRegistration({ onSuccess: mockOnSuccess }),
+      { wrapper: createWrapper(recaptchaMocks) },
+    );
+
+    await act(async () => {
+      await result.current.register({
+        name: 'Test User',
+        email: 'test@example.com',
+        password: 'password123',
+        organizationId: 'org-1',
+        recaptchaToken,
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockOnSuccess).toHaveBeenCalledTimes(1);
+    });
     expect(result.current.loading).toBe(false);
   });
 });
