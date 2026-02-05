@@ -299,6 +299,9 @@ test_library_exports_functions() {
     declare -f required_pnpm_version >/dev/null 2>&1 || missing_functions+=("required_pnpm_version")
     declare -f ensure_node_toolchain >/dev/null 2>&1 || missing_functions+=("ensure_node_toolchain")
     declare -f verify_node_toolchain >/dev/null 2>&1 || missing_functions+=("verify_node_toolchain")
+    declare -f version_satisfies >/dev/null 2>&1 || missing_functions+=("version_satisfies")
+    declare -f normalize_version >/dev/null 2>&1 || missing_functions+=("normalize_version")
+    declare -f parse_version_component >/dev/null 2>&1 || missing_functions+=("parse_version_component")
     
     if [[ ${#missing_functions[@]} -gt 0 ]]; then
         echo "  Missing functions: ${missing_functions[*]}"
@@ -340,6 +343,73 @@ test_common_library_integration() {
     return 1
 }
 
+test_version_satisfies_semver() {
+    source_library
+    
+    local failed=0
+    
+    # Test: equal versions should satisfy
+    if ! version_satisfies "1.2.3" "1.2.3"; then
+        echo "  1.2.3 should satisfy 1.2.3"
+        failed=1
+    fi
+    
+    # Test: greater patch should satisfy
+    if ! version_satisfies "1.2.4" "1.2.3"; then
+        echo "  1.2.4 should satisfy 1.2.3"
+        failed=1
+    fi
+    
+    # Test: greater minor should satisfy
+    if ! version_satisfies "1.3.0" "1.2.9"; then
+        echo "  1.3.0 should satisfy 1.2.9"
+        failed=1
+    fi
+    
+    # Test: greater major should satisfy
+    if ! version_satisfies "2.0.0" "1.9.9"; then
+        echo "  2.0.0 should satisfy 1.9.9"
+        failed=1
+    fi
+    
+    # Test: lesser patch should NOT satisfy
+    if version_satisfies "1.2.2" "1.2.3"; then
+        echo "  1.2.2 should NOT satisfy 1.2.3"
+        failed=1
+    fi
+    
+    # Test: lesser minor should NOT satisfy
+    if version_satisfies "1.1.9" "1.2.0"; then
+        echo "  1.1.9 should NOT satisfy 1.2.0"
+        failed=1
+    fi
+    
+    # Test: pinned pnpm versions like 10.4.1
+    if ! version_satisfies "10.4.1" "10.4.1"; then
+        echo "  10.4.1 should satisfy 10.4.1"
+        failed=1
+    fi
+    
+    if ! version_satisfies "10.5.0" "10.4.1"; then
+        echo "  10.5.0 should satisfy 10.4.1"
+        failed=1
+    fi
+    
+    # Test: versions with leading v
+    if ! version_satisfies "v22.14.0" "22.13.1"; then
+        echo "  v22.14.0 should satisfy 22.13.1"
+        failed=1
+    fi
+    
+    # Test: major-only comparison (single number requirement)
+    if ! version_satisfies "22.14.0" "22"; then
+        echo "  22.14.0 should satisfy 22"
+        failed=1
+    fi
+    
+    return $failed
+}
+
 main() {
     echo "=========================================="
     echo "Node.js Installation Helper Test Suite"
@@ -361,6 +431,7 @@ main() {
     run_test "Library Exports Functions" test_library_exports_functions
     run_test "Library Exports Constants" test_library_exports_constants
     run_test "common.sh Integration" test_common_library_integration
+    run_test "version_satisfies Full Semver" test_version_satisfies_semver
     
     echo ""
     echo "=========================================="

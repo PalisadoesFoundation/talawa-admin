@@ -63,6 +63,7 @@ readonly FNM_INSTALLER_URL="https://fnm.vercel.app/install"
 normalize_version() {
     local version="$1"
     version="${version#v}"
+    version="${version#V}"
     printf '%s' "$version"
 }
 
@@ -72,6 +73,21 @@ parse_major_version() {
     printf '%s' "${version%%.*}"
 }
 
+# Parse version component at given index (0=major, 1=minor, 2=patch)
+parse_version_component() {
+    local version="$1"
+    local index="$2"
+    version="$(normalize_version "$version")"
+    
+    local IFS='.'
+    local -a parts
+    read -ra parts <<< "$version"
+    
+    # Return component or 0 if missing
+    printf '%s' "${parts[$index]:-0}"
+}
+
+# Full semver comparison: returns 0 if installed >= required
 version_satisfies() {
     local installed="$1"
     local required="$2"
@@ -79,21 +95,31 @@ version_satisfies() {
     installed="$(normalize_version "$installed")"
     required="$(normalize_version "$required")"
     
-    local installed_major required_major
-    installed_major="$(parse_major_version "$installed")"
-    required_major="$(parse_major_version "$required")"
-    
     # Check for empty values
-    if [[ -z "$installed_major" ]] || [[ -z "$required_major" ]]; then
+    if [[ -z "$installed" ]] || [[ -z "$required" ]]; then
         return 1
     fi
     
-    # Validate that both values are strictly numeric before arithmetic comparison
-    if ! [[ "$installed_major" =~ ^[0-9]+$ ]] || ! [[ "$required_major" =~ ^[0-9]+$ ]]; then
-        return 1
-    fi
+    local i inst_part req_part
+    for i in 0 1 2; do
+        inst_part="$(parse_version_component "$installed" "$i")"
+        req_part="$(parse_version_component "$required" "$i")"
+        
+        # Validate numeric before comparison
+        if ! [[ "$inst_part" =~ ^[0-9]+$ ]] || ! [[ "$req_part" =~ ^[0-9]+$ ]]; then
+            return 1
+        fi
+        
+        # Force base-10 to handle leading zeros
+        if (( 10#$inst_part > 10#$req_part )); then
+            return 0
+        elif (( 10#$inst_part < 10#$req_part )); then
+            return 1
+        fi
+    done
     
-    [[ "$installed_major" -ge "$required_major" ]]
+    # All components equal means installed >= required
+    return 0
 }
 
 # ==============================================================================
@@ -370,6 +396,14 @@ verify_node() {
     required_version="$(required_node_version)"
     installed_version="$(normalize_version "$installed_version")"
     
+    # Check if required_version is numeric/semver-like (starts with digit)
+    # Non-numeric values like "lts/*", "node", "lts/hydrogen" skip version comparison
+    if ! [[ "$required_version" =~ ^[0-9] ]]; then
+        log_warning "Non-numeric version requirement '$required_version' - skipping version comparison (fnm resolved at runtime)"
+        log_success "Node.js verified: v$installed_version (requirement: $required_version)"
+        return 0
+    fi
+    
     if ! version_satisfies "$installed_version" "$required_version"; then
         log_error "Node.js version mismatch: required >=$required_version, found $installed_version"
         return 1
@@ -431,17 +465,23 @@ install_pnpm() {
     version="$(required_pnpm_version)"
     log_info "Required pnpm version: $version"
     
-    # Enable corepack
-    # Try without sudo first, then with sudo if needed (Linux systems)
+    # Enable corepack (non-interactive to avoid hanging on password prompts)
     if ! corepack enable 2>/dev/null; then
         if command_exists sudo; then
-            log_info "Enabling corepack with sudo..."
-            if ! sudo corepack enable 2>/dev/null; then
-                log_error "Failed to enable corepack"
+            # Check for passwordless sudo before attempting
+            if sudo -n true 2>/dev/null; then
+                log_info "Enabling corepack with passwordless sudo..."
+                if ! sudo -n corepack enable 2>/dev/null; then
+                    log_error "Failed to enable corepack with sudo"
+                    return 1
+                fi
+            else
+                log_error "corepack enable requires elevated privileges but passwordless sudo is not available"
+                log_error "Please either: run as root, configure passwordless sudo, or manually run: sudo corepack enable"
                 return 1
             fi
         else
-            log_error "Failed to enable corepack (try running as root or with sudo)"
+            log_error "Failed to enable corepack (try running as root or configure passwordless sudo)"
             return 1
         fi
     fi
