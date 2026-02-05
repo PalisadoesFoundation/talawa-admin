@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Autocomplete } from '@mui/material';
+import DropDownButton from 'shared-components/DropDownButton';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
@@ -25,7 +25,6 @@ import {
 import styles from './AgendaItemsUpdateModal.module.css';
 
 import type {
-  InterfaceAgendaItemCategoryInfo,
   InterfaceAgendaItemsUpdateModalProps,
   InterfaceAttachment,
 } from 'types/AdminPortal/Agenda/interface';
@@ -234,58 +233,54 @@ const AgendaItemsUpdateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <Autocomplete
-          options={agendaFolderData ?? []}
-          getOptionLabel={(f) => f.name}
-          value={
-            agendaFolderData?.find((f) => f.id === itemFormState.folder) ?? null
-          }
-          onChange={(_, folder) =>
-            setItemFormState({
-              ...itemFormState,
-              folder: folder?.id ?? '',
-            })
-          }
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <input
-                {...params.inputProps}
-                className="form-control"
-                placeholder={t('folderName')}
-              />
-              {params.InputProps.endAdornment}
-            </div>
-          )}
-        />
+        <div className="w-100">
+          <DropDownButton
+            id="agenda-folder-dropdown"
+            options={(agendaFolderData ?? []).map((f) => ({
+              value: f.id,
+              label: f.name,
+            }))}
+            selectedValue={itemFormState.folder || undefined}
+            onSelect={(val) =>
+              setItemFormState({
+                ...itemFormState,
+                folder: val,
+              })
+            }
+            placeholder={t('folderName')}
+            ariaLabel="Folder"
+            dataTestIdPrefix="folder-dropdown"
+            variant="light"
+            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            parentContainerStyle="w-100"
+          />
+        </div>
       </FormFieldGroup>
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <Autocomplete
-          options={agendaItemCategories ?? []}
-          getOptionLabel={(c: InterfaceAgendaItemCategoryInfo) => c.name}
-          value={
-            agendaItemCategories?.find(
-              (c) => c.id === itemFormState.category,
-            ) ?? null
-          }
-          onChange={(_, category) =>
-            setItemFormState({
-              ...itemFormState,
-              category: category?.id ?? '',
-            })
-          }
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <input
-                {...params.inputProps}
-                className="form-control"
-                placeholder={t('categoryName')}
-              />
-              {params.InputProps.endAdornment}
-            </div>
-          )}
-        />
+        <div className="w-100">
+          <DropDownButton
+            id="agenda-category-dropdown"
+            options={(agendaItemCategories ?? []).map((c) => ({
+              value: c.id,
+              label: c.name,
+            }))}
+            selectedValue={itemFormState.category || undefined}
+            onSelect={(val) =>
+              setItemFormState({
+                ...itemFormState,
+                category: val,
+              })
+            }
+            placeholder={t('categoryName')}
+            ariaLabel="Category"
+            dataTestIdPrefix="category-dropdown"
+            variant="light"
+            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            parentContainerStyle="w-100"
+          />
+        </div>
       </FormFieldGroup>
 
       <Row className="mb-3">

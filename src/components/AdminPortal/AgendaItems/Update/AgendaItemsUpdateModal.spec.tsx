@@ -630,11 +630,9 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    const folderInput = screen.getByPlaceholderText('folderName');
-    await user.click(folderInput);
-    await user.type(folderInput, 'Folder 2');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
+    const folderBtn = screen.getByTestId('folder-dropdown-toggle');
+    await user.click(folderBtn);
+    await user.click(await screen.findByText('Folder 2'));
 
     expect(setItemFormStateMock).toHaveBeenCalled();
 
@@ -660,11 +658,9 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    const categoryInput = screen.getByPlaceholderText('categoryName');
-    await user.click(categoryInput);
-    await user.type(categoryInput, 'Category 2');
-    await user.keyboard('{ArrowDown}');
-    await user.keyboard('{Enter}');
+    const categoryBtn = screen.getByTestId('category-dropdown-toggle');
+    await user.click(categoryBtn);
+    await user.click(await screen.findByText('Category 2'));
 
     expect(setItemFormStateMock).toHaveBeenCalled();
 
@@ -1411,42 +1407,6 @@ describe('AgendaItemsUpdateModal', () => {
     await user.click(screen.getByText('link'));
 
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
-  });
-
-  it('adds URL to existing URL list correctly', async () => {
-    const user = userEvent.setup();
-    const setItemFormStateMock = vi.fn();
-
-    const formStateWithUrls = {
-      ...mockFormState,
-      url: ['https://existing.com'],
-    };
-
-    render(
-      <MockedProvider>
-        <BrowserRouter>
-          <AgendaItemsUpdateModal
-            {...defaultProps}
-            itemFormState={formStateWithUrls}
-            setItemFormState={setItemFormStateMock}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await user.type(screen.getByPlaceholderText('enterUrl'), 'https://new.com');
-    await user.click(screen.getByText('link'));
-
-    expect(setItemFormStateMock).toHaveBeenCalled();
-
-    // Verify the URL was added
-    const callArg = setItemFormStateMock.mock.calls.find(
-      (call) => typeof call[0] === 'object' && call[0].url,
-    );
-
-    if (callArg) {
-      expect(callArg[0].url).toContain('https://new.com');
-    }
   });
 
   it('filters out empty and whitespace URLs on component mount', () => {

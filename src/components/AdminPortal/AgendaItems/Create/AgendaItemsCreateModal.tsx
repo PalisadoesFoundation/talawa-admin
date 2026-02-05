@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Autocomplete } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-
+import DropDownButton from 'shared-components/DropDownButton';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import Button from 'shared-components/Button/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
@@ -82,6 +81,23 @@ const AgendaItemsCreateModal: React.FC<
       folderId: '',
       categoryId: '',
     });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setAgendaItemFormState({
+        id: '',
+        title: '',
+        description: '',
+        duration: '',
+        creator: { name: '' },
+        urls: [],
+        attachments: [],
+        folderId: '',
+        categoryId: '',
+      });
+      setNewUrl('');
+    }
+  }, [isOpen]);
 
   /**
    * Validates user-provided URLs.
@@ -282,62 +298,54 @@ const AgendaItemsCreateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <Autocomplete
-          options={agendaFolderData ?? []}
-          getOptionLabel={(f) => f.name}
-          value={
-            agendaFolderData?.find(
-              (f) => f.id === agendaItemFormState.folderId,
-            ) ?? null
-          }
-          onChange={(_, folder) =>
-            setAgendaItemFormState((prev) => ({
-              ...prev,
-              folderId: folder?.id ?? '',
-            }))
-          }
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <input
-                {...params.inputProps}
-                className="form-control"
-                placeholder={t('folderName')}
-              />
-              {params.InputProps.endAdornment}
-            </div>
-          )}
-        />
+        <div className="w-100">
+          <DropDownButton
+            id="create-agenda-folder-dropdown"
+            options={(agendaFolderData ?? []).map((f) => ({
+              value: f.id,
+              label: f.name,
+            }))}
+            selectedValue={agendaItemFormState.folderId || undefined}
+            onSelect={(val) =>
+              setAgendaItemFormState((prev) => ({
+                ...prev,
+                folderId: val,
+              }))
+            }
+            placeholder={t('folderName')}
+            ariaLabel="Folder"
+            dataTestIdPrefix="create-folder-dropdown"
+            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            parentContainerStyle="w-100"
+            variant="light"
+          />
+        </div>
       </FormFieldGroup>
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <Autocomplete
-          options={agendaItemCategories || []}
-          disablePortal
-          getOptionLabel={(c) => c.name}
-          value={
-            agendaItemCategories?.find(
-              (c) => c.id === agendaItemFormState.categoryId,
-            ) ?? null
-          }
-          onChange={(_, category) =>
-            setAgendaItemFormState((prev) => ({
-              ...prev,
-              categoryId: category?.id ?? '',
-            }))
-          }
-          renderInput={(params) => (
-            <div ref={params.InputProps.ref} className="position-relative">
-              <input
-                {...params.inputProps}
-                className="form-control"
-                aria-label={t('category')}
-                placeholder={t('categoryName')}
-              />
-              {params.InputProps.endAdornment}
-            </div>
-          )}
-        />
+        <div className="w-100">
+          <DropDownButton
+            id="create-agenda-category-dropdown"
+            options={(agendaItemCategories ?? []).map((c) => ({
+              value: c.id,
+              label: c.name,
+            }))}
+            selectedValue={agendaItemFormState.categoryId || undefined}
+            onSelect={(val) =>
+              setAgendaItemFormState((prev) => ({
+                ...prev,
+                categoryId: val,
+              }))
+            }
+            placeholder={t('categoryName')}
+            ariaLabel="Category"
+            dataTestIdPrefix="create-category-dropdown"
+            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            parentContainerStyle="w-100"
+            variant="light"
+          />
+        </div>
       </FormFieldGroup>
 
       <Row className="mb-3">

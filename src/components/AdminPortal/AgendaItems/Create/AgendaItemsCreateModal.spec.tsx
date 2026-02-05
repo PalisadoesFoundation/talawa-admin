@@ -571,9 +571,8 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    const folderInput = screen.getByPlaceholderText('folderName');
-    await user.click(folderInput);
-    await user.type(folderInput, 'Folder');
+    const folderBtn = screen.getByText('folderName');
+    await user.click(folderBtn);
     await user.click(await screen.findByText('Folder'));
 
     await user.type(screen.getByLabelText(/title/i), 'Agenda');
@@ -714,7 +713,7 @@ describe('AgendaItemsCreateModal', () => {
     );
   });
 
-  it('renders folder autocomplete safely when agendaFolderData is undefined', () => {
+  it('renders folder dropdown safely when agendaFolderData is undefined', () => {
     render(
       <MockedProvider>
         <BrowserRouter>
@@ -731,31 +730,19 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByPlaceholderText('folderName')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('create-folder-dropdown-toggle'),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText('folderName')).toBeInTheDocument();
   });
 
-  it('clears folderId when folder selection is removed', async () => {
-    const createMock = vi.fn().mockResolvedValue({});
-
-    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
-      createMock,
-      {
-        loading: false,
-        data: undefined,
-        error: undefined,
-        called: false,
-        reset: vi.fn(),
-        client: {} as ApolloClient.ApolloClient<object>,
-      },
-    ]);
-
-    const user = userEvent.setup();
-
-    render(
+  it('resets form when modal closes and reopens', async () => {
+    const { rerender } = render(
       <MockedProvider>
         <BrowserRouter>
           <AgendaItemsCreateModal
-            isOpen
+            isOpen={true}
             hide={vi.fn()}
             eventId="event-1"
             t={t}
@@ -767,30 +754,44 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    const folderInput = screen.getByPlaceholderText('folderName');
-    await user.click(folderInput);
-    await user.click(await screen.findByText('Folder'));
+    const titleInput = screen.getByLabelText(/title/i);
+    await userEvent.type(titleInput, 'My Title');
 
-    // clear input
-    await user.clear(folderInput);
-
-    await user.type(screen.getByLabelText(/title/i), 'Agenda');
-    await user.click(screen.getByTestId('modal-submit-btn'));
-
-    await waitFor(
-      () => {
-        expect(createMock).toHaveBeenCalledWith(
-          expect.objectContaining({
-            variables: expect.objectContaining({
-              input: expect.objectContaining({
-                folderId: '',
-              }),
-            }),
-          }),
-        );
-      },
-      { timeout: 5000 },
+    // close modal
+    rerender(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen={false}
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
     );
+
+    // reopen
+    rerender(
+      <MockedProvider>
+        <BrowserRouter>
+          <AgendaItemsCreateModal
+            isOpen={true}
+            hide={vi.fn()}
+            eventId="event-1"
+            t={t}
+            agendaItemCategories={categories}
+            agendaFolderData={agendaFolders}
+            refetchAgendaFolder={vi.fn()}
+          />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByLabelText(/title/i)).toHaveValue('');
   });
 
   it('returns early when file input has no files', async () => {
@@ -835,9 +836,7 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    expect(
-      screen.getByRole('combobox', { name: /category/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText('categoryName')).toBeInTheDocument();
   });
 
   it('updates description when description field changes', async () => {
