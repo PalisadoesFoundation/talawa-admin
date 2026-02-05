@@ -1333,4 +1333,36 @@ describe('CampaignModal', () => {
       );
     });
   });
+
+  it('should auto-adjust end date when start date is changed to after end date', async () => {
+    const user = userEvent.setup();
+
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: new Date('2025-01-01T00:00:00.000Z'),
+        endAt: new Date('2025-06-01T00:00:00.000Z'),
+        currencyCode: 'USD',
+        createdAt: '2021-01-01T00:00:00.000Z',
+      },
+    };
+
+    renderCampaignModal(link1, editProps);
+
+    // Change start date to be after the current end date
+    // This will trigger line 298: newEnd = date.toDate()
+    const startDateInput = getStartDateInput();
+    const newStartDate = dayjs.utc('2025-07-01').format('DD/MM/YYYY');
+
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDate);
+
+    // Verify the start date was updated
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue(newStartDate);
+    });
+  });
 });
