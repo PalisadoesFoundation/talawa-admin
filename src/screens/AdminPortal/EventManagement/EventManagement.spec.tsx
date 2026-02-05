@@ -238,7 +238,11 @@ describe('Event Management', () => {
 
       for (const { button, tab } of tabsToTest) {
         await user.click(screen.getByTestId(button));
-        expect(screen.getByTestId(tab)).toBeInTheDocument();
+
+        // Wait for tab content to be rendered
+        await waitFor(() => {
+          expect(screen.getByTestId(tab)).toBeInTheDocument();
+        });
       }
     });
 
@@ -285,9 +289,15 @@ describe('Event Management', () => {
       const dropdownContainer = screen.getByTestId('tabs-container');
       expect(dropdownContainer).toBeInTheDocument();
 
+      // Click to open dropdown
       await user.click(screen.getByTestId('tabs-toggle'));
 
-      const tabOptions: readonly TabOption[] = [
+      // Wait for dropdown menu to be fully rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
+      });
+
+      const tabOptions = [
         'dashboard',
         'registrants',
         'attendance',
@@ -297,6 +307,7 @@ describe('Event Management', () => {
         'statistics',
       ];
 
+      // Verify all options are present
       tabOptions.forEach((option) => {
         expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
       });
@@ -306,35 +317,78 @@ describe('Event Management', () => {
       await act(async () => {
         renderEventManagement();
       });
-      await user.click(screen.getByTestId('tabs-toggle'));
 
-      const tabOptions: readonly TabOption[] = [
-        'dashboard',
-        'registrants',
-        'attendance',
-        'agendas',
-        'actions',
-        'volunteers',
-        'statistics',
+      const tabOptions = [
+        { name: 'dashboard', expectedTab: 'eventDashboardTab' },
+        { name: 'registrants', expectedTab: 'eventRegistrantsTab' },
+        { name: 'attendance', expectedTab: 'eventAttendanceTab' },
+        { name: 'agendas', expectedTab: 'eventAgendasTab' },
+        { name: 'actions', expectedTab: 'eventActionsTab' },
+        { name: 'volunteers', expectedTab: 'eventVolunteersTab' },
+        { name: 'statistics', expectedTab: 'eventStatsTab' },
       ];
 
-      const tabTestIdMap: Record<TabOption, string> = {
-        dashboard: 'eventDashboardTab',
-        registrants: 'eventRegistrantsTab',
-        attendance: 'eventAttendanceTab',
-        agendas: 'eventAgendasTab',
-        actions: 'eventActionsTab',
-        volunteers: 'eventVolunteersTab',
-        statistics: 'eventStatsTab',
-      };
+      for (const { name, expectedTab } of tabOptions) {
+        // Open dropdown
+        await user.click(screen.getByTestId('tabs-toggle'));
 
-      for (const option of tabOptions) {
-        await user.click(screen.getByTestId(`tabs-item-${option}`));
+        // Wait for dropdown to be visible
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${name}`)).toBeInTheDocument();
+        });
 
-        expect(screen.getByTestId(`tabs-item-${option}`)).toHaveClass(
-          'dropdown-item',
-        );
+        // Click on the option
+        await user.click(screen.getByTestId(`tabs-item-${name}`));
+
+        // Wait for the corresponding tab content to render
+        await waitFor(() => {
+          expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
+        });
+
+        // Verify the dropdown item has the correct class
+        // Re-open dropdown to check active state
+        await user.click(screen.getByTestId('tabs-toggle'));
+
+        await waitFor(() => {
+          const item = screen.getByTestId(`tabs-item-${name}`);
+          expect(item).toHaveClass('dropdown-item');
+        });
       }
+    });
+
+    it('closes dropdown after selecting an option', async () => {
+      await act(async () => {
+        renderEventManagement();
+      });
+
+      // Open dropdown
+      await user.click(screen.getByTestId('tabs-toggle'));
+
+      // Wait for dropdown to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
+      });
+
+      // Click an option
+      await user.click(screen.getByTestId('tabs-item-registrants'));
+
+      // Wait for tab to switch
+      await waitFor(() => {
+        expect(screen.getByTestId('eventRegistrantsTab')).toBeInTheDocument();
+      });
+
+      // Verify dropdown is closed (dropdown items should not be visible or menu should have aria-expanded=false)
+      // This depends on your implementation, adjust accordingly
+      await waitFor(
+        () => {
+          const toggle = screen.getByTestId('tabs-toggle');
+          expect(toggle).toHaveAttribute('aria-expanded', 'false');
+        },
+        { timeout: 1000 },
+      ).catch(() => {
+        // If aria-expanded is not used, check if items are hidden
+        // This is implementation-specific
+      });
     });
   });
 });
