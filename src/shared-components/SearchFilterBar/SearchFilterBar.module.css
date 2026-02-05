@@ -8,7 +8,6 @@
   align-items: stretch;
   gap: var(--space-1);
   flex-wrap: wrap;
-  height: var(--space-10);
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
