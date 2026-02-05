@@ -12,8 +12,6 @@ import {
   InMemoryCache,
   ApolloLink,
   Observable,
-  type Operation,
-  type NextLink,
 } from '@apollo/client';
 import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -611,9 +609,9 @@ describe('Apollo Client Configuration', () => {
     let onErrorCallback: (error: {
       graphQLErrors?: readonly GraphQLError[];
       networkError?: Error | null;
-      operation: Operation;
-      forward: NextLink;
-    }) => { subscribe: (observer: unknown) => void } | void;
+      operation: ApolloLink.Operation;
+      forward: ApolloLink.ForwardFunction;
+    }) => Observable<ApolloLink.Result> | void;
     let splitPredicate: (args: { query: DocumentNode }) => boolean;
     let mockRefreshToken: Mock<() => Promise<boolean>>;
     let mockGetItem: Mock<() => string | null>;
@@ -633,7 +631,7 @@ describe('Apollo Client Configuration', () => {
       vi.doMock('@apollo/link-error', () => ({
         onError: vi.fn((cb) => {
           onErrorCallback = cb;
-          return new ApolloLink(() => null);
+          return new ApolloLink(() => new Observable((obs) => obs.complete()));
         }),
       }));
 
@@ -642,7 +640,7 @@ describe('Apollo Client Configuration', () => {
         ...actualApollo,
         split: vi.fn((predicate) => {
           splitPredicate = predicate;
-          return new ApolloLink(() => null);
+          return new ApolloLink(() => new Observable((obs) => obs.complete()));
         }),
         ApolloClient: vi.fn(),
       }));
@@ -718,7 +716,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       // Execute the error callback
       const observable = onErrorCallback({
@@ -774,7 +772,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
       const operation2 = {
         operationName: 'Query2',
         variables: {},
@@ -782,7 +780,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       // 1. Trigger first error -> starts refresh
       const obs1 = onErrorCallback({
@@ -851,7 +849,7 @@ describe('Apollo Client Configuration', () => {
         setContext: vi.fn(),
         getContext: vi.fn(),
         toKey: vi.fn(),
-      } as unknown as Operation;
+      } as unknown as ApolloLink.Operation;
 
       const obs = onErrorCallback({
         graphQLErrors: [

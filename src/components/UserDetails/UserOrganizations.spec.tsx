@@ -13,8 +13,7 @@ import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import { DocumentNode } from 'graphql';
-import { OperationVariables } from '@apollo/client/core/types';
-import { QueryHookOptions } from '@apollo/client/react/types/types';
+import type { OperationVariables } from '@apollo/client';
 
 vi.mock('react-router', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-router')>();
@@ -169,7 +168,7 @@ describe('UserOrganizations', () => {
 
     // Get the mocked useQuery function
     const apolloClient = await import('@apollo/client/react');
-    mockUseQuery = apolloClient.useQuery as ReturnType<typeof vi.fn>;
+    mockUseQuery = apolloClient.useQuery as unknown as ReturnType<typeof vi.fn>;
 
     // Define interface for query variables
     interface InterfaceUserDetailsVariables {
@@ -184,11 +183,11 @@ describe('UserOrganizations', () => {
       filter: string;
     }
 
-    // Default mock implementation with proper typing
+    // Default mock implementation with loose typing compatible with Apollo v4
     mockUseQuery.mockImplementation(
       <TData, TVariables extends OperationVariables>(
         query: DocumentNode,
-        options?: QueryHookOptions<TData, TVariables>,
+        options?: { variables?: TVariables },
       ) => {
         if (query === USER_DETAILS) {
           const vars = options?.variables as

@@ -181,7 +181,7 @@ function CreatePostModal({
           onSuccess('created');
         }
       } else {
-        const { data } = await editPost({
+        const { data } = (await editPost({
           variables: {
             input: {
               caption: postTitle,
@@ -191,8 +191,8 @@ function CreatePostModal({
               ...(file && { attachment: file }),
             },
           },
-        });
-        if (data.updatePost) {
+        })) as { data?: { updatePost?: unknown } };
+        if (data?.updatePost) {
           onSuccess('edited');
         }
       }

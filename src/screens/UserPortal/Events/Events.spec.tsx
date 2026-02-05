@@ -703,20 +703,7 @@ const REFETCH_FAILURE_MOCKS = [
     request: {
       query: CREATE_EVENT_MUTATION,
     },
-    variableMatcher: (variables: {
-      input: {
-        name: string;
-        description?: string;
-        startAt: string;
-        endAt: string;
-        organizationId: string;
-        allDay: boolean;
-        location?: string;
-        isPublic: boolean;
-        isRegisterable: boolean;
-        isInviteOnly: boolean;
-      };
-    }) => {
+    variableMatcher: (variables: Record<string, any>) => {
       const { input } = variables;
       return (
         input.name === 'New Test Event' &&
@@ -911,20 +898,7 @@ describe('Testing Events Screen [User Portal]', () => {
       request: {
         query: CREATE_EVENT_MUTATION,
       },
-      variableMatcher: (variables: {
-        input: {
-          name: string;
-          description?: string;
-          startAt: string;
-          endAt: string;
-          organizationId: string;
-          allDay: boolean;
-          location?: string;
-          isPublic: boolean;
-          isRegisterable: boolean;
-          isInviteOnly: boolean;
-        };
-      }) => {
+      variableMatcher: (variables: Record<string, any>) => {
         const { input } = variables;
         return (
           input.name === 'New Test Event' &&
@@ -1031,20 +1005,7 @@ describe('Testing Events Screen [User Portal]', () => {
       request: {
         query: CREATE_EVENT_MUTATION,
       },
-      variableMatcher: (variables: {
-        input: {
-          name: string;
-          description?: string;
-          startAt: string;
-          endAt: string;
-          organizationId: string;
-          allDay: boolean;
-          location?: string;
-          isPublic: boolean;
-          isRegisterable: boolean;
-          isInviteOnly: boolean;
-        };
-      }) => {
+      variableMatcher: (variables: Record<string, any>) => {
         const { input } = variables;
         return (
           input.name === 'New Non All Day Event' &&
@@ -1826,26 +1787,7 @@ describe('Testing Events Screen [User Portal]', () => {
       request: {
         query: CREATE_EVENT_MUTATION,
       },
-      variableMatcher: (variables: {
-        input: {
-          name: string;
-          description?: string;
-          startAt: string;
-          endAt: string;
-          organizationId: string;
-          allDay: boolean;
-          location?: string;
-          isPublic: boolean;
-          isRegisterable: boolean;
-          isInviteOnly: boolean;
-          recurrence?: {
-            frequency: string;
-            interval: number;
-            never?: boolean;
-            byDay?: string[];
-          };
-        };
-      }) => {
+      variableMatcher: (variables: Record<string, any>) => {
         const { input } = variables;
         // Ensure all conditions return boolean (not undefined via optional chaining)
         return Boolean(
@@ -2202,7 +2144,7 @@ describe('Testing Events Screen [User Portal]', () => {
       request: {
         query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       },
-      variableMatcher: (variables: Record<string, unknown>) => {
+      variableMatcher: (variables: Record<string, any>) => {
         return (
           variables.id === 'org123' &&
           (variables.startDate as string).includes(

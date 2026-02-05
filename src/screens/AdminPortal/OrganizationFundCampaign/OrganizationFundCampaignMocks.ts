@@ -140,14 +140,7 @@ export const MOCKS = [
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: {
-      fundId: string;
-      name: string;
-      goalAmount: number;
-      startAt: string;
-      endAt: string;
-      currencyCode: string;
-    }) =>
+    variableMatcher: (vars: Record<string, any>) =>
       vars.fundId === 'fundId' &&
       vars.name === 'Campaign 2' &&
       vars.goalAmount === 200 &&
@@ -168,15 +161,7 @@ export const MOCKS = [
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: {
-      input: {
-        id: string;
-        name: string;
-        goalAmount: number;
-        startAt: string;
-        endAt: string;
-      };
-    }) =>
+    variableMatcher: (vars: Record<string, any>) =>
       vars.input.id === 'campaignId1' &&
       vars.input.name === 'Campaign 4' &&
       vars.input.goalAmount === 400 &&
@@ -206,14 +191,7 @@ export const MOCK_ERROR = [
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: {
-      fundId: string;
-      name: string;
-      goalAmount: number;
-      startAt: string;
-      endAt: string;
-      currencyCode: string;
-    }) =>
+    variableMatcher: (vars: Record<string, any>) =>
       vars.fundId === 'fundId' &&
       vars.name === 'Campaign 2' &&
       vars.goalAmount === 200 &&
@@ -226,15 +204,7 @@ export const MOCK_ERROR = [
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: {
-      input: {
-        id: string;
-        name: string;
-        goalAmount: number;
-        startAt: string;
-        endAt: string;
-      };
-    }) =>
+    variableMatcher: (vars: Record<string, any>) =>
       vars.input.id === 'campaignId1' &&
       vars.input.name === 'Campaign 4' &&
       vars.input.goalAmount === 400 &&

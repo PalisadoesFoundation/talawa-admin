@@ -81,10 +81,12 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
     variables: { organizationId: orgId },
   });
 
-  const members = useMemo(
-    () => membersData?.usersByOrganizationId || [],
-    [membersData],
-  );
+  const members = useMemo(() => {
+    const typed = membersData as
+      | { usersByOrganizationId: InterfaceUserInfoPG[] }
+      | undefined;
+    return typed?.usersByOrganizationId || [];
+  }, [membersData]);
 
   // Use useMutationModal for loading/error state management
   const { isSubmitting, execute } = useMutationModal<InterfaceAddVolunteerData>(

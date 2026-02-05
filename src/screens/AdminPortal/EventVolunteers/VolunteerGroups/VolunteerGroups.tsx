@@ -92,18 +92,6 @@ function VolunteerGroups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteerGroups: InterfaceVolunteerGroupInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: {
@@ -131,14 +119,31 @@ function VolunteerGroups(): JSX.Element {
 
   // Effect to set recurring event info similar to Volunteers component
   useEffect(() => {
-    if (eventData && eventData.event) {
-      setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent || null);
+    const typed = eventData as
+      | {
+          event?: {
+            id: string;
+            recurrenceRule?: { id: string } | null;
+            baseEvent?: { id: string } | null;
+            volunteerGroups: InterfaceVolunteerGroupInfo[];
+          };
+        }
+      | undefined;
+    if (typed?.event) {
+      setIsRecurring(!!typed.event.recurrenceRule);
+      setBaseEvent(typed.event.baseEvent || null);
     }
   }, [eventData]);
 
   const groups = useMemo(() => {
-    const allGroups = eventData?.event?.volunteerGroups || [];
+    const typed = eventData as
+      | {
+          event?: {
+            volunteerGroups: InterfaceVolunteerGroupInfo[];
+          };
+        }
+      | undefined;
+    const allGroups = typed?.event?.volunteerGroups || [];
 
     // Apply client-side filtering based on search term
     let filteredGroups = allGroups;

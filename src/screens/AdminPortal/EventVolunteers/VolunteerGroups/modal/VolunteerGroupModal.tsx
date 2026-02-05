@@ -80,10 +80,12 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     variables: { organizationId: orgId },
   });
 
-  const members = useMemo(
-    () => membersData?.usersByOrganizationId || [],
-    [membersData],
-  );
+  const members = useMemo(() => {
+    const typed = membersData as
+      | { usersByOrganizationId: InterfaceUserInfoPG[] }
+      | undefined;
+    return typed?.usersByOrganizationId || [];
+  }, [membersData]);
 
   useEffect(() => {
     setFormState({

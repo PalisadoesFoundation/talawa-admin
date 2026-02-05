@@ -103,14 +103,14 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     setIsSubmitting(true);
 
     try {
-      const response = await addSignUp({
+      const response = (await addSignUp({
         variables: {
           ID: orgId,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
           password: '123456',
         },
-      });
+      })) as { data?: { signUp?: unknown } };
 
       if (response.data?.signUp) {
         NotificationToast.success(t('attendeeAddedSuccess'));

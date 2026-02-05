@@ -667,7 +667,7 @@ describe('PostCard', () => {
     // Override just for this test
     apolloMock.useMutation = vi
       .fn()
-      .mockReturnValue([mockLikePost, { loading: false }]);
+      .mockReturnValue([mockLikePost, { loading: false }]) as any;
 
     try {
       renderPostCard({
@@ -710,7 +710,7 @@ describe('PostCard', () => {
       }
       // For other mutations, return the normal mock
       return [vi.fn().mockResolvedValue({}), { loading: false }];
-    }) as ReturnType<typeof vi.fn>;
+    }) as any;
 
     try {
       renderPostCard();
@@ -1392,8 +1392,8 @@ describe('PostCard', () => {
                 __typename: 'CommentEdge',
                 node: {
                   __typename: 'Comment',
-                  id: `comment - ${ i } `,
-                  body: `Comment ${ i } `,
+                  id: `comment - ${i} `,
+                  body: `Comment ${i} `,
                   creator: {
                     __typename: 'User',
                     id: '2',
@@ -1409,7 +1409,7 @@ describe('PostCard', () => {
                     voteType: null,
                   },
                 },
-                cursor: `cursor - ${ i } `,
+                cursor: `cursor - ${i} `,
               })),
               pageInfo: {
                 __typename: 'PageInfo',

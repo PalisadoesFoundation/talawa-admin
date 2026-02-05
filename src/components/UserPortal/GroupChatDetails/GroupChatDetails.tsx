@@ -187,7 +187,20 @@ export default function GroupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<{
+    organization: {
+      members: {
+        edges: {
+          node: {
+            id: string;
+            name: string;
+            avatarURL?: string;
+            role: string;
+          };
+        }[];
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: chat.organization?.id },
       first: 20,

@@ -41,7 +41,7 @@ export default function PluginStore() {
     handleFilterChange,
     isInstalled,
     getInstalledPlugin,
-  } = usePluginFilters({ pluginData });
+  } = usePluginFilters({ pluginData: pluginData as any });
 
   const {
     loading,
@@ -52,7 +52,7 @@ export default function PluginStore() {
     uninstallPlugin,
     handleUninstallConfirm,
     closeUninstallModal,
-  } = usePluginActions({ pluginData, refetch });
+  } = usePluginActions({ pluginData: pluginData as any, refetch });
 
   useEffect(() => {
     if (pluginError) {

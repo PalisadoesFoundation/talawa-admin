@@ -1392,7 +1392,7 @@ describe('UploadPluginModal Component', () => {
           // This should not be reached due to early return
           await installAdminPluginFromZip({
             zipFile: selectedFile,
-            apolloClient: {} as unknown as ApolloClient<NormalizedCacheObject>,
+            apolloClient: {} as unknown as ApolloClient,
           });
         };
 

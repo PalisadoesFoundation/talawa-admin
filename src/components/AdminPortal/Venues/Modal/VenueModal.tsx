@@ -90,9 +90,10 @@ const VenueModal = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Mutation function for creating or updating a venue
-  const [mutate, { loading }] = useMutation(
-    edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
-  );
+  const [mutate, { loading }] = useMutation<{
+    updateVenue?: { id: string; name: string };
+    createVenue?: { id: string; name: string };
+  }>(edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION);
 
   /**
    * Handles form submission to create or update a venue.
@@ -132,8 +133,8 @@ const VenueModal = ({
         description: formState.description?.trim() || '',
         ...(formState.attachments &&
           formState.attachments.length > 0 && {
-            attachments: formState.attachments,
-          }),
+          attachments: formState.attachments,
+        }),
       };
       try {
         const result = await mutate({ variables });
@@ -173,8 +174,8 @@ const VenueModal = ({
           description: formState.description?.trim() || '',
           ...(formState.attachments &&
             formState.attachments.length > 0 && {
-              attachments: formState.attachments,
-            }),
+            attachments: formState.attachments,
+          }),
         };
 
         const result = await mutate({ variables });
@@ -195,8 +196,8 @@ const VenueModal = ({
           organizationId: orgId,
           ...(formState.attachments &&
             formState.attachments.length > 0 && {
-              attachments: formState.attachments,
-            }),
+            attachments: formState.attachments,
+          }),
         };
 
         const result = await mutate({ variables });

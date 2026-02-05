@@ -112,11 +112,6 @@ function Groups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
       where: whereVariables,
@@ -149,10 +144,12 @@ function Groups(): JSX.Element {
     setSearchBy(searchBy as 'leader' | 'group');
   }, []);
 
-  const groups = useMemo(
-    () => groupsData?.getEventVolunteerGroups || [],
-    [groupsData],
-  );
+  const groups = useMemo(() => {
+    const data = groupsData as
+      | { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] }
+      | undefined;
+    return data?.getEventVolunteerGroups || [];
+  }, [groupsData]);
 
   // Early return after all hooks
   if (!orgId || !userId) {

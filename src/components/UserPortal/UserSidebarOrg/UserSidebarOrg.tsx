@@ -41,7 +41,13 @@ const UserSidebarOrg = ({
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
-  const { data: currentUserData } = useQuery(CURRENT_USER, {
+  const { data: currentUserData } = useQuery<{
+    user: {
+      role: string;
+      id: string;
+      name: string;
+    };
+  }>(CURRENT_USER, {
     fetchPolicy: 'cache-first',
   });
   const roleFromAuth = currentUserData?.user?.role ?? null;

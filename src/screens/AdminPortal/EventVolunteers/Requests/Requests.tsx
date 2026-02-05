@@ -103,11 +103,6 @@ function Requests(): JSX.Element {
     loading: requestsLoading,
     error: requestsError,
     refetch: refetchRequests,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
@@ -122,9 +117,12 @@ function Requests(): JSX.Element {
   });
 
   const requests = useMemo(() => {
-    if (!requestsData) return [];
+    const data = requestsData as
+      | { getVolunteerMembership: InterfaceVolunteerMembership[] }
+      | undefined;
+    if (!data) return [];
 
-    let filteredRequests = requestsData.getVolunteerMembership;
+    let filteredRequests = data.getVolunteerMembership;
 
     // Apply filter by request type
     if (filterBy === 'individual') {

@@ -110,11 +110,6 @@ const Invitations = (): JSX.Element => {
     loading: invitationLoading,
     error: invitationError,
     refetch: refetchInvitations,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
@@ -127,9 +122,12 @@ const Invitations = (): JSX.Element => {
   });
 
   const invitations = useMemo(() => {
-    if (!invitationData) return [];
+    const dataWrapper = invitationData as
+      | { getVolunteerMembership: InterfaceVolunteerMembership[] }
+      | undefined;
+    if (!dataWrapper) return [];
 
-    let data = invitationData.getVolunteerMembership;
+    let data = dataWrapper.getVolunteerMembership;
 
     if (filter === 'group') {
       data = data.filter((i) => i.group && i.group.id);

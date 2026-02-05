@@ -102,7 +102,12 @@ function Leaderboard(): JSX.Element {
     skip: !orgId,
   });
 
-  const rankings = useMemo(() => data?.getVolunteerRanks ?? [], [data]);
+  const rankings = useMemo(() => {
+    const typed = data as
+      | { getVolunteerRanks?: Array<Record<string, unknown>> }
+      | undefined;
+    return typed?.getVolunteerRanks ?? [];
+  }, [data]);
 
   const leaderboardDropdowns = useMemo(
     () => [

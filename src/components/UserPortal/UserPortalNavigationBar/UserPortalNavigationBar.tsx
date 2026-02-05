@@ -85,7 +85,13 @@ export const UserPortalNavigationBar = (
     mode === 'organization' && fetchOrganizationData && finalOrganizationId;
 
   // GraphQL query for organization data
-  const { data: orgData } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+  const { data: orgData } = useQuery<{
+    organization: {
+      id: string;
+      name: string;
+      description: string;
+    };
+  }>(GET_ORGANIZATION_BASIC_DATA, {
     variables: { id: finalOrganizationId },
     skip: !shouldFetchOrgData,
   });

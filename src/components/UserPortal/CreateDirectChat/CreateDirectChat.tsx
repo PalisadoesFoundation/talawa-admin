@@ -66,7 +66,7 @@ interface InterfaceCreateDirectChatProps {
   createDirectChatModalisOpen: boolean;
   chatsListRefetch: (
     variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
+  ) => Promise<unknown>;
   chats: GroupChat[];
 }
 
@@ -85,8 +85,8 @@ export const handleCreateDirectChat = async (
   chatsListRefetch: {
     (
       variables?: Partial<{ id: string }> | undefined,
-    ): Promise<ApolloQueryResult<unknown>>;
-    (): Promise<ApolloQueryResult<unknown>>;
+    ): Promise<unknown>;
+    (): Promise<unknown>;
   },
   toggleCreateDirectChatModal: { (): void; (): void },
 ): Promise<void> => {

@@ -19,6 +19,17 @@ const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
 const EMAIL_KEY = 'email';
 
+type InviteMetadata = {
+  invitationToken: string;
+  inviteeEmailMasked?: string | null;
+  inviteeName?: string | null;
+  status?: string | null;
+  expiresAt?: string | null;
+  eventId?: string | null;
+  recurringEventInstanceId?: string | null;
+  organizationId?: string | null;
+};
+
 const AcceptInvitation = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
@@ -28,22 +39,16 @@ const AcceptInvitation = (): JSX.Element => {
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
-  const [verify] = useMutation(VERIFY_EVENT_INVITATION);
-  const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
+  const [verify] = useMutation<{
+    verifyEventInvitation: InviteMetadata;
+  }>(VERIFY_EVENT_INVITATION);
+  const [accept] = useMutation<{
+    acceptEventInvitation: { success: boolean; message: string };
+  }>(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
-  type InviteMetadata = {
-    invitationToken: string;
-    inviteeEmailMasked?: string | null;
-    inviteeName?: string | null;
-    status?: string | null;
-    expiresAt?: string | null;
-    eventId?: string | null;
-    recurringEventInstanceId?: string | null;
-    organizationId?: string | null;
-  } | null;
 
-  const [invite, setInvite] = useState<InviteMetadata>(null);
+  const [invite, setInvite] = useState<InviteMetadata | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -81,7 +86,7 @@ const AcceptInvitation = (): JSX.Element => {
         const e = err as Error | { message?: string };
         setError(
           e?.message ||
-            t('verifyError', { defaultValue: 'Error verifying invitation' }),
+          t('verifyError', { defaultValue: 'Error verifying invitation' }),
         );
       } finally {
         setLoading(false);
@@ -129,7 +134,7 @@ const AcceptInvitation = (): JSX.Element => {
       const e = err as Error | { message?: string };
       NotificationToast.error(
         e?.message ||
-          t('acceptError', { defaultValue: 'Could not accept invitation' }),
+        t('acceptError', { defaultValue: 'Could not accept invitation' }),
       );
     } finally {
       setIsSubmitting(false);

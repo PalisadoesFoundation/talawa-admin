@@ -81,7 +81,13 @@ export const EventRegistrantsModal = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<{
+    event: {
+      id: string;
+      name: string;
+      recurrenceRule: any;
+    };
+  }>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -98,7 +104,9 @@ export const EventRegistrantsModal = ({
     variables: { eventId: eventId },
   });
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
+  const { data: memberData } = useQuery<{
+    usersByOrganizationId: InterfaceUser[];
+  }>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 

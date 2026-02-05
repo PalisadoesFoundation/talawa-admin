@@ -7,7 +7,6 @@ import {
   InMemoryCache,
   split,
   Observable,
-  fromPromise,
 } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
@@ -90,7 +89,7 @@ const errorLink = onError(
         // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
         const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
-        if (authOperations.includes(operationName)) {
+        if (operationName && authOperations.includes(operationName)) {
           continue;
         }
 
@@ -122,36 +121,27 @@ const errorLink = onError(
 
           isRefreshing = true;
 
-          return fromPromise(
+          return new Observable((observer) => {
             refreshToken()
               .then((success) => {
                 if (success) {
                   resolvePendingRequests();
-                  return true;
+                  forward(operation).subscribe(observer);
                 } else {
                   // Refresh failed, clear storage and redirect
                   clearAllItems();
                   window.location.href = '/';
-                  return false;
+                  observer.error(error);
                 }
               })
-              .catch(() => {
+              .catch((err) => {
                 clearAllItems();
                 window.location.href = '/';
-                return false;
+                observer.error(err);
               })
               .finally(() => {
                 isRefreshing = false;
-              }),
-          ).flatMap((success: any) => {
-            if (success) {
-              // Retry the original request
-              // No need to set headers - HTTP-Only cookies are automatically included
-              return forward(operation);
-            }
-            return new Observable((observer) => {
-              observer.error(error);
-            });
+              });
           });
         }
       }

@@ -35,6 +35,20 @@ import styles from './VerifyEmail.module.css';
 
 type VerificationState = 'loading' | 'success' | 'error';
 
+interface VerifyEmailData {
+  verifyEmail: {
+    success: boolean;
+    message?: string;
+  };
+}
+
+interface ResendVerificationEmailData {
+  sendVerificationEmail: {
+    success: boolean;
+    message?: string;
+  };
+}
+
 /**
  * VerifyEmail Component
  *
@@ -59,10 +73,10 @@ const VerifyEmail = (): JSX.Element => {
   const [verificationState, setVerificationState] =
     useState<VerificationState>('loading');
 
-  const [verifyEmail, { loading: verifyLoading }] = useMutation(
+  const [verifyEmail, { loading: verifyLoading }] = useMutation<VerifyEmailData>(
     VERIFY_EMAIL_MUTATION,
   );
-  const [resendVerification, { loading: resendLoading }] = useMutation(
+  const [resendVerification, { loading: resendLoading }] = useMutation<ResendVerificationEmailData>(
     RESEND_VERIFICATION_EMAIL_MUTATION,
   );
 

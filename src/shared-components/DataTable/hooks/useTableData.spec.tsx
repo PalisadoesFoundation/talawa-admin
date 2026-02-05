@@ -2,8 +2,8 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, renderHook } from '@testing-library/react';
 import { useTableData } from './useTableData';
-import type { QueryResult } from '@apollo/client';
-import { NetworkStatus, ApolloError } from '@apollo/client';
+import { NetworkStatus } from '@apollo/client';
+import type { QueryResult } from '@apollo/client/react';
 import type { Connection } from '../../../types/shared-components/DataTable/interface';
 
 type Node = { id: string; name: string };
@@ -23,11 +23,11 @@ type MockQueryResultFn<T = unknown> = () => Promise<QueryResult<T>>;
 interface IItemsData {
   items?: Array<
     | {
-        connection?: {
-          edges?: Array<{ node: Node }> | null;
-          pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
-        } | null;
-      }
+      connection?: {
+        edges?: Array<{ node: Node }> | null;
+        pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
+      } | null;
+    }
     | undefined
   >;
 }
@@ -39,11 +39,11 @@ interface IItemsData {
 interface IDatasetsData {
   datasets?: Array<
     | {
-        items?: {
-          edges?: Array<{ node: Node }> | null;
-          pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
-        } | null;
-      }
+      items?: {
+        edges?: Array<{ node: Node }> | null;
+        pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
+      } | null;
+    }
     | undefined
   >;
 }
@@ -214,9 +214,7 @@ describe('useTableData', () => {
   });
 
   it('handles error state correctly', () => {
-    const error = new ApolloError({
-      errorMessage: 'Network error',
-    });
+    const error = new Error('Network error');
     const data = {};
 
     render(

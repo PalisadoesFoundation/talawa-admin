@@ -21,7 +21,7 @@ export async function refreshToken(): Promise<boolean> {
 
   try {
     // No need to pass refreshToken variable - API reads from HTTP-Only cookie
-    const { data } = await client.mutate({
+    const { data } = await client.mutate<{ refreshToken?: boolean }>({
       mutation: REFRESH_TOKEN_MUTATION,
     });
 

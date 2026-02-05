@@ -34,6 +34,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
+        operationType: 'query' as any,
+        client: {} as any,
       };
 
       const forward = vi.fn(
@@ -63,7 +65,6 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: FetchResult = {
         data: { createdAt: utcDate.toISOString() },
         extensions: {},
-        context: {},
       };
 
       const operation: Operation = {
@@ -73,6 +74,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
+        operationType: 'query' as any,
+        client: {} as any,
       };
 
       const forward = vi.fn(
@@ -114,6 +117,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
+        operationType: 'query' as any,
+        client: {} as any,
       };
 
       const forward = vi.fn(
@@ -136,7 +141,6 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: FetchResult = {
         data: { createdAt: 'invalid-date-time' },
         extensions: {},
-        context: {},
       };
 
       const operation: Operation = {
@@ -146,6 +150,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
+        operationType: 'query' as any,
+        client: {} as any,
       };
 
       const forward = vi.fn(
@@ -209,6 +215,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
+        operationType: 'query' as any,
+        client: {} as any,
       };
 
       const forward = vi.fn(

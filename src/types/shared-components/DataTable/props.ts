@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import type React from 'react';
-import type { QueryResult } from '@apollo/client';
 import type { IColumnDef } from './column';
 import type { SortDirection, ISortState, Key, ISortChangeEvent } from './types';
 import type { InterfacePageInfo } from './pagination';
@@ -181,7 +180,13 @@ export type InterfaceDataTableProps<T> = {
   bulkActions?: ReadonlyArray<IBulkAction<T>>;
   actionableRows?: ReadonlySet<Key>;
   showViewMoreButton?: boolean;
-  refetch?: QueryResult<unknown>['refetch'];
+  /**
+   * Optional refetch function for server-side data.
+   *
+   * Apollo v4 no longer exposes the previous `QueryResult` type in the same way,
+   * so we keep this intentionally loose to avoid coupling to internal types.
+   */
+  refetch?: (...args: unknown[]) => unknown;
   disableSort?: boolean;
   tableBodyClassName?: string;
   tableClassName?: string;

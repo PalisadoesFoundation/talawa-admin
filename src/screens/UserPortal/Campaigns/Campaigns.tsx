@@ -15,6 +15,38 @@ import { Box, Typography } from '@mui/material';
 import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
+import { type GridCellParams } from 'shared-components/DataGridWrapper';
+import useLocalStorage from 'utils/useLocalstorage';
+import PledgeModal from './PledgeModal';
+import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
+import { InterfaceUserCampaign } from 'utils/interfaces';
+import { useQuery } from '@apollo/client/react';
+
+interface RawCampaignNode {
+  id: string;
+  name: string;
+  currencyCode: string;
+  goalAmount: number;
+  startAt: string;
+  endAt: string;
+}
+
+interface CampaignData {
+  organization: {
+    funds: {
+      edges: {
+        node: {
+          campaigns: {
+            edges: {
+              node: RawCampaignNode;
+            }[];
+          };
+        };
+      }[];
+    };
+  };
+}
+
 /**
  * Extended interface for campaigns with computed status
  */
@@ -23,12 +55,6 @@ export type CampaignWithStatus = InterfaceUserCampaign & {
   [key: string]: unknown;
 };
 
-import { type GridCellParams } from 'shared-components/DataGridWrapper';
-import useLocalStorage from 'utils/useLocalstorage';
-import PledgeModal from './PledgeModal';
-import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
-import { useQuery } from '@apollo/client/react';
-import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
@@ -82,7 +108,7 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = useQuery<CampaignData>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },
@@ -110,21 +136,14 @@ const Campaigns = (): JSX.Element => {
 
     return campaignData.organization.funds.edges
       .flatMap(
-        (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
+        (fundEdge) =>
           fundEdge?.node?.campaigns?.edges ?? [],
       )
       .map(
         ({
           node: campaign,
         }: {
-          node: {
-            id: string;
-            name: string;
-            currencyCode: string;
-            goalAmount: number;
-            startAt: string;
-            endAt: string;
-          };
+          node: RawCampaignNode;
         }) => {
           const today = dayjs().startOf('day');
           const startDate = dayjs(campaign.startAt).startOf('day');

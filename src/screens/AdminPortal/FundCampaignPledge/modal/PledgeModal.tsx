@@ -96,8 +96,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   }, [pledge]);
 
   useEffect(() => {
-    if (memberData) {
-      const members = memberData.organization.members.edges.map(
+    const typed = memberData as
+      | {
+          organization: {
+            members: { edges: Array<{ node: InterfaceUserInfoPG }> };
+          };
+        }
+      | undefined;
+    if (typed?.organization?.members?.edges) {
+      const members = typed.organization.members.edges.map(
         (edge: { node: InterfaceUserInfoPG }) => edge.node,
       );
       setPledgers(members);

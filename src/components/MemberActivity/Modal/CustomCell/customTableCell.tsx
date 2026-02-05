@@ -61,7 +61,19 @@ export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
       </TableRow>
     );
   }
-  const event = data?.event;
+  const typedData = data as
+    | {
+        event?: {
+          id: string;
+          name: string;
+          startAt: string;
+          isRecurringEventTemplate?: boolean | null;
+          attendees?: Array<unknown> | null;
+          organization: { id: string };
+        };
+      }
+    | undefined;
+  const event = typedData?.event;
   if (!event) {
     return (
       <TableRow data-testid="no-event-state">

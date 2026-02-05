@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { InterfaceUserDetailsQuery } from 'utils/interfaces';
 import { errorHandler } from 'utils/errorHandler';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
@@ -122,10 +123,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
 
   // Mutation to update an existing pledge
-  const [updatePledge] = useMutation(UPDATE_PLEDGE);
+  const [updatePledge] = useMutation<unknown>(UPDATE_PLEDGE);
 
   // Mutation to create a new pledge
-  const [createPledge] = useMutation(CREATE_PLEDGE);
+  const [createPledge] = useMutation<unknown>(CREATE_PLEDGE);
 
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
@@ -142,7 +143,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<InterfaceUserDetailsQuery>(USER_DETAILS, {
     variables: { input: { id: userId } },
   });
 

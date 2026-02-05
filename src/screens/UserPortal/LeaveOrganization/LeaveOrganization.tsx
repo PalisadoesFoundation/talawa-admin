@@ -76,7 +76,13 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
+  } = useQuery<{
+    organizations: {
+      id: string;
+      name: string;
+      description: string;
+    }[];
+  }>(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
 
   /**
    * Mutation to remove the member from the organization.

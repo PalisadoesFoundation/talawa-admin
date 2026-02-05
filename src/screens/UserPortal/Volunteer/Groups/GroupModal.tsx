@@ -131,11 +131,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   const {
     data: requestsData,
     refetch: refetchRequests,
-  }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
-    refetch: () => void;
   } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
@@ -147,8 +142,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   });
 
   const requests = useMemo(() => {
-    if (!requestsData) return [];
-    return requestsData.getVolunteerMembership;
+    const data = requestsData as
+      | { getVolunteerMembership: InterfaceVolunteerMembership[] }
+      | undefined;
+    if (!data) return [];
+    return data.getVolunteerMembership;
   }, [requestsData]);
 
   useEffect(() => {

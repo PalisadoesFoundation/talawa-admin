@@ -55,7 +55,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameBlockedOrgs, setSearchByNameBlockedOrgs] = useState('');
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
-  const [unblockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
+  const [unblockUser] = useMutation<{ unblockUser: boolean }>(
+    UNBLOCK_USER_MUTATION_PG,
+  );
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
 

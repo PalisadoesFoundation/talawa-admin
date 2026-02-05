@@ -109,8 +109,11 @@ const UpcomingEvents = (): JSX.Element => {
     },
   );
   const basicMembershipLookup = useMemo(() => {
+    const dataWrapper = membershipData as
+      | { getVolunteerMembership: InterfaceVolunteerMembership[] }
+      | undefined;
     const lookup: Record<string, InterfaceVolunteerMembership> = {};
-    membershipData?.getVolunteerMembership?.forEach(
+    dataWrapper?.getVolunteerMembership?.forEach(
       (membership: InterfaceVolunteerMembership) => {
         const key = membership.group
           ? `${membership.event.id}-${membership.group.id}`
@@ -121,10 +124,17 @@ const UpcomingEvents = (): JSX.Element => {
     return lookup;
   }, [membershipData]);
   const events = useMemo<InterfaceMappedEvent[]>(() => {
-    if (!eventsData?.organization?.events?.edges) {
+    const typed = eventsData as
+      | {
+          organization?: {
+            events?: { edges: InterfaceEventEdge[] };
+          };
+        }
+      | undefined;
+    if (!typed?.organization?.events?.edges) {
       return [];
     }
-    const mapped = eventsData.organization.events.edges.map(
+    const mapped = typed.organization.events.edges.map(
       (edge: InterfaceEventEdge) => {
         const isRecurringInstance =
           edge.node.baseEvent?.isRecurringEventTemplate;

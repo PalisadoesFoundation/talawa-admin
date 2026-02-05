@@ -74,8 +74,12 @@ interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
+    variables?:
+      | Partial<{
+        id: string;
+      }>
+      | undefined,
+  ) => Promise<unknown>;
 }
 
 const { getItem } = useLocalStorage();

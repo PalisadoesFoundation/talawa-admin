@@ -81,7 +81,10 @@ function Actions(): JSX.Element {
   });
 
   const actionItems = useMemo(() => {
-    let items = (data?.actionItemsByOrganization ?? []).filter(
+    const typed = data as
+      | { actionItemsByOrganization?: IActionItemInfo[] }
+      | undefined;
+    let items = (typed?.actionItemsByOrganization ?? []).filter(
       (item: IActionItemInfo) => {
         const direct = item.volunteer?.user?.id === userId;
         const inGroup = item.volunteerGroup?.volunteers?.some(

@@ -1,17 +1,18 @@
 import React from 'react';
-import type { QueryResult, NetworkStatus } from '@apollo/client';
+import type { NetworkStatus, MaybeMasked } from '@apollo/client';
+import type { QueryResult } from '@apollo/client/react';
 import type { InterfacePageInfo } from './pagination';
 import type { IColumnDef } from './column';
 import type { Key } from './types';
 
-type ConnectionResolver<TNode, TData> = (data: TData) =>
+type ConnectionResolver<TNode, TData> = (data: MaybeMasked<TData>) =>
   | {
-      edges?:
-        | Array<{ node: TNode | null | undefined } | null | undefined>
-        | null
-        | undefined;
-      pageInfo?: InterfacePageInfo | null | undefined;
-    }
+    edges?:
+    | Array<{ node: TNode | null | undefined } | null | undefined>
+    | null
+    | undefined;
+    pageInfo?: InterfacePageInfo | null | undefined;
+  }
   | null
   | undefined;
 

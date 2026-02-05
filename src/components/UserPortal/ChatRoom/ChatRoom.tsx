@@ -49,7 +49,7 @@ interface IChatRoomProps {
         id: string;
       }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: INewChat[] }>>;
+  ) => Promise<unknown>;
 }
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {

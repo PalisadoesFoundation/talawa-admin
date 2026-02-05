@@ -204,8 +204,8 @@ function OrganizationVenues(): JSX.Element {
       // Client-side sorting by capacity
       if (filteredVenues.length > 0) {
         filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
+          const capacityA = a.node.capacity || 0;
+          const capacityB = b.node.capacity || 0;
           return sortOrder === 'highest'
             ? capacityB - capacityA
             : capacityA - capacityB;

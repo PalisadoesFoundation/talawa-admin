@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { NetworkStatus } from '@apollo/client';
-import type { QueryResult } from '@apollo/client';
+import type { QueryResult } from '@apollo/client/react';
+import type { MaybeMasked } from '@apollo/client';
 import type {
   Connection,
   Edge,
@@ -18,7 +19,7 @@ export function useTableData<TNode = unknown, TRow = TNode, TData = unknown>(
 
   // Resolve a Connection<TNode> via path (array or selector) and validate edges shape.
   const getConnection = (
-    d: TData | undefined,
+    d: MaybeMasked<TData> | undefined,
   ): Connection<TNode> | undefined => {
     if (!d) return undefined;
 
@@ -46,7 +47,7 @@ export function useTableData<TNode = unknown, TRow = TNode, TData = unknown>(
     return result as Connection<TNode>;
   };
 
-  const connection = useMemo(() => getConnection(data), [data, path, ...deps]);
+  const connection = useMemo(() => getConnection(data as any), [data, path, ...deps]);
 
   // Memoize rows derived from the connection and optional transform.
   const rows = useMemo<TRow[]>(() => {

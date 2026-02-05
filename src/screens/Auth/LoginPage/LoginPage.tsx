@@ -372,7 +372,7 @@ const LoginPage = (): JSX.Element => {
         return;
       }
 
-      if (signInData) {
+      if (signInData && signInData.signIn) {
         if (signInData.signIn.user.countryCode !== null) {
           i18n.changeLanguage(signInData.signIn.user.countryCode);
         }

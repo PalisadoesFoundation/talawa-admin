@@ -40,7 +40,7 @@ vi.mock('utils/errorHandler', async () => ({
   errorHandler: vi.fn(),
 }));
 
-const mockUseMutation = useMutation as Mock;
+const mockUseMutation = useMutation as unknown as Mock;
 const mockT = ((key: string) => key) as unknown as TFunction<
   'translation',
   undefined
