@@ -198,7 +198,7 @@ export const EventRegistrantsModal = ({
                     imageUrl={option.avatarURL}
                     fallbackName={option.name || t('unknownUser')}
                     size="small"
-                    enableEnlarge={true}
+                    enableEnlarge={false}
                   />
                   <span className="ms-2">
                     {option.name || t('unknownUser')}
