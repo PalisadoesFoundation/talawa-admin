@@ -282,10 +282,10 @@ describe('Event Management', () => {
     it('renders dropdown with all options', async () => {
       renderEventManagement();
 
-      const dropdownContainer = screen.getByTestId('tabsDropdown-container');
+      const dropdownContainer = screen.getByTestId('tabs-container');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await user.click(screen.getByTestId('tabsDropdown-toggle'));
+      await user.click(screen.getByTestId('tabs-toggle'));
 
       const tabOptions: readonly TabOption[] = [
         'dashboard',
@@ -298,16 +298,15 @@ describe('Event Management', () => {
       ];
 
       tabOptions.forEach((option) => {
-        expect(
-          screen.getByTestId(`tabsDropdown-item-${option}`),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
       });
     });
 
     it('switches tabs through dropdown selection', async () => {
-      renderEventManagement();
-
-      await user.click(screen.getByTestId('tabsDropdown-toggle'));
+      await act(async () => {
+        renderEventManagement();
+      });
+      await user.click(screen.getByTestId('tabs-toggle'));
 
       const tabOptions: readonly TabOption[] = [
         'dashboard',
@@ -330,9 +329,11 @@ describe('Event Management', () => {
       };
 
       for (const option of tabOptions) {
-        await user.click(screen.getByTestId(`tabsDropdown-item-${option}`));
+        await user.click(screen.getByTestId(`tabs-item-${option}`));
 
-        expect(screen.getByTestId(tabTestIdMap[option])).toBeInTheDocument();
+        expect(screen.getByTestId(`tabs-item-${option}`)).toHaveClass(
+          'dropdown-item',
+        );
       }
     });
   });

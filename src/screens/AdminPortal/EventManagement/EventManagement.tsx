@@ -47,8 +47,8 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
+import DropDownButton from 'shared-components/DropDownButton';
 import styles from './EventManagement.module.css';
-
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
@@ -56,7 +56,7 @@ import EventAgenda from 'components/AdminPortal/EventManagement/EventAgenda/Even
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
-import DropDownButton from 'shared-components/DropDownButton';
+
 /**
  * Tab options for the event management component.
  */
@@ -241,16 +241,18 @@ const EventManagement = (): JSX.Element => {
           </div>
 
           <DropDownButton
-            id="event-tabs-dropdown"
-            options={tabDropdownOptions}
+            id="tabs-dropdown"
+            options={eventDashboardTabs.map(({ value }) => ({
+              value,
+              label: t(value),
+            }))}
             selectedValue={tab}
-            onSelect={(val) => setTab(val as TabOptions)}
-            ariaLabel={t('eventTabs')}
-            dataTestIdPrefix="tabsDropdown"
+            onSelect={(value) => setTab(value as TabOptions)}
             variant="success"
-            buttonLabel={t(tab)}
+            dataTestIdPrefix="tabs"
+            drop="down"
             parentContainerStyle="d-md-none"
-            btnStyle="w-100"
+            ariaLabel={t('selectTab')}
           />
         </Col>
       </Row>
