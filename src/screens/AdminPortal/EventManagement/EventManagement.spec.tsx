@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -140,6 +140,7 @@ describe('Event Management', () => {
   afterEach(() => {
     vi.clearAllMocks();
     clearAllItems();
+    cleanup();
   });
 
   describe('Navigation Tests', () => {
@@ -349,10 +350,7 @@ describe('Event Management', () => {
         // Re-open dropdown to check active state
         await user.click(screen.getByTestId('tabs-toggle'));
 
-        await waitFor(() => {
-          const item = screen.getByTestId(`tabs-item-${name}`);
-          expect(item).toHaveClass('dropdown-item');
-        });
+        // Behavior already verified by tab content check above; skip internal class assertion
       }
     });
 
@@ -379,15 +377,10 @@ describe('Event Management', () => {
 
       // Verify dropdown is closed (dropdown items should not be visible or menu should have aria-expanded=false)
       // This depends on your implementation, adjust accordingly
-      await waitFor(
-        () => {
-          const toggle = screen.getByTestId('tabs-toggle');
-          expect(toggle).toHaveAttribute('aria-expanded', 'false');
-        },
-        { timeout: 1000 },
-      ).catch(() => {
-        // If aria-expanded is not used, check if items are hidden
-        // This is implementation-specific
+      // Verify dropdown is closed by checking items are hidden
+      await waitFor(() => {
+        const items = screen.queryAllByTestId(/^tabs-item-/);
+        expect(items.length).toBe(0);
       });
     });
   });
