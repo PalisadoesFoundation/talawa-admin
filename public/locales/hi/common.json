@@ -299,5 +299,7 @@
   "toggleSidebar": "साइडबार टॉगल करें",
   "picture": "{{name}} चित्र",
   "optionsSuffix": "विकल्प",
-  "userMenu": "उपयोगकर्ता मेनू"
+  "userMenu": "उपयोगकर्ता मेनू",
+  "searchPlaceholder": "खोजें...",
+  "noOptionsFound": "कोई विकल्प नहीं मिला"
 }
