@@ -47,8 +47,10 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { generateSecurePassword } from 'utils/generateSecurePassword';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -102,13 +104,14 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
 
     setIsSubmitting(true);
 
+    const securePassword = generateSecurePassword();
     try {
       const response = await addSignUp({
         variables: {
           ID: orgId,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
-          password: '123456',
+          password: securePassword, // initially it was hardcoded as '123456'
         },
       });
 

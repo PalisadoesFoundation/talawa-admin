@@ -1,4 +1,3 @@
-
 /**
  * EventRegistrantsModal Component
  *
@@ -50,6 +49,10 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { useTranslation } from 'react-i18next';
 
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+
+// TextField is required here because MUI Autocomplete requires
+// a MUI-compatible input via renderInput.
+// shared FormTextField is incompatible with Autocomplete internals.
 /* eslint-disable no-restricted-imports */
 import TextField from '@mui/material/TextField';
 
@@ -64,7 +67,7 @@ import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 
 import type { InterfaceUser } from 'types/shared-components/User/interface';
-import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
+import type { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 
 import styles from './EventRegistrantsModal.module.css';
 
@@ -129,14 +132,15 @@ export const EventRegistrantsModal = ({
       await addRegistrantMutation({ variables });
 
       NotificationToast.success(
-        tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+        tCommon('addedSuccessfully', { item: t('attendee') }) as string,
       );
 
       setSelectedMember(null);
       refetchAttendees();
     } catch (error) {
-      NotificationToast.error(t('errorAddingAttendee') as string);
-      NotificationToast.error((error as Error).message);
+      NotificationToast.error(
+        `${t('errorAddingAttendee')}: ${(error as Error).message}`,
+      );
     }
   };
 

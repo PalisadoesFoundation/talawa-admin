@@ -2105,28 +2105,46 @@
       "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
     }
   },
-  "onSpotAttendee": {
-    "invalidEmailFormat": "Formato de correo electrónico no válido",
+ "onSpotAttendee": {
+    "invalidEmailFormat": "Formato de correo electrónico inválido",
     "organizationIdMissing": "Falta el ID de la organización.",
-    "title": "Asistente in situ",
+    "title": "Asistente en el lugar",
+
     "enterFirstName": "Ingrese el nombre",
     "enterLastName": "Ingrese el apellido",
     "enterEmail": "Ingrese el correo electrónico",
+
+    "placeholderFirstName": "Juan",
+    "placeholderLastName": "García",
+    "placeholderEmail": "abc@gmail.com",
+
     "enterPhoneNo": "Ingrese el número de teléfono",
-    "selectGender": "Seleccionar género",
-    "invalidDetailsMessage": "Por favor complete todos los detalles requeridos",
-    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
-    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
-    "addAttendee": "Agregar asistente",
-    "phoneNumber": "Nº de teléfono",
+    "selectGender": "Seleccione género",
+
+    "invalidDetailsMessage": "Por favor complete todos los campos obligatorios",
+    "orgIdMissing": "Falta el ID de la organización. Inténtelo de nuevo.",
+
+    "attendeeAddedSuccess": "¡Asistente agregado con éxito!",
+    "addAttendee": "Agregar",
+
+    "phoneNumber": "Teléfono",
     "phoneNumberPlaceholder": "1234567890",
     "addingAttendee": "Agregando...",
+
     "male": "Masculino",
     "female": "Femenino",
     "other": "Otro",
-    "placeholderFirstName": "Juan",
-    "placeholderLastName": "García",
-    "placeholderEmail": "abc@gmail.com"
+
+    "hello": "Hola",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "copyPassword": "Copiar contraseña",
+    "close": "Cerrar",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "passwordCopied": "¡Contraseña copiada!",
+    "copyFailed": "Error al copiar la contraseña",
+    "passwordWarning": "Guarde esta contraseña. Pida al asistente que la cambie después de iniciar sesión."
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
