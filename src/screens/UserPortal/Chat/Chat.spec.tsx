@@ -147,9 +147,6 @@ vi.mock('react-router-dom', async () => {
 });
 
 // Mock SVG imports
-vi.mock('assets/svgs/newChat.svg?react', () => ({
-  default: () => <svg data-testid="new-chat-icon" />,
-}));
 
 // --- GraphQL Mocks ---
 
@@ -364,8 +361,8 @@ describe('Chat Component - Comprehensive Coverage', () => {
     });
 
     expect(screen.getByTestId('chat')).toBeInTheDocument();
-    expect(screen.getByText('Messages')).toBeInTheDocument();
-    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
+    expect(screen.getByText('Chats')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('chat-room')).toBeInTheDocument();
   });
 
@@ -384,6 +381,15 @@ describe('Chat Component - Comprehensive Coverage', () => {
     expect(screen.getByTestId('allChat')).toBeInTheDocument();
     expect(screen.getByTestId('unreadChat')).toBeInTheDocument();
     expect(screen.getByTestId('groupChat')).toBeInTheDocument();
+  });
+
+  test('should have accessible new chat dropdown', async () => {
+    renderComponent();
+    await screen.findByTestId('contact-card-chat-1');
+
+    expect(
+      screen.getByRole('button', { name: /new chat/i }),
+    ).toBeInTheDocument();
   });
 
   // ==================== CHAT LIST RENDERING ====================
@@ -673,10 +679,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId(
+      'dropdown-item-newDirectChat',
+    );
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -700,10 +708,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {
@@ -725,11 +735,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
 
     // Open direct chat modal
     await user.click(dropdown);
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId(
+      'dropdown-item-newDirectChat',
+    );
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -740,7 +752,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
     // Open group chat modal without closing direct chat
     await user.click(dropdown);
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {
@@ -777,10 +791,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
     renderComponent(legacyMocks);
     await screen.findByTestId('contact-card-legacy-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
-    const newDirectChat = await screen.findByTestId('newDirectChat');
+    const newDirectChat = await screen.findByTestId(
+      'dropdown-item-newDirectChat',
+    );
     await user.click(newDirectChat);
 
     await waitFor(() => {
@@ -1010,15 +1026,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
         data: {
           chatsByUser: [
             {
-              _id: 'group-1',
               id: 'group-1',
               name: 'Group in Org 1',
-              isGroup: true,
               description: '',
               createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
               image: '',
-              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
+              organization: { id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [
                   {
@@ -1053,15 +1066,12 @@ describe('Chat Component - Comprehensive Coverage', () => {
               __typename: 'Chat',
             },
             {
-              _id: 'group-2',
               id: 'group-2',
               name: 'Group in Org 2',
-              isGroup: true,
               description: '',
               createdAt: dayjs.utc().toISOString(),
-              users: [{}, {}, {}],
               image: '',
-              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
+              organization: { id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [
                   {
@@ -1270,6 +1280,133 @@ describe('Chat Component - Comprehensive Coverage', () => {
       expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
       expect(
         screen.queryByTestId('contact-card-legacy-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('should filter legacy GroupChat types in unread filter by orgId', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+
+    // Create legacy unread chats with _id (not id) to trigger the legacy branch
+    const mockLegacyUnreadChats = {
+      request: { query: UNREAD_CHATS, variables: {} },
+      result: {
+        data: {
+          unreadChats: [
+            {
+              _id: 'legacy-unread-1',
+              name: 'Legacy Unread Chat Org 1',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+            {
+              _id: 'legacy-unread-2',
+              name: 'Legacy Unread Chat Org 2',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-2' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    const mockChatsListForLegacy = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'legacy-unread-1',
+              name: 'Legacy Unread Chat Org 1',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockChatsListForLegacy,
+      mockChatsListForLegacy,
+      mockLegacyUnreadChats,
+      mockLegacyUnreadChats,
+    ]);
+
+    await screen.findByTestId('contact-card-legacy-unread-1');
+
+    const unreadButton = screen.getByTestId('unreadChat');
+    await user.click(unreadButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('contact-card-legacy-unread-1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('contact-card-legacy-unread-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('should filter legacy GroupChat types in group filter by orgId', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+
+    // Create legacy group chats with isGroup true and _id (not id)
+    const mockLegacyGroupChats = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'legacy-group-1',
+              name: 'Legacy Group Chat Org 1',
+              isGroup: true,
+              users: [{}, {}, {}],
+              image: '',
+              organization: { _id: 'org-1' },
+              __typename: 'Chat',
+            },
+            {
+              _id: 'legacy-group-2',
+              name: 'Legacy Group Chat Org 2',
+              isGroup: true,
+              users: [{}, {}, {}],
+              image: '',
+              organization: { _id: 'org-2' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockLegacyGroupChats,
+      mockLegacyGroupChats,
+      mockLegacyGroupChats,
+      mockUnreadChats,
+    ]);
+
+    await screen.findByTestId('contact-card-legacy-group-1');
+
+    const groupButton = screen.getByTestId('groupChat');
+    await user.click(groupButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('contact-card-legacy-group-1'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('contact-card-legacy-group-2'),
       ).not.toBeInTheDocument();
     });
   });
@@ -1492,25 +1629,27 @@ describe('Chat Component - Comprehensive Coverage', () => {
 
   // ==================== DROPDOWN AND NEW CHAT ====================
 
-  test('should render dropdown with new chat icon', async () => {
+  test('should render dropdown toggle for new chat', async () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    expect(screen.getByTestId('dropdown')).toBeInTheDocument();
-    expect(screen.getByTestId('new-chat-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('dropdown-toggle')).toBeInTheDocument();
   });
 
   test('should show dropdown menu items when clicked', async () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
 
     await waitFor(() => {
-      expect(screen.getByTestId('newDirectChat')).toBeInTheDocument();
-      expect(screen.getByTestId('newGroupChat')).toBeInTheDocument();
-      expect(screen.getByText('Starred Messages')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('dropdown-item-newDirectChat'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('dropdown-item-newGroupChat'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -2034,9 +2173,11 @@ describe('Chat Component - Comprehensive Coverage', () => {
     await screen.findByTestId('contact-card-chat-1');
 
     // Open group chat modal
-    const dropdown = screen.getByTestId('dropdown');
+    const dropdown = screen.getByTestId('dropdown-toggle');
     await user.click(dropdown);
-    const newGroupChat = await screen.findByTestId('newGroupChat');
+    const newGroupChat = await screen.findByTestId(
+      'dropdown-item-newGroupChat',
+    );
     await user.click(newGroupChat);
 
     await waitFor(() => {
