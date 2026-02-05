@@ -302,6 +302,7 @@ const Calendar: React.FC<
                   className={styles.btn__more}
                   onClick={handleExpandClick}
                   data-testid="view-more-button"
+                  data-cy="viewAllEventsBtn"
                 >
                   {expanded === -100 ? 'View less' : 'View all'}
                 </button>
@@ -468,6 +469,7 @@ const Calendar: React.FC<
                   className={styles.btn__more}
                   data-testid="more"
                   onClick={() => toggleExpand(index)}
+                  data-cy="viewAllEventsBtn"
                 >
                   {expanded === index ? 'View less' : 'View all'}
                 </button>

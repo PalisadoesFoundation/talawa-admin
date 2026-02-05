@@ -12,6 +12,7 @@ export class AdminEventPage {
   private readonly _previewUpdateEventBtn = '[data-cy="previewUpdateEventBtn"]';
   private readonly _deleteEventModalBtn = '[data-cy="deleteEventModalBtn"]';
   private readonly _deleteEventBtn = '[data-testid="deleteEventBtn"]';
+  private readonly _viewAllEventsBtn = '[data-cy="viewAllEventsBtn"]';
 
   visitEventPage(): void {
     cy.get(this._eventsTabButton).should('be.visible').click();
@@ -59,5 +60,11 @@ export class AdminEventPage {
     cy.get(this._deleteEventModalBtn).should('be.visible').click();
     cy.get(this._deleteEventBtn).should('be.visible').click();
     cy.assertToast('Event deleted successfully.');
+  }
+
+  clickViewAllEventsButtons(): void {
+    cy.get(this._viewAllEventsBtn).each(($btn) => {
+      cy.wrap($btn).click({ force: true });
+    });
   }
 }
