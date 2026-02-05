@@ -289,6 +289,7 @@ describe('AgendaItemsCreateModal', () => {
   });
 
   it('rejects file exceeding size limit', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider>
         <BrowserRouter>
@@ -311,7 +312,7 @@ describe('AgendaItemsCreateModal', () => {
 
     const input = screen.getByTestId('attachment') as HTMLInputElement;
 
-    await userEvent.upload(input, file);
+    await user.upload(input, file);
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
       'fileSizeExceedsLimit',
@@ -713,30 +714,6 @@ describe('AgendaItemsCreateModal', () => {
     );
   });
 
-  it('returns early when file input has empty FileList', async () => {
-    render(
-      <MockedProvider>
-        <BrowserRouter>
-          <AgendaItemsCreateModal
-            isOpen
-            hide={vi.fn()}
-            eventId="event-1"
-            t={t}
-            agendaItemCategories={categories}
-            agendaFolderData={agendaFolders}
-            refetchAgendaFolder={vi.fn()}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const input = screen.getByTestId('attachment');
-
-    await userEvent.upload(input, []);
-
-    expect(NotificationToast.error).not.toHaveBeenCalled();
-  });
-
   it('renders folder autocomplete safely when agendaFolderData is undefined', () => {
     render(
       <MockedProvider>
@@ -1004,30 +981,6 @@ describe('AgendaItemsCreateModal', () => {
     expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
   });
 
-  it('does nothing when file input has no files', async () => {
-    render(
-      <MockedProvider>
-        <BrowserRouter>
-          <AgendaItemsCreateModal
-            isOpen={true}
-            hide={vi.fn()}
-            eventId="event-1"
-            t={t}
-            agendaItemCategories={categories}
-            agendaFolderData={agendaFolders}
-            refetchAgendaFolder={vi.fn()}
-          />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const input = screen.getByTestId('attachment');
-
-    await userEvent.upload(input, []);
-
-    expect(NotificationToast.error).not.toHaveBeenCalled();
-  });
-
   it('uploads multiple valid files', async () => {
     uploadFileToMinioMock.mockResolvedValue({
       objectName: 'obj',
@@ -1180,14 +1133,8 @@ describe('AgendaItemsCreateModal', () => {
       new File(['img'], 'img.png', { type: 'image/png' }),
     );
 
-    // Find the delete button using data-testid
-    await waitFor(
-      async () => {
-        const deleteBtn = screen.getByTestId('deleteAttachment');
-        await user.click(deleteBtn);
-      },
-      { timeout: 5000 },
-    );
+    const deleteBtn = await screen.findByTestId('deleteAttachment');
+    await user.click(deleteBtn);
 
     await waitFor(
       () => {

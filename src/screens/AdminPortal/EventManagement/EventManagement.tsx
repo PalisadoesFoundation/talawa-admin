@@ -141,7 +141,7 @@ const EventManagement = (): JSX.Element => {
       value: 'agendas',
       icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2">
+        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
           <EventAgenda eventId={eventId} />
         </div>
       ),
@@ -214,14 +214,9 @@ const EventManagement = (): JSX.Element => {
 
   const currentTab = eventDashboardTabs.find((t) => t.value === tab);
 
-  const tabDropdownOptions = eventDashboardTabs.map(({ value, icon }) => ({
+  const tabDropdownOptions = eventDashboardTabs.map(({ value }) => ({
     value,
-    label: (
-      <span className="d-flex align-items-center gap-2">
-        {icon}
-        {t(value)}
-      </span>
-    ),
+    label: t(value),
   }));
 
   return (

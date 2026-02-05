@@ -37,6 +37,8 @@ const t = (key: string): string => key;
 
 describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
+    vi.doUnmock('react-router');
+    vi.resetModules();
     vi.clearAllMocks();
   });
 
