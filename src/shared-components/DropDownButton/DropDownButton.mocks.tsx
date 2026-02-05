@@ -86,3 +86,22 @@ export const dropUpProps: InterfaceDropDownButtonProps = {
   ...baseProps,
   drop: 'up',
 };
+
+export const searchableOptionsForCoverage: InterfaceDropDownOption[] = [
+  { value: '1', label: 'Apple' },
+  { value: '2', label: 'Banana' },
+];
+
+export const searchableMinimalProps: InterfaceDropDownButtonProps = {
+  id: 'searchable-dropdown',
+  options: searchableOptionsForCoverage,
+  selectedValue: undefined,
+  onSelect: mockOnSelect,
+  dataTestIdPrefix: 'test-dropdown',
+  searchable: true,
+};
+
+export const withIconSearchProps: InterfaceDropDownButtonProps = {
+  ...searchableMinimalProps,
+  icon: <ArrowDownwardSharp fontSize="small" data-testid="dropdown-icon" />,
+};

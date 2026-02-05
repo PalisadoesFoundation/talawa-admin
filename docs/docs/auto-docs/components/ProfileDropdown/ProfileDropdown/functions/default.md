@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:50](https://github.com/adityai0/talawa-admin/blob/535d1f2b472009da75704def816c0977ad667d09/src/components/ProfileDropdown/ProfileDropdown.tsx#L50)
+Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L50)
 
 ## Parameters
 
