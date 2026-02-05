@@ -44,6 +44,7 @@ reset_mock_env() {
     unset _mock_docker_info_exit_code
     unset _mock_docker_info_timeout
     unset _mock_docker_compose_output
+    unset _mock_docker_compose_short_output
     unset _mock_docker_compose_v1_output
     unset _mock_distro_id
     unset TALAWA_DOCKER_DETECT_SOURCED
@@ -153,6 +154,35 @@ test_cli_version_parsing_different_format() {
     result=$(check_docker_cli)
     
     assert_equals "installed:20.10.21" "$result" "CLI version should be parsed correctly"
+}
+
+test_cli_empty_output_returns_unknown() {
+    # Tests the installed:unknown fallback when CLI output has no parseable version
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_cli)
+    
+    # When version string is present but awk extraction yields empty, should return installed:unknown
+    # "Docker" -> awk '{print $3}' returns empty -> fallback to installed:unknown
+    assert_equals "installed:unknown" "$result" "CLI with empty version should return installed:unknown"
+}
+
+test_cli_malformed_output_returns_unknown() {
+    # Tests fallback when version parsing fails completely
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Something unexpected"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_cli)
+    
+    # awk '{print $3}' on "Something unexpected" returns empty -> installed:unknown
+    assert_equals "installed:unknown" "$result" "CLI with malformed output should return installed:unknown"
 }
 
 # ==============================================================================
@@ -295,6 +325,60 @@ test_compose_no_docker_cli() {
     result=$(check_docker_compose)
     
     assert_equals "not_installed" "$result" "Compose should be not_installed when Docker CLI missing"
+}
+
+test_compose_v2_short_output() {
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_compose_short_output="2.21.0"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_compose)
+    
+    assert_equals "v2:2.21.0" "$result" "Compose v2 should be detected from --short output"
+}
+
+test_compose_v2_short_output_with_v_prefix() {
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_compose_short_output="v2.24.5"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_compose)
+    
+    assert_equals "v2:2.24.5" "$result" "Compose v2 --short output with v prefix should parse correctly"
+}
+
+test_compose_v2_fallback_when_short_empty() {
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_compose_short_output=""
+    export _mock_docker_compose_output="Docker Compose version v2.21.0"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_compose)
+    
+    assert_equals "v2:2.21.0" "$result" "Compose v2 should fall back to full version when --short is empty"
+}
+
+test_compose_v2_short_malformed_returns_fallback() {
+    export _mock_has_docker="true"
+    export _mock_docker_cli_output="Docker version 24.0.7, build afdd53b"
+    export _mock_docker_compose_short_output="unknown"
+    export _mock_docker_compose_output="Docker Compose version v2.20.0"
+    
+    source_docker_detect
+    
+    local result
+    result=$(check_docker_compose)
+    
+    assert_equals "v2:2.20.0" "$result" "Compose should fall back to full version when --short is malformed"
 }
 
 # ==============================================================================
@@ -657,6 +741,8 @@ main() {
     run_test "CLI Installed Detection" test_cli_installed
     run_test "CLI Not Installed Detection" test_cli_not_installed
     run_test "CLI Version Parsing" test_cli_version_parsing_different_format
+    run_test "CLI Empty Output Returns Unknown" test_cli_empty_output_returns_unknown
+    run_test "CLI Malformed Output Returns Unknown" test_cli_malformed_output_returns_unknown
     
     # Daemon Detection Tests
     run_test "Daemon Running Detection" test_daemon_running
@@ -671,6 +757,10 @@ main() {
     run_test "Compose v1 Installed Detection" test_compose_v1_installed
     run_test "Compose Not Installed Detection" test_compose_not_installed
     run_test "Compose No Docker CLI" test_compose_no_docker_cli
+    run_test "Compose v2 Short Output" test_compose_v2_short_output
+    run_test "Compose v2 Short Output With v Prefix" test_compose_v2_short_output_with_v_prefix
+    run_test "Compose v2 Fallback When Short Empty" test_compose_v2_fallback_when_short_empty
+    run_test "Compose v2 Short Malformed Returns Fallback" test_compose_v2_short_malformed_returns_fallback
     
     # Aggregated Status Tests
     run_test "Full Status All Working" test_get_docker_status_all_working
