@@ -74,7 +74,10 @@ interface InterfaceChatUser {
   email: string;
   createdAt: Date;
 }
-
+/**
+ * Interface representing a mock message structure for testing purposes.
+ * @internal
+ */
 interface InterfaceMockMessage {
   _id: string;
   createdAt: Date;

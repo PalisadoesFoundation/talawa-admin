@@ -45,8 +45,9 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
-import { ListGroup, Dropdown } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -423,49 +424,53 @@ export default function GroupChatDetails({
                       </span>
                     </div>
                     {canManage && (
-                      <Dropdown className="ms-auto">
-                        <Dropdown.Toggle
-                          variant="link"
-                          id={`dropdown-${user.id}`}
-                          className={`btn-sm ${styles.dropdownToggle}`}
-                        >
-                          <BsThreeDotsVertical />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu align="end">
-                          <Dropdown.Item
-                            onClick={() =>
-                              handleRoleChange(
-                                user.id,
-                                role === 'administrator'
-                                  ? 'regular'
-                                  : 'administrator',
+                      <DropDownButton
+                        id={`dropdown-${user.id}`}
+                        variant="outline-secondary"
+                        icon={<BsThreeDotsVertical />}
+                        buttonLabel=" "
+                        ariaLabel="Options"
+                        options={[
+                          {
+                            value: 'roleChange',
+                            label:
+                              role === 'administrator'
+                                ? t('demoteToRegular')
+                                : t('promoteToAdmin'),
+                          },
+                          ...(canRemove
+                            ? [
+                                {
+                                  value: 'removeMember',
+                                  label: t('remove'),
+                                },
+                              ]
+                            : []),
+                        ]}
+                        onSelect={(value) => {
+                          if (value === 'roleChange') {
+                            handleRoleChange(
+                              user.id,
+                              role === 'administrator'
+                                ? 'regular'
+                                : 'administrator',
+                            );
+                          } else if (value === 'removeMember') {
+                            if (
+                              window.confirm(
+                                t('confirmRemoveMember', {
+                                  name: user.name,
+                                }),
                               )
+                            ) {
+                              handleRemoveMember(user.id);
                             }
-                          >
-                            {role === 'administrator'
-                              ? t('demoteToRegular')
-                              : t('promoteToAdmin')}
-                          </Dropdown.Item>
-                          {canRemove && (
-                            <Dropdown.Item
-                              className={styles.removeItem}
-                              onClick={() => {
-                                if (
-                                  window.confirm(
-                                    t('confirmRemoveMember', {
-                                      name: user.name,
-                                    }),
-                                  )
-                                ) {
-                                  handleRemoveMember(user.id);
-                                }
-                              }}
-                            >
-                              {t('remove')}
-                            </Dropdown.Item>
-                          )}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                          }
+                        }}
+                        btnStyle={styles.dropdownToggle}
+                        parentContainerStyle="ms-auto"
+                        drop="start"
+                      />
                     )}
                   </div>
                 </ListGroup.Item>

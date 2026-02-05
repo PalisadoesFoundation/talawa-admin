@@ -559,8 +559,8 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = toggles.find(
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
-    if (dropdownToggle)
-      await act(async () => await userEvent.click(dropdownToggle));
+    if (!dropdownToggle) throw new Error('Dropdown not found');
+    await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteText = await screen.findByText(
       /Promote to Admin|Demote to Regular/,
@@ -630,8 +630,8 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle)
-      await act(async () => await userEvent.click(dropdownToggle));
+    if (!dropdownToggle) throw new Error('Dropdown not found');
+    await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteItem = await screen.findByText(/Promote|Demote/i);
 
@@ -692,8 +692,8 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle)
-      await act(async () => await userEvent.click(dropdownToggle));
+    if (!dropdownToggle) throw new Error('Dropdown not found');
+    await act(async () => await userEvent.click(dropdownToggle));
 
     const removeItem = await screen.findByText(/Remove/i);
 
