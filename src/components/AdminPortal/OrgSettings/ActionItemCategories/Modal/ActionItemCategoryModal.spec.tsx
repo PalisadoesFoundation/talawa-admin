@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -127,8 +127,13 @@ const fillFormAndSubmit = async (
   const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
   const submitBtn = screen.getByTestId('formSubmitButton');
 
-  fireEvent.change(nameInput, { target: { value: name } });
-  fireEvent.change(descriptionInput, { target: { value: description } });
+  await userEvent.clear(nameInput);
+  await userEvent.clear(descriptionInput);
+  await userEvent.type(nameInput, name);
+
+  if (description !== '') {
+    await userEvent.type(descriptionInput, description);
+  }
 
   // Check the accessible state of the switch
   const ariaChecked = isDisabledSwitch.getAttribute('aria-checked');
@@ -224,7 +229,10 @@ describe('Testing Action Item Category Modal', () => {
       renderCategoryModal(link1, categoryProps[1]);
       const nameInput = screen.getByLabelText('Name *');
       expect(nameInput).toHaveValue('Category 1');
-      fireEvent.change(nameInput, { target: { value: 'Category 2' } });
+
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Category 2');
+
       expect(nameInput).toHaveValue('Category 2');
     });
 
@@ -232,9 +240,9 @@ describe('Testing Action Item Category Modal', () => {
       renderCategoryModal(link1, categoryProps[1]);
       const descriptionInput = screen.getByLabelText('Description');
       expect(descriptionInput).toHaveValue('This is a test category');
-      fireEvent.change(descriptionInput, {
-        target: { value: 'Updated description' },
-      });
+
+      await userEvent.clear(descriptionInput);
+      await userEvent.type(descriptionInput, 'Updated description');
       expect(descriptionInput).toHaveValue('Updated description');
     });
 
@@ -321,7 +329,8 @@ describe('Testing Action Item Category Modal', () => {
       const nameInput = screen.getByLabelText('Name *');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Category 2' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Category 2');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -339,9 +348,8 @@ describe('Testing Action Item Category Modal', () => {
       const descriptionInput = screen.getByLabelText('Description');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(descriptionInput, {
-        target: { value: 'New description only' },
-      });
+      await userEvent.clear(descriptionInput);
+      await userEvent.type(descriptionInput, 'New description only');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -377,7 +385,8 @@ describe('Testing Action Item Category Modal', () => {
       const descriptionInput = screen.getByLabelText('Description');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(descriptionInput, { target: { value: '' } });
+      await userEvent.clear(descriptionInput);
+
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -398,10 +407,11 @@ describe('Testing Action Item Category Modal', () => {
       const descriptionInput = screen.getByLabelText('Description');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
-      fireEvent.change(descriptionInput, {
-        target: { value: 'Updated description' },
-      });
+      await userEvent.clear(nameInput);
+      await userEvent.clear(descriptionInput);
+
+      await userEvent.type(nameInput, 'Updated Name');
+      await userEvent.type(descriptionInput, 'Updated description');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -420,7 +430,9 @@ describe('Testing Action Item Category Modal', () => {
       const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Updated Name');
+
       await userEvent.click(isDisabledSwitch);
       await userEvent.click(submitBtn);
 
@@ -440,9 +452,8 @@ describe('Testing Action Item Category Modal', () => {
       const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(descriptionInput, {
-        target: { value: 'Updated description' },
-      });
+      await userEvent.clear(descriptionInput);
+      await userEvent.type(descriptionInput, 'Updated description');
       await userEvent.click(isDisabledSwitch);
       await userEvent.click(submitBtn);
 
@@ -492,7 +503,8 @@ describe('Testing Action Item Category Modal', () => {
       const nameInput = screen.getByLabelText('Name *');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Updated Name');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -533,7 +545,8 @@ describe('Testing Action Item Category Modal', () => {
       const nameInput = screen.getByLabelText('Name *');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Updated Name');
       await userEvent.click(submitBtn);
 
       // Should attempt to update even with empty id
@@ -545,9 +558,11 @@ describe('Testing Action Item Category Modal', () => {
 
   describe('Delete Functionality', () => {
     it('should delete category successfully', async () => {
+      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
       renderCategoryModal(link1, categoryProps[1]);
       const deleteBtn = screen.getByTestId('deleteCategoryButton');
       await userEvent.click(deleteBtn);
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
 
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
@@ -559,10 +574,32 @@ describe('Testing Action Item Category Modal', () => {
       });
     });
 
+    it('should not delete if not confirmed', async () => {
+      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+      const mockRefetch = vi.fn();
+      const mockHide = vi.fn();
+      renderCategoryModal(link1, categoryProps[1]);
+
+      const deleteBtn = screen.getByTestId('deleteCategoryButton');
+      await userEvent.click(deleteBtn);
+
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
+      // Should not call any functions since the user has not confirmed the deletion
+      await waitFor(() => {
+        expect(mockRefetch).not.toHaveBeenCalled();
+        expect(mockHide).not.toHaveBeenCalled();
+        // Verify no toast notifications were triggered
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
+      });
+    });
     it('should handle error when deleting category', async () => {
+      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
       renderCategoryModal(link3, categoryProps[1]);
       const deleteBtn = screen.getByTestId('deleteCategoryButton');
       await userEvent.click(deleteBtn);
+
+      expect(confirmSpy).toHaveBeenCalledTimes(1);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({

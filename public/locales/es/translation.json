@@ -1295,6 +1295,7 @@
     }
   },
   "memberDetail": {
+    "user": "Usuario",
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "noeventsAttended": "No hay eventos asistidos",
@@ -1885,7 +1886,7 @@
     "next": "Siguiente"
   },
   "userChatRoom": {
-    "selectContact": "Seleccione un contacto para iniciar una conversación",
+    "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
     "sendMessage": "Enviar mensaje",
     "loading": "Cargando...",
     "loadOlderMessages": "Cargar mensajes más antiguos",

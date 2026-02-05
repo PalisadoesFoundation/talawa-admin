@@ -25,17 +25,17 @@
  *
  * @returns  The rendered `chat` component.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
-import NewChat from 'assets/svgs/newChat.svg?react';
+import AddIcon from '@mui/icons-material/Add';
 import styles from './Chat.module.css';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
@@ -43,22 +43,15 @@ import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirec
 // TODO: Update markChatMessagesAsRead to match new schema
 // import { MARK_CHAT_MESSAGES_AS_READ } from 'GraphQl/Mutations/OrganizationMutations';
 import type { GroupChat } from 'types/UserPortal/Chat/type';
-import type { NewChatType } from 'types/UserPortal/Chat/interface';
+import type {
+  NewChatType,
+  InterfaceContactCardProps,
+} from 'types/UserPortal/Chat/interface';
 
 // Type guard to check if chat is NewChatType (new schema with 'id' instead of '_id')
 const isNewChatType = (chat: GroupChat | NewChatType): chat is NewChatType => {
   return 'id' in chat && !('_id' in chat);
 };
-interface InterfaceContactCardProps {
-  id: string;
-  title: string;
-  image: string;
-  selectedContact: string;
-  setSelectedContact: React.Dispatch<React.SetStateAction<string>>;
-  isGroup: boolean;
-  unseenMessages: number;
-  lastMessage: string;
-}
 
 export default function chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
@@ -90,6 +83,27 @@ export default function chat(): JSX.Element {
   const toggleCreateGroupChatModal = (): void => {
     setCreateGroupChatModalisOpen(!createGroupChatModalisOpen);
   };
+
+  // Options for the new chat dropdown
+  const newChatOptions = [
+    { value: 'newDirectChat', label: t('newChat') },
+    { value: 'newGroupChat', label: t('newGroupChat') },
+  ];
+
+  // Handle dropdown selection for new chat options
+  const handleNewChatSelect = useCallback(
+    (value: string) => {
+      switch (value) {
+        case 'newDirectChat':
+          openCreateDirectChatModal();
+          break;
+        case 'newGroupChat':
+          openCreateGroupChatModal();
+          break;
+      }
+    },
+    [openCreateDirectChatModal, openCreateGroupChatModal],
+  );
 
   const [cursor] = useState<string | null>(null);
 
@@ -220,32 +234,18 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>{t('messages')}</h4>
-              <Dropdown className={styles.dropdownToggle}>
-                <Dropdown.Toggle
-                  className={styles.customToggle}
-                  data-testid={'dropdown'}
-                >
-                  <NewChat />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={openCreateDirectChatModal}
-                    data-testid="newDirectChat"
-                  >
-                    {t('newChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={openCreateGroupChatModal}
-                    data-testid="newGroupChat"
-                  >
-                    {t('newGroupChat')}
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    {t('starredMessages')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <h4>{t('title')}</h4>
+              <DropDownButton
+                id="newChatDropdown"
+                options={newChatOptions}
+                onSelect={handleNewChatSelect}
+                ariaLabel={t('newChat')}
+                dataTestIdPrefix="dropdown"
+                icon={<AddIcon data-testid="new-chat-icon" />}
+                buttonLabel=" "
+                parentContainerStyle={styles.dropdownToggle}
+                btnStyle={styles.customToggle}
+              />
             </div>
             <div
               className={`${styles.contactListContainer} d-flex flex-column`}

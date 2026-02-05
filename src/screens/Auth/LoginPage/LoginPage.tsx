@@ -44,8 +44,13 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
+<<<<<<< HEAD
 import type { InterfaceQueryOrganizationListObject, InterfaceCommunityQuery, InterfaceSignInQuery, InterfaceOrganizationListQuery, InterfaceSignUpMutation } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
+=======
+import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+>>>>>>> develop
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
@@ -130,7 +135,13 @@ const LoginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
+<<<<<<< HEAD
   const [organizations, setOrganizations] = useState<{ label: string; id: string }[]>([]);
+=======
+  const [organizations, setOrganizations] = useState<
+    Array<{ label: string; value: string }>
+  >([]);
+>>>>>>> develop
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -205,10 +216,19 @@ const LoginPage = (): JSX.Element => {
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
+<<<<<<< HEAD
         (org) => ({
           label: `${org.name}(${org.addressLine1})`,
           id: org.id,
         }),
+=======
+        (org: InterfaceQueryOrganizationListObject) => {
+          return {
+            label: `${org.name}(${org.addressLine1})`,
+            value: org.id,
+          };
+        },
+>>>>>>> develop
       );
       setOrganizations(options);
     }
@@ -957,56 +977,33 @@ const LoginPage = (): JSX.Element => {
                       </div>
                     )}
                   <div className="position-relative  my-2">
-                    <label className="form-label">{t('selectOrg')}</label>
+                    <label className="form-label" htmlFor="selectOrg">
+                      {t('selectOrg')}
+                    </label>
                     <div className="position-relative">
-                      <Autocomplete
-                        disablePortal
-                        data-testid="selectOrg"
-                        onChange={(
-                          event,
-                          value: { label: string; id: string } | null,
-                        ) => {
+                      <DropDownButton
+                        id="selectOrg"
+                        ariaLabel={t('selectOrg')}
+                        dataTestIdPrefix="selectOrg"
+                        options={organizations}
+                        selectedValue={signformState.signOrg}
+                        onSelect={(value) =>
                           setSignFormState({
                             ...signformState,
-                            signOrg: value?.id ?? '',
-                          });
-                        }}
-                        options={organizations}
-                        renderInput={(params) => {
-                          const { InputProps, inputProps } = params;
-                          const {
-                            className,
-                            startAdornment,
-                            endAdornment,
-                            ref,
-                            onMouseDown,
-                          } = InputProps;
-                          const {
-                            className: inputClassName,
-                            ...restInputProps
-                          } = inputProps;
-
-                          return (
-                            <FormFieldGroup
-                              name="signOrg"
-                              label={t('organizations')}
-                            >
-                              <div
-                                ref={ref}
-                                className={`${className ?? ''} ${styles.selectOrgText} d-flex align-items-center position-relative `}
-                                onMouseDown={onMouseDown}
-                              >
-                                {startAdornment}
-                                <input
-                                  placeholder={t('clickToSelectOrg')}
-                                  {...restInputProps}
-                                  className={`${inputClassName ?? ''} form-control w-100`}
-                                />
-                                {endAdornment}
-                              </div>
-                            </FormFieldGroup>
-                          );
-                        }}
+                            signOrg: value,
+                          })
+                        }
+                        placeholder={t('clickToSelectOrg')}
+                        buttonLabel={
+                          organizations.find(
+                            (org) => org.value === signformState.signOrg,
+                          )?.label
+                        }
+                        parentContainerStyle="w-100"
+                        btnStyle="w-100 text-start d-flex justify-content-between align-items-center"
+                        variant="outline-secondary"
+                        searchable={true}
+                        searchPlaceholder={t('clickToSelectOrg')}
                       />
                     </div>
                   </div>

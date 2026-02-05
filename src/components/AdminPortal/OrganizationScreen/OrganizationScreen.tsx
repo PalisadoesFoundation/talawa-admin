@@ -54,7 +54,8 @@ const OrganizationScreen = (): JSX.Element => {
   });
   // Get the current location to determine the translation key
   const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
+  const titleKey: string | undefined =
+    translationKeyMap[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // Get the organization ID from the URL parameters
@@ -174,7 +175,7 @@ export default OrganizationScreen;
 /**
  * Mapping object to get translation keys based on route
  */
-const map: InterfaceMapType = {
+export const translationKeyMap: InterfaceMapType = {
   orgdash: 'dashboard',
   orgpeople: 'organizationPeople',
   orgtags: 'organizationTags',
@@ -195,4 +196,5 @@ const map: InterfaceMapType = {
   orgvenues: 'organizationVenues',
   event: 'eventManagement',
   leaderboard: 'leaderboard',
+  orgchat: 'userChat',
 };
