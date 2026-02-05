@@ -113,6 +113,9 @@ export interface InterfaceGroupChatDetailsProps {
   ) => Promise<ApolloQueryResult<{ chat: Chat }>>;
 }
 
+/**
+ * Props for ContactCard component.
+ */
 export interface InterfaceContactCardProps {
   id: string;
   title: string;

@@ -98,6 +98,14 @@ export const wrapperExemptions = [
     ],
     rules: restrictImportsExcept(['rb-dropdown', 'rb-dropdown-path']),
   },
+  {
+    files: [
+      'src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx',
+      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx',
+      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.spec.tsx',
+    ],
+    rules: restrictImportsExcept(['mui-autocomplete', 'mui-autocomplete-path']),
+  },
 ];
 
 export const avatarExemption = createWrapperExemption({

@@ -122,14 +122,6 @@ i18n.use(initReactI18next).init({
   },
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('GroupChatDetails', () => {
   beforeEach(() => {
     for (const key in mockLocalStorageStore) {
@@ -299,8 +291,6 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await wait();
-
     await waitFor(
       async () => {
         expect(await screen.findByTestId('editTitleBtn')).toBeInTheDocument();
@@ -344,8 +334,6 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await wait();
-
     await act(async () => {
       userEvent.click(await screen.findByTestId('editTitleBtn'));
     });
@@ -363,8 +351,6 @@ describe('GroupChatDetails', () => {
     await act(async () => {
       userEvent.click(await screen.findByTestId('updateTitleBtn'));
     });
-
-    await wait();
 
     await waitFor(
       async () => {
@@ -390,7 +376,6 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await wait();
     await act(async () => {
       userEvent.click(await screen.findByTestId('addMembers'));
     });
@@ -407,8 +392,6 @@ describe('GroupChatDetails', () => {
     await act(async () => {
       userEvent.click(await screen.findByTestId('searchBtn'));
     });
-
-    await wait();
 
     await waitFor(
       async () => {
@@ -438,7 +421,6 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await wait();
     await act(async () => {
       userEvent.click(await screen.findByTestId('addMembers'));
     });
@@ -455,8 +437,6 @@ describe('GroupChatDetails', () => {
     await act(async () => {
       userEvent.click(await screen.findByTestId('searchBtn'));
     });
-
-    await wait();
   });
 
   it('clears user search input', async () => {
@@ -475,7 +455,6 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await wait();
     await act(async () => {
       userEvent.click(await screen.findByTestId('addMembers'));
     });
@@ -517,8 +496,6 @@ describe('GroupChatDetails', () => {
         </MockedProvider>
       </I18nextProvider>,
     );
-
-    await wait();
 
     await waitFor(
       async () => {
@@ -776,8 +753,6 @@ describe('GroupChatDetails', () => {
     await act(async () => {
       fileInput.dispatchEvent(new Event('change', { bubbles: true }));
     });
-
-    await wait(200);
 
     // ensure chatRefetch was called after upload
     await waitFor(() => expect(chatRefetch).toHaveBeenCalled());

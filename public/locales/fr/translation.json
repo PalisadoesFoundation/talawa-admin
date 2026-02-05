@@ -1317,6 +1317,7 @@
     }
   },
   "memberDetail": {
+    "user": "Utilisateur",
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "noeventsAttended": "Aucun événement assisté",
@@ -1905,7 +1906,7 @@
     "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
   },
   "userChatRoom": {
-    "selectContact": "Sélectionnez un contact pour démarrer la conversation",
+    "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",
     "sendMessage": "Envoyer le message",
     "loading": "Chargement...",
     "loadOlderMessages": "Charger les messages plus anciens",
