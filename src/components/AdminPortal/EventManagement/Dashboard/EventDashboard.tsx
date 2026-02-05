@@ -128,7 +128,13 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     isRegisterable: eventData.event.isRegisterable,
     isInviteOnly: eventData.event.isInviteOnly ?? false,
     attendees: [],
-    creator: eventData.event.creator as any,
+    creator: {
+      id: String(eventData.event.creator.id),
+      name: eventData.event.creator.name,
+      emailAddress: eventData.event.creator.emailAddress,
+      avatarURL: eventData.event.creator.avatarURL ?? undefined,
+      role: eventData.event.creator.role ?? undefined,
+    },
     userId: userId as string,
   };
 

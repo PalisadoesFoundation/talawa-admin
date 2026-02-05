@@ -619,8 +619,6 @@ describe('Testing Agenda Items components', () => {
       });
     });
 
-    await wait();
-
     // When agendaItemData is undefined, onDragEnd should exit early without calling refetch
     expect(mockRefetch).not.toHaveBeenCalled();
   });

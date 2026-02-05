@@ -2257,7 +2257,31 @@ export interface InterfaceGetEventActionItemsQuery {
     baseEvent: { id: string } | null;
     actionItems: {
       edges: Array<{
-        node: any;
+        // Using a minimal, inline shape here avoids importing React-specific
+        // types like Date into this generic interfaces file while still
+        // providing useful structure for consumers.
+        node: {
+          id: string;
+          assignedAt: string | Date;
+          completionAt: string | Date | null;
+          isCompleted: boolean;
+          category: {
+            id: string;
+            name: string;
+          } | null;
+          volunteer: {
+            id: string;
+            user: {
+              id: string;
+              name: string;
+              avatarURL?: string | null;
+            };
+          } | null;
+          volunteerGroup: {
+            id: string;
+            name: string;
+          } | null;
+        };
       }>;
       pageInfo: {
         hasNextPage: boolean;

@@ -110,16 +110,16 @@ export default function Advertisements(): JSX.Element {
   const mapAdvertisementFromPg = (
     pg: InterfaceAdvertisementPg,
   ): Advertisement => ({
-    id: pg.id,
+    id: String(pg.id),
     createdAt: new Date(pg.createdAt),
     description: pg.description,
     // creator is optional in Advertisement and not used in the UI, so omit it here
     organization: {
-      id: pg.organization.id,
+      id: String(pg.organization?.organization.id),
     },
     endAt: new Date(pg.endAt),
     name: pg.name,
-    orgId: pg.organization.id,
+    orgId: String(pg.organization?.organization.id),
     startAt: new Date(pg.startAt),
     type:
       pg.type === 'banner'
