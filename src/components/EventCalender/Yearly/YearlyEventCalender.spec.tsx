@@ -1006,29 +1006,14 @@ describe('Calendar Component', () => {
     });
 
     // Look for expand buttons that may contain events
-    const expandButtons = container.querySelectorAll(
-      '[data-testid^="expand-btn-"]',
-    );
+    container.querySelectorAll('[data-testid^="expand-btn-"]');
 
     // Check if there are events by clicking expand buttons and checking content
-    for (const button of Array.from(expandButtons)) {
-      await user.click(button);
-
-      // Wait for potential event list to appear
-      await waitFor(
-        () => {
-          const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
-          }
-        },
-        { timeout: 1000 },
-      );
-    }
+    await clickExpandForDate(container, new Date(publicEvent.startAt), user);
+    await waitFor(() => {
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.queryByText('Private Event')).toBeNull();
+    });
   });
 
   test('handles orgData being undefined', async () => {

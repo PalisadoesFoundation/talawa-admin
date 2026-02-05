@@ -1171,11 +1171,10 @@ describe('EventListCardModals', () => {
     expect(NotificationToast.success).toHaveBeenCalledWith('eventDeleted');
   });
 
-  it('passes openCustomRecurrenceModal to preview modal', () => {
+  test('passes setCustomRecurrenceModalIsOpen to preview modal', () => {
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
-        recurrenceRuleId: 'rule123',
       },
     });
 
@@ -1184,5 +1183,11 @@ describe('EventListCardModals', () => {
 
     expect(previewProps.setCustomRecurrenceModalIsOpen).toBeDefined();
     expect(typeof previewProps.setCustomRecurrenceModalIsOpen).toBe('function');
+
+    // Optionally: verify invocation opens the modal
+    // act(() => {
+    //   previewProps.setCustomRecurrenceModalIsOpen(true);
+    // });
+    // expect(screen.getByText('customRecurrenceModalTitle')).toBeInTheDocument();
   });
 });
