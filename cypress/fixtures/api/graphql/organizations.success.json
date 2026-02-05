@@ -1,0 +1,16 @@
+{
+  "data": {
+    "organizations": [
+      {
+        "id": "org-1",
+        "name": "Example Org",
+        "addressLine1": "Example Address"
+      },
+      {
+        "id": "org-2",
+        "name": "Long Name Organization — مرحبا 世界",
+        "addressLine1": "Edge Address"
+      }
+    ]
+  }
+}

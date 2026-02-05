@@ -38,15 +38,10 @@
  */
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import {
-  ButtonGroup,
-  Tooltip,
-  OverlayTrigger,
-  Dropdown,
-} from 'react-bootstrap';
+import { ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-
+import DropDownButton from 'shared-components/DropDownButton';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -88,6 +83,9 @@ ChartJS.register(
 // Age calculation helper to avoid triggering i18n checker and ensure consistency
 const MIN_ADULT_AGE = 18;
 const MAX_YOUNG_ADULT_AGE = 40;
+const DESIGN_TOKEN = {
+  BW: 2,
+} as const;
 
 const calculateAge = (birthDate: Date): number => {
   const today = new Date();
@@ -396,30 +394,25 @@ export const AttendanceStatisticsModal: React.FC<
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
 
+  const exportOptions = useMemo(
+    () => [
+      ...(showTrends ? [{ value: 'trends', label: t('trends') }] : []),
+      { value: 'demographics', label: t('demographics') },
+    ],
+    [showTrends, t],
+  );
+
   const modalFooter = (
     <>
-      <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
-        <Dropdown.Toggle
-          className="p-2 m-2"
-          variant="info"
-          id="export-dropdown"
-        >
-          {t('exportData')}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {showTrends && (
-            <Dropdown.Item data-testid="trends-export" eventKey="trends">
-              {t('trends')}
-            </Dropdown.Item>
-          )}
-          <Dropdown.Item
-            data-testid="demographics-export"
-            eventKey="demographics"
-          >
-            {t('demographics')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="export-dropdown"
+        options={exportOptions}
+        onSelect={handleExport}
+        buttonLabel={t('exportData')}
+        dataTestIdPrefix="export"
+        variant="info"
+        parentContainerStyle="p-2 m-2"
+      />
       <Button
         className="p-2 m-2"
         variant="secondary"
@@ -430,6 +423,7 @@ export const AttendanceStatisticsModal: React.FC<
       </Button>
     </>
   );
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -596,7 +590,7 @@ export const AttendanceStatisticsModal: React.FC<
                       'var(--color-purple-500)',
                       'var(--color-brown-500)',
                     ],
-                    borderWidth: 2,
+                    borderWidth: DESIGN_TOKEN.BW,
                   },
                 ],
               }}

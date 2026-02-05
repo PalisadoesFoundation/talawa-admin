@@ -101,6 +101,21 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "verifyEmail": {
+    "title": "ईमेल सत्यापित करें",
+    "loginRequired": "लॉगिन आवश्यक",
+    "verifying": "सत्यापित हो रहा है...",
+    "success": "ईमेल सत्यापित",
+    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉग इन कर सकते हैं।",
+    "error": "सत्यापन विफल",
+    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
+    "noToken": "कोई सत्यापन टोकन प्रदान नहीं किया गया। कृपया सत्यापन लिंक के लिए अपना ईमेल जांचें।",
+    "verificationFailed": "ईमेल सत्यापन विफल। कृपया पुनः प्रयास करें।",
+    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेज दिया गया है।",
+    "resendFailed": "सत्यापन ईमेल भेजने में विफल। कृपया पुनः प्रयास करें।",
+    "resendButton": "सत्यापन ईमेल पुनः भेजें",
+    "goToLogin": "लॉगिन पर जाएं"
+  },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
     "settings": "सेटिंग्स",
@@ -1312,6 +1327,7 @@
     }
   },
   "memberDetail": {
+    "user": "उपयोगकर्ता",
     "title": "उपयोगकर्ता विवरण",
     "addAdmin": "व्यवस्थापक जोड़ें",
     "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
@@ -1897,7 +1913,7 @@
     "next": "अगला"
   },
   "userChatRoom": {
-    "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
+    "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
     "sendMessage": "मेसेज भेजें",
     "loading": "लोड हो रहा है...",
     "loadOlderMessages": "पुराने संदेश लोड करें",
@@ -1916,7 +1932,8 @@
       "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
       "resetButton": "फिर से प्रयास करें",
       "resetButtonAriaLabel": "फिर से प्रयास करें"
-    }
+    },
+    "messageActions": "संदेश क्रियाएं"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
@@ -2535,19 +2552,6 @@
         "failedToLoad": "घटक लोड करने में विफल"
       }
     }
-  },
-  "verifyEmail": {
-    "title": "ईमेल सत्यापित करें",
-    "verifying": "आपका ईमेल सत्यापित किया जा रहा है...",
-    "success": "ईमेल सत्यापित!",
-    "successMessage": "आपका ईमेल सफलतापूर्वक सत्यापित हो गया है। अब आप लॉगिन कर सकते हैं।",
-    "error": "सत्यापन विफल",
-    "invalidToken": "सत्यापन लिंक अमान्य है या समाप्त हो गया है।",
-    "loginRequired": "कृपया अपना ईमेल सत्यापित करने के लिए लॉगिन करें।",
-    "resendButton": "सत्यापन ईमेल पुनः भेजें",
-    "resendSuccess": "सत्यापन ईमेल सफलतापूर्वक पुनः भेजा गया।",
-    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
-    "goToLogin": "लॉगिन पर जाएं"
   },
   "memberActivity": {
     "dateNA": "दिनांक उपलब्ध नहीं",
