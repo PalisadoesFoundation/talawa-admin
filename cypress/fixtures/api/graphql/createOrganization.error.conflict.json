@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Organization name already exists",
+      "extensions": {
+        "code": "CONFLICT"
+      }
+    }
+  ]
+}

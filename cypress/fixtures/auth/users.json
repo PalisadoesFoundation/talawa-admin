@@ -1,0 +1,20 @@
+{
+  "superAdmin": {
+    "id": "user_0001",
+    "name": "Super Admin",
+    "email": "testsuperadmin@example.com",
+    "role": "superadmin"
+  },
+  "admin": {
+    "id": "user_0002",
+    "name": "Admin User",
+    "email": "testadmin1@example.com",
+    "role": "administrator"
+  },
+  "user": {
+    "id": "user_0003",
+    "name": "Regular User",
+    "email": "testuser1@example.com",
+    "role": "user"
+  }
+}

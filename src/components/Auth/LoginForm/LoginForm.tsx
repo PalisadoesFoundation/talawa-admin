@@ -77,6 +77,18 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     }
   }, [data]);
 
+  // Handle response with no signIn (e.g. backend returns data: null) — only once per response
+  const reportedNotFoundRef = useRef(false);
+  useEffect(() => {
+    if (error) return;
+    if (data !== undefined && !data?.signIn && !reportedNotFoundRef.current) {
+      reportedNotFoundRef.current = true;
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+      onErrorRef.current?.(new Error('Not found'));
+    }
+  }, [data, error]);
+
   // Handle login error - reset ReCAPTCHA when login fails
   useEffect(() => {
     if (error) {
