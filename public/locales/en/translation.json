@@ -1886,7 +1886,8 @@
     "next": "Next",
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
     "thisUser": "this user",
-    "deleteChatConfirmation": "Are you sure you want to delete this chat?"
+    "deleteChatConfirmation": "Are you sure you want to delete this chat?",
+    "memberOptions": "Member Options"
   },
   "userChatRoom": {
     "selectContact": "Click the + icon to start a new chat",

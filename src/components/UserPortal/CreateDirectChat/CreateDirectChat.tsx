@@ -23,14 +23,6 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
 import Button from 'shared-components/Button';
-import type {
-  ApolloCache,
-  ApolloQueryResult,
-  DefaultContext,
-  FetchResult,
-  MutationFunctionOptions,
-  OperationVariables,
-} from '@apollo/client';
 import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -54,7 +46,12 @@ import type {
   Chat,
   InterfaceOrganizationMember,
 } from 'types/UserPortal/Chat/interface';
-import type { InterfaceCreateDirectChatProps } from 'types/UserPortal/CreateDirectChat/interface';
+import type {
+  InterfaceCreateDirectChatProps,
+  ChatsListRefetch,
+  CreateChatMutation,
+  CreateChatMembershipMutation,
+} from 'types/UserPortal/CreateDirectChat/interface';
 
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -66,59 +63,13 @@ export const handleCreateDirectChat = async (
   userName: string,
   chats: Chat[],
   t: TFunction<'translation', 'userChat'>,
-  createChat: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          organizationId: string;
-          name: string;
-          description: string;
-          avatar: null;
-        };
-      };
-    }): unknown;
-  },
-  createChatMembership: {
-    (
-      options?:
-        | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
-        | undefined,
-    ): Promise<FetchResult<unknown>>;
-    (arg0: {
-      variables: {
-        input: {
-          memberId: string;
-          chatId: string;
-          role: string;
-        };
-      };
-    }): unknown;
-  },
+  createChat: CreateChatMutation,
+  createChatMembership: CreateChatMembershipMutation,
   organizationId: string | undefined,
   userId: string | null,
   currentUserName: string,
-  chatsListRefetch: {
-    (
-      variables?: Partial<{ id: string }> | undefined,
-    ): Promise<ApolloQueryResult<unknown>>;
-    (): Promise<ApolloQueryResult<unknown>>;
-  },
-  toggleCreateDirectChatModal: { (): void; (): void },
+  chatsListRefetch: ChatsListRefetch,
+  toggleCreateDirectChatModal: () => void,
 ): Promise<void> => {
   const existingChat = chats.find(
     (chat) =>

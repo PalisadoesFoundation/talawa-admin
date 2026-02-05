@@ -432,7 +432,7 @@ export default function GroupChatDetails({
                         variant="outline-secondary"
                         icon={<BsThreeDotsVertical />}
                         buttonLabel=" "
-                        ariaLabel="Options"
+                        ariaLabel={t('memberOptions')}
                         options={[
                           {
                             value: 'roleChange',

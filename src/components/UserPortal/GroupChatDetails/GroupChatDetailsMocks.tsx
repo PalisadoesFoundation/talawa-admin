@@ -1,4 +1,8 @@
-import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
+import type {
+  Chat as ChatType,
+  InterfaceChatUser,
+  InterfaceMockMessage,
+} from 'types/UserPortal/Chat/interface';
 import {
   CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT,
@@ -52,6 +56,7 @@ const createMemberSearchMockWithResult = (searchTerm: string) => ({
         members: {
           edges: [
             {
+              cursor: 'cursor-1',
               node: {
                 id: 'user3',
                 name: 'Disha Smith',
@@ -66,27 +71,6 @@ const createMemberSearchMockWithResult = (searchTerm: string) => ({
     },
   },
 });
-
-interface InterfaceChatUser {
-  _id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  createdAt: Date;
-}
-/**
- * Interface representing a mock message structure for testing purposes.
- * @internal
- */
-interface InterfaceMockMessage {
-  _id: string;
-  createdAt: Date;
-  sender: InterfaceChatUser;
-  messageContent: string;
-  replyTo?: InterfaceMockMessage;
-  updatedAt: Date;
-  media?: string;
-}
 
 function createUser(
   id: string,
@@ -276,6 +260,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -314,6 +299,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -345,6 +331,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -376,6 +363,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -402,6 +390,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -410,6 +399,7 @@ export const mocks = [
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -427,6 +417,7 @@ export const mocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -435,6 +426,7 @@ export const mocks = [
                 },
               },
             ],
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },

@@ -811,6 +811,107 @@ describe('GroupChatDetails', () => {
     );
   });
 
+  it('does not delete chat if user cancels confirmation', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    const deleteBtn = await screen.findByRole('button', { name: /delete/i });
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
+    await act(async () => {
+      await userEvent.click(deleteBtn);
+    });
+
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(toastSuccess).not.toHaveBeenCalled();
+
+    confirmSpy.mockRestore();
+  });
+
+  it('does not remove member if user cancels confirmation', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+          { node: { user: { id: 'user2', name: 'Bob' }, role: 'regular' } },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
+
+    const toggles = await screen.findAllByRole('button');
+    const dropdownToggle = toggles.find(
+      (btn) => btn.id && btn.id.startsWith('dropdown-'),
+    );
+    if (!dropdownToggle) throw new Error('Dropdown not found');
+
+    await act(async () => await userEvent.click(dropdownToggle));
+
+    const removeBtn = screen.queryByText(/Remove/);
+    if (!removeBtn) throw new Error('Remove button not found');
+
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    await act(async () => await userEvent.click(removeBtn));
+
+    expect(confirmSpy).toHaveBeenCalled();
+    expect(toastSuccess).not.toHaveBeenCalled();
+
+    confirmSpy.mockRestore();
+  });
+
   it('show error toast while deleting chat when current user is administrator and confirms', async () => {
     useLocalStorage().setItem('userId', 'user1');
     const toastError = vi.spyOn(NotificationToast, 'error');

@@ -6,7 +6,7 @@ export type Chat = {
   description?: string;
   avatarMimeType?: string;
   avatarURL?: string;
-  isGroup?: boolean;
+  isGroup: boolean;
   createdAt: string;
   updatedAt?: string | null;
   unreadMessagesCount?: number;
@@ -135,4 +135,30 @@ export interface InterfaceOrganizationMember {
   name: string;
   avatarURL?: string;
   role: string;
+}
+
+/**
+ * Interface representing a chat user structure.
+ * @internal
+ */
+export interface InterfaceChatUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: Date;
+}
+
+/**
+ * Interface representing a mock message structure for testing purposes.
+ * @internal
+ */
+export interface InterfaceMockMessage {
+  _id: string;
+  createdAt: Date;
+  sender: InterfaceChatUser;
+  messageContent: string;
+  replyTo?: InterfaceMockMessage;
+  updatedAt: Date;
+  media?: string;
 }

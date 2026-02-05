@@ -301,6 +301,7 @@ describe('CreateDirectChatModal', () => {
         id: 'existing-chat-1',
         name: 'Current User & Test User 2',
         description: 'A direct chat conversation',
+        isGroup: false,
         createdAt: dayjs.utc().toISOString(),
         members: {
           edges: [

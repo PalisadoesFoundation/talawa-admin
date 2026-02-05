@@ -90,9 +90,9 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:4](https://github.com/Palisa
 
 ***
 
-### isGroup?
+### isGroup
 
-> `optional` **isGroup**: `boolean`
+> **isGroup**: `boolean`
 
 Defined in: [src/types/UserPortal/Chat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L9)
 

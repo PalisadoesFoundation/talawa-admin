@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateDirectChatProps
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L7)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L40)
 
 Props for the CreateDirectChat modal.
 
@@ -14,25 +14,15 @@ Props for the CreateDirectChat modal.
 
 > **chats**: [`Chat`](../../../Chat/interface/type-aliases/Chat.md)[]
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L13)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L44)
 
 ***
 
-### chatsListRefetch()
+### chatsListRefetch
 
-> **chatsListRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
+> **chatsListRefetch**: [`ChatsListRefetch`](../type-aliases/ChatsListRefetch.md)
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L10)
-
-#### Parameters
-
-##### variables?
-
-`Partial`\<\{ `id`: `string`; \}\>
-
-#### Returns
-
-`Promise`\<`ApolloQueryResult`\<`unknown`\>\>
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L43)
 
 ***
 
@@ -40,7 +30,7 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:10](https://gith
 
 > **createDirectChatModalisOpen**: `boolean`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L9)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L42)
 
 ***
 
@@ -48,7 +38,7 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:9](https://githu
 
 > **toggleCreateDirectChatModal**: () => `void`
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L8)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L41)
 
 #### Returns
 
