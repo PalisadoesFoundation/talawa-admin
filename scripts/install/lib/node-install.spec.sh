@@ -213,16 +213,19 @@ test_check_fnm_not_installed() {
     source_library
     
     local original_path="$PATH"
+    local original_home="$HOME"
     export PATH="/nonexistent:$PATH"
     export HOME="/nonexistent"
     
     if check_fnm; then
         export PATH="$original_path"
+        export HOME="$original_home"
         echo "  check_fnm should return false when fnm is not installed"
         return 1
     fi
     
     export PATH="$original_path"
+    export HOME="$original_home"
     return 0
 }
 

@@ -32,7 +32,6 @@ if [[ -z "${TALAWA_COMMON_SOURCED:-}" ]]; then
         # shellcheck source=./common.sh
         . "${_NODE_INSTALL_LIB_DIR}/common.sh"
     else
-        # Minimal fallback if common.sh is not available
         command_exists() { command -v "$1" >/dev/null 2>&1; }
         log_info() { printf "[INFO] %s\n" "$1"; }
         log_success() { printf "✓ %s\n" "$1"; }
@@ -42,23 +41,54 @@ if [[ -z "${TALAWA_COMMON_SOURCED:-}" ]]; then
             local prefix="${1:-talawa}"
             mktemp -t "${prefix}.XXXXXX" 2>/dev/null || mktemp "/tmp/${prefix}.XXXXXX"
         }
-        E_SUCCESS=0
-        E_GENERAL=1
-        E_NETWORK=4
+        export E_SUCCESS=0
+        export E_GENERAL=1
+        export E_NETWORK=4
     fi
 fi
 
 # ==============================================================================
 # CONFIGURATION
 # ==============================================================================
-# Default Node.js version if no .nvmrc is present
 readonly NODE_INSTALL_DEFAULT_VERSION="22"
 
-# Default pnpm version if not specified in package.json
 readonly PNPM_INSTALL_DEFAULT_VERSION="9"
 
-# fnm installer URL
 readonly FNM_INSTALLER_URL="https://fnm.vercel.app/install"
+
+# ==============================================================================
+# SEMVER UTILITIES
+# ==============================================================================
+
+normalize_version() {
+    local version="$1"
+    version="${version#v}"
+    printf '%s' "$version"
+}
+
+parse_major_version() {
+    local version="$1"
+    version="$(normalize_version "$version")"
+    printf '%s' "${version%%.*}"
+}
+
+version_satisfies() {
+    local installed="$1"
+    local required="$2"
+    
+    installed="$(normalize_version "$installed")"
+    required="$(normalize_version "$required")"
+    
+    local installed_major required_major
+    installed_major="$(parse_major_version "$installed")"
+    required_major="$(parse_major_version "$required")"
+    
+    if [[ -z "$installed_major" ]] || [[ -z "$required_major" ]]; then
+        return 1
+    fi
+    
+    [[ "$installed_major" -ge "$required_major" ]]
+}
 
 # ==============================================================================
 # FNM FUNCTIONS
@@ -302,13 +332,21 @@ verify_node() {
         return 1
     fi
     
-    local version
-    version="$(node --version 2>/dev/null)" || {
+    local installed_version required_version
+    installed_version="$(node --version 2>/dev/null)" || {
         log_error "Failed to get node version"
         return 1
     }
     
-    log_success "Node.js verified: $version"
+    required_version="$(required_node_version)"
+    installed_version="$(normalize_version "$installed_version")"
+    
+    if ! version_satisfies "$installed_version" "$required_version"; then
+        log_error "Node.js version mismatch: required >=$required_version, found $installed_version"
+        return 1
+    fi
+    
+    log_success "Node.js verified: v$installed_version (required: >=$required_version)"
     return 0
 }
 
@@ -398,13 +436,21 @@ verify_pnpm() {
         return 1
     fi
     
-    local version
-    version="$(pnpm --version 2>/dev/null)" || {
+    local installed_version required_version
+    installed_version="$(pnpm --version 2>/dev/null)" || {
         log_error "Failed to get pnpm version"
         return 1
     }
     
-    log_success "pnpm verified: $version"
+    required_version="$(required_pnpm_version)"
+    installed_version="$(normalize_version "$installed_version")"
+    
+    if ! version_satisfies "$installed_version" "$required_version"; then
+        log_error "pnpm version mismatch: required >=$required_version, found $installed_version"
+        return 1
+    fi
+    
+    log_success "pnpm verified: v$installed_version (required: >=$required_version)"
     return 0
 }
 
