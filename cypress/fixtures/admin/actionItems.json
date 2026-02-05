@@ -1,0 +1,19 @@
+{
+  "actionItems": [
+    {
+      "id": "action_001",
+      "title": "Prepare agenda",
+      "status": "OPEN",
+      "assignee": "Alex Example",
+      "dueAt": "2026-01-10T00:00:00.000Z"
+    },
+    {
+      "id": "action_002",
+      "title": "Long action item — مرحبا 世界",
+      "status": "COMPLETED",
+      "assignee": "Long Name Member — 世界",
+      "dueAt": null
+    }
+  ],
+  "emptyActionItems": []
+}

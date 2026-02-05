@@ -299,5 +299,7 @@
   "toggleSidebar": "切换侧边栏",
   "picture": "{{name}}的图片",
   "optionsSuffix": "选项",
-  "userMenu": "用户菜单"
+  "userMenu": "用户菜单",
+  "searchPlaceholder": "搜索...",
+  "noOptionsFound": "未找到选项"
 }
