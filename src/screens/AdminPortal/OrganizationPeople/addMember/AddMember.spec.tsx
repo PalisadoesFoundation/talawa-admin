@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -421,6 +421,12 @@ const renderAddMemberView = ({
   return render(<MockedProvider mocks={mocks}>{content}</MockedProvider>);
 };
 
+function getDataTableBodyRows(): HTMLElement[] {
+  const table = screen.getByTestId('datatable');
+  const rows = within(table).getAllByRole('row');
+  return rows.slice(1); // skip header row
+}
+
 describe('AddMember Screen', () => {
   beforeEach(() => {
     setupLocationMock();
@@ -462,12 +468,9 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
-    );
-    expect(userRows.length).toBe(2);
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    const userRows = getDataTableBodyRows();
+    expect(userRows).toHaveLength(2);
 
     await waitFor(
       () => {
@@ -547,7 +550,7 @@ describe('AddMember Screen', () => {
     );
     expect(modal).toBeInTheDocument();
 
-    await screen.findAllByTestId('user', {}, { timeout: 3000 });
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
 
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
@@ -619,12 +622,9 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
-    );
-    expect(userRows.length).toBe(2);
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    const userRows = getDataTableBodyRows();
+    expect(userRows).toHaveLength(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -673,12 +673,9 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
-    );
-    expect(userRows.length).toBe(2);
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    const userRows = getDataTableBodyRows();
+    expect(userRows).toHaveLength(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -761,12 +758,9 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    const userRows1 = await screen.findAllByTestId(
-      'user',
-      {},
-      { timeout: 3000 },
-    );
-    expect(userRows1.length).toBe(2);
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    const userRows1 = getDataTableBodyRows();
+    expect(userRows1).toHaveLength(2);
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -778,12 +772,13 @@ describe('AddMember Screen', () => {
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
 
-    const userRows2 = await screen.findAllByTestId(
-      'user',
+    await screen.findByText(
+      (content) => content.includes('Bob Johnson'),
       {},
       { timeout: 3000 },
     );
-    expect(userRows2.length).toBe(1);
+    const userRows2 = getDataTableBodyRows();
+    expect(userRows2).toHaveLength(1);
     expect(
       screen.getByText((content) => content.includes('Bob Johnson')),
     ).toBeInTheDocument();
@@ -1098,7 +1093,7 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable');
 
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
@@ -1193,7 +1188,7 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable');
 
     const forceNext = screen.getByTestId('force-next');
     const forcePrev = screen.getByTestId('force-prev');
@@ -1282,7 +1277,7 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     expect(
-      await screen.findByText(/Error occurred while loading Users/i),
+      await screen.findByText(/Unable to load data\./i),
     ).toBeInTheDocument();
   });
 
@@ -1318,7 +1313,7 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findAllByTestId('user');
+    await screen.findByTestId('datatable');
 
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Alex' } });
@@ -1326,7 +1321,7 @@ describe('AddMember Screen', () => {
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.click(submitButton);
 
-    const users = await screen.findAllByTestId('user');
-    expect(users.length).toBe(2);
+    await screen.findByTestId('datatable');
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 });

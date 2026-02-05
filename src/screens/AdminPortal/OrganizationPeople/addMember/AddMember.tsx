@@ -17,13 +17,6 @@
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Check, Close } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import {
   CREATE_MEMBER_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -48,6 +41,8 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -299,118 +294,88 @@ function AddMember(): JSX.Element {
             buttonTestId="submitBtn"
           />
         </div>
-        <TableContainer component={Paper}>
-          <Table aria-label={translateOrgPeople('users')}>
-            <TableHead>
-              <TableRow>
-                <TableCell className={styles.tableHeadCell}>#</TableCell>
-                <TableCell align="center" className={styles.tableHeadCell}>
-                  {translateAddMember('addMember.profile')}
-                </TableCell>
-                <TableCell align="center" className={styles.tableHeadCell}>
-                  {translateAddMember('addMember.user')}
-                </TableCell>
-                <TableCell align="center" className={styles.tableHeadCell}>
-                  {translateAddMember('addMember.addMember')}
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userLoading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    align="center"
-                    className={styles.tableBodyCell}
+        <DataTable<IUserDetails & { rowIndex: number }>
+          data={allUsersData.map((user: IUserDetails, index: number) => ({
+            ...user,
+            rowIndex: page * PAGE_SIZE + index + 1,
+          }))}
+          columns={
+            [
+              {
+                id: 'index',
+                header: '#',
+                accessor: 'rowIndex',
+              },
+              {
+                id: 'profile',
+                header: translateAddMember('addMember.profile'),
+                accessor: 'avatarURL',
+                render: (value, row) => (
+                  <div
+                    data-testid="profileImage"
+                    className={styles.profileCell}
                   >
-                    {tCommon('loading')}
-                  </TableCell>
-                </TableRow>
-              ) : userError ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    align="center"
-                    className={styles.tableBodyCell}
+                    {value ? (
+                      <img
+                        src={value as string}
+                        alt={`${row.name} ${tCommon('avatar')}`}
+                        className={styles.TableImage}
+                        crossOrigin="anonymous"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <Avatar
+                        avatarStyle={styles.TableImage}
+                        name={row.name}
+                        data-testid="avatarImage"
+                      />
+                    )}
+                  </div>
+                ),
+              },
+              {
+                id: 'user',
+                header: translateAddMember('addMember.user'),
+                accessor: 'name',
+                render: (_, row) => (
+                  <Link
+                    className={`${styles.membername} ${styles.subtleBlueGrey}`}
+                    to={{
+                      pathname: `/admin/member/${currentUrl}/${row.id}`,
+                    }}
                   >
-                    {translateAddMember('users.errorLoadingUsers')}
-                  </TableCell>
-                </TableRow>
-              ) : allUsersData.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={4}
-                    align="center"
-                    className={styles.tableBodyCell}
+                    {row.name}
+                    <br />
+                    {row.emailAddress}
+                  </Link>
+                ),
+              },
+              {
+                id: 'action',
+                header: translateAddMember('addMember.addMember'),
+                accessor: 'id',
+                render: (_, row) => (
+                  <Button
+                    onClick={() => {
+                      createMember(row.id);
+                    }}
+                    data-testid="addBtn"
+                    className={styles.addButton}
                   >
-                    {translateOrgPeople('notFound')}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                allUsersData.map((userDetails: IUserDetails, index: number) => (
-                  <TableRow
-                    className={styles.tableRow}
-                    data-testid="user"
-                    key={userDetails.id}
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      className={styles.tableBodyCell}
-                    >
-                      {page * PAGE_SIZE + index + 1}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={styles.tableBodyCell}
-                      data-testid="profileImage"
-                    >
-                      {userDetails.avatarURL ? (
-                        <img
-                          src={userDetails.avatarURL}
-                          alt={`${userDetails.name} ${tCommon('avatar')}`}
-                          className={styles.TableImage}
-                          crossOrigin="anonymous"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <Avatar
-                          avatarStyle={styles.TableImage}
-                          name={`${userDetails.name}`}
-                          data-testid="avatarImage"
-                        />
-                      )}
-                    </TableCell>
-                    <TableCell align="center" className={styles.tableBodyCell}>
-                      <Link
-                        className={`${styles.membername} ${styles.subtleBlueGrey}`}
-                        to={{
-                          pathname: `/admin/member/${currentUrl}/${userDetails.id}`,
-                        }}
-                      >
-                        {userDetails.name}
-                        <br />
-                        {userDetails.emailAddress}
-                      </Link>
-                    </TableCell>
-                    <TableCell align="center" className={styles.tableBodyCell}>
-                      <Button
-                        onClick={() => {
-                          createMember(userDetails.id);
-                        }}
-                        data-testid="addBtn"
-                        className={styles.addButton}
-                      >
-                        <i className={'fa fa-plus me-2'} />
-                        {translateAddMember('addMember.add')}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    <i className={'fa fa-plus me-2'} />
+                    {translateAddMember('addMember.add')}
+                  </Button>
+                ),
+              },
+            ] as IColumnDef<IUserDetails & { rowIndex: number }>[]
+          }
+          rowKey="id"
+          loading={userLoading}
+          error={userError || undefined}
+          emptyMessage={translateOrgPeople('notFound')}
+          tableClassName={styles.dataTable}
+          ariaLabel={translateOrgPeople('users')}
+        />
         <TablePagination
           component="div"
           count={-1}
