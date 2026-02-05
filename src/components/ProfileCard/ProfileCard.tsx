@@ -45,10 +45,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import styles from './ProfileCard.module.css';
-
-interface InterfaceProfileCardProps {
-  portal?: 'admin' | 'user';
-}
+import { InterfaceProfileCardProps } from 'types/ProfileCard/interface';
 
 const ProfileCard = ({
   portal = 'admin',

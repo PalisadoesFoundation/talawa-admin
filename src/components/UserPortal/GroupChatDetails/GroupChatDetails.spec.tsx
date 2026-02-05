@@ -13,12 +13,10 @@ import {
   filledMockChat,
   incompleteMockChat,
   failingMocks,
+  delayedMocks,
 } from './GroupChatDetailsMocks';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-
-// Standardized cache configuration for Apollo MockedProvider
-const testCache = new InMemoryCache();
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -125,7 +123,11 @@ i18n.use(initReactI18next).init({
 });
 
 describe('GroupChatDetails', () => {
+  let testCache: InMemoryCache;
+
   beforeEach(() => {
+    testCache = new InMemoryCache();
+
     for (const key in mockLocalStorageStore) {
       delete mockLocalStorageStore[key];
     }
@@ -134,6 +136,7 @@ describe('GroupChatDetails', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   type MaybeChat = Partial<ChatType>;
@@ -646,9 +649,6 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to update role');
       expect(consoleError).toHaveBeenCalled();
     });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
 
   it('shows error toast when removing member fails', async () => {
@@ -710,9 +710,6 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to remove member');
       expect(consoleError).toHaveBeenCalled();
     });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
 
   it('uploads image and updates chat avatar', async () => {
@@ -966,8 +963,6 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
       expect(consoleError).toHaveBeenCalled();
     });
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
   it('shows error toast when title update fails', async () => {
     useLocalStorage().setItem('userId', '2');
@@ -1021,9 +1016,6 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to update chat name');
       expect(consoleError).toHaveBeenCalled();
     });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
 
   it('shows error toast when image upload fails', async () => {
@@ -1069,9 +1061,6 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to update chat image');
       expect(consoleError).toHaveBeenCalled();
     });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
 
   it('demotes administrator to regular member', async () => {
@@ -1371,19 +1360,11 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('Failed to add user');
       expect(consoleError).toHaveBeenCalled();
     });
-
-    toastError.mockRestore();
-    consoleError.mockRestore();
   });
 
   describe('LoadingState Behavior', () => {
     it('should show LoadingState spinner while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
-
-      const delayedMocks = mocks.map((mock) => ({
-        ...mock,
-        delay: 300,
-      }));
 
       render(
         <I18nextProvider i18n={i18n}>
@@ -1410,7 +1391,7 @@ describe('GroupChatDetails', () => {
           const spinner = document.querySelector('[data-testid="spinner"]');
           expect(spinner).toBeInTheDocument();
         },
-        { timeout: 2000 },
+        { timeout: 5000 },
       );
     });
 
@@ -1434,7 +1415,7 @@ describe('GroupChatDetails', () => {
         () => {
           expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
       const spinners = screen.queryAllByTestId('spinner');

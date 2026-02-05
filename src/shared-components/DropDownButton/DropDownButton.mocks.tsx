@@ -34,6 +34,7 @@ export const baseProps: InterfaceDropDownButtonProps = {
   onSelect: mockOnSelect,
   ariaLabel: 'Test Dropdown',
   dataTestIdPrefix: 'test-dropdown',
+  showCaret: true,
 };
 
 export const noSelectionProps: InterfaceDropDownButtonProps = {

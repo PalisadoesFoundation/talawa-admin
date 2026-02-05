@@ -148,6 +148,7 @@ describe('DropDownButton Component', () => {
     const button = screen.getByTestId('dropdown-toggle');
     expect(button).toBeInTheDocument();
   });
+
   it('opens dropdown menu upwards when drop up is provided', async () => {
     renderComponent(dropUpProps);
     const button = screen.getByTestId('test-dropdown-toggle');
@@ -155,7 +156,14 @@ describe('DropDownButton Component', () => {
     const menu = screen.getByTestId('test-dropdown-menu');
     expect(menu.parentElement).toHaveClass('dropup');
   });
-
+  it('does not show caret when showCaret is false', () => {
+    renderComponent({
+      ...baseProps,
+      showCaret: false,
+    });
+    const caret = screen.queryByText('▼');
+    expect(caret).not.toBeInTheDocument();
+  });
   describe('Searchable DropDownButton', () => {
     const searchableProps = {
       ...baseProps,

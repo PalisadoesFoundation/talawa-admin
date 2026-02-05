@@ -122,6 +122,11 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text for the search input.
    */
   searchPlaceholder?: string;
+
+  /** Whether to show the caret icon on the dropdown button.
+   * @defaultValue true
+   */
+  showCaret?: boolean;
 }
 
 /**

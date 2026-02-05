@@ -619,3 +619,8 @@ export const failingMocks = [
     },
   },
 ];
+
+export const delayedMocks = mocks.map((mock) => ({
+  ...mock,
+  delay: 300,
+}));
