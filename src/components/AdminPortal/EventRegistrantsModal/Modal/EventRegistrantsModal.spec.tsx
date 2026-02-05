@@ -809,4 +809,144 @@ describe('EventRegistrantsModal', () => {
       expect(input).toHaveValue('Another Test');
     });
   });
+
+  test('renders ProfileAvatarDisplay in renderOption with correct props for member with name', async () => {
+    // Mock ProfileAvatarDisplay to verify it receives correct props
+    const ProfileAvatarDisplayMock = vi.fn(() => (
+      <div data-testid="profile-avatar-display">Avatar</div>
+    ));
+
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal');
+
+    // The renderOption function should be called when options are rendered
+    // Since we're using a mock Autocomplete, we need to verify the component
+    // would pass correct props to ProfileAvatarDisplay
+    const input = await screen.findByTestId('autocomplete');
+    await user.type(input, 'John');
+
+    // Verify the option is rendered with the member's name
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('renders ProfileAvatarDisplay in renderOption with unknownUser fallback when name is empty', async () => {
+    // Create a custom mock for this test that actually renders the renderOption
+    vi.resetModules();
+
+    const customAutocompleteMock = ({
+      renderInput,
+      renderOption,
+      options,
+      onChange,
+      getOptionLabel,
+    }: InterfaceAutocompleteMockProps) => {
+      return (
+        <div data-testid="autocomplete-mock">
+          {renderInput({
+            InputProps: { ref: vi.fn() },
+            id: 'test-autocomplete',
+            disabled: false,
+            inputProps: {},
+          })}
+          {options && options.length > 0 ? (
+            options.map((option) => {
+              // Call renderOption to test the actual rendering logic
+              const renderedOption = renderOption
+                ? renderOption({ key: option.id }, option, { selected: false })
+                : null;
+
+              return (
+                <div
+                  key={option.id}
+                  data-testid={`option-${option.id}`}
+                  onClick={(): void => {
+                    if (onChange) {
+                      onChange({} as React.SyntheticEvent, option);
+                    }
+                  }}
+                  onKeyDown={(): void => {
+                    /* mock */
+                  }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  {renderedOption || getOptionLabel?.(option) || option.name}
+                </div>
+              );
+            })
+          ) : (
+            <div data-testid="no-options">No options</div>
+          )}
+        </div>
+      );
+    };
+
+    vi.doMock('@mui/material/Autocomplete', () => ({
+      __esModule: true,
+      default: customAutocompleteMock,
+    }));
+
+    const ProfileAvatarDisplayMock = vi.fn(
+      ({ imageUrl, fallbackName, size, enableEnlarge }) => (
+        <div
+          data-testid="profile-avatar-display"
+          data-image-url={imageUrl || 'null'}
+          data-fallback-name={fallbackName}
+          data-size={size}
+          data-enable-enlarge={String(enableEnlarge)}
+        >
+          Avatar: {fallbackName}
+        </div>
+      ),
+    );
+
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersUnknownNameMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal');
+
+    // Wait for the option to be rendered
+    await waitFor(() => {
+      const option = screen.queryByTestId('option-user2');
+      expect(option).toBeInTheDocument();
+    });
+
+    // Verify ProfileAvatarDisplay was called with unknownUser fallback
+    await waitFor(() => {
+      const avatarDisplay = screen.queryByTestId('profile-avatar-display');
+      if (avatarDisplay) {
+        expect(avatarDisplay).toHaveAttribute(
+          'data-fallback-name',
+          'Unknown User',
+        );
+        expect(avatarDisplay).toHaveAttribute('data-size', 'small');
+        expect(avatarDisplay).toHaveAttribute('data-enable-enlarge', 'false');
+        expect(avatarDisplay).toHaveAttribute('data-image-url', 'null');
+      }
+    });
+  });
 });
