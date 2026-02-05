@@ -47,8 +47,6 @@ import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
@@ -68,6 +66,8 @@ import {
   dataGridStyle,
 } from 'types/AdminPortal/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import Button from 'shared-components/Button';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
 import componentStyles from './AddPeopleToTag.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -321,15 +321,15 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       resetButtonText={tErrors('resetButton')}
       onReset={hideAddPeopleToTagModal}
     >
-      <BaseModal
-        show={addPeopleToTagModalIsOpen}
-        onHide={hideAddPeopleToTagModal}
+      <CRUDModalTemplate
+        open={addPeopleToTagModalIsOpen}
+        onClose={hideAddPeopleToTagModal}
         title={t('addPeople')}
-        headerClassName={`bg-primary ${styles.modalHeader}`}
-        footer={modalFooter}
-        dataTestId="addPeopleToTagModal"
+        customFooter={modalFooter}
+        className={styles.modalHeader}
+        data-testid="addPeopleToTagModal"
       >
-        <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
+        <form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
             className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
           >
@@ -444,8 +444,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               </div>
             </>
           )}
-        </Form>
-      </BaseModal>
+        </form>
+      </CRUDModalTemplate>
     </ErrorBoundaryWrapper>
   );
 };

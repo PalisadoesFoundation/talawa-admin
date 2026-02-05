@@ -42,12 +42,17 @@ import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementReg
 import { useParams } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Advertisement } from 'types/AdminPortal/Advertisement/type';
+import { AdvertisementType } from 'types/AdminPortal/Advertisement/type';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import type { InterfaceOrganizationPg } from 'utils/interfaces';
+import type {
+  InterfaceOrganizationPg,
+  InterfaceOrganizationAdvertisementsConnectionEdgePg,
+  InterfaceAdvertisementPg,
+} from 'utils/interfaces';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -102,13 +107,41 @@ export default function Advertisements(): JSX.Element {
     Advertisement[]
   >([]);
 
+  const mapAdvertisementFromPg = (
+    pg: InterfaceAdvertisementPg,
+  ): Advertisement => ({
+    id: pg.id,
+    createdAt: new Date(pg.createdAt),
+    description: pg.description,
+    // creator is optional in Advertisement and not used in the UI, so omit it here
+    organization: {
+      id: pg.organization.id,
+    },
+    endAt: new Date(pg.endAt),
+    name: pg.name,
+    orgId: pg.organization.id,
+    startAt: new Date(pg.startAt),
+    type:
+      pg.type === 'banner'
+        ? AdvertisementType.Banner
+        : pg.type === 'menu'
+          ? AdvertisementType.Menu
+          : AdvertisementType.Popup,
+    updatedAt: new Date(pg.updatedAt),
+    attachments: pg.attachments?.map((a) => ({
+      url: a.url,
+      mimeType: a.mimeType,
+    })),
+  });
+
   useEffect(() => {
     if (
       orgCompletedAdvertisementListData?.organization?.advertisements?.edges
     ) {
       const ads: Advertisement[] =
         orgCompletedAdvertisementListData.organization.advertisements.edges.map(
-          (edge: any) => edge.node as Advertisement,
+          (edge: InterfaceOrganizationAdvertisementsConnectionEdgePg) =>
+            mapAdvertisementFromPg(edge.node),
         );
       if (afterCompleted) {
         setCompletedAdvertisements((prevAds) => {
@@ -125,7 +158,8 @@ export default function Advertisements(): JSX.Element {
     if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
       const ads: Advertisement[] =
         orgActiveAdvertisementListData.organization.advertisements.edges.map(
-          (edge: any) => edge.node as Advertisement,
+          (edge: InterfaceOrganizationAdvertisementsConnectionEdgePg) =>
+            mapAdvertisementFromPg(edge.node),
         );
       if (afterActive) {
         setActiveAdvertisements((prevAds) => {

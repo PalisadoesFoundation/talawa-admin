@@ -30,6 +30,13 @@ import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
+const getSafePreviewUrl = (url: string | null): string | null => {
+  if (typeof url !== 'string') return null;
+  if (!url.startsWith('blob:')) return null;
+  // Encode URI meta-characters to prevent it from being reinterpreted as HTML.
+  return encodeURI(url);
+};
+
 function CreatePostModal({
   show,
   onHide,
@@ -270,16 +277,14 @@ function CreatePostModal({
             data-testid="postBodyInput"
           />
           {(() => {
-            const isSafePreviewUrl =
-              typeof preview === 'string' && preview.startsWith('blob:');
+            const safePreviewUrl = getSafePreviewUrl(preview);
             return (
-              preview &&
-              previewType &&
-              isSafePreviewUrl && (
+              safePreviewUrl &&
+              previewType && (
                 <div className={styles.imagePreviewContainer}>
                   {previewType === 'image' && (
                     <img
-                      src={preview}
+                      src={safePreviewUrl}
                       alt={t('createPostModal.selectedImage')}
                       className={styles.imagePreview}
                       data-testid="imagePreview"
@@ -288,7 +293,7 @@ function CreatePostModal({
 
                   {previewType === 'video' && (
                     <video
-                      src={preview}
+                      src={safePreviewUrl}
                       controls
                       className={styles.videoPreview}
                       data-testid="videoPreview"

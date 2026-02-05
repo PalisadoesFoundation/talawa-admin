@@ -1,6 +1,7 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import type { MockedResponse } from '@apollo/client/testing';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LoginForm } from './LoginForm';
@@ -70,6 +71,25 @@ const mockSignInAdminSuccess: MockedResponse = {
         refreshToken: 'admin-refresh-token',
       },
     },
+  },
+};
+
+const fireEvent = {
+  click: (element: Element | Window | Document) => {
+    void userEvent.click(element as never);
+  },
+  input: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  change: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  keyDown: (element: Element, init: { key: string }) => {
+    void userEvent.keyboard(`{${init.key}}`);
   },
 };
 

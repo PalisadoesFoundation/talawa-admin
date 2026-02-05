@@ -362,10 +362,14 @@ const LoginPage = (): JSX.Element => {
       // Check for GraphQL errors (like account_locked) first
       if (signInError) {
         // Check if this is an account_locked error with retryAfter timestamp
-        const graphQLError = (signInError as any).graphQLErrors?.[0];
-        const extensions = graphQLError?.extensions as
-          | { code?: string; retryAfter?: string }
-          | undefined;
+        const graphQLError = (
+          signInError as {
+            graphQLErrors?: Array<{
+              extensions?: { code?: string; retryAfter?: string };
+            }>;
+          }
+        ).graphQLErrors?.[0];
+        const extensions = graphQLError?.extensions;
 
         if (extensions?.code === 'account_locked' && extensions?.retryAfter) {
           // Calculate remaining minutes until unlock

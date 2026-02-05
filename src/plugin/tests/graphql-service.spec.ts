@@ -376,7 +376,15 @@ describe('GraphQL Hooks', () => {
         ],
       };
 
-      const mockQueryResult = {
+      const mockQueryResult: {
+        data: typeof mockData | undefined;
+        loading: boolean;
+        error: Error | undefined;
+        refetch: ReturnType<typeof vi.fn>;
+        fetchMore: ReturnType<typeof vi.fn>;
+        networkStatus: number;
+        called: boolean;
+      } = {
         data: mockData,
         loading: false,
         error: undefined,
@@ -386,7 +394,9 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
+      );
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -397,7 +407,15 @@ describe('GraphQL Hooks', () => {
     });
 
     it('should handle loading state', () => {
-      const mockQueryResult = {
+      const mockQueryResult: {
+        data: undefined;
+        loading: boolean;
+        error: Error | undefined;
+        refetch: ReturnType<typeof vi.fn>;
+        fetchMore: ReturnType<typeof vi.fn>;
+        networkStatus: number;
+        called: boolean;
+      } = {
         data: undefined,
         loading: true,
         error: undefined,
@@ -407,7 +425,9 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
+      );
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -417,7 +437,15 @@ describe('GraphQL Hooks', () => {
 
     it('should handle error state', () => {
       const mockError = new Error('Failed to fetch plugins');
-      const mockQueryResult = {
+      const mockQueryResult: {
+        data: undefined;
+        loading: boolean;
+        error: Error;
+        refetch: ReturnType<typeof vi.fn>;
+        fetchMore: ReturnType<typeof vi.fn>;
+        networkStatus: number;
+        called: boolean;
+      } = {
         data: undefined,
         loading: false,
         error: mockError,
@@ -427,7 +455,9 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as ReturnType<typeof useQuery>,
+      );
 
       const { result } = renderHook(() => useGetAllPlugins());
 

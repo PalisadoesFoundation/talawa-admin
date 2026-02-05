@@ -1,11 +1,28 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
 import OrganizationCard from './OrganizationCard';
+
+const fireEvent = {
+  click: (element: Element | Window | Document) => {
+    void userEvent.click(element as never);
+  },
+  input: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  change: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+};
 
 const mockMutationFn = vi.fn().mockResolvedValue({ data: {} });
 

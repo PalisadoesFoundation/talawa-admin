@@ -82,6 +82,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     );
   }
 
+  if (eventInfoError) {
+    return (
+      <div data-testid="event-error">{tEventList('errorLoadingEvent')}</div>
+    );
+  }
+
   if (!eventData || !eventData.event) {
     return <div data-testid="no-event">{tEventList('noEvent')}</div>;
   }

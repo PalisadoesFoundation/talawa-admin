@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -20,6 +20,31 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+const fireEvent = {
+  click: (element: Element | Window | Document) => {
+    void userEvent.click(element as never);
+  },
+  input: (element: Element, init: { target: Record<string, unknown> }) => {
+    const input = element as HTMLInputElement;
+    const value = (init.target as { value?: string }).value ?? '';
+    void userEvent.clear(input);
+    if (value) {
+      void userEvent.type(input, value);
+    }
+  },
+  change: (element: Element, init: { target: Record<string, unknown> }) => {
+    const input = element as HTMLInputElement;
+    const value = (init.target as { value?: string }).value ?? '';
+    void userEvent.clear(input);
+    if (value) {
+      void userEvent.type(input, value);
+    }
+  },
+  keyDown: (element: Element, init: { key: string }) => {
+    void userEvent.keyboard(`{${init.key}}`);
+  },
+};
 
 // Mock Setup
 const MOCKS = [

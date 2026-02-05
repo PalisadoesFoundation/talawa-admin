@@ -33,7 +33,6 @@
  * ```
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
@@ -44,7 +43,8 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -333,16 +333,17 @@ const VenueModal = ({
     }
   };
   return (
-    <BaseModal
-      show={show}
-      onHide={onHide}
+    <CRUDModalTemplate
+      open={show}
+      onClose={onHide}
       title={t('venueDetails')}
-      showCloseButton
+      loading={loading}
+      showFooter={false}
     >
-      <Form data-testid="venueForm">
+      <form data-testid="venueForm">
         <label htmlFor="venuetitle">{t('venueName')}</label>
-        <Form.Control
-          type="title"
+        <input
+          type="text"
           id="venuetitle"
           placeholder={t('enterVenueName')}
           autoComplete="off"
@@ -354,10 +355,8 @@ const VenueModal = ({
           className={styles.inputField}
         />
         <label htmlFor="venuedescrip">{tCommon('description')}</label>
-        <Form.Control
-          type="text"
+        <textarea
           id="venuedescrip"
-          as="textarea"
           placeholder={t('enterVenueDesc')}
           autoComplete="off"
           required
@@ -369,7 +368,7 @@ const VenueModal = ({
           className={styles.inputField}
         />
         <label htmlFor="venuecapacity">{t('capacity')}</label>
-        <Form.Control
+        <input
           type="text"
           id="venuecapacity"
           placeholder={t('enterVenueCapacity')}
@@ -381,8 +380,8 @@ const VenueModal = ({
           }}
           className={styles.inputField}
         />
-        <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
-        <Form.Control
+        <label htmlFor="venueImgUrl">{t('image')}</label>
+        <input
           accept="image/*"
           id="venueImgUrl"
           data-testid="venueImgUrl"
@@ -398,6 +397,7 @@ const VenueModal = ({
           <div className={styles.previewVenueModal}>
             <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
             <button
+              type="button"
               className={styles.closeButtonP}
               onClick={clearImageInput}
               data-testid="closeimage"
@@ -408,7 +408,6 @@ const VenueModal = ({
         )}
 
         <Button
-          type="submit"
           className={styles.addButton}
           value={edit ? 'editVenue' : 'createVenue'}
           data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}
@@ -417,8 +416,8 @@ const VenueModal = ({
         >
           {edit ? t('editVenue') : t('createVenue')}
         </Button>
-      </Form>
-    </BaseModal>
+      </form>
+    </CRUDModalTemplate>
   );
 };
 

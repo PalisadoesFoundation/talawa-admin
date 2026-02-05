@@ -63,11 +63,19 @@ export default function OrganizationSidebar(): JSX.Element {
   // Query to fetch members of the organization
   const { data: memberData, loading: memberLoading } = useQuery<{
     organizationsMemberConnection?: {
-      edges: any[];
+      edges: InterfaceMemberInfo[];
     };
     organization?: {
       members?: {
-        edges: any[];
+        edges: {
+          node?: {
+            id?: string;
+            name?: string;
+            emailAddress?: string;
+            avatarURL?: string;
+            createdAt?: string;
+          };
+        }[];
       };
     };
   }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {

@@ -15,6 +15,7 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
+import type { IPlugin } from 'plugin/graphql-service';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
@@ -33,6 +34,15 @@ export default function PluginStore() {
     refetch,
   } = useGetAllPlugins();
 
+  const normalizedPluginData: { getPlugins: IPlugin[] } | undefined =
+    pluginData?.getPlugins
+      ? {
+          // At runtime this is either IPlugin[] or a deep-partial IPlugin[] during loading;
+          // for the hooks we only care about the concrete IPlugin fields we actually use.
+          getPlugins: pluginData.getPlugins as IPlugin[],
+        }
+      : undefined;
+
   const {
     searchTerm,
     filteredPlugins,
@@ -41,7 +51,9 @@ export default function PluginStore() {
     handleFilterChange,
     isInstalled,
     getInstalledPlugin,
-  } = usePluginFilters({ pluginData: pluginData as any });
+  } = usePluginFilters({
+    pluginData: normalizedPluginData,
+  });
 
   const {
     loading,
@@ -52,7 +64,10 @@ export default function PluginStore() {
     uninstallPlugin,
     handleUninstallConfirm,
     closeUninstallModal,
-  } = usePluginActions({ pluginData: pluginData as any, refetch });
+  } = usePluginActions({
+    pluginData: normalizedPluginData,
+    refetch,
+  });
 
   useEffect(() => {
     if (pluginError) {

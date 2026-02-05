@@ -72,13 +72,34 @@ interface InterfaceCreateDirectChatProps {
 
 const { getItem } = useLocalStorage();
 
+type CreateChatFn = (options: {
+  variables: {
+    input: {
+      organizationId: string | undefined;
+      name: string;
+      description: string;
+      avatar: null;
+    };
+  };
+}) => Promise<FetchResult<unknown>>;
+
+type CreateChatMembershipFn = (options: {
+  variables: {
+    input: {
+      memberId: string;
+      chatId: string;
+      role: 'regular';
+    };
+  };
+}) => Promise<FetchResult<unknown>>;
+
 export const handleCreateDirectChat = async (
   id: string,
   userName: string,
   chats: GroupChat[],
   t: TFunction<'translation', 'userChat'>,
-  createChat: any,
-  createChatMembership: any,
+  createChat: CreateChatFn,
+  createChatMembership: CreateChatMembershipFn,
   organizationId: string | undefined,
   userId: string | null,
   currentUserName: string,

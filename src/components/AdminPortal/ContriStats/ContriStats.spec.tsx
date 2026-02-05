@@ -4,7 +4,6 @@ import ContriStats from './ContriStats';
 import { I18nextProvider } from 'react-i18next';
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import type { NormalizedCacheObject } from '@apollo/client';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import { describe, test, expect } from 'vitest';

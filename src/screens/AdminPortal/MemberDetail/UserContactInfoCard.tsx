@@ -8,17 +8,15 @@ import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
 import styles from './UserContactDetails.module.css';
 import type { UserContactFormState } from './UserContactDetails';
 
-interface UserContactInfoCardProps {
+interface InterfaceUserContactInfoCardProps {
   formState: UserContactFormState;
   onFieldChange: (fieldName: string, value: string) => void;
   emailAddress: string;
 }
 
-export const UserContactInfoCard: React.FC<UserContactInfoCardProps> = ({
-  formState,
-  onFieldChange,
-  emailAddress,
-}) => {
+export const UserContactInfoCard: React.FC<
+  InterfaceUserContactInfoCardProps
+> = ({ formState, onFieldChange, emailAddress }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const { t: tCommon } = useTranslation('common');
 

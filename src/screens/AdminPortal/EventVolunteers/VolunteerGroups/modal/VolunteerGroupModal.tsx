@@ -9,7 +9,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
 import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -293,82 +292,62 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           required
           touched={false}
         >
-          <Autocomplete
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
+          <select
+            id="leaderSelect"
+            className={`form-select ${styles.noOutline}`}
             data-testid="leaderSelect"
-            options={members}
-            value={leader}
-            disabled={mode === 'edit'}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              getMemberLabel(member)
-            }
-            onChange={(_, newLeader): void => {
+            value={leader?.id ?? ''}
+            onChange={(e) => {
+              const nextLeader = members.find(
+                (member) => member.id === e.target.value,
+              );
               setFormState({
                 ...formState,
-                leader: newLeader,
+                leader: nextLeader ?? null,
               });
             }}
-            renderInput={(params) => (
-              <div ref={params.InputProps.ref} className="w-100">
-                <div className="d-flex align-items-center gap-2">
-                  {params.InputProps.startAdornment}
-                  <input
-                    {...params.inputProps}
-                    id="leaderSelect"
-                    className={`form-control ${styles.noOutline}`}
-                    placeholder={t('leader')}
-                    aria-label={t('leader')}
-                  />
-                  {params.InputProps.endAdornment}
-                </div>
-              </div>
-            )}
-          />
+            disabled={mode === 'edit'}
+          >
+            <option value="">{t('selectLeader')}</option>
+            {members.map((member) => (
+              <option key={member.id} value={member.id}>
+                {getMemberLabel(member)}
+              </option>
+            ))}
+          </select>
         </FormFieldGroup>
       </div>
 
       <div className="d-flex mb-3 w-100">
-        <Autocomplete
-          multiple
-          className={`${styles.noOutline} w-100`}
-          limitTags={2}
-          data-testid="volunteerSelect"
-          options={availableVolunteers}
-          value={volunteerUsers}
-          isOptionEqualToValue={areOptionsEqual}
-          filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfoPG): string =>
-            getMemberLabel(member)
-          }
-          disabled={mode === 'edit'}
-          aria-label={t('volunteers')}
-          onChange={(_, newUsers): void => {
-            setFormState({
-              ...formState,
-              volunteerUsers: newUsers,
-            });
-          }}
-          renderInput={(params) => (
-            <FormFieldGroup name="volunteers" label={t('volunteers')} required>
-              <div
-                ref={params.InputProps.ref}
-                className="d-flex align-items-center w-100"
-              >
-                {params.InputProps.startAdornment}
-                <input
-                  {...params.inputProps}
-                  id="volunteers"
-                  className="form-control"
-                  data-testid="volunteersInput"
-                />
-                {params.InputProps.endAdornment}
-              </div>
-            </FormFieldGroup>
-          )}
-        />
+        <FormFieldGroup name="volunteers" label={t('volunteers')} required>
+          <select
+            id="volunteers"
+            className="form-select"
+            data-testid="volunteersInput"
+            multiple
+            value={volunteerUsers.map((user) => user.id)}
+            onChange={(e) => {
+              const selectedIds = Array.from(e.target.selectedOptions).map(
+                (opt) => opt.value,
+              );
+              const selectedUsers = availableVolunteers.filter((member) =>
+                selectedIds.includes(member.id),
+              );
+              setFormState({
+                ...formState,
+                volunteerUsers: selectedUsers,
+              });
+            }}
+            disabled={mode === 'edit'}
+            aria-label={t('volunteers')}
+          >
+            {availableVolunteers.map((member) => (
+              <option key={member.id} value={member.id}>
+                {getMemberLabel(member)}
+              </option>
+            ))}
+          </select>
+        </FormFieldGroup>
       </div>
 
       <FormTextField

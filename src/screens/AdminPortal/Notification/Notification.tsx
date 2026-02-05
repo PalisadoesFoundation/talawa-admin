@@ -42,7 +42,9 @@ const Notification: React.FC = () => {
 
   const skip = page * pageSize;
 
-  const { loading, data, refetch } = useQuery<any>(GET_USER_NOTIFICATIONS, {
+  const { loading, data, refetch } = useQuery<{
+    user?: { notifications?: InterfaceNotification[] };
+  }>(GET_USER_NOTIFICATIONS, {
     variables: {
       userId: userId,
       input: {
@@ -70,7 +72,7 @@ const Notification: React.FC = () => {
   };
 
   const notifications: InterfaceNotification[] =
-    data?.user?.notifications || [];
+    data?.user?.notifications ?? [];
 
   const handleNext = async () => {
     if (notifications.length < pageSize) return;

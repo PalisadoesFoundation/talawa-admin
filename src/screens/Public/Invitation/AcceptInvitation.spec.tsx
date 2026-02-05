@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
@@ -14,6 +15,25 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
+
+const fireEvent = {
+  click: (element: Element | Window | Document) => {
+    void userEvent.click(element as never);
+  },
+  input: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  change: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  keyDown: (element: Element, init: { key: string }) => {
+    void userEvent.keyboard(`{${init.key}}`);
+  },
+};
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {

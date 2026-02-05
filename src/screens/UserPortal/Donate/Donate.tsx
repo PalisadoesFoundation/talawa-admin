@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client/react';
 import SendIcon from '@mui/icons-material/Send';
@@ -28,6 +27,7 @@ import type {
   InterfaceOrganizationDonationConnectionQuery,
 } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import DropDownButton from 'shared-components/DropDownButton';
 
 /**
  * Component for handling donations to an organization.
@@ -137,35 +137,24 @@ export default function Donate(): JSX.Element {
             {t('donateForThe')} {organizationDetails.name}
           </div>
 
-          <InputGroup className={styles.width100}>
-            <Dropdown>
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.dropdown}`}
-                variant="success"
-                data-testid="modeChangeBtn"
-              >
-                <span data-testid="changeCurrencyBtn">
-                  {currencies[selectedCurrency]}
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {currencies.map((currency, index) => (
-                  <Dropdown.Item
-                    key={currency}
-                    data-testid={`currency${index}`}
-                    onClick={() => setSelectedCurrency(index)}
-                  >
-                    {currency}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+          <div className={`${styles.width100} d-flex gap-2`}>
+            <DropDownButton
+              id="currency-select"
+              options={currencies.map((currency, index) => ({
+                value: String(index),
+                label: currency,
+              }))}
+              selectedValue={String(selectedCurrency)}
+              onSelect={(val) => setSelectedCurrency(Number(val))}
+              ariaLabel={t('selectCurrency')}
+              dataTestIdPrefix="currency"
+              buttonLabel={currencies[selectedCurrency]}
+            />
 
             <label htmlFor="donationAmountInput" className="visually-hidden">
               {t('amount')}
             </label>
-            <FormControl
+            <input
               id="donationAmountInput"
               type="text"
               data-testid="donationAmount"
@@ -173,8 +162,9 @@ export default function Donate(): JSX.Element {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               aria-describedby="donationAmountHelp"
+              className="form-control"
             />
-          </InputGroup>
+          </div>
 
           <div id="donationAmountHelp" className="text-muted form-text">
             {t('donationAmountDescription')}

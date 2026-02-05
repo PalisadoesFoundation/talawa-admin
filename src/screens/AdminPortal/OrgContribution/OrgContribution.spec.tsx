@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { vi, describe, test, expect } from 'vitest';
@@ -15,6 +16,20 @@ async function wait(ms = 100): Promise<void> {
     setTimeout(resolve, ms);
   });
 }
+
+const fireEvent = {
+  click: (element: Element | Window | Document) => {
+    void userEvent.click(element as never);
+  },
+  input: (element: Element, init: { target: { value: string } }) => {
+    const input = element as HTMLInputElement;
+    void userEvent.clear(input);
+    void userEvent.type(input, init.target.value);
+  },
+  keyDown: (element: Element, init: { key: string }) => {
+    void userEvent.keyboard(`{${init.key}}`);
+  },
+};
 
 const renderComponent = () => {
   return render(

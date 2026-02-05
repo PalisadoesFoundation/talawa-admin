@@ -34,7 +34,6 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
@@ -44,6 +43,7 @@ import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
+import DropDownButton from 'shared-components/DropDownButton';
 
 export const MAX_NAME_LENGTH = 20;
 
@@ -83,8 +83,26 @@ const ProfileDropdown = ({
     role: userRole,
   });
 
+  const options = [
+    {
+      value: 'profile',
+      label: tCommon('viewProfile'),
+      action: () => navigate(profileDestination),
+      testId: 'profileBtn',
+    },
+    {
+      value: 'logout',
+      label: tCommon('logout'),
+      action: handleLogout,
+      testId: 'logoutBtn',
+      className: dropdownStyles.logoutBtn,
+    },
+  ];
+
   return (
-    <Dropdown as={ButtonGroup} variant="none" className={styles.customDropdown}>
+    <div
+      className={`${styles.customDropdown} ${dropdownStyles.profileDropdown}`}
+    >
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
@@ -113,31 +131,21 @@ const ProfileDropdown = ({
           </span>
         </div>
       </div>
-      <Dropdown.Toggle
-        split
-        variant="none"
-        data-testid="togDrop"
-        id="dropdown-split-basic"
-        className={styles.dropdownToggle}
-        aria-label={tCommon('userProfileMenu')}
+      <DropDownButton
+        id="profile-dropdown"
+        options={options.map(({ value, label }) => ({ value, label }))}
+        selectedValue={undefined}
+        onSelect={(val) => {
+          const opt = options.find((o) => o.value === val);
+          opt?.action();
+        }}
+        ariaLabel={tCommon('userProfileMenu')}
+        dataTestIdPrefix="profile-dropdown"
+        buttonLabel=""
+        parentContainerStyle={dropdownStyles.dropdownButtonContainer}
+        btnStyle={styles.dropdownToggle}
       />
-      <Dropdown.Menu>
-        <Dropdown.Item
-          data-testid="profileBtn"
-          onClick={() => navigate(profileDestination)}
-          aria-label={tCommon('viewProfile')}
-        >
-          {tCommon('viewProfile')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          className={dropdownStyles.logoutBtn}
-          onClick={handleLogout}
-          data-testid="logoutBtn"
-        >
-          {tCommon('logout')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+    </div>
   );
 };
 

@@ -31,7 +31,6 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import {
   CreateModal,
@@ -181,36 +180,22 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
       {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
       <div className="d-flex mb-3 w-100">
-        <Autocomplete
-          className={`${styles.noOutline} w-100`}
-          limitTags={2}
-          data-testid="membersSelect"
-          options={members}
-          value={members.find((m) => m.id === userId) || null}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
-          onChange={(_, newVolunteer): void => {
-            setUserId(newVolunteer?.id ?? '');
-          }}
-          renderInput={(params) => (
-            <FormFieldGroup name="members" label={tCommon('members')}>
-              <div
-                ref={params.InputProps.ref}
-                className="d-flex w-100 align-items-center"
-              >
-                {params.InputProps.startAdornment}
-                <input
-                  {...params.inputProps}
-                  id="members"
-                  className="form-control"
-                  data-testid="membersInput"
-                />
-                {params.InputProps.endAdornment}
-              </div>
-            </FormFieldGroup>
-          )}
-        />
+        <FormFieldGroup name="members" label={tCommon('members')}>
+          <select
+            id="members"
+            className="form-select"
+            data-testid="membersInput"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+          >
+            <option value="">{t('selectVolunteer')}</option>
+            {members.map((member) => (
+              <option key={member.id} value={member.id}>
+                {member.name}
+              </option>
+            ))}
+          </select>
+        </FormFieldGroup>
       </div>
     </CreateModal>
   );

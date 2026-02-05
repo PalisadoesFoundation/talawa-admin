@@ -327,7 +327,27 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     },
     skip: !props.selectedContact,
     onData: async (messageSubscriptionData) => {
-      const data: any = messageSubscriptionData.data.data;
+      const data = messageSubscriptionData.data.data as {
+        chatMessageCreate?: {
+          id: string;
+          body: string;
+          createdAt: string;
+          updatedAt: string;
+          chat?: { id?: string | null } | null;
+          creator?: {
+            id?: string | null;
+            name?: string | null;
+            avatarMimeType?: string | null;
+            avatarURL?: string | null;
+          } | null;
+          parentMessage?: {
+            id: string;
+            body: string;
+            createdAt: string;
+            creator?: { id: string; name: string } | null;
+          } | null;
+        };
+      } | null;
       if (
         data?.chatMessageCreate &&
         data?.chatMessageCreate.chat?.id === props.selectedContact

@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
@@ -117,12 +117,6 @@ vi.spyOn(console, 'error').mockImplementation((message) => {
   originalConsoleError(message);
 });
 
-async function wait(ms = 100): Promise<void> {
-  await act(async () => {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  });
-}
-
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.agendaItems),
 );
@@ -136,6 +130,7 @@ describe('Testing Agenda Items components', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    cleanup();
   });
   const formData = {
     title: 'AgendaItem 1 Edited',
@@ -154,8 +149,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -177,8 +170,6 @@ describe('Testing Agenda Items components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.queryByText(translations.noAgendaItems),
@@ -199,8 +190,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -234,8 +223,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -271,8 +258,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -342,8 +327,6 @@ describe('Testing Agenda Items components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
@@ -392,8 +375,6 @@ describe('Testing Agenda Items components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getAllByTestId('editAgendaItemModalBtn')[0],
@@ -433,8 +414,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     await waitFor(() => {
       expect(
@@ -484,9 +463,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     await waitFor(() => {
       expect(
         screen.getAllByTestId('previewAgendaItemModalBtn')[0],
@@ -537,9 +513,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     // Verify agenda items are rendered
     await waitFor(() => {
       expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
@@ -561,8 +534,6 @@ describe('Testing Agenda Items components', () => {
         combine: null,
       });
     });
-
-    await wait(200);
 
     // Verify refetch was called after successful reorder
     await waitFor(() => {
@@ -589,8 +560,6 @@ describe('Testing Agenda Items components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     // Verify items are rendered
     await waitFor(() => {
       expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
@@ -610,8 +579,6 @@ describe('Testing Agenda Items components', () => {
         combine: null,
       });
     });
-
-    await wait();
 
     // When drag is cancelled (no destination), refetch should not be called
     expect(mockRefetch).not.toHaveBeenCalled();
@@ -636,8 +603,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
 
     expect(capturedOnDragEnd).not.toBeNull();
 
@@ -695,9 +660,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByText(/Category 1/)).toBeInTheDocument();
       expect(screen.getByText(/Category 2/)).toBeInTheDocument();
@@ -736,9 +698,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByText('No Category')).toBeInTheDocument();
     });
@@ -756,9 +715,6 @@ describe('Testing Agenda Items components', () => {
         </Provider>
       </MockedProvider>,
     );
-
-    await wait();
-
     // Verify items are rendered
     await waitFor(() => {
       expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
@@ -778,8 +734,6 @@ describe('Testing Agenda Items components', () => {
         combine: null,
       });
     });
-
-    await wait(200);
 
     // Should toast an error
     await waitFor(() => {
@@ -826,8 +780,6 @@ describe('Testing Agenda Items components', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
     });
@@ -846,8 +798,6 @@ describe('Testing Agenda Items components', () => {
         combine: null,
       });
     });
-
-    await wait(100);
 
     // Refetch should still be called even when no sequence updates occur
     await waitFor(() => {
