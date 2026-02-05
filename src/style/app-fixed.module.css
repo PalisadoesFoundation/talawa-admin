@@ -619,10 +619,6 @@
 
   --fonts-color: #707070;
 
-  --dropwdownToggle-bg: #f1f3f6;
-  --dropwdownToggle-color: #000000;
-  --dropwdownToggle-outline: #9ca3af;
-
   --createButtonEventHeader-bg: #eaebef;
   --createButtonEventHeader-color: #555555;
   --createButtonEventHeader-border: #555555;
@@ -2761,22 +2757,6 @@ form label,
   height: 1px;
   background-color: var(--current-hour-indicator-color);
   margin: auto;
-}
-
-/* -- DynamicDropDown.tsx -- */
-
-.dropwdownToggle {
-  background-color: var(--dropwdownToggle-bg);
-  color: var(--dropwdownToggle-color);
-  width: 100%;
-  border: none;
-  padding: 0.5rem;
-  text-align: left;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 8rem;
-  outline: 1px solid var(--dropwdownToggle-outline);
 }
 
 /* -- EditCustomFieldDropDown.tsx -- */
