@@ -106,7 +106,11 @@ test_source_guard() {
     
     local first_sourced="${TALAWA_NODE_INSTALL_SOURCED:-}"
     
-    source_library
+    # Source the library directly WITHOUT unsetting the guard variable
+    # This tests that the source guard actually prevents re-execution
+    local lib_path="$SCRIPT_DIR/node-install.sh"
+    # shellcheck source=scripts/install/lib/node-install.sh
+    source "$lib_path"
     
     local second_sourced="${TALAWA_NODE_INSTALL_SOURCED:-}"
     

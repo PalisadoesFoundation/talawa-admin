@@ -83,7 +83,13 @@ version_satisfies() {
     installed_major="$(parse_major_version "$installed")"
     required_major="$(parse_major_version "$required")"
     
+    # Check for empty values
     if [[ -z "$installed_major" ]] || [[ -z "$required_major" ]]; then
+        return 1
+    fi
+    
+    # Validate that both values are strictly numeric before arithmetic comparison
+    if ! [[ "$installed_major" =~ ^[0-9]+$ ]] || ! [[ "$required_major" =~ ^[0-9]+$ ]]; then
         return 1
     fi
     
@@ -185,7 +191,17 @@ install_fnm() {
     fi
     
     # Basic validation - check if it looks like the fnm installer
-    if ! grep -q "fnm" "$tmp_installer" 2>/dev/null; then
+    # 1. Check for proper shell shebang
+    local first_line
+    first_line="$(head -1 "$tmp_installer" 2>/dev/null)"
+    if ! [[ "$first_line" =~ ^#!\/(bin\/(ba)?sh|usr\/bin\/env[[:space:]]+(ba)?sh) ]]; then
+        rm -f "$tmp_installer"
+        log_error "Downloaded file does not have a valid shell shebang"
+        return 1
+    fi
+    
+    # 2. Check for known fnm installer markers (install_fnm function or fnm references)
+    if ! grep -qE "(install_fnm|fnm\.vercel\.app|FNM_DIR)" "$tmp_installer" 2>/dev/null; then
         rm -f "$tmp_installer"
         log_error "Downloaded file does not appear to be a valid fnm installer"
         return 1
@@ -251,13 +267,26 @@ required_node_version() {
         fi
     fi
     
-    # Check for engines.node in package.json
+    # Check for engines.node in package.json (must be inside "engines" object, not dependencies)
     if [[ -f "package.json" ]]; then
-        local engines_node raw_version
-        # Extract node version from engines field, handle formats like ">=22.x", "^20.0.0", "20.x"
-        raw_version="$(grep -o '"node"[[:space:]]*:[[:space:]]*"[^"]*"' package.json 2>/dev/null | \
-                       sed 's/.*"node"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | \
-                       head -1)"
+        local engines_node raw_version=""
+        
+        # Prefer jq for reliable JSON parsing if available
+        if command_exists jq; then
+            raw_version="$(jq -r '.engines.node // empty' package.json 2>/dev/null)"
+        else
+            # Fallback: extract engines block first, then find node within it
+            # This prevents matching "node" in dependencies or other fields
+            local engines_block
+            engines_block="$(sed -n '/"engines"[[:space:]]*:/,/}/p' package.json 2>/dev/null)"
+            if [[ -n "$engines_block" ]]; then
+                raw_version="$(printf '%s' "$engines_block" | \
+                               grep -o '"node"[[:space:]]*:[[:space:]]*"[^"]*"' 2>/dev/null | \
+                               sed 's/.*"node"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/' | \
+                               head -1)"
+            fi
+        fi
+        
         if [[ -n "$raw_version" ]]; then
             engines_node="${raw_version#>=}"
             engines_node="${engines_node#\^}"
