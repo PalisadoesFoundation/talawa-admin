@@ -27,159 +27,159 @@ dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
-    NotificationToast: { success: vi.fn(), error: vi.fn() },
+  NotificationToast: { success: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('shared-components/DatePicker', () => ({
-    __esModule: true,
-    default: ({
-        value,
-        onChange,
-        'data-testid': dataTestId,
-    }: {
-        value: dayjs.Dayjs | null;
-        onChange: (value: dayjs.Dayjs | null) => void;
-        'data-testid': string;
-    }) => {
-        return (
-            <input
-                data-testid={dataTestId}
-                type="text"
-                defaultValue={
-                    value && value.isValid() ? value.format('DD/MM/YYYY') : ''
-                }
-                onChange={(e) => {
-                    const val = e.target.value;
-                    if (!val) {
-                        onChange?.(null);
-                        return;
-                    }
-                    const parsed = dayjs.utc(val, 'DD/MM/YYYY', true);
-                    if (parsed.isValid()) {
-                        onChange?.(parsed);
-                    }
-                }}
-            />
-        );
-    },
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    'data-testid': dataTestId,
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    'data-testid': string;
+  }) => {
+    return (
+      <input
+        data-testid={dataTestId}
+        type="text"
+        defaultValue={
+          value && value.isValid() ? value.format('DD/MM/YYYY') : ''
+        }
+        onChange={(e) => {
+          const val = e.target.value;
+          if (!val) {
+            onChange?.(null);
+            return;
+          }
+          const parsed = dayjs.utc(val, 'DD/MM/YYYY', true);
+          if (parsed.isValid()) {
+            onChange?.(parsed);
+          }
+        }}
+      />
+    );
+  },
 }));
 
 vi.mock('shared-components/BaseModal/BaseModal', () => ({
-    __esModule: true,
-    default: ({
-        children,
-        show,
-        onHide,
-        title,
-        dataTestId,
-    }: {
-        children: ReactNode;
-        show: boolean;
-        onHide: () => void;
-        title: string;
-        dataTestId?: string;
-    }) =>
-        show ? (
-            <div data-testid={dataTestId ?? 'base-modal'}>
-                <h2 data-testid="modal-title">{title}</h2>
-                <button type="button" data-testid="modalCloseBtn" onClick={onHide}>
-                    close
-                </button>
-                {children}
-            </div>
-        ) : null,
+  __esModule: true,
+  default: ({
+    children,
+    show,
+    onHide,
+    title,
+    dataTestId,
+  }: {
+    children: ReactNode;
+    show: boolean;
+    onHide: () => void;
+    title: string;
+    dataTestId?: string;
+  }) =>
+    show ? (
+      <div data-testid={dataTestId ?? 'base-modal'}>
+        <h2 data-testid="modal-title">{title}</h2>
+        <button type="button" data-testid="modalCloseBtn" onClick={onHide}>
+          close
+        </button>
+        {children}
+      </div>
+    ) : null,
 }));
 
 type DateRangeValue = {
-    startDate: Date | null;
-    endDate: Date | null;
+  startDate: Date | null;
+  endDate: Date | null;
 };
 
 const formatDateForInput = (date?: Date | null) =>
-    date ? dayjs.utc(date).format('DD/MM/YYYY') : '';
+  date ? dayjs.utc(date).format('DD/MM/YYYY') : '';
 
 type DateRangePickerProps = {
-    value: DateRangeValue | null;
-    onChange: (value: DateRangeValue) => void;
-    dataTestId: string;
+  value: DateRangeValue | null;
+  onChange: (value: DateRangeValue) => void;
+  dataTestId: string;
 };
 vi.mock('shared-components/DateRangePicker', async () => {
-    const actual = await vi.importActual<
-        typeof import('shared-components/DateRangePicker')
-    >('shared-components/DateRangePicker');
+  const actual = await vi.importActual<
+    typeof import('shared-components/DateRangePicker')
+  >('shared-components/DateRangePicker');
 
-    return {
-        __esModule: true,
-        ...actual,
+  return {
+    __esModule: true,
+    ...actual,
 
-        default: ({ value, onChange, dataTestId }: DateRangePickerProps) => (
-            <div data-testid={dataTestId}>
-                <input
-                    data-testid={`${dataTestId}-start-input`}
-                    value={value?.startDate ? formatDateForInput(value.startDate) : ''}
-                    onChange={(e) => {
-                        const inputValue = e.target.value;
+    default: ({ value, onChange, dataTestId }: DateRangePickerProps) => (
+      <div data-testid={dataTestId}>
+        <input
+          data-testid={`${dataTestId}-start-input`}
+          value={value?.startDate ? formatDateForInput(value.startDate) : ''}
+          onChange={(e) => {
+            const inputValue = e.target.value;
 
-                        if (!inputValue) {
-                            onChange({ startDate: null, endDate: value?.endDate ?? null });
-                            return;
-                        }
+            if (!inputValue) {
+              onChange({ startDate: null, endDate: value?.endDate ?? null });
+              return;
+            }
 
-                        // ⭐ special case for tests
-                        if (inputValue === 'INVALID_DATE') {
-                            onChange({
-                                startDate: new Date('invalid'), // non-null but invalid
-                                endDate: value?.endDate ?? null,
-                            });
-                            return;
-                        }
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: new Date('invalid'), // non-null but invalid
+                endDate: value?.endDate ?? null,
+              });
+              return;
+            }
 
-                        const parsedStart = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
-                        const nextStart =
-                            parsedStart && parsedStart.isValid()
-                                ? parsedStart.toDate()
-                                : null;
+            const parsedStart = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
+            const nextStart =
+              parsedStart && parsedStart.isValid()
+                ? parsedStart.toDate()
+                : null;
 
-                        onChange({
-                            startDate: nextStart,
-                            endDate:
-                                value?.endDate && nextStart && nextStart > value.endDate
-                                    ? nextStart
-                                    : (value?.endDate ?? null),
-                        });
-                    }}
-                />
+            onChange({
+              startDate: nextStart,
+              endDate:
+                value?.endDate && nextStart && nextStart > value.endDate
+                  ? nextStart
+                  : (value?.endDate ?? null),
+            });
+          }}
+        />
 
-                <input
-                    data-testid={`${dataTestId}-end-input`}
-                    value={value?.endDate ? formatDateForInput(value.endDate) : ''}
-                    onChange={(e) => {
-                        const inputValue = e.target.value;
+        <input
+          data-testid={`${dataTestId}-end-input`}
+          value={value?.endDate ? formatDateForInput(value.endDate) : ''}
+          onChange={(e) => {
+            const inputValue = e.target.value;
 
-                        if (!inputValue) {
-                            onChange({ startDate: value?.startDate ?? null, endDate: null });
-                            return;
-                        }
+            if (!inputValue) {
+              onChange({ startDate: value?.startDate ?? null, endDate: null });
+              return;
+            }
 
-                        // ⭐ special case for tests
-                        if (inputValue === 'INVALID_DATE') {
-                            onChange({
-                                startDate: value?.startDate ?? null,
-                                endDate: new Date('invalid'), // non-null but invalid
-                            });
-                            return;
-                        }
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: value?.startDate ?? null,
+                endDate: new Date('invalid'), // non-null but invalid
+              });
+              return;
+            }
 
-                        const parsedEnd = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
-                        onChange({
-                            startDate: value?.startDate ?? null,
-                            endDate: parsedEnd.isValid() ? parsedEnd.toDate() : null,
-                        });
-                    }}
-                />
-            </div>
-        ),
-    };
+            const parsedEnd = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
+            onChange({
+              startDate: value?.startDate ?? null,
+              endDate: parsedEnd.isValid() ? parsedEnd.toDate() : null,
+            });
+          }}
+        />
+      </div>
+    ),
+  };
 });
 
 // Module-scoped links removed - now created per-test in beforeEach for isolation
@@ -187,23 +187,23 @@ vi.mock('shared-components/DateRangePicker', async () => {
 // Validate i18n fixtures exist with clear error messages
 const i18nData = i18nForTest.getDataByLanguage('en');
 if (!i18nData) {
-    throw new Error(
-        'i18n fixture missing: getDataByLanguage("en") returned undefined. Check i18nForTest configuration.',
-    );
+  throw new Error(
+    'i18n fixture missing: getDataByLanguage("en") returned undefined. Check i18nForTest configuration.',
+  );
 }
 if (!i18nData.translation?.fundCampaign) {
-    throw new Error(
-        'i18n fixture missing: translation.fundCampaign is undefined. Ensure the fundCampaign namespace exists in test translations.',
-    );
+  throw new Error(
+    'i18n fixture missing: translation.fundCampaign is undefined. Ensure the fundCampaign namespace exists in test translations.',
+  );
 }
 if (!i18nData.common) {
-    throw new Error(
-        'i18n fixture missing: common namespace is undefined. Ensure the common namespace exists in test translations.',
-    );
+  throw new Error(
+    'i18n fixture missing: common namespace is undefined. Ensure the common namespace exists in test translations.',
+  );
 }
 
 const translations = JSON.parse(
-    JSON.stringify(i18nData.translation.fundCampaign),
+  JSON.stringify(i18nData.translation.fundCampaign),
 );
 const tCommon = JSON.parse(JSON.stringify(i18nData.common));
 
@@ -212,56 +212,56 @@ const tCommon = JSON.parse(JSON.stringify(i18nData.common));
 const baseDate = dayjs().startOf('day');
 
 const campaignProps: InterfaceCampaignModal[] = [
-    {
-        isOpen: true,
-        hide: vi.fn(),
-        fundId: 'fundId',
-        campaign: {
-            id: 'campaignId1',
-            name: 'Campaign 1',
-            goalAmount: 100,
-            startAt: baseDate.add(12, 'month').toDate(),
-            endAt: baseDate.add(24, 'month').toDate(),
-            currencyCode: 'USD',
-            createdAt: baseDate.subtract(12, 'month').toISOString(),
-        },
-        refetchCampaign: vi.fn(),
-        mode: 'create',
-        orgId: 'orgId',
+  {
+    isOpen: true,
+    hide: vi.fn(),
+    fundId: 'fundId',
+    campaign: {
+      id: 'campaignId1',
+      name: 'Campaign 1',
+      goalAmount: 100,
+      startAt: baseDate.add(12, 'month').toDate(),
+      endAt: baseDate.add(24, 'month').toDate(),
+      currencyCode: 'USD',
+      createdAt: baseDate.subtract(12, 'month').toISOString(),
     },
-    {
-        isOpen: true,
-        hide: vi.fn(),
-        fundId: 'fundId',
-        campaign: {
-            id: 'campaignId1',
-            name: 'Campaign 1',
-            goalAmount: 100,
-            startAt: baseDate.add(12, 'month').toDate(),
-            endAt: baseDate.add(24, 'month').toDate(),
-            currencyCode: 'USD',
-            createdAt: baseDate.subtract(12, 'month').toISOString(),
-        },
-        refetchCampaign: vi.fn(),
-        mode: 'edit',
-        orgId: 'orgId',
+    refetchCampaign: vi.fn(),
+    mode: 'create',
+    orgId: 'orgId',
+  },
+  {
+    isOpen: true,
+    hide: vi.fn(),
+    fundId: 'fundId',
+    campaign: {
+      id: 'campaignId1',
+      name: 'Campaign 1',
+      goalAmount: 100,
+      startAt: baseDate.add(12, 'month').toDate(),
+      endAt: baseDate.add(24, 'month').toDate(),
+      currencyCode: 'USD',
+      createdAt: baseDate.subtract(12, 'month').toISOString(),
     },
+    refetchCampaign: vi.fn(),
+    mode: 'edit',
+    orgId: 'orgId',
+  },
 ];
 
 const getStartDateInput = () =>
-    screen.getByTestId('campaignStartDate') as HTMLInputElement;
+  screen.getByTestId('campaignStartDate') as HTMLInputElement;
 
 const getEndDateInput = () =>
-    screen.getByTestId('campaignEndDate') as HTMLInputElement;
+  screen.getByTestId('campaignEndDate') as HTMLInputElement;
 
 const getCampaignNameInput = () =>
-    screen.getByTestId('campaignNameInput') as HTMLInputElement;
+  screen.getByTestId('campaignNameInput') as HTMLInputElement;
 
 const getFundingGoalInput = () =>
-    screen.getByTestId('fundingGoalInput') as HTMLInputElement;
+  screen.getByTestId('fundingGoalInput') as HTMLInputElement;
 
 const getCurrencySelect = () =>
-    screen.getByTestId('currencySelect') as HTMLSelectElement;
+  screen.getByTestId('currencySelect') as HTMLSelectElement;
 
 // Setup userEvent instance for better async handling
 const setupUser = () => userEvent.setup();
@@ -269,1487 +269,1487 @@ const setupUser = () => userEvent.setup();
 // Cache removed from module scope - now created per-test in beforeEach
 
 const renderCampaignModal = (
-    link: ApolloLink,
-    props: InterfaceCampaignModal,
-    cacheInstance: InMemoryCache,
+  link: ApolloLink,
+  props: InterfaceCampaignModal,
+  cacheInstance: InMemoryCache,
 ): RenderResult => {
-    return render(
-        <MockedProvider link={link} cache={cacheInstance}>
-            <Provider store={store}>
-                <BrowserRouter>
-                    <I18nextProvider i18n={i18nForTest}>
-                        <CampaignModal {...props} />
-                    </I18nextProvider>
-                </BrowserRouter>
-            </Provider>
-        </MockedProvider>,
-    );
+  return render(
+    <MockedProvider link={link} cache={cacheInstance}>
+      <Provider store={store}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <CampaignModal {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </Provider>
+    </MockedProvider>,
+  );
 };
 
 // Add new mocks for testing the update field logic
 const UPDATE_NAME_ONLY_MOCK = [
-    {
-        request: {
-            query: UPDATE_CAMPAIGN_MUTATION,
-            variables: {
-                input: {
-                    id: 'campaignId1',
-                    name: 'Updated Name',
-                },
-            },
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+      variables: {
+        input: {
+          id: 'campaignId1',
+          name: 'Updated Name',
         },
-        result: {
-            data: {
-                updateFundCampaign: {
-                    id: 'campaignId1',
-                },
-            },
-        },
+      },
     },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
 ];
 
 const UPDATE_ALL_FIELDS_MOCK = [
-    {
-        request: {
-            query: UPDATE_CAMPAIGN_MUTATION,
-            variables: {
-                input: {
-                    id: 'campaignId1',
-                    name: 'Updated Name',
-                    currencyCode: 'USD',
-                    goalAmount: 500,
-                    startAt: expect.any(String),
-                    endAt: expect.any(String),
-                },
-            },
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+      variables: {
+        input: {
+          id: 'campaignId1',
+          name: 'Updated Name',
+          currencyCode: 'USD',
+          goalAmount: 500,
+          startAt: expect.any(String),
+          endAt: expect.any(String),
         },
-        variableMatcher: (variables: Record<string, unknown>) => {
-            if (
-                !variables ||
-                typeof variables !== 'object' ||
-                !('input' in variables)
-            ) {
-                return false;
-            }
-
-            const input = variables.input as Record<string, unknown>;
-
-            if (!input || typeof input !== 'object') {
-                return false;
-            }
-
-            return (
-                input.id === 'campaignId1' &&
-                input.name === 'Updated Name' &&
-                (!('currencyCode' in input) || input.currencyCode === 'USD') &&
-                input.goalAmount === 500 &&
-                typeof input.startAt === 'string' &&
-                typeof input.endAt === 'string' &&
-                input.startAt.length > 0 &&
-                input.endAt.length > 0
-            );
-        },
-
-        result: {
-            data: {
-                updateFundCampaign: {
-                    id: 'campaignId1',
-                },
-            },
-        },
+      },
     },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
+      const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
+      return (
+        input.id === 'campaignId1' &&
+        input.name === 'Updated Name' &&
+        (!('currencyCode' in input) || input.currencyCode === 'USD') &&
+        input.goalAmount === 500 &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0
+      );
+    },
+
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
 ];
 
 const UPDATE_NO_FIELDS_MOCK = [
-    {
-        request: {
-            query: UPDATE_CAMPAIGN_MUTATION,
-            variables: {
-                input: {
-                    id: 'campaignId1',
-                },
-            },
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+      variables: {
+        input: {
+          id: 'campaignId1',
         },
-        result: {
-            data: {
-                updateFundCampaign: {
-                    id: 'campaignId1',
-                },
-            },
-        },
+      },
     },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
 ];
 
 // Add a new mock for currency-only updates
 const UPDATE_CURRENCY_ONLY_MOCK = [
-    {
-        request: {
-            query: UPDATE_CAMPAIGN_MUTATION,
-            variables: {
-                input: {
-                    id: 'campaignId1',
-                    currencyCode: 'EUR',
-                },
-            },
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+      variables: {
+        input: {
+          id: 'campaignId1',
+          currencyCode: 'EUR',
         },
-        result: {
-            data: {
-                updateFundCampaign: {
-                    id: 'campaignId1',
-                },
-            },
-        },
+      },
     },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
 ];
 
 // Mock for auto-adjust end date test - verifies endAt is auto-adjusted to match startAt
 const UPDATE_AUTO_ADJUST_END_DATE_MOCK = [
-    {
-        request: {
-            query: UPDATE_CAMPAIGN_MUTATION,
-        },
-        variableMatcher: (variables: Record<string, unknown>) => {
-            if (
-                !variables ||
-                typeof variables !== 'object' ||
-                !('input' in variables)
-            ) {
-                return false;
-            }
-
-            const input = variables.input as Record<string, unknown>;
-
-            if (!input || typeof input !== 'object') {
-                return false;
-            }
-
-            // Verify that when start date is changed to after end date,
-            // the end date is auto-adjusted to match the new start date
-            return (
-                input.id === 'campaignId1' &&
-                typeof input.startAt === 'string' &&
-                typeof input.endAt === 'string' &&
-                input.startAt.length > 0 &&
-                input.endAt.length > 0 &&
-                // Both dates should be the same (auto-adjusted)
-                input.startAt === input.endAt
-            );
-        },
-        result: {
-            data: {
-                updateFundCampaign: {
-                    id: 'campaignId1',
-                },
-            },
-        },
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
     },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
+      const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
+      // Verify that when start date is changed to after end date,
+      // the end date is auto-adjusted to match the new start date
+      return (
+        input.id === 'campaignId1' &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0 &&
+        // Both dates should be the same (auto-adjusted)
+        input.startAt === input.endAt
+      );
+    },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
 ];
 
 // Mock links removed from module scope - now created per-test in beforeEach
 
 describe('CampaignModal', () => {
-    // Test isolation: fresh instances created in beforeEach
-    let link1: StaticMockLink;
-    let link2: StaticMockLink;
-    let cache: InMemoryCache;
-    let nameOnlyMockLink: StaticMockLink;
-    let allFieldsMockLink: StaticMockLink;
-    let noFieldsMockLink: StaticMockLink;
-    let currencyOnlyMockLink: StaticMockLink;
-    let autoAdjustEndDateMockLink: StaticMockLink;
+  // Test isolation: fresh instances created in beforeEach
+  let link1: StaticMockLink;
+  let link2: StaticMockLink;
+  let cache: InMemoryCache;
+  let nameOnlyMockLink: StaticMockLink;
+  let allFieldsMockLink: StaticMockLink;
+  let noFieldsMockLink: StaticMockLink;
+  let currencyOnlyMockLink: StaticMockLink;
+  let autoAdjustEndDateMockLink: StaticMockLink;
 
-    beforeEach(() => {
-        // Create fresh instances for each test to ensure isolation
-        cache = new InMemoryCache();
-        link1 = new StaticMockLink(MOCKS);
-        link2 = new StaticMockLink(MOCK_ERROR);
-        nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
-        allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
-        noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
-        currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
-        autoAdjustEndDateMockLink = new StaticMockLink(
-            UPDATE_AUTO_ADJUST_END_DATE_MOCK,
-        );
+  beforeEach(() => {
+    // Create fresh instances for each test to ensure isolation
+    cache = new InMemoryCache();
+    link1 = new StaticMockLink(MOCKS);
+    link2 = new StaticMockLink(MOCK_ERROR);
+    nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
+    allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
+    noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
+    currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
+    autoAdjustEndDateMockLink = new StaticMockLink(
+      UPDATE_AUTO_ADJUST_END_DATE_MOCK,
+    );
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    cleanup();
+  });
+
+  it('should not render modal when isOpen is false', () => {
+    const closedProps = {
+      ...campaignProps[0],
+      isOpen: false,
+    };
+
+    renderCampaignModal(link1, closedProps, cache);
+
+    // Modal should not be in the DOM
+    const modal = screen.queryByTestId('campaignModal');
+    expect(modal).not.toBeInTheDocument();
+  });
+
+  it('should call hide callback when close button is clicked', async () => {
+    const user = userEvent.setup();
+    const hideCallback = vi.fn();
+
+    const propsWithCallback = {
+      ...campaignProps[0],
+      hide: hideCallback,
+    };
+
+    renderCampaignModal(link1, propsWithCallback, cache);
+
+    // Click the close button
+    const closeBtn = screen.getByTestId('modalCloseBtn');
+    await user.click(closeBtn);
+
+    // Verify hide was called exactly once
+    expect(hideCallback).toHaveBeenCalledTimes(1);
+  });
+
+  it('should update form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
+
+    // Initial values
+    expect(getCampaignNameInput()).toHaveValue('Campaign 1');
+
+    // Create new props with different campaign data
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId2',
+        name: 'Updated Campaign',
+        goalAmount: 500,
+        startAt: baseDate.add(6, 'month').toDate(),
+        endAt: baseDate.add(18, 'month').toDate(),
+        currencyCode: 'EUR',
+        createdAt: baseDate.subtract(6, 'month').toISOString(),
+      },
+    };
+
+    // Re-render with new campaign prop
+    rerender(
+      <MockedProvider link={link1} cache={cache}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify controlled form fields updated (name, goal, currency)
+    // Note: Date inputs use defaultValue (uncontrolled) so they don't update on re-render
+    await waitFor(() => {
+      expect(getCampaignNameInput()).toHaveValue('Updated Campaign');
+      expect(getFundingGoalInput()).toHaveValue(500);
+      expect(getCurrencySelect()).toHaveValue('EUR');
+    });
+  });
+
+  it('should reset form state when campaign prop changes to null', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
+
+    // Initial values
+    expect(getCampaignNameInput()).toHaveValue('Campaign 1');
+
+    // Create props with null campaign
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    // Re-render with null campaign
+    rerender(
+      <MockedProvider link={link1} cache={cache}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset to defaults
+    await waitFor(() => {
+      expect(getCampaignNameInput()).toHaveValue('');
+      expect(getFundingGoalInput()).toHaveValue(0);
+    });
+  });
+
+  it('should populate form fields with correct values in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1], cache);
+    const modal = screen.getByTestId('campaignModal');
+
+    await waitFor(() => {
+      // The mocked BaseModal puts title in an h2 but as plain text, not as heading with accessible name
+      expect(modal).toBeInTheDocument();
     });
 
-    afterEach(() => {
-        vi.clearAllMocks();
-        cleanup();
+    expect(getCampaignNameInput()).toHaveValue('Campaign 1');
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
+
+    expect(startDateInput).toHaveValue(
+      dayjs(campaignProps[1].campaign?.startAt).format('DD/MM/YYYY'),
+    );
+    expect(endDateInput).toHaveValue(
+      dayjs(campaignProps[1].campaign?.endAt).format('DD/MM/YYYY'),
+    );
+    expect(getCurrencySelect()).toHaveValue('USD');
+    expect(getFundingGoalInput()).toHaveValue(100);
+  });
+
+  it('should update fundingGoal when input value changes', async () => {
+    const user = setupUser();
+    await act(async () => {
+      renderCampaignModal(link1, campaignProps[1], cache);
+    });
+    const goalInput = getFundingGoalInput();
+    expect(goalInput).toHaveValue(100);
+    // Use focus + clear + type pattern for controlled inputs
+    goalInput.focus();
+    await act(async () => {
+      await user.clear(goalInput);
+    });
+    goalInput.focus();
+    await act(async () => {
+      await user.type(goalInput, '2');
+    });
+    goalInput.focus();
+    await act(async () => {
+      await user.type(goalInput, '0');
+    });
+    goalInput.focus();
+    await act(async () => {
+      await user.type(goalInput, '0');
+    });
+    await waitFor(() => {
+      expect(parseInt(goalInput.value)).toBe(200);
+    });
+  });
+
+  it('should set fundingGoal to 0 when field is cleared', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+    const goalInput = getFundingGoalInput();
+    expect(goalInput).toHaveValue(100);
+    // Clear the field - component sets value to 0 when empty
+    goalInput.focus();
+    await act(async () => {
+      await user.clear(goalInput);
+    });
+    // After clearing, value should be 0
+    await waitFor(() => {
+      expect(goalInput).toHaveValue(0);
+    });
+  });
+
+  it('should clamp fundingGoal to 0 when negative value is programmatically set', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+    const goalInput = getFundingGoalInput();
+    expect(goalInput).toHaveValue(100);
+    // Type a value after clearing to verify Math.max(0, parsed) logic
+    // Note: HTML number inputs filter out minus signs, so we test the clamping
+    // by verifying the component accepts positive values correctly
+    goalInput.focus();
+    await act(async () => {
+      await user.clear(goalInput);
+      await user.type(goalInput, '50');
+    });
+    await waitFor(() => {
+      expect(goalInput).toHaveValue(50);
+    });
+  });
+
+  it('should update Start Date when a new date is selected', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+    const startDateInput = getStartDateInput();
+    const testDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testDate);
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue(testDate);
+    });
+  });
+
+  it('should update End Date when a new date is selected', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+    const endDateInput = getEndDateInput();
+    const testDate = dayjs(campaignProps[1].campaign?.startAt)
+      .add(1, 'month')
+      .format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, testDate);
+    await waitFor(() => {
+      expect(endDateInput).toHaveValue(testDate);
+    });
+  });
+
+  it('should create campaign', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    campaignName.focus();
+    await act(async () => {
+      await user.clear(campaignName);
+    });
+    campaignName.focus();
+    await act(async () => {
+      await user.type(campaignName, 'Campaign 2');
     });
 
-    it('should not render modal when isOpen is false', () => {
-        const closedProps = {
-            ...campaignProps[0],
-            isOpen: false,
-        };
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testStartDate);
 
-        renderCampaignModal(link1, closedProps, cache);
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, testEndDate);
 
-        // Modal should not be in the DOM
-        const modal = screen.queryByTestId('campaignModal');
-        expect(modal).not.toBeInTheDocument();
+    const fundingGoal = getFundingGoalInput();
+    fundingGoal.focus();
+    await act(async () => {
+      await user.clear(fundingGoal);
+    });
+    fundingGoal.focus();
+    await act(async () => {
+      await user.type(fundingGoal, '200');
     });
 
-    it('should call hide callback when close button is clicked', async () => {
-        const user = userEvent.setup();
-        const hideCallback = vi.fn();
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    expect(submitBtn).toBeInTheDocument();
+    await user.click(submitBtn);
 
-        const propsWithCallback = {
-            ...campaignProps[0],
-            hide: hideCallback,
-        };
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.createdCampaign,
+      );
+      expect(campaignProps[0].refetchCampaign).toHaveBeenCalled();
+      expect(campaignProps[0].hide).toHaveBeenCalled();
+    });
+  });
 
-        renderCampaignModal(link1, propsWithCallback, cache);
+  it('should show loading state during mutation', async () => {
+    const user = setupUser();
 
-        // Click the close button
-        const closeBtn = screen.getByTestId('modalCloseBtn');
-        await user.click(closeBtn);
+    type MutationObserver = {
+      next(value: Record<string, unknown>): void;
+      error(error: unknown): void;
+      complete(): void;
+    };
 
-        // Verify hide was called exactly once
-        expect(hideCallback).toHaveBeenCalledTimes(1);
+    // Capture the observer to control the stream manually
+    let mutationObserver: MutationObserver | null = null;
+
+    // Create a static link to handle other requests (like refetchQueries)
+    const staticLink = new StaticMockLink(MOCKS);
+
+    // implementation of a manual link that captures the observer
+    const manualLink = new ApolloLink((operation, forward) => {
+      // Verify this is the expected mutation
+      const variables = operation.variables as Record<string, unknown>;
+      const input = variables?.input as Record<string, unknown>;
+
+      if (
+        operation.operationName === 'updateFundCampaign' &&
+        input?.id === 'campaignId1'
+      ) {
+        return new Observable((observer) => {
+          mutationObserver = observer;
+        });
+      }
+
+      return forward(operation);
     });
 
-    it('should update form state when campaign prop changes', async () => {
-        const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
+    // Use edit mode props to match UPDATE mutation
+    const editProps = { ...campaignProps[1] };
 
-        // Initial values
-        expect(getCampaignNameInput()).toHaveValue('Campaign 1');
+    // Chain the links so unhandled requests go to static mocks
+    const link = ApolloLink.from([manualLink, staticLink]);
 
-        // Create new props with different campaign data
-        const updatedProps: InterfaceCampaignModal = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId2',
-                name: 'Updated Campaign',
-                goalAmount: 500,
-                startAt: baseDate.add(6, 'month').toDate(),
-                endAt: baseDate.add(18, 'month').toDate(),
-                currencyCode: 'EUR',
-                createdAt: baseDate.subtract(6, 'month').toISOString(),
+    renderCampaignModal(link, editProps, cache);
+
+    // Change a field to trigger the update logic
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Updated For Loading Test');
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+
+    // Submit button should be enabled before clicking
+    expect(submitBtn).not.toBeDisabled();
+
+    // Click submit button - mutation will start but hang until we use the observer
+    await user.click(submitBtn);
+
+    // The component shows a loading overlay/disabled state during mutation
+    await waitFor(() => {
+      // Check for the loading indicator explicitly first to confirm state
+      expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+
+      // The CRUDModalTemplate replaces the form with the loading state,
+      // so the submit button is removed from the DOM.
+      expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
+    });
+
+    // Now resolve the mutation manually
+    await act(async () => {
+      if (mutationObserver) {
+        mutationObserver.next({
+          data: {
+            updateFundCampaign: {
+              id: 'campaignId1',
+              __typename: 'FundCampaign', // Add typename just in case
             },
-        };
-
-        // Re-render with new campaign prop
-        rerender(
-            <MockedProvider link={link1} cache={cache}>
-                <Provider store={store}>
-                    <BrowserRouter>
-                        <I18nextProvider i18n={i18nForTest}>
-                            <CampaignModal {...updatedProps} />
-                        </I18nextProvider>
-                    </BrowserRouter>
-                </Provider>
-            </MockedProvider>,
+          },
+        });
+        mutationObserver.complete();
+      } else {
+        throw new Error(
+          'Mutation observer was not captured - operation mismatch?',
         );
-
-        // Verify controlled form fields updated (name, goal, currency)
-        // Note: Date inputs use defaultValue (uncontrolled) so they don't update on re-render
-        await waitFor(() => {
-            expect(getCampaignNameInput()).toHaveValue('Updated Campaign');
-            expect(getFundingGoalInput()).toHaveValue(500);
-            expect(getCurrencySelect()).toHaveValue('EUR');
-        });
+      }
     });
 
-    it('should reset form state when campaign prop changes to null', async () => {
-        const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
-
-        // Initial values
-        expect(getCampaignNameInput()).toHaveValue('Campaign 1');
-
-        // Create props with null campaign
-        const updatedProps: InterfaceCampaignModal = {
-            ...campaignProps[1],
-            campaign: null,
-        };
-
-        // Re-render with null campaign
-        rerender(
-            <MockedProvider link={link1} cache={cache}>
-                <Provider store={store}>
-                    <BrowserRouter>
-                        <I18nextProvider i18n={i18nForTest}>
-                            <CampaignModal {...updatedProps} />
-                        </I18nextProvider>
-                    </BrowserRouter>
-                </Provider>
-            </MockedProvider>,
-        );
-
-        // Verify form state is reset to defaults
-        await waitFor(() => {
-            expect(getCampaignNameInput()).toHaveValue('');
-            expect(getFundingGoalInput()).toHaveValue(0);
-        });
+    // Wait for success and UI update
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
 
-    it('should populate form fields with correct values in edit mode', async () => {
-        renderCampaignModal(link1, campaignProps[1], cache);
-        const modal = screen.getByTestId('campaignModal');
-
-        await waitFor(() => {
-            // The mocked BaseModal puts title in an h2 but as plain text, not as heading with accessible name
-            expect(modal).toBeInTheDocument();
-        });
-
-        expect(getCampaignNameInput()).toHaveValue('Campaign 1');
-        const startDateInput = getStartDateInput();
-        const endDateInput = getEndDateInput();
-
-        expect(startDateInput).toHaveValue(
-            dayjs(campaignProps[1].campaign?.startAt).format('DD/MM/YYYY'),
-        );
-        expect(endDateInput).toHaveValue(
-            dayjs(campaignProps[1].campaign?.endAt).format('DD/MM/YYYY'),
-        );
-        expect(getCurrencySelect()).toHaveValue('USD');
-        expect(getFundingGoalInput()).toHaveValue(100);
+    // In the test environment, props don't update automatically, so isOpen remains true.
+    // The component should return to idle state, showing the form again.
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+      const btn = screen.getByTestId('submitCampaignBtn');
+      expect(btn).toBeInTheDocument();
+      expect(btn).toBeEnabled();
     });
 
-    it('should update fundingGoal when input value changes', async () => {
-        const user = setupUser();
-        await act(async () => {
-            renderCampaignModal(link1, campaignProps[1], cache);
-        });
-        const goalInput = getFundingGoalInput();
-        expect(goalInput).toHaveValue(100);
-        // Use focus + clear + type pattern for controlled inputs
-        goalInput.focus();
-        await act(async () => {
-            await user.clear(goalInput);
-        });
-        goalInput.focus();
-        await act(async () => {
-            await user.type(goalInput, '2');
-        });
-        goalInput.focus();
-        await act(async () => {
-            await user.type(goalInput, '0');
-        });
-        goalInput.focus();
-        await act(async () => {
-            await user.type(goalInput, '0');
-        });
-        await waitFor(() => {
-            expect(parseInt(goalInput.value)).toBe(200);
-        });
+    expect(editProps.hide).toHaveBeenCalled();
+  });
+
+  it('should update campaign', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    campaignName.focus();
+    await act(async () => {
+      await user.clear(campaignName);
+    });
+    campaignName.focus();
+    await act(async () => {
+      await user.type(campaignName, 'Campaign 4');
     });
 
-    it('should set fundingGoal to 0 when field is cleared', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-        const goalInput = getFundingGoalInput();
-        expect(goalInput).toHaveValue(100);
-        // Clear the field - component sets value to 0 when empty
-        goalInput.focus();
-        await act(async () => {
-            await user.clear(goalInput);
-        });
-        // After clearing, value should be 0
-        await waitFor(() => {
-            expect(goalInput).toHaveValue(0);
-        });
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testStartDate);
+
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, testEndDate);
+
+    const fundingGoal = getFundingGoalInput();
+    fundingGoal.focus();
+    await act(async () => {
+      await user.clear(fundingGoal);
+    });
+    fundingGoal.focus();
+    await act(async () => {
+      await user.type(fundingGoal, '400');
     });
 
-    it('should clamp fundingGoal to 0 when negative value is programmatically set', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-        const goalInput = getFundingGoalInput();
-        expect(goalInput).toHaveValue(100);
-        // Type a value after clearing to verify Math.max(0, parsed) logic
-        // Note: HTML number inputs filter out minus signs, so we test the clamping
-        // by verifying the component accepts positive values correctly
-        goalInput.focus();
-        await act(async () => {
-            await user.clear(goalInput);
-            await user.type(goalInput, '50');
-        });
-        await waitFor(() => {
-            expect(goalInput).toHaveValue(50);
-        });
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    expect(submitBtn).toBeInTheDocument();
+
+    await user.click(submitBtn);
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+      expect(campaignProps[1].refetchCampaign).toHaveBeenCalled();
+      expect(campaignProps[1].hide).toHaveBeenCalled();
+    });
+  });
+
+  it('Error: should create campaign', async () => {
+    const user = setupUser();
+    renderCampaignModal(link2, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    campaignName.focus();
+    await act(async () => {
+      await user.clear(campaignName);
+    });
+    campaignName.focus();
+    await act(async () => {
+      await user.type(campaignName, 'Campaign 2');
     });
 
-    it('should update Start Date when a new date is selected', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-        const startDateInput = getStartDateInput();
-        const testDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testDate);
-        await waitFor(() => {
-            expect(startDateInput).toHaveValue(testDate);
-        });
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testStartDate);
+
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, testEndDate);
+
+    const fundingGoal = getFundingGoalInput();
+    fundingGoal.focus();
+    await act(async () => {
+      await user.clear(fundingGoal);
+    });
+    fundingGoal.focus();
+    await act(async () => {
+      await user.type(fundingGoal, '200');
     });
 
-    it('should update End Date when a new date is selected', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-        const endDateInput = getEndDateInput();
-        const testDate = dayjs(campaignProps[1].campaign?.startAt)
-            .add(1, 'month')
-            .format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, testDate);
-        await waitFor(() => {
-            expect(endDateInput).toHaveValue(testDate);
-        });
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
+    });
+  });
+
+  it('Error: should update campaign', async () => {
+    const user = setupUser();
+    renderCampaignModal(link2, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    campaignName.focus();
+    await act(async () => {
+      await user.clear(campaignName);
+    });
+    campaignName.focus();
+    await act(async () => {
+      await user.type(campaignName, 'Campaign 4');
     });
 
-    it('should create campaign', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testStartDate);
 
-        const campaignName = getCampaignNameInput();
-        campaignName.focus();
-        await act(async () => {
-            await user.clear(campaignName);
-        });
-        campaignName.focus();
-        await act(async () => {
-            await user.type(campaignName, 'Campaign 2');
-        });
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, testEndDate);
 
-        const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
-        const startDateInput = getStartDateInput();
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testStartDate);
-
-        const endDateInput = getEndDateInput();
-        const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, testEndDate);
-
-        const fundingGoal = getFundingGoalInput();
-        fundingGoal.focus();
-        await act(async () => {
-            await user.clear(fundingGoal);
-        });
-        fundingGoal.focus();
-        await act(async () => {
-            await user.type(fundingGoal, '200');
-        });
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        expect(submitBtn).toBeInTheDocument();
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.createdCampaign,
-            );
-            expect(campaignProps[0].refetchCampaign).toHaveBeenCalled();
-            expect(campaignProps[0].hide).toHaveBeenCalled();
-        });
+    const fundingGoal = getFundingGoalInput();
+    fundingGoal.focus();
+    await act(async () => {
+      await user.clear(fundingGoal);
+    });
+    fundingGoal.focus();
+    await act(async () => {
+      await user.type(fundingGoal, '400');
     });
 
-    it('should show loading state during mutation', async () => {
-        const user = setupUser();
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    expect(submitBtn).toBeInTheDocument();
+    await user.click(submitBtn);
 
-        type MutationObserver = {
-            next(value: Record<string, unknown>): void;
-            error(error: unknown): void;
-            complete(): void;
-        };
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
+    });
+  });
 
-        // Capture the observer to control the stream manually
-        let mutationObserver: MutationObserver | null = null;
+  it('should only update changed fields', async () => {
+    const user = setupUser();
+    // Create a component with edit mode and specific campaign data
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Original Name',
+        goalAmount: 100,
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
 
-        // Create a static link to handle other requests (like refetchQueries)
-        const staticLink = new StaticMockLink(MOCKS);
+    renderCampaignModal(nameOnlyMockLink, editProps, cache);
 
-        // implementation of a manual link that captures the observer
-        const manualLink = new ApolloLink((operation, forward) => {
-            // Verify this is the expected mutation
-            const variables = operation.variables as Record<string, unknown>;
-            const input = variables?.input as Record<string, unknown>;
+    // Only change the name field
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Updated Name');
 
-            if (
-                operation.operationName === 'updateFundCampaign' &&
-                input?.id === 'campaignId1'
-            ) {
-                return new Observable((observer) => {
-                    mutationObserver = observer;
-                });
-            }
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
 
-            return forward(operation);
-        });
+    // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+  });
 
-        // Use edit mode props to match UPDATE mutation
-        const editProps = { ...campaignProps[1] };
+  it('should update all fields when all are changed', async () => {
+    const user = setupUser();
+    // Create a component with edit mode and specific campaign data
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Original Name',
+        goalAmount: 100,
+        startAt: baseDate.add(10, 'year').toDate(),
+        endAt: baseDate.add(11, 'year').toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
 
-        // Chain the links so unhandled requests go to static mocks
-        const link = ApolloLink.from([manualLink, staticLink]);
+    renderCampaignModal(allFieldsMockLink, editProps, cache);
 
-        renderCampaignModal(link, editProps, cache);
-
-        // Change a field to trigger the update logic
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Updated For Loading Test');
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-
-        // Submit button should be enabled before clicking
-        expect(submitBtn).not.toBeDisabled();
-
-        // Click submit button - mutation will start but hang until we use the observer
-        await user.click(submitBtn);
-
-        // The component shows a loading overlay/disabled state during mutation
-        await waitFor(() => {
-            // Check for the loading indicator explicitly first to confirm state
-            expect(screen.getByTestId('loading-state')).toBeInTheDocument();
-
-            // The CRUDModalTemplate replaces the form with the loading state,
-            // so the submit button is removed from the DOM.
-            expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
-        });
-
-        // Now resolve the mutation manually
-        await act(async () => {
-            if (mutationObserver) {
-                mutationObserver.next({
-                    data: {
-                        updateFundCampaign: {
-                            id: 'campaignId1',
-                            __typename: 'FundCampaign', // Add typename just in case
-                        },
-                    },
-                });
-                mutationObserver.complete();
-            } else {
-                throw new Error(
-                    'Mutation observer was not captured - operation mismatch?',
-                );
-            }
-        });
-
-        // Wait for success and UI update
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
-
-        // In the test environment, props don't update automatically, so isOpen remains true.
-        // The component should return to idle state, showing the form again.
-        await waitFor(() => {
-            expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
-            const btn = screen.getByTestId('submitCampaignBtn');
-            expect(btn).toBeInTheDocument();
-            expect(btn).toBeEnabled();
-        });
-
-        expect(editProps.hide).toHaveBeenCalled();
+    // Change all fields
+    const campaignName = getCampaignNameInput();
+    campaignName.focus();
+    await act(async () => {
+      await user.clear(campaignName);
+    });
+    campaignName.focus();
+    await act(async () => {
+      await user.type(campaignName, 'Updated Name');
     });
 
-    it('should update campaign', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        campaignName.focus();
-        await act(async () => {
-            await user.clear(campaignName);
-        });
-        campaignName.focus();
-        await act(async () => {
-            await user.type(campaignName, 'Campaign 4');
-        });
-
-        const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
-        const startDateInput = getStartDateInput();
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testStartDate);
-
-        const endDateInput = getEndDateInput();
-        const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, testEndDate);
-
-        const fundingGoal = getFundingGoalInput();
-        fundingGoal.focus();
-        await act(async () => {
-            await user.clear(fundingGoal);
-        });
-        fundingGoal.focus();
-        await act(async () => {
-            await user.type(fundingGoal, '400');
-        });
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        expect(submitBtn).toBeInTheDocument();
-
-        await user.click(submitBtn);
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-            expect(campaignProps[1].refetchCampaign).toHaveBeenCalled();
-            expect(campaignProps[1].hide).toHaveBeenCalled();
-        });
+    const fundingGoal = getFundingGoalInput();
+    fundingGoal.focus();
+    await act(async () => {
+      await user.clear(fundingGoal);
+    });
+    fundingGoal.focus();
+    await act(async () => {
+      await user.type(fundingGoal, '500');
     });
 
-    it('Error: should create campaign', async () => {
-        const user = setupUser();
-        renderCampaignModal(link2, campaignProps[0], cache);
+    const startDateInput = getStartDateInput();
+    await user.clear(startDateInput);
+    await user.type(
+      startDateInput,
+      baseDate.add(1, 'month').format('DD/MM/YYYY'),
+    );
 
-        const campaignName = getCampaignNameInput();
-        campaignName.focus();
-        await act(async () => {
-            await user.clear(campaignName);
-        });
-        campaignName.focus();
-        await act(async () => {
-            await user.type(campaignName, 'Campaign 2');
-        });
+    const endDateInput = getEndDateInput();
+    await user.clear(endDateInput);
+    await user.type(
+      endDateInput,
+      baseDate.add(2, 'month').format('DD/MM/YYYY'),
+    );
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
 
-        const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
-        const startDateInput = getStartDateInput();
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testStartDate);
+    // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+  });
 
-        const endDateInput = getEndDateInput();
-        const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, testEndDate);
+  it('should not update any fields when nothing is changed', async () => {
+    const user = setupUser();
+    // Create props where the campaign data matches the form state exactly
+    const unchangedProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
 
-        const fundingGoal = getFundingGoalInput();
-        fundingGoal.focus();
-        await act(async () => {
-            await user.clear(fundingGoal);
-        });
-        fundingGoal.focus();
-        await act(async () => {
-            await user.type(fundingGoal, '200');
-        });
+    renderCampaignModal(noFieldsMockLink, unchangedProps, cache);
 
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
+    // Don't change any values, just submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
 
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                'Mock graphql error',
-            );
-        });
+    // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+  });
+
+  it('should not change end date when start date is updated to a date still before end date', async () => {
+    const user = setupUser();
+    // Create props with start date and end date far apart
+    const keepEndDateProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(1, 'year').add(3, 'month').toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
+
+    renderCampaignModal(link1, keepEndDateProps, cache);
+
+    // Verify initial dates
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
+    expect(startDateInput).toHaveValue(
+      dayjs(keepEndDateProps.campaign?.startAt).format('DD/MM/YYYY'),
+    );
+    expect(endDateInput).toHaveValue(
+      dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+    );
+
+    // Change start date to a date that is still BEFORE the end date
+    const testDate = baseDate.add(1, 'month');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, testDate.format('DD/MM/YYYY'));
+
+    // Verify that end date was NOT updated and remains the same
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue(testDate.format('DD/MM/YYYY'));
+      expect(endDateInput).toHaveValue(
+        dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+      ); // End date should remain unchanged
+    });
+  });
+
+  it('should only update currency code when only currency is changed', async () => {
+    const user = setupUser();
+    // Create a component with edit mode and specific campaign data
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign Name',
+        goalAmount: 100,
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
+
+    renderCampaignModal(currencyOnlyMockLink, editProps, cache);
+
+    // For select components, find the select element and change it
+    const currencySelect = screen.getByTestId('currencySelect');
+    await user.selectOptions(currencySelect, 'EUR');
+
+    // Submit the form
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+  });
+
+  // Coverage tests
+  it('should mark campaign name as touched on blur', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.tab(); // Moves focus away, triggering blur
+    // Assert that validation error appears when field is empty and touched
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
+  });
+
+  it('should prevent create submission if name is empty', async () => {
+    const user = setupUser();
+    renderCampaignModal(
+      link1,
+      {
+        ...campaignProps[0],
+        campaign: {
+          ...(campaignProps[0].campaign as InterfaceCampaignInfo),
+          name: '',
+        },
+      },
+      cache,
+    );
+
+    // Clear the name field if it has a value (form state init might set it)
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
     });
 
-    it('Error: should update campaign', async () => {
-        const user = setupUser();
-        renderCampaignModal(link2, campaignProps[1], cache);
+    // Should not call mutation (NotificationToast.success not called)
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
 
-        const campaignName = getCampaignNameInput();
-        campaignName.focus();
-        await act(async () => {
-            await user.clear(campaignName);
-        });
-        campaignName.focus();
-        await act(async () => {
-            await user.type(campaignName, 'Campaign 4');
-        });
+  it('should prevent update submission if name is empty', async () => {
+    const user = setupUser();
+    renderCampaignModal(
+      link1,
+      {
+        ...campaignProps[1],
+        campaign: {
+          ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+          name: '',
+        },
+      },
+      cache,
+    );
 
-        const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
-        const startDateInput = getStartDateInput();
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testStartDate);
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
 
-        const endDateInput = getEndDateInput();
-        const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, testEndDate);
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
 
-        const fundingGoal = getFundingGoalInput();
-        fundingGoal.focus();
-        await act(async () => {
-            await user.clear(fundingGoal);
-        });
-        fundingGoal.focus();
-        await act(async () => {
-            await user.type(fundingGoal, '400');
-        });
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        expect(submitBtn).toBeInTheDocument();
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                'Mock graphql error',
-            );
-        });
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
     });
 
-    it('should only update changed fields', async () => {
-        const user = setupUser();
-        // Create a component with edit mode and specific campaign data
-        const editProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Original Name',
-                goalAmount: 100,
-                startAt: baseDate.add(1, 'year').toDate(),
-                endAt: baseDate.add(2, 'year').toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
+    // Should not call mutation
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
 
-        renderCampaignModal(nameOnlyMockLink, editProps, cache);
+  it('should reject non-numeric input in fundingGoal field', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
 
-        // Only change the name field
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Updated Name');
+    const goalInput = getFundingGoalInput();
+    expect(goalInput).toHaveValue(100);
 
-        // Submit the form
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
+    goalInput.focus();
+    await act(async () => {
+      await user.clear(goalInput);
+    });
+    // After clearing, value should be 0
+    expect(goalInput).toHaveValue(0);
 
-        // Wait for success message which indicates the mutation was called
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
+    goalInput.focus();
+    await act(async () => {
+      await user.type(goalInput, 'abc');
     });
 
-    it('should update all fields when all are changed', async () => {
-        const user = setupUser();
-        // Create a component with edit mode and specific campaign data
-        const editProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Original Name',
-                goalAmount: 100,
-                startAt: baseDate.add(10, 'year').toDate(),
-                endAt: baseDate.add(11, 'year').toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
+    await waitFor(() => {
+      // Non-numeric input should be rejected, value stays at 0
+      expect(goalInput).toHaveValue(0);
+    });
+  });
 
-        renderCampaignModal(allFieldsMockLink, editProps, cache);
+  it('shows error when campaign name is empty in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
 
-        // Change all fields
-        const campaignName = getCampaignNameInput();
-        campaignName.focus();
-        await act(async () => {
-            await user.clear(campaignName);
-        });
-        campaignName.focus();
-        await act(async () => {
-            await user.type(campaignName, 'Updated Name');
-        });
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, '   ');
 
-        const fundingGoal = getFundingGoalInput();
-        fundingGoal.focus();
-        await act(async () => {
-            await user.clear(fundingGoal);
-        });
-        fundingGoal.focus();
-        await act(async () => {
-            await user.type(fundingGoal, '500');
-        });
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
 
-        const startDateInput = getStartDateInput();
-        await user.clear(startDateInput);
-        await user.type(
-            startDateInput,
-            baseDate.add(1, 'month').format('DD/MM/YYYY'),
-        );
+    await user.clear(getStartDateInput());
+    await user.type(getStartDateInput(), start);
+    await user.clear(getEndDateInput());
+    await user.type(getEndDateInput(), end);
 
-        const endDateInput = getEndDateInput();
-        await user.clear(endDateInput);
-        await user.type(
-            endDateInput,
-            baseDate.add(2, 'month').format('DD/MM/YYYY'),
-        );
-        // Submit the form
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
+    await user.click(screen.getByTestId('submitCampaignBtn'));
 
-        // Wait for success message which indicates the mutation was called
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('shows error when date range is missing in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Name');
+
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when campaign name is empty', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('shows error when submitting without date range', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid name');
+
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when updating without campaign id', async () => {
+    const user = setupUser();
+    const badProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    renderCampaignModal(link1, badProps, cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.type(campaignName, 'Valid Name');
+
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
+
+    await user.clear(getStartDateInput());
+    await user.type(getStartDateInput(), start);
+    await user.clear(getEndDateInput());
+    await user.type(getEndDateInput(), end);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNotFound,
+      );
+    });
+  });
+
+  it('re-enables submit button after invalid date validation error', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'New Name');
+
+    // Clear the dates to trigger dateRangeRequired error
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
+  it('re-enables submit button after update error', async () => {
+    const user = setupUser();
+    renderCampaignModal(link2, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'New Name');
+
+    const start = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+
+    await user.clear(getStartDateInput());
+    await user.type(getStartDateInput(), start);
+    await user.clear(getEndDateInput());
+    await user.type(getEndDateInput(), end);
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
+  it('shows error when creating campaign with invalid date', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign');
+
+    // Clear dates to trigger dateRangeRequired error
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when end date is before start date in create mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[0], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign');
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier than start
+
+    await user.clear(getStartDateInput());
+    await user.type(getStartDateInput(), startDate);
+    await user.clear(getEndDateInput());
+    await user.type(getEndDateInput(), endDate);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
+      );
+    });
+  });
+
+  it('shows error when updating campaign with invalid date', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign');
+
+    // Clear dates to trigger dateRangeRequired error
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when end date is before start date in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign');
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(3, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier
+
+    await user.clear(getStartDateInput());
+    await user.type(getStartDateInput(), startDate);
+    await user.clear(getEndDateInput());
+    await user.type(getEndDateInput(), endDate);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
+      );
+    });
+  });
+
+  it('should synchronize form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+
+    expect(campaignName).toHaveValue(campaignProps[1].campaign?.name);
+    expect(goalAmount).toHaveValue(campaignProps[1].campaign?.goalAmount);
+
+    const baseCampaign = campaignProps[1].campaign;
+    if (!baseCampaign) {
+      throw new Error('Expected campaign to be defined for edit-mode test');
+    }
+    const updatedCampaign = {
+      ...campaignProps[1],
+      campaign: {
+        ...baseCampaign,
+        name: 'Updated Campaign Name',
+        goalAmount: 5000,
+      },
+    };
+
+    rerender(
+      <MockedProvider link={link1} cache={cache}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedCampaign} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(campaignName).toHaveValue('Updated Campaign Name');
+      expect(goalAmount).toHaveValue(5000);
+    });
+  });
+
+  it('should handle null campaign prop correctly', async () => {
+    const nullCampaignProps = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    renderCampaignModal(link1, nullCampaignProps, cache);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+    const startDate = getStartDateInput();
+    const endDate = getEndDateInput();
+
+    expect(campaignName).toHaveValue('');
+    expect(goalAmount).toHaveValue(0);
+    expect(startDate).toHaveValue('');
+    expect(endDate).toHaveValue('');
+  });
+
+  it('should show error when campaign name is empty in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('should show error when start and end dates are not provided in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign Name');
+
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('should allow updating the fundingGoal field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const goalAmountInput = getFundingGoalInput();
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '7500');
+
+    expect(goalAmountInput).toHaveValue(7500);
+  });
+
+  it('should allow updating the startAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const startDateInput = getStartDateInput();
+    const newStartDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDate);
+
+    expect(startDateInput).toHaveValue(newStartDate);
+  });
+
+  it('should allow updating the endAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const endDateInput = getEndDateInput();
+    const newEndDate = dayjs.utc().add(8, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, newEndDate);
+
+    expect(endDateInput).toHaveValue(newEndDate);
+  });
+
+  it('should allow changing the currency code', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const currencySelect = getCurrencySelect();
+    await user.selectOptions(currencySelect, 'EUR');
+
+    expect(currencySelect).toHaveValue('EUR');
+  });
+
+  it('should handle zero value for fundingGoal', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const goalAmountInput = getFundingGoalInput();
+
+    // Test with zero
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '0');
+    expect(goalAmountInput).toHaveValue(0);
+
+    // Test clearing to empty - component sets value to 0 when cleared
+    await user.clear(goalAmountInput);
+    expect(goalAmountInput).toHaveValue(0);
+  });
+
+  it('should auto-adjust end date when start date is changed to after end date', async () => {
+    const user = userEvent.setup();
+
+    // Use dynamic dates based on baseDate to avoid hardcoded values
+    const initialStartDate = baseDate.add(1, 'month');
+    const initialEndDate = baseDate.add(6, 'month');
+    const newStartDate = baseDate.add(8, 'month'); // After the initial end date
+
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: initialStartDate.toDate(),
+        endAt: initialEndDate.toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
+
+    renderCampaignModal(autoAdjustEndDateMockLink, editProps, cache);
+
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
+
+    // Verify initial dates
+    expect(startDateInput).toHaveValue(initialStartDate.format('DD/MM/YYYY'));
+    expect(endDateInput).toHaveValue(initialEndDate.format('DD/MM/YYYY'));
+
+    // Change start date to be after the current end date
+    // This should trigger auto-adjustment of end date to match start date
+    const newStartDateFormatted = newStartDate.format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDateFormatted);
+
+    // Verify the start date was updated
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue(newStartDateFormatted);
     });
 
-    it('should not update any fields when nothing is changed', async () => {
-        const user = setupUser();
-        // Create props where the campaign data matches the form state exactly
-        const unchangedProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Campaign 1',
-                goalAmount: 100,
-                startAt: baseDate.add(1, 'year').toDate(),
-                endAt: baseDate.add(2, 'year').toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
+    // Note: The end date input won't visually update because the mocked DatePicker
+    // uses defaultValue (uncontrolled). However, the component's internal state
+    // is correctly updated, which we verify via the mutation payload.
 
-        renderCampaignModal(noFieldsMockLink, unchangedProps, cache);
+    // Submit the form to verify the mutation payload contains auto-adjusted dates
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
 
-        // Don't change any values, just submit the form
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        // Wait for success message which indicates the mutation was called
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
+    // Verify success - the mock's variableMatcher ensures startAt === endAt
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
-
-    it('should not change end date when start date is updated to a date still before end date', async () => {
-        const user = setupUser();
-        // Create props with start date and end date far apart
-        const keepEndDateProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Campaign 1',
-                goalAmount: 100,
-                startAt: baseDate.add(1, 'year').toDate(),
-                endAt: baseDate.add(1, 'year').add(3, 'month').toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
-
-        renderCampaignModal(link1, keepEndDateProps, cache);
-
-        // Verify initial dates
-        const startDateInput = getStartDateInput();
-        const endDateInput = getEndDateInput();
-        expect(startDateInput).toHaveValue(
-            dayjs(keepEndDateProps.campaign?.startAt).format('DD/MM/YYYY'),
-        );
-        expect(endDateInput).toHaveValue(
-            dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
-        );
-
-        // Change start date to a date that is still BEFORE the end date
-        const testDate = baseDate.add(1, 'month');
-        await user.clear(startDateInput);
-        await user.type(startDateInput, testDate.format('DD/MM/YYYY'));
-
-        // Verify that end date was NOT updated and remains the same
-        await waitFor(() => {
-            expect(startDateInput).toHaveValue(testDate.format('DD/MM/YYYY'));
-            expect(endDateInput).toHaveValue(
-                dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
-            ); // End date should remain unchanged
-        });
-    });
-
-    it('should only update currency code when only currency is changed', async () => {
-        const user = setupUser();
-        // Create a component with edit mode and specific campaign data
-        const editProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Campaign Name',
-                goalAmount: 100,
-                startAt: baseDate.add(1, 'year').toDate(),
-                endAt: baseDate.add(2, 'year').toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
-
-        renderCampaignModal(currencyOnlyMockLink, editProps, cache);
-
-        // For select components, find the select element and change it
-        const currencySelect = screen.getByTestId('currencySelect');
-        await user.selectOptions(currencySelect, 'EUR');
-
-        // Submit the form
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        // Wait for success message which indicates the mutation was called
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
-    });
-
-    // Coverage tests
-    it('should mark campaign name as touched on blur', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.tab(); // Moves focus away, triggering blur
-        // Assert that validation error appears when field is empty and touched
-        await waitFor(() => {
-            expect(screen.getByText(tCommon.required)).toBeInTheDocument();
-        });
-    });
-
-    it('should prevent create submission if name is empty', async () => {
-        const user = setupUser();
-        renderCampaignModal(
-            link1,
-            {
-                ...campaignProps[0],
-                campaign: {
-                    ...(campaignProps[0].campaign as InterfaceCampaignInfo),
-                    name: '',
-                },
-            },
-            cache,
-        );
-
-        // Clear the name field if it has a value (form state init might set it)
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        // Assert validation UI shows the required error message
-        await waitFor(() => {
-            expect(screen.getByText(tCommon.required)).toBeInTheDocument();
-        });
-
-        // Should not call mutation (NotificationToast.success not called)
-        await waitFor(() => {
-            expect(NotificationToast.success).not.toHaveBeenCalled();
-        });
-    });
-
-    it('should prevent update submission if name is empty', async () => {
-        const user = setupUser();
-        renderCampaignModal(
-            link1,
-            {
-                ...campaignProps[1],
-                campaign: {
-                    ...(campaignProps[1].campaign as InterfaceCampaignInfo),
-                    name: '',
-                },
-            },
-            cache,
-        );
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        // Assert validation UI shows the required error message
-        await waitFor(() => {
-            expect(screen.getByText(tCommon.required)).toBeInTheDocument();
-        });
-
-        // Should not call mutation
-        await waitFor(() => {
-            expect(NotificationToast.success).not.toHaveBeenCalled();
-        });
-    });
-
-    it('should reject non-numeric input in fundingGoal field', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const goalInput = getFundingGoalInput();
-        expect(goalInput).toHaveValue(100);
-
-        goalInput.focus();
-        await act(async () => {
-            await user.clear(goalInput);
-        });
-        // After clearing, value should be 0
-        expect(goalInput).toHaveValue(0);
-
-        goalInput.focus();
-        await act(async () => {
-            await user.type(goalInput, 'abc');
-        });
-
-        await waitFor(() => {
-            // Non-numeric input should be rejected, value stays at 0
-            expect(goalInput).toHaveValue(0);
-        });
-    });
-
-    it('shows error when campaign name is empty in edit mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, '   ');
-
-        const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
-        const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
-
-        await user.clear(getStartDateInput());
-        await user.type(getStartDateInput(), start);
-        await user.clear(getEndDateInput());
-        await user.type(getEndDateInput(), end);
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.campaignNameRequired,
-            );
-        });
-    });
-
-    it('shows error when date range is missing in edit mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Name');
-
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-        });
-    });
-
-    it('shows error when campaign name is empty', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.campaignNameRequired,
-            );
-        });
-    });
-
-    it('shows error when submitting without date range', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid name');
-
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-        });
-    });
-
-    it('shows error when updating without campaign id', async () => {
-        const user = setupUser();
-        const badProps: InterfaceCampaignModal = {
-            ...campaignProps[1],
-            campaign: null,
-        };
-
-        renderCampaignModal(link1, badProps, cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.type(campaignName, 'Valid Name');
-
-        const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
-        const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
-
-        await user.clear(getStartDateInput());
-        await user.type(getStartDateInput(), start);
-        await user.clear(getEndDateInput());
-        await user.type(getEndDateInput(), end);
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.campaignNotFound,
-            );
-        });
-    });
-
-    it('re-enables submit button after invalid date validation error', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'New Name');
-
-        // Clear the dates to trigger dateRangeRequired error
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-            expect(submitBtn).not.toBeDisabled();
-        });
-    });
-
-    it('re-enables submit button after update error', async () => {
-        const user = setupUser();
-        renderCampaignModal(link2, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'New Name');
-
-        const start = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
-        const end = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
-
-        await user.clear(getStartDateInput());
-        await user.type(getStartDateInput(), start);
-        await user.clear(getEndDateInput());
-        await user.type(getEndDateInput(), end);
-
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalled();
-            expect(submitBtn).not.toBeDisabled();
-        });
-    });
-
-    it('shows error when creating campaign with invalid date', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Campaign');
-
-        // Clear dates to trigger dateRangeRequired error
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-        });
-    });
-
-    it('shows error when end date is before start date in create mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[0], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Campaign');
-
-        // Set end date before start date
-        const startDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
-        const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier than start
-
-        await user.clear(getStartDateInput());
-        await user.type(getStartDateInput(), startDate);
-        await user.clear(getEndDateInput());
-        await user.type(getEndDateInput(), endDate);
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.endDateBeforeStart,
-            );
-        });
-    });
-
-    it('shows error when updating campaign with invalid date', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Campaign');
-
-        // Clear dates to trigger dateRangeRequired error
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-        });
-    });
-
-    it('shows error when end date is before start date in edit mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Campaign');
-
-        // Set end date before start date
-        const startDate = dayjs.utc().add(3, 'month').format('DD/MM/YYYY');
-        const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier
-
-        await user.clear(getStartDateInput());
-        await user.type(getStartDateInput(), startDate);
-        await user.clear(getEndDateInput());
-        await user.type(getEndDateInput(), endDate);
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.endDateBeforeStart,
-            );
-        });
-    });
-
-    it('should synchronize form state when campaign prop changes', async () => {
-        const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        const goalAmount = getFundingGoalInput();
-
-        expect(campaignName).toHaveValue(campaignProps[1].campaign?.name);
-        expect(goalAmount).toHaveValue(campaignProps[1].campaign?.goalAmount);
-
-        const baseCampaign = campaignProps[1].campaign;
-        if (!baseCampaign) {
-            throw new Error('Expected campaign to be defined for edit-mode test');
-        }
-        const updatedCampaign = {
-            ...campaignProps[1],
-            campaign: {
-                ...baseCampaign,
-                name: 'Updated Campaign Name',
-                goalAmount: 5000,
-            },
-        };
-
-        rerender(
-            <MockedProvider link={link1} cache={cache}>
-                <Provider store={store}>
-                    <BrowserRouter>
-                        <I18nextProvider i18n={i18nForTest}>
-                            <CampaignModal {...updatedCampaign} />
-                        </I18nextProvider>
-                    </BrowserRouter>
-                </Provider>
-            </MockedProvider>,
-        );
-
-        await waitFor(() => {
-            expect(campaignName).toHaveValue('Updated Campaign Name');
-            expect(goalAmount).toHaveValue(5000);
-        });
-    });
-
-    it('should handle null campaign prop correctly', async () => {
-        const nullCampaignProps = {
-            ...campaignProps[1],
-            campaign: null,
-        };
-
-        renderCampaignModal(link1, nullCampaignProps, cache);
-
-        const campaignName = getCampaignNameInput();
-        const goalAmount = getFundingGoalInput();
-        const startDate = getStartDateInput();
-        const endDate = getEndDateInput();
-
-        expect(campaignName).toHaveValue('');
-        expect(goalAmount).toHaveValue(0);
-        expect(startDate).toHaveValue('');
-        expect(endDate).toHaveValue('');
-    });
-
-    it('should show error when campaign name is empty in edit mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.campaignNameRequired,
-            );
-        });
-    });
-
-    it('should show error when start and end dates are not provided in edit mode', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const campaignName = getCampaignNameInput();
-        await user.clear(campaignName);
-        await user.type(campaignName, 'Valid Campaign Name');
-
-        await user.clear(getStartDateInput());
-        await user.clear(getEndDateInput());
-
-        await user.click(screen.getByTestId('submitCampaignBtn'));
-
-        await waitFor(() => {
-            expect(NotificationToast.error).toHaveBeenCalledWith(
-                translations.dateRangeRequired,
-            );
-        });
-    });
-
-    it('should allow updating the fundingGoal field value', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const goalAmountInput = getFundingGoalInput();
-        await user.clear(goalAmountInput);
-        await user.type(goalAmountInput, '7500');
-
-        expect(goalAmountInput).toHaveValue(7500);
-    });
-
-    it('should allow updating the startAt date field value', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const startDateInput = getStartDateInput();
-        const newStartDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
-        await user.clear(startDateInput);
-        await user.type(startDateInput, newStartDate);
-
-        expect(startDateInput).toHaveValue(newStartDate);
-    });
-
-    it('should allow updating the endAt date field value', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const endDateInput = getEndDateInput();
-        const newEndDate = dayjs.utc().add(8, 'month').format('DD/MM/YYYY');
-        await user.clear(endDateInput);
-        await user.type(endDateInput, newEndDate);
-
-        expect(endDateInput).toHaveValue(newEndDate);
-    });
-
-    it('should allow changing the currency code', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const currencySelect = getCurrencySelect();
-        await user.selectOptions(currencySelect, 'EUR');
-
-        expect(currencySelect).toHaveValue('EUR');
-    });
-
-    it('should handle zero value for fundingGoal', async () => {
-        const user = setupUser();
-        renderCampaignModal(link1, campaignProps[1], cache);
-
-        const goalAmountInput = getFundingGoalInput();
-
-        // Test with zero
-        await user.clear(goalAmountInput);
-        await user.type(goalAmountInput, '0');
-        expect(goalAmountInput).toHaveValue(0);
-
-        // Test clearing to empty - component sets value to 0 when cleared
-        await user.clear(goalAmountInput);
-        expect(goalAmountInput).toHaveValue(0);
-    });
-
-    it('should auto-adjust end date when start date is changed to after end date', async () => {
-        const user = userEvent.setup();
-
-        // Use dynamic dates based on baseDate to avoid hardcoded values
-        const initialStartDate = baseDate.add(1, 'month');
-        const initialEndDate = baseDate.add(6, 'month');
-        const newStartDate = baseDate.add(8, 'month'); // After the initial end date
-
-        const editProps = {
-            ...campaignProps[1],
-            campaign: {
-                id: 'campaignId1',
-                name: 'Campaign 1',
-                goalAmount: 100,
-                startAt: initialStartDate.toDate(),
-                endAt: initialEndDate.toDate(),
-                currencyCode: 'USD',
-                createdAt: baseDate.subtract(1, 'year').toISOString(),
-            },
-        };
-
-        renderCampaignModal(autoAdjustEndDateMockLink, editProps, cache);
-
-        const startDateInput = getStartDateInput();
-        const endDateInput = getEndDateInput();
-
-        // Verify initial dates
-        expect(startDateInput).toHaveValue(initialStartDate.format('DD/MM/YYYY'));
-        expect(endDateInput).toHaveValue(initialEndDate.format('DD/MM/YYYY'));
-
-        // Change start date to be after the current end date
-        // This should trigger auto-adjustment of end date to match start date
-        const newStartDateFormatted = newStartDate.format('DD/MM/YYYY');
-        await user.clear(startDateInput);
-        await user.type(startDateInput, newStartDateFormatted);
-
-        // Verify the start date was updated
-        await waitFor(() => {
-            expect(startDateInput).toHaveValue(newStartDateFormatted);
-        });
-
-        // Note: The end date input won't visually update because the mocked DatePicker
-        // uses defaultValue (uncontrolled). However, the component's internal state
-        // is correctly updated, which we verify via the mutation payload.
-
-        // Submit the form to verify the mutation payload contains auto-adjusted dates
-        const submitBtn = screen.getByTestId('submitCampaignBtn');
-        await user.click(submitBtn);
-
-        // Verify success - the mock's variableMatcher ensures startAt === endAt
-        await waitFor(() => {
-            expect(NotificationToast.success).toHaveBeenCalledWith(
-                translations.updatedCampaign,
-            );
-        });
-    });
+  });
 });
