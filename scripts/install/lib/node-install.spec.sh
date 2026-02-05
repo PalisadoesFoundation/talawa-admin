@@ -59,6 +59,47 @@ write_package_json() {
     echo "$content" > "$fixture_dir/package.json"
 }
 
+# Create a stub executable that outputs specified content and returns specified exit code
+create_stub_executable() {
+    local dir="$1"
+    local name="$2"
+    local output="${3:-}"
+    local exit_code="${4:-0}"
+    
+    mkdir -p "$dir"
+    cat > "$dir/$name" << EOF
+#!/bin/bash
+if [[ "\$1" == "--version" ]] || [[ "\$1" == "-v" ]]; then
+    echo "$output"
+    exit $exit_code
+fi
+if [[ "\$1" == "env" ]]; then
+    echo "# fnm env stub"
+    exit 0
+fi
+echo "$output"
+exit $exit_code
+EOF
+    chmod +x "$dir/$name"
+}
+
+# Save and restore PATH/HOME for isolated tests
+save_env() {
+    SAVED_PATH="$PATH"
+    SAVED_HOME="$HOME"
+    SAVED_FNM_DIR="${FNM_DIR:-}"
+}
+
+restore_env() {
+    export PATH="$SAVED_PATH"
+    export HOME="$SAVED_HOME"
+    if [[ -n "$SAVED_FNM_DIR" ]]; then
+        export FNM_DIR="$SAVED_FNM_DIR"
+    else
+        unset FNM_DIR 2>/dev/null || true
+    fi
+}
+
 source_library() {
     unset TALAWA_NODE_INSTALL_SOURCED 2>/dev/null || true
     unset TALAWA_COMMON_SOURCED 2>/dev/null || true
@@ -410,6 +451,285 @@ test_version_satisfies_semver() {
     return $failed
 }
 
+# Test setup_fnm_env when fnm is already in PATH
+test_setup_fnm_env_in_path() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fnm-in-path")
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+    
+    export PATH="$fixture_dir/bin:$PATH"
+    export HOME="$fixture_dir"
+    
+    local result=0
+    if ! setup_fnm_env; then
+        echo "  setup_fnm_env should return 0 when fnm is in PATH"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+# Test setup_fnm_env finding fnm in $HOME/.local/share/fnm
+test_setup_fnm_env_local_share() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fnm-local-share")
+    mkdir -p "$fixture_dir/.local/share/fnm"
+    create_stub_executable "$fixture_dir/.local/share/fnm" "fnm" "fnm 1.35.0" 0
+    
+    export PATH="/nonexistent"
+    export HOME="$fixture_dir"
+    unset FNM_DIR 2>/dev/null || true
+    
+    local result=0
+    if ! setup_fnm_env; then
+        echo "  setup_fnm_env should return 0 when fnm is in ~/.local/share/fnm"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+# Test setup_fnm_env finding fnm in $HOME/.fnm
+test_setup_fnm_env_home_fnm() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fnm-home-fnm")
+    mkdir -p "$fixture_dir/.fnm"
+    create_stub_executable "$fixture_dir/.fnm" "fnm" "fnm 1.35.0" 0
+    
+    export PATH="/nonexistent"
+    export HOME="$fixture_dir"
+    unset FNM_DIR 2>/dev/null || true
+    
+    local result=0
+    if ! setup_fnm_env; then
+        echo "  setup_fnm_env should return 0 when fnm is in ~/.fnm"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+# Test setup_fnm_env using FNM_DIR environment variable
+test_setup_fnm_env_fnm_dir() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fnm-dir-env")
+    mkdir -p "$fixture_dir/custom-fnm"
+    create_stub_executable "$fixture_dir/custom-fnm" "fnm" "fnm 1.35.0" 0
+    
+    export PATH="/nonexistent"
+    export HOME="/nonexistent"
+    export FNM_DIR="$fixture_dir/custom-fnm"
+    
+    local result=0
+    if ! setup_fnm_env; then
+        echo "  setup_fnm_env should return 0 when fnm is in FNM_DIR"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+# Test setup_fnm_env returns 1 when fnm not found anywhere
+test_setup_fnm_env_not_found() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fnm-not-found")
+    
+    export PATH="/nonexistent"
+    export HOME="$fixture_dir"
+    unset FNM_DIR 2>/dev/null || true
+    
+    local result=0
+    if setup_fnm_env; then
+        echo "  setup_fnm_env should return 1 when fnm is not found"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+# Test verify_node with stub node returning version
+test_verify_node_with_stub() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-node-stub")
+    
+    create_stub_executable "$fixture_dir/bin" "node" "v22.14.0" 0
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+    write_nvmrc "$fixture_dir" "22"
+    
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+    
+    source_library
+    
+    cd "$fixture_dir" || return 1
+    local result=0
+    if ! verify_node 2>/dev/null; then
+        echo "  verify_node should pass with node v22.14.0 and requirement 22"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+    
+    restore_env
+    return $result
+}
+
+# Test verify_node skips comparison for non-numeric requirements
+test_verify_node_nonnumeric_requirement() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-node-lts")
+    
+    create_stub_executable "$fixture_dir/bin" "node" "v22.14.0" 0
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+    write_nvmrc "$fixture_dir" "lts/*"
+    
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+    
+    source_library
+    
+    cd "$fixture_dir" || return 1
+    local result=0
+    local output
+    output=$(verify_node 2>&1)
+    local exit_code=$?
+    if [[ $exit_code -ne 0 ]]; then
+        echo "  verify_node should pass for non-numeric requirement lts/* (exit code: $exit_code)"
+        result=1
+    fi
+    if [[ "$output" != *"skipping"* ]]; then
+        echo "  verify_node should log warning about skipping comparison (output: $output)"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+    
+    restore_env
+    return $result
+}
+
+# Test verify_node handles v-prefixed requirements correctly
+test_verify_node_v_prefix_requirement() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-node-v-prefix")
+    
+    create_stub_executable "$fixture_dir/bin" "node" "v22.14.0" 0
+    create_stub_executable "$fixture_dir/bin" "fnm" "fnm 1.35.0" 0
+    write_nvmrc "$fixture_dir" "v22.0.0"
+    
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+    
+    source_library
+    
+    cd "$fixture_dir" || return 1
+    local result=0
+    if ! verify_node 2>/dev/null; then
+        echo "  verify_node should handle v-prefixed requirements correctly"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+    
+    restore_env
+    return $result
+}
+
+# Test check_fnm with stub in different locations
+test_check_fnm_locations() {
+    source_library
+    save_env
+    
+    local failed=0
+    
+    # Test: fnm in PATH
+    local fixture1
+    fixture1=$(create_fixture "check-fnm-path")
+    create_stub_executable "$fixture1/bin" "fnm" "fnm 1.35.0" 0
+    export PATH="$fixture1/bin:$SAVED_PATH"
+    export HOME="/nonexistent"
+    
+    if ! check_fnm; then
+        echo "  check_fnm should find fnm in PATH"
+        failed=1
+    fi
+    
+    # Test: fnm in ~/.local/share/fnm
+    local fixture2
+    fixture2=$(create_fixture "check-fnm-local")
+    mkdir -p "$fixture2/.local/share/fnm"
+    create_stub_executable "$fixture2/.local/share/fnm" "fnm" "fnm 1.35.0" 0
+    export PATH="/usr/bin:/bin"
+    export HOME="$fixture2"
+    
+    if ! check_fnm; then
+        echo "  check_fnm should find fnm in ~/.local/share/fnm"
+        failed=1
+    fi
+    
+    # Test: fnm in ~/.fnm
+    local fixture3
+    fixture3=$(create_fixture "check-fnm-home")
+    mkdir -p "$fixture3/.fnm"
+    create_stub_executable "$fixture3/.fnm" "fnm" "fnm 1.35.0" 0
+    export PATH="/usr/bin:/bin"
+    export HOME="$fixture3"
+    
+    if ! check_fnm; then
+        echo "  check_fnm should find fnm in ~/.fnm"
+        failed=1
+    fi
+    
+    restore_env
+    return $failed
+}
+
+# Test verify_pnpm with stub pnpm
+test_verify_pnpm_with_stub() {
+    local fixture_dir
+    fixture_dir=$(create_fixture "verify-pnpm-stub")
+    
+    create_stub_executable "$fixture_dir/bin" "pnpm" "10.4.1" 0
+    write_package_json "$fixture_dir" '{"packageManager": "pnpm@10.4.1"}'
+    
+    save_env
+    export PATH="$fixture_dir/bin:$SAVED_PATH"
+    export HOME="$fixture_dir"
+    
+    source_library
+    
+    cd "$fixture_dir" || return 1
+    local result=0
+    if ! verify_pnpm 2>/dev/null; then
+        echo "  verify_pnpm should pass with pnpm 10.4.1 matching requirement"
+        result=1
+    fi
+    cd - > /dev/null || return 1
+    
+    restore_env
+    return $result
+}
+
 main() {
     echo "=========================================="
     echo "Node.js Installation Helper Test Suite"
@@ -432,6 +752,16 @@ main() {
     run_test "Library Exports Constants" test_library_exports_constants
     run_test "common.sh Integration" test_common_library_integration
     run_test "version_satisfies Full Semver" test_version_satisfies_semver
+    run_test "setup_fnm_env in PATH" test_setup_fnm_env_in_path
+    run_test "setup_fnm_env ~/.local/share/fnm" test_setup_fnm_env_local_share
+    run_test "setup_fnm_env ~/.fnm" test_setup_fnm_env_home_fnm
+    run_test "setup_fnm_env FNM_DIR" test_setup_fnm_env_fnm_dir
+    run_test "setup_fnm_env not found" test_setup_fnm_env_not_found
+    run_test "verify_node with stub" test_verify_node_with_stub
+    run_test "verify_node non-numeric requirement" test_verify_node_nonnumeric_requirement
+    run_test "verify_node v-prefix requirement" test_verify_node_v_prefix_requirement
+    run_test "check_fnm locations" test_check_fnm_locations
+    run_test "verify_pnpm with stub" test_verify_pnpm_with_stub
     
     echo ""
     echo "=========================================="

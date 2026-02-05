@@ -393,7 +393,8 @@ verify_node() {
         return 1
     }
     
-    required_version="$(required_node_version)"
+    # Normalize both versions to strip leading v/V prefix
+    required_version="$(normalize_version "$(required_node_version)")"
     installed_version="$(normalize_version "$installed_version")"
     
     # Check if required_version is numeric/semver-like (starts with digit)
