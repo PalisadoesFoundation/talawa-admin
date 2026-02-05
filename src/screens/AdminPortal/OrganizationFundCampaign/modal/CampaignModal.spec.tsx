@@ -402,10 +402,54 @@ const UPDATE_CURRENCY_ONLY_MOCK = [
   },
 ];
 
+// Mock for auto-adjust end date test - verifies endAt is auto-adjusted to match startAt
+const UPDATE_AUTO_ADJUST_END_DATE_MOCK = [
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+    },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
+      const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
+      // Verify that when start date is changed to after end date,
+      // the end date is auto-adjusted to match the new start date
+      return (
+        input.id === 'campaignId1' &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0 &&
+        // Both dates should be the same (auto-adjusted)
+        input.startAt === input.endAt
+      );
+    },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
+];
+
 const nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
 const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
 const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
 const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
+const autoAdjustEndDateMockLink = new StaticMockLink(UPDATE_AUTO_ADJUST_END_DATE_MOCK);
 
 describe('CampaignModal', () => {
   it('should update form state when campaign prop changes', async () => {
@@ -1489,32 +1533,57 @@ describe('CampaignModal', () => {
   it('should auto-adjust end date when start date is changed to after end date', async () => {
     const user = userEvent.setup();
 
+    // Use dynamic dates based on baseDate to avoid hardcoded values
+    const initialStartDate = baseDate.add(1, 'month');
+    const initialEndDate = baseDate.add(6, 'month');
+    const newStartDate = baseDate.add(8, 'month'); // After the initial end date
+
     const editProps = {
       ...campaignProps[1],
       campaign: {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2025-06-01T00:00:00.000Z'),
+        startAt: initialStartDate.toDate(),
+        endAt: initialEndDate.toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
-    renderCampaignModal(link1, editProps);
+    renderCampaignModal(autoAdjustEndDateMockLink, editProps);
+
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
+
+    // Verify initial dates
+    expect(startDateInput).toHaveValue(initialStartDate.format('DD/MM/YYYY'));
+    expect(endDateInput).toHaveValue(initialEndDate.format('DD/MM/YYYY'));
 
     // Change start date to be after the current end date
-    // This will trigger line 298: newEnd = date.toDate()
-    const startDateInput = getStartDateInput();
-    const newStartDate = dayjs.utc('2025-07-01').format('DD/MM/YYYY');
-
+    // This should trigger auto-adjustment of end date to match start date
+    const newStartDateFormatted = newStartDate.format('DD/MM/YYYY');
     await user.clear(startDateInput);
-    await user.type(startDateInput, newStartDate);
+    await user.type(startDateInput, newStartDateFormatted);
 
     // Verify the start date was updated
     await waitFor(() => {
-      expect(startDateInput).toHaveValue(newStartDate);
+      expect(startDateInput).toHaveValue(newStartDateFormatted);
+    });
+
+    // Note: The end date input won't visually update because the mocked DatePicker
+    // uses defaultValue (uncontrolled). However, the component's internal state
+    // is correctly updated, which we verify via the mutation payload.
+
+    // Submit the form to verify the mutation payload contains auto-adjusted dates
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    // Verify success - the mock's variableMatcher ensures startAt === endAt
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
   });
 });
