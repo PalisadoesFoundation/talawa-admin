@@ -148,16 +148,16 @@ function organizationEvents(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  const {
-    data: orgData,
-    error: orgDataError,
-  } = useQuery(GET_ORGANIZATION_DATA_PG, {
-    variables: {
-      id: currentUrl,
-      first: 10,
-      after: null,
+  const { data: orgData, error: orgDataError } = useQuery(
+    GET_ORGANIZATION_DATA_PG,
+    {
+      variables: {
+        id: currentUrl,
+        first: 10,
+        after: null,
+      },
     },
-  });
+  );
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION, {
