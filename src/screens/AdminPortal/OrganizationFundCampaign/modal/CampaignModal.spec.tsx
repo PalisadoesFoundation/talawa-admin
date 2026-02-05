@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { InMemoryCache } from '@apollo/client';
-import type { ApolloLink } from '@apollo/client';
+import { InMemoryCache, ApolloLink } from '@apollo/client';
+import type { FetchResult } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import type { ReactNode } from 'react';
+import { Observable } from '@apollo/client/utilities';
 
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -20,7 +21,10 @@ import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './types';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { vi } from 'vitest';
-import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
+import {
+  UPDATE_CAMPAIGN_MUTATION,
+  CREATE_CAMPAIGN_MUTATION,
+} from 'GraphQl/Mutations/CampaignMutation';
 import CampaignModal from './CampaignModal';
 
 dayjs.extend(utc);
@@ -742,32 +746,98 @@ describe('CampaignModal', () => {
     });
   });
 
-  it('should disable submit button during mutation', async () => {
+  it('should show loading state during mutation', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0], cache);
 
+    // Capture the observer to control the stream manually
+    let mutationObserver: any = null;
+
+    // Create a static link to handle other requests (like refetchQueries)
+    const staticLink = new StaticMockLink(MOCKS);
+
+    // implementation of a manual link that captures the observer
+    const manualLink = new ApolloLink((operation, forward) => {
+      // Verify this is the expected mutation
+      const variables = operation.variables as Record<string, unknown>;
+      const input = variables?.input as Record<string, unknown>;
+
+      if (
+        operation.operationName === 'updateFundCampaign' &&
+        input?.id === 'campaignId1'
+      ) {
+        return new Observable((observer) => {
+          mutationObserver = observer;
+        });
+      }
+
+      return forward(operation);
+    });
+
+    // Use edit mode props to match UPDATE mutation
+    const editProps = { ...campaignProps[1] };
+
+    // Chain the links so unhandled requests go to static mocks
+    const link = ApolloLink.from([manualLink, staticLink]);
+
+    renderCampaignModal(link, editProps, cache);
+
+    // Change a field to trigger the update logic
     const campaignName = getCampaignNameInput();
-    const fundingGoal = getFundingGoalInput();
-
-    await act(async () => {
-      await user.clear(campaignName);
-      await user.type(campaignName, 'Test Campaign');
-    });
-
-    await act(async () => {
-      await user.clear(fundingGoal);
-      await user.type(fundingGoal, '100');
-    });
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Updated For Loading Test');
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
 
     // Submit button should be enabled before clicking
     expect(submitBtn).not.toBeDisabled();
 
-    // The component uses disabled={isSubmitting} on the submit button
-    // This test verifies the button exists and is interactive
-    // The actual disabled state during mutation is too fast to reliably test
-    // in a unit test environment, but the behavior is covered by integration tests
+    // Click submit button - mutation will start but hang until we use the observer
+    await user.click(submitBtn);
+
+    // The component shows a loading overlay/disabled state during mutation
+    await waitFor(() => {
+      // Check for the loading indicator explicitly first to confirm state
+      expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+
+      // The CRUDModalTemplate replaces the form with the loading state,
+      // so the submit button is removed from the DOM.
+      expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
+    });
+
+    // Now resolve the mutation manually
+    await act(async () => {
+      if (mutationObserver) {
+        mutationObserver.next({
+          data: {
+            updateFundCampaign: {
+              id: 'campaignId1',
+              __typename: 'FundCampaign', // Add typename just in case
+            },
+          },
+        });
+        mutationObserver.complete();
+      } else {
+        throw new Error('Mutation observer was not captured - operation mismatch?');
+      }
+    });
+
+    // Wait for success and UI update
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+
+    // In the test environment, props don't update automatically, so isOpen remains true.
+    // The component should return to idle state, showing the form again.
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+      const btn = screen.getByTestId('submitCampaignBtn');
+      expect(btn).toBeInTheDocument();
+      expect(btn).toBeEnabled();
+    });
+
+    expect(editProps.hide).toHaveBeenCalled();
   });
 
   it('should update campaign', async () => {
