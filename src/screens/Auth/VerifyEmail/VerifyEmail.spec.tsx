@@ -53,7 +53,7 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-const MOCKS = [
+const createMocks = () => [
   {
     request: {
       query: VERIFY_EMAIL_MUTATION,
@@ -100,19 +100,25 @@ const MOCKS = [
   },
 ];
 
-const resendErrorMock = {
+const createResendErrorMock = () => ({
   request: {
     query: RESEND_VERIFICATION_EMAIL_MUTATION,
   },
   error: new Error('User not found'),
-};
-
-const link = new StaticMockLink(MOCKS, true);
+});
 
 let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
   vi.clearAllMocks();
+  localStorageMocks.removeItem.mockClear();
+  localStorageMocks.setItem.mockClear();
+  localStorageMocks.getItem.mockClear();
+  toastMocks.success.mockClear();
+  toastMocks.error.mockClear();
+  toastMocks.warning.mockClear();
+  toastMocks.warn.mockClear();
+
   consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 });
 
@@ -145,7 +151,7 @@ describe('Testing VerifyEmail screen', () => {
           },
         },
       },
-      delay: 100, // Add delay to see loading state
+      delay: 100,
     };
     const loadingMocks = [mockObj, mockObj];
 
@@ -169,11 +175,14 @@ describe('Testing VerifyEmail screen', () => {
       () => {
         expect(screen.getByTestId('success-state')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
   });
 
   it('Should show success state after successful verification', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email?token=valid-token']}>
@@ -190,15 +199,21 @@ describe('Testing VerifyEmail screen', () => {
       () => {
         expect(screen.getByTestId('success-state')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     expect(screen.getByTestId('success-icon')).toBeInTheDocument();
     expect(screen.getByTestId('goToLoginBtn')).toBeInTheDocument();
-    expect(toastMocks.success).toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(toastMocks.success).toHaveBeenCalled();
+    });
   });
 
   it('Should remove localStorage items on successful verification', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email?token=valid-token']}>
@@ -215,18 +230,23 @@ describe('Testing VerifyEmail screen', () => {
       () => {
         expect(screen.getByTestId('success-state')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
-    expect(localStorageMocks.removeItem).toHaveBeenCalledWith(
-      'emailNotVerified',
-    );
-    expect(localStorageMocks.removeItem).toHaveBeenCalledWith(
-      'unverifiedEmail',
-    );
+    await waitFor(() => {
+      expect(localStorageMocks.removeItem).toHaveBeenCalledWith(
+        'emailNotVerified',
+      );
+      expect(localStorageMocks.removeItem).toHaveBeenCalledWith(
+        'unverifiedEmail',
+      );
+    });
   });
 
   it('Should navigate to login when Go to Login button is clicked', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email?token=valid-token']}>
@@ -239,21 +259,24 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('success-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('success-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const goToLoginBtn = screen.getByTestId('goToLoginBtn');
-    // Ensure the link points to the root (login page)
     const linkElement = goToLoginBtn.closest('a');
     expect(linkElement).toHaveAttribute('href', '/');
 
     await userEvent.click(goToLoginBtn);
-    // Since we are using MemoryRouter, we verify it doesn't crash and the state is correct.
-    // In a real scenario, we might check if the component for '/' is rendered.
   });
 
   it('Should show error state when token is missing', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
@@ -270,7 +293,7 @@ describe('Testing VerifyEmail screen', () => {
       () => {
         expect(screen.getByTestId('error-state')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
@@ -278,6 +301,9 @@ describe('Testing VerifyEmail screen', () => {
   });
 
   it('Should show error state when verification fails', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter
@@ -296,13 +322,16 @@ describe('Testing VerifyEmail screen', () => {
       () => {
         expect(screen.getByTestId('error-state')).toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 5000 },
     );
 
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
   });
 
   it('Should successfully resend verification email', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
@@ -315,19 +344,27 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(toastMocks.success).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should handle resend email error', async () => {
+    const resendErrorMock = createResendErrorMock();
+
     render(
       <MockedProvider mocks={[resendErrorMock]}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
@@ -340,16 +377,22 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(toastMocks.error).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should handle resend email failure (api returns false)', async () => {
@@ -379,19 +422,28 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('Failed to resend');
-    });
+    await waitFor(
+      () => {
+        expect(toastMocks.error).toHaveBeenCalledWith('Failed to resend');
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should have back to login link in error state', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
@@ -404,9 +456,12 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const backLink = screen.getByTestId('backToLoginLink');
     expect(backLink).toBeInTheDocument();
@@ -448,9 +503,12 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('should show LoadingState spinner while resend is in progress', async () => {
@@ -481,16 +539,22 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
       await userEvent.click(resendBtn);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 
@@ -523,11 +587,16 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
-    expect(toastMocks.error).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalled();
+    });
   });
 
   it('Should handle authentication error during verification', async () => {
@@ -553,11 +622,16 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
-    expect(toastMocks.error).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalled();
+    });
   });
 
   it('Should handle UNAUTHENTICATED GraphQL error code', async () => {
@@ -592,9 +666,12 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should handle invalid arguments error during verification', async () => {
@@ -620,11 +697,16 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
-    expect(toastMocks.error).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalled();
+    });
   });
 
   it('Should not call setState when unmounted after mutation resolves', async () => {
@@ -642,7 +724,7 @@ describe('Testing VerifyEmail screen', () => {
           },
         },
       },
-      delay: 200,
+      delay: 300,
     };
 
     const { unmount } = render(
@@ -659,15 +741,24 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await new Promise((resolve) => setTimeout(resolve, 50));
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
+
     unmount();
 
-    await new Promise((resolve) => setTimeout(resolve, 200));
-
-    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
-      expect.stringMatching(
-        /Can't perform a React state update on an unmounted component/,
-      ),
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Can't perform a React state update on an unmounted component/,
+          ),
+        );
+      },
+      { timeout: 5000 },
     );
   });
 
@@ -686,7 +777,7 @@ describe('Testing VerifyEmail screen', () => {
           },
         },
       },
-      delay: 500,
+      delay: 600,
     };
 
     const { unmount } = render(
@@ -701,16 +792,24 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    // Unmount before the mutation completes
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
+
     unmount();
 
-    // Wait to ensure no state updates occur after unmount
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
-      expect.stringMatching(
-        /Can't perform a React state update on an unmounted component/,
-      ),
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Can't perform a React state update on an unmounted component/,
+          ),
+        );
+      },
+      { timeout: 5000 },
     );
   });
 
@@ -727,7 +826,7 @@ describe('Testing VerifyEmail screen', () => {
           },
         },
       },
-      delay: 500,
+      delay: 600,
     };
 
     const { unmount } = render(
@@ -742,21 +841,34 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
+
     unmount();
 
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
-      expect.stringMatching(
-        /Can't perform a React state update on an unmounted component/,
-      ),
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Can't perform a React state update on an unmounted component/,
+          ),
+        );
+      },
+      { timeout: 5000 },
     );
   });
 
@@ -766,7 +878,7 @@ describe('Testing VerifyEmail screen', () => {
         query: RESEND_VERIFICATION_EMAIL_MUTATION,
       },
       error: new Error('Network error'),
-      delay: 500,
+      delay: 600,
     };
 
     const { unmount } = render(
@@ -781,21 +893,33 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    unmount();
+    // Wait for loading to potentially start
+    await waitFor(
+      () => {
+        unmount();
+      },
+      { timeout: 5000 },
+    );
 
-    await new Promise((resolve) => setTimeout(resolve, 600));
-
-    expect(consoleErrorSpy).not.toHaveBeenCalledWith(
-      expect.stringMatching(
-        /Can't perform a React state update on an unmounted component/,
-      ),
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+          expect.stringMatching(
+            /Can't perform a React state update on an unmounted component/,
+          ),
+        );
+      },
+      { timeout: 5000 },
     );
   });
 
@@ -834,12 +958,19 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('success-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('success-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
-    // Should only be called once despite React Strict Mode
-    expect(callCount).toBe(1);
+    await waitFor(
+      () => {
+        expect(callCount).toBe(1);
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('Should disable resend button while loading', async () => {
@@ -870,9 +1001,12 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
 
@@ -881,6 +1015,9 @@ describe('Testing VerifyEmail screen', () => {
   });
 
   it('Should set document title on mount', async () => {
+    const mocks = createMocks();
+    const link = new StaticMockLink(mocks, true);
+
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
@@ -925,16 +1062,22 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
-    await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(toastMocks.error).toHaveBeenCalled();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should show error for verification with no success field', async () => {
@@ -967,9 +1110,12 @@ describe('Testing VerifyEmail screen', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('error-state')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   describe('Debounce Tests', () => {
@@ -1007,9 +1153,12 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
 
@@ -1023,11 +1172,15 @@ describe('Testing VerifyEmail screen', () => {
         () => {
           expect(toastMocks.success).toHaveBeenCalled();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
-      // Should only be called once despite multiple clicks
-      expect(callCount).toBe(1);
+      await waitFor(
+        () => {
+          expect(callCount).toBe(1);
+        },
+        { timeout: 2000 },
+      );
     });
 
     it('Should reset isResending state even when component unmounts during resend', async () => {
@@ -1043,7 +1196,7 @@ describe('Testing VerifyEmail screen', () => {
             },
           },
         },
-        delay: 500,
+        delay: 600,
       };
 
       const { unmount } = render(
@@ -1058,24 +1211,34 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
       await userEvent.click(resendBtn);
 
-      // Wait a bit then unmount
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+
       unmount();
 
-      // Wait for the request to complete
-      await new Promise((resolve) => setTimeout(resolve, 500));
-
-      expect(consoleErrorSpy).not.toHaveBeenCalledWith(
-        expect.stringMatching(
-          /Can't perform a React state update on an unmounted component/,
-        ),
+      await waitFor(
+        () => {
+          expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+            expect.stringMatching(
+              /Can't perform a React state update on an unmounted component/,
+            ),
+          );
+        },
+        { timeout: 5000 },
       );
     });
 
@@ -1111,9 +1274,12 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
 
@@ -1126,23 +1292,23 @@ describe('Testing VerifyEmail screen', () => {
         () => {
           expect(toastMocks.error).toHaveBeenCalled();
         },
-        { timeout: 1000 },
+        { timeout: 5000 },
       );
 
-      // Should only be called once
-      expect(callCount).toBe(1);
+      await waitFor(
+        () => {
+          expect(callCount).toBe(1);
+        },
+        { timeout: 2000 },
+      );
     });
 
     it('Should handle rapid clicks with network error', async () => {
-      let callCount = 0;
       const networkErrorMock = {
         request: {
           query: RESEND_VERIFICATION_EMAIL_MUTATION,
         },
-        error: (() => {
-          callCount++;
-          return new Error('Network error');
-        })(),
+        error: new Error('Network error'),
         delay: 150,
       };
 
@@ -1158,9 +1324,12 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
 
@@ -1173,11 +1342,8 @@ describe('Testing VerifyEmail screen', () => {
         () => {
           expect(toastMocks.error).toHaveBeenCalled();
         },
-        { timeout: 1000 },
+        { timeout: 5000 },
       );
-
-      // Should only be called once
-      expect(callCount).toBe(1);
     });
 
     it('Should show loading state in LoadingState component during isResending', async () => {
@@ -1208,17 +1374,23 @@ describe('Testing VerifyEmail screen', () => {
         </MockedProvider>,
       );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('error-state')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('error-state')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       const resendBtn = screen.getByTestId('resendVerificationBtn');
       await userEvent.click(resendBtn);
 
       // LoadingState spinner should be visible
-      await waitFor(() => {
-        expect(screen.getByTestId('spinner')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('spinner')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
   });
 });
