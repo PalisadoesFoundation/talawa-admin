@@ -75,6 +75,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  window.history.replaceState(null, '', '/');
   clearAllItems();
 });
 
