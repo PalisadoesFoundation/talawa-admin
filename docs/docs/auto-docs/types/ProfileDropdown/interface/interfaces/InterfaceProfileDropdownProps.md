@@ -20,9 +20,4 @@ Defined in: [src/types/ProfileDropdown/interface.ts:12](https://github.com/Palis
 
 Optional prop to specify the portal type for navigation purposes.
 Acceptable values are 'admin' or 'user'. This prop is used to determine
-
-#### Default Value
-
-```ts
-'admin' the navigation path when the user clicks on the profile or logout options.
-```
+`@defaultValue` 'admin'

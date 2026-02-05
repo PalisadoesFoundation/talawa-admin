@@ -22,7 +22,7 @@ Whether the option is disabled.
 
 ### label
 
-> **label**: `string` \| `Element`
+> **label**: `ReactNode`
 
 Defined in: [src/types/shared-components/DropDownButton/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L13)
 

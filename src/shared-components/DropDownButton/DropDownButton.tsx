@@ -17,6 +17,7 @@
  * @param placeholder - Placeholder text when no option is selected.
  * @param parentContainerStyle - Additional styles for the parent container.
  * @param btnStyle - Additional styles for the dropdown button.
+ * @param showCaret - Whether to render the caret indicator (non-searchable mode).
  *
  * @returns A DropDownButton component.
  *
@@ -105,11 +106,12 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   const filteredOptions = useMemo(
     () =>
       searchable
-        ? options.filter(
-            (opt) =>
-              typeof opt.label === 'string' &&
-              opt.label.toLowerCase().includes(searchTerm.toLowerCase()),
-          )
+        ? options.filter((opt) => {
+            if (typeof opt.label !== 'string') {
+              return searchTerm.trim().length === 0;
+            }
+            return opt.label.toLowerCase().includes(searchTerm.toLowerCase());
+          })
         : options,
     [searchable, options, searchTerm],
   );

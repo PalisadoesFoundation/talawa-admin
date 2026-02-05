@@ -27,7 +27,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import DropDownButton from 'shared-components/DropDownButton';
-import { InterfaceDropDownProps } from 'types/shared-components/DropDownButton/interface';
+import type { InterfaceDropDownProps } from 'types/shared-components/DropDownButton/interface';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';

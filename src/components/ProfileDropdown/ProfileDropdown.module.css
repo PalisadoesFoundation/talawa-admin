@@ -5,7 +5,7 @@
 .profileContainer {
   display: flex;
   align-items: center;
-  gap: var(--spacing-3);
+  gap: var(--space-3);
 }
 
 .imageContainer {
@@ -13,15 +13,15 @@
 }
 
 .avatarStyle {
-  width: var(--size-45);
-  height: var(--size-45);
-  border-radius: var(--border-radius-full);
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: var(--radius-full);
 }
 
 .profileText {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1);
+  gap: var(--space-1);
 }
 
 .primaryText {
@@ -31,7 +31,7 @@
 }
 
 .secondaryText {
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
   font-size: var(--font-size-xs);
   color: var(--color-gray-500);
 }
