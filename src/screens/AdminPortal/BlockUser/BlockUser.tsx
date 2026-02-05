@@ -179,8 +179,12 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
-  const [blockUser] = useMutation<InterfaceBlockUserMutation>(BLOCK_USER_MUTATION_PG);
-  const [unBlockUser] = useMutation<InterfaceUnblockUserMutation>(UNBLOCK_USER_MUTATION_PG);
+  const [blockUser] = useMutation<InterfaceBlockUserMutation>(
+    BLOCK_USER_MUTATION_PG,
+  );
+  const [unBlockUser] = useMutation<InterfaceUnblockUserMutation>(
+    UNBLOCK_USER_MUTATION_PG,
+  );
 
   const handleBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
@@ -343,7 +347,7 @@ const BlockUser = (): JSX.Element => {
         </div>
         <div className={styles.listBox}>
           {(!showBlockedMembers && filteredAllMembers.length > 0) ||
-            (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
             <div data-testid="userList">
               <DataTable
                 data={tableRows}

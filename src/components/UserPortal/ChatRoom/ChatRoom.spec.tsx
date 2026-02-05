@@ -908,7 +908,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     renderChatRoom([SEND_MESSAGE_ERROR_MOCK]);
     await waitFor(() => {
@@ -1401,7 +1401,7 @@ describe('ChatRoom Component', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     renderChatRoom([ERROR_LOAD_MORE_MOCK]);
 
@@ -2036,7 +2036,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
 
@@ -2979,7 +2979,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     // Override the mock to throw an error
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -3321,7 +3321,7 @@ describe('ChatRoom Component', () => {
       // Mock console.error to catch any error logs
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <MockedProvider mocks={[]}>
@@ -3503,7 +3503,7 @@ describe('ChatRoom Component', () => {
       // Mock network errors that would occur without the skip fix
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <MockedProvider mocks={[]}>

@@ -81,7 +81,7 @@ const ERROR_MOCKS = [
 
 const renderAddOnSpotAttendee = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS} >
+    <MockedProvider mocks={MOCKS}>
       <Provider store={store}>
         <I18nextProvider i18n={i18nForTest}>
           <BrowserRouter>

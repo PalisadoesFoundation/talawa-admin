@@ -135,40 +135,31 @@ const Campaigns = (): JSX.Element => {
     }
 
     return campaignData.organization.funds.edges
-      .flatMap(
-        (fundEdge) =>
-          fundEdge?.node?.campaigns?.edges ?? [],
-      )
-      .map(
-        ({
-          node: campaign,
-        }: {
-          node: RawCampaignNode;
-        }) => {
-          const today = dayjs().startOf('day');
-          const startDate = dayjs(campaign.startAt).startOf('day');
-          const endDate = dayjs(campaign.endAt).startOf('day');
+      .flatMap((fundEdge) => fundEdge?.node?.campaigns?.edges ?? [])
+      .map(({ node: campaign }: { node: RawCampaignNode }) => {
+        const today = dayjs().startOf('day');
+        const startDate = dayjs(campaign.startAt).startOf('day');
+        const endDate = dayjs(campaign.endAt).startOf('day');
 
-          let status: 'active' | 'inactive' | 'pending';
-          if (endDate.isBefore(today)) {
-            status = 'inactive';
-          } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
-            status = 'active';
-          } else {
-            status = 'pending';
-          }
+        let status: 'active' | 'inactive' | 'pending';
+        if (endDate.isBefore(today)) {
+          status = 'inactive';
+        } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
+          status = 'active';
+        } else {
+          status = 'pending';
+        }
 
-          return {
-            _id: campaign.id,
-            name: campaign.name,
-            fundingGoal: campaign.goalAmount,
-            startDate: new Date(campaign.startAt),
-            endDate: new Date(campaign.endAt),
-            currency: campaign.currencyCode,
-            status,
-          };
-        },
-      );
+        return {
+          _id: campaign.id,
+          name: campaign.name,
+          fundingGoal: campaign.goalAmount,
+          startDate: new Date(campaign.startAt),
+          endDate: new Date(campaign.endAt),
+          currency: campaign.currencyCode,
+          status,
+        };
+      });
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {

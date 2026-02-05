@@ -732,9 +732,9 @@ describe('Apollo Client Configuration', () => {
       // Subscribe to trigger execution if it returns an observable
       if (observable && observable.subscribe) {
         observable.subscribe({
-          next: () => { },
-          error: () => { },
-          complete: () => { },
+          next: () => {},
+          error: () => {},
+          complete: () => {},
         });
       }
 
@@ -793,7 +793,7 @@ describe('Apollo Client Configuration', () => {
         forward,
       });
       if (obs1 && obs1.subscribe)
-        obs1.subscribe({ next: () => { }, error: () => { }, complete: () => { } });
+        obs1.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
 
       // 2. Trigger second error -> should be queued
       const obs2 = onErrorCallback({
@@ -809,7 +809,7 @@ describe('Apollo Client Configuration', () => {
       // We need to subscribe to obs2 to verify it waits
       const nextSpy = vi.fn();
       if (obs2 && obs2.subscribe)
-        obs2.subscribe({ next: nextSpy, error: () => { }, complete: () => { } });
+        obs2.subscribe({ next: nextSpy, error: () => {}, complete: () => {} });
 
       expect(mockRefreshToken).toHaveBeenCalledTimes(1);
       expect(nextSpy).not.toHaveBeenCalled();
@@ -862,7 +862,7 @@ describe('Apollo Client Configuration', () => {
       });
 
       if (obs && obs.subscribe)
-        obs.subscribe({ next: () => { }, error: () => { }, complete: () => { } });
+        obs.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
 
       // Wait for cleanup actions after refresh failure
       await vi.waitFor(

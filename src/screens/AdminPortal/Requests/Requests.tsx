@@ -57,7 +57,6 @@ import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 
-
 /**
  * Renders the Membership Requests screen.
  *
@@ -94,19 +93,23 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, refetch } = useQuery<InterfaceMembershipRequestQuery>(MEMBERSHIP_REQUEST_PG, {
-    variables: {
-      input: {
-        id: organizationId,
+  const { data, loading, refetch } = useQuery<InterfaceMembershipRequestQuery>(
+    MEMBERSHIP_REQUEST_PG,
+    {
+      variables: {
+        input: {
+          id: organizationId,
+        },
+        first: PAGE_SIZE,
+        skip: 0,
+        name_contains: '',
       },
-      first: PAGE_SIZE,
-      skip: 0,
-      name_contains: '',
+      notifyOnNetworkStatusChange: true,
     },
-    notifyOnNetworkStatusChange: true,
-  });
+  );
 
-  const { data: orgsData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST);
+  const { data: orgsData } =
+    useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);
@@ -367,8 +370,12 @@ const Requests = (): JSX.Element => {
   ];
 
   // Mutations for accept/reject
-  const [acceptUser] = useMutation<InterfaceAcceptMembershipRequestMutation>(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
-  const [rejectUser] = useMutation<InterfaceRejectMembershipRequestMutation>(REJECT_ORGANIZATION_REQUEST_MUTATION);
+  const [acceptUser] = useMutation<InterfaceAcceptMembershipRequestMutation>(
+    ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+  );
+  const [rejectUser] = useMutation<InterfaceRejectMembershipRequestMutation>(
+    REJECT_ORGANIZATION_REQUEST_MUTATION,
+  );
 
   const handleAcceptUser = async (membershipRequestId: string) => {
     try {

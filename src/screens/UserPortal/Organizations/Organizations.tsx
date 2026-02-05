@@ -54,7 +54,12 @@ import { Alert } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceCurrentUserQuery, InterfaceOrganizationFilterListQuery, InterfaceUserJoinedOrgsQuery, InterfaceUserCreatedOrgsQuery } from 'utils/interfaces';
+import type {
+  InterfaceCurrentUserQuery,
+  InterfaceOrganizationFilterListQuery,
+  InterfaceUserJoinedOrgsQuery,
+  InterfaceUserCreatedOrgsQuery,
+} from 'utils/interfaces';
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
@@ -136,9 +141,12 @@ export default function Organizations(): React.JSX.Element {
   const [hasDismissed, setHasDismissed] = useState(false);
 
   // Fetch current user status to sync verification state
-  const { data: currentUserData } = useQuery<InterfaceCurrentUserQuery>(CURRENT_USER, {
-    fetchPolicy: 'network-only', // Ensure fresh data
-  });
+  const { data: currentUserData } = useQuery<InterfaceCurrentUserQuery>(
+    CURRENT_USER,
+    {
+      fetchPolicy: 'network-only', // Ensure fresh data
+    },
+  );
 
   const [resendVerificationEmail, { loading: resendLoading }] = useMutation<{
     sendVerificationEmail: { success: boolean; message?: string };
@@ -248,10 +256,13 @@ export default function Organizations(): React.JSX.Element {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery<InterfaceUserJoinedOrgsQuery>(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
-    variables: { id: userId, first: rowsPerPage, filter: filterName },
-    skip: mode !== 1,
-  });
+  } = useQuery<InterfaceUserJoinedOrgsQuery>(
+    USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+    {
+      variables: { id: userId, first: rowsPerPage, filter: filterName },
+      skip: mode !== 1,
+    },
+  );
 
   const {
     data: createdOrganizationsData,
@@ -299,7 +310,7 @@ export default function Organizations(): React.JSX.Element {
               userRegistrationRequired: false,
               membershipRequests: [],
               isJoined: org.isMember,
-            } satisfies IOrganization),
+            }) satisfies IOrganization,
         );
         setOrganizations(orgs);
       }
@@ -370,8 +381,9 @@ export default function Organizations(): React.JSX.Element {
     <>
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.organizationsContainer} ${hideDrawer ? styles.marginLeft80 : styles.marginLeft260
-          } ${hideDrawer ? styles.expand : styles.contract}`}
+        className={`${styles.organizationsContainer} ${
+          hideDrawer ? styles.marginLeft80 : styles.marginLeft260
+        } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
         <div
@@ -460,9 +472,9 @@ export default function Organizations(): React.JSX.Element {
                     <div className="row" data-testid="organizations-list">
                       {(rowsPerPage > 0
                         ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
                         : organizations
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {

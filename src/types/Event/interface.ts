@@ -286,10 +286,10 @@ export interface ICreateEventInput {
   description?: string;
   location?: string;
   recurrence?:
-  | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
-    endDate?: string;
-  })
-  | null;
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
 }
 
 // Legacy interface exports for backward compatibility

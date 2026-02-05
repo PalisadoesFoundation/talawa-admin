@@ -2,12 +2,7 @@ import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import type { NormalizedCacheObject } from '@apollo/client';
-import {
-  ApolloClient,
-  InMemoryCache,
-  split,
-  Observable,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, split, Observable } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';

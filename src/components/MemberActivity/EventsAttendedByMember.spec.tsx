@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { render, screen } from '@testing-library/react';
-import { MockedProvider } from "@apollo/client/testing/react";
+import { MockedProvider } from '@apollo/client/testing/react';
 import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';

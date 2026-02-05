@@ -12,14 +12,8 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
-import {
-  type ApolloClient,
-} from '@apollo/client';
-import {
-  useQuery,
-  useMutation,
-  type QueryResult,
-} from '@apollo/client/react';
+import { type ApolloClient } from '@apollo/client';
+import { useQuery, useMutation, type QueryResult } from '@apollo/client/react';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -125,7 +119,7 @@ describe('PluginGraphQLService', () => {
     it('should handle errors and return empty array', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       mockApolloClient.query.mockRejectedValue(new Error('Network error'));
 
       const result = await graphqlService.getAllPlugins();
@@ -180,7 +174,7 @@ describe('PluginGraphQLService', () => {
     it('should handle errors and return null', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const input = { pluginId: 'new-plugin' };
       mockApolloClient.mutate.mockRejectedValue(new Error('Creation failed'));
 
@@ -236,7 +230,7 @@ describe('PluginGraphQLService', () => {
     it('should handle errors and return null', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const input = { orgId: 'org1', pluginId: 'test-plugin' };
       mockApolloClient.mutate.mockRejectedValue(new Error('Install failed'));
 
@@ -295,7 +289,7 @@ describe('PluginGraphQLService', () => {
     it('should handle errors and return null', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const input = { id: '1', isActivated: false };
       mockApolloClient.mutate.mockRejectedValue(new Error('Update failed'));
 
@@ -343,7 +337,7 @@ describe('PluginGraphQLService', () => {
     it('should handle errors and return null', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const input = { id: '1' };
       mockApolloClient.mutate.mockRejectedValue(new Error('Deletion failed'));
 
@@ -392,9 +386,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as any,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -415,9 +407,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as any,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -437,9 +427,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as any,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 

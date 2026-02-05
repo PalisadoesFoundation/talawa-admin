@@ -89,9 +89,8 @@ export const CheckInModal = ({
       setTableData([]); // Clear table data while loading
     } else if (checkInData?.event?.attendeesCheckInStatus) {
       // Map the check-in data to table rows
-      const statuses =
-        checkInData.event
-          .attendeesCheckInStatus as InterfaceAttendeeCheckIn[];
+      const statuses = checkInData.event
+        .attendeesCheckInStatus as InterfaceAttendeeCheckIn[];
 
       setTableData(
         statuses.map((checkIn) => ({

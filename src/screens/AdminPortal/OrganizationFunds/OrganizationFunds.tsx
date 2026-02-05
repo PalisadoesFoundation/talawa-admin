@@ -378,9 +378,9 @@ const OrgFundsList = (): JSX.Element => {
       </div>
 
       {!fundLoading &&
-        fundData &&
-        filteredAndSortedFunds.length === 0 &&
-        searchText.length > 0 ? (
+      fundData &&
+      filteredAndSortedFunds.length === 0 &&
+      searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"

@@ -149,8 +149,8 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
                 >
                   {communityTimeout !== undefined
                     ? t('communityProfile.sessionTimeout.minutes', {
-                      count: communityTimeout,
-                    })
+                        count: communityTimeout,
+                      })
                     : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
               </div>

@@ -7,12 +7,12 @@ import type { Key } from './types';
 
 type ConnectionResolver<TNode, TData> = (data: MaybeMasked<TData>) =>
   | {
-    edges?:
-    | Array<{ node: TNode | null | undefined } | null | undefined>
-    | null
-    | undefined;
-    pageInfo?: InterfacePageInfo | null | undefined;
-  }
+      edges?:
+        | Array<{ node: TNode | null | undefined } | null | undefined>
+        | null
+        | undefined;
+      pageInfo?: InterfacePageInfo | null | undefined;
+    }
   | null
   | undefined;
 

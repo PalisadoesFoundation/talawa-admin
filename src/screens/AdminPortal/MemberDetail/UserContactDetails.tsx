@@ -36,7 +36,10 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceGetUserByIdQuery, InterfaceUpdateUserMutation } from 'utils/interfaces';
+import type {
+  InterfaceGetUserByIdQuery,
+  InterfaceUpdateUserMutation,
+} from 'utils/interfaces';
 import { Card, Row, Col } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';

@@ -13,7 +13,10 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
-import { StaticMockLink, type IStaticMockedResponse } from 'utils/StaticMockLink';
+import {
+  StaticMockLink,
+  type IStaticMockedResponse,
+} from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
@@ -903,9 +906,9 @@ describe('Testing VolunteerGroupModal', () => {
         ...modalProps[1],
         group: baseGroup
           ? {
-            ...baseGroup,
-            id: '',
-          }
+              ...baseGroup,
+              id: '',
+            }
           : null,
       };
 

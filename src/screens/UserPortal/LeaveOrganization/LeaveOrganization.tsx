@@ -98,7 +98,10 @@ const LeaveOrganization = (): JSX.Element => {
       navigate(`/user/organizations`);
     },
     onError: (err: Error) => {
-      const networkError = 'networkError' in err ? (err as { networkError: unknown }).networkError : null;
+      const networkError =
+        'networkError' in err
+          ? (err as { networkError: unknown }).networkError
+          : null;
       const isNetworkError = networkError !== null;
       setError(
         isNetworkError

@@ -2,15 +2,8 @@
  * GraphQL service for plugin operations
  */
 
-import {
-  type ApolloClient,
-  type OperationVariables,
-} from '@apollo/client';
-import {
-  useMutation,
-  useQuery,
-  type QueryResult,
-} from '@apollo/client/react';
+import { type ApolloClient, type OperationVariables } from '@apollo/client';
+import { useMutation, useQuery, type QueryResult } from '@apollo/client/react';
 import { GET_ALL_PLUGINS } from '../GraphQl/Queries/PlugInQueries';
 import {
   CREATE_PLUGIN_MUTATION,

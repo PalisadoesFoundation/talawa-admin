@@ -294,34 +294,34 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       selectedCategory === 'Gender'
         ? [
-          memberData.filter((member) => member.natalSex === 'male').length,
-          memberData.filter((member) => member.natalSex === 'female').length,
-          memberData.filter(
-            (member) =>
-              member.natalSex === 'intersex' ||
-              member.natalSex === null ||
-              member.natalSex === '',
-          ).length,
-        ]
+            memberData.filter((member) => member.natalSex === 'male').length,
+            memberData.filter((member) => member.natalSex === 'female').length,
+            memberData.filter(
+              (member) =>
+                member.natalSex === 'intersex' ||
+                member.natalSex === null ||
+                member.natalSex === '',
+            ).length,
+          ]
         : [
-          memberData.filter((member) => {
-            if (!member.birthDate) return false;
-            const age = calculateAge(member.birthDate);
-            return age < MIN_ADULT_AGE;
-          }).length,
-          memberData.filter((member) => {
-            if (!member.birthDate) return false;
-            const memberAge = calculateAge(member.birthDate);
-            const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
-            const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
-            return isAtLeastAdult && isAtMostYoungAdult;
-          }).length,
-          memberData.filter((member) => {
-            if (!member.birthDate) return false;
-            const age = calculateAge(member.birthDate);
-            return age > MAX_YOUNG_ADULT_AGE;
-          }).length,
-        ],
+            memberData.filter((member) => {
+              if (!member.birthDate) return false;
+              const age = calculateAge(member.birthDate);
+              return age < MIN_ADULT_AGE;
+            }).length,
+            memberData.filter((member) => {
+              if (!member.birthDate) return false;
+              const memberAge = calculateAge(member.birthDate);
+              const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
+              const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
+              return isAtLeastAdult && isAtMostYoungAdult;
+            }).length,
+            memberData.filter((member) => {
+              if (!member.birthDate) return false;
+              const age = calculateAge(member.birthDate);
+              return age > MAX_YOUNG_ADULT_AGE;
+            }).length,
+          ],
     [selectedCategory, memberData],
   );
 

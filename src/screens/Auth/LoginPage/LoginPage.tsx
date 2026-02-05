@@ -44,13 +44,14 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
-<<<<<<< HEAD
-import type { InterfaceQueryOrganizationListObject, InterfaceCommunityQuery, InterfaceSignInQuery, InterfaceOrganizationListQuery, InterfaceSignUpMutation } from 'utils/interfaces';
-import Autocomplete from '@mui/material/Autocomplete';
-=======
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
+import type {
+  InterfaceQueryOrganizationListObject,
+  InterfaceCommunityQuery,
+  InterfaceSignInQuery,
+  InterfaceOrganizationListQuery,
+  InterfaceSignUpMutation,
+} from 'utils/interfaces';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
->>>>>>> develop
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
@@ -135,13 +136,9 @@ const LoginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-<<<<<<< HEAD
-  const [organizations, setOrganizations] = useState<{ label: string; id: string }[]>([]);
-=======
   const [organizations, setOrganizations] = useState<
     Array<{ label: string; value: string }>
   >([]);
->>>>>>> develop
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -203,33 +200,28 @@ const LoginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery<InterfaceCommunityQuery>(GET_COMMUNITY_DATA_PG);
+  const { data, refetch } = useQuery<InterfaceCommunityQuery>(
+    GET_COMMUNITY_DATA_PG,
+  );
   useEffect(() => {
     refetch();
   }, [data]);
-  const [signin, { loading: loginLoading }] = useLazyQuery<InterfaceSignInQuery>(SIGNIN_QUERY, {
-    fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
-  });
-  const [signup, { loading: signinLoading }] = useMutation<InterfaceSignUpMutation>(SIGNUP_MUTATION);
-  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATION_LIST_NO_MEMBERS);
+  const [signin, { loading: loginLoading }] =
+    useLazyQuery<InterfaceSignInQuery>(SIGNIN_QUERY, {
+      fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
+    });
+  const [signup, { loading: signinLoading }] =
+    useMutation<InterfaceSignUpMutation>(SIGNUP_MUTATION);
+  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(
+    ORGANIZATION_LIST_NO_MEMBERS,
+  );
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
-      const options = orgData.organizations.map(
-<<<<<<< HEAD
-        (org) => ({
-          label: `${org.name}(${org.addressLine1})`,
-          id: org.id,
-        }),
-=======
-        (org: InterfaceQueryOrganizationListObject) => {
-          return {
-            label: `${org.name}(${org.addressLine1})`,
-            value: org.id,
-          };
-        },
->>>>>>> develop
-      );
+      const options = orgData.organizations.map((org) => ({
+        label: `${org.name}(${org.addressLine1})`,
+        value: org.id,
+      }));
       setOrganizations(options);
     }
   }, [orgData]);
@@ -519,13 +511,15 @@ const LoginPage = (): JSX.Element => {
                 btnStyle={styles.langChangeBtnStyle}
               />
               <TalawaLogo
-                className={`${styles.talawa_logo}  ${showTab === 'REGISTER' && styles.marginTopForReg
-                  }`}
+                className={`${styles.talawa_logo}  ${
+                  showTab === 'REGISTER' && styles.marginTopForReg
+                }`}
               />
               {/* LOGIN FORM */}
               <div
-                className={`${showTab === 'LOGIN' ? styles.active_tab : 'd-none'
-                  }`}
+                className={`${
+                  showTab === 'LOGIN' ? styles.active_tab : 'd-none'
+                }`}
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
@@ -666,8 +660,9 @@ const LoginPage = (): JSX.Element => {
               </div>
               {/* REGISTER FORM */}
               <div
-                className={`${showTab === 'REGISTER' ? styles.active_tab : 'd-none'
-                  }`}
+                className={`${
+                  showTab === 'REGISTER' ? styles.active_tab : 'd-none'
+                }`}
               >
                 <form onSubmit={signupLink}>
                   <h1
@@ -850,10 +845,11 @@ const LoginPage = (): JSX.Element => {
                         )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${showAlert.lowercaseChar
-                            ? 'text-danger'
-                            : 'text-success'
-                            } ${styles.password_check_element}`}
+                          className={`form-text ${
+                            showAlert.lowercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
                           {showAlert.lowercaseChar ? (
                             <span>
@@ -869,10 +865,11 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${showAlert.uppercaseChar
-                            ? 'text-danger'
-                            : 'text-success'
-                            } ${styles.password_check_element}`}
+                          className={`form-text ${
+                            showAlert.uppercaseChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
                           {showAlert.uppercaseChar ? (
                             <span>
@@ -888,10 +885,11 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${showAlert.numericValue
-                            ? 'text-danger'
-                            : 'text-success'
-                            } ${styles.password_check_element}`}
+                          className={`form-text ${
+                            showAlert.numericValue
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element}`}
                         >
                           {showAlert.numericValue ? (
                             <span>
@@ -907,11 +905,13 @@ const LoginPage = (): JSX.Element => {
                       )}
                       {isInputFocused && (
                         <p
-                          className={`form-text ${showAlert.specialChar
-                            ? 'text-danger'
-                            : 'text-success'
-                            } ${styles.password_check_element} ${styles.password_check_element_bottom
-                            }`}
+                          className={`form-text ${
+                            showAlert.specialChar
+                              ? 'text-danger'
+                              : 'text-success'
+                          } ${styles.password_check_element} ${
+                            styles.password_check_element_bottom
+                          }`}
                         >
                           {showAlert.specialChar ? (
                             <span>

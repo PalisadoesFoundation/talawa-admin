@@ -73,23 +73,23 @@ const NotificationIcon = (): JSX.Element => {
       ? [{ value: 'status-error', label: t('errorFetching'), disabled: true }]
       : notifications.length === 0
         ? [
-          {
-            value: 'status-empty',
-            label: t('noNewNotifications'),
-            disabled: true,
-          },
-          { value: 'view-all', label: t('viewAllNotifications') },
-        ]
+            {
+              value: 'status-empty',
+              label: t('noNewNotifications'),
+              disabled: true,
+            },
+            { value: 'view-all', label: t('viewAllNotifications') },
+          ]
         : [
-          ...notifications.map((notification) => ({
-            value: notification.id,
-            label:
-              notification.body.length > 48
-                ? `${notification.body.slice(0, 48)}...`
-                : notification.body,
-          })),
-          { value: 'view-all', label: t('viewAllNotifications') },
-        ];
+            ...notifications.map((notification) => ({
+              value: notification.id,
+              label:
+                notification.body.length > 48
+                  ? `${notification.body.slice(0, 48)}...`
+                  : notification.body,
+            })),
+            { value: 'view-all', label: t('viewAllNotifications') },
+          ];
 
   const handleSelectNotification = (value: string) => {
     if (value === 'view-all') {

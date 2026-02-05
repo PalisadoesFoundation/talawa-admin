@@ -1415,7 +1415,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({});
     render(
@@ -1445,7 +1445,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     const cache = new InMemoryCache({});
     render(
@@ -2507,11 +2507,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const cache = new InMemoryCache({});
     render(
-      <MockedProvider
-        mocks={[...MOCKS, mutationErrorMock]}
-        cache={cache}
-
-      >
+      <MockedProvider mocks={[...MOCKS, mutationErrorMock]} cache={cache}>
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nForTest}>

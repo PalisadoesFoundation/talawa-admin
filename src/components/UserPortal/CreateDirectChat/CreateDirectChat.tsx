@@ -83,9 +83,7 @@ export const handleCreateDirectChat = async (
   userId: string | null,
   currentUserName: string,
   chatsListRefetch: {
-    (
-      variables?: Partial<{ id: string }> | undefined,
-    ): Promise<unknown>;
+    (variables?: Partial<{ id: string }> | undefined): Promise<unknown>;
     (): Promise<unknown>;
   },
   toggleCreateDirectChatModal: { (): void; (): void },

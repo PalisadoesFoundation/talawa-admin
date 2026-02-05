@@ -221,14 +221,14 @@ const createUpdatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to update pledge') }
     : {
-      result: {
-        data: {
-          updateFundraisingCampaignPledge: {
-            _id: variables.id,
+        result: {
+          data: {
+            updateFundraisingCampaignPledge: {
+              _id: variables.id,
+            },
           },
         },
-      },
-    }),
+      }),
 });
 
 // Helper to create CREATE_PLEDGE mock with custom variables
@@ -249,26 +249,26 @@ const createCreatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to create pledge') }
     : {
-      result: {
-        data: {
-          createFundCampaignPledge: {
-            id: '3',
-            amount: variables.amount,
-            note: null,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-            campaign: {
-              id: variables.campaignId,
-              name: 'Campaign Name',
-            },
-            pledger: {
-              id: variables.pledgerId,
-              name: 'Pledger Name',
+        result: {
+          data: {
+            createFundCampaignPledge: {
+              id: '3',
+              amount: variables.amount,
+              note: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              campaign: {
+                id: variables.campaignId,
+                name: 'Campaign Name',
+              },
+              pledger: {
+                id: variables.pledgerId,
+                name: 'Pledger Name',
+              },
             },
           },
         },
-      },
-    }),
+      }),
 });
 
 // Default mocks for basic rendering tests

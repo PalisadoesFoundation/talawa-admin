@@ -123,15 +123,20 @@ const CommunityProfile = (): JSX.Element => {
   const logoInputRef = React.useRef<HTMLInputElement>(null);
 
   // Query to fetch community data
-  const { data, loading } = useQuery<InterfaceCommunityQuery>(GET_COMMUNITY_DATA_PG);
+  const { data, loading } = useQuery<InterfaceCommunityQuery>(
+    GET_COMMUNITY_DATA_PG,
+  );
 
   // Mutations for updating and resetting community data
-  const [uploadPreLoginImagery] = useMutation<InterfaceUpdateCommunityMutation>(UPDATE_COMMUNITY_PG);
-  const [resetPreLoginImagery] = useMutation<InterfaceResetCommunityMutation>(RESET_COMMUNITY);
+  const [uploadPreLoginImagery] =
+    useMutation<InterfaceUpdateCommunityMutation>(UPDATE_COMMUNITY_PG);
+  const [resetPreLoginImagery] =
+    useMutation<InterfaceResetCommunityMutation>(RESET_COMMUNITY);
 
   // Effect to set profile data from fetched data
   React.useEffect(() => {
-    const preLoginData: PreLoginImageryDataType | undefined | null = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined | null =
+      data?.community;
     if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
@@ -194,7 +199,8 @@ const CommunityProfile = (): JSX.Element => {
    * Resets profile data to initial values and performs a reset operation.
    */
   const resetData = async (): Promise<void> => {
-    const preLoginData: PreLoginImageryDataType | undefined | null = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined | null =
+      data?.community;
     try {
       setProfileVariable({
         name: '',

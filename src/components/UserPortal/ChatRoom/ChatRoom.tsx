@@ -46,8 +46,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-        id: string;
-      }>
+          id: string;
+        }>
       | undefined,
   ) => Promise<unknown>;
 }
@@ -276,14 +276,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
           parentMessage: replyToDirectMessage
             ? {
-              id: replyToDirectMessage.id,
-              body: replyToDirectMessage.body,
-              createdAt: replyToDirectMessage.createdAt,
-              creator: {
-                id: replyToDirectMessage.creator.id,
-                name: replyToDirectMessage.creator.name,
-              },
-            }
+                id: replyToDirectMessage.id,
+                body: replyToDirectMessage.body,
+                createdAt: replyToDirectMessage.createdAt,
+                creator: {
+                  id: replyToDirectMessage.creator.id,
+                  name: replyToDirectMessage.creator.name,
+                },
+              }
             : undefined,
         };
 
@@ -330,8 +330,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       const data: any = messageSubscriptionData.data.data;
       if (
         data?.chatMessageCreate &&
-        data?.chatMessageCreate.chat?.id ===
-        props.selectedContact
+        data?.chatMessageCreate.chat?.id === props.selectedContact
       ) {
         const newMessage = data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
@@ -341,7 +340,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           }
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => { },
+          () => {},
         );
 
         // Soft-append the new message to local state
@@ -358,16 +357,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
           parentMessage: newMessage.parentMessage
             ? {
-              id: newMessage.parentMessage.id,
-              body: newMessage.parentMessage.body,
-              createdAt: newMessage.parentMessage.createdAt,
-              creator: newMessage.parentMessage.creator
-                ? {
-                  id: newMessage.parentMessage.creator.id,
-                  name: newMessage.parentMessage.creator.name,
-                }
-                : { id: '', name: '' },
-            }
+                id: newMessage.parentMessage.id,
+                body: newMessage.parentMessage.body,
+                createdAt: newMessage.parentMessage.createdAt,
+                creator: newMessage.parentMessage.creator
+                  ? {
+                      id: newMessage.parentMessage.creator.id,
+                      name: newMessage.parentMessage.creator.name,
+                    }
+                  : { id: '', name: '' },
+              }
             : undefined,
         };
 

@@ -171,9 +171,7 @@ function OrgList(): JSX.Element {
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
   // Fetch current user status (consolidated query with network-only for fresh data)
-  const {
-    data: userData,
-  } = useQuery<InterfaceCurrentUserType>(CURRENT_USER, {
+  const { data: userData } = useQuery<InterfaceCurrentUserType>(CURRENT_USER, {
     fetchPolicy: 'network-only',
     context,
   });
@@ -440,9 +438,9 @@ function OrgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-        (!sortedOrganizations || sortedOrganizations.length === 0) &&
-        searchByName.length === 0 &&
-        (!userData || adminFor.length === 0) ? (
+      (!sortedOrganizations || sortedOrganizations.length === 0) &&
+      searchByName.length === 0 &&
+      (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -486,9 +484,9 @@ function OrgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-              )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage,
+                )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (

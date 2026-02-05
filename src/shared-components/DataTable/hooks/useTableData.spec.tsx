@@ -23,11 +23,11 @@ type MockQueryResultFn<T = unknown> = () => Promise<QueryResult<T>>;
 interface IItemsData {
   items?: Array<
     | {
-      connection?: {
-        edges?: Array<{ node: Node }> | null;
-        pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
-      } | null;
-    }
+        connection?: {
+          edges?: Array<{ node: Node }> | null;
+          pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
+        } | null;
+      }
     | undefined
   >;
 }
@@ -39,11 +39,11 @@ interface IItemsData {
 interface IDatasetsData {
   datasets?: Array<
     | {
-      items?: {
-        edges?: Array<{ node: Node }> | null;
-        pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
-      } | null;
-    }
+        items?: {
+          edges?: Array<{ node: Node }> | null;
+          pageInfo?: { hasNextPage: boolean; hasPreviousPage: boolean } | null;
+        } | null;
+      }
     | undefined
   >;
 }

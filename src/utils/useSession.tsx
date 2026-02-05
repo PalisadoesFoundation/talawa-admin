@@ -42,9 +42,10 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [logout] = useMutation(LOGOUT_MUTATION);
-  const { data, error: queryError } = useQuery<InterfaceCommunitySessionTimeoutQuery>(
-    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
-  );
+  const { data, error: queryError } =
+    useQuery<InterfaceCommunitySessionTimeoutQuery>(
+      GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+    );
 
   const { clearAllItems } = useLocalStorage();
 

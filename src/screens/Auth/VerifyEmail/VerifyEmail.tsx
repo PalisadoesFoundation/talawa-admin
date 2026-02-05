@@ -73,12 +73,12 @@ const VerifyEmail = (): JSX.Element => {
   const [verificationState, setVerificationState] =
     useState<VerificationState>('loading');
 
-  const [verifyEmail, { loading: verifyLoading }] = useMutation<VerifyEmailData>(
-    VERIFY_EMAIL_MUTATION,
-  );
-  const [resendVerification, { loading: resendLoading }] = useMutation<ResendVerificationEmailData>(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-  );
+  const [verifyEmail, { loading: verifyLoading }] =
+    useMutation<VerifyEmailData>(VERIFY_EMAIL_MUTATION);
+  const [resendVerification, { loading: resendLoading }] =
+    useMutation<ResendVerificationEmailData>(
+      RESEND_VERIFICATION_EMAIL_MUTATION,
+    );
 
   // Verify email on component mount
   useEffect(() => {

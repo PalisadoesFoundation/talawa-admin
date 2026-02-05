@@ -143,8 +143,8 @@ describe('PluginStore', () => {
     // Mock admin plugin file service
     (adminPluginFileService.adminPluginFileService
       .removePlugin as unknown as typeof vi.fn) = vi
-        .fn()
-        .mockResolvedValue(true);
+      .fn()
+      .mockResolvedValue(true);
   });
 
   const renderPluginStore = () => {
@@ -609,7 +609,7 @@ describe('PluginStore', () => {
       // Mock console.error to verify it's called
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       // Set the error in our mock
       const apolloError = new Error('GraphQL fetch failed');
@@ -796,8 +796,8 @@ describe('PluginStore', () => {
       // Mock admin plugin file service to fail
       (adminPluginFileService.adminPluginFileService
         .removePlugin as unknown as typeof vi.fn) = vi
-          .fn()
-          .mockResolvedValue(false);
+        .fn()
+        .mockResolvedValue(false);
 
       mockDeletePlugin.mockResolvedValue({
         data: { deletePlugin: { id: '1' } },

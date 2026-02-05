@@ -22,7 +22,10 @@ import DatePicker from 'shared-components/DatePicker';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
-import type { IActionItemInfo, IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
+import type {
+  IActionItemInfo,
+  IActionItemCategoryInfo,
+} from 'types/shared-components/ActionItems/interface';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from './ActionItemViewModal.module.css';

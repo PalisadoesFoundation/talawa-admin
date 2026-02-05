@@ -242,7 +242,7 @@ const OrgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -267,7 +267,7 @@ const OrgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.fundingRaised ?? 0}
@@ -313,12 +313,13 @@ const OrgFundCampaign = (): JSX.Element => {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={percentage}
-                className={`${styles.progressCircleForeground} ${percentage >= 100
+                className={`${styles.progressCircleForeground} ${
+                  percentage >= 100
                     ? styles.progressComplete
                     : percentage >= 50
                       ? styles.progressHalf
                       : styles.progressLow
-                  }`}
+                }`}
               />
             </Box>
             <Typography variant="body2" className={styles.progressTypography}>
@@ -413,9 +414,9 @@ const OrgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-        campaignData &&
-        filteredCampaigns.length === 0 &&
-        searchText.length > 0 ? (
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"

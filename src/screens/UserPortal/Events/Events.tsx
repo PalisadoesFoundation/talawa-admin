@@ -80,7 +80,10 @@ import type {
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
-import type { InterfaceGetOrgEventsUserPortalQuery, InterfaceOrganizationListQuery } from 'utils/interfaces';
+import type {
+  InterfaceGetOrgEventsUserPortalQuery,
+  InterfaceOrganizationListQuery,
+} from 'utils/interfaces';
 
 import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
 dayjs.extend(utc);
@@ -192,28 +195,34 @@ export default function Events(): JSX.Element {
     data,
     error: eventDataError,
     refetch,
-  } = useQuery<InterfaceGetOrgEventsUserPortalQuery>(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
-    variables: {
-      id: organizationId,
-      first: 100,
-      after: null,
-      startDate: dateRange.startDate
-        ? dayjs(dateRange.startDate).startOf('day').toISOString()
-        : null,
-      endDate: dateRange.endDate
-        ? dayjs(dateRange.endDate).endOf('day').toISOString()
-        : null,
-      includeRecurring: true,
+  } = useQuery<InterfaceGetOrgEventsUserPortalQuery>(
+    GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+    {
+      variables: {
+        id: organizationId,
+        first: 100,
+        after: null,
+        startDate: dateRange.startDate
+          ? dayjs(dateRange.startDate).startOf('day').toISOString()
+          : null,
+        endDate: dateRange.endDate
+          ? dayjs(dateRange.endDate).endOf('day').toISOString()
+          : null,
+        includeRecurring: true,
+      },
+      notifyOnNetworkStatusChange: true,
+      errorPolicy: 'all',
+      fetchPolicy: 'cache-and-network',
     },
-    notifyOnNetworkStatusChange: true,
-    errorPolicy: 'all',
-    fetchPolicy: 'cache-and-network',
-  });
+  );
 
   // Query to fetch organization details
-  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(ORGANIZATIONS_LIST, {
-    variables: { id: organizationId },
-  });
+  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(
+    ORGANIZATIONS_LIST,
+    {
+      variables: { id: organizationId },
+    },
+  );
 
   // Mutation to create a new event
   const [create] = useMutation<any>(CREATE_EVENT_MUTATION, {
@@ -300,41 +309,39 @@ export default function Events(): JSX.Element {
   const closeCreateEventModal = (): void => createEventModal.close();
 
   // Normalize event data for EventCalendar with proper typing
-  const events = (data?.organization?.events?.edges || []).map(
-    (edge: any) => ({
-      id: edge.node.id || '',
+  const events = (data?.organization?.events?.edges || []).map((edge: any) => ({
+    id: edge.node.id || '',
 
-      name: edge.node.name || '',
-      description: edge.node.description || '',
-      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
-      startTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
-      endTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      isInviteOnly: edge.node.isInviteOnly,
-      // Add recurring event information
-      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-      baseEvent: edge.node.baseEvent,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      recurrenceDescription: edge.node.recurrenceDescription,
-      recurrenceRule: edge.node.recurrenceRule,
-      creator: edge.node.creator || {
-        id: '',
-        name: '',
-      },
-      attendees: edge.node.attendees || [],
-    }),
-  ); // Handle errors gracefully
+    name: edge.node.name || '',
+    description: edge.node.description || '',
+    startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+    endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+    startTime: edge.node.allDay
+      ? null
+      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+    endTime: edge.node.allDay
+      ? null
+      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+    allDay: edge.node.allDay,
+    location: edge.node.location || '',
+    isPublic: edge.node.isPublic,
+    isRegisterable: edge.node.isRegisterable,
+    isInviteOnly: edge.node.isInviteOnly,
+    // Add recurring event information
+    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+    baseEvent: edge.node.baseEvent,
+    sequenceNumber: edge.node.sequenceNumber,
+    totalCount: edge.node.totalCount,
+    hasExceptions: edge.node.hasExceptions,
+    progressLabel: edge.node.progressLabel,
+    recurrenceDescription: edge.node.recurrenceDescription,
+    recurrenceRule: edge.node.recurrenceRule,
+    creator: edge.node.creator || {
+      id: '',
+      name: '',
+    },
+    attendees: edge.node.attendees || [],
+  })); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
       // Check if we have valid data (partial data scenario)

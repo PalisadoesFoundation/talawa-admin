@@ -78,12 +78,12 @@ function EventAttendance(): JSX.Element {
     return filteringBy === 'All'
       ? attendees
       : attendees.filter((attendee) => {
-        const attendeeDate = new Date(attendee.createdAt);
-        const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
-        return filteringBy === 'This Month'
-          ? isSameYear && attendeeDate.getMonth() === now.getMonth()
-          : isSameYear;
-      });
+          const attendeeDate = new Date(attendee.createdAt);
+          const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
+          return filteringBy === 'This Month'
+            ? isSameYear && attendeeDate.getMonth() === now.getMonth()
+            : isSameYear;
+        });
   };
 
   const filterAndSortAttendees = (
@@ -94,15 +94,15 @@ function EventAttendance(): JSX.Element {
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
-    const filtered = ((memberData?.event?.attendees as InterfaceMember[]) ?? []).filter(
-      (attendee: InterfaceMember) => {
-        const name = attendee.name?.toLowerCase() || '';
-        const email = attendee.emailAddress?.toLowerCase() || '';
-        return (
-          name.includes(searchValueLower) || email.includes(searchValueLower)
-        );
-      },
-    );
+    const filtered = (
+      (memberData?.event?.attendees as InterfaceMember[]) ?? []
+    ).filter((attendee: InterfaceMember) => {
+      const name = attendee.name?.toLowerCase() || '';
+      const email = attendee.emailAddress?.toLowerCase() || '';
+      return (
+        name.includes(searchValueLower) || email.includes(searchValueLower)
+      );
+    });
 
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);
@@ -124,12 +124,15 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery<InterfaceEventAttendeesQuery, { eventId: string }>(EVENT_ATTENDEES, {
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'cache-first',
-      errorPolicy: 'all',
-      notifyOnNetworkStatusChange: true,
-    });
+    useLazyQuery<InterfaceEventAttendeesQuery, { eventId: string }>(
+      EVENT_ATTENDEES,
+      {
+        fetchPolicy: 'cache-and-network',
+        nextFetchPolicy: 'cache-first',
+        errorPolicy: 'all',
+        notifyOnNetworkStatusChange: true,
+      },
+    );
 
   useEffect(() => {
     if (memberData?.event?.attendees) {

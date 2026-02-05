@@ -178,9 +178,7 @@ export class PluginManager {
 // Create and export singleton instance
 let pluginManagerInstance: PluginManager | null = null;
 
-export function getPluginManager(
-  apolloClient?: ApolloClient,
-): PluginManager {
+export function getPluginManager(apolloClient?: ApolloClient): PluginManager {
   if (!pluginManagerInstance) {
     pluginManagerInstance = new PluginManager(apolloClient);
   } else if (apolloClient) {

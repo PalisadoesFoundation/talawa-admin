@@ -155,7 +155,9 @@ const Users = (): JSX.Element => {
     setHasMore(pageInfo?.hasNextPage ?? false);
   }, [data]);
 
-  const { data: dataOrgs } = useQuery<{ organizations: { _id: string }[] }>(ORGANIZATION_LIST);
+  const { data: dataOrgs } = useQuery<{ organizations: { _id: string }[] }>(
+    ORGANIZATION_LIST,
+  );
   const [displayedUsers, setDisplayedUsers] = useState<
     InterfaceQueryUserListItem[]
   >([]);

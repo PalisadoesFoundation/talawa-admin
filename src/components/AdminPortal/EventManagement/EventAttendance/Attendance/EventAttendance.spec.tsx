@@ -56,7 +56,7 @@ function mockLazyQuery(returned: {
   error?: Error | null;
 }) {
   vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
-    () => { },
+    () => {},
     {
       data: returned.data,
       loading: returned.loading ?? false,

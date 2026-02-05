@@ -77,12 +77,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgUpdate' });
   const { t: tCommon } = useTranslation('common');
 
-  const {
-    data,
-    loading,
-    refetch,
-    error,
-  } = useQuery<{ organization: InterfaceOrganization }>(GET_ORGANIZATION_BASIC_DATA, {
+  const { data, loading, refetch, error } = useQuery<{
+    organization: InterfaceOrganization;
+  }>(GET_ORGANIZATION_BASIC_DATA, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });

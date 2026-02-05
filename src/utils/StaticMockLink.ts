@@ -1,4 +1,11 @@
-import { print, visit, DocumentNode, DefinitionNode, SelectionSetNode, FieldNode } from 'graphql';
+import {
+  print,
+  visit,
+  DocumentNode,
+  DefinitionNode,
+  SelectionSetNode,
+  FieldNode,
+} from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
@@ -26,7 +33,9 @@ function cloneDeep<T>(obj: T): T {
 }
 
 // Local implementation since it's no longer exported from @apollo/client/utilities
-function removeConnectionDirectiveFromDocument(doc: DocumentNode): DocumentNode | null {
+function removeConnectionDirectiveFromDocument(
+  doc: DocumentNode,
+): DocumentNode | null {
   if (!doc) return null;
   return visit(doc, {
     Directive(node) {
@@ -43,10 +52,16 @@ function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
   if (!doc) return null;
 
   const isClientField = (field: FieldNode): boolean => {
-    return field.directives?.some((directive) => directive.name.value === 'client') ?? false;
+    return (
+      field.directives?.some(
+        (directive) => directive.name.value === 'client',
+      ) ?? false
+    );
   };
 
-  const removeClientFields = (selectionSet: SelectionSetNode): SelectionSetNode | null => {
+  const removeClientFields = (
+    selectionSet: SelectionSetNode,
+  ): SelectionSetNode | null => {
     const selections = selectionSet.selections.filter((selection) => {
       if (selection.kind === 'Field') {
         return !isClientField(selection);
@@ -61,7 +76,10 @@ function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
 
   const newDefinitions: DefinitionNode[] = [];
   for (const definition of doc.definitions) {
-    if (definition.kind === 'OperationDefinition' || definition.kind === 'FragmentDefinition') {
+    if (
+      definition.kind === 'OperationDefinition' ||
+      definition.kind === 'FragmentDefinition'
+    ) {
       if (definition.selectionSet) {
         const newSelectionSet = removeClientFields(definition.selectionSet);
         if (newSelectionSet) {
@@ -82,7 +100,6 @@ function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
   return { ...doc, definitions: newDefinitions };
 }
 
-
 /**
  * Extended MockedResponse type that supports variableMatcher for flexible matching,
  * delay, and dynamic newData generation.
@@ -96,9 +113,7 @@ export interface IStaticMockedResponse extends MockedResponse {
 }
 
 function requestToKey(
-  request:
-    | Operation
-    | import('@apollo/client').GraphQLRequest,
+  request: Operation | import('@apollo/client').GraphQLRequest,
   addTypename: boolean,
 ): string {
   const queryString =
@@ -115,7 +130,8 @@ function requestToKey(
 export class StaticMockLink extends ApolloLink {
   public operation?: Operation;
   public addTypename = true;
-  private _mockedResponsesByKey: { [key: string]: IStaticMockedResponse[] } = {};
+  private _mockedResponsesByKey: { [key: string]: IStaticMockedResponse[] } =
+    {};
 
   constructor(
     mockedResponses: readonly IStaticMockedResponse[],
@@ -220,8 +236,8 @@ export class StaticMockLink extends ApolloLink {
               observer.next(
                 typeof currentResponse.result === 'function'
                   ? (currentResponse.result as ResultFunction<FetchResult>)(
-                    operation.variables,
-                  )
+                      operation.variables,
+                    )
                   : currentResponse.result,
               );
             }

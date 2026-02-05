@@ -128,18 +128,18 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     }
   };
 
-  const {
-    data: requestsData,
-    refetch: refetchRequests,
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
-    variables: {
-      where: {
-        eventId,
-        groupId: group.id,
-        status: 'requested',
+  const { data: requestsData, refetch: refetchRequests } = useQuery(
+    USER_VOLUNTEER_MEMBERSHIP,
+    {
+      variables: {
+        where: {
+          eventId,
+          groupId: group.id,
+          status: 'requested',
+        },
       },
     },
-  });
+  );
 
   const requests = useMemo(() => {
     const data = requestsData as

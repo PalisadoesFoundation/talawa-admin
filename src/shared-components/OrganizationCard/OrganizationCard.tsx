@@ -98,11 +98,11 @@ function OrganizationCard({
   const joinedRefetch =
     userId != null
       ? [
-        {
-          query: USER_JOINED_ORGANIZATIONS_PG,
-          variables: { id: userId, first: 5 },
-        },
-      ]
+          {
+            query: USER_JOINED_ORGANIZATIONS_PG,
+            variables: { id: userId, first: 5 },
+          },
+        ]
       : [];
   const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
     refetchQueries: [{ query: ORGANIZATION_LIST }, ...joinedRefetch],
@@ -127,7 +127,9 @@ function OrganizationCard({
       }
     } catch (error: unknown) {
       if (error instanceof Error && 'graphQLErrors' in error) {
-        const apolloError = error as { graphQLErrors?: Array<{ extensions?: { code?: string } }> };
+        const apolloError = error as {
+          graphQLErrors?: Array<{ extensions?: { code?: string } }>;
+        };
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           NotificationToast.error(t('users.AlreadyJoined'));

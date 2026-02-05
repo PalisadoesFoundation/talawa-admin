@@ -86,7 +86,7 @@ const AcceptInvitation = (): JSX.Element => {
         const e = err as Error | { message?: string };
         setError(
           e?.message ||
-          t('verifyError', { defaultValue: 'Error verifying invitation' }),
+            t('verifyError', { defaultValue: 'Error verifying invitation' }),
         );
       } finally {
         setLoading(false);
@@ -134,7 +134,7 @@ const AcceptInvitation = (): JSX.Element => {
       const e = err as Error | { message?: string };
       NotificationToast.error(
         e?.message ||
-        t('acceptError', { defaultValue: 'Could not accept invitation' }),
+          t('acceptError', { defaultValue: 'Could not accept invitation' }),
       );
     } finally {
       setIsSubmitting(false);

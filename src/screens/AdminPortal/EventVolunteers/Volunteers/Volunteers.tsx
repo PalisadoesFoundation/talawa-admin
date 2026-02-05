@@ -63,7 +63,10 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import styles from './Volunteers.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
-import type { InterfaceEventVolunteerInfo, InterfaceGetEventVolunteersQuery } from 'utils/interfaces';
+import type {
+  InterfaceEventVolunteerInfo,
+  InterfaceGetEventVolunteersQuery,
+} from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';

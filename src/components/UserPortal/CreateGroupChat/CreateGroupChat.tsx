@@ -76,8 +76,8 @@ interface InterfaceCreateGroupChatProps {
   chatsListRefetch: (
     variables?:
       | Partial<{
-        id: string;
-      }>
+          id: string;
+        }>
       | undefined,
   ) => Promise<unknown>;
 }

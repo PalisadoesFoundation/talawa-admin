@@ -137,14 +137,16 @@ const ItemModal: FC<IItemModalProps> = ({
     isCompleted,
   } = formState;
 
-  const { data: actionItemCategoriesData } =
-    useQuery<IActionItemCategoryList>(ACTION_ITEM_CATEGORY_LIST, {
+  const { data: actionItemCategoriesData } = useQuery<IActionItemCategoryList>(
+    ACTION_ITEM_CATEGORY_LIST,
+    {
       variables: {
         input: {
           organizationId: orgId,
         },
       },
-    });
+    },
+  );
 
   const { data: volunteersData } = useQuery<InterfaceGetEventVolunteersQuery>(
     GET_EVENT_VOLUNTEERS,
@@ -166,13 +168,15 @@ const ItemModal: FC<IItemModalProps> = ({
     } | null;
   }
 
-  const { data: volunteerGroupsData } =
-    useQuery<IGetEventVolunteerGroupsQuery>(GET_EVENT_VOLUNTEER_GROUPS, {
+  const { data: volunteerGroupsData } = useQuery<IGetEventVolunteerGroupsQuery>(
+    GET_EVENT_VOLUNTEER_GROUPS,
+    {
       variables: {
         input: { id: eventId },
       },
       skip: !eventId,
-    });
+    },
+  );
 
   const isApplyToRelevant =
     Boolean(isRecurring) &&
@@ -215,8 +219,7 @@ const ItemModal: FC<IItemModalProps> = ({
     editMode && Boolean(actionItem?.volunteer?.id);
 
   const actionItemCategories = useMemo(
-    () =>
-      actionItemCategoriesData?.actionItemCategoriesByOrganization || [],
+    () => actionItemCategoriesData?.actionItemCategoriesByOrganization || [],
     [actionItemCategoriesData],
   );
 

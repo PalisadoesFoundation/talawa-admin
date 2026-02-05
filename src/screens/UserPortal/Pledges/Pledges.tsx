@@ -75,10 +75,10 @@ const Pledges = (): JSX.Element => {
     variables: shouldSkip
       ? undefined
       : {
-        input: { userId: userId as string },
-        where: {},
-        orderBy: 'endDate_DESC',
-      },
+          input: { userId: userId as string },
+          where: {},
+          orderBy: 'endDate_DESC',
+        },
     fetchPolicy: 'cache-and-network',
   });
 
@@ -104,11 +104,16 @@ const Pledges = (): JSX.Element => {
 
   const isNoPledgesFoundError =
     pledgeError && 'graphQLErrors' in pledgeError
-      ? (pledgeError as { graphQLErrors: Array<{ extensions?: { code?: string } }> }).graphQLErrors.some((graphQLError) => {
-        const code = (graphQLError.extensions as { code?: string } | undefined)
-          ?.code;
-        return code === 'arguments_associated_resources_not_found';
-      })
+      ? (
+          pledgeError as {
+            graphQLErrors: Array<{ extensions?: { code?: string } }>;
+          }
+        ).graphQLErrors.some((graphQLError) => {
+          const code = (
+            graphQLError.extensions as { code?: string } | undefined
+          )?.code;
+          return code === 'arguments_associated_resources_not_found';
+        })
       : false;
 
   useEffect(() => {
@@ -233,8 +238,8 @@ const Pledges = (): JSX.Element => {
           label={
             params.row.goalAmount > 0
               ? `${Math.round(
-                (params.row.amount / params.row.goalAmount) * 100,
-              )}%`
+                  (params.row.amount / params.row.goalAmount) * 100,
+                )}%`
               : '0%'
           }
           data-testid="progressBar"

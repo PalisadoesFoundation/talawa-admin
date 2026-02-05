@@ -63,7 +63,7 @@ export default function Donate(): JSX.Element {
   } = useQuery<InterfaceOrganizationDonationConnectionQuery>(
     ORGANIZATION_DONATION_CONNECTION_LIST,
     {
-    variables: { orgId: organizationId },
+      variables: { orgId: organizationId },
     },
   );
 

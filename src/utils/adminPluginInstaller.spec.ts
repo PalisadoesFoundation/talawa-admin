@@ -261,8 +261,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       // Accept that only 'Admin' is installed (matches implementation)
@@ -293,8 +292,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       // Accept the actual error message thrown by the implementation
@@ -402,13 +400,12 @@ describe('adminPluginInstaller', () => {
       });
 
       // API upload fails (this triggers the uncovered catch block)
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockApolloClient.mutate.mockRejectedValueOnce(new Error('upload failed'));
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       expect(errorSpy).toHaveBeenCalled();
@@ -521,7 +518,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return empty array and log error when getInstalledPlugins throws', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockAdminPluginFileService.getInstalledPlugins.mockRejectedValue(
         new Error('fail'),
       );
@@ -547,7 +544,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return false when removal returns false', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockAdminPluginFileService.removePlugin.mockResolvedValue(false);
       const result = await removeAdminPlugin('TestPlugin');
       expect(result).toBe(false);
@@ -559,7 +556,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return false and log error if removePlugin throws', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockAdminPluginFileService.removePlugin.mockRejectedValue(
         new Error('fail'),
       );
@@ -592,7 +589,7 @@ describe('adminPluginInstaller', () => {
   // Edge & fallback error coverage
   describe('Edge and fallback error coverage', () => {
     it('should handle non-Error exception in getInstalledAdminPlugins', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
       mockAdminPluginFileService.getInstalledPlugins.mockRejectedValue(
         'string error',
       );
@@ -684,8 +681,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient:
-          mockApolloClient as unknown as ApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient,
       });
 
       expect(result.success).toBe(true);

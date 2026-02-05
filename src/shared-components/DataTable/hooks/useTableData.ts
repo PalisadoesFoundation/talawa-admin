@@ -47,7 +47,10 @@ export function useTableData<TNode = unknown, TRow = TNode, TData = unknown>(
     return result as Connection<TNode>;
   };
 
-  const connection = useMemo(() => getConnection(data as any), [data, path, ...deps]);
+  const connection = useMemo(
+    () => getConnection(data as any),
+    [data, path, ...deps],
+  );
 
   // Memoize rows derived from the connection and optional transform.
   const rows = useMemo<TRow[]>(() => {

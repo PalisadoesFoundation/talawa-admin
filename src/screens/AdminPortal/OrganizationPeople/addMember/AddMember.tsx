@@ -126,14 +126,11 @@ function AddMember(): JSX.Element {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
   const [userName, setUserName] = useState('');
-  const {
-    data: organizationData,
-  } = useQuery<{ organization: InterfaceQueryOrganizationsListObject }>(
-    GET_ORGANIZATION_BASIC_DATA,
-    {
-      variables: { id: currentUrl },
-    },
-  );
+  const { data: organizationData } = useQuery<{
+    organization: InterfaceQueryOrganizationsListObject;
+  }>(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: currentUrl },
+  });
   const [registerMutation] = useMutation<{
     createUser: { user: { id: string } };
   }>(CREATE_MEMBER_PG);

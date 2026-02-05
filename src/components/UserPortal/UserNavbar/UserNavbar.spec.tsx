@@ -334,7 +334,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
    * @param logoutMock - The mock response for the logout mutation (error or GraphQL error).
    */
   const testLogoutError = async (logoutMock: MockedResponse) => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const { mockClearAllItems } = createMock();
 
     const mocks = [

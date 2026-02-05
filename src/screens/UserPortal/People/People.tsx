@@ -99,19 +99,20 @@ export default function People(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query the current page of members
-  const { data, loading, fetchMore, refetch } = useQuery<InterfaceOrgMemberConnectionQuery>(
-    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        firstName_contains: searchTerm,
-        first: rowsPerPage,
-        after: pageCursors[currentPage] || undefined,
+  const { data, loading, fetchMore, refetch } =
+    useQuery<InterfaceOrgMemberConnectionQuery>(
+      ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+      {
+        variables: {
+          orgId: organizationId,
+          firstName_contains: searchTerm,
+          first: rowsPerPage,
+          after: pageCursors[currentPage] || undefined,
+        },
+        errorPolicy: 'ignore',
+        notifyOnNetworkStatusChange: true,
       },
-      errorPolicy: 'ignore',
-      notifyOnNetworkStatusChange: true,
-    },
-  );
+    );
 
   // Extract members for the current page and filter by role if needed
   const members: IMemberWithUserType[] = React.useMemo(() => {

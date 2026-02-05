@@ -425,7 +425,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const mockClick = vi
         .spyOn(fileInput, 'click')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       await user.click(photoButton);
 
