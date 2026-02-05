@@ -12,7 +12,7 @@ Defined in: [src/components/ProfileCard/ProfileCard.tsx:50](https://github.com/P
 
 ### \_\_namedParameters
 
-[`InterfaceProfileCardProps`](../../../../types/ProfileCard/interface/interfaces/InterfaceProfileCardProps.md)
+[`InterfaceProfileCardProps`](../../../../types/shared-components/ProfileCard/interface/interfaces/InterfaceProfileCardProps.md)
 
 ## Returns
 
