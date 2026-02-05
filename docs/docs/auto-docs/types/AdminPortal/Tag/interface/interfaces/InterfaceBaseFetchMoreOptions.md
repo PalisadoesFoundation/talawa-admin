@@ -4,7 +4,7 @@
 
 # Interface: InterfaceBaseFetchMoreOptions\<T\>
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L45)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L44)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/Palis
 
 > `optional` **updateQuery**: (`prev`, `options`) => `T`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L47)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L46)
 
 #### Parameters
 
@@ -42,4 +42,4 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:47](https://github.com/Palis
 
 > **variables**: [`InterfacePaginationVariables`](InterfacePaginationVariables.md)
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L46)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L45)

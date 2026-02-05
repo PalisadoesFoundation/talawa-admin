@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/Campaigns.tsx#L61)
+Defined in: [src/screens/UserPortal/Campaigns/Campaigns.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/Campaigns.tsx#L87)
 
 ## Returns
 

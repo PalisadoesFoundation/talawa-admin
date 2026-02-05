@@ -4,7 +4,7 @@
 
 # Enumeration: UserEmploymentStatus
 
-Defined in: [src/utils/interfaces.ts:281](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L281)
+Defined in: [src/utils/interfaces.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L284)
 
 Represents the employment status of a user.
 
@@ -14,7 +14,7 @@ Represents the employment status of a user.
 
 > **FULL\_TIME**: `"full_time"`
 
-Defined in: [src/utils/interfaces.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L282)
+Defined in: [src/utils/interfaces.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L285)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:282](https://github.com/PalisadoesFoundatio
 
 > **PART\_TIME**: `"part_time"`
 
-Defined in: [src/utils/interfaces.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L283)
+Defined in: [src/utils/interfaces.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L286)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/utils/interfaces.ts:283](https://github.com/PalisadoesFoundatio
 
 > **UNEMPLOYED**: `"unemployed"`
 
-Defined in: [src/utils/interfaces.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L284)
+Defined in: [src/utils/interfaces.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L287)

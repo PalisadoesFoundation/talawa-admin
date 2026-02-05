@@ -10,7 +10,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/Palisadoes
 
 ### apolloClient?
 
-> `optional` **apolloClient**: `ApolloClient`\<`NormalizedCacheObject`\>
+> `optional` **apolloClient**: `ApolloClient`
 
 Defined in: [src/utils/adminPluginInstaller.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L48)
 

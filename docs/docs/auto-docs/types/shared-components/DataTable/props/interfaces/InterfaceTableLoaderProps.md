@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableLoaderProps\<T\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L42)
+Defined in: [src/types/shared-components/DataTable/props.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L41)
 
 Props for table loading states and error/empty conditions.
 
@@ -25,7 +25,7 @@ The type of data for each row in the table
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L50)
+Defined in: [src/types/shared-components/DataTable/props.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L49)
 
 ARIA label for the loading state
 
@@ -35,7 +35,7 @@ ARIA label for the loading state
 
 > `optional` **asOverlay**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L48)
+Defined in: [src/types/shared-components/DataTable/props.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L47)
 
 Whether to render as an overlay
 
@@ -45,7 +45,7 @@ Whether to render as an overlay
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L44)
+Defined in: [src/types/shared-components/DataTable/props.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L43)
 
 Array of column definitions to match table structure
 
@@ -55,7 +55,7 @@ Array of column definitions to match table structure
 
 > `optional` **emptyComponent**: `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L60)
+Defined in: [src/types/shared-components/DataTable/props.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L59)
 
 Custom React component to display when no rows are present
 
@@ -65,7 +65,7 @@ Custom React component to display when no rows are present
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L56)
+Defined in: [src/types/shared-components/DataTable/props.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L55)
 
 Error from the last data fetch operation
 
@@ -75,7 +75,7 @@ Error from the last data fetch operation
 
 > `optional` **errorComponent**: `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L58)
+Defined in: [src/types/shared-components/DataTable/props.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L57)
 
 Custom React component to display when an error occurs
 
@@ -85,7 +85,7 @@ Custom React component to display when an error occurs
 
 > `optional` **loading**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L52)
+Defined in: [src/types/shared-components/DataTable/props.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L51)
 
 Whether the table is loading initial data
 
@@ -95,7 +95,7 @@ Whether the table is loading initial data
 
 > `optional` **loadingMore**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L54)
+Defined in: [src/types/shared-components/DataTable/props.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L53)
 
 Whether additional data is currently loading
 
@@ -105,6 +105,6 @@ Whether additional data is currently loading
 
 > `optional` **rows**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L46)
+Defined in: [src/types/shared-components/DataTable/props.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L45)
 
 Number of skeleton rows to display

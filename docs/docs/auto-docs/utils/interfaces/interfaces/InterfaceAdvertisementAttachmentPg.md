@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAdvertisementAttachmentPg
 
-Defined in: [src/utils/interfaces.ts:581](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L581)
+Defined in: [src/utils/interfaces.ts:584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L584)
 
 Defines the structure for an advertisement attachment with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for an advertisement attachment with PostgreSQL-specific f
 
 > **mimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:582](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L582)
+Defined in: [src/utils/interfaces.ts:585](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L585)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:582](https://github.com/PalisadoesFoundatio
 
 > **url**: `string`
 
-Defined in: [src/utils/interfaces.ts:583](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L583)
+Defined in: [src/utils/interfaces.ts:586](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L586)

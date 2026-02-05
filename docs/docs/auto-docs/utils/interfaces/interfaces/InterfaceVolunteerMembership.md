@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/utils/interfaces.ts:1816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1816)
+Defined in: [src/utils/interfaces.ts:1828](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1828)
 
 Defines the structure for volunteer membership information.
 
@@ -14,7 +14,7 @@ Defines the structure for volunteer membership information.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1819)
+Defined in: [src/utils/interfaces.ts:1831](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1831)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1819](https://github.com/PalisadoesFoundati
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:1845](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1845)
+Defined in: [src/utils/interfaces.ts:1857](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1857)
 
 #### id
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1845](https://github.com/PalisadoesFoundati
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:1821](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1821)
+Defined in: [src/utils/interfaces.ts:1833](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1833)
 
 #### endAt
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:1821](https://github.com/PalisadoesFoundati
 
 > `optional` **group**: `object`
 
-Defined in: [src/utils/interfaces.ts:1841](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1841)
+Defined in: [src/utils/interfaces.ts:1853](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1853)
 
 #### id
 
@@ -86,7 +86,7 @@ Defined in: [src/utils/interfaces.ts:1841](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1817)
+Defined in: [src/utils/interfaces.ts:1829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1829)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundati
 
 > **status**: `string`
 
-Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1818)
+Defined in: [src/utils/interfaces.ts:1830](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1830)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundati
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1820](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1820)
+Defined in: [src/utils/interfaces.ts:1832](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1832)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:1820](https://github.com/PalisadoesFoundati
 
 > **updatedBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:1849](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1849)
+Defined in: [src/utils/interfaces.ts:1861](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1861)
 
 #### id
 
@@ -126,7 +126,7 @@ Defined in: [src/utils/interfaces.ts:1849](https://github.com/PalisadoesFoundati
 
 > **volunteer**: `object`
 
-Defined in: [src/utils/interfaces.ts:1830](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1830)
+Defined in: [src/utils/interfaces.ts:1842](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1842)
 
 #### hasAccepted
 

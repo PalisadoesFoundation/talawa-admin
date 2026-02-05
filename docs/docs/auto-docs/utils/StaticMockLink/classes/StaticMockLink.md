@@ -4,7 +4,7 @@
 
 # Class: StaticMockLink
 
-Defined in: [src/utils/StaticMockLink.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L42)
+Defined in: [src/utils/StaticMockLink.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L130)
 
 Similar to the standard Apollo MockLink, but doesn't consume a mock
 when it is used allowing it to be used in places like Storybook.
@@ -19,13 +19,13 @@ when it is used allowing it to be used in places like Storybook.
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): `StaticMockLink`
 
-Defined in: [src/utils/StaticMockLink.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L47)
+Defined in: [src/utils/StaticMockLink.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L136)
 
 #### Parameters
 
 ##### mockedResponses
 
-readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
+readonly [`IStaticMockedResponse`](../interfaces/IStaticMockedResponse.md)[]
 
 ##### addTypename
 
@@ -45,7 +45,7 @@ readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any
 
 > **addTypename**: `boolean` = `true`
 
-Defined in: [src/utils/StaticMockLink.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L44)
+Defined in: [src/utils/StaticMockLink.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L132)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/utils/StaticMockLink.ts:44](https://github.com/PalisadoesFounda
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L43)
+Defined in: [src/utils/StaticMockLink.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L131)
 
 ## Methods
 
@@ -61,13 +61,13 @@ Defined in: [src/utils/StaticMockLink.ts:43](https://github.com/PalisadoesFounda
 
 > **addMockedResponse**(`mockedResponse`): `void`
 
-Defined in: [src/utils/StaticMockLink.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L57)
+Defined in: [src/utils/StaticMockLink.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L149)
 
 #### Parameters
 
 ##### mockedResponse
 
-`MockedResponse`
+[`IStaticMockedResponse`](../interfaces/IStaticMockedResponse.md)
 
 #### Returns
 
@@ -75,11 +75,40 @@ Defined in: [src/utils/StaticMockLink.ts:57](https://github.com/PalisadoesFounda
 
 ***
 
+### onError()
+
+> **onError**(`error`, `_observer?`): `boolean` \| `void`
+
+Defined in: [src/utils/StaticMockLink.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L255)
+
+#### Parameters
+
+##### error
+
+`Error`
+
+##### \_observer?
+
+`unknown`
+
+#### Returns
+
+`boolean` \| `void`
+
+***
+
 ### request()
 
-> **request**(`operation`): `Observable`\<`FetchResult`\>
+> **request**(`operation`): `Observable`\<`FormattedExecutionResult`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>\>
 
-Defined in: [src/utils/StaticMockLink.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L72)
+Defined in: [src/utils/StaticMockLink.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L164)
+
+Runs the request handler for the provided operation.
+
+> [!NOTE]
+> This is called by the `ApolloLink.execute` function for you and should
+> not be called directly. Prefer using `ApolloLink.execute` to make the
+> request instead.
 
 #### Parameters
 
@@ -89,7 +118,7 @@ Defined in: [src/utils/StaticMockLink.ts:72](https://github.com/PalisadoesFounda
 
 #### Returns
 
-`Observable`\<`FetchResult`\>
+`Observable`\<`FormattedExecutionResult`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>\>
 
 #### Overrides
 

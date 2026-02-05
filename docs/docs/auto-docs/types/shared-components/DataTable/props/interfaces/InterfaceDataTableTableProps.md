@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDataTableTableProps\<T\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L198)
+Defined in: [src/types/shared-components/DataTable/props.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L203)
 
 Props for the DataTableTable component that renders table rows.
 
@@ -25,7 +25,7 @@ The type of data for each row in the table
 
 > `optional` **activeSortBy**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L226)
+Defined in: [src/types/shared-components/DataTable/props.ts:231](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L231)
 
 ID of the currently sorted column
 
@@ -35,7 +35,7 @@ ID of the currently sorted column
 
 > `optional` **activeSortDir**: [`SortDirection`](../../types/type-aliases/SortDirection.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L228)
+Defined in: [src/types/shared-components/DataTable/props.ts:233](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L233)
 
 Current sort direction
 
@@ -45,7 +45,7 @@ Current sort direction
 
 > `optional` **allSelectedOnPage**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L222)
+Defined in: [src/types/shared-components/DataTable/props.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L227)
 
 Whether all rows on page are selected
 
@@ -55,7 +55,7 @@ Whether all rows on page are selected
 
 > `optional` **ariaBusy**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L210)
+Defined in: [src/types/shared-components/DataTable/props.ts:215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L215)
 
 ARIA busy state for the table
 
@@ -65,7 +65,7 @@ ARIA busy state for the table
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L208)
+Defined in: [src/types/shared-components/DataTable/props.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L213)
 
 ARIA label for the table element
 
@@ -75,7 +75,7 @@ ARIA label for the table element
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L200)
+Defined in: [src/types/shared-components/DataTable/props.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L205)
 
 Array of column definitions specifying how to render each column
 
@@ -85,7 +85,7 @@ Array of column definitions specifying how to render each column
 
 > **currentSelection**: `ReadonlySet`\<[`Key`](../../types/type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L238)
+Defined in: [src/types/shared-components/DataTable/props.ts:243](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L243)
 
 Current selection state
 
@@ -95,7 +95,7 @@ Current selection state
 
 > **effectiveRowActions**: readonly [`IRowAction`](../../hooks/interfaces/IRowAction.md)\<`T`\>[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L246)
+Defined in: [src/types/shared-components/DataTable/props.ts:251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L251)
 
 Array of effective row actions
 
@@ -105,7 +105,7 @@ Array of effective row actions
 
 > `optional` **effectiveSelectable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L214)
+Defined in: [src/types/shared-components/DataTable/props.ts:219](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L219)
 
 Whether selection is enabled
 
@@ -115,7 +115,7 @@ Whether selection is enabled
 
 > **getKey**: (`row`, `idx`) => `string` \| `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L236)
+Defined in: [src/types/shared-components/DataTable/props.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L241)
 
 Function to get unique key for a row
 
@@ -139,7 +139,7 @@ Function to get unique key for a row
 
 > **handleHeaderClick**: (`col`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:230](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L230)
+Defined in: [src/types/shared-components/DataTable/props.ts:235](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L235)
 
 Callback when header is clicked for sorting
 
@@ -159,7 +159,7 @@ Callback when header is clicked for sorting
 
 > `optional` **hasRowActions**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L216)
+Defined in: [src/types/shared-components/DataTable/props.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L221)
 
 Whether row actions are present
 
@@ -169,7 +169,7 @@ Whether row actions are present
 
 > `optional` **headerCheckboxRef**: `RefObject`\<`HTMLInputElement`\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L218)
+Defined in: [src/types/shared-components/DataTable/props.ts:223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L223)
 
 Ref to the header checkbox for select all
 
@@ -179,7 +179,7 @@ Ref to the header checkbox for select all
 
 > `optional` **keysToShowRows**: `ReadonlySet`\<[`Key`](../../types/type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L202)
+Defined in: [src/types/shared-components/DataTable/props.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L207)
 
 Set of row keys to display; if provided, only these rows are shown
 
@@ -189,7 +189,7 @@ Set of row keys to display; if provided, only these rows are shown
 
 > `optional` **loadingMore**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:248](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L248)
+Defined in: [src/types/shared-components/DataTable/props.ts:253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L253)
 
 Whether more rows are loading
 
@@ -199,7 +199,7 @@ Whether more rows are loading
 
 > `optional` **renderRow**: (`row`, `index`) => `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:244](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L244)
+Defined in: [src/types/shared-components/DataTable/props.ts:249](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L249)
 
 Custom function to render each row
 
@@ -223,7 +223,7 @@ Custom function to render each row
 
 > **selectAllOnPage**: (`checked`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L224)
+Defined in: [src/types/shared-components/DataTable/props.ts:229](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L229)
 
 Callback to select/deselect all rows on page
 
@@ -243,7 +243,7 @@ Callback to select/deselect all rows on page
 
 > `optional` **skeletonRows**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:250](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L250)
+Defined in: [src/types/shared-components/DataTable/props.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L255)
 
 Number of skeleton rows to show
 
@@ -253,7 +253,7 @@ Number of skeleton rows to show
 
 > `optional` **someSelectedOnPage**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L220)
+Defined in: [src/types/shared-components/DataTable/props.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L225)
 
 Whether some rows on page are selected
 
@@ -263,7 +263,7 @@ Whether some rows on page are selected
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L204)
+Defined in: [src/types/shared-components/DataTable/props.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L209)
 
 Whether columns are sortable (default: true)
 
@@ -273,7 +273,7 @@ Whether columns are sortable (default: true)
 
 > **sortedRows**: readonly `T`[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L232)
+Defined in: [src/types/shared-components/DataTable/props.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L237)
 
 Array of sorted rows to display
 
@@ -283,7 +283,7 @@ Array of sorted rows to display
 
 > `optional` **sortState**: [`ISortState`](../../types/interfaces/ISortState.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L206)
+Defined in: [src/types/shared-components/DataTable/props.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L211)
 
 Current sort state specifying column and direction
 
@@ -293,7 +293,7 @@ Current sort state specifying column and direction
 
 > **startIndex**: `number`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:234](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L234)
+Defined in: [src/types/shared-components/DataTable/props.ts:239](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L239)
 
 Starting index for row numbering
 
@@ -303,7 +303,7 @@ Starting index for row numbering
 
 > `optional` **tableClassNames**: `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L212)
+Defined in: [src/types/shared-components/DataTable/props.ts:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L217)
 
 CSS classes to apply to the table
 
@@ -313,7 +313,7 @@ CSS classes to apply to the table
 
 > **tCommon**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L242)
+Defined in: [src/types/shared-components/DataTable/props.ts:247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L247)
 
 Translation function for common strings
 
@@ -337,7 +337,7 @@ Translation function for common strings
 
 > **toggleRowSelection**: (`key`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:240](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L240)
+Defined in: [src/types/shared-components/DataTable/props.ts:245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L245)
 
 Callback to toggle row selection
 

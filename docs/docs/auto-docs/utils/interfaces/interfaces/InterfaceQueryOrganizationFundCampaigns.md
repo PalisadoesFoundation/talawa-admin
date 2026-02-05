@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:1205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1205)
+Defined in: [src/utils/interfaces.ts:1217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1217)
 
 Defines the structure for a query result containing organization fund campaigns.
 
@@ -14,7 +14,7 @@ Defines the structure for a query result containing organization fund campaigns.
 
 > **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1209)
+Defined in: [src/utils/interfaces.ts:1221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1221)
 
 #### edges
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1206)
+Defined in: [src/utils/interfaces.ts:1218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1218)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/interfaces.ts:1206](https://github.com/PalisadoesFoundati
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1208)
+Defined in: [src/utils/interfaces.ts:1220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1220)
 
 ***
 
@@ -42,4 +42,4 @@ Defined in: [src/utils/interfaces.ts:1208](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1207)
+Defined in: [src/utils/interfaces.ts:1219](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1219)

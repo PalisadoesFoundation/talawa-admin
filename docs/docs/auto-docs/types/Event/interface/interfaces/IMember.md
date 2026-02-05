@@ -8,9 +8,9 @@ Defined in: [src/types/Event/interface.ts:18](https://github.com/PalisadoesFound
 
 ## Properties
 
-### birthDate
+### birthDate?
 
-> **birthDate**: `Date`
+> `optional` **birthDate**: `string` \| `Date`
 
 Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L26)
 
@@ -76,9 +76,9 @@ Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFound
 
 ***
 
-### tagsAssignedWith
+### tagsAssignedWith?
 
-> **tagsAssignedWith**: `object`
+> `optional` **tagsAssignedWith**: `object`
 
 Defined in: [src/types/Event/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L29)
 

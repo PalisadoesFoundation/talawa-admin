@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVenuePg
 
-Defined in: [src/utils/interfaces.ts:925](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L925)
+Defined in: [src/utils/interfaces.ts:929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L929)
 
 Defines the structure for a venue with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for a venue with PostgreSQL-specific fields.
 
 > `optional` **attachments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L930)
+Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L934)
 
 #### mimeType
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundatio
 
 > `optional` **capacity**: `number`
 
-Defined in: [src/utils/interfaces.ts:929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L929)
+Defined in: [src/utils/interfaces.ts:933](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L933)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:929](https://github.com/PalisadoesFoundatio
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L934)
+Defined in: [src/utils/interfaces.ts:938](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L938)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundatio
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:936](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L936)
+Defined in: [src/utils/interfaces.ts:940](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L940)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/interfaces.ts:936](https://github.com/PalisadoesFoundatio
 
 > `optional` **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:928](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L928)
+Defined in: [src/utils/interfaces.ts:932](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L932)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:928](https://github.com/PalisadoesFoundatio
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:926](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L926)
+Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L930)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:926](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:927](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L927)
+Defined in: [src/utils/interfaces.ts:931](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L931)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/utils/interfaces.ts:927](https://github.com/PalisadoesFoundatio
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:938](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L938)
+Defined in: [src/utils/interfaces.ts:942](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L942)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/utils/interfaces.ts:938](https://github.com/PalisadoesFoundatio
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:935](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L935)
+Defined in: [src/utils/interfaces.ts:939](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L939)
 
 ***
 
@@ -94,4 +94,4 @@ Defined in: [src/utils/interfaces.ts:935](https://github.com/PalisadoesFoundatio
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:937](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L937)
+Defined in: [src/utils/interfaces.ts:941](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L941)

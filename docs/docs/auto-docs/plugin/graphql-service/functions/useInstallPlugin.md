@@ -4,10 +4,10 @@
 
 # Function: useInstallPlugin()
 
-> **useInstallPlugin**(): `MutationTuple`\<\{ `installPlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IInstallPluginInput`](../interfaces/IInstallPluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+> **useInstallPlugin**(): `ResultTuple`\<\{ `installPlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IInstallPluginInput`](../interfaces/IInstallPluginInput.md); \}, `ApolloCache`\>
 
-Defined in: [src/plugin/graphql-service.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L62)
+Defined in: [src/plugin/graphql-service.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L57)
 
 ## Returns
 
-`MutationTuple`\<\{ `installPlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IInstallPluginInput`](../interfaces/IInstallPluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+`ResultTuple`\<\{ `installPlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IInstallPluginInput`](../interfaces/IInstallPluginInput.md); \}, `ApolloCache`\>

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceBaseDataTableProps\<T\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L17)
+Defined in: [src/types/shared-components/DataTable/props.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L16)
 
 Base props for DataTable component configuration.
 
@@ -25,7 +25,7 @@ The type of data for each row in the table
 
 > **columns**: [`IColumnDef`](../../column/interfaces/IColumnDef.md)\<`T`, `unknown`\>[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L19)
+Defined in: [src/types/shared-components/DataTable/props.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L18)
 
 Array of column definitions specifying how to render each column
 
@@ -35,7 +35,7 @@ Array of column definitions specifying how to render each column
 
 > `optional` **keysToShowRows**: `ReadonlySet`\<[`Key`](../../types/type-aliases/Key.md)\>
 
-Defined in: [src/types/shared-components/DataTable/props.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L23)
+Defined in: [src/types/shared-components/DataTable/props.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L22)
 
 Set of row keys to display; if provided, only these rows are shown
 
@@ -45,7 +45,7 @@ Set of row keys to display; if provided, only these rows are shown
 
 > `optional` **onSortChange**: (`event`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L31)
+Defined in: [src/types/shared-components/DataTable/props.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L30)
 
 Callback fired when sort state changes
 
@@ -65,7 +65,7 @@ Callback fired when sort state changes
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => [`Key`](../../types/type-aliases/Key.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L25)
+Defined in: [src/types/shared-components/DataTable/props.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L24)
 
 Key or property name or function to extract unique identifier for each row
 
@@ -75,7 +75,7 @@ Key or property name or function to extract unique identifier for each row
 
 > `optional` **rows**: `T`[]
 
-Defined in: [src/types/shared-components/DataTable/props.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L21)
+Defined in: [src/types/shared-components/DataTable/props.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L20)
 
 Array of row data to display in the table
 
@@ -85,7 +85,7 @@ Array of row data to display in the table
 
 > `optional` **sortable**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/props.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L27)
+Defined in: [src/types/shared-components/DataTable/props.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L26)
 
 Whether columns are sortable (default: true)
 
@@ -95,6 +95,6 @@ Whether columns are sortable (default: true)
 
 > `optional` **sortState**: [`ISortState`](../../types/interfaces/ISortState.md)
 
-Defined in: [src/types/shared-components/DataTable/props.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L29)
+Defined in: [src/types/shared-components/DataTable/props.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/props.ts#L28)
 
 Current sort state specifying column and direction

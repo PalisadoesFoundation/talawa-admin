@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationMembersConnectionPg
 
-Defined in: [src/utils/interfaces.ts:786](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L786)
+Defined in: [src/utils/interfaces.ts:790](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L790)
 
 Defines the structure for a connection of organization members with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for a connection of organization members with PostgreSQL-s
 
 > **edges**: [`InterfaceOrganizationMembersConnectionEdgePg`](InterfaceOrganizationMembersConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:787](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L787)
+Defined in: [src/utils/interfaces.ts:791](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L791)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:787](https://github.com/PalisadoesFoundatio
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:788](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L788)
+Defined in: [src/utils/interfaces.ts:792](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L792)

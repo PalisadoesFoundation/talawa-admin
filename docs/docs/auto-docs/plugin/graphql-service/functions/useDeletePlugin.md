@@ -4,10 +4,10 @@
 
 # Function: useDeletePlugin()
 
-> **useDeletePlugin**(): `MutationTuple`\<\{ `deletePlugin`: \{ `id`: `string`; `pluginId`: `string`; \}; \}, \{ `input`: [`IDeletePluginInput`](../interfaces/IDeletePluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+> **useDeletePlugin**(): `ResultTuple`\<\{ `deletePlugin`: \{ `id`: `string`; `pluginId`: `string`; \}; \}, \{ `input`: [`IDeletePluginInput`](../interfaces/IDeletePluginInput.md); \}, `ApolloCache`\>
 
-Defined in: [src/plugin/graphql-service.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L75)
+Defined in: [src/plugin/graphql-service.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L70)
 
 ## Returns
 
-`MutationTuple`\<\{ `deletePlugin`: \{ `id`: `string`; `pluginId`: `string`; \}; \}, \{ `input`: [`IDeletePluginInput`](../interfaces/IDeletePluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+`ResultTuple`\<\{ `deletePlugin`: \{ `id`: `string`; `pluginId`: `string`; \}; \}, \{ `input`: [`IDeletePluginInput`](../interfaces/IDeletePluginInput.md); \}, `ApolloCache`\>

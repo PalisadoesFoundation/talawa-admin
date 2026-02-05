@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPg
 
-Defined in: [src/utils/interfaces.ts:954](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L954)
+Defined in: [src/utils/interfaces.ts:958](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L958)
 
 Defines the structure for an organization with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for an organization with PostgreSQL-specific fields.
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L955)
+Defined in: [src/utils/interfaces.ts:959](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L959)
 
 #### addressLine1
 
@@ -44,6 +44,10 @@ Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundatio
 
 > **blockedUsers**: [`InterfaceOrganizationBlockedUsersConnectionPg`](InterfaceOrganizationBlockedUsersConnectionPg.md)
 
+#### blockedUsersCount
+
+> **blockedUsersCount**: `number`
+
 #### chats
 
 > **chats**: `InterfaceOrganizationChatsConnectionPg`
@@ -72,6 +76,10 @@ Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundatio
 
 > **events**: [`InterfaceOrganizationEventsConnectionPg`](InterfaceOrganizationEventsConnectionPg.md)
 
+#### eventsCount
+
+> **eventsCount**: `number`
+
 #### funds
 
 > **funds**: [`InterfaceOrganizationFundsConnectionPg`](InterfaceOrganizationFundsConnectionPg.md)
@@ -87,6 +95,10 @@ Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundatio
 #### membersCount
 
 > **membersCount**: `number`
+
+#### membershipRequests?
+
+> `optional` **membershipRequests**: `object`[]
 
 #### name
 
@@ -127,3 +139,7 @@ Defined in: [src/utils/interfaces.ts:955](https://github.com/PalisadoesFoundatio
 #### venues
 
 > **venues**: [`InterfaceOrganizationVenuesConnectionPg`](InterfaceOrganizationVenuesConnectionPg.md)
+
+#### venuesCount
+
+> **venuesCount**: `number`

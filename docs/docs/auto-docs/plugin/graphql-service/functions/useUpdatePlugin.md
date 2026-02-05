@@ -4,10 +4,10 @@
 
 # Function: useUpdatePlugin()
 
-> **useUpdatePlugin**(): `MutationTuple`\<\{ `updatePlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IUpdatePluginInput`](../interfaces/IUpdatePluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+> **useUpdatePlugin**(): `ResultTuple`\<\{ `updatePlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IUpdatePluginInput`](../interfaces/IUpdatePluginInput.md); \}, `ApolloCache`\>
 
-Defined in: [src/plugin/graphql-service.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L69)
+Defined in: [src/plugin/graphql-service.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L64)
 
 ## Returns
 
-`MutationTuple`\<\{ `updatePlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IUpdatePluginInput`](../interfaces/IUpdatePluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
+`ResultTuple`\<\{ `updatePlugin`: [`IPlugin`](../interfaces/IPlugin.md); \}, \{ `input`: [`IUpdatePluginInput`](../interfaces/IUpdatePluginInput.md); \}, `ApolloCache`\>

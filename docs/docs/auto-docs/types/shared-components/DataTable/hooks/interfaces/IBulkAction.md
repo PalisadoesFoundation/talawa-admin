@@ -4,7 +4,7 @@
 
 # Interface: IBulkAction\<T\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L157)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L158)
 
 Configuration for an action available on bulk-selected rows.
 
@@ -25,7 +25,7 @@ The type of row data this action operates on
 
 > `optional` **confirm**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L179)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L180)
 
 Optional confirmation message to display before executing the action
 
@@ -35,7 +35,7 @@ Optional confirmation message to display before executing the action
 
 > `optional` **disabled**: `boolean` \| (`rows`, `keys`) => `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L177)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L178)
 
 Whether this action is disabled for the current selection.
 Can be a boolean or a function that evaluates the selection.
@@ -54,7 +54,7 @@ Array of keys for the selected rows
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L159)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L160)
 
 Unique identifier for this action
 
@@ -64,7 +64,7 @@ Unique identifier for this action
 
 > **label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L161)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L162)
 
 Display label for the bulk action button
 
@@ -74,7 +74,7 @@ Display label for the bulk action button
 
 > **onClick**: (`rows`, `keys`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L170)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L171)
 
 Callback fired when the bulk action is triggered.
 Can be async to support server operations.

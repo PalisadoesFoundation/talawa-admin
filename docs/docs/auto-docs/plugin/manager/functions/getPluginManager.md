@@ -12,7 +12,7 @@ Defined in: [src/plugin/manager.ts:181](https://github.com/PalisadoesFoundation/
 
 ### apolloClient?
 
-`ApolloClient`\<`unknown`\>
+`ApolloClient`
 
 ## Returns
 

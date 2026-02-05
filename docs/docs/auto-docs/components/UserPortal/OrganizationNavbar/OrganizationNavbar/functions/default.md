@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L34)
+Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L35)
 
 ## Parameters
 

@@ -4,7 +4,7 @@
 
 # Interface: IUseTableDataResult\<TRow, TData\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L59)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L60)
 
 Result object from a table data fetching hook.
 
@@ -31,7 +31,7 @@ The shape of the complete GraphQL query result
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L67)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L68)
 
 Error from the most recent query or fetch operation
 
@@ -39,9 +39,9 @@ Error from the most recent query or fetch operation
 
 ### fetchMore()
 
-> **fetchMore**: \<`TFetchData`, `TFetchVars`\>(`fetchMoreOptions`) => `Promise`\<`ApolloQueryResult`\<`TFetchData`\>\>
+> **fetchMore**: \<`TFetchData`, `TFetchVars`\>(`fetchMoreOptions`) => `Promise`\<`QueryResult`\<`TFetchData`\>\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L79)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L80)
 
 Function to fetch additional pages or update pagination cursors.
 Follows Apollo Client's fetchMore signature.
@@ -60,11 +60,11 @@ Follows Apollo Client's fetchMore signature.
 
 ##### fetchMoreOptions
 
-`FetchMoreQueryOptions`\<`TFetchVars`, `TFetchData`\> & `object`
+`FetchMoreOptions`\<`TData`, `OperationVariables`, `TFetchData`, `TFetchVars`\>
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<`TFetchData`\>\>
+`Promise`\<`QueryResult`\<`TFetchData`\>\>
 
 ***
 
@@ -72,7 +72,7 @@ Follows Apollo Client's fetchMore signature.
 
 > **loading**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L63)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L64)
 
 Whether the initial data fetch is in progress
 
@@ -82,7 +82,7 @@ Whether the initial data fetch is in progress
 
 > **loadingMore**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L65)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L66)
 
 Whether additional pages are currently being fetched
 
@@ -92,7 +92,7 @@ Whether additional pages are currently being fetched
 
 > **networkStatus**: `NetworkStatus`
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L84)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L85)
 
 Apollo Client network status code.
 1 = loading, 4 = setVariables, 6 = refetch, 7 = poll, 8 = ready, etc.
@@ -103,7 +103,7 @@ Apollo Client network status code.
 
 > **pageInfo**: [`InterfacePageInfo`](../../pagination/interfaces/InterfacePageInfo.md)
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L69)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L70)
 
 Pagination state including cursors and next/previous page availability
 
@@ -111,9 +111,9 @@ Pagination state including cursors and next/previous page availability
 
 ### refetch()
 
-> **refetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<`TData`\>\>
+> **refetch**: (`variables?`) => `Promise`\<`QueryResult`\<`TData`\>\>
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L74)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L75)
 
 Function to refetch the query with fresh data.
 Typically used to refresh after mutations.
@@ -126,7 +126,7 @@ Typically used to refresh after mutations.
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<`TData`\>\>
+`Promise`\<`QueryResult`\<`TData`\>\>
 
 ***
 
@@ -134,6 +134,6 @@ Typically used to refresh after mutations.
 
 > **rows**: `TRow`[]
 
-Defined in: [src/types/shared-components/DataTable/hooks.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L61)
+Defined in: [src/types/shared-components/DataTable/hooks.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/hooks.ts#L62)
 
 Array of processed rows ready for display in the table

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateVolunteerGroup
 
-Defined in: [src/utils/interfaces.ts:1805](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1805)
+Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1817)
 
 Defines the structure for creating a volunteer group.
 
@@ -14,15 +14,15 @@ Defines the structure for creating a volunteer group.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1807](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1807)
+Defined in: [src/utils/interfaces.ts:1819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1819)
 
 ***
 
 ### leader
 
-> **leader**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
+> **leader**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md) \| [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/utils/interfaces.ts:1808](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1808)
+Defined in: [src/utils/interfaces.ts:1820](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1820)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1808](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1806](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1806)
+Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1818)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1806](https://github.com/PalisadoesFoundati
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/utils/interfaces.ts:1809](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1809)
+Defined in: [src/utils/interfaces.ts:1821](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1821)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:1809](https://github.com/PalisadoesFoundati
 
 > **volunteerUsers**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
 
-Defined in: [src/utils/interfaces.ts:1810](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1810)
+Defined in: [src/utils/interfaces.ts:1822](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1822)

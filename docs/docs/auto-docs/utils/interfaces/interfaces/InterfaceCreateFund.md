@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateFund
 
-Defined in: [src/utils/interfaces.ts:1562](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1562)
+Defined in: [src/utils/interfaces.ts:1574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1574)
 
 Defines the structure for creating a fund.
 
@@ -14,7 +14,7 @@ Defines the structure for creating a fund.
 
 > **fundName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1563](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1563)
+Defined in: [src/utils/interfaces.ts:1575](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1575)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1563](https://github.com/PalisadoesFoundati
 
 > **fundRef**: `string`
 
-Defined in: [src/utils/interfaces.ts:1564](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1564)
+Defined in: [src/utils/interfaces.ts:1576](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1576)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1564](https://github.com/PalisadoesFoundati
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1566](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1566)
+Defined in: [src/utils/interfaces.ts:1578](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1578)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1566](https://github.com/PalisadoesFoundati
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1565](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1565)
+Defined in: [src/utils/interfaces.ts:1577](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1577)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:1565](https://github.com/PalisadoesFoundati
 
 > **isTaxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1567](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1567)
+Defined in: [src/utils/interfaces.ts:1579](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1579)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationMembersConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:794](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L794)
+Defined in: [src/utils/interfaces.ts:798](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L798)
 
 Defines the structure for an edge in the organization members connection with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for an edge in the organization members connection with Po
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:795](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L795)
+Defined in: [src/utils/interfaces.ts:799](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L799)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:795](https://github.com/PalisadoesFoundatio
 
 > **node**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:796](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L796)
+Defined in: [src/utils/interfaces.ts:800](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L800)

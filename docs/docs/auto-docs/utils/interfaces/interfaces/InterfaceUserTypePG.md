@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserTypePG
 
-Defined in: [src/utils/interfaces.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L345)
+Defined in: [src/utils/interfaces.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L348)
 
 Defines the structure for a user type with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for a user type with PostgreSQL-specific fields.
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L346)
+Defined in: [src/utils/interfaces.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L349)
 
 #### emailAddress
 
