@@ -45,6 +45,10 @@ get_staged_files > "$STAGED_ALL_FILE"
   exit 0
 }
 
+# Design token validation (runs for any staged files so .css/.scss/.sass are checked even when no .ts/.tsx staged)
+echo "Running design token validation..."
+pnpm exec tsx scripts/validate-tokens.ts --staged --all || exit 1
+
 if [ -s "$STAGED_SRC_FILE" ]; then
   .husky/scripts/precommit-node.sh "$STAGED_SRC_FILE"
 fi
