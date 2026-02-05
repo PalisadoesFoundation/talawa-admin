@@ -85,6 +85,7 @@ export default function Events(): JSX.Element {
   const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
 
   // Query to fetch events for the organization
+  const monthStart = new Date(currentYear, currentMonth, 1);
   const {
     data,
     error: eventDataError,
@@ -94,12 +95,8 @@ export default function Events(): JSX.Element {
       id: organizationId,
       first: 100,
       after: null,
-      startDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .startOf('month')
-        .toISOString(),
-      endDate: dayjs(new Date(currentYear, currentMonth, 1))
-        .endOf('month')
-        .toISOString(),
+      startDate: dayjs(monthStart).startOf('month').toISOString(),
+      endDate: dayjs(monthStart).endOf('month').toISOString(),
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,

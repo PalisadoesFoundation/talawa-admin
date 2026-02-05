@@ -36,24 +36,25 @@
   min-width: 120px;
 }
 
+/* Override Bootstrap dropdown button styles */
 .dropdown button {
-  background-color: var(--color-white) !important;
-  border: 1px solid var(--color-gray-300) !important;
-  color: var(--color-gray-700) !important;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-700);
   height: 40px;
   border-radius: var(--radius-md);
 }
 
 .dropdown button:hover,
 .dropdown button:focus {
-  background-color: var(--color-gray-50) !important;
-  border-color: var(--color-gray-400) !important;
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-400);
 }
 
 .createButton {
-  background-color: var(--color-white) !important;
-  border: 1px solid var(--color-gray-300) !important;
-  color: var(--color-gray-700) !important;
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  color: var(--color-gray-700);
   height: 40px;
   min-width: 100px;
   display: inline-flex;
@@ -66,8 +67,8 @@
 
 .createButton:hover,
 .createButton:focus {
-  background-color: var(--color-gray-50) !important;
-  border-color: var(--color-gray-400) !important;
+  background-color: var(--color-gray-50);
+  border-color: var(--color-gray-400);
 }
 
 .addButtonIcon {

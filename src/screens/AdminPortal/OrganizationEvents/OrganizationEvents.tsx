@@ -216,7 +216,7 @@ function organizationEvents(): JSX.Element {
       });
 
       if (createEventData) {
-        NotificationToast.success(t('eventCreated') as string);
+        NotificationToast.success(t('eventCreated'));
         try {
           await refetchEvents();
         } catch {

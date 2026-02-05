@@ -289,7 +289,6 @@
   padding: var(--space-10);
   background-color: var(--calendar-bg);
   min-height: 80vh;
-  margin-right: var(--space-6);
   border-radius: var(--space-3);
 }
 

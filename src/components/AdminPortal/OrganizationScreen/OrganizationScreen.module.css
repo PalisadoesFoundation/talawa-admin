@@ -8,7 +8,7 @@
 .expand {
   margin-left: var(--space-13);
   padding-left: var(--space-11);
-  padding-right: var(--space-6);
+  padding-right: var(--space-3);
   animation: moveLeft 0.5s ease-in-out;
 }
 
@@ -71,7 +71,7 @@
 
 .contract {
   padding-left: var(--space-22);
-  padding-right: var(--space-6);
+  padding-right: var(--space-3);
   animation: moveRight 0.5s ease-in-out;
 }
 
@@ -192,7 +192,7 @@
     animation: none;
     margin-left: 0;
     padding-left: var(--space-5);
-    padding-right: var(--space-5);
+    padding-right: var(--space-3);
   }
 
   .collapseSidebarButton {
@@ -205,7 +205,7 @@
 /* -- OrganizationScreen specific styles -- */
 
 .titleContainer {
-  padding: 10px;
+  padding: var(--space-3);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
