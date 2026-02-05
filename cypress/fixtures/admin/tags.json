@@ -1,0 +1,13 @@
+{
+  "tags": [
+    {
+      "id": "tag_001",
+      "name": "Urgent"
+    },
+    {
+      "id": "tag_002",
+      "name": "Long Tag — 世界"
+    }
+  ],
+  "emptyTags": []
+}
