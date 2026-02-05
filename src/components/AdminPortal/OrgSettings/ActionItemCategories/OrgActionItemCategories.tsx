@@ -271,7 +271,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
               data-testid={'viewCategoryBtn' + params.row.serialNumber}
               onClick={() => {
                 setCategory(params.row as IActionItemCategoryInfo);
-                openModal(ModalState.VIEW);
+                viewModal.open();
               }}
             >
               <i className="fa fa-eye" />

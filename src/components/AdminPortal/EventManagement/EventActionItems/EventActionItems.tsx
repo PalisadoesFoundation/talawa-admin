@@ -84,10 +84,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -136,6 +132,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         id: eventId,
       },
     },
+    skip: !orgId,
     // Use cache-first but ensure fresh data for recurring event instances
     // This prevents cached action items from showing template data instead of instance exception data
     fetchPolicy: 'cache-first',
@@ -204,6 +201,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       setBaseEvent(eventData.event.baseEvent);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   if (eventInfoLoading) {
     return (

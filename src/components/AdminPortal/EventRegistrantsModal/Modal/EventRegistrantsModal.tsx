@@ -82,10 +82,13 @@ export const EventRegistrantsModal = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { data: eventData } = useQuery<InterfaceEventDetailsQuery>(EVENT_DETAILS, {
-    variables: { eventId: eventId },
-    fetchPolicy: 'cache-first',
-  });
+  const { data: eventData } = useQuery<InterfaceEventDetailsQuery>(
+    EVENT_DETAILS,
+    {
+      variables: { eventId: eventId },
+      fetchPolicy: 'cache-first',
+    },
+  );
 
   // Determine event type
   useEffect(() => {

@@ -96,12 +96,13 @@ function EventAttendance(): JSX.Element {
 
     const filtered = (memberData?.event?.attendees ?? []).filter(
       (attendee: InterfaceMember) => {
-      const name = attendee.name?.toLowerCase() || '';
-      const email = attendee.emailAddress?.toLowerCase() || '';
-      return (
-        name.includes(searchValueLower) || email.includes(searchValueLower)
-      );
-    });
+        const name = attendee.name?.toLowerCase() || '';
+        const email = attendee.emailAddress?.toLowerCase() || '';
+        return (
+          name.includes(searchValueLower) || email.includes(searchValueLower)
+        );
+      },
+    );
 
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);

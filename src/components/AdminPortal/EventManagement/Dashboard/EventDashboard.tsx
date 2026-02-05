@@ -39,10 +39,12 @@ import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceEventDetailsQuery } from 'utils/interfaces';
+import type { InterfaceEventDashboardProps } from 'types/AdminPortal/EventManagement/Dashboard';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
-const EventDashboard = (props: { eventId: string }): JSX.Element => {
-  const { eventId } = props;
+const EventDashboard = ({
+  eventId,
+}: InterfaceEventDashboardProps): JSX.Element => {
   const { t } = useTranslation(['translation', 'common']);
   const { t: tEventList } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
@@ -193,6 +195,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                 onClick={showViewModal}
                 data-testid="edit-event-button"
+                aria-label={tEventList('editEvent')}
               >
                 <Edit fontSize="medium" />
               </button>

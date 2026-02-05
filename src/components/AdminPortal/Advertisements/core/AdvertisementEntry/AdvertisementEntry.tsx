@@ -278,7 +278,7 @@ function AdvertisementEntry({
                   )}
                 </div>
               )}
-      <Card.Body>
+              <Card.Body>
                 <Card.Title className="t-bold" data-testid="Ad_name">
                   {advertisement.name}
                 </Card.Title>

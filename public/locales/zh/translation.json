@@ -855,6 +855,7 @@
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
+    "errorLoadingEvent": "加载活动时出错。请稍后再试。",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "没有要更新的更改",
     "thisInstance": "本实例",

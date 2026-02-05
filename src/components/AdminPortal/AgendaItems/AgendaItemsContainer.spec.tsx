@@ -203,7 +203,7 @@ describe('Testing Agenda Items components', () => {
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -304,7 +304,7 @@ describe('Testing Agenda Items components', () => {
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -384,10 +384,10 @@ describe('Testing Agenda Items components', () => {
 
     const titleInput = screen.getByTestId('titleInput');
     const descriptionInput = screen.getByTestId('descriptionInput');
-    await userEvent.clear(titleInput);
-    await userEvent.clear(descriptionInput);
-    await userEvent.type(titleInput, formData.title);
-    await userEvent.type(descriptionInput, formData.description);
+    await user.clear(titleInput);
+    await user.clear(descriptionInput);
+    await user.type(titleInput, formData.title);
+    await user.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();

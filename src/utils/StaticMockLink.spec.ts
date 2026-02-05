@@ -10,6 +10,7 @@ type Observer<T> = {
 };
 import type { MockedResponse } from '@apollo/client/testing';
 import { gql, Observable } from '@apollo/client';
+import { OperationTypeNode } from 'graphql';
 import { print } from 'graphql';
 import { equal } from '@wry/equality';
 
@@ -52,7 +53,7 @@ const operation: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query',
+  operationType: OperationTypeNode.QUERY,
   client: {} as unknown as Operation['client'],
 };
 const oper: Operation = {
@@ -62,7 +63,7 @@ const oper: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query',
+  operationType: OperationTypeNode.QUERY,
   client: {} as unknown as Operation['client'],
 };
 
@@ -77,7 +78,7 @@ function createOperation(
     extensions: {},
     setContext: () => {},
     getContext: () => ({}),
-    operationType: 'query', // Default to query
+    operationType: OperationTypeNode.QUERY, // Default to query
     client: {} as unknown as Operation['client'], // Mock client
   };
 }
@@ -92,7 +93,7 @@ const operation2: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query',
+  operationType: OperationTypeNode.QUERY,
   client: {} as unknown as Operation['client'],
 };
 const operation3: Operation = {
@@ -102,7 +103,7 @@ const operation3: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query',
+  operationType: OperationTypeNode.QUERY,
   client: {} as unknown as Operation['client'],
 };
 const sampleResponse = {
@@ -251,11 +252,11 @@ describe('StaticMockLink', () => {
         variables: { id: '2' }, // Changed to match the request variables
       },
       result: sampleResponse,
-      newData: (variables: { id: string }) => ({
+      newData: (variables: Record<string, unknown>) => ({
         data: {
           user: {
-            id: variables.id,
-            name: `User ${variables.id}`,
+            id: String(variables.id),
+            name: `User ${String(variables.id)}`,
             __typename: 'User',
           },
         },
@@ -432,7 +433,7 @@ describe('mockSingleLink', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-      operationType: 'query' as const,
+      operationType: OperationTypeNode.QUERY,
       client: {} as unknown as Operation['client'],
     };
 
@@ -476,6 +477,12 @@ describe('mockSingleLink', () => {
     const operation: Operation = {
       query: mockQuery,
       variables: { id: '999' },
+      operationName: 'MockQuery',
+      extensions: {},
+      setContext: () => {},
+      getContext: () => ({}),
+      operationType: OperationTypeNode.QUERY,
+      client: {} as unknown as Operation['client'],
     };
 
     const key = JSON.stringify({
@@ -597,7 +604,7 @@ describe('mockSingleLink', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-      operationType: 'query' as const,
+      operationType: OperationTypeNode.QUERY,
       client: {} as unknown as Operation['client'],
     });
 

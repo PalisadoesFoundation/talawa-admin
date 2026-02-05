@@ -106,6 +106,7 @@ export default function Advertisements(): JSX.Element {
   const [activeAdvertisements, setActiveAdvertisements] = useState<
     Advertisement[]
   >([]);
+  const [searchValue, setSearchValue] = useState('');
 
   const mapAdvertisementFromPg = (
     pg: InterfaceAdvertisementPg,
@@ -149,16 +150,31 @@ export default function Advertisements(): JSX.Element {
           (edge: InterfaceOrganizationAdvertisementsConnectionEdgePg) =>
             mapAdvertisementFromPg(edge.node),
         );
+
       if (afterCompleted) {
         setCompletedAdvertisements((prevAds) => {
-          const unique = mergedAdvertisements(prevAds, ads);
-          return unique;
+          const merged = mergedAdvertisements(prevAds, ads);
+          return searchValue
+            ? merged.filter(
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
+            : merged;
         });
       } else {
-        setCompletedAdvertisements(ads);
+        setCompletedAdvertisements(
+          searchValue
+            ? ads.filter(
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
+            : ads,
+        );
       }
     }
-  }, [orgCompletedAdvertisementListData, afterCompleted]);
+  }, [orgCompletedAdvertisementListData, afterCompleted, searchValue]);
 
   useEffect(() => {
     if (orgActiveAdvertisementListData?.organization?.advertisements?.edges) {
@@ -167,16 +183,31 @@ export default function Advertisements(): JSX.Element {
           (edge: InterfaceOrganizationAdvertisementsConnectionEdgePg) =>
             mapAdvertisementFromPg(edge.node),
         );
+
       if (afterActive) {
         setActiveAdvertisements((prevAds) => {
-          const unique = mergedAdvertisements(prevAds, ads);
-          return unique;
+          const merged = mergedAdvertisements(prevAds, ads);
+          return searchValue
+            ? merged.filter(
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
+            : merged;
         });
       } else {
-        setActiveAdvertisements(ads);
+        setActiveAdvertisements(
+          searchValue
+            ? ads.filter(
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
+            : ads,
+        );
       }
     }
-  }, [orgActiveAdvertisementListData, afterActive]);
+  }, [orgActiveAdvertisementListData, afterActive, searchValue]);
 
   /**
    * Fetches more completed advertisements for infinite scrolling.
@@ -241,24 +272,7 @@ export default function Advertisements(): JSX.Element {
               search={{
                 placeholder: t('searchAdvertisements'),
                 onSearch: (value) => {
-                  const searchValue = value.toLowerCase();
-                  const filteredActiveAds = activeAdvertisements.filter(
-                    (ad) =>
-                      ad.name.toLowerCase().includes(searchValue) ||
-                      (ad.description ?? '')
-                        .toLowerCase()
-                        .includes(searchValue),
-                  );
-                  const filteredCompletedAds = completedAdvertisements.filter(
-                    (ad) =>
-                      ad.name.toLowerCase().includes(searchValue) ||
-                      (ad.description ?? '')
-                        .toLowerCase()
-                        .includes(searchValue),
-                  );
-
-                  setActiveAdvertisements(filteredActiveAds);
-                  setCompletedAdvertisements(filteredCompletedAds);
+                  setSearchValue(value.toLowerCase());
                 },
                 inputTestId: 'searchname',
                 buttonTestId: 'searchButton',

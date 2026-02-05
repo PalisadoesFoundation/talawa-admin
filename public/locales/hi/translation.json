@@ -867,6 +867,7 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "errorLoadingEvent": "ईवेंट लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "अपडेट करने के लिए कोई बदलाव नहीं",
     "thisInstance": "यह उदाहरण",

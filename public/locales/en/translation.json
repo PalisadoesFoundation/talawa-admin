@@ -854,6 +854,7 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+    "errorLoadingEvent": "Error loading event. Please try again later.",
     "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "No changes to update",
     "thisInstance": "This Instance",

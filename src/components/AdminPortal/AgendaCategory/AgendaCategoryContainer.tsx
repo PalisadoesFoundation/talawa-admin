@@ -73,10 +73,8 @@ function agendaCategoryContainer({
     open: openUpdateModal,
     close: closeUpdateModal,
   } = useModalState(false);
-  const {
-    isOpen: agendaCategoryDeleteModalIsOpen,
-    toggle: toggleDeleteModal,
-  } = useModalState(false);
+  const { isOpen: agendaCategoryDeleteModalIsOpen, toggle: toggleDeleteModal } =
+    useModalState(false);
 
   const [agendaCategoryId, setAgendaCategoryId] = useState('');
 

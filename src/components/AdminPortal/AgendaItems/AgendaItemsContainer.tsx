@@ -80,7 +80,7 @@ function AgendaItemsContainer({
   } = useModalState(false);
   const {
     isOpen: agendaItemDeleteModalIsOpen,
-    toggle: toggleDeleteModal,
+    toggle: internalToggleDeleteModal,
   } = useModalState(false);
 
   // State for current agenda item ID and form data
@@ -140,7 +140,7 @@ function AgendaItemsContainer({
    * Toggles the visibility of the delete modal.
    */
   const toggleDeleteModal = (): void => {
-    toggleDeleteModal();
+    internalToggleDeleteModal();
   };
 
   const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);

@@ -855,6 +855,7 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
+    "errorLoadingEvent": "Erreur lors du chargement de l'événement. Veuillez réessayer plus tard.",
     "registeredSuccessfully": "Enregistré avec succès pour {{eventName}}",
     "noChangesToUpdate": "Aucun changement à mettre à jour",
     "thisInstance": "Cette instance",

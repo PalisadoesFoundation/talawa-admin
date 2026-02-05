@@ -1,16 +1,12 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import ContriStats from './ContriStats';
 import { I18nextProvider } from 'react-i18next';
-import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
-import { ApolloProvider } from '@apollo/client/react';
 import i18nForTest from 'utils/i18nForTest';
-import { BACKEND_URL } from 'Constant/constant';
-import { describe, test, expect } from 'vitest';
+import { afterEach, describe, expect, test } from 'vitest';
 
-const client = new ApolloClient({
-  cache: new InMemoryCache(),
-  link: new HttpLink({ uri: BACKEND_URL }),
+afterEach(() => {
+  cleanup();
 });
 
 describe('Testing Contribution Stats', () => {
@@ -23,11 +19,9 @@ describe('Testing Contribution Stats', () => {
 
   test('should render props and text elements test for the page component', () => {
     render(
-      <ApolloProvider client={client}>
-        <I18nextProvider i18n={i18nForTest}>
-          <ContriStats {...props} />
-        </I18nextProvider>
-      </ApolloProvider>,
+      <I18nextProvider i18n={i18nForTest}>
+        <ContriStats {...props} />
+      </I18nextProvider>,
     );
     expect(screen.getByText('Recent Contribution: $')).toBeInTheDocument();
     expect(screen.getByText('Highest Contribution: $')).toBeInTheDocument();

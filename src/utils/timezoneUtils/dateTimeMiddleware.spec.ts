@@ -1,9 +1,14 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import { Observable, type Operation, type FetchResult } from '@apollo/client/core';
+import {
+  Observable,
+  type Operation,
+  type FetchResult,
+} from '@apollo/client/core';
 import { gql } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { DocumentNode } from 'graphql';
+import { OperationTypeNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
 
 dayjs.extend(utc);
@@ -33,7 +38,7 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query',
+        operationType: OperationTypeNode.QUERY,
         client: {} as unknown as Operation['client'],
       };
 
@@ -73,7 +78,7 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query',
+        operationType: OperationTypeNode.QUERY,
         client: {} as unknown as Operation['client'],
       };
 
@@ -116,7 +121,7 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query',
+        operationType: OperationTypeNode.QUERY,
         client: {} as unknown as Operation['client'],
       };
 
@@ -149,7 +154,7 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query',
+        operationType: OperationTypeNode.QUERY,
         client: {} as unknown as Operation['client'],
       };
 
@@ -214,7 +219,7 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query',
+        operationType: OperationTypeNode.QUERY,
         client: {} as unknown as Operation['client'],
       };
 

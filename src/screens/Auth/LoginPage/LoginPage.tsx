@@ -446,31 +446,40 @@ const LoginPage = (): JSX.Element => {
     }
   };
 
-  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
-    data?.community ? (
-      data.community?.[tag] && (
+  const socialIconsList = socialMediaLinks
+    .map(({ href, logo, tag }, index) => {
+      if (data?.community) {
+        const communityHref = data.community?.[tag];
+        if (typeof communityHref !== 'string' || !communityHref) {
+          return null;
+        }
+
+        return (
+          <a
+            key={index}
+            href={communityHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="preLoginSocialMedia"
+          >
+            <img src={logo} />
+          </a>
+        );
+      }
+
+      return (
         <a
           key={index}
-          href={data.community?.[tag]}
+          href={href}
           target="_blank"
           rel="noopener noreferrer"
-          data-testid="preLoginSocialMedia"
+          data-testid="PalisadoesSocialMedia"
         >
           <img src={logo} />
         </a>
-      )
-    ) : (
-      <a
-        key={index}
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        data-testid="PalisadoesSocialMedia"
-      >
-        <img src={logo} />
-      </a>
-    ),
-  );
+      );
+    })
+    .filter((icon): icon is JSX.Element => icon !== null && icon !== undefined);
 
   return (
     <>
