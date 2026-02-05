@@ -121,12 +121,18 @@ export default function Advertisements(): JSX.Element {
     name: pg.name,
     orgId: String(pg.organization?.organization.id),
     startAt: new Date(pg.startAt),
-    type:
-      pg.type === 'banner'
-        ? AdvertisementType.Banner
-        : pg.type === 'menu'
-          ? AdvertisementType.Menu
-          : AdvertisementType.Popup,
+    type: (() => {
+      switch (pg.type) {
+        case 'banner':
+          return AdvertisementType.Banner;
+        case 'menu':
+          return AdvertisementType.Menu;
+        case 'pop_up':
+          return AdvertisementType.Popup;
+        default:
+          return AdvertisementType.Popup;
+      }
+    })(),
     updatedAt: new Date(pg.updatedAt),
     attachments: pg.attachments?.map((a) => ({
       url: a.url,
