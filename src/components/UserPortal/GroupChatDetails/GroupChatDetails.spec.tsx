@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, act, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import GroupChatDetails from './GroupChatDetails';
 import { MockedProvider } from '@apollo/client/testing';
@@ -130,6 +130,7 @@ describe('GroupChatDetails', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -197,7 +198,7 @@ describe('GroupChatDetails', () => {
     expect(toastSpy).toHaveBeenCalledWith('User not found');
   });
 
-  it('renders correctly without name and image', () => {
+  it('renders correctly without name and image', async () => {
     const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
@@ -219,10 +220,10 @@ describe('GroupChatDetails', () => {
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
   });
 
-  it('renders correctly', () => {
+  it('renders correctly', async () => {
     const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
@@ -246,7 +247,7 @@ describe('GroupChatDetails', () => {
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
-    userEvent.click(closeButton);
+    await userEvent.click(closeButton);
   });
 
   it('renders ProfileAvatarDisplay for group and members', () => {
@@ -789,11 +790,14 @@ describe('GroupChatDetails', () => {
     );
 
     // Wait for delete (trash) button to be present
-    await waitFor(async () => {
-      expect(
-        await screen.findByRole('button', { name: /trash/i }),
-      ).toBeTruthy();
-    }).catch(() => {});
+    await waitFor(
+      async () => {
+        expect(
+          await screen.findByRole('button', { name: /trash/i }),
+        ).toBeTruthy();
+      },
+      { timeout: 3000 },
+    );
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
@@ -842,11 +846,14 @@ describe('GroupChatDetails', () => {
     );
 
     // Wait for delete (trash) button to be present
-    await waitFor(async () => {
-      expect(
-        await screen.findByRole('button', { name: /trash/i }),
-      ).toBeTruthy();
-    }).catch(() => {});
+    await waitFor(
+      async () => {
+        expect(
+          await screen.findByRole('button', { name: /trash/i }),
+        ).toBeTruthy();
+      },
+      { timeout: 3000 },
+    );
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
 
