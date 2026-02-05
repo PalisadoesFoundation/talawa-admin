@@ -17,6 +17,4 @@ declare module 'apollo-upload-client' {
   export class UploadHttpLink extends ApolloLink {
     constructor(options?: UploadOptions);
   }
-
-  export function createUploadLink(options?: UploadOptions): ApolloLink;
 }
