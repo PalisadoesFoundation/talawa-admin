@@ -73,8 +73,8 @@
   --bs-btn-active-border-color: var(--color-blue-200);
   --bs-btn-active-color: var(--color-blue-500);
   width: var(--space-14);
-  min-height: var(--space-8);
-  padding: var(--space-2) var(--space-4);
+  height: var(--space-9);
+  padding: var(--space-3) var(--space-3);
   color: var(--color-blue-500);
   border-color: var(--color-blue-200);
   background-color: transparent;
@@ -194,7 +194,7 @@
 .orText {
   display: block;
   position: absolute;
-  top: calc(-1 * var(--space-2));
+  top: calc(var(--space-2) * -1);
   left: calc(50% - 2.6rem);
   margin: 0 auto;
   padding: var(--space-3) var(--space-8);
@@ -209,7 +209,7 @@
   top: calc(var(--space-3) * -1);
   left: calc(50% - 2.6rem);
   margin: 0 auto;
-  padding: var(--space-3) var(--space-8);
+  padding: var(--space-2) var(--space-8);
   z-index: 100;
   background: var(--color-white);
   color: var(--color-gray-600);

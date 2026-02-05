@@ -35,6 +35,7 @@
   padding: var(--space-0);
   background: none;
   box-shadow: none;
+  max-width: var(--space-1);
 }
 
 .removeItem {
@@ -140,6 +141,7 @@
   align-items: center;
   width: 100%;
   gap: var(--space-5);
+  justify-content: space-between;
 }
 
 .input {
