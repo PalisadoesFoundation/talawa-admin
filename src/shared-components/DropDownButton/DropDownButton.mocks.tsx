@@ -105,3 +105,17 @@ export const withIconSearchProps: InterfaceDropDownButtonProps = {
   ...searchableMinimalProps,
   icon: <ArrowDownwardSharp fontSize="small" data-testid="dropdown-icon" />,
 };
+
+export const optionsWithNonStringLabel: InterfaceDropDownOption[] = [
+  { value: '1', label: <span data-testid="icon-label">📋</span> },
+  { value: '2', label: 'String Label Option' },
+];
+
+export const withNonStringLabelProps: InterfaceDropDownButtonProps = {
+  id: 'searchable-non-string',
+  options: optionsWithNonStringLabel,
+  selectedValue: undefined,
+  onSelect: mockOnSelect,
+  dataTestIdPrefix: 'test-dropdown',
+  searchable: true,
+};

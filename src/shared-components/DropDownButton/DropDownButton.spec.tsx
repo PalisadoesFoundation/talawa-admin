@@ -18,6 +18,7 @@ import {
   dropUpProps,
   searchableMinimalProps,
   withIconSearchProps,
+  withNonStringLabelProps,
 } from './DropDownButton.mocks';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -299,6 +300,20 @@ describe('DropDownButton Component', () => {
       await userEvent.keyboard('{Enter}');
 
       expect(mockOnSelect).toHaveBeenCalledWith('1');
+    });
+    it('filters non-string label options based on search term', async () => {
+      renderComponent(withNonStringLabelProps);
+
+      const input = screen.getByTestId('test-dropdown-input');
+      await userEvent.click(input);
+
+      expect(screen.getByTestId('icon-label')).toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
+
+      await userEvent.type(input, 'String');
+
+      expect(screen.queryByTestId('icon-label')).not.toBeInTheDocument();
+      expect(screen.getByText('String Label Option')).toBeInTheDocument();
     });
   });
 });
