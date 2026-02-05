@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
@@ -186,6 +186,7 @@ describe('Calendar Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
     vi.restoreAllMocks();
+    cleanup();
   });
   const mockRefetchEvents = vi.fn();
   const today = new Date();

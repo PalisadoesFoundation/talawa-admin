@@ -132,6 +132,7 @@ describe('Event Management', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
     clearAllItems();
     cleanup();
