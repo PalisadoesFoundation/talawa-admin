@@ -35,6 +35,7 @@ import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client/react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 import {
   DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
@@ -62,14 +63,20 @@ function agendaCategoryContainer({
   const { t: tCommon } = useTranslation('common');
 
   // State management for modals and form data
-  const [
-    agendaCategoryPreviewModalIsOpen,
-    setAgendaCategoryPreviewModalIsOpen,
-  ] = useState(false);
-  const [agendaCategoryUpdateModalIsOpen, setAgendaCategoryUpdateModalIsOpen] =
-    useState(false);
-  const [agendaCategoryDeleteModalIsOpen, setAgendaCategoryDeleteModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: agendaCategoryPreviewModalIsOpen,
+    open: openPreviewModal,
+    close: closePreviewModal,
+  } = useModalState(false);
+  const {
+    isOpen: agendaCategoryUpdateModalIsOpen,
+    open: openUpdateModal,
+    close: closeUpdateModal,
+  } = useModalState(false);
+  const {
+    isOpen: agendaCategoryDeleteModalIsOpen,
+    toggle: toggleDeleteModal,
+  } = useModalState(false);
 
   const [agendaCategoryId, setAgendaCategoryId] = useState('');
 
@@ -88,35 +95,35 @@ function agendaCategoryContainer({
     agendaItemCategory: InterfaceAgendaItemCategoryInfo,
   ): void => {
     setAgendaCategoryState(agendaItemCategory);
-    setAgendaCategoryPreviewModalIsOpen(true);
+    openPreviewModal();
   };
 
   /**
    * Closes the preview modal.
    */
   const hidePreviewModal = (): void => {
-    setAgendaCategoryPreviewModalIsOpen(false);
+    closePreviewModal();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const showUpdateModal = (): void => {
-    setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
+    openUpdateModal();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const hideUpdateModal = (): void => {
-    setAgendaCategoryUpdateModalIsOpen(!agendaCategoryUpdateModalIsOpen);
+    closeUpdateModal();
   };
 
   /**
    * Toggles the visibility of the delete modal.
    */
-  const toggleDeleteModal = (): void => {
-    setAgendaCategoryDeleteModalIsOpen(!agendaCategoryDeleteModalIsOpen);
+  const toggleDeleteModalLocal = (): void => {
+    toggleDeleteModal();
   };
 
   const [updateAgendaCategory] = useMutation(
@@ -165,7 +172,7 @@ function agendaCategoryContainer({
         variables: { deleteAgendaCategoryId: agendaCategoryId },
       });
       agendaCategoryRefetch();
-      toggleDeleteModal();
+      toggleDeleteModalLocal();
       NotificationToast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -311,7 +318,7 @@ function agendaCategoryContainer({
         agendaCategoryPreviewModalIsOpen={agendaCategoryPreviewModalIsOpen}
         hidePreviewModal={hidePreviewModal}
         showUpdateModal={showUpdateModal}
-        toggleDeleteModal={toggleDeleteModal}
+        toggleDeleteModal={toggleDeleteModalLocal}
         formState={formState}
         t={t}
       />
@@ -327,7 +334,7 @@ function agendaCategoryContainer({
       {/* Delete modal */}
       <AgendaCategoryDeleteModal
         agendaCategoryDeleteModalIsOpen={agendaCategoryDeleteModalIsOpen}
-        toggleDeleteModal={toggleDeleteModal}
+        toggleDeleteModal={toggleDeleteModalLocal}
         deleteAgendaCategoryHandler={deleteAgendaCategoryHandler}
         t={t}
         tCommon={tCommon}

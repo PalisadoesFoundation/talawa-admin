@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { toast } from 'react-toastify';
 import type { InterfaceCommunitySessionTimeoutQuery } from 'utils/interfaces';
 
 type UseSessionReturnType = {
@@ -77,7 +76,7 @@ const useSession = (): UseSessionReturnType => {
       await logout();
     } catch (error) {
       console.error('Error during logout:', error);
-      toast.error(tCommon('errorOccurred'));
+      NotificationToast.error(tCommon('errorOccurred'));
     }
     clearAllItems();
     endSession();

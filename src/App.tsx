@@ -17,6 +17,7 @@ import PageNotFound from 'screens/Public/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import type { InterfaceCurrentUserQuery } from 'utils/interfaces';
 
 const OrganizationScreen = lazy(
   () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
@@ -136,7 +137,7 @@ const { setItem } = useLocalStorage();
  */
 
 function App(): React.ReactElement {
-  const { data, loading } = useQuery<{ currentUser: any }>(CURRENT_USER);
+  const { data, loading } = useQuery<InterfaceCurrentUserQuery>(CURRENT_USER);
 
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');

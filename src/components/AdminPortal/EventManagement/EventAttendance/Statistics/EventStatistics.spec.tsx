@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { AttendanceStatisticsModal } from './EventStatistics';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
@@ -445,6 +445,8 @@ const mockStatistics = {
 
 describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
   afterEach(() => {
+    cleanup();
+    lastLineChartOptions = null;
     vi.clearAllMocks();
   });
 

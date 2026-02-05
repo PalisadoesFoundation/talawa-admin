@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,

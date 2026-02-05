@@ -48,6 +48,7 @@ import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 /** Modal state management */
 enum ModalState {
@@ -89,13 +90,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const [status, setStatus] = useState<CategoryStatus | null>(null);
   const [categories, setCategories] = useState<IActionItemCategoryInfo[]>([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+
+  const categoryModal = useModalState(false);
+  const viewModal = useModalState(false);
 
   // Query to fetch action item categories
   const {
@@ -113,13 +110,6 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
   });
 
-  /** Modal state handlers */
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
   /** Open category modal in create/edit mode */
   const handleOpenModal = useCallback(
     (
@@ -128,9 +118,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     ): void => {
       setCategory(category);
       setModalMode(mode);
-      openModal(ModalState.SAME);
+      categoryModal.open();
     },
-    [openModal],
+    [categoryModal],
   );
 
   /** Apply client-side filtering and sorting */
@@ -407,8 +397,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
 
         {/* Category Modal */}
         <CategoryModal
-          isOpen={modalState[ModalState.SAME]}
-          hide={() => closeModal(ModalState.SAME)}
+          isOpen={categoryModal.isOpen}
+          hide={categoryModal.close}
           refetchCategories={refetchCategories}
           category={category}
           orgId={orgId}
@@ -417,8 +407,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
 
         {/* Category View Modal */}
         <CategoryViewModal
-          isOpen={modalState[ModalState.VIEW]}
-          hide={() => closeModal(ModalState.VIEW)}
+          isOpen={viewModal.isOpen}
+          hide={viewModal.close}
           category={category}
         />
       </div>

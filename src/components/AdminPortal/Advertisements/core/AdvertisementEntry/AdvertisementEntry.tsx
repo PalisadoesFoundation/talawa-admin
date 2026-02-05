@@ -51,6 +51,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 import { BaseModal } from 'shared-components/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 function AdvertisementEntry({
   advertisement,
@@ -77,7 +78,11 @@ function AdvertisementEntry({
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // State for delete confirmation modal visibility
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const {
+    isOpen: isDeleteModalOpen,
+    toggle: toggleDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState(false);
 
   // Mutation hook for deleting an advertisement
   const [deleteAd] = useMutation(DELETE_ADVERTISEMENT_MUTATION, {
@@ -108,11 +113,6 @@ function AdvertisementEntry({
   });
 
   /**
-   * Toggles the visibility of the delete confirmation modal.
-   */
-  const toggleShowDeleteModal = (): void => setShowDeleteModal((prev) => !prev);
-
-  /**
    * Handles advertisement deletion.
    * Displays a success or error message based on the result.
    */
@@ -129,7 +129,7 @@ function AdvertisementEntry({
       setAfterCompleted?.(null);
       setAfterActive?.(null);
       setDropdown(false); // Close dropdown after deletion
-      toggleShowDeleteModal(); // Close the modal after deletion
+      closeDeleteModal(); // Close the modal after deletion
     } catch (error: unknown) {
       if (error instanceof Error) {
         NotificationToast.error(error.message);
@@ -142,7 +142,7 @@ function AdvertisementEntry({
     <>
       <Button
         className={`btn btn-danger ${styles.removeButton}`}
-        onClick={toggleShowDeleteModal}
+        onClick={toggleDeleteModal}
         data-testid="delete_no"
       >
         {tCommon('no')}
@@ -208,7 +208,7 @@ function AdvertisementEntry({
                     </li>
                     <li
                       onClick={() => {
-                        toggleShowDeleteModal();
+                        toggleDeleteModal();
                         setDropdown(false); // Close dropdown after clicking
                       }}
                       data-testid="deletebtn"
@@ -278,7 +278,7 @@ function AdvertisementEntry({
                   )}
                 </div>
               )}
-              <Card.Body>
+      <Card.Body>
                 <Card.Title className="t-bold" data-testid="Ad_name">
                   {advertisement.name}
                 </Card.Title>
@@ -343,8 +343,8 @@ function AdvertisementEntry({
                 </div>
 
                 <BaseModal
-                  show={showDeleteModal}
-                  onHide={toggleShowDeleteModal}
+                  show={isDeleteModalOpen}
+                  onHide={toggleDeleteModal}
                   title={t('deleteAdvertisement')}
                   footer={deleteModalFooter}
                   dataTestId="deleteAdvertisementModal"

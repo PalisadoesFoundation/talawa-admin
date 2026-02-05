@@ -252,7 +252,7 @@ export class StaticMockLink extends ApolloLink {
     });
   }
 
-  public onError(error: Error, _observer?: unknown): boolean | void {
+  public onError(_error: Error, _observer?: unknown): boolean | void {
     return false;
   }
 

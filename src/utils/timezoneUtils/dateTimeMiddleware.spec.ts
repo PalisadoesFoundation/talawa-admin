@@ -1,6 +1,5 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { Operation, FetchResult } from '@apollo/client/core';
-import { Observable } from '@apollo/client/core';
+import { Observable, type Operation, type FetchResult } from '@apollo/client/core';
 import { gql } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -34,8 +33,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query' as any,
-        client: {} as any,
+        operationType: 'query',
+        client: {} as unknown as Operation['client'],
       };
 
       const forward = vi.fn(
@@ -74,8 +73,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query' as any,
-        client: {} as any,
+        operationType: 'query',
+        client: {} as unknown as Operation['client'],
       };
 
       const forward = vi.fn(
@@ -117,8 +116,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query' as any,
-        client: {} as any,
+        operationType: 'query',
+        client: {} as unknown as Operation['client'],
       };
 
       const forward = vi.fn(
@@ -150,8 +149,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query' as any,
-        client: {} as any,
+        operationType: 'query',
+        client: {} as unknown as Operation['client'],
       };
 
       const forward = vi.fn(
@@ -215,8 +214,8 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-        operationType: 'query' as any,
-        client: {} as any,
+        operationType: 'query',
+        client: {} as unknown as Operation['client'],
       };
 
       const forward = vi.fn(

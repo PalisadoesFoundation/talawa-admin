@@ -745,7 +745,11 @@ export interface IEvent {
   };
 }
 
-import type { IMember, IEvent as InterfaceEvent } from 'types/Event/interface';
+import type {
+  IMember,
+  InterfaceMember,
+  IEvent as InterfaceEvent,
+} from 'types/Event/interface';
 /**
  * Defines the structure for an event attachment with PostgreSQL-specific fields.
  */
@@ -1937,7 +1941,7 @@ export interface InterfaceCommunityQuery {
     youtubeURL?: string;
     redditURL?: string;
     slackURL?: string;
-    [key: string]: any;
+    [key: string]: unknown;
   } | null;
 }
 
@@ -2025,6 +2029,9 @@ export interface InterfaceCurrentUserQuery {
     emailAddress: string;
     isEmailAddressVerified: boolean;
     avatarURL: string | null;
+    appUserProfile?: {
+      adminFor?: Array<{ _id: string }> | null;
+    } | null;
   } | null;
 }
 
@@ -2151,7 +2158,7 @@ export interface InterfaceUpdateCommunityMutation {
  * Defines the structure for RESET_COMMUNITY mutation result
  */
 export interface InterfaceResetCommunityMutation {
-  resetCommunity: any;
+  resetCommunity: unknown;
 }
 
 /**
@@ -2315,7 +2322,7 @@ export interface InterfaceSignInQuery {
  */
 export interface InterfaceEventAttendeesQuery {
   event: {
-    attendees: Array<IMember>;
+    attendees: Array<InterfaceMember>;
   } | null;
 }
 

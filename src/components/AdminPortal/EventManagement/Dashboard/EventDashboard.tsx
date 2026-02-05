@@ -39,6 +39,7 @@ import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceEventDetailsQuery } from 'utils/interfaces';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -47,7 +48,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     keyPrefix: 'eventListCard',
   });
 
-  const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
+  const {
+    isOpen: eventModalIsOpen,
+    open: openEventModal,
+    close: closeEventModal,
+  } = useModalState(false);
 
   // Get user information from local storage, similar to OrganizationEvents
   const { getItem } = useLocalStorage();
@@ -67,11 +72,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   });
 
   const showViewModal = (): void => {
-    setEventModalIsOpen(true);
+    openEventModal();
   };
 
   const hideViewModal = (): void => {
-    setEventModalIsOpen(false);
+    closeEventModal();
   };
 
   if (eventInfoLoading) {

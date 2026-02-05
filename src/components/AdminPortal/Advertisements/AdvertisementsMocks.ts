@@ -24,7 +24,7 @@
  *
  */
 import { act } from 'react';
-import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import {

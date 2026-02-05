@@ -51,6 +51,7 @@ import styles from './AgendaItemsContainer.module.css';
 import AgendaItemsPreviewModal from 'components/AdminPortal/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AdminPortal/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AdminPortal/AgendaItems/Update/AgendaItemsUpdateModal';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 function AgendaItemsContainer({
   agendaItemConnection,
@@ -67,12 +68,20 @@ function AgendaItemsContainer({
   const { t: tCommon } = useTranslation('common');
 
   // State for modals
-  const [agendaItemPreviewModalIsOpen, setAgendaItemPreviewModalIsOpen] =
-    useState(false);
-  const [agendaItemUpdateModalIsOpen, setAgendaItemUpdateModalIsOpen] =
-    useState(false);
-  const [agendaItemDeleteModalIsOpen, setAgendaItemDeleteModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: agendaItemPreviewModalIsOpen,
+    open: openPreviewModal,
+    close: closePreviewModal,
+  } = useModalState(false);
+  const {
+    isOpen: agendaItemUpdateModalIsOpen,
+    open: openUpdateModal,
+    close: closeUpdateModal,
+  } = useModalState(false);
+  const {
+    isOpen: agendaItemDeleteModalIsOpen,
+    toggle: toggleDeleteModal,
+  } = useModalState(false);
 
   // State for current agenda item ID and form data
   const [agendaItemId, setAgendaItemId] = useState('');
@@ -103,35 +112,35 @@ function AgendaItemsContainer({
    */
   const showPreviewModal = (agendaItem: InterfaceAgendaItemInfo): void => {
     setAgendaItemState(agendaItem);
-    setAgendaItemPreviewModalIsOpen(true);
+    openPreviewModal();
   };
 
   /**
    * Hides the preview modal.
    */
   const hidePreviewModal = (): void => {
-    setAgendaItemPreviewModalIsOpen(false);
+    closePreviewModal();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const showUpdateModal = (): void => {
-    setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
+    openUpdateModal();
   };
 
   /**
    * Toggles the visibility of the update modal.
    */
   const hideUpdateModal = (): void => {
-    setAgendaItemUpdateModalIsOpen(!agendaItemUpdateModalIsOpen);
+    closeUpdateModal();
   };
 
   /**
    * Toggles the visibility of the delete modal.
    */
   const toggleDeleteModal = (): void => {
-    setAgendaItemDeleteModalIsOpen(!agendaItemDeleteModalIsOpen);
+    toggleDeleteModal();
   };
 
   const [updateAgendaItem] = useMutation(UPDATE_AGENDA_ITEM_MUTATION);

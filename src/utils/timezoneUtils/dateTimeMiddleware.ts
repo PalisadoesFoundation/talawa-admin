@@ -1,4 +1,4 @@
-import { ApolloLink } from '@apollo/client/core';
+import { ApolloLink, type FetchResult } from '@apollo/client/core';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -92,7 +92,7 @@ export const requestMiddleware = new ApolloLink((operation, forward) => {
 
 // Response middleware to convert UTC time to local time
 export const responseMiddleware = new ApolloLink((operation, forward) => {
-  return (forward(operation) as any).map((response: any) => {
+  return forward(operation).map((response: FetchResult) => {
     if (response.data) {
       traverseAndConvertDates(
         response.data as Record<string, unknown>,

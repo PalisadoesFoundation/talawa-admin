@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import JSZip from 'jszip';
 import {
   validateAdminPluginZip,

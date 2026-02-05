@@ -94,9 +94,8 @@ function EventAttendance(): JSX.Element {
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
-    const filtered = (
-      (memberData?.event?.attendees as InterfaceMember[]) ?? []
-    ).filter((attendee: InterfaceMember) => {
+    const filtered = (memberData?.event?.attendees ?? []).filter(
+      (attendee: InterfaceMember) => {
       const name = attendee.name?.toLowerCase() || '';
       const email = attendee.emailAddress?.toLowerCase() || '';
       return (
@@ -137,7 +136,7 @@ function EventAttendance(): JSX.Element {
   useEffect(() => {
     if (memberData?.event?.attendees) {
       const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees as InterfaceMember[],
+        memberData.event.attendees,
       );
       setFilteredAttendees(updatedAttendees);
     }

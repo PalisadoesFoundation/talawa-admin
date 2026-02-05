@@ -52,8 +52,8 @@ const operation: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query' as any,
-  client: {} as any,
+  operationType: 'query',
+  client: {} as unknown as Operation['client'],
 };
 const oper: Operation = {
   query: sampleQuery,
@@ -62,8 +62,8 @@ const oper: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query' as any,
-  client: {} as any,
+  operationType: 'query',
+  client: {} as unknown as Operation['client'],
 };
 
 function createOperation(
@@ -77,8 +77,8 @@ function createOperation(
     extensions: {},
     setContext: () => {},
     getContext: () => ({}),
-    operationType: 'query' as any, // Default to query
-    client: {} as any, // Mock client
+    operationType: 'query', // Default to query
+    client: {} as unknown as Operation['client'], // Mock client
   };
 }
 const operation2: Operation = {
@@ -92,18 +92,18 @@ const operation2: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query' as any,
-  client: {} as any,
+  operationType: 'query',
+  client: {} as unknown as Operation['client'],
 };
-const operation3 = {
+const operation3: Operation = {
   query: TEST_QUERY,
   variables: { id: '1' },
   operationName: 'TestQuery', // or the actual operation name from your query
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-  operationType: 'query' as any,
-  client: {} as any,
+  operationType: 'query',
+  client: {} as unknown as Operation['client'],
 };
 const sampleResponse = {
   data: {
@@ -251,7 +251,7 @@ describe('StaticMockLink', () => {
         variables: { id: '2' }, // Changed to match the request variables
       },
       result: sampleResponse,
-      newData: (variables: any) => ({
+      newData: (variables: { id: string }) => ({
         data: {
           user: {
             id: variables.id,
@@ -425,15 +425,15 @@ describe('mockSingleLink', () => {
 
     const link = new StaticMockLink(mockedResponses);
 
-    const operation4 = {
+    const operation4: Operation = {
       query: mockQuery,
       variables: {},
       operationName: '',
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-      operationType: 'query' as any,
-      client: {} as any,
+      operationType: 'query' as const,
+      client: {} as unknown as Operation['client'],
     };
 
     const observable = link.request(operation4);
@@ -473,7 +473,7 @@ describe('mockSingleLink', () => {
     const link = new StaticMockLink(mockedResponses);
 
     // Simulate operation with unmatched variables
-    const operation = {
+    const operation: Operation = {
       query: mockQuery,
       variables: { id: '999' },
     };
@@ -597,8 +597,8 @@ describe('mockSingleLink', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-      operationType: 'query' as any,
-      client: {} as any,
+      operationType: 'query' as const,
+      client: {} as unknown as Operation['client'],
     });
 
     return new Promise<void>((resolve) => {

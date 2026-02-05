@@ -58,6 +58,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
+import type { InterfaceEventDetailsQuery } from 'utils/interfaces';
 
 export const EventRegistrantsModal = ({
   eventId,
@@ -81,13 +82,7 @@ export const EventRegistrantsModal = ({
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { data: eventData } = useQuery<{
-    event: {
-      id: string;
-      name: string;
-      recurrenceRule: any;
-    };
-  }>(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<InterfaceEventDetailsQuery>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });

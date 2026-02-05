@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { BrowserRouter } from 'react-router';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -101,6 +101,7 @@ describe('AddOnSpotAttendee Component', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });

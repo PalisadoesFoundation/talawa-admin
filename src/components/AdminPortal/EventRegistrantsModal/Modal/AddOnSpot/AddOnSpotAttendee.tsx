@@ -36,7 +36,6 @@ import {
   FormTextField,
   FormSelectField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client/react';
@@ -46,9 +45,9 @@ import type {
 } from 'types/AdminPortal/EventRegistrantsModal/AddOnSpot';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -131,13 +130,13 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <BaseModal
-        show={show}
-        onHide={handleClose}
-        backdrop="static"
-        centered={true}
-        headerClassName={styles.modalHeader}
+      <CRUDModalTemplate
+        open={show}
+        onClose={handleClose}
         title={t('title')}
+        loading={isSubmitting}
+        showFooter={false}
+        data-testid="onspot-attendee-modal"
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
           <div className="d-flex justify-content-between">
@@ -193,18 +192,16 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             <option value="Other">{t('other')}</option>
           </FormSelectField>
           <br />
-          <LoadingState isLoading={isSubmitting} variant="inline">
-            <Button
-              variant="success"
-              type="submit"
-              className={`border-1 mx-4 ${styles.addButton}`}
-              disabled={isSubmitting}
-            >
-              {t('addAttendee')}
-            </Button>
-          </LoadingState>
+          <Button
+            variant="success"
+            type="submit"
+            className={`border-1 mx-4 ${styles.addButton}`}
+            disabled={isSubmitting}
+          >
+            {t('addAttendee')}
+          </Button>
         </form>
-      </BaseModal>
+      </CRUDModalTemplate>
     </ErrorBoundaryWrapper>
   );
 };
