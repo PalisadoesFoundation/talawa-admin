@@ -36,7 +36,6 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
@@ -51,6 +50,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -238,19 +238,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   return (
     <>
-      <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
-        backdrop="static"
-        centered
+      <CRUDModalTemplate
+        open={tagActionsModalIsOpen}
+        onClose={hideTagActionsModal}
         title={
           tagActionType === 'assignToTags'
             ? t('assignToTags')
             : t('removeFromTags')
         }
-        headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
-        footer={
+        data-testid="modalOrganizationHeader"
+        className={styles.modalHeader}
+        showFooter
+        customFooter={
           <>
             <Button
               className={`btn btn-danger ${styles.removeButton}`}
@@ -381,7 +380,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             </ul>
           </div>
         </form>
-      </BaseModal>
+      </CRUDModalTemplate>
     </>
   );
 };

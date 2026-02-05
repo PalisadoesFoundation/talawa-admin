@@ -50,13 +50,6 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
-/** Modal state management */
-enum ModalState {
-  SAME = 'same',
-  DELETE = 'delete',
-  VIEW = 'view',
-}
-
 /** Category status for filtering */
 enum CategoryStatus {
   Active = 'active',

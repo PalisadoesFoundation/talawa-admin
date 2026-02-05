@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
@@ -15,6 +15,7 @@ import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from './DeleteOrg.module.css';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 /**
  * A component for deleting an organization.
@@ -36,7 +37,11 @@ function deleteOrg(): JSX.Element {
   // Navigation hook for redirecting
   const navigate = useNavigate();
   // State to control the visibility of the delete confirmation modal
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const {
+    isOpen: showDeleteModal,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+  } = useModalState(false);
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
@@ -44,11 +49,6 @@ function deleteOrg(): JSX.Element {
 
   // Check if the user has super admin privileges
   // const canDelete = getItem('SuperAdmin');
-  /**
-   * Toggles the visibility of the delete confirmation modal.
-   */
-  const toggleDeleteModal = (): void => setShowDeleteModal(!showDeleteModal);
-
   // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
   const [removeSampleOrganization] = useMutation(
@@ -105,7 +105,7 @@ function deleteOrg(): JSX.Element {
             <Button
               variant="danger"
               className={styles.deleteButton}
-              onClick={toggleDeleteModal}
+              onClick={openDeleteModal}
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
@@ -118,16 +118,17 @@ function deleteOrg(): JSX.Element {
       )}
       {/* Delete Organization Modal */}
       {canDelete && (
-        <BaseModal
-          show={showDeleteModal}
-          onHide={toggleDeleteModal}
+        <CRUDModalTemplate
+          open={showDeleteModal}
+          onClose={closeDeleteModal}
           title={t('deleteOrganization')}
-          dataTestId="orgDeleteModal"
-          headerClassName={styles.modalHeaderDelete}
-          footer={
+          data-testid="orgDeleteModal"
+          className={styles.modalHeaderDelete}
+          showFooter
+          customFooter={
             <>
               <Button
-                onClick={toggleDeleteModal}
+                onClick={closeDeleteModal}
                 data-testid="closeDelOrgModalBtn"
                 className={styles.btnDelete}
               >
@@ -144,7 +145,7 @@ function deleteOrg(): JSX.Element {
           }
         >
           {t('deleteMsg')}
-        </BaseModal>
+        </CRUDModalTemplate>
       )}
     </>
   );

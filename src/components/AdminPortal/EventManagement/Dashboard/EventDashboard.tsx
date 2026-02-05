@@ -24,7 +24,7 @@
  *
  */
 // translation-check-keyPrefix: eventListCard
-import React, { useState } from 'react';
+import React from 'react';
 import type { JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';

@@ -53,7 +53,7 @@ import type {
 } from 'utils/interfaces';
 import AgendaItemsContainer from 'components/AdminPortal/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AdminPortal/AgendaItems/Create/AgendaItemsCreateModal';
-
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import styles from './EventAgendaItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -72,8 +72,11 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
   }
 
   // State to manage the create agenda item modal visibility
-  const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
-    useState<boolean>(false);
+  const {
+    isOpen: agendaItemCreateModalIsOpen,
+    open: openCreateModal,
+    close: closeCreateModal,
+  } = useModalState(false);
 
   // State to manage form values
   const [formState, setFormState] = useState({
@@ -148,7 +151,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
         attachments: [''],
         urls: [''],
       });
-      hideCreateModal();
+      closeCreateModal();
       refetchAgendaItem();
       NotificationToast.success(t('agendaItemCreated') as string);
     } catch (error: unknown) {
@@ -156,20 +159,6 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
         NotificationToast.error(error.message);
       }
     }
-  };
-
-  /**
-   * Toggles the visibility of the create agenda item modal.
-   */
-  const showCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
-  };
-
-  /**
-   * Hides the create agenda item modal.
-   */
-  const hideCreateModal = (): void => {
-    setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
   };
 
   // Show error message if there is an error loading data
@@ -217,7 +206,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
               <Button
                 type="button"
                 variant="success"
-                onClick={showCreateModal}
+                onClick={openCreateModal}
                 data-testid="createAgendaItemBtn"
                 className={styles.createAgendaItemButton}
               >
@@ -240,7 +229,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
 
         <AgendaItemsCreateModal
           agendaItemCreateModalIsOpen={agendaItemCreateModalIsOpen}
-          hideCreateModal={hideCreateModal}
+          hideCreateModal={closeCreateModal}
           formState={formState}
           setFormState={setFormState}
           createAgendaItemHandler={createAgendaItemHandler}

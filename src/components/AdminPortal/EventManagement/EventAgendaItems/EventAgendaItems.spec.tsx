@@ -13,7 +13,6 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
-import type { MockedResponse } from '@apollo/client/testing';
 import {
   StaticMockLink,
   type IStaticMockedResponse,

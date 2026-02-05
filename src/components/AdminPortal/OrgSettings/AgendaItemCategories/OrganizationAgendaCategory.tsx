@@ -46,6 +46,7 @@ import styles from './OrganizationAgendaCategory.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;
@@ -59,8 +60,11 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   });
   const { t: tCommon } = useTranslation('common');
   // State for managing modal visibility and form data
-  const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
-    useState<boolean>(false);
+  const {
+    isOpen: agendaCategoryCreateModalIsOpen,
+    open: openCreateModal,
+    close: closeCreateModal,
+  } = useModalState(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [formState, setFormState] = useState({
     name: '',
@@ -111,26 +115,12 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
       NotificationToast.success(t('agendaCategoryCreated') as string);
       setFormState({ name: '', description: '', createdBy: '' });
       refetchAgendaCategory();
-      hideCreateModal();
+      closeCreateModal();
     } catch (error: unknown) {
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }
     }
-  };
-
-  /**
-   * Toggles the visibility of the create agenda item category modal.
-   */
-  const showCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
-  };
-
-  /**
-   * Hides the create agenda item category modal.
-   */
-  const hideCreateModal = (): void => {
-    setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
   };
 
   if (agendaCategoryError) {
@@ -168,7 +158,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               <Button
                 type="button"
                 variant="success"
-                onClick={showCreateModal}
+                onClick={openCreateModal}
                 data-testid="createAgendaCategoryBtn"
                 className={styles.addButton}
               >
@@ -190,7 +180,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
         </div>
         <AgendaCategoryCreateModal
           agendaCategoryCreateModalIsOpen={agendaCategoryCreateModalIsOpen}
-          hideCreateModal={hideCreateModal}
+          hideCreateModal={closeCreateModal}
           formState={formState}
           setFormState={setFormState}
           createAgendaCategoryHandler={createAgendaCategoryHandler}

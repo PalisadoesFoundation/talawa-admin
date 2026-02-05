@@ -8,7 +8,15 @@ import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import { describe, beforeEach, it, expect, vi, type Mock } from 'vitest';
+import {
+  describe,
+  beforeEach,
+  it,
+  expect,
+  vi,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
@@ -60,23 +68,25 @@ describe('DeleteOrg Component', () => {
     vi.clearAllMocks();
     vi.useRealTimers();
 
-    (useParams as any).mockReturnValue({ orgId: '1' });
-    (useNavigate as any).mockReturnValue(navigateMock);
-    (useLocalStorage as any).mockReturnValue({
+    (useParams as unknown as Mock).mockReturnValue({ orgId: '1' });
+    (useNavigate as unknown as Mock).mockReturnValue(navigateMock);
+    (useLocalStorage as unknown as Mock).mockReturnValue({
       getItem: vi.fn().mockReturnValue('true'),
     });
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: { isSampleOrganization: false },
       loading: false,
     });
-    (useMutation as any).mockImplementation((mutation: DocumentNode) => {
-      if (mutation === DELETE_ORGANIZATION_MUTATION) {
-        return [deleteOrgMutationMock, { loading: false }];
-      } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
-        return [removeSampleOrgMutationMock, { loading: false }];
-      }
-      return [vi.fn(), { loading: false }];
-    });
+    (useMutation as unknown as Mock).mockImplementation(
+      (mutation: DocumentNode) => {
+        if (mutation === DELETE_ORGANIZATION_MUTATION) {
+          return [deleteOrgMutationMock, { loading: false }];
+        } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
+          return [removeSampleOrgMutationMock, { loading: false }];
+        }
+        return [vi.fn(), { loading: false }];
+      },
+    );
   });
 
   afterEach(() => {
@@ -119,7 +129,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles error during sample organization deletion', async () => {
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: { isSampleOrganization: true },
       loading: false,
     });
@@ -136,7 +146,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('deletes sample organization successfully', async () => {
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: { isSampleOrganization: true },
       loading: false,
     });
@@ -162,7 +172,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('renders delete button with different text for sample organization', () => {
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: { isSampleOrganization: true },
       loading: false,
     });
@@ -173,7 +183,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('renders when canDelete is true due to OR condition', () => {
-    (useLocalStorage as any).mockReturnValue({
+    (useLocalStorage as unknown as Mock).mockReturnValue({
       getItem: vi.fn().mockReturnValue(false),
     });
 
@@ -195,7 +205,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles undefined organization ID', async () => {
-    (useParams as any).mockReturnValue({ orgId: undefined });
+    (useParams as unknown as Mock).mockReturnValue({ orgId: undefined });
     deleteOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
@@ -210,7 +220,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles query loading state', () => {
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: true,
     });
@@ -221,7 +231,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles undefined query data', () => {
-    (useQuery as any).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: false,
     });
