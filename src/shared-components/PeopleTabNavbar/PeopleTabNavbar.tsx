@@ -46,7 +46,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './PeopleTabNavbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'shared-components/SortingButton/SortingButton';
+import DropDownButton from 'shared-components/DropDownButton';
 import type { InterfacePeopleTabNavbarProps } from 'types/shared-components/PeopleTabNavbar/interface';
 
 export default function PeopleTabNavbar({
@@ -80,14 +80,25 @@ export default function PeopleTabNavbar({
                 idx: React.Key | null | undefined,
               ) => (
                 <div key={idx} className={styles.dropdownItemButton}>
-                  <SortingButton
-                    title={sort.title}
-                    sortingOptions={sort.options}
-                    selectedOption={sort.selected}
-                    onSortChange={sort.onChange}
+                  <DropDownButton
+                    options={sort.options.map((opt) => ({
+                      label: opt.label,
+                      value: String(opt.value),
+                    }))}
+                    selectedValue={String(sort.selected)}
+                    onSelect={(value) => {
+                      const original = sort.options.find(
+                        (opt) => String(opt.value) === value,
+                      );
+                      if (original) {
+                        sort.onChange(original.value);
+                      }
+                    }}
+                    ariaLabel={sort.title}
                     dataTestIdPrefix={sort.testIdPrefix}
-                    className={styles.dropdown}
-                    icon={sort.icon}
+                    variant="outline-secondary"
+                    btnStyle={styles.dropdown}
+                    buttonLabel={sort.title}
                   />
                 </div>
               ),
@@ -96,16 +107,17 @@ export default function PeopleTabNavbar({
           {/*  Optional Event Type dropdown */}
           {showEventTypeFilter && (
             <div className={styles.btnsBlock}>
-              <SortingButton
-                title={tCommon('eventType')}
-                sortingOptions={[
+              <DropDownButton
+                options={[
                   { label: 'Events', value: 'Events' },
                   { label: 'Workshops', value: 'Workshops' },
                 ]}
-                selectedOption={'Events'}
-                onSortChange={() => {}}
+                selectedValue="Events"
+                onSelect={() => {}}
+                ariaLabel={tCommon('eventType')}
                 dataTestIdPrefix="eventType"
-                className={styles.dropdown}
+                variant="outline-secondary"
+                btnStyle={styles.dropdown}
                 buttonLabel={tCommon('eventType')}
               />
             </div>

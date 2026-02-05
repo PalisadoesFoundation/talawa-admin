@@ -24,25 +24,27 @@ describe('RecurrenceFrequencySection', () => {
 
   it('renders all required elements', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
+
     expect(screen.getAllByText('repeatsEvery').length).toBeGreaterThan(0);
     expect(
       screen.getByTestId('customRecurrenceIntervalInput'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequency-toggle'),
     ).toBeInTheDocument();
   });
 
   it('shows correct frequency label', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
     expect(
-      screen.getByTestId('customRecurrenceFrequencyDropdown'),
+      screen.getByTestId('customRecurrenceFrequency-toggle'),
     ).toHaveTextContent('Daily');
   });
 
   it('handles interval changes', async () => {
     const user = userEvent.setup();
     const onIntervalChange = vi.fn();
+
     render(
       <RecurrenceFrequencySection
         {...defaultProps}
@@ -53,6 +55,7 @@ describe('RecurrenceFrequencySection', () => {
     const input = screen.getByTestId('customRecurrenceIntervalInput');
     await user.clear(input);
     await user.type(input, '5');
+
     expect(onIntervalChange).toHaveBeenCalled();
   });
 
@@ -78,12 +81,20 @@ describe('RecurrenceFrequencySection', () => {
     const user = userEvent.setup();
     render(<RecurrenceFrequencySection {...defaultProps} />);
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
+    await user.click(screen.getByTestId('customRecurrenceFrequency-toggle'));
 
-    expect(screen.getByTestId('customDailyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customWeeklyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customMonthlyRecurrence')).toBeInTheDocument();
-    expect(screen.getByTestId('customYearlyRecurrence')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequency-item-DAILY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequency-item-WEEKLY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequency-item-MONTHLY'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('customRecurrenceFrequency-item-YEARLY'),
+    ).toBeInTheDocument();
   });
 
   it('selects interval text on double click', async () => {
@@ -96,18 +107,21 @@ describe('RecurrenceFrequencySection', () => {
 
     const selectSpy = vi.spyOn(input, 'select');
     await user.dblClick(input);
+
     expect(selectSpy).toHaveBeenCalled();
   });
 
   it('applies aria-label to frequency dropdown', () => {
     render(<RecurrenceFrequencySection {...defaultProps} />);
-    const dropdown = screen.getByTestId('customRecurrenceFrequencyDropdown');
+
+    const dropdown = screen.getByTestId('customRecurrenceFrequency-toggle');
     expect(dropdown).toHaveAttribute('aria-label', 'frequency');
   });
 
   it('calls onFrequencyChange when a frequency is selected', async () => {
     const user = userEvent.setup();
     const onFrequencyChange = vi.fn();
+
     render(
       <RecurrenceFrequencySection
         {...defaultProps}
@@ -115,14 +129,18 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customWeeklyRecurrence'));
+    await user.click(screen.getByTestId('customRecurrenceFrequency-toggle'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequency-item-WEEKLY'),
+    );
+
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.WEEKLY);
   });
 
   it('calls onFrequencyChange for daily frequency', async () => {
     const user = userEvent.setup();
     const onFrequencyChange = vi.fn();
+
     render(
       <RecurrenceFrequencySection
         {...defaultProps}
@@ -130,14 +148,18 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customDailyRecurrence'));
+    await user.click(screen.getByTestId('customRecurrenceFrequency-toggle'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequency-item-DAILY'),
+    );
+
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.DAILY);
   });
 
   it('calls onFrequencyChange for monthly frequency', async () => {
     const user = userEvent.setup();
     const onFrequencyChange = vi.fn();
+
     render(
       <RecurrenceFrequencySection
         {...defaultProps}
@@ -145,14 +167,18 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customMonthlyRecurrence'));
+    await user.click(screen.getByTestId('customRecurrenceFrequency-toggle'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequency-item-MONTHLY'),
+    );
+
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.MONTHLY);
   });
 
   it('calls onFrequencyChange for yearly frequency', async () => {
     const user = userEvent.setup();
     const onFrequencyChange = vi.fn();
+
     render(
       <RecurrenceFrequencySection
         {...defaultProps}
@@ -160,16 +186,21 @@ describe('RecurrenceFrequencySection', () => {
       />,
     );
 
-    await user.click(screen.getByTestId('customRecurrenceFrequencyDropdown'));
-    await user.click(screen.getByTestId('customYearlyRecurrence'));
+    await user.click(screen.getByTestId('customRecurrenceFrequency-toggle'));
+    await user.click(
+      screen.getByTestId('customRecurrenceFrequency-item-YEARLY'),
+    );
+
     expect(onFrequencyChange).toHaveBeenCalledWith(Frequency.YEARLY);
   });
 
   it('handles empty interval safely', () => {
     render(<RecurrenceFrequencySection {...defaultProps} localInterval="" />);
+
     const input = screen.getByTestId(
       'customRecurrenceIntervalInput',
     ) as HTMLInputElement;
+
     expect(input.value).toBe('');
   });
 });

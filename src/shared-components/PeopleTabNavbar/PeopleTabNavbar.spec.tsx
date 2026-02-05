@@ -1,30 +1,8 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import PeopleTabNavbar from './PeopleTabNavbar';
-
-/* ------------------ Types (NO `any`) ------------------ */
-
-type SearchBarProps = {
-  placeholder: string;
-  onSearch: (value: string) => void;
-  inputTestId?: string;
-  buttonTestId?: string;
-};
-
-type SortingOption = {
-  label: string;
-  value: string | number;
-};
-
-type SortingButtonProps = {
-  title: string;
-  sortingOptions: SortingOption[];
-  selectedOption: string | number;
-  onSortChange: (value: string | number) => void;
-  dataTestIdPrefix: string;
-};
 
 /* ------------------ Mocks ------------------ */
 
@@ -40,7 +18,12 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
     onSearch,
     inputTestId,
     buttonTestId,
-  }: SearchBarProps) => (
+  }: {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  }) => (
     <div>
       <input
         data-testid={inputTestId ?? 'search-input'}
@@ -53,28 +36,6 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
       >
         Search
       </button>
-    </div>
-  ),
-}));
-
-vi.mock('shared-components/SortingButton/SortingButton', () => ({
-  default: ({
-    title,
-    sortingOptions,
-    selectedOption,
-    onSortChange,
-    dataTestIdPrefix,
-  }: SortingButtonProps) => (
-    <div data-testid={`${dataTestIdPrefix}-sorting`}>
-      <span>{title}</span>
-
-      {sortingOptions.map((opt) => (
-        <button key={opt.value} onClick={() => onSortChange(opt.value)}>
-          {opt.label}
-        </button>
-      ))}
-
-      <span>Selected: {selectedOption}</span>
     </div>
   ),
 }));
@@ -134,10 +95,12 @@ describe('PeopleTabNavbar', () => {
       />,
     );
 
-    expect(screen.getByText('Sort By')).toBeInTheDocument();
-    expect(screen.getByText('Selected: DESC')).toBeInTheDocument();
+    const toggle = screen.getByTestId('usersSort-toggle');
+    expect(toggle).toBeInTheDocument();
 
+    await user.click(toggle);
     await user.click(screen.getByText('Oldest'));
+
     expect(onSortChange).toHaveBeenCalledWith('ASC');
   });
 
@@ -153,21 +116,21 @@ describe('PeopleTabNavbar', () => {
 
   it('renders event type filter when enabled', () => {
     render(<PeopleTabNavbar showEventTypeFilter />);
-    expect(screen.getByTestId('eventType-sorting')).toBeInTheDocument();
+    expect(screen.getByTestId('eventType-toggle')).toBeInTheDocument();
   });
 
   it('does not render event type filter when disabled', () => {
     render(<PeopleTabNavbar showEventTypeFilter={false} />);
-    expect(screen.queryByTestId('eventType-sorting')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('eventType-toggle')).not.toBeInTheDocument();
   });
 
-  it('handles event type sort change safely when onSortChange is a no-op', async () => {
+  it('handles event type sort change safely when onSelect is a no-op', async () => {
     const user = userEvent.setup();
 
     render(<PeopleTabNavbar showEventTypeFilter />);
 
-    const eventTypeSorting = screen.getByTestId('eventType-sorting');
-    expect(eventTypeSorting).toBeInTheDocument();
+    const toggle = screen.getByTestId('eventType-toggle');
+    await user.click(toggle);
 
     await expect(
       user.click(screen.getByText('Workshops')),

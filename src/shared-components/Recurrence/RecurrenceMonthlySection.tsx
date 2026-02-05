@@ -1,5 +1,6 @@
+// translation-check-keyPrefix: organizationEvents
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import { Frequency, getMonthlyOptions } from '../../utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
 
@@ -31,40 +32,37 @@ export const RecurrenceMonthlySection: React.FC<
 
   const monthlyOptions = getMonthlyOptions(startDate);
 
+  const options = [
+    {
+      label: monthlyOptions.byDate,
+      value: 'BY_DATE',
+    },
+  ];
+
   return (
     <div className="mb-4">
       <span className="fw-semibold text-secondary">{t('monthlyOn')}</span>
       <br />
       <div className="mx-2 mt-3">
-        <Dropdown className="d-inline-block">
-          <Dropdown.Toggle
-            className="py-2"
-            variant="outline-secondary"
-            id="monthly-dropdown"
-            data-testid="monthlyRecurrenceDropdown"
-            data-cy="monthlyRecurrenceDropdown"
-            aria-label={t('monthlyOn')}
-          >
-            {recurrenceRuleState.byDay
+        <DropDownButton
+          options={options}
+          selectedValue="BY_DATE"
+          onSelect={() => {
+            setRecurrenceRuleState((prev) => ({
+              ...prev,
+              byMonthDay: [monthlyOptions.dateValue],
+              byDay: undefined,
+            }));
+          }}
+          ariaLabel={t('monthlyOn')}
+          dataTestIdPrefix="monthlyRecurrence"
+          variant="outline-secondary"
+          buttonLabel={
+            recurrenceRuleState.byDay
               ? monthlyOptions.byWeekday
-              : monthlyOptions.byDate}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              onClick={() => {
-                setRecurrenceRuleState((prev) => ({
-                  ...prev,
-                  byMonthDay: [monthlyOptions.dateValue],
-                  byDay: undefined,
-                }));
-              }}
-              data-testid="monthlyByDate"
-              data-cy="monthlyByDate"
-            >
-              {monthlyOptions.byDate}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+              : monthlyOptions.byDate
+          }
+        />
       </div>
     </div>
   );

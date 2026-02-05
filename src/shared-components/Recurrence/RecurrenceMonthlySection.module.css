@@ -1,0 +1,3 @@
+.dropdown {
+  width: var(--dropdown-min-width);
+}
