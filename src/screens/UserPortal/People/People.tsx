@@ -1,5 +1,5 @@
 /**
- * The `people` component is responsible for rendering a list of members and admins
+ * The `People` component is responsible for rendering a list of members and admins
  * of an organization. It provides functionality for searching, filtering, and paginating
  * through the list of users. The component uses CursorPaginationManager to handle
  * pagination automatically with a "Load More" pattern.
@@ -12,6 +12,8 @@
  * - Uses DataTable for consistent table rendering with loading/empty states.
  * - Supports filtering between "All Members" and "Admins" via a dropdown menu.
  * - Provides a search bar to find members by first name.
+ * - Uses internal `mode` state (0 for "All Members", 1 for "Admins") to filter results.
+ * - Extracts `organizationId` from URL parameters via `useParams`.
  *
  * **Dependencies**
  * - Custom components:
@@ -21,6 +23,9 @@
  *   - `GraphQl/Queries/Queries`
  * - Styles:
  *   - `./People.module.css`
+ *
+ * **Internal Event Handlers**
+ * - `handleSearch` – Updates search term which triggers refetch via CursorPaginationManager.
  */
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
@@ -39,7 +44,7 @@ interface IMemberNode {
   name: string;
   role: string;
   avatarURL?: string;
-  createdAt: string;
+  createdAt?: string | null;
   emailAddress?: string;
 }
 

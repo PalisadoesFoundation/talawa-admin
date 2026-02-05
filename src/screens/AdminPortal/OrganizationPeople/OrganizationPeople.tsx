@@ -102,7 +102,7 @@ interface IMemberNode {
   role: string;
   avatarURL: string;
   emailAddress: string;
-  createdAt: string;
+  createdAt?: string | null;
 }
 
 function OrganizationPeople(): JSX.Element {
@@ -300,7 +300,7 @@ function OrganizationPeople(): JSX.Element {
               day: '2-digit',
               timeZone: 'UTC',
             }).format(new Date(params.row.createdAt))
-          : 'Unknown';
+          : tCommon('notAvailable');
         return (
           <div data-testid={`org-people-joined-${params.row.id}`}>
             {t('joined')} : {joinedDate}
