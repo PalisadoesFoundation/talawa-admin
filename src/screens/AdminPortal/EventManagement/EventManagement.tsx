@@ -141,7 +141,7 @@ const EventManagement = (): JSX.Element => {
       value: 'agendas',
       icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2">
           <EventAgenda eventId={eventId} />
         </div>
       ),

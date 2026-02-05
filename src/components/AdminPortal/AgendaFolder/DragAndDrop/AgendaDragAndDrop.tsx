@@ -198,9 +198,6 @@ export default function AgendaDragAndDrop({
     }
   };
 
-  const getRoundedBottomClass = (isEvent: boolean): string =>
-    isEvent ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mx-0';
-
   const getRoundedTopClass = (isEvent: boolean): string =>
     isEvent ? 'rounded-top-4' : 'rounded-top-2';
 
@@ -221,7 +218,7 @@ export default function AgendaDragAndDrop({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="mx-4 bg-light p-3"
+              className="mx-4 bg-light p-3 rounded-4"
             >
               {folders.map((agendaFolder, index) => {
                 const isDefault = agendaFolder.isDefaultFolder;
@@ -238,15 +235,15 @@ export default function AgendaDragAndDrop({
                         {...provided.draggableProps}
                         className={`${styles.agendaItemRow} ${getDraggingClass(
                           snapshot.isDragging,
-                        )} py-3 mb-4 px-4`}
+                        )} py-3 mb-4 px-4 rounded-4`}
                       >
                         {/* Folder header */}
                         <Row>
                           <Col
-                            xs={6}
-                            sm={4}
-                            md={2}
-                            lg={2}
+                            xs={2}
+                            sm={1}
+                            md={1}
+                            lg={1}
                             className="text-center align-self-center"
                           >
                             <span
@@ -258,11 +255,11 @@ export default function AgendaDragAndDrop({
                           </Col>
 
                           <Col
-                            xs={6}
-                            sm={4}
-                            md={2}
-                            lg={1}
-                            className="text-center align-self-center"
+                            xs={10}
+                            sm={5}
+                            md={3}
+                            lg={3}
+                            className="text-start align-self-center"
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.name}
@@ -272,8 +269,20 @@ export default function AgendaDragAndDrop({
                           <Col
                             xs={12}
                             sm={4}
+                            md={6}
+                            lg={4}
+                            className="text-start align-self-center"
+                          >
+                            <span className={styles.categoryChip}>
+                              {agendaFolder.description}
+                            </span>
+                          </Col>
+
+                          <Col
+                            xs={12}
+                            sm={2}
                             md={2}
-                            lg={9}
+                            lg={4}
                             className="d-flex justify-content-end align-self-center"
                           >
                             <div className="d-flex gap-2">
@@ -358,10 +367,15 @@ export default function AgendaDragAndDrop({
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className={`bg-light-subtle border border-top-0 shadow-sm ${getRoundedBottomClass(
-                                agendaFolderConnection === 'Event',
-                              )}`}
+                              className={`bg-light-subtle border border-top-0 shadow-sm mx-4`}
                             >
+                              {/* EMPTY STATE */}
+                              {agendaFolder.items.edges.length === 0 && (
+                                <div className="py-3 text-center fw-semibold text-body-tertiary">
+                                  {t('noAgendaItems')}
+                                </div>
+                              )}
+
                               {[...agendaFolder.items.edges]
                                 .map((edge) => edge.node)
                                 .sort((a, b) => a.sequence - b.sequence)

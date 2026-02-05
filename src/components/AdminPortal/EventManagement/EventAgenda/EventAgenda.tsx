@@ -122,7 +122,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
         <div className={`bg-white rounded-4 my-3`}>
           <div className={`pt-4 mx-4`}>
             <div className={styles.btnsContainer}>
-              <div className=" d-none d-lg-inline grow d-flex align-items-center border bg-light-subtle rounded-3">
+              <div className=" d-none d-lg-inline grow d-flex align-items-center bg-light-subtle rounded-3">
                 {/* <input
                     type="search"
                     className="form-control border-0 bg-light-subtle"

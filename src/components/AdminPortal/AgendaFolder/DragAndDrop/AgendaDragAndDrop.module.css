@@ -1,6 +1,5 @@
 .agendaItemRow {
   border: var(--border-1) solid var(--agendaItemRow-border);
-  border-radius: var(--radius-xs);
   transition: box-shadow 0.2s ease;
   background-color: var(--agendaItemRow-bg);
 }
@@ -20,7 +19,7 @@
   display: inline-flex;
   align-items: center;
   background-color: var(--categoryChip-bg);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-2xl);
   padding: var(--space-0) var(--space-6);
   font-size: var(--font-size-sm);
   height: var(--space-8);
