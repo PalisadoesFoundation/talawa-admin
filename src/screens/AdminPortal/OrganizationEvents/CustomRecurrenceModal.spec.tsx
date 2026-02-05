@@ -137,13 +137,15 @@ describe('CustomRecurrenceModal', () => {
     renderComponent();
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     expect(frequencyDropdown).toBeInTheDocument();
 
     await userEvent.click(frequencyDropdown);
 
-    const dailyOption = screen.getByTestId('customDailyRecurrence');
+    const dailyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-DAILY',
+    );
     await userEvent.click(dailyOption);
 
     expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
@@ -178,10 +180,12 @@ describe('CustomRecurrenceModal', () => {
     });
 
     expect(screen.getByText('monthlyOn')).toBeInTheDocument();
-    expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
+    expect(screen.getByTestId('monthlyRecurrence-toggle')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('monthlyRecurrenceDropdown'));
-    const monthlyByDateOption = screen.getByTestId('monthlyByDate');
+    await userEvent.click(screen.getByTestId('monthlyRecurrence-toggle'));
+    const monthlyByDateOption = screen.getByTestId(
+      'monthlyRecurrence-item-BY_DATE',
+    );
     await userEvent.click(monthlyByDateOption);
 
     expect(mockProps.setRecurrenceRuleState).toHaveBeenCalled();
@@ -294,11 +298,13 @@ describe('CustomRecurrenceModal', () => {
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const yearlyOption = screen.getByTestId('customYearlyRecurrence');
+    const yearlyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-YEARLY',
+    );
     await userEvent.click(yearlyOption);
 
     // Verify that setRecurrenceRuleState was called with yearly defaults
@@ -405,11 +411,13 @@ describe('CustomRecurrenceModal', () => {
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const yearlyOption = screen.getByTestId('customYearlyRecurrence');
+    const yearlyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-YEARLY',
+    );
     await userEvent.click(yearlyOption);
 
     // Wait for state update and check if count input shows correct value
@@ -539,12 +547,14 @@ describe('CustomRecurrenceModal', () => {
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
     // Click on weekly option (line 398)
-    const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
+    const weeklyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-WEEKLY',
+    );
     await userEvent.click(weeklyOption);
 
     // Verify handleFrequencyChange(Frequency.WEEKLY) was called
@@ -563,12 +573,14 @@ describe('CustomRecurrenceModal', () => {
     });
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
     // Click on monthly option (line 404)
-    const monthlyOption = screen.getByTestId('customMonthlyRecurrence');
+    const monthlyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-MONTHLY',
+    );
     await userEvent.click(monthlyOption);
 
     // Verify handleFrequencyChange(Frequency.MONTHLY) was called
@@ -935,11 +947,13 @@ describe('CustomRecurrenceModal', () => {
     mockSetRecurrenceRuleState.mockClear();
 
     const frequencyDropdown = screen.getByTestId(
-      'customRecurrenceFrequencyDropdown',
+      'customRecurrenceFrequency-toggle',
     );
     await userEvent.click(frequencyDropdown);
 
-    const weeklyOption = screen.getByTestId('customWeeklyRecurrence');
+    const weeklyOption = screen.getByTestId(
+      'customRecurrenceFrequency-item-WEEKLY',
+    );
     await userEvent.click(weeklyOption);
 
     expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(
@@ -1042,10 +1056,12 @@ describe('CustomRecurrenceModal', () => {
 
     mockSetRecurrenceRuleState.mockClear();
 
-    const monthlyDropdown = screen.getByTestId('monthlyRecurrenceDropdown');
+    const monthlyDropdown = screen.getByTestId('monthlyRecurrence-toggle');
     await userEvent.click(monthlyDropdown);
 
-    const monthlyByDateOption = screen.getByTestId('monthlyByDate');
+    const monthlyByDateOption = screen.getByTestId(
+      'monthlyRecurrence-item-BY_DATE',
+    );
     await userEvent.click(monthlyByDateOption);
 
     expect(mockSetRecurrenceRuleState).toHaveBeenCalledWith(

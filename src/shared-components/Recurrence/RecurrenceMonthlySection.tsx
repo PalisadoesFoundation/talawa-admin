@@ -1,7 +1,11 @@
 // translation-check-keyPrefix: organizationEvents
 import React from 'react';
 import DropDownButton from 'shared-components/DropDownButton';
-import { Frequency, getMonthlyOptions } from '../../utils/recurrenceUtils';
+import {
+  Frequency,
+  getMonthlyOptions,
+  WeekDays,
+} from '../../utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
 
 interface InterfaceRecurrenceMonthlySectionProps {
@@ -37,7 +41,13 @@ export const RecurrenceMonthlySection: React.FC<
       label: monthlyOptions.byDate,
       value: 'BY_DATE',
     },
+    {
+      label: monthlyOptions.byWeekday,
+      value: 'BY_WEEKDAY',
+    },
   ];
+
+  const selectedValue = recurrenceRuleState.byDay ? 'BY_WEEKDAY' : 'BY_DATE';
 
   return (
     <div className="mb-4">
@@ -46,13 +56,23 @@ export const RecurrenceMonthlySection: React.FC<
       <div className="mx-2 mt-3">
         <DropDownButton
           options={options}
-          selectedValue="BY_DATE"
-          onSelect={() => {
-            setRecurrenceRuleState((prev) => ({
-              ...prev,
-              byMonthDay: [monthlyOptions.dateValue],
-              byDay: undefined,
-            }));
+          selectedValue={selectedValue}
+          onSelect={(value) => {
+            setRecurrenceRuleState((prev) => {
+              if (value === 'BY_WEEKDAY') {
+                return {
+                  ...prev,
+                  byDay: [monthlyOptions.weekdayValue.day as WeekDays],
+                  byMonthDay: undefined,
+                };
+              }
+
+              return {
+                ...prev,
+                byMonthDay: [monthlyOptions.dateValue],
+                byDay: undefined,
+              };
+            });
           }}
           ariaLabel={t('monthlyOn')}
           dataTestIdPrefix="monthlyRecurrence"
