@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { vi } from 'vitest';
@@ -37,6 +37,7 @@ const t = (key: string): string => key;
 
 describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
+    cleanup();
     vi.doUnmock('react-router');
     vi.resetModules();
     vi.clearAllMocks();

@@ -738,6 +738,7 @@ describe('AgendaItemsCreateModal', () => {
   });
 
   it('resets form when modal closes and reopens', async () => {
+    const user = userEvent.setup();
     const { rerender } = render(
       <MockedProvider>
         <BrowserRouter>
@@ -755,7 +756,7 @@ describe('AgendaItemsCreateModal', () => {
     );
 
     const titleInput = screen.getByLabelText(/title/i);
-    await userEvent.type(titleInput, 'My Title');
+    await user.type(titleInput, 'My Title');
 
     // close modal
     rerender(
