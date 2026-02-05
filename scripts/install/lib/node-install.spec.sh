@@ -730,6 +730,91 @@ test_verify_pnpm_with_stub() {
     return $result
 }
 
+test_ensure_node_toolchain_fail_fast() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "fail-fast")
+    export HOME="$fixture_dir"
+    export PATH="/nonexistent:$SAVED_PATH"
+    
+    eval 'check_fnm() { return 1; }'
+    eval 'install_fnm() { return 1; }'
+    
+    local install_node_called=false
+    eval 'check_node() { install_node_called=true; return 1; }'
+    eval 'install_node() { install_node_called=true; return 1; }'
+    
+    local output result=0
+    output=$(ensure_node_toolchain --fail-fast 2>&1)
+    local exit_code=$?
+    
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  ensure_node_toolchain --fail-fast should return non-zero on fnm failure"
+        result=1
+    fi
+    
+    if [[ "$output" != *"fnm installation failed"* ]]; then
+        echo "  ensure_node_toolchain --fail-fast should report fnm failure"
+        result=1
+    fi
+    
+    if [[ "$output" == *"Node.js"* && "$output" != *"Checking"* ]]; then
+        echo "  ensure_node_toolchain --fail-fast should not attempt Node.js after fnm fails"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
+test_ensure_node_toolchain_no_fail_fast() {
+    source_library
+    save_env
+    
+    local fixture_dir
+    fixture_dir=$(create_fixture "no-fail-fast")
+    export HOME="$fixture_dir"
+    export PATH="/nonexistent:$SAVED_PATH"
+    
+    local fnm_install_called=false
+    local node_check_called=false
+    local pnpm_check_called=false
+    
+    eval 'check_fnm() { return 1; }'
+    eval 'install_fnm() { fnm_install_called=true; return 1; }'
+    eval 'check_node() { node_check_called=true; return 0; }'
+    eval 'check_pnpm() { pnpm_check_called=true; return 0; }'
+    
+    local output result=0
+    output=$(ensure_node_toolchain 2>&1)
+    local exit_code=$?
+    
+    if [[ $exit_code -eq 0 ]]; then
+        echo "  ensure_node_toolchain should return non-zero when install fails"
+        result=1
+    fi
+    
+    if [[ "$output" != *"Some toolchain components failed"* ]]; then
+        echo "  ensure_node_toolchain should report partial failure"
+        result=1
+    fi
+    
+    if [[ "$output" != *"Node.js is available"* ]]; then
+        echo "  ensure_node_toolchain without --fail-fast should continue checking Node.js"
+        result=1
+    fi
+    
+    if [[ "$output" != *"pnpm is available"* ]]; then
+        echo "  ensure_node_toolchain without --fail-fast should continue checking pnpm"
+        result=1
+    fi
+    
+    restore_env
+    return $result
+}
+
 main() {
     echo "=========================================="
     echo "Node.js Installation Helper Test Suite"
@@ -762,6 +847,8 @@ main() {
     run_test "verify_node v-prefix requirement" test_verify_node_v_prefix_requirement
     run_test "check_fnm locations" test_check_fnm_locations
     run_test "verify_pnpm with stub" test_verify_pnpm_with_stub
+    run_test "ensure_node_toolchain --fail-fast" test_ensure_node_toolchain_fail_fast
+    run_test "ensure_node_toolchain without --fail-fast" test_ensure_node_toolchain_no_fail_fast
     
     echo ""
     echo "=========================================="

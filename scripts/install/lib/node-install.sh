@@ -530,9 +530,25 @@ verify_pnpm() {
 
 # Ensure all Node.js toolchain components are installed
 # Installs fnm, Node.js, and pnpm if not already present
+# Arguments:
+#   --fail-fast: Exit immediately on first install failure (default: continue checking all)
 # Returns: 0 if all components are available, 1 on any failure
 ensure_node_toolchain() {
+    local fail_fast=false
     local had_error=false
+    
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --fail-fast)
+                fail_fast=true
+                shift
+                ;;
+            *)
+                log_error "Unknown argument: $1"
+                return 1
+                ;;
+        esac
+    done
     
     log_info "Checking Node.js toolchain..."
     
@@ -542,24 +558,40 @@ ensure_node_toolchain() {
         log_success "fnm is available"
     else
         if ! install_fnm; then
+            if [[ "$fail_fast" == "true" ]]; then
+                log_error "fnm installation failed, aborting (--fail-fast)"
+                return 1
+            fi
             had_error=true
         fi
     fi
     
     # Check/install Node.js
-    if check_node; then
+    if [[ "$had_error" == "true" && "$fail_fast" == "true" ]]; then
+        :
+    elif check_node; then
         log_success "Node.js is available"
     else
         if ! install_node; then
+            if [[ "$fail_fast" == "true" ]]; then
+                log_error "Node.js installation failed, aborting (--fail-fast)"
+                return 1
+            fi
             had_error=true
         fi
     fi
     
     # Check/install pnpm
-    if check_pnpm; then
+    if [[ "$had_error" == "true" && "$fail_fast" == "true" ]]; then
+        :
+    elif check_pnpm; then
         log_success "pnpm is available"
     else
         if ! install_pnpm; then
+            if [[ "$fail_fast" == "true" ]]; then
+                log_error "pnpm installation failed, aborting (--fail-fast)"
+                return 1
+            fi
             had_error=true
         fi
     fi
