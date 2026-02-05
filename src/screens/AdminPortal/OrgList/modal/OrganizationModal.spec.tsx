@@ -117,9 +117,13 @@ describe('OrganizationModal Component', () => {
     setup();
     const nameInput = screen.getByTestId('modalOrganizationName');
     setNativeInputValue(nameInput as HTMLInputElement, 'Test Organization');
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ name: 'Test Organization' }),
-    );
+
+    // Use waitFor to handle potential React batched updates
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ name: 'Test Organization' }),
+      );
+    });
   });
 
   test('submits form correctly', async () => {
@@ -237,7 +241,7 @@ describe('OrganizationModal Component', () => {
     expect(mockCreateOrg).toHaveBeenCalled();
   });
 
-  test('updates all form fields correctly', () => {
+  test('updates all form fields correctly', async () => {
     setup();
     const fields = [
       {
@@ -263,13 +267,18 @@ describe('OrganizationModal Component', () => {
         value: 'Apt 456',
       },
     ];
-    fields.forEach(({ testId, key, value }) => {
+
+    for (const { testId, key, value } of fields) {
       const input = screen.getByTestId(testId);
       setNativeInputValue(input as HTMLInputElement, value);
-      expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ [key]: value }),
-      );
-    });
+
+      // Use waitFor to handle potential React batched updates
+      await waitFor(() => {
+        expect(mockSetFormState).toHaveBeenCalledWith(
+          expect.objectContaining({ [key]: value }),
+        );
+      });
+    }
   });
 
   test('description field should not accept more than 200 characters', async () => {
@@ -285,8 +294,11 @@ describe('OrganizationModal Component', () => {
     // Use native setter to test the validation logic (simulates paste)
     setNativeInputValue(descInput, longText);
 
-    // Should not call setFormState when input exceeds limit
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Use waitFor to ensure React has processed any potential state updates
+    await waitFor(() => {
+      // Should not call setFormState when input exceeds limit
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
   });
 
   test('should handle country selection correctly', async () => {
@@ -427,8 +439,11 @@ describe('OrganizationModal Component', () => {
       // Use native setter to test validation logic (simulates paste)
       setNativeInputValue(input as HTMLInputElement, longText);
 
-      // Should not call setFormState when input exceeds limit
-      expect(mockSetFormState).not.toHaveBeenCalled();
+      // Use waitFor to ensure React has processed any potential state updates
+      await waitFor(() => {
+        // Should not call setFormState when input exceeds limit
+        expect(mockSetFormState).not.toHaveBeenCalled();
+      });
     });
   });
   test('should handle valid image upload', async () => {
@@ -438,9 +453,12 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
-    );
+    // Use waitFor to handle async state updates after upload
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
+    });
   });
 
   test('should handle invalid file type', async () => {
@@ -461,9 +479,9 @@ describe('OrganizationModal Component', () => {
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
+      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
-    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
   test('should handle null file selection', async () => {
@@ -475,8 +493,10 @@ describe('OrganizationModal Component', () => {
     // Simulate null files using native property setter
     Object.defineProperty(fileInput, 'files', { value: null, writable: true });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Use waitFor to ensure React has processed any potential state updates
+    await waitFor(() => {
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
   });
 
   test('should handle empty file selection', async () => {
@@ -488,8 +508,10 @@ describe('OrganizationModal Component', () => {
     // Simulate empty files using native property setter
     Object.defineProperty(fileInput, 'files', { value: [], writable: true });
     fileInput.dispatchEvent(new Event('change', { bubbles: true }));
-
-    expect(mockSetFormState).not.toHaveBeenCalled();
+    // Use waitFor to ensure React has processed any potential state updates
+    await waitFor(() => {
+      expect(mockSetFormState).not.toHaveBeenCalled();
+    });
   });
 
   test('should show modal when showModal is true', () => {
@@ -617,12 +639,13 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
+    // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
+      );
     });
-    expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
-    );
   });
 
   test('should show error toast on upload failure', async () => {
@@ -633,9 +656,10 @@ describe('OrganizationModal Component', () => {
 
     await userEvent.upload(fileInput, file);
 
+    // All assertions inside waitFor to handle async state updates
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(mockSetFormState).not.toHaveBeenCalled();
     });
-    expect(mockSetFormState).not.toHaveBeenCalled();
   });
 });
