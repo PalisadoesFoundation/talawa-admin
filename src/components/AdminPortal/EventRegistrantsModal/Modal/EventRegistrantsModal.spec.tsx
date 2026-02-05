@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, waitFor, screen, cleanup, within } from '@testing-library/react';
+import {
+  render,
+  waitFor,
+  screen,
+  cleanup,
+  within,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -384,11 +390,19 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     // BaseModal has dataTestId="invite-modal"
-    const modal = await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+    const modal = await screen.findByTestId(
+      'invite-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(modal).toBeInTheDocument();
 
     // Autocomplete input should be rendered
-    const autocomplete = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const autocomplete = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
     expect(autocomplete).toBeInTheDocument();
   });
 
@@ -404,16 +418,27 @@ describe('EventRegistrantsModal', () => {
     );
 
     // Wait for modal to appear using stable test id
-    const modal = await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+    const modal = await screen.findByTestId(
+      'invite-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(modal).toBeInTheDocument();
 
     // Close button has data-testid="modalCloseBtn"
-    const closeButton = await screen.findByTestId('modalCloseBtn', {}, { timeout: 3000 });
+    const closeButton = await screen.findByTestId(
+      'modalCloseBtn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(closeButton);
 
-    await waitFor(() => {
-      expect(handleClose).toHaveBeenCalledTimes(1);
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(handleClose).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('shows warning when Add Registrant is clicked without selecting a member', async () => {
@@ -425,7 +450,11 @@ describe('EventRegistrantsModal', () => {
 
     // Wait for modal and button to appear
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
 
     // Clear any previous mock calls
     vi.clearAllMocks();
@@ -434,12 +463,15 @@ describe('EventRegistrantsModal', () => {
     await user.click(addButton);
 
     // Assert NotificationToast was called (it's mocked)
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Please choose a user to add first!',
-      );
-      expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Please choose a user to add first!',
+        );
+        expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
@@ -452,7 +484,11 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
 
     await user.click(input);
     await user.type(input, 'John Doe');
@@ -460,30 +496,43 @@ describe('EventRegistrantsModal', () => {
     // Wait for option to appear
     const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
     expect(option).toBeInTheDocument();
-    
+
     await user.click(option);
 
     // Wait for member to be selected
-    await waitFor(() => {
-      expect(input).toHaveValue('John Doe');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('John Doe');
+      },
+      { timeout: 3000 },
+    );
 
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
-    
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+
     // Clear previous mocks
     vi.clearAllMocks();
-    
+
     await user.click(addButton);
 
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Adding the attendee...',
-      );
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Adding the attendee...',
+        );
+      },
+      { timeout: 3000 },
+    );
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
-    }, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 5000 },
+    );
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
@@ -496,34 +545,55 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
 
     await user.type(input, 'John');
 
-    const option = await screen.findByTestId('option-user1', {}, { timeout: 3000 });
+    const option = await screen.findByTestId(
+      'option-user1',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(option);
 
     // Wait for selection to complete
-    await waitFor(() => {
-      expect(input).toHaveValue('John');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('John');
+      },
+      { timeout: 3000 },
+    );
 
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
-    
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+
     // Clear previous mocks
     vi.clearAllMocks();
-    
+
     await user.click(addButton);
 
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Adding the attendee...',
-      );
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Adding the attendee...',
+        );
+      },
+      { timeout: 3000 },
+    );
 
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
-    }, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 5000 },
+    );
   });
 
   test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
@@ -537,34 +607,58 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
       {},
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
     expect(input).toBeInTheDocument();
 
     await user.type(input, 'NonexistentUser');
 
     // Wait for no options message
-    await waitFor(() => {
-      expect(screen.getByText('No Registrations found')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('No Registrations found')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
-    const addOnspotLink = await screen.findByText('Add Onspot Registration', {}, { timeout: 3000 });
+    const addOnspotLink = await screen.findByText(
+      'Add Onspot Registration',
+      {},
+      { timeout: 3000 },
+    );
     expect(addOnspotLink).toBeInTheDocument();
 
     await user.click(addOnspotLink);
 
-    const onspotModal = await screen.findByTestId('add-onspot-modal', {}, { timeout: 3000 });
+    const onspotModal = await screen.findByTestId(
+      'add-onspot-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(onspotModal).toBeInTheDocument();
 
-    const reloadBtn = await screen.findByTestId('reload-members-btn', {}, { timeout: 3000 });
+    const reloadBtn = await screen.findByTestId(
+      'reload-members-btn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(reloadBtn);
 
-    const closeBtn = await screen.findByTestId('add-onspot-close', {}, { timeout: 3000 });
+    const closeBtn = await screen.findByTestId(
+      'add-onspot-close',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(closeBtn);
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(
+          screen.queryByTestId('add-onspot-modal'),
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Invite by Email button opens InviteByEmailModal and handleClose closes it', async () => {
@@ -578,27 +672,52 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     // Click invite button using data-testid
-    const inviteButton = await screen.findByTestId('invite-by-email-btn', {}, { timeout: 3000 });
+    const inviteButton = await screen.findByTestId(
+      'invite-by-email-btn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(inviteButton);
 
     // Wait for invite modal to appear (mocked as a div with data-testid)
-    const inviteModal = await screen.findByTestId('invite-by-email-modal', {}, { timeout: 3000 });
+    const inviteModal = await screen.findByTestId(
+      'invite-by-email-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(inviteModal).toBeInTheDocument();
 
     // Verify props passed to InviteByEmailModal
-    const eventIdElement = await screen.findByTestId('invite-event-id', {}, { timeout: 3000 });
-    const isRecurringElement = await screen.findByTestId('invite-is-recurring', {}, { timeout: 3000 });
-    
+    const eventIdElement = await screen.findByTestId(
+      'invite-event-id',
+      {},
+      { timeout: 3000 },
+    );
+    const isRecurringElement = await screen.findByTestId(
+      'invite-is-recurring',
+      {},
+      { timeout: 3000 },
+    );
+
     expect(eventIdElement).toHaveTextContent('event123');
     expect(isRecurringElement).toHaveTextContent('false');
 
     // Close invite modal
-    const closeInvite = await screen.findByTestId('invite-close', {}, { timeout: 3000 });
+    const closeInvite = await screen.findByTestId(
+      'invite-close',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(closeInvite);
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('invite-by-email-modal')).not.toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(
+          screen.queryByTestId('invite-by-email-modal'),
+        ).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('InviteByEmailModal onInvitesSent callback triggers and isRecurring is true for recurring event', async () => {
@@ -610,24 +729,43 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const inviteButton = await screen.findByTestId('invite-by-email-btn', {}, { timeout: 3000 });
+    const inviteButton = await screen.findByTestId(
+      'invite-by-email-btn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(inviteButton);
 
-    const inviteModal = await screen.findByTestId('invite-by-email-modal', {}, { timeout: 3000 });
+    const inviteModal = await screen.findByTestId(
+      'invite-by-email-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(inviteModal).toBeInTheDocument();
 
     // Verify isRecurring is true
-    const isRecurringElement = await screen.findByTestId('invite-is-recurring', {}, { timeout: 3000 });
+    const isRecurringElement = await screen.findByTestId(
+      'invite-is-recurring',
+      {},
+      { timeout: 3000 },
+    );
     expect(isRecurringElement).toHaveTextContent('true');
 
     // Click send button to trigger onInvitesSent
-    const sendBtn = await screen.findByTestId('invite-send', {}, { timeout: 3000 });
+    const sendBtn = await screen.findByTestId(
+      'invite-send',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(sendBtn);
-    
+
     // Wait for any potential side effects
-    await waitFor(() => {
-      expect(sendBtn).toBeInTheDocument();
-    }, { timeout: 1000 });
+    await waitFor(
+      () => {
+        expect(sendBtn).toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
   });
 
   test('shows warning when user types but does not select an option', async () => {
@@ -637,24 +775,35 @@ describe('EventRegistrantsModal', () => {
       makeMembersUnknownNameMock(),
     ]);
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
     expect(input).toBeInTheDocument();
 
     await user.type(input, 'Unknown');
 
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
-    
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+
     // Clear previous mocks
     vi.clearAllMocks();
-    
+
     await user.click(addButton);
 
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Please choose a user to add first!',
-      );
-      expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Please choose a user to add first!',
+        );
+        expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('opens AddOnSpot modal on Enter key press (first scenario)', async () => {
@@ -667,18 +816,26 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
       {},
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
 
     await user.type(input, 'NonexistentUser');
-    
+
     // Wait for the link to appear
-    const addOnspotLink = await screen.findByText('Add Onspot Registration', {}, { timeout: 3000 });
+    const addOnspotLink = await screen.findByText(
+      'Add Onspot Registration',
+      {},
+      { timeout: 3000 },
+    );
     expect(addOnspotLink).toBeInTheDocument();
 
     await user.type(addOnspotLink, '{Enter}');
 
-    const onspotModal = await screen.findByTestId('add-onspot-modal', {}, { timeout: 3000 });
+    const onspotModal = await screen.findByTestId(
+      'add-onspot-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(onspotModal).toBeInTheDocument();
   });
 
@@ -692,18 +849,26 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
       {},
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
 
     await user.type(input, 'NonexistentUser');
 
-    const addOnspotLink = await screen.findByText('Add Onspot Registration', {}, { timeout: 3000 });
+    const addOnspotLink = await screen.findByText(
+      'Add Onspot Registration',
+      {},
+      { timeout: 3000 },
+    );
     expect(addOnspotLink).toBeInTheDocument();
 
     addOnspotLink.focus();
     await user.keyboard('{Enter}');
 
-    const onspotModal = await screen.findByTestId('add-onspot-modal', {}, { timeout: 3000 });
+    const onspotModal = await screen.findByTestId(
+      'add-onspot-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(onspotModal).toBeInTheDocument();
   });
 
@@ -717,14 +882,18 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
       {},
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
 
     await user.type(input, 'NonexistentUser');
 
     await user.keyboard('{ArrowDown}');
 
-    const addOnspotLink = await screen.findByTestId('add-onspot-link', {}, { timeout: 3000 });
+    const addOnspotLink = await screen.findByTestId(
+      'add-onspot-link',
+      {},
+      { timeout: 3000 },
+    );
 
     const ignoredKeys = ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'];
 
@@ -736,9 +905,9 @@ describe('EventRegistrantsModal', () => {
 
       // Use queryBy for negative assertion
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
-      
+
       // Small delay between iterations
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
     }
   });
 
@@ -758,40 +927,60 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
     await user.type(input, 'John');
 
     const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
     await user.click(option);
-    
+
     // Wait for selection
-    await waitFor(() => {
-      expect(input).toHaveValue('John');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('John');
+      },
+      { timeout: 3000 },
+    );
 
     // Clear previous mocks
     vi.clearAllMocks();
 
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(addButton);
 
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Adding the attendee...',
-      );
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Adding the attendee...',
+        );
+      },
+      { timeout: 3000 },
+    );
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Error adding attendee',
-      );
-    }, { timeout: 5000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Error adding attendee',
+        );
+      },
+      { timeout: 5000 },
+    );
 
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Network error: Failed to add attendee',
-      );
-    }, { timeout: 2000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Network error: Failed to add attendee',
+        );
+      },
+      { timeout: 2000 },
+    );
 
     expect(NotificationToast.error).toHaveBeenCalledTimes(2);
   });
@@ -806,18 +995,26 @@ describe('EventRegistrantsModal', () => {
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
       {},
-      { timeout: 3000 }
+      { timeout: 3000 },
     );
     await user.type(input, 'NonExistentUser');
 
-    const addOnspotLink = await screen.findByTestId('add-onspot-link', {}, { timeout: 3000 });
+    const addOnspotLink = await screen.findByTestId(
+      'add-onspot-link',
+      {},
+      { timeout: 3000 },
+    );
     expect(addOnspotLink).toBeInTheDocument();
 
     addOnspotLink.focus();
 
     await user.keyboard(' ');
 
-    const onspotModal = await screen.findByTestId('add-onspot-modal', {}, { timeout: 3000 });
+    const onspotModal = await screen.findByTestId(
+      'add-onspot-modal',
+      {},
+      { timeout: 3000 },
+    );
     expect(onspotModal).toBeInTheDocument();
   });
 
@@ -828,26 +1025,44 @@ describe('EventRegistrantsModal', () => {
       makeMembersUnknownNameMock(),
     ]);
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
     await user.type(input, 'unknown');
 
-    const option = await screen.findByTestId('option-user2', {}, { timeout: 3000 });
+    const option = await screen.findByTestId(
+      'option-user2',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(option);
-    
+
     // Wait for selection
-    await waitFor(() => {
-      expect(input).toHaveValue('unknown');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('unknown');
+      },
+      { timeout: 3000 },
+    );
 
     // Clear previous mocks
     vi.clearAllMocks();
 
-    const addButton = await screen.findByTestId('add-registrant-btn', {}, { timeout: 3000 });
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
     await user.click(addButton);
 
-    await waitFor(() => {
-      expect(NotificationToast.warning).toHaveBeenCalledTimes(2);
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(NotificationToast.warning).toHaveBeenCalledTimes(2);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('updates inputValue state when user types in autocomplete', async () => {
@@ -857,26 +1072,39 @@ describe('EventRegistrantsModal', () => {
       makeMembersWithOneMock(),
     ]);
 
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
 
     await user.type(input, 'Test User');
 
-    await waitFor(() => {
-      expect(input).toHaveValue('Test User');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('Test User');
+      },
+      { timeout: 3000 },
+    );
 
     await user.clear(input);
-    
+
     // Wait for clear to complete
-    await waitFor(() => {
-      expect(input).toHaveValue('');
-    }, { timeout: 3000 });
-    
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('');
+      },
+      { timeout: 3000 },
+    );
+
     await user.type(input, 'Another Test');
 
-    await waitFor(() => {
-      expect(input).toHaveValue('Another Test');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(input).toHaveValue('Another Test');
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('renders ProfileAvatarDisplay in renderOption with correct props for member with name', async () => {
@@ -903,13 +1131,20 @@ describe('EventRegistrantsModal', () => {
     // The renderOption function should be called when options are rendered
     // Since we're using a mock Autocomplete, we need to verify the component
     // would pass correct props to ProfileAvatarDisplay
-    const input = await screen.findByTestId('autocomplete', {}, { timeout: 3000 });
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
     await user.type(input, 'John');
 
     // Verify the option is rendered with the member's name
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('renders ProfileAvatarDisplay in renderOption with unknownUser fallback when name is empty', async () => {
@@ -997,24 +1232,30 @@ describe('EventRegistrantsModal', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     // Wait for the option to be rendered
-    await waitFor(() => {
-      const option = screen.queryByTestId('option-user2');
-      expect(option).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const option = screen.queryByTestId('option-user2');
+        expect(option).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify ProfileAvatarDisplay was called with unknownUser fallback
-    await waitFor(() => {
-      const avatarDisplay = screen.queryByTestId('profile-avatar-display');
-      if (avatarDisplay) {
-        expect(avatarDisplay).toHaveAttribute(
-          'data-fallback-name',
-          'Unknown User',
-        );
-        expect(avatarDisplay).toHaveAttribute('data-size', 'small');
-        expect(avatarDisplay).toHaveAttribute('data-enable-enlarge', 'false');
-        expect(avatarDisplay).toHaveAttribute('data-image-url', 'null');
-      }
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const avatarDisplay = screen.queryByTestId('profile-avatar-display');
+        if (avatarDisplay) {
+          expect(avatarDisplay).toHaveAttribute(
+            'data-fallback-name',
+            'Unknown User',
+          );
+          expect(avatarDisplay).toHaveAttribute('data-size', 'small');
+          expect(avatarDisplay).toHaveAttribute('data-enable-enlarge', 'false');
+          expect(avatarDisplay).toHaveAttribute('data-image-url', 'null');
+        }
+      },
+      { timeout: 3000 },
+    );
   });
 });
 
@@ -1040,7 +1281,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   beforeEach(() => {
     user = userEvent.setup();
     vi.clearAllMocks();
-    
+
     // Re-mock ProfileAvatarDisplay for these tests
     vi.doMock(
       'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
@@ -1106,7 +1347,9 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   }: InterfaceAutocompleteMockProps) => {
     const [localInputValue, setLocalInputValue] = React.useState('');
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleInputChange = (
+      e: React.ChangeEvent<HTMLInputElement>,
+    ): void => {
       const newValue = e.target.value;
       setLocalInputValue(newValue);
       if (onInputChange) {
@@ -1145,7 +1388,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
               // Actually call renderOption to execute the real code
               return renderOption
                 ? renderOption(liProps, option, { selected: false })
-                : (getOptionLabel?.(option) || option.name);
+                : getOptionLabel?.(option) || option.name;
             })
           ) : (
             <div data-testid="no-options">No options</div>
@@ -1170,21 +1413,30 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     // Wait for options to be rendered
-    await waitFor(() => {
-      const optionsContainer = screen.getByTestId('options-container');
-      expect(optionsContainer).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const optionsContainer = screen.getByTestId('options-container');
+        expect(optionsContainer).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify ProfileAvatarDisplay components are rendered
-    await waitFor(() => {
-      const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
-      expect(avatarDisplays.length).toBe(3);
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
+        expect(avatarDisplays.length).toBe(3);
+      },
+      { timeout: 3000 },
+    );
 
     // Verify user1 with avatar
     const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
     const user1Avatar = avatarDisplays[0];
-    expect(user1Avatar).toHaveAttribute('data-image-url', 'https://example.com/avatar1.jpg');
+    expect(user1Avatar).toHaveAttribute(
+      'data-image-url',
+      'https://example.com/avatar1.jpg',
+    );
     expect(user1Avatar).toHaveAttribute('data-fallback-name', 'John Doe');
     expect(user1Avatar).toHaveAttribute('data-size', 'small');
     expect(user1Avatar).toHaveAttribute('data-enable-enlarge', 'false');
@@ -1210,14 +1462,20 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     // Verify user3 with empty name uses "Unknown User"
-    await waitFor(() => {
-      const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
-      expect(avatarDisplays.length).toBe(3);
-      
-      const user3Avatar = avatarDisplays[2];
-      expect(user3Avatar).toHaveAttribute('data-fallback-name', 'Unknown User');
-      expect(user3Avatar).toHaveTextContent('Avatar: Unknown User');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
+        expect(avatarDisplays.length).toBe(3);
+
+        const user3Avatar = avatarDisplays[2];
+        expect(user3Avatar).toHaveAttribute(
+          'data-fallback-name',
+          'Unknown User',
+        );
+        expect(user3Avatar).toHaveTextContent('Avatar: Unknown User');
+      },
+      { timeout: 3000 },
+    );
 
     // Verify the span also shows Unknown User (line 204)
     const optionsContainer = screen.getByTestId('options-container');
@@ -1239,23 +1497,28 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
     // Verify li elements are created with correct keys and props
-    await waitFor(() => {
-      const option1 = screen.getByTestId('rendered-option-user1');
-      const option2 = screen.getByTestId('rendered-option-user2');
-      const option3 = screen.getByTestId('rendered-option-user3');
+    await waitFor(
+      () => {
+        const option1 = screen.getByTestId('rendered-option-user1');
+        const option2 = screen.getByTestId('rendered-option-user2');
+        const option3 = screen.getByTestId('rendered-option-user3');
 
-      expect(option1).toBeInTheDocument();
-      expect(option2).toBeInTheDocument();
-      expect(option3).toBeInTheDocument();
+        expect(option1).toBeInTheDocument();
+        expect(option2).toBeInTheDocument();
+        expect(option3).toBeInTheDocument();
 
-      expect(option1).toHaveAttribute('role', 'option');
-      expect(option2).toHaveAttribute('role', 'option');
-      expect(option3).toHaveAttribute('role', 'option');
-    }, { timeout: 3000 });
+        expect(option1).toHaveAttribute('role', 'option');
+        expect(option2).toHaveAttribute('role', 'option');
+        expect(option3).toHaveAttribute('role', 'option');
+      },
+      { timeout: 3000 },
+    );
 
     // Verify d-flex align-items-center divs exist (line 196)
     const optionsContainer = screen.getByTestId('options-container');
-    const flexDivs = optionsContainer.querySelectorAll('.d-flex.align-items-center');
+    const flexDivs = optionsContainer.querySelectorAll(
+      '.d-flex.align-items-center',
+    );
     expect(flexDivs.length).toBeGreaterThan(0);
   });
 
@@ -1273,18 +1536,23 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    await waitFor(() => {
-      const optionsContainer = screen.getByTestId('options-container');
-      const spanElements = optionsContainer.querySelectorAll('span.ms-2');
-      
-      expect(spanElements.length).toBeGreaterThan(0);
-      
-      // Verify spans contain correct text
-      const spanTexts = Array.from(spanElements).map(span => span.textContent);
-      expect(spanTexts).toContain('John Doe');
-      expect(spanTexts).toContain('Jane Smith');
-      expect(spanTexts).toContain('Unknown User');
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const optionsContainer = screen.getByTestId('options-container');
+        const spanElements = optionsContainer.querySelectorAll('span.ms-2');
+
+        expect(spanElements.length).toBeGreaterThan(0);
+
+        // Verify spans contain correct text
+        const spanTexts = Array.from(spanElements).map(
+          (span) => span.textContent,
+        );
+        expect(spanTexts).toContain('John Doe');
+        expect(spanTexts).toContain('Jane Smith');
+        expect(spanTexts).toContain('Unknown User');
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('getOptionLabel returns correct labels for all member types (line 192)', async () => {
@@ -1301,16 +1569,19 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    await waitFor(() => {
-      const option1 = screen.getByTestId('rendered-option-user1');
-      const option2 = screen.getByTestId('rendered-option-user2');
-      const option3 = screen.getByTestId('rendered-option-user3');
+    await waitFor(
+      () => {
+        const option1 = screen.getByTestId('rendered-option-user1');
+        const option2 = screen.getByTestId('rendered-option-user2');
+        const option3 = screen.getByTestId('rendered-option-user3');
 
-      // Verify correct names are displayed
-      expect(option1).toHaveTextContent('John Doe');
-      expect(option2).toHaveTextContent('Jane Smith');
-      expect(option3).toHaveTextContent('Unknown User');
-    }, { timeout: 3000 });
+        // Verify correct names are displayed
+        expect(option1).toHaveTextContent('John Doe');
+        expect(option2).toHaveTextContent('Jane Smith');
+        expect(option3).toHaveTextContent('Unknown User');
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('ProfileAvatarDisplay always receives enableEnlarge=false (line 201)', async () => {
@@ -1327,14 +1598,17 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    await waitFor(() => {
-      const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
-      expect(avatarDisplays.length).toBe(3);
-      
-      avatarDisplays.forEach(display => {
-        expect(display).toHaveAttribute('data-enable-enlarge', 'false');
-      });
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
+        expect(avatarDisplays.length).toBe(3);
+
+        avatarDisplays.forEach((display) => {
+          expect(display).toHaveAttribute('data-enable-enlarge', 'false');
+        });
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('ProfileAvatarDisplay always receives size="small" (line 200)', async () => {
@@ -1351,14 +1625,17 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    await waitFor(() => {
-      const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
-      expect(avatarDisplays.length).toBe(3);
-      
-      avatarDisplays.forEach(display => {
-        expect(display).toHaveAttribute('data-size', 'small');
-      });
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
+        expect(avatarDisplays.length).toBe(3);
+
+        avatarDisplays.forEach((display) => {
+          expect(display).toHaveAttribute('data-size', 'small');
+        });
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('clicking on rendered option triggers onChange (line 195)', async () => {
@@ -1375,11 +1652,15 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    const option1 = await screen.findByTestId('rendered-option-user1', {}, { timeout: 3000 });
-    
+    const option1 = await screen.findByTestId(
+      'rendered-option-user1',
+      {},
+      { timeout: 3000 },
+    );
+
     // Click should work without errors
     await user.click(option1);
-    
+
     // Verify option is in the document and clickable
     expect(option1).toBeInTheDocument();
   });
