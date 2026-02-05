@@ -583,8 +583,6 @@ describe('CampaignModal', () => {
     });
   });
 
-
-
   it('should populate form fields with correct values in edit mode', async () => {
     renderCampaignModal(link1, campaignProps[1], cache);
     const modal = screen.getByTestId('campaignModal');
