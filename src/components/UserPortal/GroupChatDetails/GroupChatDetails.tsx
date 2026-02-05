@@ -71,7 +71,10 @@ import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceGroupChatDetailsProps } from 'types/UserPortal/Chat/interface';
+import type {
+  InterfaceGroupChatDetailsProps,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -530,12 +533,7 @@ export default function GroupChatDetails({
                       ({
                         node: userDetails,
                       }: {
-                        node: {
-                          id: string;
-                          name: string;
-                          avatarURL?: string;
-                          role: string;
-                        };
+                        node: InterfaceOrganizationMember;
                       }) =>
                         userDetails.id !== userId &&
                         !chat.members?.edges?.some(
@@ -547,12 +545,7 @@ export default function GroupChatDetails({
                         {
                           node: userDetails,
                         }: {
-                          node: {
-                            id: string;
-                            name: string;
-                            avatarURL?: string;
-                            role: string;
-                          };
+                          node: InterfaceOrganizationMember;
                         },
                         index: number,
                       ) => (

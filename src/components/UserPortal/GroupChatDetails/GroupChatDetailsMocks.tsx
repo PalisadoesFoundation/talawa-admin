@@ -574,4 +574,14 @@ export const failingMocks = [
     },
     error: new Error('Failed to update chat image'),
   },
+  // Mock for adding user failure
+  {
+    request: {
+      query: CREATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user3', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    error: new Error('Failed to add user'),
+  },
 ];

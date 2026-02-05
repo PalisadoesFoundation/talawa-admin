@@ -109,6 +109,8 @@ i18n.use(initReactI18next).init({
           chatDeletedSuccessfully: 'Chat deleted successfully',
           failedToDeleteChat: 'Failed to delete chat',
           chatNameUpdatedSuccessfully: 'Chat name updated successfully',
+          failedToAddUser: 'Failed to add user',
+          userAddedSuccessfully: 'User added successfully',
         },
       },
       common: {
@@ -1034,5 +1036,137 @@ describe('GroupChatDetails', () => {
       });
       expect(visibleSpinners.length).toBe(0);
     });
+  });
+
+  it('shows error toast when chat name update fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(NotificationToast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[...failingMocks, ...mocks]} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    const editBtn = await screen.findByTestId('editTitleBtn');
+    await userEvent.click(editBtn);
+
+    const input = await screen.findByTestId('chatNameInput');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'New Name');
+
+    const updateBtn = await screen.findByTestId('updateTitleBtn');
+    await userEvent.click(updateBtn);
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to update chat name');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
+
+  it('shows error toast when chat deletion fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(NotificationToast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    vi.spyOn(window, 'confirm').mockReturnValue(true);
+
+    const adminChat = withSafeChat({
+      ...filledMockChat,
+      members: {
+        edges: [
+          {
+            node: {
+              user: { id: 'user1', name: 'Alice' },
+              role: 'administrator',
+            },
+          },
+        ],
+      },
+    });
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[...failingMocks, ...mocks]} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={adminChat}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    const deleteBtn = await screen.findByRole('button', { name: /delete/i });
+    await userEvent.click(deleteBtn);
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
+
+  it('shows error toast when adding user fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(NotificationToast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[...failingMocks, ...mocks]} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Open User Modal
+    const addMembersBtn = await screen.findByTestId('addMembers');
+    await userEvent.click(addMembersBtn);
+
+    // Search for user
+    const searchInput = await screen.findByTestId('searchUser');
+    await userEvent.type(searchInput, 'Disha');
+
+    // Check if search button is enabled/present and click it
+    // Wait for button to be clickable if needed, but here assuming it's ready
+    const searchBtn = await screen.findByTestId('searchBtn');
+    await userEvent.click(searchBtn);
+
+    // Wait for user to appear
+    const addBtn = await screen.findByTestId('addUserBtn');
+    await userEvent.click(addBtn);
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to add user');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
   });
 });

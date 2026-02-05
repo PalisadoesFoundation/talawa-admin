@@ -136,15 +136,3 @@ export interface InterfaceOrganizationMember {
   avatarURL?: string;
   role: string;
 }
-
-/**
- * Props for the CreateDirectChat modal.
- */
-export interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  chats: Chat[];
-}

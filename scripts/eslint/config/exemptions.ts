@@ -66,6 +66,11 @@ export const wrapperExemptions = [
     componentName: 'NotificationToast',
     allowedIds: ['react-toastify'],
   }),
+  createWrapperExemption({
+    componentName: 'DropDownButton',
+    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
+  }),
+
   {
     files: [
       'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
@@ -86,19 +91,6 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
-  createWrapperExemption({
-    componentName: 'DropDownButton',
-    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
-  }),
-
-  {
-    files: [
-      'src/shared-components/ActionItems/ActionItemModal/ActionItemModal.tsx',
-      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx',
-      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.spec.tsx',
-    ],
-    rules: restrictImportsExcept(['mui-autocomplete', 'mui-autocomplete-path']),
-  },
 ];
 
 export const avatarExemption = createWrapperExemption({

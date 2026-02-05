@@ -52,9 +52,10 @@ import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import type {
   Chat,
-  InterfaceCreateDirectChatProps,
   InterfaceOrganizationMember,
 } from 'types/UserPortal/Chat/interface';
+import type { InterfaceCreateDirectChatProps } from 'types/UserPortal/CreateDirectChat/interface';
+
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
