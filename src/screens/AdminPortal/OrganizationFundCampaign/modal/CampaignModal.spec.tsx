@@ -1334,6 +1334,158 @@ describe('CampaignModal', () => {
     });
   });
 
+  it('should synchronize form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+
+    expect(campaignName).toHaveValue(campaignProps[1].campaign?.name);
+    expect(goalAmount).toHaveValue(campaignProps[1].campaign?.goalAmount);
+
+    const updatedCampaign = {
+      ...campaignProps[1],
+      campaign: {
+        ...campaignProps[1].campaign!,
+        name: 'Updated Campaign Name',
+        goalAmount: 5000,
+      },
+    };
+
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedCampaign} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(campaignName).toHaveValue('Updated Campaign Name');
+      expect(goalAmount).toHaveValue(5000);
+    });
+  });
+
+  it('should handle null campaign prop correctly', async () => {
+    const nullCampaignProps = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    renderCampaignModal(link1, nullCampaignProps);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+    const startDate = getStartDateInput();
+    const endDate = getEndDateInput();
+
+    expect(campaignName).toHaveValue('');
+    expect(goalAmount).toHaveValue(0);
+    expect(startDate).toHaveValue('');
+    expect(endDate).toHaveValue('');
+  });
+
+  it('should show error when campaign name is empty in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('should show error when start and end dates are not provided in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign Name');
+
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('should allow updating the fundingGoal field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const goalAmountInput = getFundingGoalInput();
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '7500');
+
+    expect(goalAmountInput).toHaveValue(7500);
+  });
+
+  it('should allow updating the startAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const startDateInput = getStartDateInput();
+    const newStartDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDate);
+
+    expect(startDateInput).toHaveValue(newStartDate);
+  });
+
+  it('should allow updating the endAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const endDateInput = getEndDateInput();
+    const newEndDate = dayjs.utc().add(8, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, newEndDate);
+
+    expect(endDateInput).toHaveValue(newEndDate);
+  });
+
+  it('should allow changing the currency code', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const currencySelect = getCurrencySelect();
+    await user.selectOptions(currencySelect, 'EUR');
+
+    expect(currencySelect).toHaveValue('EUR');
+  });
+
+  it('should handle zero value for fundingGoal', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const goalAmountInput = getFundingGoalInput();
+
+    // Test with zero
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '0');
+    expect(goalAmountInput).toHaveValue(0);
+
+    // Test clearing to empty - component sets value to 0 when cleared
+    await user.clear(goalAmountInput);
+    expect(goalAmountInput).toHaveValue(0);
+  });
+
   it('should auto-adjust end date when start date is changed to after end date', async () => {
     const user = userEvent.setup();
 
