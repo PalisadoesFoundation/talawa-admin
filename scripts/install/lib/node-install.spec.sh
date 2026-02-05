@@ -741,10 +741,8 @@ test_ensure_node_toolchain_fail_fast() {
     
     eval 'check_fnm() { return 1; }'
     eval 'install_fnm() { return 1; }'
-    
-    local install_node_called=false
-    eval 'check_node() { install_node_called=true; return 1; }'
-    eval 'install_node() { install_node_called=true; return 1; }'
+    eval 'check_node() { return 1; }'
+    eval 'install_node() { return 1; }'
     
     local output result=0
     output=$(ensure_node_toolchain --fail-fast 2>&1)
@@ -778,14 +776,10 @@ test_ensure_node_toolchain_no_fail_fast() {
     export HOME="$fixture_dir"
     export PATH="/nonexistent:$SAVED_PATH"
     
-    local fnm_install_called=false
-    local node_check_called=false
-    local pnpm_check_called=false
-    
     eval 'check_fnm() { return 1; }'
-    eval 'install_fnm() { fnm_install_called=true; return 1; }'
-    eval 'check_node() { node_check_called=true; return 0; }'
-    eval 'check_pnpm() { pnpm_check_called=true; return 0; }'
+    eval 'install_fnm() { return 1; }'
+    eval 'check_node() { return 0; }'
+    eval 'check_pnpm() { return 0; }'
     
     local output result=0
     output=$(ensure_node_toolchain 2>&1)
