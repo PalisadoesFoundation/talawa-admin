@@ -185,7 +185,6 @@ describe('Calendar Component', () => {
   });
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
     cleanup();
   });
   const mockRefetchEvents = vi.fn();
@@ -1000,7 +999,6 @@ describe('Calendar Component', () => {
     });
 
     // Look for expand buttons that may contain events
-    container.querySelectorAll('[data-testid^="expand-btn-"]');
 
     // Check if there are events by clicking expand buttons and checking content
     await clickExpandForDate(container, new Date(publicEvent.startAt), user);
