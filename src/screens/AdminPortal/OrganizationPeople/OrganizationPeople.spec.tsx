@@ -169,6 +169,9 @@ const createMemberConnectionMock = (
 type UserListVariables = {
   first?: number | null;
   after?: string | null;
+  last?: number | null;
+  before?: string | null;
+  where?: Record<string, unknown> | null;
 };
 
 type UserEdge = {
@@ -197,6 +200,15 @@ const createUserListMock = (
   variables: UserListVariables,
   overrides: UserListOverrides = {},
 ) => {
+  // Ensure all query variables are included for proper mock matching
+  const fullVariables: UserListVariables = {
+    first: variables.first ?? null,
+    after: variables.after ?? null,
+    last: variables.last ?? null,
+    before: variables.before ?? null,
+    where: variables.where ?? null,
+  };
+
   const defaultData = {
     allUsers: {
       edges: [
@@ -256,8 +268,11 @@ const createUserListMock = (
   return {
     request: {
       query: USER_LIST_FOR_TABLE,
-      variables,
+      variables: fullVariables,
     },
+    variableMatcher: (variables: Record<string, unknown>) =>
+      variables.first === fullVariables.first &&
+      variables.after === fullVariables.after,
     result: {
       data,
     },
@@ -827,8 +842,13 @@ describe('OrganizationPeople', () => {
         variables: {
           first: 10,
           after: null,
+          last: null,
+          before: null,
+          where: null,
         },
       },
+      variableMatcher: (variables: Record<string, unknown>) =>
+        variables.first === 10 && variables.after === null,
       error: new Error('An error occurred'),
     };
 

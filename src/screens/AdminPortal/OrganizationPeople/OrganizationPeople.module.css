@@ -101,6 +101,12 @@
   display: none;
 }
 
+.paginationContainer {
+  margin-top: var(--space-4);
+  display: flex;
+  justify-content: center;
+}
+
 /* DatagridWrapper's Column min-width classes using spacing tokens */
 .colMinWidthXs {
   min-width: var(--space-10);

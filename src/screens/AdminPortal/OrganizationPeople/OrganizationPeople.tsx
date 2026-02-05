@@ -357,6 +357,7 @@ function OrganizationPeople(): JSX.Element {
       {/* CursorPaginationManager for all modes */}
       {state !== 2 ? (
         <CursorPaginationManager<unknown, IMemberNode, Record<string, unknown>>
+          key="members-pagination"
           query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
           queryVariables={memberQueryVariables}
           dataPath="organization.members"
@@ -366,10 +367,11 @@ function OrganizationPeople(): JSX.Element {
           renderItem={() => null}
           loadingComponent={<></>}
           emptyStateComponent={<></>}
-          className={styles.hidden}
+          className={styles.paginationContainer}
         />
       ) : (
         <CursorPaginationManager<unknown, IMemberNode, Record<string, unknown>>
+          key="users-pagination"
           query={USER_LIST_FOR_TABLE}
           queryVariables={{}}
           dataPath="allUsers"
@@ -379,7 +381,7 @@ function OrganizationPeople(): JSX.Element {
           renderItem={() => null}
           loadingComponent={<></>}
           emptyStateComponent={<></>}
-          className={styles.hidden}
+          className={styles.paginationContainer}
         />
       )}
 
