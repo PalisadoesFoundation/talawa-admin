@@ -14,6 +14,59 @@ import dayjs from 'dayjs';
  * Mocks for the GroupChatDetails component
  */
 
+const createMemberSearchMock = (searchTerm: string) => ({
+  request: {
+    query: ORGANIZATION_MEMBERS,
+    variables: {
+      input: { id: 'org123' },
+      first: 20,
+      after: null,
+      where: { name_contains: searchTerm },
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [],
+          pageInfo: { hasNextPage: false, endCursor: null },
+        },
+      },
+    },
+  },
+});
+
+const createMemberSearchMockWithResult = (searchTerm: string) => ({
+  request: {
+    query: ORGANIZATION_MEMBERS,
+    variables: {
+      input: { id: 'org123' },
+      first: 20,
+      after: null,
+      where: { name_contains: searchTerm },
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [
+            {
+              node: {
+                id: 'user3',
+                name: 'Disha Smith',
+                avatarURL: null,
+                role: 'Member',
+              },
+            },
+          ],
+          pageInfo: { hasNextPage: false, endCursor: null },
+        },
+      },
+    },
+  },
+});
+
 interface InterfaceChatUser {
   _id: string;
   firstName: string;
@@ -196,6 +249,13 @@ export const mocks = [
       },
     },
   },
+  // Intermediate mocks for 'Disha'
+  createMemberSearchMock('D'),
+  createMemberSearchMock('Di'),
+  createMemberSearchMock('Dis'),
+  createMemberSearchMock('Dish'),
+  createMemberSearchMockWithResult('Disha'),
+
   // Organization members mock for name search 'Disha'
   {
     request: {
@@ -227,6 +287,13 @@ export const mocks = [
       },
     },
   },
+  // Intermediate mocks for 'Smith'
+  createMemberSearchMock('S'),
+  createMemberSearchMock('Sm'),
+  createMemberSearchMock('Smi'),
+  createMemberSearchMock('Smit'),
+  createMemberSearchMockWithResult('Smith'),
+
   // Organization members mock for name search 'Disha' - duplicate for multiple calls
   {
     request: {

@@ -559,12 +559,13 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = toggles.find(
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle)
+      await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteText = await screen.findByText(
       /Promote to Admin|Demote to Regular/,
     );
-    await act(async () => userEvent.click(promoteText));
+    await act(async () => await userEvent.click(promoteText));
 
     // wait for role change toast
     await waitFor(() =>
@@ -574,7 +575,7 @@ describe('GroupChatDetails', () => {
     const removeBtn = screen.queryByText(/Remove/);
     if (removeBtn) {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
-      await act(async () => userEvent.click(removeBtn));
+      await act(async () => await userEvent.click(removeBtn));
       await waitFor(() =>
         expect(toastSuccess).toHaveBeenCalledWith(
           'Member removed successfully',
@@ -629,11 +630,12 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle)
+      await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteItem = await screen.findByText(/Promote|Demote/i);
 
-    await act(async () => userEvent.click(promoteItem));
+    await act(async () => await userEvent.click(promoteItem));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to update role');
@@ -690,11 +692,12 @@ describe('GroupChatDetails', () => {
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
     );
 
-    if (dropdownToggle) await act(async () => userEvent.click(dropdownToggle));
+    if (dropdownToggle)
+      await act(async () => await userEvent.click(dropdownToggle));
 
     const removeItem = await screen.findByText(/Remove/i);
 
-    await act(async () => userEvent.click(removeItem));
+    await act(async () => await userEvent.click(removeItem));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to remove member');
@@ -790,21 +793,16 @@ describe('GroupChatDetails', () => {
     );
 
     // Wait for delete (trash) button to be present
-    await waitFor(
-      async () => {
-        expect(
-          await screen.findByRole('button', { name: /trash/i }),
-        ).toBeTruthy();
-      },
-      { timeout: 3000 },
-    );
+    // Wait for delete (trash) button to be present
+    expect(
+      await screen.findByRole('button', { name: /delete/i }, { timeout: 3000 }),
+    ).toBeTruthy();
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
-    const buttons = screen.getAllByRole('button');
-    const trashButton = buttons.find((b) => b.querySelector('svg'));
-    if (trashButton) await act(async () => userEvent.click(trashButton));
+    const trashButton = screen.getByRole('button', { name: /delete/i });
+    if (trashButton) await act(async () => await userEvent.click(trashButton));
 
     await waitFor(() =>
       expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'),
@@ -846,20 +844,15 @@ describe('GroupChatDetails', () => {
     );
 
     // Wait for delete (trash) button to be present
-    await waitFor(
-      async () => {
-        expect(
-          await screen.findByRole('button', { name: /trash/i }),
-        ).toBeTruthy();
-      },
-      { timeout: 3000 },
-    );
+    // Wait for delete (trash) button to be present
+    expect(
+      await screen.findByRole('button', { name: /delete/i }, { timeout: 3000 }),
+    ).toBeTruthy();
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
 
-    const buttons = screen.getAllByRole('button');
-    const trashButton = buttons.find((b) => b.querySelector('svg'));
-    if (trashButton) await act(async () => userEvent.click(trashButton));
+    const trashButton = screen.getByRole('button', { name: /delete/i });
+    if (trashButton) await act(async () => await userEvent.click(trashButton));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
@@ -903,7 +896,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await userEvent.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await act(async () => {
@@ -913,7 +906,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('updateTitleBtn'));
+      await userEvent.click(await screen.findByTestId('updateTitleBtn'));
     });
 
     await waitFor(() => {
@@ -950,7 +943,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
+      await userEvent.click(await screen.findByTestId('editImageBtn'));
     });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
@@ -998,7 +991,7 @@ describe('GroupChatDetails', () => {
       // Click "Add Members" to open the modal that triggers ORGANIZATION_MEMBERS query
       const addMembersBtn = screen.getByTestId('addMembers');
       await act(async () => {
-        userEvent.click(addMembersBtn);
+        await userEvent.click(addMembersBtn);
       });
 
       // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading

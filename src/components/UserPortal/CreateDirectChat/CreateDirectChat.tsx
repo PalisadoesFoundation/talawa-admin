@@ -50,24 +50,13 @@ import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
-import type { Chat } from 'types/UserPortal/Chat/interface';
+import type {
+  Chat,
+  InterfaceCreateDirectChatProps,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/Chat/interface';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-
-interface InterfaceOrganizationMember {
-  id: string;
-  name: string;
-  avatarURL?: string;
-  role: string;
-}
-interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
-  chats: Chat[];
-}
 
 const { getItem } = useLocalStorage();
 
