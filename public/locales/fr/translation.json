@@ -101,6 +101,21 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "verifyEmail": {
+    "title": "Vérifier l'Email",
+    "loginRequired": "Connexion requise",
+    "verifying": "Vérification...",
+    "success": "Email Vérifié",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "error": "Vérification Échouée",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "noToken": "Aucun jeton de vérification fourni. Veuillez vérifier votre email pour le lien de vérification.",
+    "verificationFailed": "La vérification de l'email a échoué. Veuillez réessayer.",
+    "resendSuccess": "L'email de vérification a été renvoya avec succès.",
+    "resendFailed": "Échec de l'envoi de l'email de vérification. Veuillez réessayer.",
+    "resendButton": "Renvoyer l'Email de Vérification",
+    "goToLogin": "Aller à la Connexion"
+  },
   "adminProfile": {
     "title": "Profil Administrateur",
     "settings": "Paramètres",
@@ -2511,19 +2526,6 @@
       "emptyState": "Veuillez demander aux participants de soumettre leurs commentaires pour obtenir des informations !",
       "filledByCount": "{{count}} personnes ont rempli des commentaires pour cet événement."
     }
-  },
-  "verifyEmail": {
-    "title": "Vérifier l'e-mail",
-    "verifying": "Vérification de votre e-mail...",
-    "success": "E-mail vérifié !",
-    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
-    "error": "Échec de la vérification",
-    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
-    "loginRequired": "Veuillez vous connecter pour vérifier votre e-mail.",
-    "resendButton": "Renvoyer l'e-mail de vérification",
-    "resendSuccess": "L'e-mail de vérification a été renvoyé avec succès.",
-    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
-    "goToLogin": "Aller à la connexion"
   },
   "plugins": {
     "loading": "Chargement du plugin...",
