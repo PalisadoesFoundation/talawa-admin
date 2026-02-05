@@ -2,7 +2,6 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LoginForm } from './LoginForm';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';

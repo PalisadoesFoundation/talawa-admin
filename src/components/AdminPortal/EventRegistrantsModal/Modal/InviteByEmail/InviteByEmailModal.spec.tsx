@@ -7,7 +7,6 @@ import InviteByEmailModal from './InviteByEmailModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

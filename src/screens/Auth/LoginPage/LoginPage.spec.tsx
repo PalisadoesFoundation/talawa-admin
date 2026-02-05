@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import React, { act } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, within, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router';
@@ -1843,8 +1842,8 @@ const renderLoginPage = (
       {...(isLink
         ? { link: mocksOrLink }
         : {
-            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-          })}
+          mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+        })}
     >
       <Router location={history.location} navigator={history}>
         <Provider store={store}>

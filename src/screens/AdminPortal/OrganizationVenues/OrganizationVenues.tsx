@@ -61,7 +61,7 @@ import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
-function organizationVenues(): JSX.Element {
+function OrganizationVenues(): JSX.Element {
   // Translation hooks for i18n support
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
@@ -95,7 +95,13 @@ function organizationVenues(): JSX.Element {
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
-  } = useQuery(VENUE_LIST, {
+  } = useQuery<{
+    organization: {
+      venues: {
+        edges: InterfaceQueryVenueListItem[];
+      };
+    };
+  }>(VENUE_LIST, {
     variables: {
       orgId: orgId,
     },
@@ -298,4 +304,4 @@ function organizationVenues(): JSX.Element {
   );
 }
 
-export default organizationVenues;
+export default OrganizationVenues;

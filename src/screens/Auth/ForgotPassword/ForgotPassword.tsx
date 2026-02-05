@@ -79,7 +79,9 @@ const ForgotPassword = (): JSX.Element => {
     confirmNewPassword: '',
   });
 
-  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
+  const [otp, { loading: otpLoading }] = useMutation<{
+    otp: { otpToken: string };
+  }>(GENERATE_OTP_MUTATION);
   const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
     FORGOT_PASSWORD_MUTATION,
   );
@@ -101,9 +103,11 @@ const ForgotPassword = (): JSX.Element => {
     try {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
-      setItem('otpToken', data.otp.otpToken);
-      NotificationToast.success(t('OTPsent'));
-      setShowEnterEmail(false);
+      if (data?.otp) {
+        setItem('otpToken', data.otp.otpToken);
+        NotificationToast.success(t('OTPsent'));
+        setShowEnterEmail(false);
+      }
     } catch (error: unknown) {
       if ((error as Error).message === 'User not found') {
         NotificationToast.warning(tErrors('emailNotRegistered'));

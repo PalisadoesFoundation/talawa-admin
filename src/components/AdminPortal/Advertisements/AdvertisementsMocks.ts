@@ -188,7 +188,7 @@ const authLink = setContext((_, { headers }) => {
 
 export const link = ApolloLink.from([authLink, httpLink]);
 
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   link,
 });

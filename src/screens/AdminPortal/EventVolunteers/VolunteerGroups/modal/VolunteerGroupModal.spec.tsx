@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { StaticMockLink, type IStaticMockedResponse } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
@@ -243,8 +243,8 @@ describe('Testing VolunteerGroupModal', () => {
   });
 
   it('GroupModal -> Create -> leader already selected as volunteer', async () => {
-    const membersMock = MOCKS[1] as MockedResponse;
-    const createGroupMock: MockedResponse = {
+    const membersMock = MOCKS[1] as IStaticMockedResponse;
+    const createGroupMock: IStaticMockedResponse = {
       request: {
         query: CREATE_VOLUNTEER_GROUP,
         variables: {
@@ -903,9 +903,9 @@ describe('Testing VolunteerGroupModal', () => {
         ...modalProps[1],
         group: baseGroup
           ? {
-              ...baseGroup,
-              id: '',
-            }
+            ...baseGroup,
+            id: '',
+          }
           : null,
       };
 
@@ -1133,7 +1133,7 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
     // We want Leader = John Doe (userId2) and Volunteer = Harve Lance (userId)
     // Expected volunteerUserIds = ['userId2', 'userId'] - Leader first
 
-    const orderingMock: MockedResponse = {
+    const orderingMock: IStaticMockedResponse = {
       request: {
         query: CREATE_VOLUNTEER_GROUP,
         variables: {
@@ -1154,7 +1154,7 @@ describe('VolunteerGroupModal helper functions (coverage)', () => {
           },
         },
       },
-      variableMatcher: (variables) => {
+      variableMatcher: (variables: Record<string, unknown>) => {
         const data = variables.data as { volunteerUserIds: string[] };
         return (
           JSON.stringify(data.volunteerUserIds) ===

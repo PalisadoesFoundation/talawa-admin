@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import React, { act } from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -335,7 +334,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
    * @param logoutMock - The mock response for the logout mutation (error or GraphQL error).
    */
   const testLogoutError = async (logoutMock: MockedResponse) => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     const { mockClearAllItems } = createMock();
 
     const mocks = [

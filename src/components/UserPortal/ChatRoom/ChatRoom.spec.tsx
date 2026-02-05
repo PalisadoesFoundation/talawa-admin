@@ -3,7 +3,6 @@ import React from 'react';
 import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -909,7 +908,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     renderChatRoom([SEND_MESSAGE_ERROR_MOCK]);
     await waitFor(() => {
@@ -1402,7 +1401,7 @@ describe('ChatRoom Component', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     renderChatRoom([ERROR_LOAD_MORE_MOCK]);
 
@@ -2037,7 +2036,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
 
@@ -2980,7 +2979,7 @@ describe('ChatRoom Component', () => {
     const user = userEvent.setup();
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     // Override the mock to throw an error
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -3322,7 +3321,7 @@ describe('ChatRoom Component', () => {
       // Mock console.error to catch any error logs
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <MockedProvider mocks={[]}>
@@ -3504,7 +3503,7 @@ describe('ChatRoom Component', () => {
       // Mock network errors that would occur without the skip fix
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <MockedProvider mocks={[]}>

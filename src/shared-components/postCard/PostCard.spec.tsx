@@ -1,7 +1,6 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import {
   render,
   screen,
@@ -1393,8 +1392,8 @@ describe('PostCard', () => {
                 __typename: 'CommentEdge',
                 node: {
                   __typename: 'Comment',
-                  id: `comment-${i}`,
-                  body: `Comment ${i}`,
+                  id: `comment - ${ i } `,
+                  body: `Comment ${ i } `,
                   creator: {
                     __typename: 'User',
                     id: '2',
@@ -1410,7 +1409,7 @@ describe('PostCard', () => {
                     voteType: null,
                   },
                 },
-                cursor: `cursor-${i}`,
+                cursor: `cursor - ${ i } `,
               })),
               pageInfo: {
                 __typename: 'PageInfo',

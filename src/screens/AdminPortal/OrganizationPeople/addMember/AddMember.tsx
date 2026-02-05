@@ -88,9 +88,7 @@ function AddMember(): JSX.Element {
         endCursor: string;
       };
     };
-  }>(USER_LIST_FOR_TABLE, {
-    variables: { first: PAGE_SIZE, after: null, last: null, before: null },
-  });
+  }>(USER_LIST_FOR_TABLE);
 
   const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
@@ -175,8 +173,10 @@ function AddMember(): JSX.Element {
             isEmailAddressVerified: true,
           },
         });
-        const createdUserId = registeredUser?.data.createUser.user.id;
-        await createMember(createdUserId);
+        const createdUserId = registeredUser?.data?.createUser.user.id;
+        if (createdUserId) {
+          await createMember(createdUserId);
+        }
         closeCreateNewUserModal();
         setCreateUserVariables({
           name: '',
@@ -236,6 +236,7 @@ function AddMember(): JSX.Element {
   useEffect(() => {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
+      if (!pageInfo) return;
       const pageIndex = responsePageRef.current;
       if (pageInfo.endCursor) {
         mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
@@ -244,8 +245,8 @@ function AddMember(): JSX.Element {
         backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
       setPaginationMeta({
-        hasNextPage: pageInfo.hasNextPage,
-        hasPreviousPage: pageInfo.hasPreviousPage,
+        hasNextPage: !!pageInfo.hasNextPage,
+        hasPreviousPage: !!pageInfo.hasPreviousPage,
       });
     }
   }, [userData]);
@@ -274,7 +275,7 @@ function AddMember(): JSX.Element {
     fetchUsers({ variables });
   };
   const allUsersData =
-    userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
+    userData?.allUsers?.edges?.map((edge) => edge?.node) || [];
   return (
     <>
       <PageHeader

@@ -109,6 +109,16 @@ interface IEdges {
   };
 }
 
+interface IConnection {
+  edges: IEdges[];
+  pageInfo: {
+    startCursor?: string;
+    endCursor?: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+}
+
 interface IQueryVariable {
   orgId?: string | undefined;
   first?: number | null;
@@ -134,24 +144,13 @@ function OrganizationPeople(): JSX.Element {
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
-  const [data, setData] = useState<
-    | {
-      edges: IEdges[];
-      pageInfo: {
-        startCursor?: string;
-        endCursor?: string;
-        hasNextPage: boolean;
-        hasPreviousPage: boolean;
-      };
-    }
-    | undefined
-  >();
+  const [data, setData] = useState<IConnection | undefined>();
 
   // Query hooks
   const [
     fetchMembers,
     { data: memberData, loading: memberLoading, error: memberError },
-  ] = useLazyQuery<{ organization: { members: any } }>(
+  ] = useLazyQuery<{ organization: { members: IConnection } }>(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   );
 
@@ -159,7 +158,7 @@ function OrganizationPeople(): JSX.Element {
     fetchUsers,
     { data: userData, loading: userLoading, error: userError },
   ] = useLazyQuery<{
-    allUsers: any;
+    allUsers: IConnection;
   }>(USER_LIST_FOR_TABLE);
 
   // Sync query data with local state

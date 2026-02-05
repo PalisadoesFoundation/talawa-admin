@@ -143,7 +143,7 @@ const errorLink = onError(
               .finally(() => {
                 isRefreshing = false;
               }),
-          ).flatMap((success) => {
+          ).flatMap((success: any) => {
             if (success) {
               // Retry the original request
               // No need to set headers - HTTP-Only cookies are automatically included

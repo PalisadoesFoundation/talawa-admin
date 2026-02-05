@@ -3,7 +3,6 @@ import React from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';

@@ -13,8 +13,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
-import { StaticMockLink } from 'utils/StaticMockLink';
 import type { MockedResponse } from '@apollo/client/testing';
+import { StaticMockLink, type IStaticMockedResponse } from 'utils/StaticMockLink';
 import EventAgendaItems from './EventAgendaItems';
 import { vi } from 'vitest';
 import { AgendaItemByEvent } from 'GraphQl/Queries/AgendaItemQueries';
@@ -72,7 +72,7 @@ const translations = JSON.parse(
 describe('Testing Agenda Items Components', () => {
   interface InterfaceRenderOptions {
     link?: StaticMockLink;
-    mocks?: MockedResponse[];
+    mocks?: IStaticMockedResponse[];
     withLocalization?: boolean;
     eventId?: string;
     orgId?: string;
@@ -126,13 +126,10 @@ describe('Testing Agenda Items Components', () => {
     },
   };
 
-  type GenericMock = MockedResponse<
-    Record<string, unknown>,
-    Record<string, unknown>
-  >;
+  type GenericMock = IStaticMockedResponse;
 
   const [BASE_CATEGORY_MOCK, BASE_AGENDA_MOCK, BASE_MUTATION_MOCK] =
-    MOCKS as GenericMock[];
+    MOCKS as [GenericMock, GenericMock, GenericMock];
 
   const agendaErrorBase =
     (MOCKS_ERROR_QUERY[1] as GenericMock) ?? BASE_AGENDA_MOCK;
@@ -245,13 +242,13 @@ describe('Testing Agenda Items Components', () => {
     };
   };
 
-  const createDefaultMocks = (): MockedResponse[] => [
+  const createDefaultMocks = (): IStaticMockedResponse[] => [
     createCategorySuccessMock(),
     createAgendaItemsMock(),
     createMutationMock(2),
   ];
 
-  const createAgendaItemsErrorMocks = (): MockedResponse[] => [
+  const createAgendaItemsErrorMocks = (): IStaticMockedResponse[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -262,7 +259,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createBlankMessageErrorMocks = (): MockedResponse[] => [
+  const createBlankMessageErrorMocks = (): IStaticMockedResponse[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -273,7 +270,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createCategoryErrorMocks = (): MockedResponse[] => [
+  const createCategoryErrorMocks = (): IStaticMockedResponse[] => [
     {
       request: {
         query: categoryErrorRequestBase.request.query,
@@ -294,7 +291,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createMutationErrorMocks = (): MockedResponse[] => [
+  const createMutationErrorMocks = (): IStaticMockedResponse[] => [
     createCategorySuccessMock(),
     createAgendaItemsMock(),
     createMutationMock(2, { error: new Error('Mock Graphql Error') }),
@@ -302,46 +299,46 @@ describe('Testing Agenda Items Components', () => {
 
   const createEmptyAgendaItemsMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
-  ): MockedResponse[] => [
-    createCategorySuccessMock(),
-    {
-      request: {
-        query: emptyAgendaBase.request.query,
-        variables: { relatedEventId: formData.relatedEventId },
-      },
-      result: {
-        data: {
-          agendaItemByEvent: [],
+  ): IStaticMockedResponse[] => [
+      createCategorySuccessMock(),
+      {
+        request: {
+          query: emptyAgendaBase.request.query,
+          variables: { relatedEventId: formData.relatedEventId },
+        },
+        result: {
+          data: {
+            agendaItemByEvent: [],
+          },
         },
       },
-    },
-    createMutationMock(1, { onCall }),
-  ];
+      createMutationMock(1, { onCall }),
+    ];
 
   const createInvalidLengthMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
-  ): MockedResponse[] => [
-    createCategorySuccessMock(),
-    {
-      request: {
-        query: AgendaItemByEvent,
-        variables: { relatedEventId: formData.relatedEventId },
-      },
-      result: {
-        data: {
-          agendaItemByEvent: new Proxy([baseAgendaItem], {
-            get(target, prop) {
-              if (prop === 'length') {
-                return 0;
-              }
-              return Reflect.get(target, prop);
-            },
-          }) as unknown as Array<typeof baseAgendaItem>,
+  ): IStaticMockedResponse[] => [
+      createCategorySuccessMock(),
+      {
+        request: {
+          query: AgendaItemByEvent,
+          variables: { relatedEventId: formData.relatedEventId },
+        },
+        result: {
+          data: {
+            agendaItemByEvent: new Proxy([baseAgendaItem], {
+              get(target, prop) {
+                if (prop === 'length') {
+                  return 0;
+                }
+                return Reflect.get(target, prop);
+              },
+            }) as unknown as Array<typeof baseAgendaItem>,
+          },
         },
       },
-    },
-    createMutationMock(1, { onCall }),
-  ];
+      createMutationMock(1, { onCall }),
+    ];
 
   const selectAgendaCategory = async (categoryId = 'agendaItemCategory1') => {
     const categorySelect = screen.getByTestId('categorySelect');
@@ -359,8 +356,8 @@ describe('Testing Agenda Items Components', () => {
     const providerProps = link
       ? { link }
       : {
-          mocks: mocks ?? createDefaultMocks(),
-        };
+        mocks: mocks ?? createDefaultMocks(),
+      };
 
     const routes = (
       <Routes>
@@ -418,7 +415,7 @@ describe('Testing Agenda Items Components', () => {
       .mockReturnValue({ orgId: undefined });
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     renderEventAgendaItems({});
 

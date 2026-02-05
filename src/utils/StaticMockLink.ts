@@ -88,9 +88,11 @@ function removeClientSetsFromDocument(doc: DocumentNode): DocumentNode | null {
  * delay, and dynamic newData generation.
  */
 export interface IStaticMockedResponse extends MockedResponse {
-  variableMatcher?: (variables: any) => boolean;
-  newData?: (variables: any) => any;
-  delay?: number;
+  variableMatcher?: (variables: Record<string, unknown>) => boolean;
+  newData?: (
+    variables: Record<string, unknown>,
+  ) => FetchResult | ResultFunction<FetchResult>;
+  delay?: number | ((operation: Operation) => number);
 }
 
 function requestToKey(
@@ -178,10 +180,11 @@ export class StaticMockLink extends ApolloLink {
         )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
-      const response = this._mockedResponsesByKey[key][responseIndex];
-      const { newData } = response;
+      const { newData } = response as IStaticMockedResponse;
       if (newData) {
-        response.result = newData(operation.variables);
+        response.result = newData(
+          operation.variables as Record<string, unknown>,
+        );
         this._mockedResponsesByKey[key].push(response);
       }
 
@@ -195,40 +198,37 @@ export class StaticMockLink extends ApolloLink {
     const currentResponse = response as IStaticMockedResponse | undefined;
 
     return new Observable((observer) => {
-      const timer = setTimeout(
-        () => {
-          if (configError) {
-            try {
-              // The onError function can return false to indicate that
-              // configError need not be passed to observer.error. For
-              // example, the default implementation of onError calls
-              // observer.error(configError) and then returns false to
-              // prevent this extra (harmless) observer.error call.
-              if (this.onError(configError, observer) !== false) {
-                throw configError;
-              }
-            } catch (error) {
-              observer.error(error);
+      const delay =
+        typeof currentResponse?.delay === 'function'
+          ? currentResponse.delay(operation)
+          : currentResponse?.delay || 0;
+
+      const timer = setTimeout(() => {
+        if (configError) {
+          try {
+            if (this.onError(configError, observer) !== false) {
+              throw configError;
             }
-          } else if (currentResponse) {
-            if (currentResponse.error) {
-              observer.error(currentResponse.error);
-            } else {
-              if (currentResponse.result) {
-                observer.next(
-                  typeof currentResponse.result === 'function'
-                    ? (currentResponse.result as ResultFunction<FetchResult>)(
-                      operation.variables,
-                    )
-                    : currentResponse.result,
-                );
-              }
-              observer.complete();
-            }
+          } catch (error) {
+            observer.error(error);
           }
-        },
-        (currentResponse && currentResponse.delay) || 0,
-      );
+        } else if (currentResponse) {
+          if (currentResponse.error) {
+            observer.error(currentResponse.error);
+          } else {
+            if (currentResponse.result) {
+              observer.next(
+                typeof currentResponse.result === 'function'
+                  ? (currentResponse.result as ResultFunction<FetchResult>)(
+                    operation.variables,
+                  )
+                  : currentResponse.result,
+              );
+            }
+            observer.complete();
+          }
+        }
+      }, delay);
 
       return () => {
         clearTimeout(timer);
@@ -236,7 +236,7 @@ export class StaticMockLink extends ApolloLink {
     });
   }
 
-  public onError(error: Error, _observer?: any): boolean | void {
+  public onError(error: Error, _observer?: unknown): boolean | void {
     return false;
   }
 

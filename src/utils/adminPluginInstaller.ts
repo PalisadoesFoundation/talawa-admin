@@ -45,7 +45,7 @@ export interface IAdminPluginInstallationResult {
 export interface IAdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: ApolloClient<NormalizedCacheObject>;
+  apolloClient?: ApolloClient;
 }
 
 /**
@@ -311,7 +311,9 @@ export async function installAdminPluginFromZip({
     // STEP 2: Install API component if present (this will handle file upload)
     if (structure.hasApiFolder && apolloClient) {
       try {
-        const result = await apolloClient.mutate({
+        const result = await apolloClient.mutate<{
+          uploadPluginZip: { id: string };
+        }>({
           mutation: UPLOAD_PLUGIN_ZIP_MUTATION,
           variables: {
             input: {

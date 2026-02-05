@@ -4,7 +4,6 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing/react';
 import { InMemoryCache } from '@apollo/client';
 import {
   CREATE_POST_MUTATION,
@@ -426,7 +425,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const mockClick = vi
         .spyOn(fileInput, 'click')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       await user.click(photoButton);
 
