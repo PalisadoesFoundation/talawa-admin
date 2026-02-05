@@ -449,7 +449,9 @@ const nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
 const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
 const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
 const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
-const autoAdjustEndDateMockLink = new StaticMockLink(UPDATE_AUTO_ADJUST_END_DATE_MOCK);
+const autoAdjustEndDateMockLink = new StaticMockLink(
+  UPDATE_AUTO_ADJUST_END_DATE_MOCK,
+);
 
 describe('CampaignModal', () => {
   it('should update form state when campaign prop changes', async () => {
@@ -1387,10 +1389,14 @@ describe('CampaignModal', () => {
     expect(campaignName).toHaveValue(campaignProps[1].campaign?.name);
     expect(goalAmount).toHaveValue(campaignProps[1].campaign?.goalAmount);
 
+    const baseCampaign = campaignProps[1].campaign;
+    if (!baseCampaign) {
+      throw new Error('Expected campaign to be defined for edit-mode test');
+    }
     const updatedCampaign = {
       ...campaignProps[1],
       campaign: {
-        ...campaignProps[1].campaign!,
+        ...baseCampaign,
         name: 'Updated Campaign Name',
         goalAmount: 5000,
       },
