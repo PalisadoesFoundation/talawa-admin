@@ -4,7 +4,9 @@
 
 # Interface: InterfaceOrganizationMember
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L130)
+Defined in: [src/types/UserPortal/Chat/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L133)
+
+Organization member with their role.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:130](https://github.com/Pali
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L133)
+Defined in: [src/types/UserPortal/Chat/interface.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L136)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:133](https://github.com/Pali
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L131)
+Defined in: [src/types/UserPortal/Chat/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L134)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:131](https://github.com/Pali
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L132)
+Defined in: [src/types/UserPortal/Chat/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L135)
 
 ***
 
@@ -36,4 +38,4 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:132](https://github.com/Pali
 
 > **role**: `string`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L134)
+Defined in: [src/types/UserPortal/Chat/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L137)

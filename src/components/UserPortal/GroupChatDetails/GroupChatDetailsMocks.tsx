@@ -55,7 +55,7 @@ const createMemberSearchMockWithResult = (searchTerm: string) => ({
               node: {
                 id: 'user3',
                 name: 'Disha Smith',
-                avatarURL: null,
+                avatarURL: undefined,
                 role: 'Member',
               },
             },
@@ -276,7 +276,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -314,7 +314,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -345,7 +345,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -376,7 +376,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -402,7 +402,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },
@@ -427,7 +427,7 @@ export const mocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },

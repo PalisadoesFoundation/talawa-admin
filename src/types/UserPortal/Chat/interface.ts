@@ -127,6 +127,9 @@ export interface InterfaceContactCardProps {
   lastMessage: string;
 }
 
+/**
+ * Organization member with their role.
+ */
 export interface InterfaceOrganizationMember {
   id: string;
   name: string;
@@ -134,6 +137,9 @@ export interface InterfaceOrganizationMember {
   role: string;
 }
 
+/**
+ * Props for the CreateDirectChat modal.
+ */
 export interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;

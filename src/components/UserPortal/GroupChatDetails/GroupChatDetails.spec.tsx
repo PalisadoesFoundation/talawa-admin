@@ -802,7 +802,7 @@ describe('GroupChatDetails', () => {
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
     const trashButton = screen.getByRole('button', { name: /delete/i });
-    if (trashButton) await act(async () => await userEvent.click(trashButton));
+    await act(async () => await userEvent.click(trashButton));
 
     await waitFor(() =>
       expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'),
@@ -852,7 +852,7 @@ describe('GroupChatDetails', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     const trashButton = screen.getByRole('button', { name: /delete/i });
-    if (trashButton) await act(async () => await userEvent.click(trashButton));
+    await act(async () => await userEvent.click(trashButton));
 
     await waitFor(() => {
       expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
