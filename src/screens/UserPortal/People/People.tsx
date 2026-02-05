@@ -1,5 +1,5 @@
 /**
- * The `people` component is responsible for rendering a list of members and admins
+ * The `People` component is responsible for rendering a list of members and admins
  * of an organization. It provides functionality for searching, filtering, and paginating
  * through the list of users. The component uses CursorPaginationManager to handle
  * pagination automatically with a "Load More" pattern.
@@ -11,6 +11,8 @@
  * - Uses CursorPaginationManager for cursor-based pagination with "Load More" functionality.
  * - Supports filtering between "All Members" and "Admins" via a dropdown menu.
  * - Provides a search bar to find members by first name.
+ * - Uses internal `mode` state (0 for "All Members", 1 for "Admins") to filter results.
+ * - Extracts `organizationId` from URL parameters via `useParams`.
  *
  * **Dependencies**
  * - Core libraries:
@@ -26,9 +28,6 @@
  *
  * **Internal Event Handlers**
  * - `handleSearch` – Updates search term which triggers refetch via CursorPaginationManager.
- *
- * @param mode - The current filter mode (0 for "All Members", 1 for "Admins").
- * @param organizationId - The ID of the organization extracted from URL parameters.
  */
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
@@ -46,7 +45,7 @@ interface IMemberNode {
   name: string;
   role: string;
   avatarURL?: string;
-  createdAt: string;
+  createdAt?: string | null;
   emailAddress?: string;
 }
 
