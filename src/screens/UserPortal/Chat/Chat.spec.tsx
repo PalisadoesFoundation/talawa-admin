@@ -158,7 +158,9 @@ const mockChatsListData = {
     {
       id: 'chat-1',
       name: 'Direct Chat 1',
+      description: 'Direct chat description',
       avatarURL: 'http://example.com/chat1.png',
+      createdAt: new Date().toISOString(),
       members: {
         edges: [
           { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
@@ -172,7 +174,9 @@ const mockChatsListData = {
     {
       id: 'chat-2',
       name: 'Group Chat 1',
+      description: 'Group chat description',
       avatarURL: 'http://example.com/chat2.png',
+      createdAt: new Date().toISOString(),
       members: {
         edges: [
           { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
@@ -187,7 +191,9 @@ const mockChatsListData = {
     {
       id: 'chat-3',
       name: 'Direct Chat 2',
+      description: 'Direct chat 2 description',
       avatarURL: 'http://example.com/chat3.png',
+      createdAt: new Date().toISOString(),
       members: {
         edges: [
           { node: { user: { id: 'u1', name: 'User 1' }, role: 'regular' } },
@@ -589,7 +595,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
             {
               id: 'group-chat',
               name: 'Group Chat',
+              description: 'Group chat description',
               avatarURL: '',
+              createdAt: new Date().toISOString(),
               members: {
                 edges: [
                   {
@@ -619,7 +627,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
             {
               id: 'direct-chat',
               name: 'Direct Chat',
+              description: 'Direct chat description',
               avatarURL: '',
+              createdAt: new Date().toISOString(),
               members: {
                 edges: [
                   {

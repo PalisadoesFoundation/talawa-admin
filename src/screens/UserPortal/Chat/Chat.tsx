@@ -143,7 +143,7 @@ export default function Chat(): JSX.Element {
       }
     }
     getChats();
-  }, [filterType]);
+  }, [filterType, orgId]);
 
   React.useEffect(() => {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
@@ -154,7 +154,7 @@ export default function Chat(): JSX.Element {
         : chatsListData.chatsByUser;
       setChats(filteredChats);
     }
-  }, [chatsListData, filterType]);
+  }, [chatsListData, filterType, orgId]);
 
   React.useEffect(() => {
     if (chats.length === 0) return;

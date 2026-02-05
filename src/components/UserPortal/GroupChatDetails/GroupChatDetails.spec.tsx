@@ -133,7 +133,7 @@ describe('GroupChatDetails', () => {
     vi.clearAllMocks();
   });
 
-  type MaybeChat = Partial<ChatType> & { _id?: string };
+  type MaybeChat = Partial<ChatType>;
 
   const withSafeChat = (raw: unknown): ChatType => {
     const chat = (raw as MaybeChat) || {};
@@ -142,7 +142,7 @@ describe('GroupChatDetails', () => {
     const updatedAtValue = (chat as { updatedAt?: string | null }).updatedAt;
 
     return {
-      id: (chat as { _id?: string; id?: string })._id ?? chat.id ?? 'chat1',
+      id: chat.id ?? 'chat1',
       name: chat.name ?? '',
       description: chat.description,
       avatarMimeType: chat.avatarMimeType,
