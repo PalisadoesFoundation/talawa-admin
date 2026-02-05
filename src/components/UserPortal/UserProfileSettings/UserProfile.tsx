@@ -26,10 +26,16 @@
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
  * - `react-tooltip` for tooltips.
- * - `Avatar` component for displaying a placeholder profile picture.
+ * - `ProfileAvatarDisplay` for profile picture + fallback rendering.
+ *
+ * @param firstName - User first name.
+ * @param lastName - User last name.
+ * @param createdAt - Date the user joined.
+ * @param email - User email address.
+ * @param image - Profile image URL (or null/undefined).
  *
  */
-import Avatar from 'shared-components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
@@ -37,7 +43,7 @@ import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined
 import { useTranslation } from 'react-i18next';
 import styles from './UserProfile.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import type { InterfaceUser } from 'types/shared-components/User/interface';
+import type { InterfaceUserProfileProps } from 'types/UserPortal/UserProfile/interface';
 
 const joinedDate = (
   param: string | Date | null | undefined,
@@ -56,13 +62,13 @@ const joinedDate = (
   return `${day} ${month} ${year}`;
 };
 
-const UserProfile: React.FC<Partial<InterfaceUser>> = ({
+const UserProfile = ({
   firstName,
   lastName,
   createdAt,
   email,
   image,
-}): JSX.Element => {
+}: InterfaceUserProfileProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
@@ -75,20 +81,24 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
             <div className={styles.imgContainer}>
-              {image && image !== 'null' ? (
-                <img src={image} alt={t('profilePicture')} />
-              ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
-                  alt={t('dummyPicture')}
-                />
-              )}
+              <ProfileAvatarDisplay
+                imageUrl={image && image !== 'null' ? image : undefined}
+                fallbackName={[firstName, lastName].filter(Boolean).join(' ')}
+                size="custom"
+                customSize={60}
+                shape="circle"
+                objectFit="cover"
+                enableEnlarge={true}
+                dataTestId="profile-avatar"
+              />
             </div>
             <div className={styles.profileDetails}>
               <span
                 className={styles.userProfileName}
                 data-tooltip-id="name"
-                data-tooltip-content={`${firstName} ${lastName}`}
+                data-tooltip-content={[firstName, lastName]
+                  .filter(Boolean)
+                  .join(' ')}
               >
                 {firstName && firstName.length > 10
                   ? firstName?.slice(0, 5) + '..'

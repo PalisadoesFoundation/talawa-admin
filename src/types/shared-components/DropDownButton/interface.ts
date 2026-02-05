@@ -112,4 +112,28 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text when no option is selected.
    */
   placeholder?: string;
+
+  /**
+   * Whether the dropdown should be searchable.
+   */
+  searchable?: boolean;
+
+  /**
+   * Placeholder text for the search input.
+   */
+  searchPlaceholder?: string;
+}
+
+/**
+ * Interface for SearchToggle component props.
+ */
+export interface InterfaceSearchToggleProps {
+  onClick: (e: React.MouseEvent) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputClick: (e: React.MouseEvent) => void;
+  placeholder?: string;
+  icon?: React.ReactNode;
+  dataTestIdPrefix: string;
+  className?: string;
 }

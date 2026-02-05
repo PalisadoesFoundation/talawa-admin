@@ -1,0 +1,19 @@
+{
+  "donations": [
+    {
+      "id": "don_001",
+      "amount": 50,
+      "donorName": "Example Donor",
+      "donatedAt": "2026-01-05T00:00:00.000Z",
+      "campaignId": "camp_001"
+    },
+    {
+      "id": "don_002",
+      "amount": 0,
+      "donorName": "Anonymous — 世界",
+      "donatedAt": "2026-01-06T00:00:00.000Z",
+      "campaignId": "camp_002"
+    }
+  ],
+  "emptyDonations": []
+}

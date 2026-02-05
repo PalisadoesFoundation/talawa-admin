@@ -25,7 +25,11 @@ type GqlErrorExtensions = Record<string, unknown>;
  */
 type GqlOperationOptions = Partial<Cypress.StaticResponse>;
 
-const getApiPattern = (): string => {
+type GqlOperationConfig = GqlOperationOptions & {
+  timeout?: number;
+};
+
+export const getApiPattern = (): string => {
   const apiUrl =
     (Cypress.env('apiUrl') as string | undefined) ||
     (Cypress.env('API_URL') as string | undefined) ||
@@ -88,20 +92,26 @@ export const waitForGraphQLOperation = (
 export const mockGraphQLOperation = (
   operationName: string,
   responder: GqlResponder,
-  options?: GqlOperationOptions,
+  options?: GqlOperationConfig,
 ): void => {
+  const { timeout, ...responseOptions } = options ?? {};
   interceptGraphQLOperation(operationName, (req) => {
+    if (timeout) {
+      req.on('response', (res) => {
+        res.setDelay(timeout);
+      });
+    }
     if (typeof responder === 'function') {
       responder(req);
       return;
     }
 
     if (typeof responder === 'string') {
-      req.reply({ fixture: responder, ...options });
+      req.reply({ fixture: responder, ...responseOptions });
       return;
     }
 
-    req.reply({ body: responder, ...options });
+    req.reply({ body: responder, ...responseOptions });
   });
 };
 
@@ -138,7 +148,7 @@ declare global {
       mockGraphQLOperation(
         operationName: string,
         responder: GqlResponder,
-        options?: GqlOperationOptions,
+        options?: GqlOperationConfig,
       ): Chainable<Subject>;
       mockGraphQLError(
         operationName: string,
