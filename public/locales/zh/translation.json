@@ -1796,7 +1796,7 @@
     "ends": "结束",
     "creator": "创作者",
     "alreadyRegistered": "已经注册",
-    "location": "位置",
+    "location": "位置", 
     "register": "注册",
     "registeredSuccessfully": "成功注册 {{eventName}}",
     "eventCardAriaLabel": "{{name}} 的活动卡片",
