@@ -148,7 +148,7 @@ function organizationEvents(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: orgData, error: orgDataError } = useQuery(
+  const { data: orgData } = useQuery(
     GET_ORGANIZATION_DATA_PG,
     {
       variables: {
