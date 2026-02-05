@@ -43,7 +43,19 @@ describe('EventManager', () => {
       manager = new EventManager();
       const cb = vi.fn();
 
-      // Intentionally corrupt internal state to hit defensive branch
+      /**
+       * NOTE:
+       * The fallback `else` branch in EventManager.on() is defensive and
+       * unreachable in normal execution because the eventListeners map
+       * is always initialized before access.
+       *
+       * To meet the required coverage threshold without ignoring lines
+       * or modifying production code, this test intentionally simulates
+       * an invalid internal Map state.
+       *
+       * This couples the test to implementation details by design and
+       * is acceptable here purely for coverage validation.
+       */
       const internalManager = manager as unknown as {
         eventListeners: Map<
           string,
@@ -116,7 +128,11 @@ describe('EventManager', () => {
       manager.on('test', errorCb);
       manager.emit('test');
 
-      expect(spy).toHaveBeenCalled();
+      expect(spy).toHaveBeenCalledOnce();
+      expect(spy).toHaveBeenCalledWith(
+        'Error in event listener for test:',
+        expect.objectContaining({ message: 'boom' }),
+      );
     });
 
     it('logs error for invalid event name', () => {
