@@ -379,8 +379,10 @@ describe('Event Management', () => {
       // This depends on your implementation, adjust accordingly
       // Verify dropdown is closed by checking items are hidden
       await waitFor(() => {
-        const items = screen.queryAllByTestId(/^tabs-item-/);
-        expect(items.length).toBe(0);
+        expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
+          'aria-expanded',
+          'false',
+        );
       });
     });
   });
