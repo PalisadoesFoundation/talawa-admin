@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  waitFor,
-  screen,
-  cleanup,
-  within,
-} from '@testing-library/react';
+import { render, waitFor, screen, cleanup } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -1345,7 +1339,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     getOptionLabel,
     onInputChange,
   }: InterfaceAutocompleteMockProps) => {
-    const [localInputValue, setLocalInputValue] = React.useState('');
+    const [_localInputValue, setLocalInputValue] = React.useState('');
 
     const handleInputChange = (
       e: React.ChangeEvent<HTMLInputElement>,
@@ -1372,7 +1366,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         })}
         <div data-testid="options-container">
           {options && options.length > 0 ? (
-            options.map((option, index) => {
+            options.map((option) => {
               const liProps = {
                 key: option.id,
                 'data-testid': `rendered-option-${option.id}`,
