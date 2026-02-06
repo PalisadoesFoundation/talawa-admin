@@ -56,15 +56,43 @@ reviews:
         - Cover success, error (network/GraphQL/validation), edge/empty states, loading, and user interactions.
         - List uncovered line numbers in changed source files.
 
-        Flaky test guard (12 shards):
-        - Each file: afterEach(() => cleanup()); and vi.clearAllMocks() or vi.restoreAllMocks().
-        - No hardcoded setTimeout/fixed delays; use waitFor for async assertions.
-        - No shared module/global state without cleanup (localStorage/sessionStorage/window); tests independent, no order dependence.
-        - Respect 30s timeout; avoid race conditions across shards.
+        Flaky test guard (12 shards) — CRITICAL PATTERNS:
+
+        Cleanup (MANDATORY):
+        - Each file: afterEach(() => cleanup()); and vi.restoreAllMocks().
+        - Clear localStorage/sessionStorage/window state; tests must be independent.
+
+        Async patterns (NO RACE CONDITIONS):
+        - NO hardcoded setTimeout or fixed delays; use waitFor with explicit assertions.
+        - After clicking elements that open UI (dropdowns, modals, dialogs, tooltips):
+          MUST waitFor the container/menu itself to be visible BEFORE checking child elements.
+          Example: await user.click(toggle); await waitFor(() => expect(menu).toBeInTheDocument());
+        - After clicking elements that close UI: MUST waitFor close completion (aria-expanded="false" or element removed) BEFORE re-opening.
+          Example: await waitFor(() => expect(toggle).toHaveAttribute('aria-expanded', 'false'));
+        - In loops testing multiple UI states: re-open → wait for open → interact → wait for result → wait for close. No shortcuts.
+        - ALL user-event clicks/types must be awaited; check that state changes are awaited with waitFor.
+
+        Error handling (NO SILENT FAILURES):
+        - NO .catch() blocks that swallow errors without re-throwing or explicit fallback assertions.
+        - If .catch() is used, must have a comment explaining why + alternative assertion inside catch.
+        - Prefer try/catch with explicit expect() in catch block over silent .catch(() => {}).
+
+        Timer interactions (AVOID CONFLICTS):
+        - If global vi.useFakeTimers() is active (check setupTests), check for conflicts with:
+          * `@testing-library/user-event` async operations
+          * waitFor timeouts
+          * UI animations (dropdowns, modals, transitions)
+        - Consider vi.useRealTimers() in beforeEach for tests with heavy user interaction.
+        - Flag any test using both fake timers AND user-event without explicit timer management.
 
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
         - Wrap state updates in act() when needed.
+
+        REPORT FORMAT for flakiness issues:
+        - "⚠️ RACE CONDITION at file:line — [description]"
+        - "❌ SILENT ERROR SWALLOW at file:line — .catch() without fallback"
+        - "⏱️ TIMER CONFLICT at file:line — fake timers + user-event"
 
     # 2) React components/screens/pages — enforce architecture & policy
     - path: 'src/{components,screens,pages}/**/*.{ts,tsx}'
