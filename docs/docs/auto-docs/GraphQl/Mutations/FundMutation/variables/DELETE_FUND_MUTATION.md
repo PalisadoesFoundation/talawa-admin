@@ -12,8 +12,8 @@ GraphQL mutation to delete a fund.
 
 ## Param
 
-The ID of the fund to delete.
+The delete fund input payload containing the fund ID.
 
 ## Returns
 
-The deleted fund.
+The deleted fund ID.

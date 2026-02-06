@@ -76,30 +76,23 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
             slotProps={{
               ...slotProps,
               popper: {
+                ...slotProps?.popper,
+                // Enforce modal positioning - these must come after spread to prevent override
                 placement: 'bottom-start' as const,
                 disablePortal: true,
-                ...slotProps?.popper,
               },
               textField: {
                 ...slotProps?.textField,
-                // Handle onBlur with safe type checking
                 onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
                   onBlur?.();
                   const textFieldProps = slotProps?.textField;
                   if (
+                    textFieldProps &&
                     typeof textFieldProps === 'object' &&
-                    textFieldProps !== null &&
                     'onBlur' in textFieldProps &&
-                    typeof (textFieldProps as { onBlur: unknown }).onBlur ===
-                      'function'
+                    typeof textFieldProps.onBlur === 'function'
                   ) {
-                    (
-                      textFieldProps as {
-                        onBlur: (
-                          ev: React.FocusEvent<HTMLInputElement>,
-                        ) => void;
-                      }
-                    ).onBlur(e);
+                    textFieldProps.onBlur(e);
                   }
                 },
               },
@@ -122,6 +115,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
 
                 return (
                   <div
+                    ref={ref}
                     className={`${styles.wrapper} ${textFieldClassName || ''}`.trim()}
                   >
                     <input

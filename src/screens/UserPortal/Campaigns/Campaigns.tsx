@@ -106,15 +106,17 @@ const Campaigns = (): JSX.Element => {
     setSelectedCampaign(null);
   }, [closeModalState]);
 
-  // Header titles for the table loader
+  // Header titles for the table loader - matches column order: id, name, status, startDate, endDate, fundingGoal, amountRaised, percentageRaised, action
   const headerTitles: string[] = [
     '#',
     t('campaignName'),
+    t('campaignStatus'),
     tCommon('startDate'),
     tCommon('endDate'),
-    t('fundingGoal'),
-    tCommon('status'),
-    tCommon('action'),
+    t('fundGoal'),
+    t('amountRaised'),
+    t('percentRaised'),
+    t('addPledge'),
   ];
 
   const campaigns = useMemo((): CampaignWithStatus[] => {
@@ -375,7 +377,7 @@ const Campaigns = (): JSX.Element => {
           variant="success"
           className={styles.pledgesButton}
           data-testid="myPledgesBtn"
-          onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
+          onClick={() => navigate(`/user/pledges/${orgId}`)}
         >
           {t('myPledges')}
         </Button>
@@ -396,8 +398,8 @@ const Campaigns = (): JSX.Element => {
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
         <EmptyState
           icon={<Campaign />}
-          message={t('noCampaigns')}
-          description={t('createFirstCampaign')}
+          message="userCampaigns.noCampaigns"
+          description="userCampaigns.createFirstCampaign"
           dataTestId="campaigns-empty-state"
         />
       ) : (
@@ -413,12 +415,11 @@ const Campaigns = (): JSX.Element => {
                 className: styles.listTable,
                 ['data-testid']: 'campaigns-list',
                 scrollThreshold: 0.9,
-                endMessage:
-                  filteredCampaigns.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
+                endMessage: (
+                  <div className={'w-100 text-center my-4'}>
+                    <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                  </div>
+                ),
               }}
             />
           )}

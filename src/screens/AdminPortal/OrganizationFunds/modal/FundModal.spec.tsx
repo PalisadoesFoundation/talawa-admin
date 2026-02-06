@@ -228,11 +228,55 @@ describe('FundModal', () => {
   });
 
   it('should toggle isArchived when Archive button is clicked', async () => {
-    renderFundModal(link1, fundProps[1]);
+    const props = {
+      ...fundProps[1],
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
     const archiveBtn = screen.getByTestId('archiveFundBtn');
     expect(archiveBtn).toBeInTheDocument();
-    // Click the archive button to toggle isArchived state
+    // Click the archive button to archive the fund
     await userEvent.click(archiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundArchived,
+      );
+    });
+
+    expect(props.hide).toHaveBeenCalled();
+    expect(props.refetchFunds).toHaveBeenCalled();
+  });
+
+  it('should unarchive fund when Unarchive button is clicked on archived fund', async () => {
+    const baseFund = fundProps[1].fund;
+    const props = {
+      ...fundProps[1],
+      fund: baseFund
+        ? {
+            ...baseFund,
+            isArchived: true,
+          }
+        : null,
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+    const unarchiveBtn = screen.getByTestId('archiveFundBtn');
+    expect(unarchiveBtn).toBeInTheDocument();
+    expect(unarchiveBtn).toHaveTextContent(translations.unarchive);
+    // Click the button to unarchive the fund
+    await userEvent.click(unarchiveBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundUnarchived,
+      );
+    });
+
+    expect(props.hide).toHaveBeenCalled();
+    expect(props.refetchFunds).toHaveBeenCalled();
   });
 
   it('should not update the fund when no fields are changed', async () => {
@@ -259,9 +303,7 @@ describe('FundModal', () => {
     await userEvent.click(defaultSwitch);
     await userEvent.click(defaultSwitch);
 
-    const archiveBtn = screen.getByTestId('archiveFundBtn');
-    await userEvent.click(archiveBtn);
-    await userEvent.click(archiveBtn);
+    // Note: Archive button is not toggled here since it triggers a mutation directly
 
     await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 

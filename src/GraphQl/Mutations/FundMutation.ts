@@ -45,8 +45,8 @@ export const UPDATE_FUND_MUTATION = gql`
 /**
  * GraphQL mutation to delete a fund.
  *
- * @param id - The ID of the fund to delete.
- * @returns The deleted fund.
+ * @param input - The delete fund input payload containing the fund ID.
+ * @returns The deleted fund ID.
  */
 export const DELETE_FUND_MUTATION = gql`
   mutation DeleteFund($input: MutationDeleteFundInput!) {

@@ -275,7 +275,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
         <div className="d-flex gap-4 mb-3">
           <div className={styles.datePickerWrapper}>
-            <label className={styles.dateLabel}>{tCommon('startDate')}</label>
+            <label htmlFor="campaignStartDate" className={styles.dateLabel}>
+              {tCommon('startDate')}
+            </label>
             <DatePicker
               format="DD/MM/YYYY"
               value={dayjs(campaignDateRange.startDate)}
@@ -302,12 +304,14 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                   };
                 });
               }}
-              minDate={dayjs(new Date())}
+              minDate={dayjs()}
             />
           </div>
 
           <div className={styles.datePickerWrapper}>
-            <label className={styles.dateLabel}>{tCommon('endDate')}</label>
+            <label htmlFor="campaignEndDate" className={styles.dateLabel}>
+              {tCommon('endDate')}
+            </label>
             <DatePicker
               format="DD/MM/YYYY"
               className={styles.noOutline}
@@ -327,8 +331,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
 
         <div className="d-flex gap-4 mb-4">
           <div className={styles.inlineFieldWrapper}>
-            <label>{t('currency')}</label>
+            <label htmlFor="currencySelect">{t('currency')}</label>
             <select
+              id="currencySelect"
               className="form-select"
               value={campaignCurrency}
               data-testid="currencySelect"
@@ -348,8 +353,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           </div>
 
           <div className={styles.inlineFieldWrapper}>
-            <label>{t('fundingGoal')}</label>
+            <label htmlFor="fundingGoalInput">{t('fundingGoal')}</label>
             <input
+              id="fundingGoalInput"
               type="number"
               className="form-control"
               value={campaignGoal === 0 ? '' : String(campaignGoal)}

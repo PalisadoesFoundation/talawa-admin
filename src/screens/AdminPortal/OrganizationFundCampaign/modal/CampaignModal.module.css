@@ -71,16 +71,21 @@
   border-radius: var(--radius-xl);
 }
 
+/* Base button styles shared across action buttons */
+.btnBase {
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  --bs-btn-focus-box-shadow: none;
+}
+
 .addButton {
+  composes: btnBase;
   width: 100%;
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
-  padding: var(--space-3) var(--space-5);
   color: var(--color-gray-700) !important;
   background-color: var(--color-blue-200) !important;
   border-color: var(--color-blue-200) !important;
-  border-radius: var(--radius-lg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:hover {

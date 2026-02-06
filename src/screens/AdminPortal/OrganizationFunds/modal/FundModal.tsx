@@ -128,7 +128,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { fundName, isTaxDeductible } = formState;
+    const { fundName, isTaxDeductible, isDefault } = formState;
 
     try {
       const updatedFields: { [key: string]: string | boolean } = {};
@@ -138,6 +138,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       }
       if (isTaxDeductible !== fund?.isTaxDeductible) {
         updatedFields.isTaxDeductible = isTaxDeductible;
+      }
+      if (isDefault !== fund?.isDefault) {
+        updatedFields.isDefault = isDefault;
       }
 
       if (Object.keys(updatedFields).length === 0) {
@@ -192,6 +195,30 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       refetchFunds();
       hide();
       NotificationToast.success(t('fundDeleted') as string);
+    } catch (error: unknown) {
+      NotificationToast.error((error as Error).message);
+    }
+  };
+
+  const archiveFundHandler = async (): Promise<void> => {
+    try {
+      const newArchivedState = !formState.isArchived;
+
+      await updateFund({
+        variables: {
+          input: {
+            id: fund?.id,
+            isArchived: newArchivedState,
+          },
+        },
+      });
+
+      setFormState((prev) => ({ ...prev, isArchived: newArchivedState }));
+      refetchFunds();
+      hide();
+      NotificationToast.success(
+        t(newArchivedState ? 'fundArchived' : 'fundUnarchived') as string,
+      );
     } catch (error: unknown) {
       NotificationToast.error((error as Error).message);
     }
@@ -322,15 +349,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               type="button"
               className={styles.archiveButton}
               data-testid="archiveFundBtn"
-              onClick={() =>
-                setFormState((prev) => ({
-                  ...prev,
-                  isArchived: !prev.isArchived,
-                }))
-              }
+              onClick={archiveFundHandler}
             >
               <i className="fas fa-archive me-2" />
-              {t('archive')}
+              {formState.isArchived ? t('unarchive') : t('archive')}
             </Button>
           </>
         )}
