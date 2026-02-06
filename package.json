@@ -80,7 +80,7 @@
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",
-    "check:unused-exports": "ts-unused-exports tsconfig.json --ignoreTestFiles --allowUnusedTypes --allowUnusedEnums --excludeDeclarationFiles --ignoreFiles=\"src/reportWebVitals\\.ts|\\.stories\\.tsx|.ts(?!x)$\"",
+    "check:unused-exports": "ts-unused-exports tsconfig.json --ignoreTestFiles --allowUnusedTypes --allowUnusedEnums --excludeDeclarationFiles --ignoreFiles=\"src/reportWebVitals\\.ts|\\.stories\\.tsx|\\.ts(?!x)$\"",
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
