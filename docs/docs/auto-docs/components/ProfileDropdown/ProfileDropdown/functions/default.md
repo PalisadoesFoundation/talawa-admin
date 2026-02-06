@@ -12,7 +12,7 @@ Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:50](https://gith
 
 ### \_\_namedParameters
 
-[`InterfaceProfileDropdownProps`](../../../../types/ProfileDropdown/interface/interfaces/InterfaceProfileDropdownProps.md)
+[`InterfaceProfileDropdownProps`](../../../../types/shared-components/ProfileDropdown/interface/interfaces/InterfaceProfileDropdownProps.md)
 
 ## Returns
 

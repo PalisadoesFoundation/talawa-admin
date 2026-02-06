@@ -74,7 +74,7 @@
   --bs-btn-active-color: var(--color-blue-500);
   width: var(--space-14);
   height: var(--space-9);
-  padding: var(--space-3) var(--space-3);
+  padding: var(--space-3);
   color: var(--color-blue-500);
   border-color: var(--color-blue-200);
   background-color: transparent;

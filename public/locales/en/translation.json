@@ -1931,7 +1931,6 @@
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
     "thisUser": "this user",
     "deleteChatConfirmation": "Are you sure you want to delete this chat?",
-    "memberOptions": "Member Options",
     "memberActionsMenu": "Member Actions Menu"
   },
   "userChatRoom": {

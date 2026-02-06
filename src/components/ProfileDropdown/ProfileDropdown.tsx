@@ -43,7 +43,7 @@ import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import DropDownButton from 'shared-components/DropDownButton';
-import { InterfaceProfileDropdownProps } from 'types/ProfileDropdown/interface';
+import type { InterfaceProfileDropdownProps } from 'types/shared-components/ProfileDropdown/interface';
 
 export const MAX_NAME_LENGTH = 20;
 

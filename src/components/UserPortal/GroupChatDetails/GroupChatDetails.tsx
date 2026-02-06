@@ -152,7 +152,7 @@ export default function GroupChatDetails({
         variables: {
           input: { id: chat.id },
           first: 15,
-          firstMessages: 1,
+          lastMessages: 1,
         },
       },
     ],
@@ -491,7 +491,7 @@ export default function GroupChatDetails({
                         showCaret={false}
                         // i18n-ignore-next-line
                         dataTestIdPrefix={`member-actions-${user.id}`}
-                        aria-label={t('memberActionsMenu')}
+                        ariaLabel={t('memberActionsMenu')}
                         placeholder=""
                       />
                     )}

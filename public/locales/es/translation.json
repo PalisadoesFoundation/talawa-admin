@@ -1900,7 +1900,6 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
-    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",

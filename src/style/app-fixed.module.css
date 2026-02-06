@@ -8012,6 +8012,12 @@ form {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
+}
+
+.cardBody .textWrapper {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .textBox {

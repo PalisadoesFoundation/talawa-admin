@@ -604,6 +604,7 @@ export const failingMocks = [
           members: {
             edges: [
               {
+                cursor: 'cursor-1',
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
@@ -620,6 +621,9 @@ export const failingMocks = [
   },
 ];
 
+/**
+ * Delayed mocks to simulate network latency for loading states testing
+ */
 export const delayedMocks = mocks.map((mock) => ({
   ...mock,
   delay: 300,

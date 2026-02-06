@@ -566,7 +566,6 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteItem = await screen.findByTestId(
@@ -638,7 +637,6 @@ describe('GroupChatDetails', () => {
       userEvent.click(dropdownToggle);
     });
 
-    if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));
 
     const promoteItem = await screen.findByText(/Promote|Demote/i);
@@ -699,7 +697,6 @@ describe('GroupChatDetails', () => {
       userEvent.click(dropdownToggle);
     });
 
-    if (!dropdownToggle) throw new Error('Dropdown not found');
     await act(async () => await userEvent.click(dropdownToggle));
 
     const removeItem = await screen.findByText(/Remove/i);
@@ -1110,7 +1107,7 @@ describe('GroupChatDetails', () => {
       'member-actions-user2-toggle',
     );
     await act(async () => {
-      userEvent.click(dropdownToggle);
+      await userEvent.click(dropdownToggle);
     });
 
     await waitFor(async () => {

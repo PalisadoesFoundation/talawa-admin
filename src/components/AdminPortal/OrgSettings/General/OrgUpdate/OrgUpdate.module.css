@@ -7,7 +7,7 @@
 }
 
 .icon {
-  margin: var(--border-1);
+  margin: var(--space-1);
 }
 
 .descriptionTextField {
