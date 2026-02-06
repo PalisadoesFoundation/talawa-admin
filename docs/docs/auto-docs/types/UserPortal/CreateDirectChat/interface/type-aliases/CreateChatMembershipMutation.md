@@ -6,13 +6,13 @@
 
 > **CreateChatMembershipMutation** = (`options?`) => `Promise`\<`FetchResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L10)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L12)
 
 ## Parameters
 
 ### options?
 
-`any`
+`Record`\<`string`, `unknown`\>
 
 ## Returns
 

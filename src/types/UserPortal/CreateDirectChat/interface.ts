@@ -1,14 +1,16 @@
-import type { ApolloQueryResult, FetchResult } from '@apollo/client';
+import type { FetchResult } from '@apollo/client';
 import type { Chat } from 'types/UserPortal/Chat/interface';
 
-export type ChatsListRefetch = (variables?: any) => Promise<any>;
+export type ChatsListRefetch = (
+  variables?: Record<string, unknown>,
+) => Promise<unknown>;
 
 export type CreateChatMutation = (
-  options?: any,
+  options?: Record<string, unknown>,
 ) => Promise<FetchResult<unknown>>;
 
 export type CreateChatMembershipMutation = (
-  options?: any,
+  options?: Record<string, unknown>,
 ) => Promise<FetchResult<unknown>>;
 
 /**

@@ -185,7 +185,11 @@ describe('UserOrganizations', () => {
 
     // Default mock implementation with loose typing compatible with Apollo v4
     mockUseQuery.mockImplementation(
-      <TData, TVariables extends OperationVariables>(
+      <
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        _TData = unknown,
+        TVariables extends OperationVariables = OperationVariables,
+      >(
         query: DocumentNode,
         options?: { variables?: TVariables },
       ) => {

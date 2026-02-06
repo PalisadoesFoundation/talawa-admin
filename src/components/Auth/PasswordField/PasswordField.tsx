@@ -34,7 +34,12 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
       error={error ?? undefined}
       touched={true}
       value={value}
-      onChange={onChange}
+      onChange={(value: string) => {
+        const syntheticEvent = {
+          target: { value },
+        } as React.ChangeEvent<HTMLInputElement>;
+        onChange(syntheticEvent);
+      }}
       placeholder={placeholder}
       type={showPassword ? 'text' : 'password'}
       data-testid={testId}

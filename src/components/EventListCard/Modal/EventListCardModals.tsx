@@ -78,7 +78,7 @@ function EventListCardModals({
   );
   const {
     isOpen: eventDeleteModalIsOpen,
-    open: openDeleteModal,
+    open: _openDeleteModal,
     close: closeDeleteModal,
     toggle: toggleDeleteModal,
   } = useModalState();
@@ -86,7 +86,7 @@ function EventListCardModals({
   const {
     isOpen: eventUpdateModalIsOpen,
     open: openUpdateModal,
-    close: closeUpdateModal,
+    close: _closeUpdateModal,
     toggle: toggleUpdateModal,
     setIsOpen: setIsOpenUpdateModal,
   } = useModalState();

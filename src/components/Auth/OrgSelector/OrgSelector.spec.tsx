@@ -53,7 +53,7 @@ describe('OrgSelector', () => {
     });
 
     test('renders required indicator when required is true', () => {
-      renderWithI18n(<OrgSelector {...defaultProps} required />);
+      renderWithI18n(<OrgSelector {...defaultProps} _required />);
 
       const requiredIndicator = screen.getByText('*');
       expect(requiredIndicator).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('OrgSelector', () => {
     });
 
     test('does not render required indicator when required is false', () => {
-      renderWithI18n(<OrgSelector {...defaultProps} required={false} />);
+      renderWithI18n(<OrgSelector {...defaultProps} _required={false} />);
 
       const requiredIndicator = screen.queryByText('*');
       expect(requiredIndicator).not.toBeInTheDocument();

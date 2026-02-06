@@ -30,7 +30,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
   error,
   testId,
   disabled = false,
-  required = false,
+  _required = false,
   label,
 }) => {
   const { t } = useTranslation('translation', {
@@ -143,7 +143,12 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           label={displayLabel}
           hideLabel
           value={isOpen ? searchTerm : displayValue}
-          onChange={handleInputChange}
+          onChange={(value: string) => {
+            const syntheticEvent = {
+              target: { value },
+            } as React.ChangeEvent<HTMLInputElement>;
+            handleInputChange(syntheticEvent);
+          }}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}

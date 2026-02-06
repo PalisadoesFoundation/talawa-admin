@@ -15,6 +15,16 @@ Integration with validators will be handled in Phase 2b.
 
 ## Properties
 
+### \_required?
+
+> `optional` **\_required**: `boolean`
+
+Defined in: [src/types/Auth/OrgSelector/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L39)
+
+Whether the field is required - shows asterisk if true
+
+***
+
 ### disabled?
 
 > `optional` **disabled**: `boolean`
@@ -72,16 +82,6 @@ Callback invoked when the selected organization changes
 Defined in: [src/types/Auth/OrgSelector/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L21)
 
 Array of available organizations to select from
-
-***
-
-### required?
-
-> `optional` **required**: `boolean`
-
-Defined in: [src/types/Auth/OrgSelector/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L39)
-
-Whether the field is required - shows asterisk if true
 
 ***
 

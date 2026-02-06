@@ -4,7 +4,7 @@
 
 # Type Alias: ChatsListRefetch()
 
-> **ChatsListRefetch** = (`variables?`) => `Promise`\<`any`\>
+> **ChatsListRefetch** = (`variables?`) => `Promise`\<`unknown`\>
 
 Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L4)
 
@@ -12,8 +12,8 @@ Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:4](https://githu
 
 ### variables?
 
-`any`
+`Record`\<`string`, `unknown`\>
 
 ## Returns
 
-`Promise`\<`any`\>
+`Promise`\<`unknown`\>
