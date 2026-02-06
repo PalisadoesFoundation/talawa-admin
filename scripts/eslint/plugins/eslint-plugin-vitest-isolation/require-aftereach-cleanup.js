@@ -237,7 +237,9 @@ module.exports = {
                                                 // Detect indent unit from existing indent or default to 2 spaces
                                                 innerIndent = existingIndent.includes('\t') ? '\t' : '  ';
                                                 // If next line is just closing brace (empty block), add one indent level
-                                                const isClosingBrace = nextLineText.match(/^\s*\}[\s;)]*$/);
+                                                const nextLineEnd = nextLineText.indexOf('\n');
+                                                const nextLine = nextLineEnd >= 0 ? nextLineText.substring(0, nextLineEnd) : nextLineText;
+                                                const isClosingBrace = nextLine.match(/^\s*\}[\s;)]*$/);
                                                 if (isClosingBrace) {
                                                     baseIndent = existingIndent + innerIndent;
                                                 } else {
@@ -262,7 +264,7 @@ module.exports = {
                                         // because the existing statement already has its own indentation.
 
                                         // i18n-ignore-next-line: code template
-                                        const insertCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n`;
+                                        const insertCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
 
                                         // Insert at line start (insertPosition) which is before the indentation of firstStmt
                                         return fixer.insertTextBeforeRange([insertPosition, insertPosition], insertCode);

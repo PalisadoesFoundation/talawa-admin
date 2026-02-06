@@ -229,7 +229,8 @@ ruleTester.run('require-aftereach-cleanup', rule, {
           import { describe, it, afterEach, vi } from 'vitest';
           describe('test', () => {
             afterEach(() => { console.log('cleanup'); 
-              vi.clearAllMocks();});
+            vi.clearAllMocks();
+            });
             it('should work', () => {
               vi.fn();
             });
@@ -289,6 +290,7 @@ ruleTester.run('require-aftereach-cleanup', rule, {
             afterEach(() => {
               vi.clearAllMocks();
             });
+
             it('should work', () => {
               vi.fn();
             });
@@ -334,11 +336,34 @@ describe('test', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
 it('should work', () => {
 vi.fn();
 });
 });
 `,
+    },
+    // Empty describe block followed by other code (regression test for regex bug)
+    {
+      code: `
+          import { describe, it, vi } from 'vitest';
+          vi.fn();
+          describe('empty', () => {
+          });
+          export const foo = 'bar';
+        `,
+      errors: [{ messageId: 'missingAfterEach' }],
+      output: `
+          import { describe, it, vi } from 'vitest';
+          vi.fn();
+          describe('empty', () => {
+            afterEach(() => {
+              vi.clearAllMocks();
+            });
+
+          });
+          export const foo = 'bar';
+        `,
     },
   ],
 });
