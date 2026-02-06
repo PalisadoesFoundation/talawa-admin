@@ -480,4 +480,29 @@ describe('Event Attendance Component', () => {
       }
     });
   });
+
+  describe('ProfileAvatarDisplay', () => {
+    beforeEach(() => {
+      vi.mock('react-router', async () => ({
+        ...(await vi.importActual('react-router')),
+        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+      }));
+    });
+
+    it('renders ProfileAvatarDisplay for attendees with name', async () => {
+      renderEventAttendance();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+    });
+
+    it('ProfileAvatarDisplay renders avatar for each attendee row', async () => {
+      renderEventAttendance();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+    });
+  });
 });

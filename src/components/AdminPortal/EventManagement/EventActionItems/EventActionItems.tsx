@@ -117,7 +117,12 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         statusModalState.open();
       }
     },
-    [itemModalState, deleteModalState, viewModalState, statusModalState],
+    [
+      itemModalState.open,
+      deleteModalState.open,
+      viewModalState.open,
+      statusModalState.open,
+    ],
   );
 
   const {
@@ -242,7 +247,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         let isAssigned = false;
         let isGroup = false;
 
-        let imageUrl: string | undefined;
+        let imageUrl: string | null | undefined;
 
         if (volunteer?.user) {
           displayName = volunteer.user.name || t('unknownVolunteer');
@@ -422,7 +427,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           placeholder={tCommon('searchBy', {
             item:
               searchBy === 'assignee'
-                ? 'Assigned To'
+                ? t('assignedTo')
                 : searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           onSearch={(value) => {

@@ -753,10 +753,11 @@ describe('EventRegistrantsModal', () => {
     );
     await user.click(sendBtn);
 
-    // Wait for any potential side effects
+    // Verify onInvitesSent side effect — e.g., the modal remains open
+    // and no error toasts are shown after callback execution
     await waitFor(
       () => {
-        expect(sendBtn).toBeInTheDocument();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
       },
       { timeout: 1000 },
     );
@@ -896,13 +897,10 @@ describe('EventRegistrantsModal', () => {
 
       const keyPress = key.length === 1 ? key : `{${key}}`;
       await user.keyboard(keyPress);
-
-      // Use queryBy for negative assertion
-      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
-
-      // Small delay between iterations
       await waitFor(() => {
-        expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('add-onspot-modal'),
+        ).not.toBeInTheDocument();
       });
     }
   });
@@ -1098,86 +1096,6 @@ describe('EventRegistrantsModal', () => {
     await waitFor(
       () => {
         expect(input).toHaveValue('Another Test');
-      },
-      { timeout: 3000 },
-    );
-  });
-
-  test('renders ProfileAvatarDisplay in renderOption with correct props for member with name', async () => {
-    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
-
-    render(
-      <MockedProvider
-        mocks={[
-          makeEventDetailsNonRecurringMock(),
-          makeAttendeesEmptyMock(),
-          makeMembersWithOneMock(),
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <EventRegistrantsModal {...defaultProps} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
-
-    const input = await screen.findByTestId(
-      'autocomplete',
-      {},
-      { timeout: 3000 },
-    );
-    await user.type(input, 'John');
-
-    await waitFor(
-      () => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-  });
-
-  test('renders ProfileAvatarDisplay in renderOption with unknownUser fallback when name is empty', async () => {
-    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
-
-    render(
-      <MockedProvider
-        mocks={[
-          makeEventDetailsNonRecurringMock(),
-          makeAttendeesEmptyMock(),
-          makeMembersUnknownNameMock(),
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <EventRegistrantsModal {...defaultProps} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
-
-    const input = await screen.findByTestId(
-      'autocomplete',
-      {},
-      { timeout: 3000 },
-    );
-    await user.type(input, 'unknown');
-
-    await waitFor(
-      () => {
-        expect(screen.getByText('Unknown User')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );

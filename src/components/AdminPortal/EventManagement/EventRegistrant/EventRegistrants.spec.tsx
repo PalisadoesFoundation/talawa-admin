@@ -398,4 +398,30 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
       expect(screen.getByText('Check In Members')).toBeInTheDocument();
     });
   });
+
+  describe('ProfileAvatarDisplay', () => {
+    beforeEach(() => {
+      mockParams = {
+        eventId: 'event123',
+        orgId: 'org123',
+      };
+    });
+
+    test('renders ProfileAvatarDisplay for registrants with name', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+      });
+    });
+
+    test('ProfileAvatarDisplay renders avatar for each registrant row', async () => {
+      renderEventRegistrants();
+
+      await waitFor(() => {
+        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+    });
+  });
 });

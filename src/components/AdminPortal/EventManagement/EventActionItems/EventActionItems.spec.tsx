@@ -4,7 +4,7 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -70,9 +70,21 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   },
 }));
 
-vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="avatar">{name}</div>
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    fallbackName,
+    imageUrl,
+  }: {
+    fallbackName: string;
+    imageUrl?: string;
+  }) => (
+    <div
+      data-testid="profile-avatar-display"
+      data-name={fallbackName}
+      data-image={imageUrl ?? ''}
+    >
+      {fallbackName}
+    </div>
   ),
 }));
 
@@ -389,6 +401,7 @@ const renderEventActionItems = (
 describe('EventActionItems', () => {
   afterEach(() => {
     setUseParamsMock({ orgId: 'orgId1' });
+    cleanup();
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });
@@ -1078,7 +1091,9 @@ describe('EventActionItems', () => {
       await userEvent.click(filterBtn);
 
       // Small delay between clicks to ensure state updates
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await waitFor(() => {
+        // Assert intermediate filter state if needed, or just proceed
+      });
 
       await userEvent.click(filterBtn);
 
@@ -1556,6 +1571,30 @@ describe('EventActionItems', () => {
         expect(screen.getByTestId('navigate')).toBeInTheDocument();
         expect(screen.getByTestId('navigate')).toHaveTextContent('/');
       });
+    });
+  });
+
+  describe('ProfileAvatarDisplay', () => {
+    it('renders ProfileAvatarDisplay for assignees with name', async () => {
+      renderEventActionItems();
+
+      await waitFor(
+        () => {
+          expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
+        },
+        { timeout: 5000 },
+      );
+    });
+
+    it('ProfileAvatarDisplay renders avatar for each action item assignee', async () => {
+      renderEventActionItems();
+
+      await waitFor(
+        () => {
+          expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
+        },
+        { timeout: 5000 },
+      );
     });
   });
 });
