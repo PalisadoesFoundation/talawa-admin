@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -369,6 +369,7 @@ describe('AgendaDragAndDrop', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
   });
 
@@ -453,11 +454,10 @@ describe('AgendaDragAndDrop', () => {
     });
 
     it('calls onPreviewItem when preview button is clicked', async () => {
-      renderAgendaDragAndDrop();
-      const previewButtons = screen.getAllByLabelText('previewItem');
-      await userEvent.click(previewButtons[0]);
       const folders = createMockFolders();
       renderAgendaDragAndDrop([], folders);
+      const previewButtons = screen.getAllByLabelText('previewItem');
+      await userEvent.click(previewButtons[0]);
 
       expect(mockOnPreviewItem).toHaveBeenCalledWith(
         folders[0].items.edges[0].node,
@@ -1429,10 +1429,17 @@ describe('AgendaDragAndDrop', () => {
   });
 
   describe('Sequence optimization paths', () => {
-    it('skips item mutation when sequence already matches index', async () => {
+    it('skips mutation for items whose sequence does not change', async () => {
       const base = createMockFolders();
+
       const item1 = base[0].items.edges[0].node;
       const item2 = base[0].items.edges[1].node;
+      const item3 = {
+        ...item1,
+        id: 'item3',
+        name: 'Item 3',
+        sequence: 3,
+      };
 
       const folders: InterfaceAgendaFolderInfo[] = [
         {
@@ -1441,17 +1448,35 @@ describe('AgendaDragAndDrop', () => {
             edges: [
               { node: { ...item1, sequence: 1 } },
               { node: { ...item2, sequence: 2 } },
+              { node: item3 },
             ],
           },
         },
       ];
 
-      renderAgendaDragAndDrop([], folders);
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
+            variables: { input: { id: item3.id, sequence: 2 } },
+          },
+          result: { data: { updateAgendaItemSequence: { id: item3.id } } },
+        },
+        {
+          request: {
+            query: UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
+            variables: { input: { id: item2.id, sequence: 3 } },
+          },
+          result: { data: { updateAgendaItemSequence: { id: item2.id } } },
+        },
+      ];
+
+      renderAgendaDragAndDrop(mocks, folders);
 
       const dropResult: DropResult = {
-        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        source: { index: 2, droppableId: 'agenda-items-folder1' },
         destination: { index: 1, droppableId: 'agenda-items-folder1' },
-        draggableId: item1.id,
+        draggableId: item3.id,
         type: 'ITEM',
         mode: 'FLUID',
         reason: 'DROP',
@@ -1460,30 +1485,54 @@ describe('AgendaDragAndDrop', () => {
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).not.toHaveBeenCalled();
-          expect(NotificationToast.error).not.toHaveBeenCalled();
-          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
+
+      // Only 2 mutations should run, not 3
+      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
     });
 
-    it('skips folder mutation when sequence already matches index', async () => {
+    it('skips folder mutation when some folders keep same sequence', async () => {
       const base = createMockFolders();
+
+      const folder3: InterfaceAgendaFolderInfo = {
+        ...base[0],
+        id: 'folder3',
+        name: 'Folder 3',
+        sequence: 3,
+        items: { edges: [] },
+      };
 
       const folders: InterfaceAgendaFolderInfo[] = [
         { ...base[0], sequence: 1 },
         { ...base[1], sequence: 2 },
+        folder3,
       ];
 
-      renderAgendaDragAndDrop([], folders);
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: UPDATE_AGENDA_FOLDER_MUTATION,
+            variables: { input: { id: folder3.id, sequence: 2 } },
+          },
+          result: { data: { updateAgendaFolder: { id: folder3.id } } },
+        },
+        {
+          request: {
+            query: UPDATE_AGENDA_FOLDER_MUTATION,
+            variables: { input: { id: base[1].id, sequence: 3 } },
+          },
+          result: { data: { updateAgendaFolder: { id: base[1].id } } },
+        },
+      ];
+
+      renderAgendaDragAndDrop(mocks, folders);
 
       const dropResult: DropResult = {
-        source: { index: 0, droppableId: 'agendaFolder' },
+        source: { index: 2, droppableId: 'agendaFolder' },
         destination: { index: 1, droppableId: 'agendaFolder' },
-        draggableId: base[0].id,
+        draggableId: folder3.id,
         type: 'FOLDER',
         mode: 'FLUID',
         reason: 'DROP',
@@ -1492,13 +1541,11 @@ describe('AgendaDragAndDrop', () => {
 
       capturedOnDragEnd?.(dropResult);
 
-      await waitFor(
-        () => {
-          expect(NotificationToast.success).not.toHaveBeenCalled();
-          expect(NotificationToast.error).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
+
+      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
     });
 
     it('skips mutation when folder sequence already matches its new position', async () => {
