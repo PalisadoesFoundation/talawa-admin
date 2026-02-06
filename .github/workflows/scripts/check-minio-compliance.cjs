@@ -33,9 +33,6 @@ const LEGACY_EXCEPTIONS = new Set([
   'src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.spec.tsx',
   'src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx',
   'src/screens/AdminPortal/CommunityProfile/CommunityProfile.spec.tsx',
-  'src/screens/AdminPortal/OrgList/modal/OrganizationModal.spec.tsx',
-  'src/utils/convertToBase64.ts',
-  'src/utils/convertToBase64.spec.ts',
   'src/index.tsx',
   'src/index.spec.tsx',
 ]);
