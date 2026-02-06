@@ -220,7 +220,7 @@ const OrgFundsList = (): JSX.Element => {
       field: 'sl_no',
       headerName: tCommon('hash'),
       flex: 1,
-      minWidth: 60,
+      minWidth: Number(60),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -236,7 +236,7 @@ const OrgFundsList = (): JSX.Element => {
       headerName: t('funds.fundName'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -248,7 +248,7 @@ const OrgFundsList = (): JSX.Element => {
       field: 'createdAt',
       headerName: tCommon('createdOn'),
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: true,
       sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
@@ -267,7 +267,7 @@ const OrgFundsList = (): JSX.Element => {
       headerName: t('funds.status'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -280,7 +280,7 @@ const OrgFundsList = (): JSX.Element => {
       headerName: t('funds.assocCampaigns'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -304,7 +304,7 @@ const OrgFundsList = (): JSX.Element => {
       headerName: tCommon('action'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -379,9 +379,9 @@ const OrgFundsList = (): JSX.Element => {
       </div>
 
       {!fundLoading &&
-      fundData &&
-      filteredAndSortedFunds.length === 0 &&
-      searchText.length > 0 ? (
+        fundData &&
+        filteredAndSortedFunds.length === 0 &&
+        searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"

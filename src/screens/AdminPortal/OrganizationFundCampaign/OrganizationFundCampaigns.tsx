@@ -174,7 +174,7 @@ const OrgFundCampaign = (): JSX.Element => {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: 60,
+      minWidth: Number(60),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -230,7 +230,7 @@ const OrgFundCampaign = (): JSX.Element => {
       field: 'goalAmount',
       headerName: t('fundingGoal'),
       flex: 1,
-      minWidth: 100,
+      minWidth: Number(100),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -243,7 +243,7 @@ const OrgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -255,7 +255,7 @@ const OrgFundCampaign = (): JSX.Element => {
       field: 'fundingRaised',
       headerName: t('raised'),
       flex: 1,
-      minWidth: 100,
+      minWidth: Number(100),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -268,7 +268,7 @@ const OrgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.fundingRaised ?? 0}
@@ -280,7 +280,7 @@ const OrgFundCampaign = (): JSX.Element => {
       field: 'percentageRaised',
       headerName: t('percentageRaised'),
       flex: 1,
-      minWidth: 120,
+      minWidth: Number(120),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -314,13 +314,12 @@ const OrgFundCampaign = (): JSX.Element => {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={percentage}
-                className={`${styles.progressCircleForeground} ${
-                  percentage >= 100
-                    ? styles.progressComplete
-                    : percentage >= 50
-                      ? styles.progressHalf
-                      : styles.progressLow
-                }`}
+                className={`${styles.progressCircleForeground} ${percentage >= 100
+                  ? styles.progressComplete
+                  : percentage >= 50
+                    ? styles.progressHalf
+                    : styles.progressLow
+                  }`}
               />
             </Box>
             <Typography variant="body2" className={styles.progressTypography}>
@@ -334,7 +333,7 @@ const OrgFundCampaign = (): JSX.Element => {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1.5,
-      minWidth: 120,
+      minWidth: Number(120),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -415,9 +414,9 @@ const OrgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-      campaignData &&
-      filteredCampaigns.length === 0 &&
-      searchText.length > 0 ? (
+        campaignData &&
+        filteredCampaigns.length === 0 &&
+        searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"

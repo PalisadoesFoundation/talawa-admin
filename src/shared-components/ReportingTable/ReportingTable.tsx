@@ -32,7 +32,7 @@ export const adjustColumnsForCompactMode = (
       return {
         ...col,
         flex: 0.5,
-        minWidth: 50,
+        minWidth: Number(50),
       };
     }
     if (index === 1) {
