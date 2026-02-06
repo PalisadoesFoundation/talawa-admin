@@ -101,6 +101,21 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "verifyEmail": {
+    "title": "Verificar Email",
+    "loginRequired": "Inicio de sesión requerido",
+    "verifying": "Verificando...",
+    "success": "Email Verificado",
+    "successMessage": "Tu email ha sido verificado exitosamente. Ahora puedes iniciar sesión.",
+    "error": "Verificación Fallida",
+    "invalidToken": "El enlace de verificación es inválido o ha expirado.",
+    "noToken": "No se proporcionó token de verificación. Por favor, revisa tu email para el enlace de verificación.",
+    "verificationFailed": "La verificación de email falló. Por favor, inténtalo de nuevo.",
+    "resendSuccess": "El email de verificación ha sido reenviado exitosamente.",
+    "resendFailed": "Error al reenviar el email de verificación. Por favor, inténtalo de nuevo.",
+    "resendButton": "Reenviar Email de Verificación",
+    "goToLogin": "Ir a Inicio de Sesión"
+  },
   "adminProfile": {
     "title": "Perfil de Administrador",
     "settings": "Configuraciones",
@@ -1295,6 +1310,7 @@
     }
   },
   "memberDetail": {
+    "user": "Usuario",
     "title": "Detalles del usuario",
     "addAdmin": "Agregar administrador",
     "noeventsAttended": "No hay eventos asistidos",
@@ -1855,6 +1871,7 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
+    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1882,10 +1899,13 @@
     "confirmRemoveMember": "Confirmar eliminar miembro",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
+    "thisUser": "este usuario",
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
   },
   "userChatRoom": {
-    "selectContact": "Seleccione un contacto para iniciar una conversación",
+    "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
     "sendMessage": "Enviar mensaje",
     "loading": "Cargando...",
     "loadOlderMessages": "Cargar mensajes más antiguos",
@@ -2510,19 +2530,6 @@
       "emptyState": "¡Pida a los asistentes que envíen comentarios para obtener información!",
       "filledByCount": "{{count}} personas han completado comentarios para este evento."
     }
-  },
-  "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Ir a iniciar sesión"
   },
   "plugins": {
     "loading": "Cargando complemento...",

@@ -1,0 +1,10 @@
+{
+  "errors": [
+    {
+      "message": "Members not found",
+      "extensions": {
+        "code": "NOT_FOUND"
+      }
+    }
+  ]
+}
