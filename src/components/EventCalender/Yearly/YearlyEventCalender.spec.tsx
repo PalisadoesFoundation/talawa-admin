@@ -314,8 +314,6 @@ describe('Calendar Component', () => {
   });
 
   it('handles year navigation correctly', async () => {
-    const user = userEvent.setup();
-
     const { getByText } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
@@ -574,16 +572,12 @@ describe('Calendar Component', () => {
   it('handles calendar navigation and date rendering edge cases', async () => {
     const user = userEvent.setup();
 
-    const { rerender } = render(
-      <MemoryRouter initialEntries={['/organization/org1']}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Calendar
-            eventData={mockEventData}
-            refetchEvents={mockRefetchEvents}
-            orgData={mockOrgData}
-          />
-        </Suspense>
-      </MemoryRouter>,
+    const { rerender } = renderWithRouterAndPath(
+      <Calendar
+        eventData={mockEventData}
+        refetchEvents={mockRefetchEvents}
+        orgData={mockOrgData}
+      />,
     );
 
     const currentYear = new Date().getFullYear();
