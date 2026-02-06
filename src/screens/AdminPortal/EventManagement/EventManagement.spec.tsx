@@ -120,12 +120,10 @@ describe('Event Management', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
-    vi.useRealTimers();
     user = userEvent.setup();
   });
 
   beforeAll(() => {
-    vi.useFakeTimers();
     vi.mock('react-router', async () => {
       const actual = await vi.importActual('react-router');
       return {
@@ -140,7 +138,6 @@ describe('Event Management', () => {
   });
 
   afterEach(() => {
-    vi.useFakeTimers();
     vi.clearAllMocks();
     clearAllItems();
     cleanup();
@@ -250,15 +247,12 @@ describe('Event Management', () => {
       }
     });
 
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid tab
-      };
-    });
-
     it('returns dashboard tab for an invalid tab selection', async () => {
+      vi.mocked(useParams).mockReturnValue({
+        orgId: 'orgId',
+        eventId: 'event123',
+        tab: 'invalid',
+      });
       await act(async () => {
         renderEventManagement();
       });
