@@ -341,7 +341,9 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const toggle = screen.getByTestId('tabs-toggle');
-      toggle.focus();
+      await act(async () => {
+        toggle.focus();
+      });
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
@@ -353,7 +355,9 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const toggle = screen.getByTestId('tabs-toggle');
-      toggle.focus();
+      await act(async () => {
+        toggle.focus();
+      });
       await user.keyboard(' ');
 
       await waitFor(() => {
