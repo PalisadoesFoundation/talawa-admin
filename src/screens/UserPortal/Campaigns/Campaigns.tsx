@@ -47,7 +47,6 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
-    cursor: 'pointer',
     '&:focus-within': { outline: 'none' },
   },
   '& .MuiDataGrid-row:hover': {
@@ -111,8 +110,8 @@ const Campaigns = (): JSX.Element => {
     '#',
     t('campaignName'),
     t('campaignStatus'),
-    tCommon('startDate'),
-    tCommon('endDate'),
+    t('startDate'),
+    t('endDate'),
     t('fundGoal'),
     t('amountRaised'),
     t('percentRaised'),
@@ -399,7 +398,7 @@ const Campaigns = (): JSX.Element => {
         <EmptyState
           icon={<Campaign />}
           message="userCampaigns.noCampaigns"
-          description="userCampaigns.createFirstCampaign"
+          description={t('createFirstCampaign')}
           dataTestId="campaigns-empty-state"
         />
       ) : (

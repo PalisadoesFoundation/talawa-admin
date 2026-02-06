@@ -201,6 +201,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   };
 
   const archiveFundHandler = async (): Promise<void> => {
+    if (!fund?.id) return;
     try {
       const newArchivedState = !formState.isArchived;
 

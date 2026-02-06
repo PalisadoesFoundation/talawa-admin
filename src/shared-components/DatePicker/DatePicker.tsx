@@ -81,21 +81,24 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 placement: 'bottom-start' as const,
                 disablePortal: true,
               },
-              textField: {
-                ...slotProps?.textField,
-                onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
-                  onBlur?.();
-                  const textFieldProps = slotProps?.textField;
-                  if (
-                    textFieldProps &&
-                    typeof textFieldProps === 'object' &&
-                    'onBlur' in textFieldProps &&
-                    typeof textFieldProps.onBlur === 'function'
-                  ) {
-                    textFieldProps.onBlur(e);
-                  }
-                },
-              },
+              textField:
+                typeof slotProps?.textField === 'function'
+                  ? slotProps.textField
+                  : {
+                      ...slotProps?.textField,
+                      onBlur: (e: React.FocusEvent<HTMLInputElement>) => {
+                        onBlur?.();
+                        const textFieldProps = slotProps?.textField;
+                        if (
+                          textFieldProps &&
+                          typeof textFieldProps === 'object' &&
+                          'onBlur' in textFieldProps &&
+                          typeof textFieldProps.onBlur === 'function'
+                        ) {
+                          textFieldProps.onBlur(e);
+                        }
+                      },
+                    },
             }}
             slots={{
               ...customSlots,
