@@ -98,6 +98,12 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+   {
+    files: [
+      'src/components/AdminPortal/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx',
+    ],
+    rules: restrictImportsExcept(['mui-autocomplete', 'mui-autocomplete-path']),
+  },
 ];
 
 export const avatarExemption = createWrapperExemption({
