@@ -61,8 +61,7 @@ export class AdminEventPage {
 
     // Cypress cannot click this due to calendar cards overlapping the button.
     // This is a known Cypress actionability limitation — force click is required.
-    cy.get('[data-testid="more"]')
-      .filter(':contains("View all")')
+    cy.get('[data-cy="viewAllEventsBtn"]')
       .each(($btn) => {
         cy.wrap($btn).click({ force: true });
       })

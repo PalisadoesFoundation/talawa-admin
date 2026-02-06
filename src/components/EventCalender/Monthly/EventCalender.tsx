@@ -490,7 +490,7 @@ const Calendar: React.FC<
               {shouldShowViewMore && (
                 <button
                   className={styles.btn__more}
-                  data-testid="more"
+                  data-cy="viewAllEventsBtn"
                   onClick={() => toggleExpand(index)}
                 >
                   {expanded === index ? 'View less' : 'View all'}
