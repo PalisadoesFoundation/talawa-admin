@@ -5,13 +5,13 @@
 
 .agendaItemModal {
   max-width: 80vw;
-  margin-top: 2vh;
+  margin-top: var(--space-10);
   margin-left: var(--sidebar-offset, 13vw);
 }
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md)) {
   .agendaItemModal {
-    margin: 10vh auto;
+    margin: var(--space-12) auto;
     max-width: 90%;
   }
 
@@ -20,9 +20,9 @@
   }
 }
 
-@media (max-width: 576px) {
+@media (max-width: var(--breakpoint-sm)) {
   .agendaItemModal {
-    margin: 5vh auto;
+    margin: var(--space-9) auto;
     max-width: 95%;
   }
 
@@ -33,29 +33,31 @@
 
 .titlemodalAgendaItems {
   color: var(--color-gray-900);
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
-  padding-bottom: 5px;
-  border-bottom: 3px solid var(--color-gray-200);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-8);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-3) solid var(--color-gray-200);
   width: 65%;
 }
 
 .preview {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 10px;
+  display: grid;
+  grid-template-columns: var(--space-15) 1fr;
+  column-gap: var(--space-4);
+  margin-bottom: var(--space-3);
 }
 
 .preview p {
-  font-weight: 600;
-  min-width: 120px;
-  margin-bottom: 0;
+  font-weight: var(--font-weight-semibold);
+  min-width: var(--space-15);
+  margin-bottom: var(--space-0);
 }
 
 .view {
   color: var(--color-gray-600);
-  flex: 1;
+  min-width: 0;
+  padding-left: var(--space-3);
 }
 
 .previewFile {
@@ -63,28 +65,32 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  margin-top: 10px;
+  margin-top: var(--space-5);
 }
 
 .previewFile img,
 .previewFile video {
   width: 100%;
-  max-width: 400px;
+  max-width: var(--space-23);
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-5);
 }
 
 .urlListItem {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 5px 0;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-0);
   list-style: none;
+  min-width: 0;
 }
 
 .urlListItem a {
-  text-decoration: none;
   color: inherit;
+  text-decoration: none;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .urlListItem a:hover {
@@ -92,19 +98,19 @@
 }
 
 .urlIcon {
-  margin-right: 8px;
+  margin-right: var(--space-4);
   color: var(--color-blue-500);
 }
 
 .iconContainer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid var(--color-gray-200);
+  gap: var(--space-5);
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  border-top: var(--border-1) solid var(--color-gray-200);
 }
 
 .icon {
-  padding: 8px 12px;
+  padding: var(--space-4) var(--space-6);
 }
