@@ -20,6 +20,7 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
+import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
 import { store } from 'state/store';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -40,6 +41,36 @@ vi.mock('./addMember/AddMember', () => ({
     </button>
   ),
 }));
+
+vi.mock(
+  'shared-components/SearchFilterBar/SearchFilterBar',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('shared-components/SearchFilterBar/SearchFilterBar')
+      >();
+    return {
+      default: (props: React.ComponentProps<typeof actual.default>) => (
+        <>
+          <actual.default {...props} />
+          <button
+            type="button"
+            data-testid="trigger-invalid-sort"
+            onClick={() => {
+              if (props.hasDropdowns) {
+                (
+                  props as InterfaceSearchFilterBarAdvanced
+                ).dropdowns?.[0]?.onOptionChange?.('invalid');
+              }
+            }}
+          >
+            Invalid Sort
+          </button>
+        </>
+      ),
+    };
+  },
+);
 
 // Setup mock window.location
 const setupLocationMock = () => {
@@ -1398,6 +1429,321 @@ describe('OrganizationPeople', () => {
     );
     expect(imgElement).toBeInTheDocument();
     expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
+  });
+
+  test('renders avatar placeholder when member has no avatarURL', async () => {
+    const mockWithoutAvatar = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member-no-image',
+              name: 'User Without Image',
+              emailAddress: 'noimg@example.com',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([mockWithoutAvatar], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('User Without Image')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('avatar')).toBeInTheDocument();
+  });
+
+  test('uses initial tab from location.state.role when provided', async () => {
+    const adminMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+        where: { role: { equal: 'administrator' } },
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+              role: 'administrator',
+            },
+            cursor: 'adminCursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
+      },
+    );
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([adminMock, membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter
+          initialEntries={[
+            { pathname: '/admin/orgpeople/orgid', state: { role: 1 } },
+          ]}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('sort-toggle')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+  });
+
+  test('handleSortChange falls back to state 0 when option value is invalid', async () => {
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    const invalidSortButton = screen.getByTestId('trigger-invalid-sort');
+    await userEvent.click(invalidSortButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('falls back to members when location.state.role is invalid', async () => {
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter
+          initialEntries={[
+            { pathname: '/admin/orgpeople/orgid', state: { role: 99 } },
+          ]}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+  });
+
+  test('joined column uses en-US locale when language is not in languages list', async () => {
+    const originalLanguage = i18nForTest.language;
+    try {
+      await i18nForTest.changeLanguage('xx');
+      const membersMock = createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      });
+      const link = new StaticMockLink([membersMock], true);
+
+      render(
+        <MockedProvider link={link}>
+          <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route
+                    path="/admin/orgpeople/:orgId"
+                    element={<OrganizationPeople />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByText('John Doe')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
+      expect(
+        screen.getByTestId('org-people-joined-member1'),
+      ).toBeInTheDocument();
+    } finally {
+      await i18nForTest.changeLanguage(originalLanguage);
+    }
+  });
+
+  test('processes rows when edge.node.createdAt is missing', async () => {
+    const mockWithMissingCreatedAt = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member-no-date',
+              name: 'Member No Date',
+              emailAddress: 'nodate@example.com',
+              avatarURL: null,
+              createdAt: undefined as unknown as string,
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+    const link = new StaticMockLink([mockWithMissingCreatedAt], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Member No Date')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    expect(
+      screen.getByTestId('org-people-joined-member-no-date'),
+    ).toBeInTheDocument();
   });
 
   test('calls getRowClassName for each rendered row', async () => {
