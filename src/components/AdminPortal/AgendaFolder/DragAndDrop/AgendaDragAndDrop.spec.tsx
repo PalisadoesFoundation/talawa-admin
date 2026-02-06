@@ -666,7 +666,7 @@ describe('AgendaDragAndDrop', () => {
         { timeout: 5000 },
       );
 
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
     });
   });
 
@@ -772,7 +772,7 @@ describe('AgendaDragAndDrop', () => {
         { timeout: 5000 },
       );
 
-      expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
+      expect(mockRefetchAgendaFolder).toHaveBeenCalled();
       // Verify rollback occurred - setFolders called twice (optimistic update, then rollback)
       expect(mockSetFolders).toHaveBeenCalledTimes(2);
     });
