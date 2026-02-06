@@ -121,6 +121,7 @@ export default function AgendaDragAndDrop({
       refetchAgendaFolder();
     } catch (error) {
       setFolders(previousFolders);
+      refetchAgendaFolder();
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }
@@ -167,6 +168,7 @@ export default function AgendaDragAndDrop({
       refetchAgendaFolder();
     } catch (error) {
       setFolders(previousFolders);
+      refetchAgendaFolder();
       if (error instanceof Error) {
         NotificationToast.error(error.message);
       }
