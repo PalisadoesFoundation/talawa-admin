@@ -198,9 +198,6 @@ export default function AgendaDragAndDrop({
     }
   };
 
-  const getRoundedTopClass = (isEvent: boolean): string =>
-    isEvent ? 'rounded-top-4' : 'rounded-top-2';
-
   const getDraggingClass = (isDragging: boolean): string =>
     isDragging ? styles.dragging : '';
 
@@ -316,16 +313,12 @@ export default function AgendaDragAndDrop({
 
                         {/* Table head */}
                         <div
-                          className={`shadow-sm ${getRoundedTopClass(
-                            agendaFolderConnection === 'Event',
-                          )} ${
+                          className={`shadow-sm ${
                             agendaFolderConnection === 'Event' ? 'mx-4' : 'mx-0'
                           }`}
                         >
                           <Row
-                            className={`${styles.tableHeadAgendaItems} mx-0 border py-3 ${getRoundedTopClass(
-                              agendaFolderConnection === 'Event',
-                            )}`}
+                            className={`${styles.tableHeadAgendaItems} mx-0 border py-3`}
                           >
                             <Col lg={1} className="fw-bold text-center">
                               {t('sequence')}

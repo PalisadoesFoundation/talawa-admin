@@ -30,7 +30,5 @@
 .tableHeadAgendaItems {
   background-color: var(--tableHeadAgendaItems-bg) !important;
   color: var(--tableHeadAgendaItems-color);
-  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-none)
-    var(--radius-none) !important;
   padding: var(--space-8);
 }
