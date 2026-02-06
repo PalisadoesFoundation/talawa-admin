@@ -133,7 +133,6 @@ i18n.init({
   },
 });
 
-// Simplify EventListCard rendering to avoid router/i18n dependencies in tests
 vi.mock('shared-components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
