@@ -8006,8 +8006,12 @@ form {
 
 .cardBody .textBox {
   margin: 0 0 3rem 0;
-  padding-bottom: 10px;
+  padding: 10px;
   color: var(--cardBody-color);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .textBox {

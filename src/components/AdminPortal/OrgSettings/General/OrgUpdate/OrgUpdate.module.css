@@ -7,23 +7,23 @@
 }
 
 .icon {
-  margin: 1px;
+  margin: var(--border-1);
 }
 
 .descriptionTextField {
   background-color: var(--inputColor-bg);
   color: var(--text-fields-color);
-  margin-bottom: 1rem;
-  width: auto;
+  margin-bottom: var(--space-5);
+  width: 100%;
   resize: none;
-  height: 100px;
+  height: var(--space-13);
 }
 
 .textFields {
   background-color: var(--inputColor-bg);
   color: var(--text-fields-color);
-  margin-bottom: 1rem;
-  width: auto;
+  margin-bottom: var(--space-5);
+  width: 100%;
 }
 
 .customFileInput {
@@ -31,33 +31,33 @@
 }
 
 .resetChangesBtn {
-  border-width: 2px;
+  border-width: var(--border-2);
   border-color: var(--resetbtn-border);
   color: var(--resetbtn-color);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  height: 49px;
-  width: 160px;
-  font-size: 0.8rem;
+  gap: var(--space-3);
+  height: var(--space-10);
+  width: var(--space-16);
+  font-size: var(--font-size-xs);
 }
 
 .syncIconStyle {
   transform: rotate(135deg) scale(1.2);
-  width: 10px;
-  height: 10px;
+  width: var(--space-3);
+  height: var(--space-3);
   stroke: var(--card-background-color);
-  stroke-width: 1;
+  stroke-width: var(--border-1);
   fill: var(--card-background-color);
 }
 
 .saveChangesBtn {
   color: var(--btn-primary-text-color, white);
-  border: 0;
-  height: 49px;
-  width: 160px;
-  font-size: 0.8rem;
+  border: var(--border-0);
+  height: var(--space-10);
+  width: var(--space-16);
+  font-size: var(--font-size-xs);
   background-color: var(--card-background-color);
 }
