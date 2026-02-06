@@ -153,9 +153,6 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
-      - name: Check for unused TypeScript exports
-        run: pnpm run check:unused-exports || true
-
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports,nsExports,nsTypes
 

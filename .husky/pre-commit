@@ -55,8 +55,4 @@ fi
 
 .husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
-# Full repository unused export check
-echo "Running unused export check (full repository)..."
-pnpm run check:unused-exports || true
-
 xargs -0 git add -- < "$STAGED_ALL_FILE"
