@@ -85,6 +85,24 @@ reviews:
         - Consider vi.useRealTimers() in beforeEach for tests with heavy user interaction.
         - Flag any test using both fake timers AND user-event without explicit timer management.
 
+        Cleanup (MANDATORY) — SPECIFIC REQUIREMENTS:
+        - MUST use cleanup() from `@testing-library/react` in afterEach (unless global setup handles it).
+        - MUST use vi.restoreAllMocks() (NOT vi.clearAllMocks()) to restore original implementations.
+        - If test file has its own afterEach, verify it calls both cleanup() and vi.restoreAllMocks().
+        - Flag any use of vi.clearAllMocks() without vi.restoreAllMocks() as "⚠️ INCOMPLETE CLEANUP at file:line".
+
+        DataTable-specific testing (CRITICAL for this codebase):
+        - After finding datatable container (findByTestId('datatable')), MUST waitFor rows to populate:
+          ❌ BAD: await screen.findByTestId('datatable'); const rows = getDataTableBodyRows();
+          ✅ GOOD: await screen.findByTestId('datatable'); await waitFor(() => expect(getDataTableBodyRows()).toHaveLength(N));
+        - DataTable shows skeleton first, then data asynchronously — tests MUST wait for transition.
+        - Report as "⚠️ DATATABLE RACE CONDITION at file:line — Not waiting for rows after container".
+
+        Double network requests (AVOID):
+        - Flag if a handler (onClick, onChange) calls refetch() AND a useEffect also refetches with same dependency.
+        - Example: handleChangeRowsPerPage calls refetch(...rowsPerPage...) BUT useEffect([rowsPerPage]) also refetches.
+        - Report as "⚠️ DOUBLE REFETCH at file:line — Both handler and useEffect refetch on same state change".
+
         Structure:
         - No it.skip/describe.skip unless commented with reason + linked issue.
         - Wrap state updates in act() when needed.
