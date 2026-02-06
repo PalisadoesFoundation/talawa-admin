@@ -120,10 +120,12 @@ describe('Event Management', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
   beforeEach(() => {
+    vi.useRealTimers();
     user = userEvent.setup();
   });
 
   beforeAll(() => {
+    vi.useFakeTimers();
     vi.mock('react-router', async () => {
       const actual = await vi.importActual('react-router');
       return {
@@ -138,6 +140,7 @@ describe('Event Management', () => {
   });
 
   afterEach(() => {
+    vi.useFakeTimers();
     vi.clearAllMocks();
     clearAllItems();
     cleanup();
@@ -278,10 +281,15 @@ describe('Event Management', () => {
 
   describe('Responsive Dropdown Tests', () => {
     beforeEach(() => {
+      vi.useRealTimers();
       vi.mocked(useParams).mockReturnValue({
         orgId: 'orgId',
         eventId: 'event123',
       });
+    });
+
+    afterEach(() => {
+      vi.useFakeTimers();
     });
 
     it('renders dropdown with all options', async () => {
@@ -309,9 +317,11 @@ describe('Event Management', () => {
       ];
 
       // Verify all options are present
-      tabOptions.forEach((option) => {
-        expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
-      });
+      for (const option of tabOptions) {
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
+        });
+      }
     });
 
     it('switches tabs through dropdown selection', async () => {
@@ -330,27 +340,24 @@ describe('Event Management', () => {
       ];
 
       for (const { name, expectedTab } of tabOptions) {
-        // Open dropdown
         await user.click(screen.getByTestId('tabs-toggle'));
 
-        // Wait for dropdown to be visible
         await waitFor(() => {
           expect(screen.getByTestId(`tabs-item-${name}`)).toBeInTheDocument();
         });
 
-        // Click on the option
         await user.click(screen.getByTestId(`tabs-item-${name}`));
 
-        // Wait for the corresponding tab content to render
         await waitFor(() => {
           expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
         });
 
-        // Verify the dropdown item has the correct class
-        // Re-open dropdown to check active state
-        await user.click(screen.getByTestId('tabs-toggle'));
-
-        // Behavior already verified by tab content check above; skip internal class assertion
+        await waitFor(() => {
+          expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
+            'aria-expanded',
+            'false',
+          );
+        });
       }
     });
 
