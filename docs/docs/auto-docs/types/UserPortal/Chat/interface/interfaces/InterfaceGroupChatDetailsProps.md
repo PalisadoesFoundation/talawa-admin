@@ -4,23 +4,23 @@
 
 # Interface: InterfaceGroupChatDetailsProps
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L100)
+Defined in: [src/types/UserPortal/Chat/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L99)
 
 ## Properties
 
 ### chat
 
-> **chat**: [`NewChatType`](../type-aliases/NewChatType.md)
+> **chat**: [`Chat`](../type-aliases/Chat.md)
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L103)
+Defined in: [src/types/UserPortal/Chat/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L102)
 
 ***
 
 ### chatRefetch()
 
-> **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
+> **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}\>\>
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L104)
+Defined in: [src/types/UserPortal/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L103)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:104](https://github.com/Pali
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
+`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`Chat`](../type-aliases/Chat.md); \}\>\>
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:104](https://github.com/Pali
 
 > **groupChatDetailsModalisOpen**: `boolean`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L102)
+Defined in: [src/types/UserPortal/Chat/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L101)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/UserPortal/Chat/interface.ts:102](https://github.com/Pali
 
 > **toggleGroupChatDetailsModal**: () => `void`
 
-Defined in: [src/types/UserPortal/Chat/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L101)
+Defined in: [src/types/UserPortal/Chat/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/Chat/interface.ts#L100)
 
 #### Returns
 
