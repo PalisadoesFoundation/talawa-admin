@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationDonationConnectionQuery
 
-Defined in: [src/utils/interfaces.ts:2000](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2000)
+Defined in: [src/utils/interfaces.ts:2004](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2004)
 
 Defines the structure for organization donation connection query result.
 
@@ -14,4 +14,4 @@ Defines the structure for organization donation connection query result.
 
 > **getDonationByOrgIdConnection**: [`InterfaceDonation`](../../../types/UserPortal/Donation/interface/interfaces/InterfaceDonation.md)[]
 
-Defined in: [src/utils/interfaces.ts:2001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2001)
+Defined in: [src/utils/interfaces.ts:2005](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2005)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserDetailsQuery
 
-Defined in: [src/utils/interfaces.ts:2348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2348)
+Defined in: [src/utils/interfaces.ts:2382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2382)
 
 Defines the structure for USER_DETAILS query result
 
@@ -14,7 +14,7 @@ Defines the structure for USER_DETAILS query result
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2349)
+Defined in: [src/utils/interfaces.ts:2383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2383)
 
 #### avatarURL?
 

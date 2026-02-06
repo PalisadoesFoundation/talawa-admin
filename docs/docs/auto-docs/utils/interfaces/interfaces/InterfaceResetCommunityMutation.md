@@ -4,7 +4,7 @@
 
 # Interface: InterfaceResetCommunityMutation
 
-Defined in: [src/utils/interfaces.ts:2153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2153)
+Defined in: [src/utils/interfaces.ts:2163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2163)
 
 Defines the structure for RESET_COMMUNITY mutation result
 
@@ -12,6 +12,6 @@ Defines the structure for RESET_COMMUNITY mutation result
 
 ### resetCommunity
 
-> **resetCommunity**: `any`
+> **resetCommunity**: `unknown`
 
-Defined in: [src/utils/interfaces.ts:2154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2154)
+Defined in: [src/utils/interfaces.ts:2164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2164)

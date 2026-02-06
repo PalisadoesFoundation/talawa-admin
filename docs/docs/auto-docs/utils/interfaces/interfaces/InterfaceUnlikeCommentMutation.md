@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUnlikeCommentMutation
 
-Defined in: [src/utils/interfaces.ts:1991](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1991)
+Defined in: [src/utils/interfaces.ts:1995](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1995)
 
 Defines the structure for UNLIKE_COMMENT mutation result.
 
@@ -14,7 +14,7 @@ Defines the structure for UNLIKE_COMMENT mutation result.
 
 > **deleteCommentVote**: `object`
 
-Defined in: [src/utils/interfaces.ts:1992](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1992)
+Defined in: [src/utils/interfaces.ts:1996](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1996)
 
 #### id
 

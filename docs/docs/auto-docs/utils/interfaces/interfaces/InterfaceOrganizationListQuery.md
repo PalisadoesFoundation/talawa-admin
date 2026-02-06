@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationListQuery
 
-Defined in: [src/utils/interfaces.ts:1951](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1951)
+Defined in: [src/utils/interfaces.ts:1955](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1955)
 
 Defines the structure for ORGANIZATION_LIST_NO_MEMBERS query result
 
@@ -14,7 +14,7 @@ Defines the structure for ORGANIZATION_LIST_NO_MEMBERS query result
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1952](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1952)
+Defined in: [src/utils/interfaces.ts:1956](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1956)
 
 #### addressLine1
 

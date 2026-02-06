@@ -6,7 +6,7 @@
 
 > `const` **default**: `FC`\<`InterfaceGeneralSettingsProps`\>
 
-Defined in: [src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx#L23)
+Defined in: [src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx#L24)
 
 A component for displaying general settings for an organization.
 

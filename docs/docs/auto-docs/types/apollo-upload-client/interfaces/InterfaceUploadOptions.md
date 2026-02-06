@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: UploadOptions
+# Interface: InterfaceUploadOptions
 
 Defined in: [src/types/apollo-upload-client.d.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L4)
 
@@ -74,7 +74,7 @@ Defined in: [src/types/apollo-upload-client.d.ts:7](https://github.com/Palisadoe
 
 ### formData?
 
-> `optional` **formData**: `any`
+> `optional` **formData**: `FormData`
 
 Defined in: [src/types/apollo-upload-client.d.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L13)
 
@@ -90,7 +90,7 @@ Defined in: [src/types/apollo-upload-client.d.ts:14](https://github.com/Palisado
 
 ##### formData
 
-`any`
+`FormData`
 
 ##### fieldName
 
@@ -98,7 +98,7 @@ Defined in: [src/types/apollo-upload-client.d.ts:14](https://github.com/Palisado
 
 ##### file
 
-`any`
+`Blob` | `File`
 
 #### Returns
 
@@ -132,7 +132,7 @@ Defined in: [src/types/apollo-upload-client.d.ts:12](https://github.com/Palisado
 
 ##### value
 
-`any`
+`unknown`
 
 #### Returns
 

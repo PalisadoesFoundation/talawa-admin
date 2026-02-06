@@ -4,17 +4,15 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx#L43)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.tsx#L45)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-#### eventId
-
-`string`
+[`InterfaceEventDashboardProps`](../../../../../../types/AdminPortal/EventManagement/Dashboard/interfaces/InterfaceEventDashboardProps.md)
 
 ## Returns
 

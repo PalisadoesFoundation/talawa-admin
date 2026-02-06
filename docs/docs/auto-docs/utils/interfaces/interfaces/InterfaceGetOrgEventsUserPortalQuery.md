@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGetOrgEventsUserPortalQuery
 
-Defined in: [src/utils/interfaces.ts:2067](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2067)
+Defined in: [src/utils/interfaces.ts:2074](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2074)
 
 Defines the structure for GET_ORGANIZATION_EVENTS_USER_PORTAL_PG query result
 
@@ -14,7 +14,7 @@ Defines the structure for GET_ORGANIZATION_EVENTS_USER_PORTAL_PG query result
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:2068](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2068)
+Defined in: [src/utils/interfaces.ts:2075](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2075)
 
 #### events
 

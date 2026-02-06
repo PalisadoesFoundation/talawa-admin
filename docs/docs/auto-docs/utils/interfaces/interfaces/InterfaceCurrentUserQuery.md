@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCurrentUserQuery
 
-Defined in: [src/utils/interfaces.ts:2021](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2021)
+Defined in: [src/utils/interfaces.ts:2025](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2025)
 
 Defines the structure for CURRENT_USER query result
 
@@ -14,7 +14,15 @@ Defines the structure for CURRENT_USER query result
 
 > **currentUser**: `object`
 
-Defined in: [src/utils/interfaces.ts:2022](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2022)
+Defined in: [src/utils/interfaces.ts:2026](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2026)
+
+#### appUserProfile?
+
+> `optional` **appUserProfile**: `object`
+
+##### appUserProfile.adminFor?
+
+> `optional` **adminFor**: `object`[]
 
 #### avatarURL
 

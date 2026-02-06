@@ -90,7 +90,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:63](https://github.com/Pa
 
 ##### e
 
-`ChangeEvent`\<`HTMLFormElement`\>
+`FormEvent`\<`HTMLFormElement`\>
 
 #### Returns
 

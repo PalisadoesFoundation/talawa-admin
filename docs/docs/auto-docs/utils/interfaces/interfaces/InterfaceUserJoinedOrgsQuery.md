@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserJoinedOrgsQuery
 
-Defined in: [src/utils/interfaces.ts:2041](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2041)
+Defined in: [src/utils/interfaces.ts:2048](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2048)
 
 Defines the structure for USER_JOINED_ORGANIZATIONS_NO_MEMBERS query result
 
@@ -14,7 +14,7 @@ Defines the structure for USER_JOINED_ORGANIZATIONS_NO_MEMBERS query result
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2042](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2042)
+Defined in: [src/utils/interfaces.ts:2049](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2049)
 
 #### organizationsWhereMember
 

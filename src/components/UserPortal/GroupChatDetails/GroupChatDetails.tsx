@@ -49,7 +49,7 @@ import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
@@ -191,7 +191,15 @@ export default function GroupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<{
+    organization: {
+      members: {
+        edges: {
+          node: InterfaceOrganizationMember;
+        }[];
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: chat.organization?.id },
       first: 20,

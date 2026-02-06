@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventCheckInsQuery
 
-Defined in: [src/utils/interfaces.ts:2317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2317)
+Defined in: [src/utils/interfaces.ts:2351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2351)
 
 Defines the structure for EVENT_CHECKINS query result
 
@@ -14,7 +14,7 @@ Defines the structure for EVENT_CHECKINS query result
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2318)
+Defined in: [src/utils/interfaces.ts:2352](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2352)
 
 #### attendeesCheckInStatus
 

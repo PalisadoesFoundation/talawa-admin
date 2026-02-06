@@ -77,13 +77,13 @@ Defined in: [src/utils/StaticMockLink.ts:149](https://github.com/PalisadoesFound
 
 ### onError()
 
-> **onError**(`error`, `_observer?`): `boolean` \| `void`
+> **onError**(`_error`, `_observer?`): `boolean` \| `void`
 
 Defined in: [src/utils/StaticMockLink.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L255)
 
 #### Parameters
 
-##### error
+##### \_error
 
 `Error`
 

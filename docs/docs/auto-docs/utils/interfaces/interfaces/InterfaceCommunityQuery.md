@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCommunityQuery
 
-Defined in: [src/utils/interfaces.ts:1924](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1924)
+Defined in: [src/utils/interfaces.ts:1928](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1928)
 
 Defines the structure for GET_COMMUNITY_DATA_PG query result
 
@@ -14,11 +14,11 @@ Defines the structure for GET_COMMUNITY_DATA_PG query result
 
 > **community**: `object`
 
-Defined in: [src/utils/interfaces.ts:1925](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1925)
+Defined in: [src/utils/interfaces.ts:1929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1929)
 
 #### Index Signature
 
-\[`key`: `string`\]: `any`
+\[`key`: `string`\]: `unknown`
 
 #### facebookURL?
 

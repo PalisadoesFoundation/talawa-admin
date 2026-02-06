@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceStatusBadgeProps`](../../../../types/shared-components/StatusBadge/interface/interfaces/InterfaceStatusBadgeProps.md)\>
 
-Defined in: [src/shared-components/StatusBadge/StatusBadge.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/StatusBadge/StatusBadge.tsx#L69)
+Defined in: [src/shared-components/StatusBadge/StatusBadge.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/StatusBadge/StatusBadge.tsx#L72)
 
 StatusBadge component for displaying status information with consistent styling.
 
@@ -16,6 +16,7 @@ This component wraps MUI Chip and provides:
 - Internationalization support with fallback keys (statusBadge.variant)
 - Accessibility features (role="status", aria-label)
 - Optional icon and label customization
+- Interactivity support (onClick, clickable)
 
 ## Param
 

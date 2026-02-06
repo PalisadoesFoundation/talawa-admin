@@ -4,7 +4,7 @@
 
 # Type Alias: StatusVariant
 
-> **StatusVariant** = `"completed"` \| `"pending"` \| `"active"` \| `"inactive"` \| `"approved"` \| `"rejected"` \| `"disabled"` \| `"accepted"` \| `"declined"` \| `"no_response"`
+> **StatusVariant** = `"completed"` \| `"pending"` \| `"active"` \| `"inactive"` \| `"approved"` \| `"rejected"` \| `"disabled"` \| `"accepted"` \| `"declined"` \| `"no_response"` \| `"primary"` \| `"default"`
 
 Defined in: [src/types/shared-components/StatusBadge/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L7)
 

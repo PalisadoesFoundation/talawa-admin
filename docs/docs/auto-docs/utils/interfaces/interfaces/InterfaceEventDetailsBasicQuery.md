@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventDetailsBasicQuery
 
-Defined in: [src/utils/interfaces.ts:2414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2414)
+Defined in: [src/utils/interfaces.ts:2448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2448)
 
 Defines the structure for EVENT_DETAILS_BASIC query result
 
@@ -14,7 +14,7 @@ Defines the structure for EVENT_DETAILS_BASIC query result
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2415](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2415)
+Defined in: [src/utils/interfaces.ts:2449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2449)
 
 #### id
 

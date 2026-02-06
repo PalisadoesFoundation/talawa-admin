@@ -4,7 +4,7 @@
 
 # Class: UploadHttpLink
 
-Defined in: [src/types/apollo-upload-client.d.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L17)
+Defined in: [src/types/apollo-upload-client.d.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L21)
 
 ## Extends
 
@@ -16,13 +16,13 @@ Defined in: [src/types/apollo-upload-client.d.ts:17](https://github.com/Palisado
 
 > **new UploadHttpLink**(`options?`): `UploadHttpLink`
 
-Defined in: [src/types/apollo-upload-client.d.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L18)
+Defined in: [src/types/apollo-upload-client.d.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/apollo-upload-client.d.ts#L22)
 
 #### Parameters
 
 ##### options?
 
-[`UploadOptions`](../interfaces/UploadOptions.md)
+[`InterfaceUploadOptions`](../interfaces/InterfaceUploadOptions.md)
 
 #### Returns
 

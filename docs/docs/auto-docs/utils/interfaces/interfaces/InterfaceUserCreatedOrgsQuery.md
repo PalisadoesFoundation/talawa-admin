@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserCreatedOrgsQuery
 
-Defined in: [src/utils/interfaces.ts:2057](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2057)
+Defined in: [src/utils/interfaces.ts:2064](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2064)
 
 Defines the structure for USER_CREATED_ORGANIZATIONS query result
 
@@ -14,7 +14,7 @@ Defines the structure for USER_CREATED_ORGANIZATIONS query result
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2058)
+Defined in: [src/utils/interfaces.ts:2065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2065)
 
 #### createdOrganizations
 

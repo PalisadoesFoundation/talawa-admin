@@ -52,6 +52,16 @@ Opens the modal
 
 ***
 
+### setIsOpen
+
+> **setIsOpen**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L317)
+
+Sets the modal open/close state directly
+
+***
+
 ### toggle()
 
 > **toggle**: () => `void`

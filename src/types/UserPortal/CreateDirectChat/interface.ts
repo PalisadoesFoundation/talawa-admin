@@ -1,37 +1,14 @@
-import type {
-  ApolloCache,
-  ApolloQueryResult,
-  DefaultContext,
-  FetchResult,
-  MutationFunctionOptions,
-  OperationVariables,
-} from '@apollo/client';
+import type { ApolloQueryResult, FetchResult } from '@apollo/client';
 import type { Chat } from 'types/UserPortal/Chat/interface';
 
-export type ChatsListRefetch = (
-  variables?: Partial<{ id: string }> | undefined,
-) => Promise<ApolloQueryResult<unknown>>;
+export type ChatsListRefetch = (variables?: any) => Promise<any>;
 
 export type CreateChatMutation = (
-  options?:
-    | MutationFunctionOptions<
-        unknown,
-        OperationVariables,
-        DefaultContext,
-        ApolloCache<unknown>
-      >
-    | undefined,
+  options?: any,
 ) => Promise<FetchResult<unknown>>;
 
 export type CreateChatMembershipMutation = (
-  options?:
-    | MutationFunctionOptions<
-        unknown,
-        OperationVariables,
-        DefaultContext,
-        ApolloCache<unknown>
-      >
-    | undefined,
+  options?: any,
 ) => Promise<FetchResult<unknown>>;
 
 /**

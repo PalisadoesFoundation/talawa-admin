@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAcceptMembershipRequestMutation
 
-Defined in: [src/utils/interfaces.ts:2185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2185)
+Defined in: [src/utils/interfaces.ts:2195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2195)
 
 Defines the structure for ACCEPT_ORGANIZATION_REQUEST_MUTATION result
 
@@ -14,7 +14,7 @@ Defines the structure for ACCEPT_ORGANIZATION_REQUEST_MUTATION result
 
 > **acceptMembershipRequest**: `object`
 
-Defined in: [src/utils/interfaces.ts:2186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2186)
+Defined in: [src/utils/interfaces.ts:2196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2196)
 
 #### message
 

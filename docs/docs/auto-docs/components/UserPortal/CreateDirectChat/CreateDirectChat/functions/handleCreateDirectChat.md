@@ -6,7 +6,7 @@
 
 > **handleCreateDirectChat**(`id`, `userName`, `chats`, `t`, `createChat`, `createChatMembership`, `organizationId`, `userId`, `currentUserName`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L75)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L61)
 
 ## Parameters
 
@@ -28,11 +28,11 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:75]
 
 ### createChat
 
-`any`
+[`CreateChatMutation`](../../../../../types/UserPortal/CreateDirectChat/interface/type-aliases/CreateChatMutation.md)
 
 ### createChatMembership
 
-`any`
+[`CreateChatMembershipMutation`](../../../../../types/UserPortal/CreateDirectChat/interface/type-aliases/CreateChatMembershipMutation.md)
 
 ### organizationId
 
@@ -48,7 +48,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:75]
 
 ### chatsListRefetch
 
-\{(`variables?`): `Promise`\<`unknown`\>; (): `Promise`\<`unknown`\>; \}
+[`ChatsListRefetch`](../../../../../types/UserPortal/CreateDirectChat/interface/type-aliases/ChatsListRefetch.md)
 
 ### toggleCreateDirectChatModal
 

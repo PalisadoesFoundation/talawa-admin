@@ -6,7 +6,7 @@
 
 > **computeCalendarFromStartDate**(`startDate`, `refDate`): `object`
 
-Defined in: [src/screens/UserPortal/Events/Events.tsx:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L91)
+Defined in: [src/screens/UserPortal/Events/Events.tsx:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Events/Events.tsx#L97)
 
 ## Parameters
 

@@ -6,13 +6,13 @@
 
 > **CreateChatMutation** = (`options?`) => `Promise`\<`FetchResult`\<`unknown`\>\>
 
-Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L15)
+Defined in: [src/types/UserPortal/CreateDirectChat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/CreateDirectChat/interface.ts#L6)
 
 ## Parameters
 
 ### options?
 
-`MutationFunctionOptions`\<`unknown`, `OperationVariables`, `DefaultContext`, `ApolloCache`\<`unknown`\>\>
+`any`
 
 ## Returns
 

@@ -14,7 +14,7 @@ Props for FormFieldGroup component.
 
 ## Indexable
 
-\[`x`: `string`\]: `unknown`
+\[`x`: `string`\]: `any`
 
 Additional HTML input attributes passed through to the underlying control
 
