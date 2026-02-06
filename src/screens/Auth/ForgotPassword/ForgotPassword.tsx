@@ -211,7 +211,7 @@ const ForgotPassword = (): JSX.Element => {
                       pattern="[0-9]*"
                       placeholder={t('userOtp')}
                       value={forgotPassFormData.userOtp}
-                      onChange={(value) =>
+                      onChange={(value: string) =>
                         setForgotPassFormData({
                           ...forgotPassFormData,
                           userOtp: value,
@@ -227,7 +227,7 @@ const ForgotPassword = (): JSX.Element => {
                       type="password"
                       placeholder={tCommon('password')}
                       value={forgotPassFormData.newPassword}
-                      onChange={(value) =>
+                      onChange={(value: string) =>
                         setForgotPassFormData({
                           ...forgotPassFormData,
                           newPassword: value,
@@ -243,7 +243,7 @@ const ForgotPassword = (): JSX.Element => {
                       type="password"
                       placeholder={tCommon('password')}
                       value={forgotPassFormData.confirmNewPassword}
-                      onChange={(value) =>
+                      onChange={(value: string) =>
                         setForgotPassFormData({
                           ...forgotPassFormData,
                           confirmNewPassword: value,

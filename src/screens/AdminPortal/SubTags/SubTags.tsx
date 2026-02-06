@@ -444,7 +444,7 @@ function SubTags(): JSX.Element {
           label={t('tagName')}
           placeholder={t('tagNamePlaceholder')}
           value={tagName}
-          onChange={(val) => {
+          onChange={(val: string) => {
             setTagName(val);
             if (!tagNameTouched) setTagNameTouched(true);
           }}

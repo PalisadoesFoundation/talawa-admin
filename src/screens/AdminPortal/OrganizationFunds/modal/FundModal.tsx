@@ -217,10 +217,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         </div>
 
         <div
-          className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit'
+          className={`d-flex mt-2 mb-3 flex-wrap ${
+            mode === 'edit'
               ? 'justify-content-between'
               : 'justify-content-start gap-3'
-            }`}
+          }`}
         >
           <div className="d-flex align-items-center">
             <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>

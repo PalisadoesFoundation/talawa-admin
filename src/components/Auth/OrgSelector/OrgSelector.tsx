@@ -186,10 +186,11 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
                   role="option"
                   aria-selected={org._id === value}
                   tabIndex={-1}
-                  className={`${styles.orgSelectorOption} ${index === highlightedIndex
+                  className={`${styles.orgSelectorOption} ${
+                    index === highlightedIndex
                       ? styles.orgSelectorOptionHighlighted
                       : ''
-                    } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
+                  } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
                   onClick={() => handleOptionClick(org._id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {

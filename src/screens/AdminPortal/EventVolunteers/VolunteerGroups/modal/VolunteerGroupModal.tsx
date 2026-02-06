@@ -273,7 +273,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         label={tCommon('name')}
         required
         value={name}
-        onChange={(value: string) => setFormState({ ...formState, name: value })}
+        onChange={(value: string) =>
+          setFormState({ ...formState, name: value })
+        }
         data-testid="groupNameInput"
       />
 
@@ -281,7 +283,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         name="description"
         label={tCommon('description')}
         value={description ?? ''}
-        onChange={(value: string) => setFormState({ ...formState, description: value })}
+        onChange={(value: string) =>
+          setFormState({ ...formState, description: value })
+        }
         data-testid="groupDescriptionInput"
       />
 

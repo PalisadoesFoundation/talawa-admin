@@ -730,7 +730,9 @@ const ItemModal: FC<IItemModalProps> = ({
             data-cy="preCompletionNotes"
             className={styles.noOutline}
             value={preCompletionNotes}
-            onChange={(value) => handleFormChange('preCompletionNotes', value)}
+            onChange={(value: string) =>
+              handleFormChange('preCompletionNotes', value)
+            }
           />
         </>
       )}
@@ -741,7 +743,9 @@ const ItemModal: FC<IItemModalProps> = ({
           label={t('postCompletionNotes')}
           className={styles.noOutline}
           value={postCompletionNotes || ''}
-          onChange={(value) => handleFormChange('postCompletionNotes', value)}
+          onChange={(value: string) =>
+            handleFormChange('postCompletionNotes', value)
+          }
           as="textarea"
           rows={3}
         />

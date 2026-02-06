@@ -135,6 +135,7 @@ export function useMutationModal<TData, TResult = unknown>(
 
   return {
     isOpen,
+    setIsOpen,
     open,
     close,
     toggle,

@@ -293,7 +293,7 @@ export default function Events(): JSX.Element {
         variables: { input },
       });
       const createEventData = mutationResult.data;
-      const errors = mutationResult.errors;
+      const errors = mutationResult.error;
 
       // Handle partial success: prioritize data over errors
       // If createEventData exists, treat as success even if errors are present
@@ -308,8 +308,8 @@ export default function Events(): JSX.Element {
         }
         setFormResetKey((prev) => prev + 1);
         createEventModal.close();
-      } else if (errors && errors.length > 0) {
-        throw new Error(errors[0].message);
+      } else if (errors) {
+        throw errors;
       }
     } catch (error: unknown) {
       errorHandler(t, error);

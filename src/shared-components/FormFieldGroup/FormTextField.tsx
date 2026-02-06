@@ -10,7 +10,10 @@ import type { IFormTextFieldProps } from '../../types/FormFieldGroup/interface';
  * @param props - The properties for the FormTextField component.
  * @returns A text field React element.
  */
-export const FormTextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, IFormTextFieldProps>(
+export const FormTextField = forwardRef<
+  HTMLInputElement | HTMLTextAreaElement,
+  IFormTextFieldProps
+>(
   (
     {
       name,
@@ -60,9 +63,9 @@ export const FormTextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, 
         {startAdornment || endAdornment ? (
           <React.Fragment>
             <InputGroup>
-              {startAdornment}
+              {startAdornment as any}
               {renderControl()}
-              {endAdornment}
+              {endAdornment as any}
             </InputGroup>
           </React.Fragment>
         ) : (
@@ -70,7 +73,7 @@ export const FormTextField = forwardRef<HTMLInputElement | HTMLTextAreaElement, 
         )}
       </FormFieldGroup>
     );
-  }
+  },
 );
 
 FormTextField.displayName = 'FormTextField';

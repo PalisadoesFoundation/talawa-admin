@@ -69,10 +69,10 @@ export const useUpdateEventHandler = () => {
         updateInput.name = formState.name;
       }
       if (formState.eventDescription !== eventListCardProps.description) {
-        updateInput.description = formState.eventDescription;
+        updateInput.description = formState.eventDescription ?? undefined;
       }
       if (formState.location !== eventListCardProps.location) {
-        updateInput.location = formState.location;
+        updateInput.location = formState.location ?? undefined;
       }
       if (publicChecked !== eventListCardProps.isPublic) {
         updateInput.isPublic = publicChecked;
@@ -198,10 +198,11 @@ export const useUpdateEventHandler = () => {
               entireSeriesInput.name = formState.name;
             }
             if (formState.eventDescription !== eventListCardProps.description) {
-              entireSeriesInput.description = formState.eventDescription;
+              entireSeriesInput.description =
+                formState.eventDescription ?? undefined;
             }
             if (formState.location !== eventListCardProps.location) {
-              entireSeriesInput.location = formState.location;
+              entireSeriesInput.location = formState.location ?? undefined;
             }
             if (publicChecked !== eventListCardProps.isPublic) {
               entireSeriesInput.isPublic = publicChecked;

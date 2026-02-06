@@ -312,7 +312,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-cy="updateDescription"
             required
             value={
-              formState.eventDescription?.length > 256
+              formState.eventDescription &&
+              formState.eventDescription.length > 256
                 ? formState.eventDescription.substring(0, 256) + '...'
                 : formState.eventDescription || ''
             }

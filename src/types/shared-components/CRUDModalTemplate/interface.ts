@@ -341,7 +341,7 @@ export interface InterfaceUseFormModalReturn<
 export interface InterfaceUseMutationModalReturn<
   TData,
   TResult = unknown,
-// i18n-ignore-next-line
+  // i18n-ignore-next-line
 > extends InterfaceUseFormModalReturn<TData> {
   /** Executes the mutation with current form data */
   execute: (data?: TData) => Promise<TResult | undefined>;

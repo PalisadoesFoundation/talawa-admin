@@ -36,36 +36,40 @@ const AgendaCategoryUpdateModal: React.FC<
   updateAgendaCategoryHandler,
   t,
 }) => {
-    return (
-      <EditModal
-        open={agendaCategoryUpdateModalIsOpen}
-        onClose={hideUpdateModal}
-        onSubmit={updateAgendaCategoryHandler}
-        title={t('updateAgendaCategory')}
-        className={styles.campaignModal}
-        data-testid="agendaCategoryUpdateModal"
-        primaryText={t('update')}
-      >
-        <FormTextField
-          name="name"
-          label={t('name')}
-          placeholder={t('name')}
-          value={formState.name}
-          required
-          onChange={(value: string) => setFormState({ ...formState, name: value })}
-          data-testid="agendaCategoryNameInput"
-        />
-        <FormTextField
-          name="description"
-          label={t('description')}
-          placeholder={t('description')}
-          value={formState.description}
-          required
-          onChange={(value: string) => setFormState({ ...formState, description: value })}
-          data-testid="agendaCategoryDescriptionInput"
-        />
-      </EditModal>
-    );
-  };
+  return (
+    <EditModal
+      open={agendaCategoryUpdateModalIsOpen}
+      onClose={hideUpdateModal}
+      onSubmit={updateAgendaCategoryHandler}
+      title={t('updateAgendaCategory')}
+      className={styles.campaignModal}
+      data-testid="agendaCategoryUpdateModal"
+      primaryText={t('update')}
+    >
+      <FormTextField
+        name="name"
+        label={t('name')}
+        placeholder={t('name')}
+        value={formState.name}
+        required
+        onChange={(value: string) =>
+          setFormState({ ...formState, name: value })
+        }
+        data-testid="agendaCategoryNameInput"
+      />
+      <FormTextField
+        name="description"
+        label={t('description')}
+        placeholder={t('description')}
+        value={formState.description}
+        required
+        onChange={(value: string) =>
+          setFormState({ ...formState, description: value })
+        }
+        data-testid="agendaCategoryDescriptionInput"
+      />
+    </EditModal>
+  );
+};
 
 export default AgendaCategoryUpdateModal;

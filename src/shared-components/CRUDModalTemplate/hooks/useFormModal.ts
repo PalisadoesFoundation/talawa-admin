@@ -79,6 +79,7 @@ export function useFormModal<T>(
 
   return {
     isOpen,
+    setIsOpen,
     open,
     close,
     toggle,

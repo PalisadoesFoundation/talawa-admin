@@ -18,7 +18,7 @@ export const RecurrenceFrequencySection: React.FC<
         name="recurrenceInterval"
         type="number"
         value={localInterval.toString()}
-        onChange={(value) =>
+        onChange={(value: string) =>
           onIntervalChange({
             target: { value },
           } as React.ChangeEvent<HTMLInputElement>)

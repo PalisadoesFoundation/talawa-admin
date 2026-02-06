@@ -88,14 +88,14 @@ const EventForm: React.FC<IEventFormProps> = ({
   } = useModalState();
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
-    (!!initialValues.recurrenceRule || !showRecurrenceToggle),
+      (!!initialValues.recurrenceRule || !showRecurrenceToggle),
   );
 
   useEffect(() => {
     setFormState(initialValues);
     setRecurrenceEnabled(
       !disableRecurrence &&
-      (!!initialValues.recurrenceRule || !showRecurrenceToggle),
+        (!!initialValues.recurrenceRule || !showRecurrenceToggle),
     );
     // Sync visibility state with initialValues
     if (
@@ -266,7 +266,9 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.name}
           className={styles.inputField}
-          onChange={(value) => setFormState({ ...formState, name: value })}
+          onChange={(value: string) =>
+            setFormState({ ...formState, name: value })
+          }
           data-testid="eventTitleInput"
           data-cy="eventTitleInput"
         />
@@ -277,7 +279,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.description}
           className={styles.inputField}
-          onChange={(value) =>
+          onChange={(value: string) =>
             setFormState({ ...formState, description: value })
           }
           data-testid="eventDescriptionInput"
@@ -290,7 +292,9 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.location}
           className={styles.inputField}
-          onChange={(value) => setFormState({ ...formState, location: value })}
+          onChange={(value: string) =>
+            setFormState({ ...formState, location: value })
+          }
           data-testid="eventLocationInput"
           data-cy="eventLocationInput"
         />
@@ -520,8 +524,8 @@ const EventForm: React.FC<IEventFormProps> = ({
               recurrenceRule:
                 typeof newRecurrence === 'function'
                   ? newRecurrence(
-                    prev.recurrenceRule as InterfaceRecurrenceRule,
-                  )
+                      prev.recurrenceRule as InterfaceRecurrenceRule,
+                    )
                   : newRecurrence,
             }));
           }}

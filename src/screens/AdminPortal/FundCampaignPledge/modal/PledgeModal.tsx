@@ -98,10 +98,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     const typed = memberData as
       | {
-        organization: {
-          members: { edges: Array<{ node: InterfaceUserInfoPG }> };
-        };
-      }
+          organization: {
+            members: { edges: Array<{ node: InterfaceUserInfoPG }> };
+          };
+        }
       | undefined;
     if (typed?.organization?.members?.edges) {
       const members = typed.organization.members.edges.map(
@@ -125,8 +125,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           id: pledge?.id ?? '',
           ...(pledge &&
             formState.pledgeAmount !== pledge.amount && {
-            amount: formState.pledgeAmount,
-          }),
+              amount: formState.pledgeAmount,
+            }),
         };
 
         await updatePledge({ variables });

@@ -118,10 +118,13 @@ export function usePluginActions({
     [pluginData, updatePlugin, refetch],
   );
 
-  const uninstallPlugin = useCallback((plugin: IPluginMeta) => {
-    setPluginToUninstall(plugin);
-    openUninstallModal();
-  }, [openUninstallModal]);
+  const uninstallPlugin = useCallback(
+    (plugin: IPluginMeta) => {
+      setPluginToUninstall(plugin);
+      openUninstallModal();
+    },
+    [openUninstallModal],
+  );
 
   const handleUninstallConfirm = useCallback(async () => {
     if (!pluginToUninstall) return;

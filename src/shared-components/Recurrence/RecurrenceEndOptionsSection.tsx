@@ -101,7 +101,7 @@ export const RecurrenceEndOptionsSection: React.FC<
                       hideLabel
                       type="number"
                       value={localCount.toString()}
-                      onChange={(value) => {
+                      onChange={(value: string) => {
                         // Create synthetic event to match expected interface
                         const syntheticEvent = {
                           target: { value },

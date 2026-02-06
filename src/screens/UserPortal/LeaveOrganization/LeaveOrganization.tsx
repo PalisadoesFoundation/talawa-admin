@@ -244,7 +244,7 @@ const LeaveOrganization = (): JSX.Element => {
             type="email"
             placeholder={t('leaveOrganization.enterYourEmail')}
             value={email}
-            onChange={(val) => setEmail(val)}
+            onChange={(val: string) => setEmail(val)}
             error={error}
             touched={!!error}
             required

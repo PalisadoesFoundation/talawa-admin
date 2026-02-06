@@ -35,36 +35,40 @@ const AgendaCategoryCreateModal: React.FC<
   createAgendaCategoryHandler,
   t,
 }) => {
-    return (
-      <CreateModal
-        open={agendaCategoryCreateModalIsOpen}
-        onClose={hideCreateModal}
-        onSubmit={createAgendaCategoryHandler}
-        title={t('agendaCategoryDetails')}
-        className={`mt-5 ${styles.campaignModal}`}
-        data-testid="agendaCategoryCreateModal"
-        primaryText={t('createAgendaCategory')}
-      >
-        <FormTextField
-          name="name"
-          label={t('name')}
-          placeholder={t('name')}
-          value={formState.name}
-          required
-          onChange={(value: string) => setFormState({ ...formState, name: value })}
-          data-testid="agendaCategoryNameInput"
-        />
-        <FormTextField
-          name="description"
-          label={t('description')}
-          placeholder={t('description')}
-          required
-          value={formState.description}
-          onChange={(value: string) => setFormState({ ...formState, description: value })}
-          data-testid="agendaCategoryDescriptionInput"
-        />
-      </CreateModal>
-    );
-  };
+  return (
+    <CreateModal
+      open={agendaCategoryCreateModalIsOpen}
+      onClose={hideCreateModal}
+      onSubmit={createAgendaCategoryHandler}
+      title={t('agendaCategoryDetails')}
+      className={`mt-5 ${styles.campaignModal}`}
+      data-testid="agendaCategoryCreateModal"
+      primaryText={t('createAgendaCategory')}
+    >
+      <FormTextField
+        name="name"
+        label={t('name')}
+        placeholder={t('name')}
+        value={formState.name}
+        required
+        onChange={(value: string) =>
+          setFormState({ ...formState, name: value })
+        }
+        data-testid="agendaCategoryNameInput"
+      />
+      <FormTextField
+        name="description"
+        label={t('description')}
+        placeholder={t('description')}
+        required
+        value={formState.description}
+        onChange={(value: string) =>
+          setFormState({ ...formState, description: value })
+        }
+        data-testid="agendaCategoryDescriptionInput"
+      />
+    </CreateModal>
+  );
+};
 
 export default AgendaCategoryCreateModal;
