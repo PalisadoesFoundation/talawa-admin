@@ -323,6 +323,11 @@ describe('Event Management', () => {
       ];
 
       for (const { name, expectedTab } of tabOptions) {
+        // Ensure dropdown is closed before (re-)opening
+        await waitFor(() => {
+          expect(screen.queryByTestId('tabs-menu')).not.toBeInTheDocument();
+        });
+
         await user.click(screen.getByTestId('tabs-toggle'));
 
         await waitFor(() => {
@@ -333,6 +338,10 @@ describe('Event Management', () => {
 
         await waitFor(() => {
           expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
+          expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
+            'aria-expanded',
+            'false',
+          );
         });
       }
     });
