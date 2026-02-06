@@ -1012,6 +1012,40 @@ describe('AgendaDragAndDrop', () => {
     });
   });
 
+  describe('mutex protection (race condition prevention)', () => {
+    it('ignores second drag while first mutation is running', async () => {
+      renderAgendaDragAndDrop(MOCKS_SUCCESS_ITEM_SEQUENCE);
+
+      const dropResult: DropResult = {
+        source: { index: 0, droppableId: 'agenda-items-folder1' },
+        destination: { index: 1, droppableId: 'agenda-items-folder1' },
+        draggableId: 'item1',
+        type: 'ITEM',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      };
+
+      // fire first drag (starts mutation + locks mutex)
+      capturedOnDragEnd?.(dropResult);
+
+      // immediately fire second drag
+      capturedOnDragEnd?.(dropResult);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.success).toHaveBeenCalledWith(
+            'itemSequenceUpdateSuccessMsg',
+          );
+        },
+        { timeout: 5000 },
+      );
+
+      // mutex ensures only ONE mutation cycle ran
+      expect(NotificationToast.success).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('Additional item drag scenarios', () => {
     it('covers early return when ITEM destination is null', () => {
       renderAgendaDragAndDrop();

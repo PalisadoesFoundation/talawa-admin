@@ -56,6 +56,10 @@ export default function AgendaDragAndDrop({
   );
   const { t: tErrors } = useTranslation('errors');
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
+  /**
+   * Prevent concurrent drag mutations
+   */
+  const isMutatingRef = React.useRef(false);
 
   /**
    * Handles reordering of agenda items within the same folder.
@@ -180,23 +184,31 @@ export default function AgendaDragAndDrop({
    * Drag events are serialized; optimistic updates with rollback prevent race conditions.
    */
   const handleDragEnd = async (result: DropResult): Promise<void> => {
-    const { destination, source, type } = result;
+    if (isMutatingRef.current) return;
+    isMutatingRef.current = true;
 
-    if (!destination) return;
-    if (
-      destination.index === source.index &&
-      destination.droppableId === source.droppableId
-    )
-      return;
+    try {
+      const { destination, source, type } = result;
 
-    if (type === 'ITEM') {
-      await handleItemReorder(result);
-      return;
-    }
+      if (!destination) return;
 
-    if (type === 'FOLDER') {
-      await handleFolderReorder(result);
-      return;
+      if (
+        destination.index === source.index &&
+        destination.droppableId === source.droppableId
+      )
+        return;
+
+      if (type === 'ITEM') {
+        await handleItemReorder(result);
+        return;
+      }
+
+      if (type === 'FOLDER') {
+        await handleFolderReorder(result);
+        return;
+      }
+    } finally {
+      isMutatingRef.current = false;
     }
   };
 
