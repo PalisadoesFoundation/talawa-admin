@@ -113,7 +113,7 @@ export const RegistrationForm = ({
         value={formData.email}
         error={errors.email}
         onChange={(e) => setFormData((s) => ({ ...s, email: e.target.value }))}
-        testId="signInEmail"
+        testId="registrationEmail"
       />
 
       <PasswordField
@@ -144,16 +144,14 @@ export const RegistrationForm = ({
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
         testId="selectOrg"
       />
-      {enableRecaptcha && (
+      {enableRecaptcha && RECAPTCHA_SITE_KEY && (
         <div data-testid="recaptcha-placeholder">
-          {RECAPTCHA_SITE_KEY && (
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={RECAPTCHA_SITE_KEY}
-              onChange={(token): void => setRecaptchaToken(token)}
-              onExpired={(): void => setRecaptchaToken(null)}
-            />
-          )}
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={(token): void => setRecaptchaToken(token)}
+            onExpired={(): void => setRecaptchaToken(null)}
+          />
         </div>
       )}
       <button

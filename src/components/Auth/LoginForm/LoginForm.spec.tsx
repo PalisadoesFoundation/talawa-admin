@@ -331,7 +331,7 @@ describe('LoginForm', () => {
   });
 
   describe('Form Submission - Error Handling', () => {
-    test('calls onError when login fails with network error', async () => {
+    test('calls onError when login fails with network error (catch block exercises reset/onError)', async () => {
       const onError = vi.fn();
 
       render(
@@ -352,6 +352,9 @@ describe('LoginForm', () => {
         expect(onError).toHaveBeenCalled();
       });
       expect(onError).toHaveBeenCalledTimes(1);
+      expect((onError.mock.calls[0][0] as Error).message).toBe(
+        'Invalid credentials',
+      );
     });
 
     test('calls onError when login fails with GraphQL error', async () => {

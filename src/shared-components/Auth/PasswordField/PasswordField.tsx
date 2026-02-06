@@ -6,8 +6,26 @@ import { usePasswordVisibility } from '../../../hooks/usePasswordVisibility';
 import type { InterfacePasswordFieldProps } from '../../../types/shared-components/Auth/PasswordField/interface';
 
 /**
- * Reusable password field component with visibility toggle functionality.
- * Uses the shared FormTextField with endAdornment for show/hide password.
+ * Reusable password input field with visibility toggle (show/hide password).
+ *
+ * @param props - Component props (see {@link InterfacePasswordFieldProps}): label, name, value, onChange,
+ *   placeholder, error, testId, dataCy, showPassword, onToggleVisibility.
+ * @remarks
+ * Uses FormTextField with an endAdornment button to toggle visibility.
+ * Visibility can be controlled via showPassword/onToggleVisibility or managed
+ * internally via usePasswordVisibility. Renders a password (or text) input
+ * with an eye icon to show/hide the value.
+ * @returns The rendered password input field with visibility toggle.
+ * @example
+ * ```tsx
+ * <PasswordField
+ *   label="Password"
+ *   name="password"
+ *   value={password}
+ *   onChange={(e) => setPassword(e.target.value)}
+ *   testId="passwordField"
+ * />
+ * ```
  */
 export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   label,
