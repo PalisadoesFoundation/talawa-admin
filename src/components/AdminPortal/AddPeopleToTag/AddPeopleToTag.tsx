@@ -233,7 +233,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     {
       field: 'id',
       headerName: '#',
-      minWidth: 100,
+      minWidth: Number(100),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -246,7 +246,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       field: 'userName',
       headerName: t('userName'),
       flex: 2,
-      minWidth: 100,
+      minWidth: Number(100),
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
@@ -262,7 +262,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       headerName: t('actions'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
+      minWidth: Number(100),
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,

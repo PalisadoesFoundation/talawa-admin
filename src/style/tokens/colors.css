@@ -1,6 +1,9 @@
 :root {
   --color-white: #ffffff;
   --color-black: #000000;
+  --color-black-opacity-5: rgba(0, 0, 0, 0.05);
+  --color-black-opacity-10: rgba(0, 0, 0, 0.1);
+  --color-black-opacity-20: rgba(0, 0, 0, 0.2);
 
   --color-gray-50: #f8f9fa;
   --color-gray-100: #eaebef;

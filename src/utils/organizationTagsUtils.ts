@@ -18,28 +18,28 @@ export const dataGridStyle = {
   },
   '& .MuiDataGrid-row:hover': {
     backgroundColor: 'transparent',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 0 0 1px var(--color-black-opacity-10)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: 'transparent',
-    boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+    boxShadow: '0 0 0 1px var(--color-black-opacity-10)',
   },
   '& .MuiDataGrid-root': {
-    borderRadius: '0.1rem',
+    borderRadius: 'var(--radius-xs)',
   },
   '& .MuiDataGrid-main': {
-    borderRadius: '0.1rem',
+    borderRadius: 'var(--radius-xs)',
   },
   '& .MuiDataGrid-topContainer': {
     position: 'fixed',
-    top: 290,
+    top: 'var(--space-290)',
     zIndex: 1,
   },
   '& .MuiDataGrid-virtualScrollerContent': {
-    marginTop: 6.5,
+    marginTop: 'var(--space-6-5)',
   },
   '& .MuiDataGrid-cell:focus': {
-    outline: '2px solid #000',
+    outline: 'var(--border-2) solid var(--color-black)',
     outlineOffset: '-2px',
   },
 };

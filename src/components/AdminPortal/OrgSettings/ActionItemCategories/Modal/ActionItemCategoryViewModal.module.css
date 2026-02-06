@@ -1,6 +1,6 @@
 .statusCircle {
-  font-size: 0.8rem;
-  margin-right: 8px;
+  font-size: var(--font-size-13);
+  margin-right: var(--space-3);
   align-self: center;
 }
 

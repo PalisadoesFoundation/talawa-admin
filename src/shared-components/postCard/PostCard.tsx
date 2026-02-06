@@ -238,10 +238,10 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }}
             PaperProps={{
               sx: {
-                minWidth: '150px',
+                minWidth: 'var(--space-15)',
                 '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
+                  px: Number(2),
+                  py: Number(1),
                 },
               },
             }}
@@ -514,7 +514,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }
             sx={{
               backgroundColor: 'action.hover',
-              borderRadius: 20,
+              borderRadius: 'var(--radius-20)',
               px: 2,
               py: 0.5,
             }}

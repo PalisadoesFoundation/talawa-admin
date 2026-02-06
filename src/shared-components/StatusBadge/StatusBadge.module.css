@@ -5,8 +5,8 @@
 
 /* Base badge styles */
 .statusBadge {
-  font-weight: 500;
-  border-radius: 4px;
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
 }
@@ -15,57 +15,57 @@
 .success {
   background-color: var(--bs-success-bg-subtle) !important;
   color: var(--bs-success-text-emphasis) !important;
-  border: 1px solid var(--bs-success-border-subtle) !important;
+  border: var(--border-1) solid var(--bs-success-border-subtle) !important;
 }
 
 .warning {
   background-color: var(--bs-warning-bg-subtle) !important;
   color: var(--bs-warning-text-emphasis) !important;
-  border: 1px solid var(--bs-warning-border-subtle) !important;
+  border: var(--border-1) solid var(--bs-warning-border-subtle) !important;
 }
 
 .error {
   background-color: var(--bs-danger-bg-subtle) !important;
   color: var(--bs-danger-text-emphasis) !important;
-  border: 1px solid var(--bs-danger-border-subtle) !important;
+  border: var(--border-1) solid var(--bs-danger-border-subtle) !important;
 }
 
 .info {
   background-color: var(--bs-info-bg-subtle) !important;
   color: var(--bs-info-text-emphasis) !important;
-  border: 1px solid var(--bs-info-border-subtle) !important;
+  border: var(--border-1) solid var(--bs-info-border-subtle) !important;
 }
 
 .neutral {
   background-color: var(--bs-gray-200) !important;
   color: var(--bs-gray-700) !important;
-  border: 1px solid var(--bs-gray-300) !important;
+  border: var(--border-1) solid var(--bs-gray-300) !important;
 }
 
 .primary {
   background-color: var(--bs-primary-bg-subtle) !important;
   color: var(--bs-primary-text-emphasis) !important;
-  border: 1px solid var(--bs-primary-border-subtle) !important;
+  border: var(--border-1) solid var(--bs-primary-border-subtle) !important;
 }
 
 .default {
   background-color: transparent !important;
   color: var(--bs-body-color) !important;
-  border: 1px solid var(--bs-border-color) !important;
+  border: var(--border-1) solid var(--bs-border-color) !important;
 }
 
 /* Size variants */
 .sm {
-  font-size: 0.75rem;
-  height: 20px;
+  font-size: var(--font-size-xs);
+  height: var(--space-6);
 }
 
 .md {
-  font-size: 0.875rem;
-  height: 24px;
+  font-size: var(--font-size-sm);
+  height: var(--space-7);
 }
 
 .lg {
-  font-size: 1rem;
-  height: 32px;
+  font-size: var(--font-size-md);
+  height: var(--space-8);
 }

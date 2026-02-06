@@ -154,7 +154,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'index',
         headerName: '#',
-        width: 70,
+        width: Number(70),
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -163,7 +163,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'name',
         headerName: t('Member Name'),
-        width: 200,
+        width: Number(200),
         sortable: false,
         filterable: false,
         renderCell: (params) => (
@@ -179,7 +179,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'status',
         headerName: t('Status'),
-        width: 150,
+        width: Number(150),
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -190,7 +190,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'eventsAttended',
         headerName: t('Events Attended'),
-        width: 180,
+        width: Number(180),
         sortable: false,
         filterable: false,
         headerAlign: 'left',
@@ -201,14 +201,14 @@ function EventAttendance(): JSX.Element {
               tooltip: {
                 sx: {
                   backgroundColor: 'var(--bs-white)',
-                  fontSize: '2em',
-                  maxHeight: '170px',
+                  fontSize: 'var(--font-size-3xl)',
+                  maxHeight: 'var(--space-10-625)',
                   overflowY: 'scroll',
                   scrollbarColor: 'white',
                   border: 'var(--primary-border-solid)',
-                  borderRadius: '6px',
+                  borderRadius: 'var(--radius-6)',
                   boxShadow:
-                    'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) rgba(var(--color-black), 0.1)',
+                    'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) var(--color-black-opacity-10)',
                 },
               },
             }}
@@ -235,7 +235,7 @@ function EventAttendance(): JSX.Element {
       {
         field: 'tagsAssignedWith',
         headerName: t('Task Assigned'),
-        width: 200,
+        width: Number(200),
         sortable: false,
         filterable: false,
         headerAlign: 'left',

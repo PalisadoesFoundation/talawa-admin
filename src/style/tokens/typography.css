@@ -1,5 +1,6 @@
 :root {
   --font-size-xs: 0.75rem;
+  --font-size-13: 0.8rem;
   --font-size-sm: 0.875rem;
   --font-size-15: 0.9375rem;
   --font-size-md: 1rem;
@@ -27,6 +28,7 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-heavy: 800;
+  --font-weight-black: 900;
 
   --letter-spacing-tight: -0.01em;
   --letter-spacing-normal: 0;

@@ -53,8 +53,8 @@ const CommentContent = styled(Typography)({
 });
 
 const VoteCount = styled(Typography)(() => ({
-  fontSize: '0.75rem',
-  minWidth: 20,
+  fontSize: 'var(--font-size-xs)',
+  minWidth: Number(20),
   textAlign: 'center',
 }));
 
