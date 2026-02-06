@@ -59,7 +59,7 @@ reviews:
         Flaky test guard (12 shards) — CRITICAL PATTERNS:
 
         Cleanup (MANDATORY):
-        - Each file: afterEach(() => cleanup()); and vi.clearAllMocks() or vi.restoreAllMocks().
+        - Each file: afterEach(() => cleanup()); and vi.restoreAllMocks().
         - Clear localStorage/sessionStorage/window state; tests must be independent.
 
         Async patterns (NO RACE CONDITIONS):
