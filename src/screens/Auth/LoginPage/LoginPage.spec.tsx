@@ -3864,11 +3864,9 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
         </MockedProvider>,
       );
 
-      // LoginForm passes data-testid="recaptcha-container" to ReCAPTCHA; mock spreads it onto the input
-      const recaptchaInputs = await screen.findAllByTestId(
-        'recaptcha-container',
-      );
-      const loginRecaptcha = recaptchaInputs[0];
+      // Target the login form's recaptcha (mock uses data-testid="mock-recaptcha")
+      const loginForm = screen.getByTestId('login-form');
+      const loginRecaptcha = within(loginForm).getByTestId('mock-recaptcha');
       await user.type(loginRecaptcha, 'fake-recaptcha-token');
 
       await user.type(

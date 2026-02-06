@@ -101,13 +101,22 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       return;
     }
 
-    await signin({
-      variables: {
-        email: formData.email,
-        password: formData.password,
-        ...(recaptchaToken && { recaptchaToken }),
-      },
-    });
+    const variables = {
+      email: formData.email,
+      password: formData.password,
+      ...(recaptchaToken && { recaptchaToken }),
+    };
+
+    try {
+      await signin({ variables });
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        return;
+      }
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+      onErrorRef.current?.(err as Error);
+    }
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

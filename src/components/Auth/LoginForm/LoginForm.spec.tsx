@@ -560,13 +560,13 @@ describe('LoginForm', () => {
       expect(submitButton).toBeDisabled();
     });
 
-    // TODO: Re-enable when Apollo QueryManager circular stringify (HTMLInputElement ref) is resolved
+    // TODO: Re-enable when Apollo QueryManager canonicalStringify (HTMLInputElement ref) is resolved. Track: https://github.com/apollographql/apollo-client/issues
     test.todo(
       'when enableRecaptcha is true and signIn returns null, calls onError with "Not found" and resets reCAPTCHA',
     );
 
     test.todo(
-      'with recaptcha token in variables, on success calls onSuccess and does not reset reCAPTCHA on success path',
+      'with recaptcha token in variables, on success calls onSuccess with signIn payload',
     );
 
     test.todo(
