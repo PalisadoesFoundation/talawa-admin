@@ -30,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
@@ -405,54 +405,27 @@ function OrganizationTags(): JSX.Element {
         </div>
       </Row>
 
-      {/* Create Tag Modal */}
-      <BaseModal
-        show={createTagModal.isOpen}
-        onHide={hideCreateTagModal}
-        backdrop="static"
-        centered
+      <CreateModal
+        open={createTagModal.isOpen}
+        onClose={hideCreateTagModal}
         title={t('tagDetails')}
-        headerClassName={styles.tableHeader}
-        headerTestId="modalOrganizationHeader"
-        footer={
-          <>
-            <Button
-              variant="secondary"
-              onClick={(): void => hideCreateTagModal()}
-              data-testid="closeCreateTagModal"
-              className={styles.removeButton}
-              aria-label={tCommon('cancel')}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              form="create-tag-form"
-              value="invite"
-              data-testid="createTagSubmitBtn"
-              className={styles.addButton}
-              disabled={createTagLoading}
-              aria-label={tCommon('create')}
-            >
-              {tCommon('create')}
-            </Button>
-          </>
-        }
+        data-testid="createTagModal"
+        onSubmit={createTag}
+        loading={createTagLoading}
+        submitDisabled={!tagName.trim()}
       >
-        <form id="create-tag-form" onSubmit={createTag}>
-          <FormTextField
-            name="tagName"
-            label={t('tagName')}
-            placeholder={t('tagNamePlaceholder')}
-            value={tagName}
-            onChange={setTagName}
-            required
-            autoComplete="off"
-            data-testid="tagNameInput"
-            className={styles.inputField}
-          />
-        </form>
-      </BaseModal>
+        <FormTextField
+          name="tagName"
+          label={t('tagName')}
+          placeholder={t('tagNamePlaceholder')}
+          value={tagName}
+          onChange={setTagName}
+          required
+          autoComplete="off"
+          data-testid="tagNameInput"
+          className={styles.inputField}
+        />
+      </CreateModal>
     </>
   );
 }

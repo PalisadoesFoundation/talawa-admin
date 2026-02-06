@@ -1,13 +1,7 @@
 import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import type { MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  within,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -667,7 +661,10 @@ describe('PostCard', () => {
     // Override just for this test
     apolloMock.useMutation = vi
       .fn()
-      .mockReturnValue([mockLikePost, { loading: false }]) as any;
+      .mockReturnValue([
+        mockLikePost,
+        { loading: false },
+      ]) as unknown as typeof apolloMock.useMutation;
 
     try {
       renderPostCard({
@@ -710,7 +707,7 @@ describe('PostCard', () => {
       }
       // For other mutations, return the normal mock
       return [vi.fn().mockResolvedValue({}), { loading: false }];
-    }) as any;
+    }) as unknown as typeof apolloMock.useMutation;
 
     try {
       renderPostCard();
@@ -868,7 +865,7 @@ describe('PostCard', () => {
     );
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    fireEvent.click(moreButton);
+    await userEvent.click(moreButton);
 
     const deleteButton = await screen.findByTestId('delete-post-menu-item');
     await userEvent.click(deleteButton);
@@ -1313,7 +1310,7 @@ describe('PostCard', () => {
     expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
   });
 
-  it('should handle different user roles correctly', () => {
+  it('should handle different user roles correctly', async () => {
     const { setItem } = useLocalStorage();
 
     // Test as regular user (not admin, not post creator)
@@ -1323,7 +1320,7 @@ describe('PostCard', () => {
     renderPostCard();
 
     const moreButton = screen.getByTestId('post-more-options-button');
-    fireEvent.click(moreButton);
+    await userEvent.click(moreButton);
 
     // Regular user should not see edit or delete options for other users' posts
     expect(screen.queryByTestId('edit-post-menu-item')).not.toBeInTheDocument();

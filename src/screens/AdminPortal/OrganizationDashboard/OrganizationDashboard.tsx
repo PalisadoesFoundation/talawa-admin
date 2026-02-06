@@ -169,7 +169,7 @@ function OrganizationDashboard(): JSX.Element {
           return new Date(edge.node.startAt) > now;
         })
         .map((edge) => ({
-          node: edge.node as any,
+          node: edge.node as unknown as IEvent['node'],
         }));
 
       // Set to actual total count since fetchMore accumulates results

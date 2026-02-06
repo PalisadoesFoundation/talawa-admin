@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  act,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing/react';
@@ -311,7 +305,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Trigger scroll event to show buttons
       await act(async () => {
-        fireEvent.scroll(scrollContainer);
+        scrollContainer.dispatchEvent(new Event('scroll'));
       });
 
       await waitFor(() => {
@@ -322,7 +316,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click left button
       const leftButton = screen.getByTestId('scroll-left-button');
-      fireEvent.click(leftButton);
+      await userEvent.click(leftButton);
 
       expect(scrollByMock).toHaveBeenCalled();
     });
@@ -359,7 +353,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Trigger scroll event to show buttons
       await act(async () => {
-        fireEvent.scroll(scrollContainer);
+        scrollContainer.dispatchEvent(new Event('scroll'));
       });
 
       await waitFor(() => {
@@ -452,8 +446,9 @@ describe('PinnedPostsLayout Component', () => {
       // Unmount the component
       unmount();
 
-      // Simulate a scroll event on the now-detached container
-      fireEvent.scroll(scrollContainer);
+      await act(async () => {
+        scrollContainer.dispatchEvent(new Event('scroll'));
+      });
 
       // Should not see React warning about updating unmounted component
       expect(consoleErrorSpy).not.toHaveBeenCalledWith(
@@ -499,8 +494,8 @@ describe('PinnedPostsLayout Component', () => {
         configurable: true,
       });
 
-      act(() => {
-        fireEvent.scroll(scrollContainer);
+      await act(async () => {
+        scrollContainer.dispatchEvent(new Event('scroll'));
       });
 
       // Buttons should not appear when scrolling is not possible

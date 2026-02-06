@@ -14,9 +14,10 @@ import { InterfaceUserDetailsQuery } from 'utils/interfaces';
 import { errorHandler } from 'utils/errorHandler';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
-import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
+import { FormSelectField } from 'shared-components/FormFieldGroup/FormSelectField';
 
 /**
  * Props for the `PledgeModal` component.
@@ -39,28 +40,6 @@ export interface InterfacePledgeModal {
 }
 
 /**
- * Compares two user options by ID.
- * Used by MUI Autocomplete to determine equality.
- *
- * @param option - Option from the Autocomplete list
- * @param value - Currently selected value
- * @returns True if both options refer to the same user
- *
- * @example
- * ```ts
- * areOptionsEqual(
- * { id: '1' } as InterfaceUserInfoPG,
- * { id: '1' } as InterfaceUserInfoPG,
- * );
- * // returns true
- * ```
- */
-export const areOptionsEqual = (
-  option: InterfaceUserInfoPG,
-  value: InterfaceUserInfoPG,
-): boolean => option.id === value.id;
-
-/**
  * Builds a display label for a member.
  * Empty name parts are safely ignored.
  *
@@ -70,8 +49,8 @@ export const areOptionsEqual = (
  * @example
  * ```ts
  * getMemberLabel({
- * firstName: 'John',
- * lastName: 'Doe',
+ *   firstName: 'John',
+ *   lastName: 'Doe',
  * } as InterfaceUserInfoPG);
  * // returns "John Doe"
  * ```
@@ -257,62 +236,52 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     <>
       {userData?.user?.role !== 'regular' && (
         <div className="d-flex mb-3 w-100">
-          <Autocomplete
-            className={`${styles.noOutline} w-100`}
-            data-testid="pledgerSelect"
-            options={[...pledgers, ...pledgeUsers].filter(
-              (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
-            )}
-            value={pledgeUsers[0] || null}
-            readOnly={mode === 'edit'}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            filterSelectedOptions={true}
-            getOptionLabel={(member: InterfaceUserInfoPG): string =>
-              getMemberLabel(member)
-            }
-            onChange={(_, newPledger): void => {
+          <DropDownButton
+            id="pledgerSelect"
+            dataTestIdPrefix="pledgerSelect"
+            options={[...pledgers, ...pledgeUsers]
+              .filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i)
+              .map((p) => ({
+                value: p.id,
+                label: getMemberLabel(p),
+              }))}
+            selectedValue={pledgeUsers[0]?.id}
+            disabled={mode === 'edit'}
+            onSelect={(val: string) => {
+              const newPledger =
+                [...pledgers, ...pledgeUsers].find((p) => p.id === val) || null;
               setFormState({
                 ...formState,
                 pledgeUsers: newPledger ? [newPledger] : [],
               });
             }}
-            renderInput={(params) => (
-              <div ref={params.InputProps.ref} className="position-relative">
-                <input
-                  {...params.inputProps}
-                  type="text"
-                  placeholder={t('pledgers')}
-                  aria-label={t('pledgers')}
-                  className={`form-control ${styles.noOutline}`}
-                />
-                {params.InputProps.endAdornment}
-              </div>
-            )}
+            searchable
+            ariaLabel={t('pledgers')}
+            parentContainerStyle="w-100"
+            btnStyle={styles.noOutline}
           />
         </div>
       )}
       <div className="d-flex gap-3 mb-4">
         <div className="flex-grow-1">
-          <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
-          <Select
-            labelId="currency-select-label"
-            value={pledgeCurrency}
+          <FormSelectField
+            name="currency"
             label={t('currency')}
+            value={pledgeCurrency}
             data-testid="currencySelect"
-            fullWidth
-            onChange={(e) => {
+            onChange={(value: string) => {
               setFormState({
                 ...formState,
-                pledgeCurrency: e.target.value,
+                pledgeCurrency: value,
               });
             }}
           >
             {currencyOptions.map((currency) => (
-              <MenuItem key={currency.label} value={currency.value}>
+              <option key={currency.label} value={currency.value}>
                 {currency.label} ({currencySymbols[currency.value]})
-              </MenuItem>
+              </option>
             ))}
-          </Select>
+          </FormSelectField>
         </div>
         <div className="flex-grow-1">
           <FormTextField

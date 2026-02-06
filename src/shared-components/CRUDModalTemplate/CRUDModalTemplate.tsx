@@ -52,6 +52,8 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   error,
   size,
   className,
+  headerClassName,
+  bodyClassName,
   centered = true,
   'data-testid': dataTestId,
   primaryVariant = 'primary',
@@ -132,12 +134,13 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
       size={size}
       centered={centered}
       className={className}
+      headerClassName={headerClassName}
       dataTestId={dataTestId}
       backdrop={loading ? 'static' : true}
       keyboard={!loading}
       showCloseButton={!loading}
       footer={footer}
-      bodyClassName={styles.modalBody}
+      bodyClassName={bodyClassName || styles.modalBody}
     >
       {error && (
         <Alert variant="danger" className={styles.errorAlert}>

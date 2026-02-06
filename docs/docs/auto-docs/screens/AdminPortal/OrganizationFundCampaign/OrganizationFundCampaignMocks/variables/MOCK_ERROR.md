@@ -6,4 +6,4 @@
 
 > `const` **MOCK\_ERROR**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `id`: `string`; \}; \}; \}; `variableMatcher?`: `undefined`; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables?`: `undefined`; \}; `variableMatcher`: (`vars`) => `boolean`; \})[]
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L180)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L203)

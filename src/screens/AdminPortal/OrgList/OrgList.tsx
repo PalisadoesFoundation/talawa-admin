@@ -251,7 +251,7 @@ function OrgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createOrg = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {

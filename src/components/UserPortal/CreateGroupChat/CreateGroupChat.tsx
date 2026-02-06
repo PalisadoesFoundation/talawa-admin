@@ -45,7 +45,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import Button from 'shared-components/Button';
 import styles from './CreateGroupChat.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { useMutation, useQuery } from '@apollo/client/react';
 import type { InterfaceOrgMemberConnectionQuery } from 'utils/interfaces';
@@ -219,15 +219,20 @@ export default function CreateGroupChat({
       resetButtonText={tErrors('resetButton')}
       onReset={chatsListRefetch}
     >
-      <BaseModal
-        show={createGroupChatModalisOpen}
-        onHide={() => {
+      <CreateModal
+        open={createGroupChatModalisOpen}
+        onClose={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
         title={t('newGroup', { defaultValue: 'New Group' })}
-        dataTestId="createGroupChatModal"
+        data-testid="createGroupChatModal"
         className={styles.modalContent}
+        onSubmit={(e) => {
+          e.preventDefault();
+          openAddUserModal();
+        }}
+        primaryText={t('next', { defaultValue: 'Next' })}
       >
         <input
           type="file"
@@ -252,7 +257,7 @@ export default function CreateGroupChat({
             <FiEdit />
           </button>
         </div>
-        <form>
+        <div>
           <div className="mb-3">
             <FormFieldGroup
               name="groupTitleInput"
@@ -297,32 +302,17 @@ export default function CreateGroupChat({
               />
             </FormFieldGroup>
           </div>
-          <Button
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
-            variant="success"
-            onClick={openAddUserModal}
-            data-testid="nextBtn"
-          >
-            {t('next', { defaultValue: 'Next' })}
-          </Button>
-        </form>
-      </BaseModal>
-      <BaseModal
-        show={addUserModalisOpen}
-        onHide={toggleAddUserModal}
+        </div>
+      </CreateModal>
+      <CreateModal
+        open={addUserModalisOpen}
+        onClose={toggleAddUserModal}
         title={t('chat', { defaultValue: 'Chat' })}
-        dataTestId="addExistingUserModal"
+        data-testid="addExistingUserModal"
         className={styles.modalContent}
-        footer={
-          <Button
-            className={`${styles.colorPrimary} ${styles.borderNone}`}
-            variant="success"
-            onClick={handleCreateGroupChat}
-            data-testid="createBtn"
-          >
-            {t('create', { defaultValue: 'Create' })}
-          </Button>
-        }
+        onSubmit={handleCreateGroupChat}
+        primaryText={t('create', { defaultValue: 'Create' })}
+        size="lg"
       >
         <LoadingState
           isLoading={allUsersLoading}
@@ -441,7 +431,7 @@ export default function CreateGroupChat({
             </TableContainer>
           </>
         </LoadingState>
-      </BaseModal>
+      </CreateModal>
     </ErrorBoundaryWrapper>
   );
 }

@@ -59,6 +59,7 @@ import type {
   InterfaceOrganizationFilterListQuery,
   InterfaceUserJoinedOrgsQuery,
   InterfaceUserCreatedOrgsQuery,
+  InterfaceUserPg,
 } from 'utils/interfaces';
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
@@ -84,7 +85,7 @@ interface IOrganization {
   description: string;
   adminsCount?: number;
   membersCount?: number;
-  admins: any[];
+  admins: InterfaceUserPg[];
   members?: InterfaceMembersConnection;
   address: {
     city: string;
@@ -101,28 +102,6 @@ interface IOrganization {
       id: string;
     };
   }[];
-}
-
-interface InterfaceOrgData {
-  isMember: boolean;
-  addressLine1: string;
-  avatarURL: string | null;
-  id: string;
-  membersCount: number;
-  members: {
-    edges: [
-      {
-        node: {
-          id: string;
-          __typename: string;
-        };
-        __typename: string;
-      },
-    ];
-  };
-  description: string;
-  __typename: string;
-  name: string;
 }
 
 export default function Organizations(): React.JSX.Element {
@@ -330,7 +309,7 @@ export default function Organizations(): React.JSX.Element {
               };
             },
           );
-        setOrganizations(orgs as any);
+        setOrganizations(orgs as unknown as IOrganization[]);
       } else {
         setOrganizations([]);
       }
@@ -346,7 +325,7 @@ export default function Organizations(): React.JSX.Element {
             userRegistrationRequired: false,
           }),
         );
-        setOrganizations(orgs as any);
+        setOrganizations(orgs as unknown as IOrganization[]);
       } else {
         setOrganizations([]);
       }
@@ -483,7 +462,9 @@ export default function Organizations(): React.JSX.Element {
                           description: organization.description,
                           avatarURL: organization.avatarURL || '',
                           addressLine1: organization.addressLine1 || '',
-                          admins: organization.admins,
+                          admins: organization.admins.map((u) => ({
+                            id: u.id as string,
+                          })),
                           membershipRequestStatus:
                             organization.membershipRequestStatus,
                           userRegistrationRequired:

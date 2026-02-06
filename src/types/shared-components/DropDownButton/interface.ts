@@ -122,6 +122,10 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text for the search input.
    */
   searchPlaceholder?: string;
+  /**
+   * Custom content to be displayed when no options match the search term.
+   */
+  noOptionsContent?: React.ReactNode;
 }
 
 /**

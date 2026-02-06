@@ -38,8 +38,12 @@ export const FormTextField = forwardRef<
 
     const renderControl = () => (
       <Form.Control
-        ref={ref as any}
+        ref={
+          ref as unknown as React.Ref<HTMLInputElement & HTMLTextAreaElement>
+        }
         {...(props.as !== 'textarea' && { type })}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        as={props.as as any}
         placeholder={placeholder}
         value={value}
         onChange={(e) => {
@@ -48,7 +52,7 @@ export const FormTextField = forwardRef<
         isInvalid={isInvalid}
         disabled={disabled}
         data-testid={dataTestId}
-        {...(props as any)}
+        {...props}
       />
     );
     return (
@@ -63,9 +67,9 @@ export const FormTextField = forwardRef<
         {startAdornment || endAdornment ? (
           <React.Fragment>
             <InputGroup>
-              {startAdornment as any}
+              {startAdornment}
               {renderControl()}
-              {endAdornment as any}
+              {endAdornment}
             </InputGroup>
           </React.Fragment>
         ) : (

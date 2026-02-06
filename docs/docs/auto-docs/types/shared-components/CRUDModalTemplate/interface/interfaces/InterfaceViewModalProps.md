@@ -4,7 +4,7 @@
 
 # Interface: InterfaceViewModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L236)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L246)
 
 Props for ViewModal template
 
@@ -17,11 +17,25 @@ Parent component handles data fetching and passes formatted content as children.
 
 ## Properties
 
+### bodyClassName?
+
+> `optional` **bodyClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L83)
+
+Additional CSS class name for the modal body
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`bodyClassName`](InterfaceCrudModalBaseProps.md#bodyclassname)
+
+***
+
 ### centered?
 
 > `optional` **centered**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L79)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
 
 Whether to center the modal vertically on the page
 
@@ -35,7 +49,7 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L241)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L251)
 
 Content to display in the modal body
 Parent should pass formatted data display as children
@@ -60,7 +74,7 @@ Additional CSS class name for the modal
 
 > `optional` **customActions**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L252)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L262)
 
 Optional custom action buttons to display in the footer
 Useful for actions like "Edit" or "Delete" from the view modal
@@ -71,7 +85,7 @@ Useful for actions like "Edit" or "Delete" from the view modal
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L84)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L94)
 
 Test ID for the modal container (useful for testing)
 
@@ -96,6 +110,20 @@ When provided, shows an Alert component with the error
 
 ***
 
+### headerClassName?
+
+> `optional` **headerClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L78)
+
+Additional CSS class name for the modal header
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`headerClassName`](InterfaceCrudModalBaseProps.md#headerclassname)
+
+***
+
 ### loading?
 
 > `optional` **loading**: `boolean`
@@ -115,7 +143,7 @@ When true, displays a loading spinner and disables action buttons
 
 > `optional` **loadingData**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L246)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L256)
 
 Whether data is currently being loaded
 

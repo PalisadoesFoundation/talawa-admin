@@ -48,7 +48,7 @@ export function useTableData<TNode = unknown, TRow = TNode, TData = unknown>(
   };
 
   const connection = useMemo(
-    () => getConnection(data as any),
+    () => getConnection(data as unknown as TData),
     [data, path, ...deps],
   );
 

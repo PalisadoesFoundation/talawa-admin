@@ -101,12 +101,14 @@ const restrictedImports = [
       'Tests in this file use fireEvent for user interactions; our test standards require using userEvent from @testing-library/user-event for interaction fidelity and test reliability.',
   },
   {
+    id: 'mui-chip',
     name: '@mui/material',
     importNames: ['Chip'],
     message:
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
   },
   {
+    id: 'mui-chip-path',
     name: '@mui/material/Chip',
     message:
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',

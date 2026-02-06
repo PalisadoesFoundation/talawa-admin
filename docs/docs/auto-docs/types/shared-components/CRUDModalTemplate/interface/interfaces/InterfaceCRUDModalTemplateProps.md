@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCRUDModalTemplateProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L92)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L102)
 
 Props for the base CRUDModalTemplate component
 
@@ -16,11 +16,25 @@ This is the foundation component that all specialized modal templates build upon
 
 ## Properties
 
+### bodyClassName?
+
+> `optional` **bodyClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L83)
+
+Additional CSS class name for the modal body
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`bodyClassName`](InterfaceCrudModalBaseProps.md#bodyclassname)
+
+***
+
 ### centered?
 
 > `optional` **centered**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L79)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
 
 Whether to center the modal vertically on the page
 
@@ -34,7 +48,7 @@ Whether to center the modal vertically on the page
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L96)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L106)
 
 Content to render inside the modal body
 
@@ -58,7 +72,7 @@ Additional CSS class name for the modal
 
 > `optional` **customFooter**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L127)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L137)
 
 Custom footer content to replace the default action buttons
 When provided, primaryText, secondaryText, and onPrimary are ignored
@@ -69,7 +83,7 @@ When provided, primaryText, secondaryText, and onPrimary are ignored
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L84)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L94)
 
 Test ID for the modal container (useful for testing)
 
@@ -94,11 +108,25 @@ When provided, shows an Alert component with the error
 
 ***
 
+### headerClassName?
+
+> `optional` **headerClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L78)
+
+Additional CSS class name for the modal header
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`headerClassName`](InterfaceCrudModalBaseProps.md#headerclassname)
+
+***
+
 ### hideSecondary?
 
 > `optional` **hideSecondary**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L121)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L131)
 
 Whether to hide the secondary (cancel) button
 
@@ -142,7 +170,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > `optional` **onPrimary**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L102)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L112)
 
 Callback function for the primary action button
 If not provided, the primary button will not be rendered
@@ -171,7 +199,7 @@ Controls whether the modal is visible (defaults to false)
 
 > `optional` **primaryDisabled**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L115)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L125)
 
 Whether to disable the primary button
 Automatically disabled when loading is true
@@ -196,7 +224,7 @@ Text for the primary action button
 
 > `optional` **primaryVariant**: `"primary"` \| `"success"` \| `"danger"`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L108)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L118)
 
 Variant style for the primary button
 
@@ -220,7 +248,7 @@ Text for the secondary action button
 
 > `optional` **showFooter**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L133)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L143)
 
 Whether to show the modal footer at all
 

@@ -352,11 +352,20 @@ export const PLEDGE_MODAL_MOCKS = [
     request: {
       query: CREATE_PLEDGE,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.campaignId === 'campaignId' &&
-      vars.amount === 200 &&
-      vars.currency === 'USD' &&
-      vars.userIds?.[0] === '1',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const v = vars as {
+        campaignId?: string;
+        amount?: number;
+        currency?: string;
+        userIds?: string[];
+      };
+      return (
+        v.campaignId === 'campaignId' &&
+        v.amount === 200 &&
+        v.currency === 'USD' &&
+        v.userIds?.[0] === '1'
+      );
+    },
     result: {
       data: {
         createFundraisingCampaignPledge: {
@@ -370,11 +379,20 @@ export const PLEDGE_MODAL_MOCKS = [
     request: {
       query: CREATE_PLEDGE,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.campaignId === 'campaignId' &&
-      vars.amount === 100 &&
-      vars.currency === 'USD' &&
-      vars.userIds?.[0] === '1',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const v = vars as {
+        campaignId?: string;
+        amount?: number;
+        currency?: string;
+        userIds?: string[];
+      };
+      return (
+        v.campaignId === 'campaignId' &&
+        v.amount === 100 &&
+        v.currency === 'USD' &&
+        v.userIds?.[0] === '1'
+      );
+    },
     result: {
       data: {
         createPledge: {
@@ -465,8 +483,10 @@ export const PLEDGE_MODAL_ERROR_MOCKS = [
     request: {
       query: CREATE_PLEDGE,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.campaignId === 'campaignId' && vars.pledgerId === '1',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const v = vars as { campaignId?: string; pledgerId?: string };
+      return v.campaignId === 'campaignId' && v.pledgerId === '1';
+    },
     error: new Error('Failed to create pledge'),
   },
   {

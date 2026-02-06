@@ -792,8 +792,8 @@ describe('StaticMockLink variableMatcher', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-      operationType: 'query' as any,
-      client: {} as any,
+      operationType: OperationTypeNode.QUERY,
+      client: {} as unknown as Operation['client'],
     };
   }
 

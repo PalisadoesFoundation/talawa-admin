@@ -38,7 +38,6 @@ import AssignmentTypeSelector from 'components/AdminPortal/AssignmentTypeSelecto
 import type { AssignmentType } from 'types/AdminPortal/AssignmentTypeSelector/interface';
 
 import type {
-  IActionItemCategoryInfo,
   IActionItemInfo,
   ICreateActionItemInput,
   IUpdateActionItemInput,
@@ -67,8 +66,7 @@ import type {
   InterfaceGetEventVolunteersQuery,
 } from 'utils/interfaces';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -109,9 +107,6 @@ const ItemModal: FC<IItemModalProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
-
-  const [actionItemCategory, setActionItemCategory] =
-    useState<IActionItemCategoryInfo | null>(null);
 
   const [selectedVolunteer, setSelectedVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
@@ -294,7 +289,6 @@ const ItemModal: FC<IItemModalProps> = ({
       });
 
       setFormState(initializeFormState(null));
-      setActionItemCategory(null);
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
 
@@ -406,19 +400,6 @@ const ItemModal: FC<IItemModalProps> = ({
     setFormState(initializeFormState(actionItem));
   }, [isOpen, actionItem?.id]);
 
-  useEffect(() => {
-    if (actionItem?.category?.id) {
-      const foundCategory: IActionItemCategoryInfo | undefined =
-        actionItemCategories.find(
-          (category: IActionItemCategoryInfo) =>
-            category.id === actionItem.category?.id,
-        );
-      setActionItemCategory(foundCategory || null);
-    } else {
-      setActionItemCategory(null);
-    }
-  }, [actionItem, actionItemCategories]);
-
   // Separate useEffect for applyTo initialization
   useEffect(() => {
     if (actionItem?.isInstanceException) {
@@ -528,52 +509,21 @@ const ItemModal: FC<IItemModalProps> = ({
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
       <div className="d-flex gap-3 mb-3">
-        <Autocomplete
-          className={`${styles.noOutline} w-100`}
-          data-testid="categorySelect"
-          data-cy="categorySelect"
-          options={actionItemCategories}
-          value={actionItemCategory}
-          isOptionEqualToValue={(option, value) => option.id === value.id}
-          filterSelectedOptions={true}
-          getOptionLabel={(item: IActionItemCategoryInfo): string => item.name}
-          onChange={(_, newCategory): void => {
-            handleFormChange('categoryId', newCategory?.id ?? '');
-            setActionItemCategory(newCategory);
+        <DropDownButton
+          id="categorySelect"
+          dataTestIdPrefix="categorySelect"
+          options={actionItemCategories.map((item) => ({
+            value: item.id,
+            label: item.name,
+          }))}
+          selectedValue={categoryId}
+          onSelect={(val: string) => {
+            handleFormChange('categoryId', val);
           }}
-          renderInput={(params) => {
-            const { InputProps, inputProps } = params;
-            const {
-              ref,
-              className,
-              startAdornment,
-              endAdornment,
-              onMouseDown,
-            } = InputProps;
-            return (
-              <FormFieldGroup
-                name="categorySelect"
-                label={t('actionItemCategory')}
-                required
-              >
-                <div
-                  ref={ref}
-                  className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                  onMouseDown={onMouseDown}
-                  role="presentation"
-                  tabIndex={-1}
-                >
-                  {startAdornment}
-                  <input
-                    {...inputProps}
-                    className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                    required
-                  />
-                  {endAdornment}
-                </div>
-              </FormFieldGroup>
-            );
-          }}
+          searchable
+          ariaLabel={t('actionItemCategory')}
+          parentContainerStyle="w-100"
+          btnStyle={styles.noOutline}
         />
       </div>
 
@@ -590,120 +540,52 @@ const ItemModal: FC<IItemModalProps> = ({
 
           {assignmentType === 'volunteer' && (
             <div className="mb-3 w-100">
-              <Autocomplete
-                className={`${styles.noOutline} w-100`}
-                data-testid="volunteerSelect"
-                data-cy="volunteerSelect"
-                options={volunteers}
-                value={selectedVolunteer}
-                isOptionEqualToValue={(option, value) =>
-                  option.id === value?.id
-                }
-                filterSelectedOptions={true}
-                getOptionLabel={(
-                  volunteer: InterfaceEventVolunteerInfo,
-                ): string => {
-                  return volunteer.user?.name || t('unknownVolunteer');
-                }}
-                onChange={(_, newVolunteer): void => {
-                  const volunteerId = newVolunteer?.id;
-                  handleFormChange('volunteerId', volunteerId);
+              <DropDownButton
+                id="volunteerSelect"
+                dataTestIdPrefix="volunteerSelect"
+                options={volunteers.map((v) => ({
+                  value: v.id,
+                  label: v.user?.name || t('unknownVolunteer'),
+                }))}
+                selectedValue={volunteerId}
+                onSelect={(val: string) => {
+                  const newVolunteer =
+                    volunteers.find((v) => v.id === val) || null;
+                  handleFormChange('volunteerId', val);
                   handleFormChange('volunteerGroupId', '');
                   setSelectedVolunteer(newVolunteer);
                   setSelectedVolunteerGroup(null);
                 }}
-                renderInput={(params) => {
-                  const { InputProps, inputProps } = params;
-                  const {
-                    ref,
-                    className,
-                    startAdornment,
-                    endAdornment,
-                    onMouseDown,
-                  } = InputProps;
-                  return (
-                    <FormFieldGroup
-                      name="volunteerSelect"
-                      label={t('volunteer')}
-                      required
-                    >
-                      <div
-                        ref={ref}
-                        className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                        onMouseDown={onMouseDown}
-                        role="presentation"
-                        tabIndex={-1}
-                      >
-                        {startAdornment}
-                        <input
-                          {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                          required
-                        />
-                        {endAdornment}
-                      </div>
-                    </FormFieldGroup>
-                  );
-                }}
+                searchable
+                ariaLabel={t('volunteer')}
+                parentContainerStyle="w-100"
+                btnStyle={styles.noOutline}
               />
             </div>
           )}
 
           {assignmentType === 'volunteerGroup' && (
             <div className="mb-3 w-100">
-              <Autocomplete
-                className={`${styles.noOutline} w-100`}
-                data-testid="volunteerGroupSelect"
-                data-cy="volunteerGroupSelect"
-                options={volunteerGroups}
-                value={selectedVolunteerGroup}
-                isOptionEqualToValue={(option, value) =>
-                  option.id === value?.id
-                }
-                filterSelectedOptions={true}
-                getOptionLabel={(group: IEventVolunteerGroup): string => {
-                  return group.name;
-                }}
-                onChange={(_, newGroup): void => {
-                  const groupId = newGroup?.id;
-                  handleFormChange('volunteerGroupId', groupId);
+              <DropDownButton
+                id="volunteerGroupSelect"
+                dataTestIdPrefix="volunteerGroupSelect"
+                options={volunteerGroups.map((g) => ({
+                  value: g.id,
+                  label: g.name,
+                }))}
+                selectedValue={volunteerGroupId}
+                onSelect={(val: string) => {
+                  const newGroup =
+                    volunteerGroups.find((g) => g.id === val) || null;
+                  handleFormChange('volunteerGroupId', val);
                   handleFormChange('volunteerId', '');
                   setSelectedVolunteerGroup(newGroup);
                   setSelectedVolunteer(null);
                 }}
-                renderInput={(params) => {
-                  const { InputProps, inputProps } = params;
-                  const {
-                    ref,
-                    className,
-                    startAdornment,
-                    endAdornment,
-                    onMouseDown,
-                  } = InputProps;
-                  return (
-                    <FormFieldGroup
-                      name="volunteerGroupSelect"
-                      label={t('volunteerGroup')}
-                      required
-                    >
-                      <div
-                        ref={ref}
-                        className={`${className ?? ''} ${styles.autocompleteWrapper}`}
-                        onMouseDown={onMouseDown}
-                        role="presentation"
-                        tabIndex={-1}
-                      >
-                        {startAdornment}
-                        <input
-                          {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
-                          required
-                        />
-                        {endAdornment}
-                      </div>
-                    </FormFieldGroup>
-                  );
-                }}
+                searchable
+                ariaLabel={t('volunteerGroup')}
+                parentContainerStyle="w-100"
+                btnStyle={styles.noOutline}
               />
             </div>
           )}

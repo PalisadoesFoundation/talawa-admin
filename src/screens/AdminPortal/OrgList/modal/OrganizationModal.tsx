@@ -38,14 +38,13 @@
  *
  * @returns The rendered organization modal.
  */
-import React, { type ChangeEvent } from 'react';
-import Button from 'shared-components/Button';
+import React, { type FormEvent } from 'react';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import styles from './OrganizationModal.module.css';
@@ -70,7 +69,7 @@ export interface InterfaceOrganizationModalProps {
   toggleModal: () => void;
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
-  createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  createOrg: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
 }
@@ -91,49 +90,48 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   const { uploadFileToMinio } = useMinioUpload();
 
   return (
-    <BaseModal
-      show={showModal}
-      onHide={toggleModal}
+    <CreateModal
+      open={showModal}
+      onClose={toggleModal}
       title={t('createOrganization')}
+      onSubmit={createOrg}
       headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
+      data-testid="modalOrganizationHeader"
     >
-      <Form onSubmitCapture={createOrg}>
-        <FormTextField
-          name="orgname"
-          label={tCommon('name')}
-          placeholder={t('enterName')}
-          value={formState.name}
-          onChange={(val: string) => {
-            if (val.length <= 50) {
-              setFormState({ ...formState, name: val });
-            }
-          }}
-          required
-          data-testid="modalOrganizationName"
-          autoComplete="off"
-        />
+      <FormTextField
+        name="orgname"
+        label={tCommon('name')}
+        placeholder={t('enterName')}
+        value={formState.name}
+        onChange={(val: string) => {
+          if (val.length <= 50) {
+            setFormState({ ...formState, name: val });
+          }
+        }}
+        required
+        data-testid="modalOrganizationName"
+        autoComplete="off"
+      />
 
-        <FormTextField
-          name="description"
-          label={tCommon('description')}
-          placeholder={tCommon('description')}
-          value={formState.description}
-          onChange={(val: string) => {
-            if (val.length <= 200) {
-              setFormState({ ...formState, description: val });
-            }
-          }}
-          required
-          data-testid="modalOrganizationDescription"
-          autoComplete="off"
-        />
-        <Form.Label>{tCommon('address')}</Form.Label>
+      <FormTextField
+        name="description"
+        label={tCommon('description')}
+        placeholder={tCommon('description')}
+        value={formState.description}
+        onChange={(val: string) => {
+          if (val.length <= 200) {
+            setFormState({ ...formState, description: val });
+          }
+        }}
+        required
+        data-testid="modalOrganizationDescription"
+        autoComplete="off"
+      />
+      <FormFieldGroup name="address" label={tCommon('address')}>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <select
               required
-              as="select"
               data-testid="modalOrganizationCountryCode"
               value={formState.countryCode}
               onChange={(e): void => {
@@ -142,7 +140,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              className={`mb-3 ${styles.inputField} form-control`}
             >
               <option value="" disabled>
                 {tCommon('selectACountry')}
@@ -155,7 +153,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   {country.label}
                 </option>
               ))}
-            </Form.Control>
+            </select>
           </Col>
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -174,6 +172,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
+      </FormFieldGroup>
+
+      <FormFieldGroup name="city-postal" label="">
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -207,6 +208,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
+      </FormFieldGroup>
+
+      <FormFieldGroup name="address-lines" label="">
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
             <FormTextField
@@ -240,12 +244,17 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
-        <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
+      </FormFieldGroup>
+
+      <FormFieldGroup
+        name="orgphoto"
+        label={tCommon('displayImage')}
+        inputId="orgphoto"
+      >
+        <input
           accept="image/*"
           id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
+          className={`mb-3 ${styles.inputField} form-control`}
           name="photo"
           type="file"
           multiple={false}
@@ -281,18 +290,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           }}
           data-testid="organisationImage"
         />
-        <Col className={styles.sampleOrgSection}>
-          <Button
-            className="addButton"
-            type="submit"
-            value="invite"
-            data-testid="submitOrganizationForm"
-          >
-            {tCommon('createOrganization')}
-          </Button>
-        </Col>
-      </Form>
-    </BaseModal>
+      </FormFieldGroup>
+      <Col className={styles.sampleOrgSection}></Col>
+    </CreateModal>
   );
 };
 

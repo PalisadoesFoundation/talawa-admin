@@ -52,6 +52,8 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   centered = true,
   'data-testid': dataTestId,
   submitDisabled = false,
+  primaryText,
+  secondaryText,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
@@ -95,7 +97,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
         disabled={loading}
         data-testid="modal-cancel-btn"
       >
-        {tCommon('cancel')}
+        {secondaryText ?? tCommon('cancel')}
       </Button>
       <Button
         type="submit"
@@ -104,7 +106,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
         disabled={loading || submitDisabled}
         data-testid="modal-submit-btn"
       >
-        {tCommon('create')}
+        {primaryText ?? tCommon('create')}
       </Button>
     </>
   );

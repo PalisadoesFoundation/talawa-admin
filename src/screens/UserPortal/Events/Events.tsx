@@ -51,7 +51,6 @@
 import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
-  ORGANIZATIONS_LIST,
   GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
@@ -70,11 +69,7 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type {
-  ICreateEventInput,
-  IEvent,
-  IOrgList,
-} from 'types/Event/interface';
+import type { ICreateEventInput, IOrgList } from 'types/Event/interface';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -88,7 +83,6 @@ import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 import type {
   InterfaceGetOrgEventsUserPortalQuery,
   InterfaceOrganizationEventsConnectionEdgePg,
-  InterfaceOrganizationListQuery,
 } from 'utils/interfaces';
 
 import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';

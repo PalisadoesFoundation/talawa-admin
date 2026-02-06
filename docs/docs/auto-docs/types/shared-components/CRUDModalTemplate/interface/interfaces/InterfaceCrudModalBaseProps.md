@@ -21,11 +21,21 @@ the fundamental functionality for opening, closing, and displaying modals.
 
 ## Properties
 
+### bodyClassName?
+
+> `optional` **bodyClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L83)
+
+Additional CSS class name for the modal body
+
+***
+
 ### centered?
 
 > `optional` **centered**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L79)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
 
 Whether to center the modal vertically on the page
 
@@ -45,7 +55,7 @@ Additional CSS class name for the modal
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L84)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L94)
 
 Test ID for the modal container (useful for testing)
 
@@ -59,6 +69,16 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:62](http
 
 Error message to display in the modal body
 When provided, shows an Alert component with the error
+
+***
+
+### headerClassName?
+
+> `optional` **headerClassName**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L78)
+
+Additional CSS class name for the modal header
 
 ***
 

@@ -34,7 +34,7 @@
  * - shared-components/Button for button components.
  * - shared-components/BaseModal for modal components.
  * - `@apollo/client` for GraphQL queries and mutations.
- * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
+ * - `@mui/material` for UI components like Avatar and Chip.
  * - `NotificationToast` for toast notifications.
  * - `react-i18next` for translations.
  */
@@ -47,8 +47,7 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
@@ -185,15 +184,24 @@ export const EventRegistrantsModal = ({
             </div>
           }
         >
-          <Autocomplete
-            disablePortal
-            inputValue={inputValue}
-            onInputChange={(_, value) => setInputValue(value)}
+          <DropDownButton
             id="addRegistrant"
-            onChange={(_, newMember): void => {
-              setMember(newMember);
+            dataTestIdPrefix="addRegistrant"
+            options={(memberData?.usersByOrganizationId || []).map((m) => ({
+              value: m.id,
+              label: m.name || t('unknownUser'),
+            }))}
+            selectedValue={member?.id}
+            onSelect={(val: string) => {
+              const selectedMember =
+                memberData?.usersByOrganizationId?.find((m) => m.id === val) ||
+                null;
+              setMember(selectedMember);
             }}
-            noOptionsText={
+            searchable
+            searchPlaceholder={t('addRegistrantPlaceholder') as string}
+            ariaLabel={t('addRegistrantTitle')}
+            noOptionsContent={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
                 <button
@@ -213,30 +221,7 @@ export const EventRegistrantsModal = ({
                 </button>
               </div>
             }
-            options={memberData?.usersByOrganizationId || []}
-            getOptionLabel={(member: InterfaceUser): string =>
-              member.name || t('unknownUser')
-            }
-            renderInput={(params): React.ReactNode => (
-              <FormTextField
-                name="addRegistrant"
-                label={t('addRegistrantLabel') as string}
-                ref={params.InputProps.ref}
-                value={inputValue}
-                placeholder={t('addRegistrantPlaceholder') as string}
-                data-testid="autocomplete"
-                id={params.id}
-                disabled={params.disabled}
-                fullWidth
-                onChange={(v: string) => {
-                  if (params.inputProps?.onChange) {
-                    params.inputProps.onChange({
-                      target: { value: v },
-                    } as React.ChangeEvent<HTMLInputElement>);
-                  }
-                }}
-              />
-            )}
+            parentContainerStyle="w-100"
           />
           <br />
         </BaseModal>

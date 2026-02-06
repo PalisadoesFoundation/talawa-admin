@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUseModalStateReturn
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L307)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L317)
 
 Return type for useModalState hook
 
@@ -18,7 +18,7 @@ Return type for useModalState hook
 
 > **close**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L313)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L323)
 
 Closes the modal
 
@@ -32,7 +32,7 @@ Closes the modal
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L309)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L319)
 
 Whether the modal is currently open
 
@@ -42,7 +42,7 @@ Whether the modal is currently open
 
 > **open**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:311](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L311)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L321)
 
 Opens the modal
 
@@ -56,7 +56,7 @@ Opens the modal
 
 > **setIsOpen**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L317)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L327)
 
 Sets the modal open/close state directly
 
@@ -66,7 +66,7 @@ Sets the modal open/close state directly
 
 > **toggle**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L315)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L325)
 
 Toggles the modal open/close state
 

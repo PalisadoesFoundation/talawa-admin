@@ -98,6 +98,16 @@ The id of the dropdown button.
 
 ***
 
+### noOptionsContent?
+
+> `optional` **noOptionsContent**: `ReactNode`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L128)
+
+Custom content to be displayed when no options match the search term.
+
+***
+
 ### onSelect()
 
 > **onSelect**: (`value`) => `void`

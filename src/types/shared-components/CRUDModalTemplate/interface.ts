@@ -73,6 +73,16 @@ export interface InterfaceCrudModalBaseProps {
   className?: string;
 
   /**
+   * Additional CSS class name for the modal header
+   */
+  headerClassName?: string;
+
+  /**
+   * Additional CSS class name for the modal body
+   */
+  bodyClassName?: string;
+
+  /**
    * Whether to center the modal vertically on the page
    *
    */

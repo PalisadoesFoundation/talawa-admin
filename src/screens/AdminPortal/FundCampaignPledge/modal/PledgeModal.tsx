@@ -41,7 +41,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete } from '@mui/material';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
@@ -190,37 +190,25 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         touched={false}
         error={undefined}
       >
-        <Autocomplete
-          className={`${styles.noOutlinePledge} w-100`}
-          data-testid="pledgerSelect"
-          options={pledgers}
-          value={formState.pledgeUsers[0] || null}
-          filterSelectedOptions={true}
-          getOptionLabel={(member: InterfaceUserInfoPG): string =>
-            `${member.name || ''}`
-          }
-          onChange={(_, newPledger): void => {
+        <DropDownButton
+          id="pledgerSelect"
+          dataTestIdPrefix="pledgerSelect"
+          options={pledgers.map((p) => ({
+            value: p.id,
+            label: p.name || '',
+          }))}
+          selectedValue={formState.pledgeUsers[0]?.id}
+          onSelect={(val: string) => {
+            const newPledger = pledgers.find((p) => p.id === val);
             setFormState({
               ...formState,
-              pledgeUsers: newPledger
-                ? [{ ...newPledger, id: newPledger.id }]
-                : [],
+              pledgeUsers: newPledger ? [newPledger] : [],
             });
           }}
-          renderInput={(params) => {
-            const { InputProps, inputProps } = params;
-            return (
-              <div ref={InputProps.ref} className="position-relative">
-                <input
-                  {...inputProps}
-                  type="text"
-                  className="form-control"
-                  aria-label={t('pledgers')}
-                />
-                {InputProps.endAdornment}
-              </div>
-            );
-          }}
+          searchable
+          ariaLabel={t('pledgers')}
+          parentContainerStyle="w-100"
+          btnStyle={styles.noOutlinePledge}
         />
       </FormFieldGroup>
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { Frequency, frequencies } from '../../utils/recurrenceUtils';
 import styles from './RecurrenceFrequencySection.module.css';
@@ -39,49 +39,23 @@ export const RecurrenceFrequencySection: React.FC<
         aria-label={t('repeatsEvery')}
         label={t('repeatsEvery')}
       />
-      <Dropdown className="ms-3 d-inline-block">
-        <Dropdown.Toggle
-          className={`${styles.dropdown}`}
-          variant="outline-secondary"
-          id="dropdown-basic"
-          data-testid="customRecurrenceFrequencyDropdown"
-          data-cy="customRecurrenceFrequencyDropdown"
-          aria-label={t('frequency')}
-        >
-          {frequencies[frequency]}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.DAILY)}
-            data-testid="customDailyRecurrence"
-            data-cy="customDailyRecurrence"
-          >
-            {t('day')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.WEEKLY)}
-            data-testid="customWeeklyRecurrence"
-            data-cy="customWeeklyRecurrence"
-          >
-            {t('week')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.MONTHLY)}
-            data-testid="customMonthlyRecurrence"
-            data-cy="customMonthlyRecurrence"
-          >
-            {t('month')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onFrequencyChange(Frequency.YEARLY)}
-            data-testid="customYearlyRecurrence"
-            data-cy="customYearlyRecurrence"
-          >
-            {t('year')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+      <DropDownButton
+        id="dropdown-basic"
+        options={[
+          { value: Frequency.DAILY, label: t('day') },
+          { value: Frequency.WEEKLY, label: t('week') },
+          { value: Frequency.MONTHLY, label: t('month') },
+          { value: Frequency.YEARLY, label: t('year') },
+        ]}
+        selectedValue={frequency}
+        onSelect={(val: string) => onFrequencyChange(val as Frequency)}
+        variant="outline-secondary"
+        buttonLabel={frequencies[frequency]}
+        ariaLabel={t('frequency')}
+        dataTestIdPrefix="custom"
+        parentContainerStyle="ms-3 d-inline-block"
+        btnStyle={styles.dropdown}
+      />
     </div>
   );
 };

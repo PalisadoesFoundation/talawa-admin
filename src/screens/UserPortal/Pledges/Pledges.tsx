@@ -53,16 +53,6 @@ const Pledges = (): JSX.Element => {
     close: closeDeleteModal,
   } = useModalState();
 
-  type PledgeQueryResult = {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    networkStatus: number;
-    errors?: readonly Error[];
-  };
-  interface InterfacePledgeRefetchFn {
-    (): Promise<PledgeQueryResult>;
-  }
-
   const shouldSkip = !orgId || !userId;
 
   const {

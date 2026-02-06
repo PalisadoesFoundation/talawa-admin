@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePledgeModal`](../interfaces/InterfacePledgeModal.md)\>
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L103)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L82)
 
 Modal component for creating or editing pledges in a campaign.
 

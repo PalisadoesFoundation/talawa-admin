@@ -91,6 +91,10 @@ export const wrapperExemptions = [
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
   }),
+  createWrapperExemption({
+    componentName: 'StatusBadge',
+    allowedIds: ['mui-chip', 'mui-chip-path'],
+  }),
 ];
 
 export const avatarExemption = createWrapperExemption({

@@ -29,7 +29,6 @@ import { vi } from 'vitest';
 import { setupLocalStorageMock } from 'test-utils/localStorageMock';
 import PledgeModal, {
   type InterfacePledgeModal,
-  areOptionsEqual,
   getMemberLabel,
 } from './PledgeModal';
 
@@ -1046,126 +1045,87 @@ describe('PledgeModal', () => {
       renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
-        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+        const autocomplete = screen.getByTestId('pledgerSelect');
+        expect(autocomplete).toBeInTheDocument();
+      });
+    });
+
+    describe('PledgeModal helper logic (coverage)', () => {
+      it('getMemberLabel builds full name correctly', () => {
+        const member = {
+          id: '2',
+          firstName: 'John',
+          lastName: 'Doe',
+        };
+
+        expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
       });
 
-      const form = screen.getByTestId('pledgeForm');
-      expect(form).toBeInTheDocument();
+      // computeAdjustedEndDate tests removed - function no longer exists as dates are auto-generated
 
-      const autocomplete = screen.getByTestId('pledgerSelect');
-      expect(autocomplete).toBeInTheDocument();
-    });
-  });
-
-  describe('PledgeModal helper logic (coverage)', () => {
-    it('areOptionsEqual returns true when ids match', () => {
-      const option: InterfaceUserInfoPG = {
-        id: '1',
-        firstName: 'Alice',
-        lastName: 'Smith',
-        name: 'Alice Smith',
-      };
-
-      const value: InterfaceUserInfoPG = {
-        id: '1',
-        firstName: 'Bob',
-        lastName: 'Jones',
-        name: 'Bob Jones',
-      };
-
-      expect(areOptionsEqual(option, value)).toBe(true);
-    });
-
-    it('getMemberLabel builds full name correctly', () => {
-      const member = {
-        id: '2',
-        firstName: 'John',
-        lastName: 'Doe',
-      };
-
-      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
-    });
-
-    // computeAdjustedEndDate tests removed - function no longer exists as dates are auto-generated
-
-    it('areOptionsEqual returns false when ids do not match', () => {
-      const option: InterfaceUserInfoPG = {
-        id: '1',
-        firstName: 'Alice',
-        lastName: 'Smith',
-        name: 'Alice Smith',
-      };
-
-      const value: InterfaceUserInfoPG = {
-        id: '2',
-        firstName: 'A',
-        lastName: 'B',
-        name: 'A B',
-      };
-
-      expect(areOptionsEqual(option, value)).toBe(false);
-    });
-
-    it('getMemberLabel handles missing firstName', () => {
-      const member = { id: '1', firstName: '', lastName: 'Doe' };
-      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
-    });
-
-    // NEW: Test fallback to member.name when parts are missing
-    it('getMemberLabel falls back to member.name if parts are missing', () => {
-      const member = {
-        id: '1',
-        firstName: '',
-        lastName: '',
-        name: 'Fallback Name',
-      };
-      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe(
-        'Fallback Name',
-      );
-    });
-
-    it('should update pledgeUsers state when selecting a pledger from autocomplete in create mode', async () => {
-      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
-      renderPledgeModal(adminLink, pledgeProps[0]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+      it('getMemberLabel handles missing firstName', () => {
+        const member = { id: '1', firstName: '', lastName: 'Doe' };
+        expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
       });
 
-      const autocomplete = screen.getByTestId('pledgerSelect');
-      const input = within(autocomplete).getByRole('combobox');
+      // NEW: Test fallback to member.name when parts are missing
+      it('getMemberLabel falls back to member.name if parts are missing', () => {
+        const member = {
+          id: '1',
+          firstName: '',
+          lastName: '',
+          name: 'Fallback Name',
+        };
+        expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe(
+          'Fallback Name',
+        );
+      });
 
-      // Clear any existing selection first
-      const clearButton = within(autocomplete).queryByLabelText('Clear');
-      if (clearButton) {
-        await act(async () => {
-          await user.click(clearButton);
+      it('should update pledgeUsers state when selecting a pledger from autocomplete in create mode', async () => {
+        const adminLink = new StaticMockLink([
+          ...BASE_PLEDGE_MODAL_ADMIN_MOCKS,
+        ]);
+        renderPledgeModal(adminLink, pledgeProps[0]);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
         });
-      }
 
-      // Open the autocomplete
-      await user.click(input);
+        const autocomplete = screen.getByTestId('pledgerSelect');
+        const input = within(autocomplete).getByRole('combobox');
 
-      // Wait for options to be available
-      await waitFor(
-        () => {
-          const options = screen.queryAllByRole('option');
-          expect(options.length).toBeGreaterThan(0);
-        },
-        { timeout: 2000 },
-      );
+        // Clear any existing selection first
+        const clearButton = within(autocomplete).queryByLabelText('Clear');
+        if (clearButton) {
+          await act(async () => {
+            await user.click(clearButton);
+          });
+        }
 
-      // Try to select an option if available
-      const options = screen.getAllByRole('option');
-      if (options.length > 0) {
-        await act(async () => {
-          await user.click(options[0]);
+        // Open the autocomplete
+        await user.click(input);
+
+        // Wait for options to be available
+        await waitFor(
+          () => {
+            const options = screen.queryAllByRole('option');
+            expect(options.length).toBeGreaterThan(0);
+          },
+          { timeout: 2000 },
+        );
+
+        // Try to select an option if available
+        const options = screen.getAllByRole('option');
+        if (options.length > 0) {
+          await act(async () => {
+            await user.click(options[0]);
+          });
+        }
+
+        // Verify the autocomplete is still there after selection
+        await waitFor(() => {
+          expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
         });
-      }
-
-      // Verify the autocomplete is still there after selection
-      await waitFor(() => {
-        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
       });
     });
   });

@@ -140,13 +140,24 @@ export const MOCKS = [
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.fundId === 'fundId' &&
-      vars.name === 'Campaign 2' &&
-      vars.goalAmount === 200 &&
-      typeof vars.startAt === 'string' &&
-      typeof vars.endAt === 'string' &&
-      vars.currencyCode === 'USD',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const v = vars as {
+        fundId?: string;
+        name?: string;
+        goalAmount?: number;
+        startAt?: string;
+        endAt?: string;
+        currencyCode?: string;
+      };
+      return (
+        v.fundId === 'fundId' &&
+        v.name === 'Campaign 2' &&
+        v.goalAmount === 200 &&
+        typeof v.startAt === 'string' &&
+        typeof v.endAt === 'string' &&
+        v.currencyCode === 'USD'
+      );
+    },
     result: {
       data: {
         createFundCampaign: {
@@ -161,12 +172,24 @@ export const MOCKS = [
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.input.id === 'campaignId1' &&
-      vars.input.name === 'Campaign 4' &&
-      vars.input.goalAmount === 400 &&
-      typeof vars.input.startAt === 'string' &&
-      typeof vars.input.endAt === 'string',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const { input } = vars as {
+        input: {
+          id: string;
+          name: string;
+          goalAmount: number;
+          startAt: string;
+          endAt: string;
+        };
+      };
+      return (
+        input.id === 'campaignId1' &&
+        input.name === 'Campaign 4' &&
+        input.goalAmount === 400 &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string'
+      );
+    },
     result: {
       data: {
         updateFundCampaign: {
@@ -191,7 +214,7 @@ export const MOCK_ERROR = [
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: Record<string, any>) =>
+    variableMatcher: (vars: Record<string, unknown>) =>
       vars.fundId === 'fundId' &&
       vars.name === 'Campaign 2' &&
       vars.goalAmount === 200 &&
@@ -204,12 +227,24 @@ export const MOCK_ERROR = [
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
     },
-    variableMatcher: (vars: Record<string, any>) =>
-      vars.input.id === 'campaignId1' &&
-      vars.input.name === 'Campaign 4' &&
-      vars.input.goalAmount === 400 &&
-      typeof vars.input.startAt === 'string' &&
-      typeof vars.input.endAt === 'string',
+    variableMatcher: (vars: Record<string, unknown>) => {
+      const { input } = vars as {
+        input: {
+          id: string;
+          name: string;
+          goalAmount: number;
+          startAt: string;
+          endAt: string;
+        };
+      };
+      return (
+        input.id === 'campaignId1' &&
+        input.name === 'Campaign 4' &&
+        input.goalAmount === 400 &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string'
+      );
+    },
     error: new Error('Mock graphql error'),
   },
 ];

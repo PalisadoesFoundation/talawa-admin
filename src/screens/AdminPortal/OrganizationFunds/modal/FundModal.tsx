@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
-import { Button } from 'shared-components/Button';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
@@ -89,101 +87,96 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
 
-  const createFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
+  const handleSubmit = async (): Promise<void> => {
+    if (mode === 'create') {
+      const { fundName, isDefault, isTaxDeductible, isArchived } = formState;
 
-    try {
-      await createFund({
-        variables: {
-          name: fundName,
-          organizationId: orgId,
-          isTaxDeductible,
-          isArchived,
-          isDefault,
-        },
-      });
-
-      setFormState({
-        fundName: '',
-        fundRef: '',
-        isDefault: false,
-        isTaxDeductible: false,
-        isArchived: false,
-      });
-
-      NotificationToast.success(t('fundCreated') as string);
-      refetchFunds();
-      hide();
-    } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
-    }
-  };
-
-  const updateFundHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-    const { fundName, isTaxDeductible } = formState;
-
-    try {
-      const updatedFields: { [key: string]: string | boolean } = {};
-
-      if (fundName !== fund?.name) {
-        updatedFields.name = fundName;
-      }
-      if (isTaxDeductible !== fund?.isTaxDeductible) {
-        updatedFields.isTaxDeductible = isTaxDeductible;
-      }
-
-      if (Object.keys(updatedFields).length === 0) {
-        return;
-      }
-
-      await updateFund({
-        variables: {
-          input: {
-            id: fund?.id,
-            ...updatedFields,
+      try {
+        await createFund({
+          variables: {
+            name: fundName,
+            organizationId: orgId,
+            isTaxDeductible,
+            isArchived,
+            isDefault,
           },
-        },
-      });
+        });
 
-      setFormState({
-        fundName: '',
-        fundRef: '',
-        isDefault: false,
-        isTaxDeductible: false,
-        isArchived: false,
-      });
+        setFormState({
+          fundName: '',
+          fundRef: '',
+          isDefault: false,
+          isTaxDeductible: false,
+          isArchived: false,
+        });
 
-      refetchFunds();
-      hide();
-      NotificationToast.success(t('fundUpdated') as string);
-    } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
+        NotificationToast.success(t('fundCreated') as string);
+        refetchFunds();
+        hide();
+      } catch (error: unknown) {
+        NotificationToast.error((error as Error).message);
+      }
+    } else {
+      const { fundName, isTaxDeductible } = formState;
+
+      try {
+        const updatedFields: { [key: string]: string | boolean } = {};
+
+        if (fundName !== fund?.name) {
+          updatedFields.name = fundName;
+        }
+        if (isTaxDeductible !== fund?.isTaxDeductible) {
+          updatedFields.isTaxDeductible = isTaxDeductible;
+        }
+
+        if (Object.keys(updatedFields).length === 0) {
+          return;
+        }
+
+        await updateFund({
+          variables: {
+            input: {
+              id: fund?.id,
+              ...updatedFields,
+            },
+          },
+        });
+
+        setFormState({
+          fundName: '',
+          fundRef: '',
+          isDefault: false,
+          isTaxDeductible: false,
+          isArchived: false,
+        });
+
+        refetchFunds();
+        hide();
+        NotificationToast.success(t('fundUpdated') as string);
+      } catch (error: unknown) {
+        NotificationToast.error((error as Error).message);
+      }
     }
   };
+
+  const isFormValid = !!formState.fundName.trim() && !!formState.fundRef.trim();
 
   return (
-    <BaseModal
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
+      title={t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
       className={styles.fundModal}
-      show={isOpen}
-      onHide={hide}
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center">
-          <p className={styles.titlemodal} data-testid="modalTitle">
-            {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-          </p>
-        </div>
-      }
+      onPrimary={handleSubmit}
+      primaryText={t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
+      primaryDisabled={!isFormValid}
+      data-testid="fundModal"
     >
       <form
-        onSubmitCapture={
-          mode === 'create' ? createFundHandler : updateFundHandler
-        }
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
         className="p-3"
       >
         <div className="d-flex mb-3 w-100">
@@ -282,16 +275,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             </div>
           )}
         </div>
-
-        <Button
-          type="submit"
-          className={styles.addButton}
-          data-testid="createFundFormSubmitBtn"
-        >
-          {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-        </Button>
       </form>
-    </BaseModal>
+    </CRUDModalTemplate>
   );
 };
 

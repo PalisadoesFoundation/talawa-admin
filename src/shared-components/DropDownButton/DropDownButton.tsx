@@ -69,6 +69,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   btnStyle,
   searchable = false,
   searchPlaceholder,
+  noOptionsContent,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedSearchPlaceholder =
@@ -179,7 +180,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             ))
           ) : (
             <div className="px-3 py-2 text-muted text-center">
-              {tCommon('noOptionsFound')}
+              {noOptionsContent ?? tCommon('noOptionsFound')}
             </div>
           )}
         </Dropdown.Menu>
