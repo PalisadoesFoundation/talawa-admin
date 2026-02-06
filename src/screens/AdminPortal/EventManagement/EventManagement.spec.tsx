@@ -342,10 +342,7 @@ describe('Event Management', () => {
         });
 
         await waitFor(() => {
-          expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
-            'aria-expanded',
-            'false',
-          );
+          expect(screen.queryByTestId('tabs-menu')).not.toBeInTheDocument();
         });
       }
     });
@@ -377,7 +374,9 @@ describe('Event Management', () => {
       });
 
       const toggle = screen.getByTestId('tabs-toggle');
-      toggle.focus();
+      await act(async () => {
+        toggle.focus();
+      });
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
@@ -391,7 +390,9 @@ describe('Event Management', () => {
       });
 
       const toggle = screen.getByTestId('tabs-toggle');
-      toggle.focus();
+      await act(async () => {
+        toggle.focus();
+      });
       await user.keyboard(' ');
 
       await waitFor(() => {
