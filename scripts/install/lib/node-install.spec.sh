@@ -101,6 +101,11 @@ restore_env() {
 }
 
 source_library() {
+    # NOTE: TALAWA_NODE_INSTALL_SOURCED is declared readonly in node-install.sh (line 21),
+    # so the unset below silently fails and the source guard prevents re-sourcing.
+    # This means source_library() is effectively a no-op after the first load, and
+    # eval overrides (e.g., in test_ensure_node_toolchain_*) persist across tests.
+    # Alternatives: run tests in a subshell, or reset stubbed state explicitly.
     unset TALAWA_NODE_INSTALL_SOURCED 2>/dev/null || true
     unset TALAWA_COMMON_SOURCED 2>/dev/null || true
     
@@ -256,21 +261,19 @@ test_required_pnpm_version_default() {
 
 test_check_fnm_not_installed() {
     source_library
+    save_env
     
-    local original_path="$PATH"
-    local original_home="$HOME"
-    export PATH="/nonexistent:$PATH"
+    export PATH="/nonexistent"
     export HOME="/nonexistent"
+    unset FNM_DIR 2>/dev/null || true
     
     if check_fnm; then
-        export PATH="$original_path"
-        export HOME="$original_home"
+        restore_env
         echo "  check_fnm should return false when fnm is not installed"
         return 1
     fi
     
-    export PATH="$original_path"
-    export HOME="$original_home"
+    restore_env
     return 0
 }
 
@@ -739,6 +742,12 @@ test_ensure_node_toolchain_fail_fast() {
     export HOME="$fixture_dir"
     export PATH="/nonexistent:$SAVED_PATH"
     
+    local orig_check_fnm orig_install_fnm orig_check_node orig_install_node
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_install_fnm="$(declare -f install_fnm)"
+    orig_check_node="$(declare -f check_node)"
+    orig_install_node="$(declare -f install_node)"
+    
     eval 'check_fnm() { return 1; }'
     eval 'install_fnm() { return 1; }'
     eval 'check_node() { return 1; }'
@@ -765,6 +774,10 @@ test_ensure_node_toolchain_fail_fast() {
         result=1
     fi
     
+    eval "$orig_check_fnm"
+    eval "$orig_install_fnm"
+    eval "$orig_check_node"
+    eval "$orig_install_node"
     restore_env
     return $result
 }
@@ -777,6 +790,12 @@ test_ensure_node_toolchain_no_fail_fast() {
     fixture_dir=$(create_fixture "no-fail-fast")
     export HOME="$fixture_dir"
     export PATH="/nonexistent:$SAVED_PATH"
+    
+    local orig_check_fnm orig_install_fnm orig_check_node orig_check_pnpm
+    orig_check_fnm="$(declare -f check_fnm)"
+    orig_install_fnm="$(declare -f install_fnm)"
+    orig_check_node="$(declare -f check_node)"
+    orig_check_pnpm="$(declare -f check_pnpm)"
     
     eval 'check_fnm() { return 1; }'
     eval 'install_fnm() { return 1; }'
@@ -809,6 +828,10 @@ test_ensure_node_toolchain_no_fail_fast() {
         result=1
     fi
     
+    eval "$orig_check_fnm"
+    eval "$orig_install_fnm"
+    eval "$orig_check_node"
+    eval "$orig_check_pnpm"
     restore_env
     return $result
 }

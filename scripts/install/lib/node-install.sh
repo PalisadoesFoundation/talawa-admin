@@ -156,8 +156,23 @@ check_fnm() {
 
 # Set up fnm environment variables and PATH
 # This should be called before using fnm commands
+# Check order mirrors check_fnm: FNM_DIR first, then PATH, then common locations
 # Returns: 0 on success, 1 if fnm not found
 setup_fnm_env() {
+    # Honor FNM_DIR first (mirrors check_fnm priority)
+    if [[ -n "${FNM_DIR:-}" ]]; then
+        if [[ -x "$FNM_DIR/fnm" ]]; then
+            export PATH="$FNM_DIR:$PATH"
+            eval "$(fnm env --use-on-cd 2>/dev/null)" || true
+            return 0
+        fi
+        if [[ -x "$FNM_DIR/bin/fnm" ]]; then
+            export PATH="$FNM_DIR/bin:$PATH"
+            eval "$(fnm env --use-on-cd 2>/dev/null)" || true
+            return 0
+        fi
+    fi
+    
     # Already in PATH and working
     if command_exists fnm; then
         eval "$(fnm env --use-on-cd 2>/dev/null)" || true
@@ -176,15 +191,6 @@ setup_fnm_env() {
     # Check ~/.fnm (alternative location)
     if [[ -d "$HOME/.fnm" ]]; then
         export PATH="$HOME/.fnm:$PATH"
-        if command_exists fnm; then
-            eval "$(fnm env --use-on-cd 2>/dev/null)" || true
-            return 0
-        fi
-    fi
-    
-    # Check FNM_DIR if set
-    if [[ -n "${FNM_DIR:-}" ]] && [[ -d "$FNM_DIR" ]]; then
-        export PATH="$FNM_DIR:$PATH"
         if command_exists fnm; then
             eval "$(fnm env --use-on-cd 2>/dev/null)" || true
             return 0
@@ -575,9 +581,7 @@ ensure_node_toolchain() {
     fi
     
     # Check/install Node.js
-    if [[ "$had_error" == "true" && "$fail_fast" == "true" ]]; then
-        :
-    elif check_node; then
+    if check_node; then
         log_success "Node.js is available"
     else
         if ! install_node; then
@@ -590,9 +594,7 @@ ensure_node_toolchain() {
     fi
     
     # Check/install pnpm
-    if [[ "$had_error" == "true" && "$fail_fast" == "true" ]]; then
-        :
-    elif check_pnpm; then
+    if check_pnpm; then
         log_success "pnpm is available"
     else
         if ! install_pnpm; then
