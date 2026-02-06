@@ -901,7 +901,9 @@ describe('EventRegistrantsModal', () => {
       expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
 
       // Small delay between iterations
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await waitFor(() => {
+        expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
+      });
     }
   });
 
@@ -1726,7 +1728,7 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
                   const optionElement = renderOption ? (
                     renderOption(liProps, option, { selected: false })
                   ) : (
-                    <span>{label}</span>
+                    <span key={option.id}>{label}</span>
                   );
 
                   return optionElement;

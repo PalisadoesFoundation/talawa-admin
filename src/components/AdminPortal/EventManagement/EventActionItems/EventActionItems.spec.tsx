@@ -388,6 +388,7 @@ const renderEventActionItems = (
 
 describe('EventActionItems', () => {
   afterEach(() => {
+    setUseParamsMock({ orgId: 'orgId1' });
     vi.clearAllMocks();
     vi.restoreAllMocks();
   });
