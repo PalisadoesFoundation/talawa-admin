@@ -18,7 +18,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { errorHandler } from 'utils/errorHandler';
-import type { GroupChat } from 'types/UserPortal/Chat/type';
+import type { Chat } from 'types/UserPortal/Chat/interface';
 import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
@@ -191,7 +191,7 @@ const mocks = [
 
 describe('CreateDirectChatModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   const { setItem } = useLocalStorage();
   const toggleCreateDirectChatModal = vi.fn();
@@ -199,7 +199,6 @@ describe('CreateDirectChatModal', () => {
 
   beforeEach(() => {
     setItem('userId', '1');
-    vi.clearAllMocks();
   });
 
   const renderComponent = (props = {}) => {
@@ -297,33 +296,29 @@ describe('CreateDirectChatModal', () => {
 
   test('should prevent creating a duplicate chat', async () => {
     const user = userEvent.setup();
-    const existingChats: GroupChat[] = [
+    const existingChats: Chat[] = [
       {
-        _id: 'existing-chat-1',
-        isGroup: false,
+        id: 'existing-chat-1',
         name: 'Current User & Test User 2',
-        image: undefined,
-        messages: [],
-        admins: [],
-        users: [
-          {
-            _id: '1',
-            createdAt: dayjs.utc().toDate(),
-            email: 'user1@example.com',
-            firstName: 'Current',
-            lastName: 'User',
-          },
-          {
-            _id: 'user-2',
-            createdAt: dayjs.utc().toDate(),
-            email: 'user2@example.com',
-            firstName: 'Test',
-            lastName: 'User2',
-          },
-        ],
-        unseenMessagesByUsers: '',
         description: 'A direct chat conversation',
-        createdAt: dayjs.utc().toDate(),
+        isGroup: false,
+        createdAt: dayjs.utc().toISOString(),
+        members: {
+          edges: [
+            {
+              node: {
+                user: { id: '1', name: 'Current User' },
+                role: 'regular',
+              },
+            },
+            {
+              node: {
+                user: { id: 'user-2', name: 'Test User 2' },
+                role: 'regular',
+              },
+            },
+          ],
+        },
       },
     ];
 
