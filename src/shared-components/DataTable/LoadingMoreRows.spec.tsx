@@ -92,6 +92,7 @@ describe('LoadingMoreRows', () => {
       </table>,
     );
 
+    // 1 selectable cell + 1 column cell + 1 row-actions cell = 3 per row
     const cells = screen.getAllByTestId('data-skeleton-cell');
     expect(cells.length).toBe(5 * 3);
   });
