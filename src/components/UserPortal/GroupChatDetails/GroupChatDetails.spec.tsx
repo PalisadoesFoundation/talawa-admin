@@ -305,15 +305,15 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await userEvent.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await waitFor(async () => {
       expect(await screen.findByTestId('cancelEditBtn')).toBeInTheDocument();
     });
 
-    act(() => {
-      userEvent.click(screen.getByTestId('cancelEditBtn'));
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('cancelEditBtn'));
     });
 
     await waitFor(
@@ -341,7 +341,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editTitleBtn'));
+      await userEvent.click(await screen.findByTestId('editTitleBtn'));
     });
 
     await waitFor(async () => {
@@ -355,7 +355,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('updateTitleBtn'));
+      await userEvent.click(await screen.findByTestId('updateTitleBtn'));
     });
 
     await waitFor(
@@ -383,7 +383,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await userEvent.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -396,7 +396,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('searchBtn'));
+      await userEvent.click(await screen.findByTestId('searchBtn'));
     });
 
     await waitFor(
@@ -407,7 +407,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addUserBtn'));
+      await userEvent.click(await screen.findByTestId('addUserBtn'));
     });
     await waitFor(() => {
       expect(toastSuccess).toHaveBeenCalledWith('User added successfully');
@@ -431,7 +431,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await userEvent.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -444,7 +444,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('searchBtn'));
+      await userEvent.click(await screen.findByTestId('searchBtn'));
     });
   });
 
@@ -465,7 +465,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await userEvent.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -483,7 +483,7 @@ describe('GroupChatDetails', () => {
     // SearchBar renders a button with aria-label='Clear'
     const clearBtn = await screen.findByLabelText('Clear');
     await act(async () => {
-      userEvent.click(clearBtn);
+      await userEvent.click(clearBtn);
     });
 
     await waitFor(() => {
@@ -513,7 +513,7 @@ describe('GroupChatDetails', () => {
       { timeout: 5000 },
     );
     await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
+      await userEvent.click(await screen.findByTestId('editImageBtn'));
     });
 
     const fileInput = screen.getByTestId('fileInput');
@@ -633,9 +633,6 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    await act(async () => {
-      userEvent.click(dropdownToggle);
-    });
 
     await act(async () => await userEvent.click(dropdownToggle));
 
@@ -693,9 +690,6 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    await act(async () => {
-      userEvent.click(dropdownToggle);
-    });
 
     await act(async () => await userEvent.click(dropdownToggle));
 
@@ -744,9 +738,7 @@ describe('GroupChatDetails', () => {
       expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
     });
 
-    await act(async () => {
-      userEvent.click(await screen.findByTestId('editImageBtn'));
-    });
+    await userEvent.click(await screen.findByTestId('editImageBtn'));
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
@@ -844,9 +836,7 @@ describe('GroupChatDetails', () => {
     const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
     const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
-    await act(async () => {
-      await userEvent.click(deleteBtn);
-    });
+    await userEvent.click(deleteBtn);
 
     expect(confirmSpy).toHaveBeenCalled();
     expect(toastSuccess).not.toHaveBeenCalled();
@@ -1120,7 +1110,7 @@ describe('GroupChatDetails', () => {
       'member-actions-user2-item-roleChange',
     );
     await act(async () => {
-      userEvent.click(demoteItem);
+      await userEvent.click(demoteItem);
     });
 
     await waitFor(() =>
@@ -1171,9 +1161,8 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    await act(async () => {
-      userEvent.click(dropdownToggle);
-    });
+
+    await userEvent.click(dropdownToggle);
 
     const removeItem = screen.queryByTestId(
       'member-actions-user2-item-removeMember',
@@ -1227,16 +1216,15 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    await act(async () => {
-      userEvent.click(dropdownToggle);
-    });
+
+    await userEvent.click(dropdownToggle);
 
     const removeItem = await screen.findByTestId(
       'member-actions-user2-item-removeMember',
     );
     vi.spyOn(window, 'confirm').mockReturnValue(true);
     await act(async () => {
-      userEvent.click(removeItem);
+      await userEvent.click(removeItem);
     });
 
     await waitFor(() =>
@@ -1290,16 +1278,15 @@ describe('GroupChatDetails', () => {
     const dropdownToggle = await screen.findByTestId(
       'member-actions-user2-toggle',
     );
-    await act(async () => {
-      userEvent.click(dropdownToggle);
-    });
+
+    await userEvent.click(dropdownToggle);
 
     const removeItem = await screen.findByTestId(
       'member-actions-user2-item-removeMember',
     );
     vi.spyOn(window, 'confirm').mockReturnValue(false);
     await act(async () => {
-      userEvent.click(removeItem);
+      await userEvent.click(removeItem);
     });
 
     expect(toastSuccess).not.toHaveBeenCalled();
@@ -1326,7 +1313,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addMembers'));
+      await userEvent.click(await screen.findByTestId('addMembers'));
     });
 
     await waitFor(async () => {
@@ -1339,7 +1326,7 @@ describe('GroupChatDetails', () => {
     });
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('searchBtn'));
+      await userEvent.click(await screen.findByTestId('searchBtn'));
     });
 
     await waitFor(
@@ -1350,7 +1337,7 @@ describe('GroupChatDetails', () => {
     );
 
     await act(async () => {
-      userEvent.click(await screen.findByTestId('addUserBtn'));
+      await userEvent.click(await screen.findByTestId('addUserBtn'));
     });
 
     await waitFor(() => {

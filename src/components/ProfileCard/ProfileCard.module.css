@@ -37,7 +37,7 @@
 }
 
 .secondaryText {
-  font-weight: var(--font-weight-normal);
+  font-weight: var(--font-weight-regular);
   font-size: var(--font-size-xs);
   color: var(--color-gray-600);
 }

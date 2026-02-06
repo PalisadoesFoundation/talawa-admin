@@ -608,7 +608,7 @@ export const failingMocks = [
                 node: {
                   id: 'user3',
                   name: 'Disha Smith',
-                  avatarURL: null,
+                  avatarURL: undefined,
                   role: 'Member',
                 },
               },

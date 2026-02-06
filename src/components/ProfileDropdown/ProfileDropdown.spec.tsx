@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
@@ -61,6 +61,7 @@ afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
   window.history.replaceState(null, '', '/');
+  cleanup();
   clearAllItems();
 });
 
@@ -177,7 +178,9 @@ describe('ProfileDropdown Component', () => {
     await act(async () => {
       await userEvent.click(screen.getByTestId('profile-toggle'));
     });
-
+    await waitFor(() =>
+      expect(screen.getByTestId('profile-item-logout')).toBeInTheDocument(),
+    );
     await act(async () => {
       await userEvent.click(screen.getByTestId('profile-item-logout'));
     });
