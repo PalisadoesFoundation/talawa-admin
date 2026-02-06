@@ -98,4 +98,21 @@ describe('LoadingMoreRows', () => {
     const cells = screen.getAllByTestId('data-skeleton-cell');
     expect(cells.length).toBe(5 * 3);
   });
+
+  it('renders no skeleton rows when skeletonRows is 0', () => {
+    render(
+      <table>
+        <tbody>
+          <LoadingMoreRows
+            columns={columns}
+            effectiveSelectable={false}
+            hasRowActions={false}
+            skeletonRows={0}
+          />
+        </tbody>
+      </table>,
+    );
+
+    expect(screen.queryByTestId('skeleton-append-0')).not.toBeInTheDocument();
+  });
 });
