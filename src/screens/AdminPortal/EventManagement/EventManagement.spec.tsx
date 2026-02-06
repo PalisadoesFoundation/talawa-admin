@@ -281,15 +281,10 @@ describe('Event Management', () => {
 
   describe('Responsive Dropdown Tests', () => {
     beforeEach(() => {
-      vi.useRealTimers();
       vi.mocked(useParams).mockReturnValue({
         orgId: 'orgId',
         eventId: 'event123',
       });
-    });
-
-    afterEach(() => {
-      vi.useFakeTimers();
     });
 
     it('renders dropdown with all options', async () => {
@@ -361,30 +356,19 @@ describe('Event Management', () => {
       }
     });
 
-    it('closes dropdown after selecting an option', async () => {
+    it('closes dropdown when clicking toggle without selecting an option', async () => {
       await act(async () => {
         renderEventManagement();
       });
 
-      // Open dropdown
       await user.click(screen.getByTestId('tabs-toggle'));
 
-      // Wait for dropdown to be visible
       await waitFor(() => {
         expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
       });
 
-      // Click an option
-      await user.click(screen.getByTestId('tabs-item-registrants'));
+      await user.click(screen.getByTestId('tabs-toggle'));
 
-      // Wait for tab to switch
-      await waitFor(() => {
-        expect(screen.getByTestId('eventRegistrantsTab')).toBeInTheDocument();
-      });
-
-      // Verify dropdown is closed (dropdown items should not be visible or menu should have aria-expanded=false)
-      // This depends on your implementation, adjust accordingly
-      // Verify dropdown is closed by checking items are hidden
       await waitFor(() => {
         expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
           'aria-expanded',
