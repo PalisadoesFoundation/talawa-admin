@@ -30,16 +30,9 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
     <button
       type="button"
       onClick={togglePassword}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          togglePassword();
-        }
-      }}
       aria-label={showPassword ? t('hidePassword') : t('showPassword')}
       aria-pressed={showPassword}
       className="input-group-text bg-white border-start-0"
-      tabIndex={0}
     >
       {showPassword ? (
         <AiOutlineEyeInvisible aria-hidden />
@@ -58,7 +51,9 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
       placeholder={placeholder}
       value={value}
       onChange={(v) =>
-        onChange({ target: { value: v } } as ChangeEvent<HTMLInputElement>)
+        onChange({
+          target: { name, value: v },
+        } as ChangeEvent<HTMLInputElement>)
       }
       error={error ?? undefined}
       touched={!!error}

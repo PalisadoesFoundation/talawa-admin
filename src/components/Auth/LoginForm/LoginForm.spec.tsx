@@ -52,8 +52,18 @@ vi.mock('react-google-recaptcha', async () => {
             'data-testid': 'mock-recaptcha-input',
             'aria-label': 'Complete reCAPTCHA',
             onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-              props.onChange?.(e.target.value),
+              props.onChange?.(String(e.target.value)),
           }),
+          React.default.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'mock-recaptcha-complete',
+              'aria-label': 'Complete reCAPTCHA',
+              onClick: () => props.onChange?.('token'),
+            },
+            'Complete',
+          ),
           React.default.createElement(
             'button',
             {
@@ -369,7 +379,45 @@ describe('LoginForm', () => {
       expect(onError).toHaveBeenCalledTimes(1);
     });
 
-    test('handles AbortError from signin (catch returns early; useEffect may still call onError)', async () => {
+    test('on error with recaptcha enabled, resets reCAPTCHA and calls onError', async () => {
+      const onError = vi.fn();
+      const link = new ApolloLink(
+        () =>
+          new Observable((observer) => {
+            observer.error(new Error('Network failed'));
+          }),
+      );
+
+      render(
+        <MockedProvider link={link}>
+          <LoginForm
+            {...defaultProps}
+            onError={onError}
+            enableRecaptcha={true}
+          />
+        </MockedProvider>,
+      );
+
+      const completeButton = screen.getByTestId('mock-recaptcha-complete');
+      await user.click(completeButton);
+
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'test@example.com',
+      );
+      await user.type(screen.getByTestId('login-form-password'), 'password123');
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledWith(expect.any(Error));
+        expect(recaptchaResetSpy).toHaveBeenCalled();
+      });
+      expect((onError.mock.calls[0][0] as Error).message).toBe(
+        'Network failed',
+      );
+    });
+
+    test('handles AbortError from signin (catch returns early; useEffect ignores AbortError)', async () => {
       const onError = vi.fn();
       const link = new ApolloLink(
         () =>
@@ -395,13 +443,47 @@ describe('LoginForm', () => {
       await user.type(screen.getByTestId('login-form-password'), 'password123');
       await user.click(screen.getByTestId('login-form-submit'));
 
-      // Catch block runs and returns early for AbortError (lines 113–114); hook may still set error so useEffect can call onError
+      // Catch block returns early for AbortError; useEffect ignores AbortError and does not call onError
       await waitFor(() => {
-        expect(onError).toHaveBeenCalledTimes(1);
+        expect(onError).not.toHaveBeenCalled();
       });
     });
 
-    test('on signin rejection (non-Abort), calls onError and resets reCAPTCHA when enabled', async () => {
+    test('AbortError in catch: returns early without resetting reCAPTCHA or calling onError', async () => {
+      const onError = vi.fn();
+      const link = new ApolloLink(
+        () =>
+          new Observable((observer) => {
+            observer.error(new DOMException('aborted', 'AbortError'));
+          }),
+      );
+
+      render(
+        <MockedProvider link={link}>
+          <LoginForm
+            {...defaultProps}
+            onError={onError}
+            enableRecaptcha={true}
+          />
+        </MockedProvider>,
+      );
+
+      const completeButton = screen.getByTestId('mock-recaptcha-complete');
+      await user.click(completeButton);
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'test@example.com',
+      );
+      await user.type(screen.getByTestId('login-form-password'), 'password123');
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      await waitFor(() => {
+        expect(onError).not.toHaveBeenCalled();
+        expect(recaptchaResetSpy).not.toHaveBeenCalled();
+      });
+    });
+
+    test('on signin rejection (non-Abort), catch block calls onError with thrown error', async () => {
       const onError = vi.fn();
       const link = new ApolloLink(
         () =>
@@ -429,8 +511,10 @@ describe('LoginForm', () => {
 
       await waitFor(() => {
         expect(onError).toHaveBeenCalledWith(expect.any(Error));
+        expect(onError).toHaveBeenCalledTimes(1);
       });
-      // With recaptcha disabled, catch block still runs (reset/setRecaptchaToken/onError); recaptchaRef is null so reset is no-op
+      const [callArg] = onError.mock.calls[0];
+      expect((callArg as Error).message).toBe('Network failed');
     });
 
     test('does not throw when onError is not provided', async () => {
@@ -556,8 +640,8 @@ describe('LoginForm', () => {
         </MockedProvider>,
       );
 
-      const recaptchaInput = screen.getByTestId('mock-recaptcha-input');
-      await user.type(recaptchaInput, 'token');
+      const completeButton = screen.getByTestId('mock-recaptcha-complete');
+      await user.click(completeButton);
 
       const submitButton = screen.getByTestId('login-form-submit');
       expect(submitButton).not.toBeDisabled();

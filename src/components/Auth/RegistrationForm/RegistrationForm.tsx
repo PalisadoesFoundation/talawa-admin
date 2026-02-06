@@ -152,7 +152,6 @@ export const RegistrationForm = ({
               sitekey={RECAPTCHA_SITE_KEY}
               onChange={(token): void => setRecaptchaToken(token)}
               onExpired={(): void => setRecaptchaToken(null)}
-              data-testid="recaptcha-container"
             />
           )}
         </div>

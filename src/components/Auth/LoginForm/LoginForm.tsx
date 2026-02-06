@@ -65,6 +65,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   });
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const reportedNotFoundRef = useRef(false);
 
   const isRecaptchaBlocking =
     enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken;
@@ -76,19 +77,29 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   // Single effect: error first, then success, then not-found
   useEffect(() => {
     if (error) {
+      const isAbortError =
+        (error instanceof DOMException && error.name === 'AbortError') ||
+        (error as { networkError?: { name?: string } })?.networkError?.name ===
+          'AbortError';
+      if (isAbortError) return;
+      reportedNotFoundRef.current = false;
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
       onErrorRef.current?.(error);
       return;
     }
     if (data?.signIn?.authenticationToken) {
+      reportedNotFoundRef.current = false;
       onSuccessRef.current?.(data.signIn);
       return;
     }
     if (data !== undefined && !data?.signIn) {
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
-      onErrorRef.current?.(new Error('Not found'));
+      if (!reportedNotFoundRef.current) {
+        reportedNotFoundRef.current = true;
+        recaptchaRef.current?.reset();
+        setRecaptchaToken(null);
+        onErrorRef.current?.(new Error('Not found'));
+      }
     }
   }, [data, error]);
 
