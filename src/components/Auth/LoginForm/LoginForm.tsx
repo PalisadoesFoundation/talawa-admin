@@ -5,7 +5,7 @@ import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
-import { PasswordField } from '../PasswordField/PasswordField';
+import { PasswordField } from '../../../shared-components/Auth/PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import type {
   InterfaceLoginFormData,

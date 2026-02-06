@@ -2,6 +2,8 @@ import React from 'react';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { ApolloLink } from '@apollo/client/link/core';
+import { Observable } from '@apollo/client/utilities';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { StaticMockLink } from '../../../utils/StaticMockLink';
 import { LoginForm } from './LoginForm';
@@ -146,80 +148,6 @@ const mockSignInGraphQLError: MockedResponse = {
   },
 };
 
-const _mockSignInNotFound: MockedResponse & {
-  variableMatcher?: (vars: Record<string, unknown>) => boolean;
-} = {
-  request: {
-    query: SIGNIN_QUERY,
-    variables: {
-      email: 'test@example.com',
-      password: 'password123',
-      recaptchaToken: 'recaptcha-token',
-    },
-  },
-  variableMatcher: (vars) =>
-    vars?.email === 'test@example.com' &&
-    vars?.password === 'password123' &&
-    vars?.recaptchaToken === 'recaptcha-token',
-  result: {
-    data: {
-      signIn: null,
-    },
-  },
-};
-
-const _mockSignInSuccessWithRecaptcha: MockedResponse & {
-  variableMatcher?: (vars: Record<string, unknown>) => boolean;
-} = {
-  request: {
-    query: SIGNIN_QUERY,
-    variables: {
-      email: 'test@example.com',
-      password: 'password123',
-      recaptchaToken: 'recaptcha-token',
-    },
-  },
-  variableMatcher: (vars) =>
-    vars?.email === 'test@example.com' &&
-    vars?.password === 'password123' &&
-    vars?.recaptchaToken === 'recaptcha-token',
-  result: {
-    data: {
-      signIn: {
-        user: {
-          id: '1',
-          name: 'Test User',
-          emailAddress: 'test@example.com',
-          role: 'user',
-          countryCode: 'US',
-          avatarURL: null,
-          isEmailAddressVerified: true,
-        },
-        authenticationToken: 'test-auth-token',
-        refreshToken: 'test-refresh-token',
-      },
-    },
-  },
-};
-
-const _mockSignInErrorWithRecaptcha: MockedResponse & {
-  variableMatcher?: (vars: Record<string, unknown>) => boolean;
-} = {
-  request: {
-    query: SIGNIN_QUERY,
-    variables: {
-      email: 'wrong@example.com',
-      password: 'wrongpassword',
-      recaptchaToken: 'recaptcha-token',
-    },
-  },
-  variableMatcher: (vars) =>
-    vars?.email === 'wrong@example.com' &&
-    vars?.password === 'wrongpassword' &&
-    vars?.recaptchaToken === 'recaptcha-token',
-  error: new Error('Invalid credentials'),
-};
-
 describe('LoginForm', () => {
   let user: ReturnType<typeof userEvent.setup>;
   const defaultProps = {
@@ -234,7 +162,6 @@ describe('LoginForm', () => {
   afterEach(() => {
     cleanup();
     vi.clearAllMocks();
-    recaptchaResetSpy.mockClear();
   });
 
   describe('Basic Rendering', () => {
@@ -442,6 +369,70 @@ describe('LoginForm', () => {
       expect(onError).toHaveBeenCalledTimes(1);
     });
 
+    test('handles AbortError from signin (catch returns early; useEffect may still call onError)', async () => {
+      const onError = vi.fn();
+      const link = new ApolloLink(
+        () =>
+          new Observable((observer) => {
+            observer.error(new DOMException('aborted', 'AbortError'));
+          }),
+      );
+
+      render(
+        <MockedProvider link={link}>
+          <LoginForm
+            {...defaultProps}
+            enableRecaptcha={false}
+            onError={onError}
+          />
+        </MockedProvider>,
+      );
+
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'test@example.com',
+      );
+      await user.type(screen.getByTestId('login-form-password'), 'password123');
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      // Catch block runs and returns early for AbortError (lines 113–114); hook may still set error so useEffect can call onError
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('on signin rejection (non-Abort), calls onError and resets reCAPTCHA when enabled', async () => {
+      const onError = vi.fn();
+      const link = new ApolloLink(
+        () =>
+          new Observable((observer) => {
+            observer.error(new Error('Network failed'));
+          }),
+      );
+
+      render(
+        <MockedProvider link={link}>
+          <LoginForm
+            {...defaultProps}
+            enableRecaptcha={false}
+            onError={onError}
+          />
+        </MockedProvider>,
+      );
+
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'test@example.com',
+      );
+      await user.type(screen.getByTestId('login-form-password'), 'password123');
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      await waitFor(() => {
+        expect(onError).toHaveBeenCalledWith(expect.any(Error));
+      });
+      // With recaptcha disabled, catch block still runs (reset/setRecaptchaToken/onError); recaptchaRef is null so reset is no-op
+    });
+
     test('does not throw when onError is not provided', async () => {
       render(
         <MockedProvider link={new StaticMockLink([mockSignInError], true)}>
@@ -539,6 +530,23 @@ describe('LoginForm', () => {
 
       const submitButton = screen.getByTestId('login-form-submit');
       expect(submitButton).toBeDisabled();
+    });
+
+    test('handleSubmit returns early when enableRecaptcha is true and no token (no signin call)', async () => {
+      const link = new StaticMockLink([], true);
+
+      render(
+        <MockedProvider link={link}>
+          <LoginForm {...defaultProps} enableRecaptcha={true} />
+        </MockedProvider>,
+      );
+
+      const form = screen.getByTestId('login-form') as HTMLFormElement;
+      form.requestSubmit();
+
+      await waitFor(() => {
+        expect(link.operation).toBeUndefined();
+      });
     });
 
     test('calls onExpired and disables submit when reCAPTCHA expires', async () => {

@@ -1797,6 +1797,77 @@ describe('Extra coverage for 100 %', () => {
     vi.doUnmock('Constant/constant.ts');
   });
 
+  it('sets document.title on render', async () => {
+    setLocationPath('/');
+    renderLoginPage();
+    await wait();
+    expect(document.title).toBeTruthy();
+    expect(document.title).not.toBe('');
+  });
+
+  it('handleLoginSuccess when user.countryCode is null still navigates (skips changeLanguage)', async () => {
+    const COUNTRY_NULL_MOCKS = [
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'nocc@example.com', password: 'pass' },
+        },
+        variableMatcher: (vars: Record<string, unknown> | undefined) =>
+          vars?.email === 'nocc@example.com' && vars?.password === 'pass',
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '1',
+                role: 'user',
+                name: 'User',
+                emailAddress: 'nocc@example.com',
+                countryCode: null,
+                avatarURL: null,
+                isEmailAddressVerified: true,
+              },
+              authenticationToken: 'token',
+              refreshToken: 'refreshToken',
+            },
+          },
+        },
+      },
+    ];
+    setLocationPath('/');
+    vi.resetModules();
+    vi.doMock('Constant/constant.ts', async () => ({
+      ...(await vi.importActual<object>('Constant/constant.ts')),
+      REACT_APP_USE_RECAPTCHA: 'NO',
+    }));
+    const { default: LoginPageNoRecaptcha } = await import('./LoginPage');
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(COUNTRY_NULL_MOCKS, true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPageNoRecaptcha />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'nocc@example.com',
+      );
+      await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+      await user.click(screen.getByTestId('login-form-submit'));
+      await waitFor(() => {
+        expect(routerMocks.navigate).toHaveBeenCalledWith(
+          '/user/organizations',
+        );
+      });
+    });
+  });
+
   it('bypasses recaptcha when feature is off', async () => {
     // Ensure pathname exists to prevent i18n language detector crash
     setLocationPath('/');

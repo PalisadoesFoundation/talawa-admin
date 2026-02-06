@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { usePasswordVisibility } from '../../../hooks/usePasswordVisibility';
-import type { InterfacePasswordFieldProps } from '../../../types/Auth/PasswordField/interface';
+import type { InterfacePasswordFieldProps } from '../../../types/shared-components/Auth/PasswordField/interface';
 
 /**
  * Reusable password field component with visibility toggle functionality.

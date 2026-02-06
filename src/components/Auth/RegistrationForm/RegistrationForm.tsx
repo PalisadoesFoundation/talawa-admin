@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import { FormField } from '../../../shared-components/Auth/FormField/FormField';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
-import { PasswordField } from '../PasswordField/PasswordField';
+import { PasswordField } from '../../../shared-components/Auth/PasswordField/PasswordField';
 import { PasswordStrengthIndicator } from '../PasswordStrengthIndicator/PasswordStrengthIndicator';
 import { OrgSelector } from '../OrgSelector/OrgSelector';
 import { useRegistration } from '../../../hooks/auth/useRegistration';
