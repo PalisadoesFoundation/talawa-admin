@@ -26,7 +26,13 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import type { ChangeEvent } from 'react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { InputGroup, FormControl } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
@@ -254,6 +260,86 @@ function AddMember(): JSX.Element {
   };
   const allUsersData =
     userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
+
+  const tableData = useMemo(
+    () =>
+      allUsersData.map((user: IUserDetails, index: number) => ({
+        ...user,
+        rowIndex: page * PAGE_SIZE + index + 1,
+      })),
+    [allUsersData, page, PAGE_SIZE],
+  );
+
+  const columns = useMemo(
+    () =>
+      [
+        {
+          id: 'index',
+          header: '#',
+          accessor: 'rowIndex',
+        },
+        {
+          id: 'profile',
+          header: translateAddMember('addMember.profile'),
+          accessor: 'avatarURL',
+          render: (value, row) => (
+            <div data-testid="profileImage" className={styles.profileCell}>
+              {value ? (
+                <img
+                  src={value as string}
+                  alt={`${row.name} ${tCommon('avatar')}`}
+                  className={styles.TableImage}
+                  crossOrigin="anonymous"
+                  loading="lazy"
+                />
+              ) : (
+                <Avatar
+                  avatarStyle={styles.TableImage}
+                  name={row.name}
+                  dataTestId="avatarImage"
+                />
+              )}
+            </div>
+          ),
+        },
+        {
+          id: 'user',
+          header: translateAddMember('addMember.user'),
+          accessor: 'name',
+          render: (_, row) => (
+            <Link
+              className={`${styles.membername} ${styles.subtleBlueGrey}`}
+              to={{
+                pathname: `/admin/member/${currentUrl}/${row.id}`,
+              }}
+            >
+              {row.name}
+              <br />
+              {row.emailAddress}
+            </Link>
+          ),
+        },
+        {
+          id: 'action',
+          header: translateAddMember('addMember.addMember'),
+          accessor: 'id',
+          render: (_, row) => (
+            <Button
+              onClick={() => {
+                createMember(row.id);
+              }}
+              data-testid="addBtn"
+              className={styles.addButton}
+            >
+              <i className={'fa fa-plus me-2'} />
+              {translateAddMember('addMember.add')}
+            </Button>
+          ),
+        },
+      ] as IColumnDef<IUserDetails & { rowIndex: number }>[],
+    [translateAddMember, tCommon, currentUrl, styles, createMember],
+  );
+
   return (
     <>
       <PageHeader
@@ -295,80 +381,8 @@ function AddMember(): JSX.Element {
           />
         </div>
         <DataTable<IUserDetails & { rowIndex: number }>
-          data={allUsersData.map((user: IUserDetails, index: number) => ({
-            ...user,
-            rowIndex: page * PAGE_SIZE + index + 1,
-          }))}
-          columns={
-            [
-              {
-                id: 'index',
-                header: '#',
-                accessor: 'rowIndex',
-              },
-              {
-                id: 'profile',
-                header: translateAddMember('addMember.profile'),
-                accessor: 'avatarURL',
-                render: (value, row) => (
-                  <div
-                    data-testid="profileImage"
-                    className={styles.profileCell}
-                  >
-                    {value ? (
-                      <img
-                        src={value as string}
-                        alt={`${row.name} ${tCommon('avatar')}`}
-                        className={styles.TableImage}
-                        crossOrigin="anonymous"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <Avatar
-                        avatarStyle={styles.TableImage}
-                        name={row.name}
-                        data-testid="avatarImage"
-                      />
-                    )}
-                  </div>
-                ),
-              },
-              {
-                id: 'user',
-                header: translateAddMember('addMember.user'),
-                accessor: 'name',
-                render: (_, row) => (
-                  <Link
-                    className={`${styles.membername} ${styles.subtleBlueGrey}`}
-                    to={{
-                      pathname: `/admin/member/${currentUrl}/${row.id}`,
-                    }}
-                  >
-                    {row.name}
-                    <br />
-                    {row.emailAddress}
-                  </Link>
-                ),
-              },
-              {
-                id: 'action',
-                header: translateAddMember('addMember.addMember'),
-                accessor: 'id',
-                render: (_, row) => (
-                  <Button
-                    onClick={() => {
-                      createMember(row.id);
-                    }}
-                    data-testid="addBtn"
-                    className={styles.addButton}
-                  >
-                    <i className={'fa fa-plus me-2'} />
-                    {translateAddMember('addMember.add')}
-                  </Button>
-                ),
-              },
-            ] as IColumnDef<IUserDetails & { rowIndex: number }>[]
-          }
+          data={tableData}
+          columns={columns}
           rowKey="id"
           loading={userLoading}
           error={userError || undefined}

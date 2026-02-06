@@ -423,8 +423,18 @@ const renderAddMemberView = ({
 
 function getDataTableBodyRows(): HTMLElement[] {
   const table = screen.getByTestId('datatable');
+  const tbody = table.querySelector('tbody');
+  if (tbody) {
+    return Array.from(tbody.querySelectorAll('tr'));
+  }
+  // Fallback: skip header row(s) by counting rows that contain columnheader cells
   const rows = within(table).getAllByRole('row');
-  return rows.slice(1); // skip header row
+  const headerCount = within(table).queryAllByRole('columnheader').length ?? 0;
+  expect(headerCount).toBeGreaterThanOrEqual(0);
+  const headerRowCount = rows.filter(
+    (row) => within(row).queryAllByRole('columnheader').length > 0,
+  ).length;
+  return rows.slice(headerRowCount);
 }
 
 describe('AddMember Screen', () => {
