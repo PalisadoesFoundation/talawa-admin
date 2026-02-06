@@ -16,7 +16,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-cell:focus.outline
 
-> **outline**: `string` = `'2px solid #000'`
+> **outline**: `string` = `'var(--border-2) solid var(--color-black)'`
 
 #### & .MuiDataGrid-cell:focus.outlineOffset
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-main.borderRadius
 
-> **borderRadius**: `string` = `'0.1rem'`
+> **borderRadius**: `string` = `'var(--radius-xs)'`
 
 #### & .MuiDataGrid-root
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-root.borderRadius
 
-> **borderRadius**: `string` = `'0.1rem'`
+> **borderRadius**: `string` = `'var(--radius-xs)'`
 
 #### & .MuiDataGrid-row:hover
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-row:hover.boxShadow
 
-> **boxShadow**: `string` = `'0 0 0 1px rgba(0, 0, 0, 0.1)'`
+> **boxShadow**: `string` = `'0 0 0 1px var(--color-black-opacity-10)'`
 
 #### & .MuiDataGrid-row.Mui-hovered
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-row.Mui-hovered.boxShadow
 
-> **boxShadow**: `string` = `'0 0 0 1px rgba(0, 0, 0, 0.1)'`
+> **boxShadow**: `string` = `'0 0 0 1px var(--color-black-opacity-10)'`
 
 #### & .MuiDataGrid-topContainer
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-topContainer.top
 
-> **top**: `number` = `290`
+> **top**: `string` = `'var(--space-290)'`
 
 #### & .MuiDataGrid-topContainer.zIndex
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/Palisadoe
 
 #### & .MuiDataGrid-virtualScrollerContent.marginTop
 
-> **marginTop**: `number` = `6.5`
+> **marginTop**: `string` = `'var(--space-6-5)'`
 
 #### &.MuiDataGrid-root .MuiDataGrid-cell:focus-within
 
