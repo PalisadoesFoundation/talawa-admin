@@ -300,7 +300,7 @@ required_node_version() {
     # Check for .nvmrc file in current directory
     if [[ -f ".nvmrc" ]]; then
         local version
-        version="$(cat .nvmrc 2>/dev/null | tr -d '[:space:]')"
+        version="$(tr -d '[:space:]' < .nvmrc 2>/dev/null)"
         if [[ -n "$version" ]]; then
             printf '%s' "$version"
             return 0
@@ -515,6 +515,8 @@ install_pnpm() {
 # Returns: 0 if pnpm works correctly, 1 otherwise
 # Outputs: pnpm version to stdout on success
 verify_pnpm() {
+    setup_fnm_env || true
+    
     if ! command_exists pnpm; then
         log_error "pnpm is not available in PATH"
         return 1

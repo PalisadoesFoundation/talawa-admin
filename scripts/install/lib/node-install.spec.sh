@@ -678,6 +678,7 @@ test_check_fnm_locations() {
     fi
     
     # Test: fnm in ~/.local/share/fnm
+    unset FNM_DIR 2>/dev/null || true
     local fixture2
     fixture2=$(create_fixture "check-fnm-local")
     mkdir -p "$fixture2/.local/share/fnm"
@@ -691,6 +692,7 @@ test_check_fnm_locations() {
     fi
     
     # Test: fnm in ~/.fnm
+    unset FNM_DIR 2>/dev/null || true
     local fixture3
     fixture3=$(create_fixture "check-fnm-home")
     mkdir -p "$fixture3/.fnm"
@@ -769,8 +771,8 @@ test_ensure_node_toolchain_fail_fast() {
         result=1
     fi
     
-    if [[ "$output" == *"Node.js"* && "$output" != *"Checking"* ]]; then
-        echo "  ensure_node_toolchain --fail-fast should not attempt Node.js after fnm fails"
+    if [[ "$output" == *"Node.js is available"* ]] || [[ "$output" == *"Node.js installation failed"* ]]; then
+        echo "  ensure_node_toolchain --fail-fast should not attempt Node.js install after fnm fails"
         result=1
     fi
     
