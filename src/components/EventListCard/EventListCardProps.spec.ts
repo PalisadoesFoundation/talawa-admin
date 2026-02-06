@@ -37,6 +37,8 @@ describe('EventListCardProps', () => {
   });
 
   it('should allow calling refetchEvents when provided', () => {
+    const eventsWithRefetch = props.filter((e) => e.refetchEvents);
+    expect(eventsWithRefetch.length).toBeGreaterThan(0);
     props.forEach((event) => {
       if (event.refetchEvents) {
         expect(() => event.refetchEvents?.()).not.toThrow();
