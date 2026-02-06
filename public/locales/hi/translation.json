@@ -1884,6 +1884,7 @@
     "description": "विवरण",
     "hash": "#",
     "groupInfo": "समूह जानकारी",
+    "memberOptions": "सदस्य विकल्प",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
@@ -1913,7 +1914,10 @@
     "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
     "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
     "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
-    "next": "अगला"
+    "next": "अगला",
+    "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
+    "thisUser": "इस उपयोगकर्ता",
+    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",

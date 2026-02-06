@@ -46,9 +46,10 @@ import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
 import { ListGroup } from 'react-bootstrap';
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
-import { useMutation, useQuery } from '@apollo/client/react';
+import { useMutation, useQuery } from '@apollo/client';
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
@@ -68,14 +69,17 @@ import { useTranslation } from 'react-i18next';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
+import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceGroupChatDetailsProps } from 'types/UserPortal/Chat/interface';
+import type {
+  InterfaceGroupChatDetailsProps,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import DropDownButton from 'shared-components/DropDownButton';
 
 export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
@@ -101,16 +105,15 @@ export default function GroupChatDetails({
 
   if (!userId) {
     return (
-      <CRUDModalTemplate
-        open={groupChatDetailsModalisOpen}
-        onClose={toggleGroupChatDetailsModal}
+      <BaseModal
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
         title={t('Error')}
-        data-testid="groupChatDetailsModal"
+        dataTestId="groupChatDetailsModal"
         className={styles.modalContent}
-        showFooter={false}
       >
         {t('userNotFound')}
-      </CRUDModalTemplate>
+      </BaseModal>
     );
   }
 
@@ -132,7 +135,7 @@ export default function GroupChatDetails({
   const [deleteChat] = useMutation(DELETE_CHAT);
   const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
 
-  const currentUserRole = chat.members.edges.find(
+  const currentUserRole = chat.members?.edges?.find(
     (edge) => edge.node.user.id === userId,
   )?.node.role;
 
@@ -188,20 +191,7 @@ export default function GroupChatDetails({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery<{
-    organization: {
-      members: {
-        edges: {
-          node: {
-            id: string;
-            name: string;
-            avatarURL?: string;
-            role: string;
-          };
-        }[];
-      };
-    };
-  }>(ORGANIZATION_MEMBERS, {
+  } = useQuery(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: chat.organization?.id },
       first: 20,
@@ -275,40 +265,40 @@ export default function GroupChatDetails({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <CRUDModalTemplate
-        open={groupChatDetailsModalisOpen}
-        onClose={toggleGroupChatDetailsModal}
-        data-testid="groupChatDetailsModal"
+      <BaseModal
+        show={groupChatDetailsModalisOpen}
+        onHide={toggleGroupChatDetailsModal}
+        dataTestId="groupChatDetailsModal"
         className={styles.modalContent}
-        showFooter={false}
-        customFooter={
-          currentUserRole === 'administrator' ? (
-            <Button
-              variant="outline-danger"
-              size="sm"
-              aria-label={t('deleteChat')}
-              onClick={async () => {
-                if (
-                  window.confirm('Are you sure you want to delete this chat?')
-                ) {
-                  try {
-                    await deleteChat({
-                      variables: { input: { id: chat.id } },
-                    });
-                    NotificationToast.success(t('chatDeletedSuccessfully'));
-                    toggleGroupChatDetailsModal();
-                  } catch (error) {
-                    NotificationToast.error(t('failedToDeleteChat'));
-                    console.error(error);
+        headerContent={
+          <div className="d-flex justify-content-between w-100">
+            <div className="modal-title h4">{t('groupInfo')}</div>
+            {currentUserRole === 'administrator' && (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                aria-label={t('deleteChat')}
+                onClick={async () => {
+                  if (window.confirm(t('deleteChatConfirmation'))) {
+                    try {
+                      await deleteChat({
+                        variables: { input: { id: chat.id } },
+                      });
+                      NotificationToast.success(t('chatDeletedSuccessfully'));
+                      toggleGroupChatDetailsModal();
+                      // Maybe navigate away or refetch chats
+                    } catch (error) {
+                      NotificationToast.error(t('failedToDeleteChat'));
+                      console.error(error);
+                    }
                   }
-                }
-              }}
-            >
-              <FaTrash />
-            </Button>
-          ) : undefined
+                }}
+              >
+                <FaTrash />
+              </Button>
+            )}
+          </div>
         }
-        title={t('groupInfo')}
       >
         <input
           type="file"
@@ -388,14 +378,14 @@ export default function GroupChatDetails({
           )}
 
           <p>
-            {chat?.members.edges.length} {t('members')}
+            {chat?.members?.edges?.length || 0} {t('members')}
           </p>
           <p>{chat?.description}</p>
         </div>
 
         <div>
           <h5>
-            {chat.members.edges.length} {t('members')}
+            {chat.members?.edges?.length || 0} {t('members')}
           </h5>
           <ListGroup className={styles.memberList} variant="flush">
             <ListGroup.Item
@@ -407,7 +397,7 @@ export default function GroupChatDetails({
             >
               <Add /> {t('addMembers')}
             </ListGroup.Item>
-            {chat.members.edges.map((edge) => {
+            {chat.members?.edges?.map((edge) => {
               const user = edge.node.user;
               const role = edge.node.role;
               const isCurrentUser = user.id === userId;
@@ -438,10 +428,14 @@ export default function GroupChatDetails({
                     </div>
                     {canManage && (
                       <DropDownButton
-                        id={`member-actions-${user.id}`}
+                        id={`dropdown-${user.id}`}
+                        variant="outline-secondary"
+                        icon={<BsThreeDotsVertical />}
+                        buttonLabel=" "
+                        ariaLabel={t('memberOptions')}
                         options={[
                           {
-                            value: 'toggleRole',
+                            value: 'roleChange',
                             label:
                               role === 'administrator'
                                 ? t('demoteToRegular')
@@ -450,23 +444,21 @@ export default function GroupChatDetails({
                           ...(canRemove
                             ? [
                                 {
-                                  value: 'remove',
+                                  value: 'removeMember',
                                   label: t('remove'),
                                 },
                               ]
                             : []),
                         ]}
-                        selectedValue={undefined}
-                        onSelect={(val) => {
-                          if (val === 'toggleRole') {
-                            void handleRoleChange(
+                        onSelect={(value) => {
+                          if (value === 'roleChange') {
+                            handleRoleChange(
                               user.id,
                               role === 'administrator'
                                 ? 'regular'
                                 : 'administrator',
                             );
-                          }
-                          if (val === 'remove') {
+                          } else if (value === 'removeMember') {
                             if (
                               window.confirm(
                                 t('confirmRemoveMember', {
@@ -474,14 +466,13 @@ export default function GroupChatDetails({
                                 }),
                               )
                             ) {
-                              void handleRemoveMember(user.id);
+                              handleRemoveMember(user.id);
                             }
                           }
                         }}
-                        ariaLabel={t('memberActions')}
-                        dataTestIdPrefix={`member-actions-${user.id}`}
-                        buttonLabel=""
                         btnStyle={styles.dropdownToggle}
+                        parentContainerStyle="ms-auto"
+                        drop="start"
                       />
                     )}
                   </div>
@@ -490,14 +481,13 @@ export default function GroupChatDetails({
             })}
           </ListGroup>
         </div>
-      </CRUDModalTemplate>
-      <CRUDModalTemplate
-        open={addUserModalisOpen}
-        onClose={toggleAddUserModal}
+      </BaseModal>
+      <BaseModal
+        show={addUserModalisOpen}
+        onHide={toggleAddUserModal}
         title={t('chat')}
-        data-testid="addExistingUserModal"
+        dataTestId="addExistingUserModal"
         className={styles.modalContent}
-        showFooter={false}
       >
         <LoadingState isLoading={allUsersLoading} variant="spinner">
           <div className={styles.input}>
@@ -543,15 +533,10 @@ export default function GroupChatDetails({
                       ({
                         node: userDetails,
                       }: {
-                        node: {
-                          id: string;
-                          name: string;
-                          avatarURL?: string;
-                          role: string;
-                        };
+                        node: InterfaceOrganizationMember;
                       }) =>
                         userDetails.id !== userId &&
-                        !chat.members.edges.some(
+                        !chat.members?.edges?.some(
                           (edge) => edge.node.user.id === userDetails.id,
                         ),
                     )
@@ -560,12 +545,7 @@ export default function GroupChatDetails({
                         {
                           node: userDetails,
                         }: {
-                          node: {
-                            id: string;
-                            name: string;
-                            avatarURL?: string;
-                            role: string;
-                          };
+                          node: InterfaceOrganizationMember;
                         },
                         index: number,
                       ) => (
@@ -616,7 +596,7 @@ export default function GroupChatDetails({
             </Table>
           </TableContainer>
         </LoadingState>
-      </CRUDModalTemplate>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 }

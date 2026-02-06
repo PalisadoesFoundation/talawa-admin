@@ -4,6 +4,6 @@
 
 # Variable: filledMockChat
 
-> `const` **filledMockChat**: [`GroupChat`](../../../../../types/UserPortal/Chat/type/type-aliases/GroupChat.md)
+> `const` **filledMockChat**: [`Chat`](../../../../../types/UserPortal/Chat/interface/type-aliases/Chat.md)
 
-Defined in: [src/components/UserPortal/GroupChatDetails/GroupChatDetailsMocks.tsx:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/GroupChatDetails/GroupChatDetailsMocks.tsx#L100)
+Defined in: [src/components/UserPortal/GroupChatDetails/GroupChatDetailsMocks.tsx:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/GroupChatDetails/GroupChatDetailsMocks.tsx#L197)

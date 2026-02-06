@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:148
 
 ### \_\_namedParameters
 
-`InterfaceCreateDirectChatProps`
+[`InterfaceCreateDirectChatProps`](../../../../../types/UserPortal/CreateDirectChat/interface/interfaces/InterfaceCreateDirectChatProps.md)
 
 ## Returns
 

@@ -1873,6 +1873,7 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
+    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1901,7 +1902,10 @@
     "confirmRemoveMember": "Confirmar eliminar miembro",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
+    "thisUser": "este usuario",
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",

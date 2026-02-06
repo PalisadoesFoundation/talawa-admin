@@ -23,8 +23,7 @@
 import { Paper, TableBody } from '@mui/material';
 import { useState } from 'react';
 import Button from 'shared-components/Button';
-import type { FetchResult } from '@apollo/client';
-import { useQuery, useMutation } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
@@ -43,76 +42,51 @@ import { useTranslation } from 'react-i18next';
 import styles from './CreateDirectChat.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
-import { type GroupChat } from 'types/UserPortal/Chat/type';
+import type {
+  Chat,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/Chat/interface';
+import type {
+  InterfaceCreateDirectChatProps,
+  ChatsListRefetch,
+  CreateChatMutation,
+  CreateChatMembershipMutation,
+} from 'types/UserPortal/CreateDirectChat/interface';
+
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-import type { InterfaceOrgMemberConnectionQuery } from 'utils/interfaces';
-
-interface InterfaceOrganizationMember {
-  id: string;
-  name: string;
-  avatarURL?: string;
-  role: string;
-}
-interface InterfaceCreateDirectChatProps {
-  toggleCreateDirectChatModal: () => void;
-  createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<unknown>;
-  chats: GroupChat[];
-}
-
 const { getItem } = useLocalStorage();
-
-type CreateChatFn = (options: {
-  variables: {
-    input: {
-      organizationId: string | undefined;
-      name: string;
-      description: string;
-      avatar: null;
-    };
-  };
-}) => Promise<FetchResult<unknown>>;
-
-type CreateChatMembershipFn = (options: {
-  variables: {
-    input: {
-      memberId: string;
-      chatId: string;
-      role: 'regular';
-    };
-  };
-}) => Promise<FetchResult<unknown>>;
 
 export const handleCreateDirectChat = async (
   id: string,
   userName: string,
-  chats: GroupChat[],
+  chats: Chat[],
   t: TFunction<'translation', 'userChat'>,
-  createChat: CreateChatFn,
-  createChatMembership: CreateChatMembershipFn,
+  createChat: CreateChatMutation,
+  createChatMembership: CreateChatMembershipMutation,
   organizationId: string | undefined,
   userId: string | null,
   currentUserName: string,
-  chatsListRefetch: {
-    (variables?: Partial<{ id: string }> | undefined): Promise<unknown>;
-    (): Promise<unknown>;
-  },
-  toggleCreateDirectChatModal: { (): void; (): void },
+  chatsListRefetch: ChatsListRefetch,
+  toggleCreateDirectChatModal: () => void,
 ): Promise<void> => {
   const existingChat = chats.find(
     (chat) =>
-      chat.users?.length === 2 && chat.users.some((user) => user._id === id),
+      chat.members?.edges?.length === 2 &&
+      chat.members?.edges?.some((edge) => edge.node.user.id === id) &&
+      chat.members?.edges?.some((edge) => edge.node.user.id === userId),
   );
   if (existingChat) {
-    const existingUser = existingChat.users.find((user) => user._id === id);
+    const existingUser = existingChat.members?.edges?.find(
+      (edge) => edge.node.user.id === id,
+    )?.node.user;
     errorHandler(
       t,
       new Error(
-        `A conversation with ${existingUser?.firstName || 'this user'} already exists!`,
+        t('conversationAlreadyExists', {
+          userName: existingUser?.name || t('thisUser'),
+        }),
       ),
     );
   } else {
@@ -183,7 +157,15 @@ export default function createDirectChatModal({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery<InterfaceOrgMemberConnectionQuery>(ORGANIZATION_MEMBERS, {
+  } = useQuery<{
+    organization: {
+      members: {
+        edges: {
+          node: InterfaceOrganizationMember;
+        }[];
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: organizationId },
       first: 20,
