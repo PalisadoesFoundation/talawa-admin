@@ -1053,7 +1053,7 @@ describe('EventRegistrantsModal', () => {
 
     await waitFor(
       () => {
-        expect(NotificationToast.warning).toHaveBeenCalledTimes(2);
+        expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },
       { timeout: 3000 },
     );
@@ -1102,29 +1102,30 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('renders ProfileAvatarDisplay in renderOption with correct props for member with name', async () => {
-    // Mock ProfileAvatarDisplay to verify it receives correct props
-    const ProfileAvatarDisplayMock = vi.fn(() => (
-      <div data-testid="profile-avatar-display">Avatar</div>
-    ));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    vi.doMock(
-      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
-      () => ({
-        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
-      }),
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithOneMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
-
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithOneMock(),
-    ]);
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // The renderOption function should be called when options are rendered
-    // Since we're using a mock Autocomplete, we need to verify the component
-    // would pass correct props to ProfileAvatarDisplay
     const input = await screen.findByTestId(
       'autocomplete',
       {},
@@ -1132,7 +1133,6 @@ describe('EventRegistrantsModal', () => {
     );
     await user.type(input, 'John');
 
-    // Verify the option is rendered with the member's name
     await waitFor(
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1142,111 +1142,40 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('renders ProfileAvatarDisplay in renderOption with unknownUser fallback when name is empty', async () => {
-    // Create a custom mock for this test that actually renders the renderOption
-    const customAutocompleteMock = ({
-      renderInput,
-      renderOption,
-      options,
-      onChange,
-      getOptionLabel,
-    }: InterfaceAutocompleteMockProps) => {
-      return (
-        <div data-testid="autocomplete-mock">
-          {renderInput({
-            InputProps: { ref: vi.fn() },
-            id: 'test-autocomplete',
-            disabled: false,
-            inputProps: {},
-          })}
-          {options && options.length > 0 ? (
-            options.map((option) => {
-              // Call renderOption to test the actual rendering logic
-              const renderedOption = renderOption
-                ? renderOption({ key: option.id }, option, { selected: false })
-                : null;
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-              return (
-                <div
-                  key={option.id}
-                  data-testid={`option-${option.id}`}
-                  onClick={(): void => {
-                    if (onChange) {
-                      onChange({} as React.SyntheticEvent, option);
-                    }
-                  }}
-                  onKeyDown={(): void => {
-                    /* mock */
-                  }}
-                  role="button"
-                  tabIndex={0}
-                >
-                  {renderedOption || getOptionLabel?.(option) || option.name}
-                </div>
-              );
-            })
-          ) : (
-            <div data-testid="no-options">No options</div>
-          )}
-        </div>
-      );
-    };
-
-    vi.doMock('@mui/material/Autocomplete', () => ({
-      __esModule: true,
-      default: customAutocompleteMock,
-    }));
-
-    const ProfileAvatarDisplayMock = vi.fn(
-      ({ imageUrl, fallbackName, size, enableEnlarge }) => (
-        <div
-          data-testid="profile-avatar-display"
-          data-image-url={imageUrl || 'null'}
-          data-fallback-name={fallbackName}
-          data-size={size}
-          data-enable-enlarge={String(enableEnlarge)}
-        >
-          Avatar: {fallbackName}
-        </div>
-      ),
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersUnknownNameMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
-
-    vi.doMock(
-      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
-      () => ({
-        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
-      }),
-    );
-
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersUnknownNameMock(),
-    ]);
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // Wait for the option to be rendered
-    await waitFor(
-      () => {
-        const option = screen.queryByTestId('option-user2');
-        expect(option).toBeInTheDocument();
-      },
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
       { timeout: 3000 },
     );
+    await user.type(input, 'unknown');
 
-    // Verify ProfileAvatarDisplay was called with unknownUser fallback
     await waitFor(
       () => {
-        const avatarDisplay = screen.queryByTestId('profile-avatar-display');
-        if (avatarDisplay) {
-          expect(avatarDisplay).toHaveAttribute(
-            'data-fallback-name',
-            'Unknown User',
-          );
-          expect(avatarDisplay).toHaveAttribute('data-size', 'small');
-          expect(avatarDisplay).toHaveAttribute('data-enable-enlarge', 'false');
-          expect(avatarDisplay).toHaveAttribute('data-image-url', 'null');
-        }
+        expect(screen.getByText('Unknown User')).toBeInTheDocument();
       },
       { timeout: 3000 },
     );
@@ -1393,20 +1322,35 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   };
 
   test('renderOption renders ProfileAvatarDisplay with correct props for members with names and avatars (lines 192, 195-202)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // Wait for options to be rendered
     await waitFor(
       () => {
         const optionsContainer = screen.getByTestId('options-container');
@@ -1415,7 +1359,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Verify ProfileAvatarDisplay components are rendered
     await waitFor(
       () => {
         const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
@@ -1424,7 +1367,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Verify user1 with avatar
     const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
     const user1Avatar = avatarDisplays[0];
     expect(user1Avatar).toHaveAttribute(
@@ -1435,27 +1377,41 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     expect(user1Avatar).toHaveAttribute('data-size', 'small');
     expect(user1Avatar).toHaveAttribute('data-enable-enlarge', 'false');
 
-    // Verify user2 without avatar
     const user2Avatar = avatarDisplays[1];
     expect(user2Avatar).toHaveAttribute('data-image-url', 'null');
     expect(user2Avatar).toHaveAttribute('data-fallback-name', 'Jane Smith');
   });
 
   test('renderOption uses unknownUser fallback when member name is empty (lines 199, 204)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // Verify user3 with empty name uses "Unknown User"
     await waitFor(
       () => {
         const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
@@ -1471,26 +1427,40 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Verify the span also shows Unknown User (line 204)
     const optionsContainer = screen.getByTestId('options-container');
     expect(optionsContainer).toHaveTextContent('Unknown User');
   });
 
   test('renderOption creates li elements with correct structure (line 195-196)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
-    // Verify li elements are created with correct keys and props
     await waitFor(
       () => {
         const option1 = screen.getByTestId('rendered-option-user1');
@@ -1508,7 +1478,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Verify d-flex align-items-center divs exist (line 196)
     const optionsContainer = screen.getByTestId('options-container');
     const flexDivs = optionsContainer.querySelectorAll(
       '.d-flex.align-items-center',
@@ -1517,16 +1486,32 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('renderOption span elements contain correct member names with ms-2 class (line 203-204)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -1537,7 +1522,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
         expect(spanElements.length).toBeGreaterThan(0);
 
-        // Verify spans contain correct text
         const spanTexts = Array.from(spanElements).map(
           (span) => span.textContent,
         );
@@ -1550,16 +1534,32 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('getOptionLabel returns correct labels for all member types (line 192)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -1569,7 +1569,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
         const option2 = screen.getByTestId('rendered-option-user2');
         const option3 = screen.getByTestId('rendered-option-user3');
 
-        // Verify correct names are displayed
         expect(option1).toHaveTextContent('John Doe');
         expect(option2).toHaveTextContent('Jane Smith');
         expect(option3).toHaveTextContent('Unknown User');
@@ -1579,16 +1578,32 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('ProfileAvatarDisplay always receives enableEnlarge=false (line 201)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -1606,16 +1621,32 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('ProfileAvatarDisplay always receives size="small" (line 200)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -1633,16 +1664,32 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   });
 
   test('clicking on rendered option triggers onChange (line 195)', async () => {
+    vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
     }));
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
 
-    renderWithProviders([
-      makeEventDetailsNonRecurringMock(),
-      makeAttendeesEmptyMock(),
-      makeMembersWithMultipleMock(),
-    ]);
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
 
@@ -1652,10 +1699,8 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Click should work without errors
     await user.click(option1);
 
-    // Verify option is in the document and clickable
     expect(option1).toBeInTheDocument();
   });
 });

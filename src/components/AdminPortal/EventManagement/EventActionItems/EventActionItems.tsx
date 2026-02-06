@@ -83,10 +83,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -103,6 +99,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const deleteModalState = useModalState();
   const viewModalState = useModalState();
   const statusModalState = useModalState();
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const handleModalClick = useCallback(
     (actionItem: IActionItemInfo | null, modal: ModalState): void => {
