@@ -91,7 +91,7 @@ interface IProcessedRow {
   id: string;
   name: string;
   email: string;
-  image: string;
+  image: string | null;
   createdAt: string;
   rowNumber: number;
 }
@@ -100,7 +100,7 @@ interface IMemberNode {
   id: string;
   name: string;
   role: string;
-  avatarURL: string;
+  avatarURL: string | null;
   emailAddress: string;
   createdAt?: string | null;
 }
