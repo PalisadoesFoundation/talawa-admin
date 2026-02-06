@@ -504,6 +504,127 @@ describe('AddMember Screen', () => {
     );
   });
 
+  test('renders profile image (img) when user has avatarURL', async () => {
+    const orgId = 'org123';
+    const userListMock = [
+      createUserListMock({ first: 10, after: null, last: null, before: null }),
+    ];
+    const orgMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const mocks = [orgMock, createOrganizationsMock(orgId), ...userListMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
+
+    const profileCells = screen.getAllByTestId('profileImage');
+    const firstCell = profileCells[0];
+    const img = firstCell.querySelector(
+      'img[src="https://example.com/avatar1.jpg"]',
+    );
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+    expect(img).toHaveAttribute('loading', 'lazy');
+  });
+
+  test('renders fallback displayName and aria-label when user has empty name or only email', async () => {
+    const orgId = 'org123';
+    const userListWithFallbacks = createUserListMock(
+      { first: 10, after: null, last: null, before: null },
+      {
+        edges: [
+          {
+            cursor: 'cursor1',
+            node: {
+              id: 'user-empty-name',
+              role: 'regular',
+              name: '',
+              emailAddress: 'noname@example.com',
+              avatarURL: null,
+            },
+          },
+          {
+            cursor: 'cursor2',
+            node: {
+              id: 'user-no-email',
+              role: 'regular',
+              name: 'Only Name',
+              emailAddress: null as unknown as string,
+              avatarURL: null,
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor2',
+        },
+      },
+    );
+    const orgMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const mocks = [
+      orgMock,
+      createOrganizationsMock(orgId),
+      userListWithFallbacks,
+    ];
+
+    renderAddMemberView({ mocks, initialEntry: `/admin/orgpeople/${orgId}` });
+
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findByTestId('datatable', {}, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
+
+    expect(screen.getByText('noname@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Only Name')).toBeInTheDocument();
+
+    const avatarImages = screen.getAllByTestId('avatarImage');
+    expect(avatarImages.length).toBeGreaterThanOrEqual(1);
+
+    const linkWithEmailOnly = screen.getByRole('link', {
+      name: 'noname@example.com',
+    });
+    expect(linkWithEmailOnly).toBeInTheDocument();
+
+    const linkWithNameOnly = screen.getByRole('link', {
+      name: 'Only Name',
+    });
+    expect(linkWithNameOnly).toBeInTheDocument();
+  });
+
   test('searches for users in the modal', async () => {
     const orgId = 'org123';
     const initialUserListMock = createUserListMock({

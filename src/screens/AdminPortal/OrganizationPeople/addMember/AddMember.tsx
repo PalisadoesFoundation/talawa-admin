@@ -107,13 +107,15 @@ function AddMember(): JSX.Element {
           },
         });
         NotificationToast.success(
-          tCommon('addedSuccessfully', { item: 'Member' }) as string,
+          tCommon('addedSuccessfully', {
+            item: translateAddMember('role.member'),
+          }) as string,
         );
       } catch (error: unknown) {
         errorHandler(tCommon, error);
       }
     },
-    [addMember, currentUrl, tCommon],
+    [addMember, currentUrl, tCommon, translateAddMember],
   );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
@@ -261,8 +263,10 @@ function AddMember(): JSX.Element {
     responsePageRef.current = newPage;
     fetchUsers({ variables });
   };
-  const allUsersData =
-    userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
+  const allUsersData = useMemo(
+    () => userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [],
+    [userData?.allUsers],
+  );
 
   const tableData = useMemo(
     () =>
