@@ -1,3 +1,4 @@
+// translation-check-keyPrefix: agendaItems
 import React, { useState, useEffect } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import Button from 'shared-components/Button';

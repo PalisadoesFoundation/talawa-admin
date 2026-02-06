@@ -36,7 +36,6 @@
  * Dependencies:
  * - React, React-Bootstrap, React-ChartJS-2, Apollo Client, and utility functions.
  */
-// translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Button from 'shared-components/Button';

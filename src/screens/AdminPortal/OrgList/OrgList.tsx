@@ -35,13 +35,13 @@ import styles from './OrgList.module.css';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import type { ChangeEvent } from 'react';
+
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { Alert } from 'react-bootstrap';
-import RBButton from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
@@ -77,9 +77,7 @@ function OrgList(): JSX.Element {
   );
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t: tTranslation } = useTranslation('translation');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
 
@@ -119,14 +117,15 @@ function OrgList(): JSX.Element {
       const { data } = await resendVerificationEmail();
 
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(tTranslation('loginPage.emailResent'));
       } else {
-        NotificationToast.error(
-          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+        NotificationToast.info(
+          data?.sendVerificationEmail?.message ||
+            tTranslation('loginPage.resendFailed'),
         );
       }
     } catch (error: unknown) {
-      errorHandler(tLogin, error);
+      errorHandler(tTranslation, error);
     }
   };
 
@@ -377,10 +376,10 @@ function OrgList(): JSX.Element {
         >
           <div className="d-flex justify-content-between align-items-center">
             <div>
-              <strong>{tLogin('emailNotVerified')}</strong>
+              <strong>{tTranslation('loginPage.emailNotVerified')}</strong>
             </div>
-            <RBButton
-              variant="outline-primary"
+            <Button
+              variant="outline-warning"
               size="sm"
               onClick={handleResendVerification}
               disabled={resendLoading}
@@ -388,8 +387,8 @@ function OrgList(): JSX.Element {
             >
               {resendLoading
                 ? tCommon('loading')
-                : tLogin('resendVerification')}
-            </RBButton>
+                : tTranslation('loginPage.resendVerification')}
+            </Button>
           </div>
         </Alert>
       )}
@@ -421,14 +420,14 @@ function OrgList(): JSX.Element {
           additionalButtons={
             <>
               {role === 'administrator' && (
-                <RBButton
+                <Button
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
                   onClick={open}
                   data-testid="createOrganizationBtn"
                 >
                   <i className="fa fa-plus me-2" />
                   {t('createOrganization')}
-                </RBButton>
+                </Button>
               )}
             </>
           }
@@ -558,7 +557,7 @@ function OrgList(): JSX.Element {
               >
                 {t('goToStore')}
               </Link>
-              <RBButton
+              <Button
                 type="submit"
                 className={styles.enableEverythingBtn}
                 onClick={closeDialogModal}
@@ -566,7 +565,7 @@ function OrgList(): JSX.Element {
                 data-testid="enableEverythingForm"
               >
                 {t('enableEverything')}
-              </RBButton>
+              </Button>
             </div>
           </div>
         </section>

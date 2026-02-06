@@ -186,8 +186,7 @@ describe('UserOrganizations', () => {
     // Default mock implementation with loose typing compatible with Apollo v4
     mockUseQuery.mockImplementation(
       <
-        // eslint-disable-next-line @typescript-eslint/naming-convention
-        _TData = unknown,
+        TData = unknown,
         TVariables extends OperationVariables = OperationVariables,
       >(
         query: DocumentNode,
@@ -199,7 +198,7 @@ describe('UserOrganizations', () => {
             | undefined;
           if (vars?.input?.id === USER_ID) {
             return {
-              data: mockUserData,
+              data: mockUserData as unknown as TData,
               loading: false,
               error: undefined,
               refetch: vi.fn(),
@@ -213,7 +212,7 @@ describe('UserOrganizations', () => {
             | undefined;
           if (vars?.id === USER_ID) {
             return {
-              data: mockJoinedOrganizationsData,
+              data: mockJoinedOrganizationsData as unknown as TData,
               loading: false,
               error: undefined,
               refetch: vi.fn(),
@@ -222,7 +221,7 @@ describe('UserOrganizations', () => {
         }
 
         return {
-          data: undefined,
+          data: undefined as unknown as TData,
           loading: false,
           error: undefined,
           refetch: vi.fn(),

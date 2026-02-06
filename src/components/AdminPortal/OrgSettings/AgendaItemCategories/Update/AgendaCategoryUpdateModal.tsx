@@ -5,6 +5,7 @@
  * It provides a form with fields for the category name and description,
  * and allows users to submit updates.
  */
+// translation-check-keyPrefix: organizationAgendaCategory
 import React from 'react';
 import type { FormEvent } from 'react';
 import styles from 'style/app-fixed.module.css';

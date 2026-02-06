@@ -1,0 +1,13 @@
+.statusCircle {
+  font-size: 0.8rem;
+  margin-right: 8px;
+  align-self: center;
+}
+
+.statusActive {
+  color: var(--bs-success);
+}
+
+.statusDisabled {
+  color: var(--errorIcon-color);
+}

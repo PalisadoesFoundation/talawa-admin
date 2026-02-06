@@ -4,6 +4,7 @@
  * This component renders a modal for confirming the deletion of an agenda category.
  * It provides options to either confirm or cancel the deletion action.
  */
+// translation-check-keyPrefix: organizationAgendaCategory
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate';

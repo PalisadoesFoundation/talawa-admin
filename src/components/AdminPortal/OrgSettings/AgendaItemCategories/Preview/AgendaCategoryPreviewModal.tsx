@@ -1,3 +1,4 @@
+// translation-check-keyPrefix: organizationAgendaCategory
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { ViewModal } from 'shared-components/CRUDModalTemplate';

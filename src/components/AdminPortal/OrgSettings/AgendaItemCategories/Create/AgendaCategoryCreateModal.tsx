@@ -5,7 +5,7 @@
  * It provides a form with fields for the category name and description,
  * and allows users to submit the new category.
  */
-import React from 'react';
+// translation-check-keyPrefix: organizationAgendaCategory
 import type { FormEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { CreateModal } from 'shared-components/CRUDModalTemplate';

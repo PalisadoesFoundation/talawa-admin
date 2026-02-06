@@ -2058,6 +2058,7 @@
     "checkInMembers": "Check In Members"
   },
   "eventRegistrantsModal": {
+    "addRegistrantTitle": "Add Registrant",
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
     "eventRegistrantsTitle": "Event Registrants",

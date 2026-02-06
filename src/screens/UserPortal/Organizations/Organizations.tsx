@@ -108,9 +108,7 @@ export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t: tTranslation } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { getItem, setItem, removeItem } = useLocalStorage();
@@ -167,9 +165,9 @@ export default function Organizations(): React.JSX.Element {
     try {
       const { data } = await resendVerificationEmail();
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent'));
+        NotificationToast.success(tTranslation('loginPage.emailResent'));
       } else {
-        NotificationToast.info(tLogin('resendFailed'));
+        NotificationToast.info(tTranslation('loginPage.resendFailed'));
       }
     } catch (error) {
       errorHandler(tCommon, error);
@@ -386,7 +384,7 @@ export default function Organizations(): React.JSX.Element {
             >
               <div className="d-flex justify-content-between align-items-center">
                 <div>
-                  <strong>{tLogin('emailNotVerified')}</strong>
+                  <strong>{tTranslation('loginPage.emailNotVerified')}</strong>
                 </div>
                 <Button
                   variant="outline-warning"
@@ -397,7 +395,7 @@ export default function Organizations(): React.JSX.Element {
                 >
                   {resendLoading
                     ? tCommon('loading')
-                    : tLogin('resendVerification')}
+                    : tTranslation('loginPage.resendVerification')}
                 </Button>
               </div>
             </Alert>

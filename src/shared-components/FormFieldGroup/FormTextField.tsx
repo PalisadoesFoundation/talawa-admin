@@ -42,8 +42,7 @@ export const FormTextField = forwardRef<
           ref as unknown as React.Ref<HTMLInputElement & HTMLTextAreaElement>
         }
         {...(props.as !== 'textarea' && { type })}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        as={props.as as any}
+        as={props.as}
         placeholder={placeholder}
         value={value}
         onChange={(e) => {

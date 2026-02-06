@@ -69,7 +69,6 @@ export const EventRegistrantsModal = ({
   const [open, setOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>('');
 
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);

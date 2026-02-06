@@ -44,7 +44,7 @@ export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
   onFocus?: () => void;
   onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onDoubleClick?: (e: React.MouseEvent<HTMLInputElement, MouseEvent>) => void;
-  as?: string;
+  as?: React.ElementType;
   rows?: number;
   fullWidth?: boolean;
   multiline?: boolean;

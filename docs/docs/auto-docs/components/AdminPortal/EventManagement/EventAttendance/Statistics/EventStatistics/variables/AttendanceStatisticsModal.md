@@ -6,4 +6,4 @@
 
 > `const` **AttendanceStatisticsModal**: `React.FC`\<[`InterfaceAttendanceStatisticsModalProps`](../../../../../../../types/Event/interface/type-aliases/InterfaceAttendanceStatisticsModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L106)
+Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L105)

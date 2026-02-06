@@ -56,7 +56,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:57](https://github.com/Palisa
 
 ### as?
 
-> `optional` **as**: `string`
+> `optional` **as**: `ElementType`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L47)
 

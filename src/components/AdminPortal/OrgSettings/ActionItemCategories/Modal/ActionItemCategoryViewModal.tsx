@@ -5,7 +5,8 @@
 import type { FC } from 'react';
 import { ViewModal } from 'shared-components/CRUDModalTemplate';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
-import styles from 'style/app-fixed.module.css';
+import appStyles from 'style/app-fixed.module.css';
+import styles from './ActionItemCategoryViewModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -43,7 +44,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
           label={t('actionItemCategoryName')}
           value={category.name}
           disabled
-          className={styles.noOutline}
+          className={appStyles.noOutline}
           data-testid="categoryNameView"
         />
 
@@ -55,7 +56,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
           disabled
           as="textarea"
           rows={4}
-          className={styles.noOutline}
+          className={appStyles.noOutline}
           data-testid="categoryDescriptionView"
         />
 
@@ -70,14 +71,11 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             }
             startAdornment={
               <Circle
-                sx={{
-                  fontSize: '0.8rem',
-                  color: category.isDisabled
-                    ? 'var(--errorIcon-color)'
-                    : 'var(--bs-success)',
-                  marginRight: '8px',
-                  alignSelf: 'center',
-                }}
+                className={`${styles.statusCircle} ${
+                  category.isDisabled
+                    ? styles.statusDisabled
+                    : styles.statusActive
+                }`}
               />
             }
             disabled
