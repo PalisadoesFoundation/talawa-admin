@@ -1,3 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-declare const plugin: any;
-export = plugin;
+/**
+ * ESLint plugin for vitest isolation – TypeScript type declarations
+ */
+import type { Rule } from 'eslint';
+
+interface InterfaceVitestIsolationPlugin {
+  rules: Record<string, Rule.RuleModule>;
+}
+
+declare const plugin: InterfaceVitestIsolationPlugin;
+
+export default plugin;

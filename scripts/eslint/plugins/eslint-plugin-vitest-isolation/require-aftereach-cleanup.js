@@ -247,17 +247,13 @@ module.exports = {
                                         }
                                     }
 
-                                    // Build properly indented afterEach block
-                                    // i18n-ignore-next-line: code template, not user-facing text
-                                    const afterEachCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n${baseIndent}`;
-
                                     if (firstStmt) {
                                         // Check if we preserved comments (insertPosition is after a comment)
                                         const leadingComments = sourceCode.getCommentsBefore(firstStmt);
                                         if (leadingComments.length > 0) {
                                             // Insert after comments, before statement
                                             // i18n-ignore-next-line: code template, not user-facing text
-                                            const insertCode = `\n\n${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
+                                            const insertCode = `\n\n${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n`;
                                             return fixer.insertTextAfterRange([insertPosition, insertPosition], insertCode);
                                         }
                                         // Insert before the statement to preserve its original indentation
@@ -265,12 +261,8 @@ module.exports = {
                                         // We append our own newlines, but we don't append baseIndent at the end
                                         // because the existing statement already has its own indentation.
 
-                                        // Remove the trailing baseIndent from the afterEachCode template for this case
-                                        // Original: `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n${baseIndent}`;
-
-                                        // New template without trailing indent:
                                         // i18n-ignore-next-line: code template
-                                        const insertCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n\n`;
+                                        const insertCode = `${baseIndent}afterEach(() => {\n${baseIndent}${innerIndent}vi.clearAllMocks();\n${baseIndent}});\n`;
 
                                         // Insert at line start (insertPosition) which is before the indentation of firstStmt
                                         return fixer.insertTextBeforeRange([insertPosition, insertPosition], insertCode);

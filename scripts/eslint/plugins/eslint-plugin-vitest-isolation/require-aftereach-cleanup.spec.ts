@@ -213,6 +213,29 @@ ruleTester.run('require-aftereach-cleanup', rule, {
       errors: [{ messageId: 'missingCleanup' }],
       output: null,
     },
+    // afterEach inline block without cleanup (covers hasCodeBeforeBrace === true path)
+    {
+      code: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => { console.log('cleanup'); });
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+      errors: [{ messageId: 'missingCleanup' }],
+      output: `
+          import { describe, it, afterEach, vi } from 'vitest';
+          describe('test', () => {
+            afterEach(() => { console.log('cleanup'); 
+              vi.clearAllMocks();});
+            it('should work', () => {
+              vi.fn();
+            });
+          });
+        `,
+    },
     // resetAllMocks arrow function (discouraged)
     {
       code: `
@@ -266,8 +289,6 @@ ruleTester.run('require-aftereach-cleanup', rule, {
             afterEach(() => {
               vi.clearAllMocks();
             });
-
-
             it('should work', () => {
               vi.fn();
             });
@@ -313,7 +334,6 @@ describe('test', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-
 it('should work', () => {
 vi.fn();
 });
