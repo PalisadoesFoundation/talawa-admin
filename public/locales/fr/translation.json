@@ -1893,6 +1893,7 @@
     "groupName": "Nom du groupe",
     "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
+    "memberOptions": "Options des membres",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
     "userNotFound": "Utilisateur non trouvé",
@@ -1915,7 +1916,10 @@
     "chatAction": "Action de chat",
     "confirmRemoveMember": "Confirmer la suppression du membre",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
-    "userAddedSuccessfully": "Utilisateur ajouté avec succès"
+    "userAddedSuccessfully": "Utilisateur ajouté avec succès",
+    "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
+    "thisUser": "cet utilisateur",
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
   },
   "userChatRoom": {
     "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",
