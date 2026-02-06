@@ -20,6 +20,7 @@
  * @returns A JSX element rendering the organization people table.
  */
 import React, { useState, useEffect, useMemo } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client/react';
@@ -140,7 +141,7 @@ function OrganizationPeople(): JSX.Element {
   // State
   const [state, setState] = useState(role?.role || 0);
   const [searchTerm, setSearchTerm] = useState('');
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const removeModal = useModalState(false);
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
@@ -255,7 +256,7 @@ function OrganizationPeople(): JSX.Element {
   }, [currentRows, searchTerm]);
 
   // Modal handlers
-  const toggleRemoveModal = () => setShowRemoveModal((prev) => !prev);
+  const toggleRemoveModal = () => removeModal.toggle();
 
   const toggleRemoveMemberModal = (id: string) => {
     setSelectedMemId(id);
@@ -458,7 +459,7 @@ function OrganizationPeople(): JSX.Element {
         }}
       />
 
-      {showRemoveModal && selectedMemId && (
+      {removeModal.isOpen && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}
           toggleRemoveModal={toggleRemoveModal}

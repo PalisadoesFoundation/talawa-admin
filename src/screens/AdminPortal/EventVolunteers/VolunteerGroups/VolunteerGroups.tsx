@@ -19,6 +19,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Navigate, useParams } from 'react-router';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
@@ -76,13 +77,9 @@ function VolunteerGroups(): JSX.Element {
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.SAME]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+  const sameModal = useModalState(false);
+  const deleteModal = useModalState(false);
+  const viewModal = useModalState(false);
 
   /**
    * Query to fetch event and volunteer groups for the event.
@@ -100,11 +97,17 @@ function VolunteerGroups(): JSX.Element {
     },
   });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  const openModal = (modal: ModalState): void => {
+    if (modal === ModalState.SAME) sameModal.open();
+    else if (modal === ModalState.DELETE) deleteModal.open();
+    else if (modal === ModalState.VIEW) viewModal.open();
+  };
 
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+  const closeModal = (modal: ModalState): void => {
+    if (modal === ModalState.SAME) sameModal.close();
+    else if (modal === ModalState.DELETE) deleteModal.close();
+    else if (modal === ModalState.VIEW) viewModal.close();
+  };
 
   const handleModalClick = (
     group: InterfaceVolunteerGroupInfo | null,
@@ -406,7 +409,7 @@ function VolunteerGroups(): JSX.Element {
         />
 
         <VolunteerGroupModal
-          isOpen={modalState[ModalState.SAME]}
+          isOpen={sameModal.isOpen}
           hide={() => closeModal(ModalState.SAME)}
           refetchGroups={refetchGroups}
           eventId={eventId}
@@ -421,13 +424,13 @@ function VolunteerGroups(): JSX.Element {
         {group && (
           <>
             <VolunteerGroupViewModal
-              isOpen={modalState[ModalState.VIEW]}
+              isOpen={viewModal.isOpen}
               hide={() => closeModal(ModalState.VIEW)}
               group={group}
             />
 
             <VolunteerGroupDeleteModal
-              isOpen={modalState[ModalState.DELETE]}
+              isOpen={deleteModal.isOpen}
               hide={() => closeModal(ModalState.DELETE)}
               refetchGroups={refetchGroups}
               group={group}

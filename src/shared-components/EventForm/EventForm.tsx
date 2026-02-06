@@ -8,6 +8,7 @@ import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
@@ -79,18 +80,22 @@ const EventForm: React.FC<IEventFormProps> = ({
   });
 
   const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: customRecurrenceModalIsOpen,
+    open: openCustomRecurrenceModal,
+    close: closeCustomRecurrenceModal,
+    setIsOpen: setCustomRecurrenceModalIsOpen,
+  } = useModalState();
   const [recurrenceEnabled, setRecurrenceEnabled] = useState(
     !disableRecurrence &&
-      (!!initialValues.recurrenceRule || !showRecurrenceToggle),
+    (!!initialValues.recurrenceRule || !showRecurrenceToggle),
   );
 
   useEffect(() => {
     setFormState(initialValues);
     setRecurrenceEnabled(
       !disableRecurrence &&
-        (!!initialValues.recurrenceRule || !showRecurrenceToggle),
+      (!!initialValues.recurrenceRule || !showRecurrenceToggle),
     );
     // Sync visibility state with initialValues
     if (
@@ -125,7 +130,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           ),
         }));
       }
-      setCustomRecurrenceModalIsOpen(true);
+      openCustomRecurrenceModal();
     } else {
       setFormState((prev) => ({
         ...prev,
@@ -515,8 +520,8 @@ const EventForm: React.FC<IEventFormProps> = ({
               recurrenceRule:
                 typeof newRecurrence === 'function'
                   ? newRecurrence(
-                      prev.recurrenceRule as InterfaceRecurrenceRule,
-                    )
+                    prev.recurrenceRule as InterfaceRecurrenceRule,
+                  )
                   : newRecurrence,
             }));
           }}
@@ -532,9 +537,7 @@ const EventForm: React.FC<IEventFormProps> = ({
             }));
           }}
           customRecurrenceModalIsOpen={customRecurrenceModalIsOpen}
-          hideCustomRecurrenceModal={(): void =>
-            setCustomRecurrenceModalIsOpen(false)
-          }
+          hideCustomRecurrenceModal={closeCustomRecurrenceModal}
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
           t={t}
           startDate={formState.startDate}

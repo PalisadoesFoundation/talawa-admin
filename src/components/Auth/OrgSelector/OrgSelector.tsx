@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect, useId } from 'react';
-import { Form } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceOrgSelectorProps } from '../../../types/Auth/OrgSelector/interface';
 import styles from '../../../style/app-fixed.module.css';
@@ -135,22 +135,20 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       : undefined;
 
   return (
-    <Form.Group className="mb-3" ref={dropdownRef}>
-      <Form.Label htmlFor={inputId}>
-        {displayLabel}
-        {required && <span className="text-danger"> *</span>}
-      </Form.Label>
-
+    <div className="mb-3" ref={dropdownRef}>
       <div className="position-relative">
-        <Form.Control
+        <FormTextField
           id={inputId}
-          type="text"
+          name={inputId}
+          label={displayLabel}
+          hideLabel
           value={isOpen ? searchTerm : displayValue}
           onChange={handleInputChange}
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          isInvalid={hasError}
+          error={error || undefined}
+          touched={true}
           placeholder={t('selectOrganization')}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
@@ -188,11 +186,10 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
                   role="option"
                   aria-selected={org._id === value}
                   tabIndex={-1}
-                  className={`${styles.orgSelectorOption} ${
-                    index === highlightedIndex
+                  className={`${styles.orgSelectorOption} ${index === highlightedIndex
                       ? styles.orgSelectorOptionHighlighted
                       : ''
-                  } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
+                    } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
                   onClick={() => handleOptionClick(org._id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
@@ -210,20 +207,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           </div>
         )}
       </div>
-
-      {/* Error message with proper ARIA attributes */}
-      {hasError && (
-        <Form.Control.Feedback
-          type="invalid"
-          id={errorId}
-          className="d-block"
-          role="status"
-          aria-live="polite"
-        >
-          {error}
-        </Form.Control.Feedback>
-      )}
-    </Form.Group>
+    </div>
   );
 };
 

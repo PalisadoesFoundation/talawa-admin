@@ -196,3 +196,14 @@
   width: 100%;
   transform: scale(1.5);
 }
+
+.viewCommentsButton {
+  color: var(--bs-secondary) !important;
+  font-size: 0.75rem !important;
+  margin-left: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  text-transform: none !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+}

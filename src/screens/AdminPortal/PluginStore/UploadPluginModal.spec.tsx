@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

@@ -41,7 +41,6 @@ const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {
                 toggleDeleteModal={mockToggleDeleteModal}
                 deleteAgendaCategoryHandler={mockDeleteAgendaCategoryHandler}
                 t={mockT}
-                tCommon={mockT}
               />
             </LocalizationProvider>
           </I18nextProvider>

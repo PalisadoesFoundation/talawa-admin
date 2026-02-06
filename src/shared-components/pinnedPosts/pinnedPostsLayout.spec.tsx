@@ -2,10 +2,11 @@ import React from 'react';
 import {
   render,
   screen,
-  fireEvent,
   waitFor,
   act,
+  fireEvent,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
@@ -232,7 +233,7 @@ describe('PinnedPostsLayout Component', () => {
   });
 
   describe('Interactions', () => {
-    it('calls onStoryClick when view button is clicked', () => {
+    it('calls onStoryClick when view button is clicked', async () => {
       render(
         <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
@@ -245,7 +246,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const viewButtons = screen.getAllByTestId('view-post-btn');
-      fireEvent.click(viewButtons[0]);
+      await userEvent.click(viewButtons[0]);
 
       expect(mockOnStoryClick).toHaveBeenCalledWith(mockPinnedPosts[0].node);
     });
@@ -263,7 +264,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -369,7 +370,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click right button
       const rightButton = screen.getByTestId('scroll-right-button');
-      fireEvent.click(rightButton);
+      await userEvent.click(rightButton);
 
       expect(scrollByMock).toHaveBeenCalled();
     });
@@ -621,7 +622,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click on more options button for first post
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -653,7 +654,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click on more options button for first post
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
@@ -705,7 +706,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Open menu
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
@@ -713,7 +714,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click pin/unpin option
       const pinMenuItem = screen.getByTestId('pin-post-menu-item');
-      fireEvent.click(pinMenuItem);
+      await userEvent.click(pinMenuItem);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -743,7 +744,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Open menu
       const moreOptionsButtons = screen.getAllByTestId('more-options-button');
-      fireEvent.click(moreOptionsButtons[0]);
+      await userEvent.click(moreOptionsButtons[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
@@ -751,7 +752,9 @@ describe('PinnedPostsLayout Component', () => {
 
       // Click delete option
       const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
-      expect(() => fireEvent.click(deleteMenuItem)).not.toThrow();
+      await expect(async () => {
+        await userEvent.click(deleteMenuItem);
+      }).not.toThrow();
     });
   });
 });

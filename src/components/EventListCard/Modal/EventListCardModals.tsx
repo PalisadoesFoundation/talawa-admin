@@ -19,6 +19,7 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { JSX } from 'react';
 import { TEST_ID_UPDATE_EVENT_MODAL } from 'Constant/common';
 import dayjs from 'dayjs';
@@ -75,8 +76,20 @@ function EventListCardModals({
   const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
     Boolean(eventListCardProps.isInviteOnly),
   );
-  const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
-  const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
+  const {
+    isOpen: eventDeleteModalIsOpen,
+    open: openDeleteModal,
+    close: closeDeleteModal,
+    toggle: toggleDeleteModal,
+  } = useModalState();
+
+  const {
+    isOpen: eventUpdateModalIsOpen,
+    open: openUpdateModal,
+    close: closeUpdateModal,
+    toggle: toggleUpdateModal,
+    setIsOpen: setIsOpenUpdateModal,
+  } = useModalState();
   const [updateOption, setUpdateOption] = useState<
     'single' | 'following' | 'entireSeries'
   >('single');
@@ -90,12 +103,12 @@ function EventListCardModals({
   const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
     eventListCardProps.recurrenceRule
       ? {
-          ...eventListCardProps.recurrenceRule,
-          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-            : undefined,
-          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-        }
+        ...eventListCardProps.recurrenceRule,
+        endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+          ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+          : undefined,
+        never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+      }
       : null,
   );
 
@@ -103,12 +116,12 @@ function EventListCardModals({
   const [originalRecurrence] = useState<InterfaceRecurrenceRule | null>(
     eventListCardProps.recurrenceRule
       ? {
-          ...eventListCardProps.recurrenceRule,
-          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-            : undefined,
-          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-        }
+        ...eventListCardProps.recurrenceRule,
+        endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+          ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+          : undefined,
+        never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+      }
       : null,
   );
 
@@ -116,12 +129,12 @@ function EventListCardModals({
     setRecurrence(
       eventListCardProps.recurrenceRule
         ? {
-            ...eventListCardProps.recurrenceRule,
-            endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-              ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-              : undefined,
-            never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-          }
+          ...eventListCardProps.recurrenceRule,
+          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+            : undefined,
+          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+        }
         : null,
     );
   }, [eventListCardProps.recurrenceRule]);
@@ -136,14 +149,14 @@ function EventListCardModals({
       originalRecurrence.frequency !== recurrence.frequency ||
       originalRecurrence.interval !== recurrence.interval ||
       JSON.stringify(originalRecurrence.byDay) !==
-        JSON.stringify(recurrence.byDay) ||
+      JSON.stringify(recurrence.byDay) ||
       JSON.stringify(originalRecurrence.byMonth) !==
-        JSON.stringify(recurrence.byMonth) ||
+      JSON.stringify(recurrence.byMonth) ||
       JSON.stringify(originalRecurrence.byMonthDay) !==
-        JSON.stringify(recurrence.byMonthDay) ||
+      JSON.stringify(recurrence.byMonthDay) ||
       originalRecurrence.count !== recurrence.count ||
       originalRecurrence.endDate?.toISOString() !==
-        recurrence.endDate?.toISOString() ||
+      recurrence.endDate?.toISOString() ||
       originalRecurrence.never !== recurrence.never;
 
     return changed;
@@ -175,8 +188,10 @@ function EventListCardModals({
     );
   };
 
-  const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
-    useState(false);
+  const {
+    isOpen: customRecurrenceModalIsOpen,
+    setIsOpen: setCustomRecurrenceModalIsOpen,
+  } = useModalState();
 
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
@@ -218,7 +233,7 @@ function EventListCardModals({
   useEffect(() => {
     if (
       !availableUpdateOptions[
-        updateOption as keyof typeof availableUpdateOptions
+      updateOption as keyof typeof availableUpdateOptions
       ]
     ) {
       if (availableUpdateOptions.following) {
@@ -236,7 +251,7 @@ function EventListCardModals({
       !!eventListCardProps.baseEvent?.id;
 
     if (isRecurringInstance) {
-      setEventUpdateModalIsOpen(true);
+      openUpdateModal();
     } else {
       await updateEventHandler({
         eventListCardProps,
@@ -249,10 +264,10 @@ function EventListCardModals({
         eventEndDate,
         recurrence,
         updateOption,
-        hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
+        hasRecurrenceChanged: hasRecurrenceChanged(),
         t,
         hideViewModal,
-        setEventUpdateModalIsOpen,
+        setEventUpdateModalIsOpen: setIsOpenUpdateModal,
         refetchEvents,
       });
     }
@@ -331,7 +346,7 @@ function EventListCardModals({
 
       if (data) {
         NotificationToast.success(t('eventDeleted') as string);
-        setEventDeleteModalIsOpen(false);
+        closeDeleteModal();
         hideViewModal();
         if (refetchEvents) {
           refetchEvents();
@@ -342,13 +357,6 @@ function EventListCardModals({
     }
   };
 
-  const toggleDeleteModal = (): void => {
-    setEventDeleteModalIsOpen(!eventDeleteModalIsOpen);
-  };
-
-  const toggleUpdateModal = (): void => {
-    setEventUpdateModalIsOpen(!eventUpdateModalIsOpen);
-  };
 
   const isInitiallyRegistered = eventListCardProps?.attendees?.some(
     (attendee) => attendee.id === userId,
@@ -466,7 +474,7 @@ function EventListCardModals({
                   hasRecurrenceChanged: hasRecurrenceChanged(),
                   t,
                   hideViewModal,
-                  setEventUpdateModalIsOpen,
+                  setEventUpdateModalIsOpen: setIsOpenUpdateModal,
                   refetchEvents,
                 })
               }

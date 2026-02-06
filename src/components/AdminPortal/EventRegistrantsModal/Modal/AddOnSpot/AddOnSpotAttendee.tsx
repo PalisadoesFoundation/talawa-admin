@@ -144,7 +144,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               name="firstName"
               label={tCommon('firstName')}
               value={formData.firstName}
-              onChange={(v) =>
+              onChange={(v: string) =>
                 setFormData((prev) => ({ ...prev, firstName: v }))
               }
               placeholder={t('placeholderFirstName')}
@@ -154,7 +154,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               name="lastName"
               label={tCommon('lastName')}
               value={formData.lastName}
-              onChange={(v) =>
+              onChange={(v: string) =>
                 setFormData((prev) => ({ ...prev, lastName: v }))
               }
               placeholder={t('placeholderLastName')}
@@ -166,7 +166,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             label={t('phoneNumber')}
             type="tel"
             value={formData.phoneNo}
-            onChange={(v) => setFormData((prev) => ({ ...prev, phoneNo: v }))}
+            onChange={(v: string) => setFormData((prev) => ({ ...prev, phoneNo: v }))}
             placeholder={t('phoneNumberPlaceholder')}
           />
 
@@ -175,7 +175,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             label={tCommon('email')}
             type="email"
             value={formData.email}
-            onChange={(v) => setFormData((prev) => ({ ...prev, email: v }))}
+            onChange={(v: string) => setFormData((prev) => ({ ...prev, email: v }))}
             placeholder={t('placeholderEmail')}
             required
           />
@@ -184,7 +184,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             name="gender"
             label={tCommon('gender')}
             value={formData.gender}
-            onChange={(v) => setFormData((prev) => ({ ...prev, gender: v }))}
+            onChange={(v: string) => setFormData((prev) => ({ ...prev, gender: v }))}
           >
             <option value="">{t('selectGender')}</option>
             <option value="Male">{t('male')}</option>

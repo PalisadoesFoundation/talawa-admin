@@ -8,7 +8,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { Button } from 'shared-components/Button';
 import styles from './UploadPluginModal.module.css';
-import { type ApolloClient, type NormalizedCacheObject } from '@apollo/client';
+import { type ApolloClient } from '@apollo/client';
 import { useApolloClient } from '@apollo/client/react';
 import {
   installAdminPluginFromZip,

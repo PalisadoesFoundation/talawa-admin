@@ -9,6 +9,7 @@ import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import dayjs from 'dayjs';
 import TableLoader from 'components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
@@ -110,7 +111,7 @@ const OrgFundsList = (): JSX.Element => {
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const fundModal = useModalState(false);
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -121,9 +122,9 @@ const OrgFundsList = (): JSX.Element => {
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
       setFund(fund);
       setFundModalMode(mode);
-      setModalState(true);
+      fundModal.open();
     },
-    [],
+    [fundModal],
   );
 
   const {
@@ -426,8 +427,8 @@ const OrgFundsList = (): JSX.Element => {
       )}
 
       <FundModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={fundModal.isOpen}
+        hide={fundModal.close}
         refetchFunds={refetchFunds}
         fund={fund}
         orgId={orgId}

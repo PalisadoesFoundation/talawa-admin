@@ -29,7 +29,7 @@
  */
 
 import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import { Button } from 'shared-components/Button';
 import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -60,7 +60,6 @@ function agendaCategoryContainer({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationAgendaCategory',
   });
-  const { t: tCommon } = useTranslation('common');
 
   // State management for modals and form data
   const {
@@ -134,7 +133,7 @@ function agendaCategoryContainer({
    * @param event - The form submit event.
    */
   const updateAgendaCategoryHandler = async (
-    event: ChangeEvent<HTMLFormElement>,
+    event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
     try {
@@ -335,7 +334,6 @@ function agendaCategoryContainer({
         toggleDeleteModal={toggleDeleteModalLocal}
         deleteAgendaCategoryHandler={deleteAgendaCategoryHandler}
         t={t}
-        tCommon={tCommon}
       />
     </>
   );

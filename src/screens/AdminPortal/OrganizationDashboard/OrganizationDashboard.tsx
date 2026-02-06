@@ -53,9 +53,6 @@ import type {
   IEvent,
   InterfaceOrganizationPg,
   InterfaceOrganizationPostsConnectionEdgePg,
-  InterfaceOrganizationEventsConnectionPg,
-  InterfaceOrganizationBlockedUsersConnectionPg,
-  InterfaceOrganizationPostsConnectionPg,
   InterfaceMembershipRequestQuery,
 } from 'utils/interfaces';
 import styles from './OrganizationDashboard.module.css';
@@ -167,11 +164,13 @@ function OrganizationDashboard(): JSX.Element {
       const allEvents = orgEventsData.organization.events.edges;
 
       const upcomingEvents = allEvents
-        .map((edge: any) => edge.node)
-        .filter((event: IEvent) => {
+        .filter((edge) => {
           // Filter events that start after the current date
-          return new Date(event.node?.startAt) > now;
-        });
+          return new Date(edge.node.startAt) > now;
+        })
+        .map((edge) => ({
+          node: edge.node as any,
+        }));
 
       // Set to actual total count since fetchMore accumulates results
       setEventCount(orgEventsData.organization.eventsCount);

@@ -28,8 +28,8 @@
  * ```
  *
  */
-import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
 import styles from 'style/app-fixed.module.css';
@@ -98,9 +98,9 @@ const VenueCard = ({
                 showEditVenueModal(venueItem);
               }}
               data-testid={`updateVenueBtn-${venueItem.node.id}`}
-              className={`btn ${styles.addButton}`}
+              className={styles.addButton}
+              icon={<i className="fa fa-pen me-1"></i>}
             >
-              <i className="fa fa-pen me-1"></i>
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
@@ -108,9 +108,10 @@ const VenueCard = ({
               size="sm"
               data-testid={`deleteVenueBtn-${venueItem.node.id}`}
               onClick={() => handleDelete(venueItem.node.id)}
-              className={`btn btn-danger ${styles.removeButton}`}
+              className={styles.removeButton}
+              variant="danger"
+              icon={<i className="fa fa-trash me-2"></i>}
             >
-              <i className="fa fa-trash me-2"></i>
               <span>{tCommon('delete')}</span>
             </Button>
           </div>

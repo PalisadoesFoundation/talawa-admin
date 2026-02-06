@@ -8,7 +8,8 @@
  * @param props - Component props containing _id, the unique identifier of the event.
  * @returns A JSX element containing a button to view event statistics and the EventStats component.
  */
-import React, { useState } from 'react';
+import React from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { EventStats } from './Statistics/EventStats';
 import Button from 'shared-components/Button/Button';
@@ -20,7 +21,11 @@ export const EventStatsWrapper = ({
   _id,
 }: InterfaceEventStatsWrapperProps): JSX.Element => {
   // State to control the visibility of the EventStats component
-  const [showModal, setShowModal] = useState(false);
+  const {
+    isOpen: showModal,
+    open: openModal,
+    close: closeModal,
+  } = useModalState();
   const { t } = useTranslation('common');
 
   return (
@@ -30,9 +35,7 @@ export const EventStatsWrapper = ({
         variant="light"
         className="text-secondary"
         aria-label={t('viewEventStatistics')}
-        onClick={(): void => {
-          setShowModal(true); // Show the EventStats component when button is clicked
-        }}
+        onClick={openModal}
       >
         <div className={styles.iconWrapper}>
           <IconComponent name="Event Stats" fill="var(--bs-secondary)" />
@@ -43,7 +46,7 @@ export const EventStatsWrapper = ({
       {/* Render the EventStats component if showModal is true */}
       <EventStats
         show={showModal}
-        handleClose={(): void => setShowModal(false)} // Hide the EventStats component when closed
+        handleClose={closeModal} // Hide the EventStats component when closed
         key={_id || 'eventStatsDetails'} // Use _id as key for the component
         eventId={_id}
       />

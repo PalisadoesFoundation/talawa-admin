@@ -1723,7 +1723,8 @@
     "invalidAmount": "请输入捐赠金额的数值。",
     "donationAmountDescription": "请输入捐款金额的数值。",
     "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
-    "donateTo": "捐赠给"
+    "donateTo": "捐赠给",
+    "selectCurrency": "选择货币"
   },
   "transactions": {
     "title": "交易",

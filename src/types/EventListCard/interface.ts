@@ -53,8 +53,8 @@ export interface InterfaceEventUpdateInput {
  */
 export interface InterfaceFormState {
   name: string;
-  eventDescription: string;
-  location: string;
+  eventDescription: string | null;
+  location: string | null;
   startTime: string;
   endTime: string;
 }

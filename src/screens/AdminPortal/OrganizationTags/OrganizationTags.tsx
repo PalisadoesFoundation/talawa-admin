@@ -39,6 +39,7 @@ import {
   GridColDef,
   type GridCellParams,
 } from 'shared-components/DataGridWrapper';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
@@ -56,7 +57,7 @@ function OrganizationTags(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
+  const createTagModal = useModalState(false);
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -68,11 +69,11 @@ function OrganizationTags(): JSX.Element {
 
   const showCreateTagModal = (): void => {
     setTagName('');
-    setCreateTagModalIsOpen(true);
+    createTagModal.open();
   };
 
   const hideCreateTagModal = (): void => {
-    setCreateTagModalIsOpen(false);
+    createTagModal.close();
   };
 
   const {
@@ -139,7 +140,7 @@ function OrganizationTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
-        setCreateTagModalIsOpen(false);
+        createTagModal.close();
       } else {
         NotificationToast.error(t('tagCreationFailed'));
       }
@@ -406,7 +407,7 @@ function OrganizationTags(): JSX.Element {
 
       {/* Create Tag Modal */}
       <BaseModal
-        show={createTagModalIsOpen}
+        show={createTagModal.isOpen}
         onHide={hideCreateTagModal}
         backdrop="static"
         centered

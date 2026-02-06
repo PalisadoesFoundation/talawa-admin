@@ -194,7 +194,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             value={formState.fundName}
             touched={touched.fundName}
             error={fundNameError}
-            onChange={(value) =>
+            onChange={(value: string) =>
               setFormState((prev) => ({ ...prev, fundName: value }))
             }
             onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
@@ -209,7 +209,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             value={formState.fundRef}
             touched={touched.fundRef}
             error={fundRefError}
-            onChange={(value) =>
+            onChange={(value: string) =>
               setFormState((prev) => ({ ...prev, fundRef: value }))
             }
             onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
@@ -217,11 +217,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         </div>
 
         <div
-          className={`d-flex mt-2 mb-3 flex-wrap ${
-            mode === 'edit'
+          className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit'
               ? 'justify-content-between'
               : 'justify-content-start gap-3'
-          }`}
+            }`}
         >
           <div className="d-flex align-items-center">
             <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>

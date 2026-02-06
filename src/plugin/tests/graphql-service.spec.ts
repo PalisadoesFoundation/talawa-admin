@@ -13,7 +13,7 @@ import {
   useDeletePlugin,
 } from '../graphql-service';
 import { type ApolloClient } from '@apollo/client';
-import { useQuery, useMutation, type QueryResult } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 
 // Mock Apollo client
 const mockApolloClient = {

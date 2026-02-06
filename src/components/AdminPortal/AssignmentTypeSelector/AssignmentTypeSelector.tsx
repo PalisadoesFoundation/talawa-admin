@@ -1,6 +1,7 @@
 import React, { useId } from 'react';
-import { Chip, Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import type {
   InterfaceAssignmentTypeSelectorProps,
   AssignmentType,
@@ -54,25 +55,27 @@ const AssignmentTypeSelector: React.FC<
         className="d-flex gap-2 border-0 p-0 m-0"
         aria-labelledby={labelId}
       >
-        <Chip
+        <StatusBadge
           label={t('volunteer')}
-          variant={assignmentType === 'volunteer' ? 'filled' : 'outlined'}
-          color={assignmentType === 'volunteer' ? 'primary' : 'default'}
+          variant={assignmentType === 'volunteer' ? 'primary' : 'default'}
+          chipVariant={assignmentType === 'volunteer' ? 'filled' : 'outlined'}
           onClick={handleVolunteerClick}
           clickable={!isVolunteerDisabled}
-          aria-disabled={isVolunteerDisabled}
+          ariaLabel={t('volunteer')}
           sx={{
             opacity: isVolunteerDisabled ? 0.6 : 1,
             cursor: isVolunteerDisabled ? 'not-allowed' : 'pointer',
           }}
         />
-        <Chip
+        <StatusBadge
           label={t('volunteerGroup')}
-          variant={assignmentType === 'volunteerGroup' ? 'filled' : 'outlined'}
-          color={assignmentType === 'volunteerGroup' ? 'primary' : 'default'}
+          variant={assignmentType === 'volunteerGroup' ? 'primary' : 'default'}
+          chipVariant={
+            assignmentType === 'volunteerGroup' ? 'filled' : 'outlined'
+          }
           onClick={handleVolunteerGroupClick}
           clickable={!isVolunteerGroupDisabled}
-          aria-disabled={isVolunteerGroupDisabled}
+          ariaLabel={t('volunteerGroup')}
           sx={{
             opacity: isVolunteerGroupDisabled ? 0.6 : 1,
             cursor: isVolunteerGroupDisabled ? 'not-allowed' : 'pointer',

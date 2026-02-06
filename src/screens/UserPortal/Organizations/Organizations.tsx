@@ -103,7 +103,7 @@ interface IOrganization {
   }[];
 }
 
-interface IOrgData {
+interface InterfaceOrgData {
   isMember: boolean;
   addressLine1: string;
   avatarURL: string | null;

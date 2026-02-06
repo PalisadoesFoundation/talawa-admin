@@ -5,6 +5,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import Button from 'shared-components/Button/Button';
 import styles from './PluginStore.module.css';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
@@ -19,8 +20,8 @@ import type { IPlugin } from 'plugin/graphql-service';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const pluginDetailsModal = useModalState(false);
+  const uploadModal = useModalState(false);
   const [selectedPluginId, setSelectedPluginId] = useState<string | null>(null);
   const [selectedPluginMeta, setSelectedPluginMeta] =
     useState<IPluginMeta | null>(null);
@@ -104,19 +105,19 @@ export default function PluginStore() {
   const openPlugin = (plugin: IPluginMeta) => {
     setSelectedPluginId(plugin.id);
     setSelectedPluginMeta(plugin);
-    setShowModal(true);
+    pluginDetailsModal.open();
   };
 
   // Close modal
   const closeModal = () => {
-    setShowModal(false);
+    pluginDetailsModal.close();
     setSelectedPluginId(null);
     setSelectedPluginMeta(null);
   };
 
   // Close upload modal
   const closeUploadModal = async () => {
-    setShowUploadModal(false);
+    uploadModal.close();
     // Refresh plugin data after upload
     await refetch();
     // Reload the page to ensure all plugin states are properly updated
@@ -142,7 +143,7 @@ export default function PluginStore() {
   const uploadPluginButton = (
     <Button
       className={`${styles.dropdown} ${styles.createorgdropdown}`}
-      onClick={() => setShowUploadModal(true)}
+      onClick={() => uploadModal.open()}
       data-testid="uploadPluginBtn"
     >
       <i className={'fa fa-plus me-2'} />
@@ -189,7 +190,7 @@ export default function PluginStore() {
       </div>
       {/* Plugin Details Modal */}
       <PluginModal
-        show={showModal}
+        show={pluginDetailsModal.isOpen}
         onHide={closeModal}
         pluginId={selectedPluginId}
         meta={selectedPluginMeta}
@@ -203,7 +204,7 @@ export default function PluginStore() {
       />
       {/* Upload Plugin Modal */}
       <UploadPluginModal
-        show={showUploadModal}
+        show={uploadModal.isOpen}
         onHide={closeUploadModal}
         data-testid="upload-plugin-modal"
       />

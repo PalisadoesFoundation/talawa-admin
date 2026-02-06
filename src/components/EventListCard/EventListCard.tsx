@@ -26,8 +26,9 @@
  * ```
  *
  */
-import React, { useState, JSX } from 'react';
+import React, { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import styles from './EventListCard.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
@@ -43,7 +44,11 @@ function EventListCard(props: IEventListCard): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
+  const {
+    isOpen: eventModalIsOpen,
+    open: showViewModal,
+    close: hideViewModal,
+  } = useModalState();
 
   const { orgId } = useParams();
 
@@ -51,20 +56,6 @@ function EventListCard(props: IEventListCard): JSX.Element {
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
-
-  /**
-   * Opens the event modal.
-   */
-  const showViewModal = (): void => {
-    setEventModalIsOpen(true);
-  };
-
-  /**
-   * Closes the event modal.
-   */
-  const hideViewModal = (): void => {
-    setEventModalIsOpen(false);
-  };
 
   return (
     <>

@@ -28,7 +28,7 @@
  */
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
-import Button from '@mui/material/Button';
+import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client/react';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

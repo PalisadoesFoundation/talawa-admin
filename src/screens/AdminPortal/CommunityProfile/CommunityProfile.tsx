@@ -64,9 +64,6 @@ import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type {
-  InterfaceUserPg,
-  InterfaceOrganizationPg,
-  InterfaceUpdateUserMutation,
   InterfaceCommunityQuery,
   InterfaceUpdateCommunityMutation,
   InterfaceResetCommunityMutation,

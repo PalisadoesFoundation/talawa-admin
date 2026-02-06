@@ -1,5 +1,6 @@
-import React, { type FC } from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
+import React, { FC } from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from 'style/app-fixed.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
@@ -53,12 +54,13 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
             </div>
           </Card.Header>
           <Card.Body className={styles.cardBody}>
-            <div className={styles.textBox}>
-              <Form.Label className={'text-secondary fw-bold'}>
-                {t('changeLanguage')}
-              </Form.Label>
+            <FormFieldGroup
+              name="changeLanguage"
+              label={t('changeLanguage')}
+              labelClassName="text-secondary fw-bold"
+            >
               <ChangeLanguageDropDown />
-            </div>
+            </FormFieldGroup>
           </Card.Body>
         </Card>
       </Col>

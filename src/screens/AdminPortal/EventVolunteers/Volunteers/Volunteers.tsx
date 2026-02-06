@@ -49,6 +49,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button/Button';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { Navigate, useParams } from 'react-router';
 import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
@@ -115,20 +116,20 @@ function Volunteers(): JSX.Element {
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
-  const [modalState, setModalState] = useState<{
-    [key in ModalState]: boolean;
-  }>({
-    [ModalState.ADD]: false,
-    [ModalState.DELETE]: false,
-    [ModalState.VIEW]: false,
-  });
+  const addModal = useModalState(false);
+  const deleteModal = useModalState(false);
+  const viewModal = useModalState(false);
 
   const openModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+    if (modal === ModalState.ADD) addModal.open();
+    else if (modal === ModalState.DELETE) deleteModal.open();
+    else if (modal === ModalState.VIEW) viewModal.open();
   };
 
   const closeModal = (modal: ModalState): void => {
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+    if (modal === ModalState.ADD) addModal.close();
+    else if (modal === ModalState.DELETE) deleteModal.close();
+    else if (modal === ModalState.VIEW) viewModal.close();
   };
 
   const handleOpenModal = (
@@ -454,7 +455,7 @@ function Volunteers(): JSX.Element {
         />
 
         <VolunteerCreateModal
-          isOpen={modalState[ModalState.ADD]}
+          isOpen={addModal.isOpen}
           hide={() => closeModal(ModalState.ADD)}
           eventId={eventId}
           orgId={orgId}
@@ -467,12 +468,12 @@ function Volunteers(): JSX.Element {
         {volunteer && (
           <>
             <VolunteerViewModal
-              isOpen={modalState[ModalState.VIEW]}
+              isOpen={viewModal.isOpen}
               hide={() => closeModal(ModalState.VIEW)}
               volunteer={volunteer}
             />
             <VolunteerDeleteModal
-              isOpen={modalState[ModalState.DELETE]}
+              isOpen={deleteModal.isOpen}
               hide={() => closeModal(ModalState.DELETE)}
               volunteer={volunteer}
               refetchVolunteers={refetchVolunteers}

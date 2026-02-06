@@ -23,13 +23,7 @@
 import { Paper, TableBody } from '@mui/material';
 import { useState } from 'react';
 import Button from 'shared-components/Button';
-import type {
-  ApolloCache,
-  DefaultContext,
-  FetchResult,
-  OperationVariables,
-  ApolloQueryResult,
-} from '@apollo/client';
+import type { FetchResult } from '@apollo/client';
 import { useQuery, useMutation } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {

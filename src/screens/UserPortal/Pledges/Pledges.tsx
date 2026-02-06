@@ -59,7 +59,7 @@ const Pledges = (): JSX.Element => {
     networkStatus: number;
     errors?: readonly Error[];
   };
-  interface IPledgeRefetchFn {
+  interface InterfacePledgeRefetchFn {
     (): Promise<PledgeQueryResult>;
   }
 

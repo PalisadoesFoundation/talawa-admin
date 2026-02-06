@@ -46,5 +46,6 @@ export function useModalState(
     open,
     close,
     toggle,
+    setIsOpen,
   };
 }

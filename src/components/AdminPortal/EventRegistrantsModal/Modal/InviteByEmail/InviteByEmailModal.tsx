@@ -240,7 +240,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
           label={t('expiresInDaysLabel')}
           type="number"
           value={expiresInDays.toString()}
-          onChange={(v) => {
+          onChange={(v: string) => {
             const value = parseInt(v, 10);
             setExpiresInDays(isNaN(value) || value < 1 ? 7 : value);
           }}

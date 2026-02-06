@@ -42,6 +42,18 @@
   border: 1px solid var(--bs-gray-300) !important;
 }
 
+.primary {
+  background-color: var(--bs-primary-bg-subtle) !important;
+  color: var(--bs-primary-text-emphasis) !important;
+  border: 1px solid var(--bs-primary-border-subtle) !important;
+}
+
+.default {
+  background-color: transparent !important;
+  color: var(--bs-body-color) !important;
+  border: 1px solid var(--bs-border-color) !important;
+}
+
 /* Size variants */
 .sm {
   font-size: 0.75rem;

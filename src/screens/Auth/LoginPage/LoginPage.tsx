@@ -45,7 +45,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
 import type {
-  InterfaceQueryOrganizationListObject,
   InterfaceCommunityQuery,
   InterfaceSignInQuery,
   InterfaceOrganizationListQuery,

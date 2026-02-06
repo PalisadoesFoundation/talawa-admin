@@ -14,7 +14,9 @@ export type StatusVariant =
   | 'disabled' // -> neutral
   | 'accepted' // -> success
   | 'declined' // -> error
-  | 'no_response'; // -> info
+  | 'no_response' // -> info
+  | 'primary' // for interactive chips
+  | 'default'; // for interactive chips
 
 /**
  * Semantic variants for internal mapping.
@@ -25,7 +27,9 @@ export type SemanticVariant =
   | 'warning'
   | 'error'
   | 'info'
-  | 'neutral';
+  | 'neutral'
+  | 'primary'
+  | 'default';
 
 /**
  * Size variants for the badge.
@@ -41,6 +45,8 @@ export interface InterfaceStatusBadgeProps {
   variant: StatusVariant;
   /** The size of the badge (optional, defaults to 'md') */
   size?: StatusSize;
+  /** The MUI Chip variant (optional) */
+  chipVariant?: 'filled' | 'outlined';
   /** Custom label text (optional, overrides i18n) */
   label?: string;
   /** Optional icon to display in the badge */
@@ -51,4 +57,10 @@ export interface InterfaceStatusBadgeProps {
   className?: string;
   /** Test ID for component testing (forwarded as data-testid) */
   dataTestId?: string;
+  /** Click handler (optional) */
+  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  /** Whether the badge is clickable (optional) */
+  clickable?: boolean;
+  /** Optional MUI sx prop for custom styling */
+  sx?: object;
 }

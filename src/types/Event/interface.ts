@@ -40,9 +40,9 @@ export interface IEvent {
   userRole?: string;
   key?: string;
   id: string;
-  location: string;
+  location: string | null;
   name: string;
-  description: string;
+  description: string | null;
   startAt: string;
   endAt: string;
   startTime?: string | null;
@@ -169,15 +169,15 @@ export interface IPreviewEventModalProps {
   setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
-    eventDescription: string;
-    location: string;
+    eventDescription: string | null;
+    location: string | null;
     startTime: string;
     endTime: string;
   };
   setFormState: (state: {
     name: string;
-    eventDescription: string;
-    location: string;
+    eventDescription: string | null;
+    location: string | null;
     startTime: string;
     endTime: string;
   }) => void;
@@ -286,10 +286,10 @@ export interface ICreateEventInput {
   description?: string;
   location?: string;
   recurrence?:
-    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
-        endDate?: string;
-      })
-    | null;
+  | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+    endDate?: string;
+  })
+  | null;
 }
 
 // Legacy interface exports for backward compatibility

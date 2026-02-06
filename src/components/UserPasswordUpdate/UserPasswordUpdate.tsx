@@ -7,9 +7,9 @@ import React from 'react';
 import { useMutation } from '@apollo/client/react';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import styles from '../../style/app-fixed.module.css';
-import { Form } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
@@ -91,18 +91,18 @@ export const UserUpdate: React.FC<
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('previousPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="previousPassword"
+                label={t('previousPassword')}
                 type="password"
-                id="previousPassword"
                 placeholder={t('previousPassword')}
                 autoComplete="off"
                 required
                 value={formState.previousPassword}
-                onChange={(e): void => {
+                onChange={(value: string): void => {
                   setFormState({
                     ...formState,
-                    previousPassword: e.target.value,
+                    previousPassword: value,
                   });
                 }}
               />
@@ -110,34 +110,34 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('newPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="newPassword"
+                label={t('newPassword')}
                 type="password"
-                id="newPassword"
                 placeholder={t('newPassword')}
                 autoComplete="off"
                 required
                 value={formState.newPassword}
-                onChange={(e): void => {
-                  setFormState({ ...formState, newPassword: e.target.value });
+                onChange={(value: string): void => {
+                  setFormState({ ...formState, newPassword: value });
                 }}
               />
             </div>
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('confirmNewPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="confirmNewPassword"
+                label={t('confirmNewPassword')}
                 type="password"
-                id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}
                 autoComplete="off"
                 required
                 value={formState.confirmNewPassword}
-                onChange={(e): void => {
+                onChange={(value: string): void => {
                   setFormState({
                     ...formState,
-                    confirmNewPassword: e.target.value,
+                    confirmNewPassword: value,
                   });
                 }}
               />

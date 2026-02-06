@@ -320,7 +320,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             label={t('amount')}
             type="number"
             value={String(pledgeAmount)}
-            onChange={(value) => {
+            onChange={(value: string) => {
               if (value === '' || value.trim() === '') {
                 setFormState({
                   ...formState,

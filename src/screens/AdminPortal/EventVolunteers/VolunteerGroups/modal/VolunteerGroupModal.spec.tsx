@@ -26,7 +26,6 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { CREATE_VOLUNTEER_GROUP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import type { MockedResponse } from '@apollo/client/testing';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),

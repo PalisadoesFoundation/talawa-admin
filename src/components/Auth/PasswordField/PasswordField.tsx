@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { usePasswordVisibility } from '../../../hooks/usePasswordVisibility';
@@ -26,18 +27,18 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   const togglePassword = externalToggle ?? internal.togglePassword;
 
   return (
-    <Form.Group className="mb-3" controlId={name}>
-      {label && <Form.Label>{label}</Form.Label>}
-      <InputGroup>
-        <Form.Control
-          type={showPassword ? 'text' : 'password'}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          isInvalid={!!error}
-          data-testid={testId}
-        />
+    <FormTextField
+      name={name}
+      label={label || ''}
+      className="mb-3"
+      error={error ?? undefined}
+      touched={true}
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder}
+      type={showPassword ? 'text' : 'password'}
+      data-testid={testId}
+      endAdornment={
         <InputGroup.Text
           as="button"
           type="button"
@@ -54,12 +55,7 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
         >
           {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
         </InputGroup.Text>
-      </InputGroup>
-      {error && (
-        <Form.Control.Feedback type="invalid" className="d-block">
-          {error}
-        </Form.Control.Feedback>
-      )}
-    </Form.Group>
+      }
+    />
   );
 };

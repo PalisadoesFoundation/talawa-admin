@@ -68,7 +68,6 @@ import { useTranslation } from 'react-i18next';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
-import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceGroupChatDetailsProps } from 'types/UserPortal/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';

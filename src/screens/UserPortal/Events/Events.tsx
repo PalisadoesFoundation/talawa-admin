@@ -52,6 +52,7 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
   ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -69,7 +70,11 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
+import type {
+  ICreateEventInput,
+  IEvent,
+  IOrgList,
+} from 'types/Event/interface';
 import styles from './Events.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -82,6 +87,7 @@ import { NotificationToast } from 'shared-components/NotificationToast/Notificat
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 import type {
   InterfaceGetOrgEventsUserPortalQuery,
+  InterfaceOrganizationEventsConnectionEdgePg,
   InterfaceOrganizationListQuery,
 } from 'utils/interfaces';
 
@@ -217,15 +223,19 @@ export default function Events(): JSX.Element {
   );
 
   // Query to fetch organization details
-  const { data: orgData } = useQuery<InterfaceOrganizationListQuery>(
-    ORGANIZATIONS_LIST,
+  const { data: orgData } = useQuery<{ organization: IOrgList }>(
+    GET_ORGANIZATION_DATA_PG,
     {
-      variables: { id: organizationId },
+      variables: { id: organizationId, first: 10 },
+      skip: !organizationId,
     },
   );
 
   // Mutation to create a new event
-  const [create] = useMutation<any>(CREATE_EVENT_MUTATION, {
+  const [create] = useMutation<
+    { createEvent: { id: string } },
+    { input: ICreateEventInput }
+  >(CREATE_EVENT_MUTATION, {
     errorPolicy: 'all',
   });
 
@@ -279,9 +289,9 @@ export default function Events(): JSX.Element {
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
-      const mutationResult = (await create({
+      const mutationResult = await create({
         variables: { input },
-      })) as any;
+      });
       const createEventData = mutationResult.data;
       const errors = mutationResult.errors;
 
@@ -309,39 +319,41 @@ export default function Events(): JSX.Element {
   const closeCreateEventModal = (): void => createEventModal.close();
 
   // Normalize event data for EventCalendar with proper typing
-  const events = (data?.organization?.events?.edges || []).map((edge: any) => ({
-    id: edge.node.id || '',
+  const events = (data?.organization?.events?.edges || []).map(
+    (edge: InterfaceOrganizationEventsConnectionEdgePg) => ({
+      id: edge.node.id || '',
 
-    name: edge.node.name || '',
-    description: edge.node.description || '',
-    startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-    endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
-    startTime: edge.node.allDay
-      ? null
-      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
-    endTime: edge.node.allDay
-      ? null
-      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
-    allDay: edge.node.allDay,
-    location: edge.node.location || '',
-    isPublic: edge.node.isPublic,
-    isRegisterable: edge.node.isRegisterable,
-    isInviteOnly: edge.node.isInviteOnly,
-    // Add recurring event information
-    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-    baseEvent: edge.node.baseEvent,
-    sequenceNumber: edge.node.sequenceNumber,
-    totalCount: edge.node.totalCount,
-    hasExceptions: edge.node.hasExceptions,
-    progressLabel: edge.node.progressLabel,
-    recurrenceDescription: edge.node.recurrenceDescription,
-    recurrenceRule: edge.node.recurrenceRule,
-    creator: edge.node.creator || {
-      id: '',
-      name: '',
-    },
-    attendees: edge.node.attendees || [],
-  })); // Handle errors gracefully
+      name: edge.node.name || '',
+      description: edge.node.description || '',
+      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+      startTime: edge.node.allDay
+        ? null
+        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+      endTime: edge.node.allDay
+        ? null
+        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+      allDay: edge.node.allDay,
+      location: edge.node.location || '',
+      isPublic: edge.node.isPublic,
+      isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly,
+      // Add recurring event information
+      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+      baseEvent: edge.node.baseEvent,
+      sequenceNumber: edge.node.sequenceNumber,
+      totalCount: edge.node.totalCount,
+      hasExceptions: edge.node.hasExceptions,
+      progressLabel: edge.node.progressLabel,
+      recurrenceDescription: edge.node.recurrenceDescription,
+      recurrenceRule: edge.node.recurrenceRule,
+      creator: edge.node.creator || {
+        id: '',
+        name: '',
+      },
+      attendees: edge.node.attendees || [],
+    }),
+  ); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
       // Check if we have valid data (partial data scenario)
@@ -413,9 +425,9 @@ export default function Events(): JSX.Element {
       {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
-        eventData={events as any}
+        eventData={events}
         refetchEvents={refetch}
-        orgData={orgData as any}
+        orgData={orgData?.organization}
         userRole={userRole}
         userId={userId}
         onMonthChange={(month, year) => {

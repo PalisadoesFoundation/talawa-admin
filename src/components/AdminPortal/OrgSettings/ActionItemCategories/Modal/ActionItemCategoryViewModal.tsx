@@ -3,12 +3,12 @@
  * Modal to display detailed view of an action item category
  */
 import type { FC } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { FormControl, TextField } from '@mui/material';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { Circle } from '@mui/icons-material';
 
 export interface ICategoryViewModalProps {
@@ -29,95 +29,63 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
 
   if (!category) return null;
 
-  const modalFooter = (
-    <Button
-      variant="secondary"
-      onClick={hide}
-      data-testid="categoryViewModalCloseBtn"
-    >
-      {tCommon('close')}
-    </Button>
-  );
-
   return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
+    <ViewModal
+      open={isOpen}
+      onClose={hide}
       title={t('categoryDetails')}
-      footer={modalFooter}
-      dataTestId="categoryViewModal"
+      data-testid="categoryViewModal"
     >
-      <Form className="p-3">
+      <div className="p-3">
         {/* Category Name */}
-        <Form.Group className="d-flex mb-3 w-100">
-          <FormControl fullWidth>
-            <TextField
-              label={t('actionItemCategoryName')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={category.name}
-              disabled
-              data-testid="categoryNameView"
-            />
-          </FormControl>
-        </Form.Group>
+        <FormTextField
+          name="categoryName"
+          label={t('actionItemCategoryName')}
+          value={category.name}
+          disabled
+          className={styles.noOutline}
+          data-testid="categoryNameView"
+        />
 
         {/* Category Description */}
-        <Form.Group className="d-flex mb-3 w-100">
-          <FormControl fullWidth>
-            <TextField
-              label={t('actionItemCategoryDescription')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={category.description || t('noDescriptionProvided')}
-              disabled
-              multiline
-              rows={4}
-              data-testid="categoryDescriptionView"
-            />
-          </FormControl>
-        </Form.Group>
+        <FormTextField
+          name="categoryDescription"
+          label={t('actionItemCategoryDescription')}
+          value={category.description || t('noDescriptionProvided')}
+          disabled
+          as="textarea"
+          rows={4}
+          className={styles.noOutline}
+          data-testid="categoryDescriptionView"
+        />
 
-        {/* Status and Created Date */}
-        <Form.Group className="d-flex gap-3 mb-3">
-          {/* Status */}
-          <TextField
+        {/* Status */}
+        <FormFieldGroup name="categoryStatus" label={t('status')}>
+          <FormTextField
+            name="status"
             label={t('status')}
-            fullWidth
+            hideLabel
             value={
               category.isDisabled ? tCommon('disabled') : tCommon('active')
             }
-            InputProps={{
-              startAdornment: (
-                <Circle
-                  sx={{
-                    fontSize: '0.8rem',
-                    color: category.isDisabled
-                      ? 'var(--errorIcon-color)'
-                      : 'var(--bs-success)',
-                  }}
-                  className="me-6"
-                />
-              ),
-              style: {
-                color: category.isDisabled
-                  ? 'var(--errorIcon-color)'
-                  : 'var(--bs-success)',
-              },
-            }}
-            inputProps={{
-              style: {
-                WebkitTextFillColor: category.isDisabled
-                  ? 'var(--errorIcon-color)'
-                  : 'var(--bs-success)',
-              },
-            }}
+            startAdornment={
+              <Circle
+                sx={{
+                  fontSize: '0.8rem',
+                  color: category.isDisabled
+                    ? 'var(--errorIcon-color)'
+                    : 'var(--bs-success)',
+                  marginRight: '8px',
+                  alignSelf: 'center',
+                }}
+              />
+            }
             disabled
             data-testid="categoryStatusView"
           />
-        </Form.Group>
-      </Form>
-    </BaseModal>
+        </FormFieldGroup>
+      </div>
+    </ViewModal>
   );
 };
 

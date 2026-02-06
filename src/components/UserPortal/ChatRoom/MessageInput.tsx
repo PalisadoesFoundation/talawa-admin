@@ -126,7 +126,7 @@ export default function MessageInput({
         label={sendMessagePlaceholder}
         placeholder={sendMessagePlaceholder}
         value={newMessage}
-        onChange={(value) => {
+        onChange={(value: string) => {
           const syntheticEvent = {
             target: { value },
           } as ChangeEvent<HTMLInputElement>;

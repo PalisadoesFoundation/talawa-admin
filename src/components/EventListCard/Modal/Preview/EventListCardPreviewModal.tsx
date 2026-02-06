@@ -2,39 +2,10 @@
  * PreviewModal Component
  *
  * This component renders a modal for previewing and editing event details.
- * It provides functionality to view, update, and manage event properties such as
- * name, description, location, date, time, and visibility settings.
- *
- * @param eventModalIsOpen - Determines if the modal is open.
- * @param hideViewModal - Function to close the modal.
- * @param toggleDeleteModal - Function to toggle the delete confirmation modal.
- * @param t - Translation function for event-specific strings.
- * @param tCommon - Translation function for common strings.
- * @param isRegistered - Indicates if the user is registered for the event.
- * @param userId - The ID of the current user.
- * @param eventStartDate - The start date of the event.
- * @param eventEndDate - The end date of the event.
- * @param setEventStartDate - Function to update the event start date.
- * @param setEventEndDate - Function to update the event end date.
- * @param allDayChecked - Indicates if the event is an all-day event.
- * @param setAllDayChecked - Function to toggle the all-day event setting.
- * @param publicChecked - Indicates if the event is public.
- * @param setPublicChecked - Function to toggle the public event setting.
- * @param registerableChecked - Indicates if the event is registrable.
- * @param setRegisterableChecked - Function to toggle the registrable event setting.
- * @param inviteOnlyChecked - Indicates if the event is invite-only.
- * @param setInviteOnlyChecked - Function to toggle the invite-only event setting.
- * @param formState - The state of the form fields.
- * @param setFormState - Function to update the form state.
- * @param registerEventHandler - Function to handle event registration.
- * @param handleEventUpdate - Function to handle event updates.
- * @param openEventDashboard - Function to navigate to the event dashboard.
- *
- * @returns A modal for previewing and managing event details.
  */
 // translation-check-keyPrefix: eventListCard
-import React from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useMemo } from 'react';
+import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
@@ -128,10 +99,13 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     return months[monthIndex];
   };
 
-  const getRecurrenceOptions = (): Array<{
+  type InterfaceRecurrenceOption = {
     label: string;
-    value: InterfaceRecurrenceRule | 'custom';
-  }> => {
+    value: string;
+    rule: InterfaceRecurrenceRule | 'custom';
+  };
+
+  const recurrenceOptions = useMemo<InterfaceRecurrenceOption[]>(() => {
     const eventDate = new Date(eventStartDate);
     const dayOfWeek = eventDate.getDay();
     const dayOfMonth = eventDate.getDate();
@@ -142,19 +116,23 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     return [
       {
         label: t('daily'),
-        value: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
+        value: 'daily',
+        rule: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
       },
       {
         label: t('weeklyOn', { day: dayName }),
-        value: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
+        value: 'weekly',
+        rule: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
       },
       {
         label: t('monthlyOnDay', { day: dayOfMonth }),
-        value: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
+        value: 'monthly',
+        rule: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
       },
       {
         label: t('annuallyOn', { month: monthName, day: dayOfMonth }),
-        value: {
+        value: 'yearly',
+        rule: {
           frequency: Frequency.YEARLY,
           interval: 1,
           byMonth: [month + 1],
@@ -164,7 +142,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       },
       {
         label: t('everyWeekday'),
-        value: {
+        value: 'weekday',
+        rule: {
           frequency: Frequency.WEEKLY,
           interval: 1,
           byDay: ['MO', 'TU', 'WE', 'TH', 'FR'] as WeekDays[],
@@ -174,14 +153,17 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       {
         label: t('customOption'),
         value: 'custom',
+        rule: 'custom',
       },
-    ];
-  };
+    ] as InterfaceRecurrenceOption[];
+  }, [eventStartDate, t]);
 
-  const handleRecurrenceSelect = (option: {
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom' | null;
-  }): void => {
+  const handleRecurrenceSelect = (value: string): void => {
+    const option = recurrenceOptions.find(
+      (opt: InterfaceRecurrenceOption) => opt.value === value,
+    );
+    if (!option) return;
+
     if (option.value === 'custom') {
       if (!recurrence) {
         setRecurrence(
@@ -190,17 +172,18 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       }
       setCustomRecurrenceModalIsOpen(true);
     } else {
-      setRecurrence(option.value);
+      setRecurrence(option.rule as InterfaceRecurrenceRule);
     }
   };
 
   const getCurrentRecurrenceLabel = (): string => {
     // If the user has interacted with the dropdown, show the selected recurrence
     if (recurrence) {
-      const options = getRecurrenceOptions();
-      const matchingOption = options.find((option) => {
+      const matchingOption = (
+        recurrenceOptions as InterfaceRecurrenceOption[]
+      ).find((option: InterfaceRecurrenceOption) => {
         if (option.value === 'custom') return false;
-        return JSON.stringify(option.value) === JSON.stringify(recurrence);
+        return JSON.stringify(option.rule) === JSON.stringify(recurrence);
       });
 
       if (matchingOption) {
@@ -312,7 +295,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.name.substring(0, 100) + '...'
                 : formState.name || ''
             }
-            onChange={(val) => setFormState({ ...formState, name: val })}
+            onChange={(val: string) =>
+              setFormState({ ...formState, name: val })
+            }
             disabled={!canEditEvent}
           />
 
@@ -331,7 +316,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.eventDescription.substring(0, 256) + '...'
                 : formState.eventDescription || ''
             }
-            onChange={(val) =>
+            onChange={(val: string) =>
               setFormState({ ...formState, eventDescription: val })
             }
             disabled={!canEditEvent}
@@ -348,7 +333,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             data-cy="updateLocation"
             required
             value={formState.location || ''}
-            onChange={(val) => setFormState({ ...formState, location: val })}
+            onChange={(val: string) =>
+              setFormState({ ...formState, location: val })
+            }
             disabled={!canEditEvent}
           />
 
@@ -510,27 +497,22 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
           {/* Recurrence Dropdown */}
           {canEditEvent && canChangeRecurrence && (
-            <Dropdown className="mb-3">
-              <Dropdown.Toggle
-                variant="outline-secondary"
-                id="recurrence-dropdown"
-                data-testid="recurrenceDropdown"
-                className={`${styles.dropdown}`}
-              >
-                {getCurrentRecurrenceLabel()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu className="w-100">
-                {getRecurrenceOptions().map((option, index) => (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`recurrenceOption-${index}`}
-                    onClick={() => handleRecurrenceSelect(option)}
-                  >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            <DropDownButton
+              id="recurrence-dropdown"
+              options={recurrenceOptions}
+              selectedValue={
+                (recurrenceOptions as InterfaceRecurrenceOption[]).find(
+                  (opt: InterfaceRecurrenceOption) =>
+                    opt.value !== 'custom' &&
+                    JSON.stringify(opt.rule) === JSON.stringify(recurrence),
+                )?.value || (recurrence ? 'custom' : '')
+              }
+              onSelect={handleRecurrenceSelect}
+              buttonLabel={getCurrentRecurrenceLabel()}
+              variant="outline-secondary"
+              dataTestIdPrefix="recurrence"
+              parentContainerStyle="mb-3"
+            />
           )}
         </div>
       </BaseModal>

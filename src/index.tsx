@@ -1,10 +1,17 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import { ApolloClient, InMemoryCache, split, Observable } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  split,
+  Observable,
+} from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { setContext } from '@apollo/client/link/context';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
@@ -23,8 +30,6 @@ import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { ApolloLink } from '@apollo/client/core';
-import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

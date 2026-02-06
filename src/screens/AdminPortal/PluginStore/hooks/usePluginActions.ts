@@ -2,6 +2,7 @@
  * Custom hook for handling plugin actions (install, uninstall, toggle status)
  */
 import { useState, useCallback } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
 import { useUpdatePlugin, useDeletePlugin } from 'plugin/graphql-service';
@@ -19,7 +20,11 @@ export function usePluginActions({
   refetch,
 }: IUsePluginActionsProps) {
   const [loading, setLoading] = useState(false);
-  const [showUninstallModal, setShowUninstallModal] = useState(false);
+  const {
+    isOpen: showUninstallModal,
+    open: openUninstallModal,
+    close: closeUninstallModalHook,
+  } = useModalState();
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
 
@@ -115,8 +120,8 @@ export function usePluginActions({
 
   const uninstallPlugin = useCallback((plugin: IPluginMeta) => {
     setPluginToUninstall(plugin);
-    setShowUninstallModal(true);
-  }, []);
+    openUninstallModal();
+  }, [openUninstallModal]);
 
   const handleUninstallConfirm = useCallback(async () => {
     if (!pluginToUninstall) return;
@@ -172,15 +177,15 @@ export function usePluginActions({
       console.error('Failed to uninstall plugin:', error);
     } finally {
       setLoading(false);
-      setShowUninstallModal(false);
+      closeUninstallModalHook();
       setPluginToUninstall(null);
     }
   }, [pluginToUninstall, pluginData, deletePlugin, refetch]);
 
   const closeUninstallModal = useCallback(() => {
-    setShowUninstallModal(false);
+    closeUninstallModalHook();
     setPluginToUninstall(null);
-  }, []);
+  }, [closeUninstallModalHook]);
 
   return {
     loading,

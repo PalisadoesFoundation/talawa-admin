@@ -104,7 +104,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           label={tCommon('name')}
           placeholder={t('enterName')}
           value={formState.name}
-          onChange={(val) => {
+          onChange={(val: string) => {
             if (val.length <= 50) {
               setFormState({ ...formState, name: val });
             }
@@ -119,7 +119,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           label={tCommon('description')}
           placeholder={tCommon('description')}
           value={formState.description}
-          onChange={(val) => {
+          onChange={(val: string) => {
             if (val.length <= 200) {
               setFormState({ ...formState, description: val });
             }
@@ -163,7 +163,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               label={tCommon('state')}
               placeholder={tCommon('state')}
               value={formState.state}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 if (val.length <= 50) {
                   setFormState({ ...formState, state: val });
                 }
@@ -181,7 +181,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               label={tCommon('city')}
               placeholder={tCommon('city')}
               value={formState.city}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 if (val.length <= 50) {
                   setFormState({ ...formState, city: val });
                 }
@@ -197,7 +197,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               label={tCommon('postalCode')}
               placeholder={tCommon('postalCode')}
               value={formState.postalCode}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 if (val.length <= 50) {
                   setFormState({ ...formState, postalCode: val });
                 }
@@ -214,7 +214,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               label={tCommon('addressLine1')}
               placeholder={tCommon('addressLine1')}
               value={formState.addressLine1}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 if (val.length <= 50) {
                   setFormState({ ...formState, addressLine1: val });
                 }
@@ -230,7 +230,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               label={tCommon('addressLine2')}
               placeholder={tCommon('addressLine2')}
               value={formState.addressLine2}
-              onChange={(val) => {
+              onChange={(val: string) => {
                 if (val.length <= 50) {
                   setFormState({ ...formState, addressLine2: val });
                 }

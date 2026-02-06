@@ -22,7 +22,7 @@ import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { InterfaceUserCampaign } from 'utils/interfaces';
 import { useQuery } from '@apollo/client/react';
 
-interface RawCampaignNode {
+interface InterfaceRawCampaignNode {
   id: string;
   name: string;
   currencyCode: string;
@@ -31,14 +31,14 @@ interface RawCampaignNode {
   endAt: string;
 }
 
-interface CampaignData {
+interface InterfaceCampaignData {
   organization: {
     funds: {
       edges: {
         node: {
           campaigns: {
             edges: {
-              node: RawCampaignNode;
+              node: InterfaceRawCampaignNode;
             }[];
           };
         };
@@ -108,7 +108,7 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery<CampaignData>(USER_FUND_CAMPAIGNS, {
+  } = useQuery<InterfaceCampaignData>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },
@@ -136,7 +136,7 @@ const Campaigns = (): JSX.Element => {
 
     return campaignData.organization.funds.edges
       .flatMap((fundEdge) => fundEdge?.node?.campaigns?.edges ?? [])
-      .map(({ node: campaign }: { node: RawCampaignNode }) => {
+      .map(({ node: campaign }: { node: InterfaceRawCampaignNode }) => {
         const today = dayjs().startOf('day');
         const startDate = dayjs(campaign.startAt).startOf('day');
         const endDate = dayjs(campaign.endAt).startOf('day');

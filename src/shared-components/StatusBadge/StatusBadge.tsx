@@ -38,6 +38,8 @@ const variantMapping: Record<StatusVariant, SemanticVariant> = {
   accepted: 'success',
   declined: 'error',
   no_response: 'info',
+  primary: 'primary',
+  default: 'default',
 };
 
 /**
@@ -49,6 +51,7 @@ const variantMapping: Record<StatusVariant, SemanticVariant> = {
  * - Internationalization support with fallback keys (statusBadge.variant)
  * - Accessibility features (role="status", aria-label)
  * - Optional icon and label customization
+ * - Interactivity support (onClick, clickable)
  *
  * @param props - Component properties
  *
@@ -69,11 +72,15 @@ const variantMapping: Record<StatusVariant, SemanticVariant> = {
 const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
   variant,
   size = 'md',
+  chipVariant,
   label,
   icon,
   ariaLabel,
   className,
   dataTestId,
+  onClick,
+  clickable,
+  sx,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'statusBadge',
@@ -95,8 +102,12 @@ const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
     <Chip
       label={badgeLabel}
       icon={validIcon}
-      role="status"
+      variant={chipVariant}
+      role={onClick ? 'button' : 'status'}
       aria-label={ariaLabelText}
+      clickable={clickable}
+      onClick={onClick}
+      sx={sx}
       className={`${styles.statusBadge} ${styles[semanticVariant]} ${styles[size]} ${className || ''}`}
       data-testid={dataTestId}
     />

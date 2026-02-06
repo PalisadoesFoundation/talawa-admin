@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 
 export interface InterfaceAgendaItemCategoryInfo {
   _id: string;
@@ -41,7 +41,7 @@ export interface InterfaceAgendaItemsCreateModalProps {
   setFormState: (
     state: React.SetStateAction<InterfaceCreateFormStateType>,
   ) => void;
-  createAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  createAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }
@@ -60,7 +60,7 @@ export interface InterfaceAgendaItemsUpdateModalProps {
   hideUpdateModal: () => void;
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
-  updateAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  updateAgendaItemHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }

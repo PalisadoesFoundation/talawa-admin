@@ -35,14 +35,14 @@ import styles from './VerifyEmail.module.css';
 
 type VerificationState = 'loading' | 'success' | 'error';
 
-interface VerifyEmailData {
+interface InterfaceVerifyEmailData {
   verifyEmail: {
     success: boolean;
     message?: string;
   };
 }
 
-interface ResendVerificationEmailData {
+interface InterfaceResendVerificationEmailData {
   sendVerificationEmail: {
     success: boolean;
     message?: string;
@@ -80,12 +80,12 @@ const VerifyEmail = (): JSX.Element => {
   const isMountedRef = useRef(true);
   const [isResending, setIsResending] = useState(false);
   const [verifyEmail, { loading: verifyLoading }] =
-    useMutation<VerifyEmailData>(VERIFY_EMAIL_MUTATION, {
+    useMutation<InterfaceVerifyEmailData>(VERIFY_EMAIL_MUTATION, {
       // Prevent caching issues
       fetchPolicy: 'no-cache',
     });
   const [resendVerification, { loading: resendLoading }] =
-    useMutation<ResendVerificationEmailData>(
+    useMutation<InterfaceResendVerificationEmailData>(
       RESEND_VERIFICATION_EMAIL_MUTATION,
       {
         fetchPolicy: 'no-cache',

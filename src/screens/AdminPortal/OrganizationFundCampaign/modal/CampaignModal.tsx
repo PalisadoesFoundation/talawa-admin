@@ -266,7 +266,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             onBlur={() =>
               setTouched((prev) => ({ ...prev, campaignName: true }))
             }
-            onChange={(value) =>
+            onChange={(value: string) =>
               setFormState({
                 ...formState,
                 campaignName: value,
@@ -331,7 +331,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             label={t('currency')}
             value={campaignCurrency}
             data-testid="currencySelect"
-            onChange={(value) =>
+            onChange={(value: string) =>
               setFormState({
                 ...formState,
                 campaignCurrency: value,
@@ -351,7 +351,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             type="number"
             value={String(campaignGoal)}
             data-testid="fundingGoalInput"
-            onChange={(value) => {
+            onChange={(value: string) => {
               if (value === '') {
                 setFormState({
                   ...formState,

@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { areOptionsEqual, getMemberLabel } from 'utils/autocompleteHelpers';
+import { getMemberLabel } from 'utils/autocompleteHelpers';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -273,7 +273,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         label={tCommon('name')}
         required
         value={name}
-        onChange={(value) => setFormState({ ...formState, name: value })}
+        onChange={(value: string) => setFormState({ ...formState, name: value })}
         data-testid="groupNameInput"
       />
 
@@ -281,7 +281,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         name="description"
         label={tCommon('description')}
         value={description ?? ''}
-        onChange={(value) => setFormState({ ...formState, description: value })}
+        onChange={(value: string) => setFormState({ ...formState, description: value })}
         data-testid="groupDescriptionInput"
       />
 
@@ -355,7 +355,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         label={t('volunteersRequired')}
         type="number"
         value={volunteersRequired !== null ? String(volunteersRequired) : ''}
-        onChange={(value) => {
+        onChange={(value: string) => {
           if (value === '') {
             setFormState({
               ...formState,

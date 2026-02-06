@@ -10,8 +10,7 @@ type Observer<T> = {
 };
 import type { MockedResponse } from '@apollo/client/testing';
 import { gql, Observable } from '@apollo/client';
-import { OperationTypeNode } from 'graphql';
-import { print } from 'graphql';
+import { OperationTypeNode, print } from 'graphql';
 import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {

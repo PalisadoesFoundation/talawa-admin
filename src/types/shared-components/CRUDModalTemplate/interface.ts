@@ -6,7 +6,7 @@
  * when creating, editing, viewing, and deleting entities.
  */
 
-import type { ReactNode, FormEvent } from 'react';
+import type { ReactNode, FormEvent, Dispatch, SetStateAction } from 'react';
 
 /**
  * Size variants for modals
@@ -313,6 +313,8 @@ export interface InterfaceUseModalStateReturn {
   close: () => void;
   /** Toggles the modal open/close state */
   toggle: () => void;
+  /** Sets the modal open/close state directly */
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 /**
@@ -339,7 +341,7 @@ export interface InterfaceUseFormModalReturn<
 export interface InterfaceUseMutationModalReturn<
   TData,
   TResult = unknown,
-  // i18n-ignore-next-line
+// i18n-ignore-next-line
 > extends InterfaceUseFormModalReturn<TData> {
   /** Executes the mutation with current form data */
   execute: (data?: TData) => Promise<TResult | undefined>;

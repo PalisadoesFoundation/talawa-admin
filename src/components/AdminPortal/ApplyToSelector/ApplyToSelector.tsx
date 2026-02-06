@@ -1,6 +1,7 @@
 import React, { useId } from 'react';
-import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import type {
   InterfaceApplyToSelectorProps,
   ApplyToType,
@@ -28,9 +29,8 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
   });
 
   return (
-    <Form.Group className="mb-3" as="fieldset">
-      <Form.Label as="legend">{t('applyTo')}</Form.Label>
-      <Form.Check
+    <FormFieldGroup label={t('applyTo')} className="mb-3" name={name}>
+      <FormCheckField
         type="radio"
         label={t('entireSeries')}
         name={name}
@@ -38,7 +38,7 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
         checked={applyTo === 'series'}
         onChange={() => onChange('series')}
       />
-      <Form.Check
+      <FormCheckField
         type="radio"
         label={t('thisEventOnly')}
         name={name}
@@ -46,7 +46,7 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
         checked={applyTo === 'instance'}
         onChange={() => onChange('instance')}
       />
-    </Form.Group>
+    </FormFieldGroup>
   );
 };
 

@@ -3,20 +3,13 @@
  *
  * This component renders a modal for updating an agenda category.
  * It provides a form with fields for the category name and description,
- * and allows users to submit updates. The modal can be toggled open or closed.
- *
- * @param props - Props for {@link InterfaceAgendaCategoryUpdateModalProps}
- *
- * @returns The rendered modal component.
+ * and allows users to submit updates.
  */
 import React from 'react';
-import { Form, Button } from 'react-bootstrap';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
-
-import { BaseModal } from 'shared-components/BaseModal';
-
-// translation-check-keyPrefix: organizationAgendaCategory
+import { EditModal } from 'shared-components/CRUDModalTemplate';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 interface InterfaceFormStateType {
   name: string;
@@ -29,9 +22,7 @@ interface InterfaceAgendaCategoryUpdateModalProps {
   hideUpdateModal: () => void;
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
-  updateAgendaCategoryHandler: (
-    e: ChangeEvent<HTMLFormElement>,
-  ) => Promise<void>;
+  updateAgendaCategoryHandler: (e: FormEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
 }
 
@@ -45,53 +36,36 @@ const AgendaCategoryUpdateModal: React.FC<
   updateAgendaCategoryHandler,
   t,
 }) => {
-  return (
-    <BaseModal
-      className={styles.campaignModal}
-      show={agendaCategoryUpdateModalIsOpen}
-      onHide={hideUpdateModal}
-      headerContent={
-        <p className={styles.titlemodalOrganizationEvents}>
-          {t('updateAgendaCategory')}
-        </p>
-      }
-      dataTestId="agendaCategoryUpdateModal"
-    >
-      <Form onSubmit={updateAgendaCategoryHandler}>
-        <Form.Group className="mb-3" controlId="name">
-          <Form.Label>{t('name')}</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder={t('name')}
-            value={formState.name}
-            required
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
-          />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>{t('description')}</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder={t('description')}
-            value={formState.description}
-            required
-            onChange={(e) =>
-              setFormState({ ...formState, description: e.target.value })
-            }
-          />
-        </Form.Group>
-        <Button
-          type="submit"
-          className={styles.regBtn}
-          data-testid="editAgendaCategoryBtn"
-        >
-          {t('update')}
-        </Button>
-      </Form>
-    </BaseModal>
-  );
-};
+    return (
+      <EditModal
+        open={agendaCategoryUpdateModalIsOpen}
+        onClose={hideUpdateModal}
+        onSubmit={updateAgendaCategoryHandler}
+        title={t('updateAgendaCategory')}
+        className={styles.campaignModal}
+        data-testid="agendaCategoryUpdateModal"
+        primaryText={t('update')}
+      >
+        <FormTextField
+          name="name"
+          label={t('name')}
+          placeholder={t('name')}
+          value={formState.name}
+          required
+          onChange={(value: string) => setFormState({ ...formState, name: value })}
+          data-testid="agendaCategoryNameInput"
+        />
+        <FormTextField
+          name="description"
+          label={t('description')}
+          placeholder={t('description')}
+          value={formState.description}
+          required
+          onChange={(value: string) => setFormState({ ...formState, description: value })}
+          data-testid="agendaCategoryDescriptionInput"
+        />
+      </EditModal>
+    );
+  };
 
 export default AgendaCategoryUpdateModal;

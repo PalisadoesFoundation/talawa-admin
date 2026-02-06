@@ -5,6 +5,7 @@ import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import dayjs from 'dayjs';
 import TableLoader from 'components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
@@ -87,7 +88,7 @@ const OrgFundCampaign = (): JSX.Element => {
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchText, setSearchText] = useState('');
 
-  const [modalState, setModalState] = useState<boolean>(false);
+  const campaignModal = useModalState(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
@@ -96,9 +97,9 @@ const OrgFundCampaign = (): JSX.Element => {
     (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
       setCampaign(campaign);
       setCampaignModalMode(mode);
-      setModalState(true);
+      campaignModal.open();
     },
-    [],
+    [campaignModal],
   );
 
   const {
@@ -463,8 +464,8 @@ const OrgFundCampaign = (): JSX.Element => {
 
       {/* Create Campaign Modal */}
       <CampaignModal
-        isOpen={modalState}
-        hide={() => setModalState(false)}
+        isOpen={campaignModal.isOpen}
+        hide={campaignModal.close}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
         orgId={orgId}

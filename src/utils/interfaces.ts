@@ -1,5 +1,6 @@
 import { IEvent as IEventCommon } from 'types/Event/interface';
 import type { InterfaceDonation } from 'types/UserPortal/Donation/interface';
+import type { InterfaceRecurrenceRule } from './recurrenceUtils/recurrenceTypes';
 
 /**
  * Represents the ISO 3166-1 alpha-2 country codes.
@@ -746,7 +747,6 @@ export interface IEvent {
 }
 
 import type {
-  IMember,
   InterfaceMember,
   IEvent as InterfaceEvent,
 } from 'types/Event/interface';
@@ -2096,13 +2096,16 @@ export interface InterfaceGetOrgEventsUserPortalQuery {
             name: string;
           }>;
           isRecurringEventTemplate: boolean;
-          baseEvent?: string;
+          baseEvent?: {
+            id: string;
+            name?: string;
+          } | null;
           sequenceNumber?: number;
           totalCount?: number;
           hasExceptions?: boolean;
           progressLabel?: string;
           recurrenceDescription?: string;
-          recurrenceRule?: string;
+          recurrenceRule?: InterfaceRecurrenceRule | null;
         };
       }> | null;
     } | null;

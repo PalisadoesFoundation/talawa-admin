@@ -19,6 +19,7 @@
  */
 
 import React, { useState, useEffect, useMemo, JSX } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -99,15 +100,15 @@ function OrganizationEvents(): JSX.Element {
   useEffect(() => {
     document.title = t('title');
   }, [t]);
-  const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
+  const createEventModal = useModalState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
 
-  const showInviteModal = (): void => setCreateEventmodalisOpen(true);
-  const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
+  const showInviteModal = (): void => createEventModal.open();
+  const hideCreateEventModal = (): void => createEventModal.close();
 
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
@@ -205,12 +206,10 @@ function OrganizationEvents(): JSX.Element {
     const lowerSearchTerm = searchByName.toLowerCase();
     return allEvents.filter((event) => {
       const matchesName = event.name.toLowerCase().includes(lowerSearchTerm);
-      const matchesDescription = event.description
-        .toLowerCase()
-        .includes(lowerSearchTerm);
-      const matchesLocation = event.location
-        .toLowerCase()
-        .includes(lowerSearchTerm);
+      const matchesDescription =
+        event.description?.toLowerCase().includes(lowerSearchTerm) ?? false;
+      const matchesLocation =
+        event.location?.toLowerCase().includes(lowerSearchTerm) ?? false;
       return matchesName || matchesDescription || matchesLocation;
     });
   }, [allEvents, searchByName]);
@@ -294,7 +293,7 @@ function OrganizationEvents(): JSX.Element {
         />
 
         <CreateEventModal
-          isOpen={createEventmodalisOpen}
+          isOpen={createEventModal.isOpen}
           onClose={hideCreateEventModal}
           onEventCreated={refetchEvents}
           currentUrl={currentUrl || ''}

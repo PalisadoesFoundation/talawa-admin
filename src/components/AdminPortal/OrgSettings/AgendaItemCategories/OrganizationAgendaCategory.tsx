@@ -29,7 +29,7 @@
  * TODO: - Add additional error handling and improve UI for error states.
  */
 import React, { useState } from 'react';
-import type { ChangeEvent, FC } from 'react';
+import type { FormEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
 
@@ -99,7 +99,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
    * @returns A promise that resolves when the agenda item category is created.
    */
   const createAgendaCategoryHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {
