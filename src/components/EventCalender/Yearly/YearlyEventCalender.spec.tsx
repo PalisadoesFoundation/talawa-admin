@@ -491,7 +491,6 @@ describe('Calendar Component', () => {
     let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
       await user.click(button);
-      // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
         expect(matches[0]).toBeInTheDocument();
@@ -570,7 +569,6 @@ describe('Calendar Component', () => {
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
-
     const { rerender } = renderWithRouterAndPath(
       <Calendar
         eventData={mockEventData}
