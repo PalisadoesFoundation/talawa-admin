@@ -103,10 +103,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   const viewModalState = useModalState();
   const statusModalState = useModalState();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const handleModalClick = useCallback(
     (actionItem: IActionItemInfo | null, modal: ModalState): void => {
       setActionItem(actionItem);
@@ -203,6 +199,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       setBaseEvent(eventData.event.baseEvent);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   if (eventInfoLoading) {
     return (
