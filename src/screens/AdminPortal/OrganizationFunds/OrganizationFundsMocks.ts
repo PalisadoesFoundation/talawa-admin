@@ -5,6 +5,7 @@ dayjs.extend(utc);
 import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
+  DELETE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 
@@ -159,6 +160,23 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: DELETE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteFund: {
+          id: 'fundId',
+        },
+      },
+    },
+  },
 ];
 
 export const NO_FUNDS = [
@@ -212,6 +230,17 @@ export const MOCKS_ERROR = [
           id: 'fundId',
           name: 'Fund 2',
           isTaxDeductible: false,
+        },
+      },
+    },
+    error: new Error('Mock graphql error'),
+  },
+  {
+    request: {
+      query: DELETE_FUND_MUTATION,
+      variables: {
+        input: {
+          id: 'fundId',
         },
       },
     },

@@ -8,6 +8,7 @@
 
 .expand {
   padding-left: calc(var(--sidebar-collapsed-width, 80px) + var(--space-7));
+  padding-right: var(--space-7);
   animation: moveLeft 0.5s ease-in-out;
 }
 
@@ -72,6 +73,7 @@
 
 .contract {
   padding-left: calc(300px + var(--space-8) + var(--space-7));
+  padding-right: var(--space-7);
   animation: moveRight 0.5s ease-in-out;
 }
 

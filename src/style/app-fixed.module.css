@@ -2425,10 +2425,9 @@ form label,
 
 /* -- AgendaItemsCreateModal.tsx -- */
 
-.campaignModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+.campaignModal :global(.modal-dialog) {
+  max-width: 500px;
+  margin: auto;
 }
 
 .titlemodalOrganizationEvents {
@@ -8539,10 +8538,9 @@ form {
 
 /* -- FundModal.tsx -- */
 
-.fundModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
+.fundModal :global(.modal-dialog) {
+  max-width: 450px;
+  margin: auto;
 }
 
 /* -- OrganizationFunds.tsx -- */
