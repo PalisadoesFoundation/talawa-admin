@@ -370,5 +370,33 @@ describe('Event Management', () => {
         );
       });
     });
+
+    it('opens dropdown menu on Enter key', async () => {
+      await act(async () => {
+        renderEventManagement();
+      });
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      toggle.focus();
+      await user.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
+    });
+
+    it('opens dropdown menu on Space key', async () => {
+      await act(async () => {
+        renderEventManagement();
+      });
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      toggle.focus();
+      await user.keyboard(' ');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
+    });
   });
 });
