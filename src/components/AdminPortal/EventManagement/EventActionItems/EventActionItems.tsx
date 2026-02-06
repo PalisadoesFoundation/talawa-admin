@@ -71,6 +71,9 @@ interface InterfaceEventActionItemsProps {
   orgActionItemsRefetch?: () => void;
 }
 
+const MIN_COLUMN_WIDTH = 100;
+const ROW_HEIGHT = 65;
+
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   eventId,
   orgActionItemsRefetch,
@@ -219,8 +222,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       </div>
     );
   }
-
-  const MIN_COLUMN_WIDTH = 100;
 
   const columns: GridColDef[] = [
     {
@@ -413,8 +414,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       },
     },
   ];
-
-  const ROW_HEIGHT = 65;
 
   return (
     <div>

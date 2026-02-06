@@ -1663,6 +1663,119 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     );
   });
 
+  test('getOptionLabel returns member.name when present, falls back to unknownUser when name is empty (line 192)', async () => {
+    vi.resetModules();
+
+    const getOptionLabelCalls: { option: unknown; result: string }[] = [];
+
+    vi.doMock('@mui/material/Autocomplete', () => ({
+      __esModule: true,
+      default: ({
+        getOptionLabel,
+        renderOption,
+        options,
+        renderInput,
+        onChange,
+        onInputChange,
+      }: InterfaceAutocompleteMockProps) => {
+        const [_localInputValue, setLocalInputValue] = React.useState('');
+
+        const handleInputChange = (
+          e: React.ChangeEvent<HTMLInputElement>,
+        ): void => {
+          const newValue = e.target.value;
+          setLocalInputValue(newValue);
+          if (onInputChange) {
+            onInputChange({} as React.SyntheticEvent, newValue, 'input');
+          }
+        };
+
+        const inputProps = {
+          onChange: handleInputChange,
+          onInput: handleInputChange,
+        };
+
+        return (
+          <div data-testid="autocomplete-mock">
+            {renderInput({
+              InputProps: { ref: vi.fn() },
+              id: 'test-autocomplete',
+              disabled: false,
+              inputProps: inputProps,
+            })}
+            <div data-testid="options-container">
+              {options && options.length > 0 ? (
+                options.map((option) => {
+                  const label = getOptionLabel
+                    ? getOptionLabel(option)
+                    : option.name || '';
+                  getOptionLabelCalls.push({ option, result: label });
+
+                  const liProps = {
+                    key: option.id,
+                    'data-testid': `getoptionlabel-option-${option.id}`,
+                    onClick: (): void => {
+                      if (onChange) {
+                        onChange({} as React.SyntheticEvent, option);
+                      }
+                    },
+                    role: 'option',
+                    tabIndex: 0,
+                  };
+
+                  const optionElement = renderOption ? (
+                    renderOption(liProps, option, { selected: false })
+                  ) : (
+                    <span>{label}</span>
+                  );
+
+                  return optionElement;
+                })
+              ) : (
+                <div data-testid="no-options">No options</div>
+              )}
+            </div>
+          </div>
+        );
+      },
+    }));
+
+    const { EventRegistrantsModal } = await import('./EventRegistrantsModal');
+
+    render(
+      <MockedProvider
+        mocks={[
+          makeEventDetailsNonRecurringMock(),
+          makeAttendeesEmptyMock(),
+          makeMembersWithMultipleMock(),
+        ]}
+      >
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventRegistrantsModal {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    await waitFor(
+      () => {
+        expect(getOptionLabelCalls.length).toBe(3);
+      },
+      { timeout: 3000 },
+    );
+
+    expect(getOptionLabelCalls[0].result).toBe('John Doe');
+    expect(getOptionLabelCalls[1].result).toBe('Jane Smith');
+    expect(getOptionLabelCalls[2].result).toBe('Unknown User');
+  });
+
   test('clicking on rendered option triggers onChange (line 195)', async () => {
     vi.resetModules();
     vi.doMock('@mui/material/Autocomplete', () => ({

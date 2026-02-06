@@ -21,16 +21,22 @@ import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 // Mock dependencies
+let useParamsMock: { orgId: string | undefined } = { orgId: 'orgId1' };
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: vi.fn(() => ({ orgId: 'orgId1' })),
+    useParams: vi.fn(() => useParamsMock),
     Navigate: ({ to }: { to: string }) => (
       <div data-testid="navigate">{to}</div>
     ),
   };
 });
+
+const setUseParamsMock = (mock: { orgId: string | undefined }): void => {
+  useParamsMock = mock;
+};
 
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
@@ -1525,6 +1531,29 @@ describe('EventActionItems', () => {
       // Verify component renders and eventually loads data
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Redirect Behavior', () => {
+    it('should redirect to home when orgId is missing', async () => {
+      setUseParamsMock({ orgId: undefined });
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('navigate')).toBeInTheDocument();
+        expect(screen.getByTestId('navigate')).toHaveTextContent('/');
       });
     });
   });
