@@ -95,23 +95,26 @@ function AddMember(): JSX.Element {
   const openCreateNewUserModal = () => setCreateNewUserModalIsOpen(true);
   const closeCreateNewUserModal = () => setCreateNewUserModalIsOpen(false);
   const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
-  const createMember = async (userId: string): Promise<void> => {
-    try {
-      await addMember({
-        variables: {
-          memberId: userId,
-          organizationId: currentUrl,
-          role: 'regular',
-        },
-      });
-      NotificationToast.success(
-        tCommon('addedSuccessfully', { item: 'Member' }) as string,
-      );
-    } catch (error: unknown) {
-      errorHandler(tCommon, error);
-    }
-  };
   const { orgId: currentUrl } = useParams();
+  const createMember = useCallback(
+    async (userId: string): Promise<void> => {
+      try {
+        await addMember({
+          variables: {
+            memberId: userId,
+            organizationId: currentUrl,
+            role: 'regular',
+          },
+        });
+        NotificationToast.success(
+          tCommon('addedSuccessfully', { item: 'Member' }) as string,
+        );
+      } catch (error: unknown) {
+        errorHandler(tCommon, error);
+      }
+    },
+    [addMember, currentUrl, tCommon],
+  );
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -267,7 +270,7 @@ function AddMember(): JSX.Element {
         ...user,
         rowIndex: page * PAGE_SIZE + index + 1,
       })),
-    [allUsersData, page, PAGE_SIZE],
+    [allUsersData, page],
   );
 
   const columns = useMemo(
@@ -282,25 +285,31 @@ function AddMember(): JSX.Element {
           id: 'profile',
           header: translateAddMember('addMember.profile'),
           accessor: 'avatarURL',
-          render: (value, row) => (
-            <div data-testid="profileImage" className={styles.profileCell}>
-              {value ? (
-                <img
-                  src={value as string}
-                  alt={`${row.name} ${tCommon('avatar')}`}
-                  className={styles.TableImage}
-                  crossOrigin="anonymous"
-                  loading="lazy"
-                />
-              ) : (
-                <Avatar
-                  avatarStyle={styles.TableImage}
-                  name={row.name}
-                  dataTestId="avatarImage"
-                />
-              )}
-            </div>
-          ),
+          render: (value, row) => {
+            const displayName =
+              row.name?.trim() ||
+              (tCommon('avatar') as string) ||
+              'User avatar';
+            return (
+              <div data-testid="profileImage" className={styles.profileCell}>
+                {value ? (
+                  <img
+                    src={value as string}
+                    alt={`${displayName} ${tCommon('avatar')}`}
+                    className={styles.TableImage}
+                    crossOrigin="anonymous"
+                    loading="lazy"
+                  />
+                ) : (
+                  <Avatar
+                    avatarStyle={styles.TableImage}
+                    name={displayName}
+                    dataTestId="avatarImage"
+                  />
+                )}
+              </div>
+            );
+          },
         },
         {
           id: 'user',
@@ -312,10 +321,15 @@ function AddMember(): JSX.Element {
               to={{
                 pathname: `/admin/member/${currentUrl}/${row.id}`,
               }}
+              aria-label={
+                row.name && row.emailAddress
+                  ? `${row.name} (${row.emailAddress})`
+                  : row.name || row.emailAddress || undefined
+              }
             >
               {row.name}
               <br />
-              {row.emailAddress}
+              <span aria-hidden="true">{row.emailAddress}</span>
             </Link>
           ),
         },

@@ -429,7 +429,7 @@ function getDataTableBodyRows(): HTMLElement[] {
   }
   // Fallback: skip header row(s) by counting rows that contain columnheader cells
   const rows = within(table).getAllByRole('row');
-  const headerCount = within(table).queryAllByRole('columnheader').length ?? 0;
+  const headerCount = within(table).queryAllByRole('columnheader').length;
   expect(headerCount).toBeGreaterThanOrEqual(0);
   const headerRowCount = rows.filter(
     (row) => within(row).queryAllByRole('columnheader').length > 0,
@@ -479,8 +479,12 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     await screen.findByTestId('datatable', {}, { timeout: 3000 });
-    const userRows = getDataTableBodyRows();
-    expect(userRows).toHaveLength(2);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
 
     await waitFor(
       () => {
@@ -633,8 +637,12 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     await screen.findByTestId('datatable', {}, { timeout: 3000 });
-    const userRows = getDataTableBodyRows();
-    expect(userRows).toHaveLength(2);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -684,8 +692,12 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     await screen.findByTestId('datatable', {}, { timeout: 3000 });
-    const userRows = getDataTableBodyRows();
-    expect(userRows).toHaveLength(2);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -769,8 +781,12 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     await screen.findByTestId('datatable', {}, { timeout: 3000 });
-    const userRows1 = getDataTableBodyRows();
-    expect(userRows1).toHaveLength(2);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 3000 },
+    );
 
     expect(
       screen.getByText((content) => content.includes('John Doe')),
@@ -787,8 +803,12 @@ describe('AddMember Screen', () => {
       {},
       { timeout: 3000 },
     );
-    const userRows2 = getDataTableBodyRows();
-    expect(userRows2).toHaveLength(1);
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 3000 },
+    );
     expect(
       screen.getByText((content) => content.includes('Bob Johnson')),
     ).toBeInTheDocument();
@@ -1332,6 +1352,5 @@ describe('AddMember Screen', () => {
     fireEvent.click(submitButton);
 
     await screen.findByTestId('datatable');
-    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 });
