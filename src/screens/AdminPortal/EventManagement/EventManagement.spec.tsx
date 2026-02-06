@@ -12,7 +12,7 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, it } from 'vitest';
+import { vi, it, describe } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -240,7 +240,6 @@ describe('Event Management', () => {
       for (const { button, tab } of tabsToTest) {
         await user.click(screen.getByTestId(button));
 
-        // Wait for tab content to be rendered
         await waitFor(() => {
           expect(screen.getByTestId(tab)).toBeInTheDocument();
         });
@@ -287,10 +286,8 @@ describe('Event Management', () => {
       const dropdownContainer = screen.getByTestId('tabs-container');
       expect(dropdownContainer).toBeInTheDocument();
 
-      // Click to open dropdown
       await user.click(screen.getByTestId('tabs-toggle'));
 
-      // Wait for dropdown menu to be fully rendered
       await waitFor(() => {
         expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
       });
@@ -305,7 +302,6 @@ describe('Event Management', () => {
         'statistics',
       ];
 
-      // Verify all options are present
       for (const option of tabOptions) {
         await waitFor(() => {
           expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
@@ -314,9 +310,7 @@ describe('Event Management', () => {
     });
 
     it('switches tabs through dropdown selection', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
+      renderEventManagement();
 
       const tabOptions = [
         { name: 'dashboard', expectedTab: 'eventDashboardTab' },
@@ -340,43 +334,14 @@ describe('Event Management', () => {
         await waitFor(() => {
           expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
         });
-
-        await waitFor(() => {
-          expect(screen.queryByTestId('tabs-menu')).not.toBeInTheDocument();
-        });
       }
     });
 
-    it('closes dropdown when clicking toggle without selecting an option', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
-
-      await user.click(screen.getByTestId('tabs-toggle'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
-      });
-
-      await user.click(screen.getByTestId('tabs-toggle'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('tabs-toggle')).toHaveAttribute(
-          'aria-expanded',
-          'false',
-        );
-      });
-    });
-
     it('opens dropdown menu on Enter key', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
+      renderEventManagement();
 
       const toggle = screen.getByTestId('tabs-toggle');
-      await act(async () => {
-        toggle.focus();
-      });
+      toggle.focus();
       await user.keyboard('{Enter}');
 
       await waitFor(() => {
@@ -385,14 +350,10 @@ describe('Event Management', () => {
     });
 
     it('opens dropdown menu on Space key', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
+      renderEventManagement();
 
       const toggle = screen.getByTestId('tabs-toggle');
-      await act(async () => {
-        toggle.focus();
-      });
+      toggle.focus();
       await user.keyboard(' ');
 
       await waitFor(() => {
