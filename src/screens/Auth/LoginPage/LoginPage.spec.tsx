@@ -502,7 +502,10 @@ describe('Testing Login Page Screen', () => {
         });
 
         await user.type(screen.getByLabelText(/First Name/i), formData.name);
-        await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+        await user.type(
+          screen.getByTestId('registrationEmail'),
+          formData.email,
+        );
         await user.type(screen.getByTestId('passwordField'), formData.password);
         await user.type(
           screen.getByTestId('cpassword'),
@@ -547,7 +550,7 @@ describe('Testing Login Page Screen', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
-      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(screen.getByTestId('registrationEmail'), formData.email);
       await user.type(screen.getByTestId('passwordField'), formData.password);
       await user.type(
         screen.getByTestId('cpassword'),
@@ -588,7 +591,7 @@ describe('Testing Login Page Screen', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
-      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(screen.getByTestId('registrationEmail'), formData.email);
       await user.type(screen.getByTestId('passwordField'), formData.password);
       await user.type(
         screen.getByTestId('cpassword'),
@@ -629,7 +632,7 @@ describe('Testing Login Page Screen', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
-      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(screen.getByTestId('registrationEmail'), formData.email);
       await user.type(screen.getByTestId('passwordField'), formData.password);
       await user.type(
         screen.getByTestId('cpassword'),
@@ -670,7 +673,7 @@ describe('Testing Login Page Screen', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
-      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(screen.getByTestId('registrationEmail'), formData.email);
       await user.type(screen.getByTestId('passwordField'), formData.password);
       await user.type(
         screen.getByTestId('cpassword'),
@@ -715,7 +718,7 @@ describe('Testing Login Page Screen', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), formData.name);
-      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(screen.getByTestId('registrationEmail'), formData.email);
       await user.type(screen.getByTestId('passwordField'), formData.password);
       await user.type(
         screen.getByTestId('cpassword'),
@@ -1336,7 +1339,10 @@ describe('Testing invitation functionality', () => {
     await wait();
 
     await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
-    await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+    await user.type(
+      screen.getByTestId('registrationEmail'),
+      'johndoe@gmail.com',
+    );
     await user.type(screen.getByTestId('passwordField'), 'Johndoe@123');
     await user.type(screen.getByTestId('cpassword'), 'Johndoe@123');
     await user.click(screen.getByLabelText('Organization'));
@@ -1593,7 +1599,10 @@ describe.todo(
       await wait();
 
       await user.type(screen.getByLabelText(/First Name/i), 'Test User');
-      await user.type(screen.getByTestId('signInEmail'), 'test@example.com');
+      await user.type(
+        screen.getByTestId('registrationEmail'),
+        'test@example.com',
+      );
       await user.type(screen.getByTestId('passwordField'), 'Test@123');
       await user.type(screen.getByTestId('cpassword'), 'Test@123');
 
@@ -1914,7 +1923,7 @@ describe('Extra coverage for 100 %', () => {
       await wait();
       await user.click(screen.getByTestId('goToRegisterPortion'));
       await user.type(screen.getByLabelText(/First Name/i), '123'); // invalid - contains numbers
-      await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
+      await user.type(screen.getByTestId('registrationEmail'), 'a@b.co'); // invalid email (too short)
       await user.type(screen.getByTestId('passwordField'), 'Valid@123');
       await user.type(screen.getByTestId('cpassword'), 'Valid@123');
       // reCAPTCHA is now integrated directly in the mutation
@@ -1935,7 +1944,7 @@ describe('Extra coverage for 100 %', () => {
       await wait();
       await user.click(screen.getByTestId('goToRegisterPortion'));
       await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
-      await user.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
+      await user.type(screen.getByTestId('registrationEmail'), 'john@doe.com'); // valid email to isolate password validation
       await user.type(screen.getByTestId('passwordField'), 'weak');
       await user.type(screen.getByTestId('cpassword'), 'weak');
       // reCAPTCHA is now integrated directly in the mutation
@@ -2118,7 +2127,10 @@ describe('Extra coverage for 100 %', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
-      await user.type(screen.getByTestId(/signInEmail/i), 'johndoe@test.com');
+      await user.type(
+        screen.getByTestId('registrationEmail'),
+        'johndoe@test.com',
+      );
       await user.type(screen.getByTestId('passwordField'), 'Password@123');
       await user.type(screen.getByTestId('cpassword'), 'Password@123');
       await user.click(screen.getByTestId('registrationBtn'));
@@ -2248,7 +2260,10 @@ describe('Extra coverage for 100 %', () => {
       await wait();
       await user.click(screen.getByTestId('goToRegisterPortion'));
       await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
-      await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+      await user.type(
+        screen.getByTestId('registrationEmail'),
+        'johndoe@gmail.com',
+      );
       await user.type(screen.getByTestId('passwordField'), 'Johndoe@123');
       await user.type(screen.getByTestId('cpassword'), 'Johndoe@123');
       // reCAPTCHA is now integrated directly in the mutation
@@ -2291,7 +2306,7 @@ describe('Extra coverage for 100 %', () => {
       await wait();
       await user.click(screen.getByTestId('goToRegisterPortion'));
       await user.type(screen.getByLabelText(/First Name/i), 'John');
-      await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+      await user.type(screen.getByTestId('registrationEmail'), 'john@doe.com');
       await user.type(screen.getByTestId('passwordField'), 'John@123');
       await user.type(screen.getByTestId('cpassword'), 'John@123');
       // reCAPTCHA is now integrated directly in the mutation
@@ -2311,7 +2326,7 @@ describe('Extra coverage for 100 %', () => {
       await wait();
       await user.click(screen.getByTestId('goToRegisterPortion'));
       await user.type(screen.getByLabelText(/First Name/i), 'John');
-      await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
+      await user.type(screen.getByTestId('registrationEmail'), 'a@b.co'); // length 6
       await user.type(screen.getByTestId('passwordField'), 'Test@123');
       await user.type(screen.getByTestId('cpassword'), 'Test@123');
       // reCAPTCHA is now integrated directly in the mutation
@@ -2797,7 +2812,10 @@ describe('Cookie-based authentication verification', () => {
     await wait();
     await user.click(screen.getByTestId('goToRegisterPortion'));
     await user.type(screen.getByLabelText(/First Name/i), 'New User');
-    await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
+    await user.type(
+      screen.getByTestId('registrationEmail'),
+      'newuser@example.com',
+    );
     await user.type(screen.getByTestId('passwordField'), 'Password@123');
     await user.type(screen.getByTestId('cpassword'), 'Password@123');
     await user.click(screen.getByLabelText('Organization'));
@@ -2996,7 +3014,10 @@ describe('Cookie-based authentication verification', () => {
       const registerButton = await screen.findByTestId('goToRegisterPortion');
       await user.click(registerButton);
       await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
-      await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+      await user.type(
+        screen.getByTestId('registrationEmail'),
+        'johndoe@gmail.com',
+      );
       await user.type(screen.getByTestId('passwordField'), 'Johndoe@123');
       await user.type(screen.getByTestId('cpassword'), 'Johndoe@123');
       await user.click(screen.getByLabelText('Organization'));
@@ -3209,7 +3230,7 @@ describe('Cookie-based authentication verification', () => {
       await user.click(registerButton);
 
       await user.type(screen.getByLabelText(/First Name/i), 'John');
-      await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+      await user.type(screen.getByTestId('registrationEmail'), 'john@doe.com');
       await user.type(screen.getByTestId('passwordField'), 'John@123');
       await user.type(screen.getByTestId('cpassword'), 'John@123');
       await user.click(screen.getByLabelText('Organization'));
@@ -3645,7 +3666,10 @@ describe('Cookie-based authentication verification (extra coverage)', () => {
 
       // Fill registration form
       await user.type(screen.getByLabelText(/First Name/i), 'New User');
-      await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
+      await user.type(
+        screen.getByTestId('registrationEmail'),
+        'newuser@example.com',
+      );
       await user.type(screen.getByTestId('passwordField'), 'Password@123');
       await user.type(screen.getByTestId('cpassword'), 'Password@123');
       await user.click(screen.getByLabelText('Organization'));
