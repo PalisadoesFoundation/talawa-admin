@@ -1,8 +1,9 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { StaticMockLink } from '../../../utils/StaticMockLink';
 import { LoginForm } from './LoginForm';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import { GraphQLError } from 'graphql';
@@ -26,6 +27,7 @@ vi.mock('Constant/constant', async () => ({
   RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
 }));
 
+const recaptchaResetSpy = vi.fn();
 vi.mock('react-google-recaptcha', async () => {
   const React = await import('react');
   return {
@@ -36,11 +38,14 @@ vi.mock('react-google-recaptcha', async () => {
           onChange?: (token: string) => void;
           onExpired?: () => void;
         } & Record<string, unknown>,
-        ref: React.Ref<HTMLDivElement>,
-      ) =>
-        React.default.createElement(
+        ref: React.Ref<{ reset: () => void }>,
+      ) => {
+        React.default.useImperativeHandle(ref, () => ({
+          reset: recaptchaResetSpy,
+        }));
+        return React.default.createElement(
           'div',
-          { ref, 'data-testid': 'recaptcha-container', ...props },
+          { 'data-testid': 'mock-recaptcha-reset' as const, ...props },
           React.default.createElement('input', {
             'data-testid': 'mock-recaptcha-input',
             'aria-label': 'Complete reCAPTCHA',
@@ -57,7 +62,8 @@ vi.mock('react-google-recaptcha', async () => {
             },
             'Expire',
           ),
-        ),
+        );
+      },
     ),
   };
 });
@@ -140,6 +146,80 @@ const mockSignInGraphQLError: MockedResponse = {
   },
 };
 
+const _mockSignInNotFound: MockedResponse & {
+  variableMatcher?: (vars: Record<string, unknown>) => boolean;
+} = {
+  request: {
+    query: SIGNIN_QUERY,
+    variables: {
+      email: 'test@example.com',
+      password: 'password123',
+      recaptchaToken: 'recaptcha-token',
+    },
+  },
+  variableMatcher: (vars) =>
+    vars?.email === 'test@example.com' &&
+    vars?.password === 'password123' &&
+    vars?.recaptchaToken === 'recaptcha-token',
+  result: {
+    data: {
+      signIn: null,
+    },
+  },
+};
+
+const _mockSignInSuccessWithRecaptcha: MockedResponse & {
+  variableMatcher?: (vars: Record<string, unknown>) => boolean;
+} = {
+  request: {
+    query: SIGNIN_QUERY,
+    variables: {
+      email: 'test@example.com',
+      password: 'password123',
+      recaptchaToken: 'recaptcha-token',
+    },
+  },
+  variableMatcher: (vars) =>
+    vars?.email === 'test@example.com' &&
+    vars?.password === 'password123' &&
+    vars?.recaptchaToken === 'recaptcha-token',
+  result: {
+    data: {
+      signIn: {
+        user: {
+          id: '1',
+          name: 'Test User',
+          emailAddress: 'test@example.com',
+          role: 'user',
+          countryCode: 'US',
+          avatarURL: null,
+          isEmailAddressVerified: true,
+        },
+        authenticationToken: 'test-auth-token',
+        refreshToken: 'test-refresh-token',
+      },
+    },
+  },
+};
+
+const _mockSignInErrorWithRecaptcha: MockedResponse & {
+  variableMatcher?: (vars: Record<string, unknown>) => boolean;
+} = {
+  request: {
+    query: SIGNIN_QUERY,
+    variables: {
+      email: 'wrong@example.com',
+      password: 'wrongpassword',
+      recaptchaToken: 'recaptcha-token',
+    },
+  },
+  variableMatcher: (vars) =>
+    vars?.email === 'wrong@example.com' &&
+    vars?.password === 'wrongpassword' &&
+    vars?.recaptchaToken === 'recaptcha-token',
+  error: new Error('Invalid credentials'),
+};
+
 describe('LoginForm', () => {
   let user: ReturnType<typeof userEvent.setup>;
   const defaultProps = {
@@ -149,17 +229,18 @@ describe('LoginForm', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
+    cleanup();
     vi.clearAllMocks();
+    recaptchaResetSpy.mockClear();
   });
 
   describe('Basic Rendering', () => {
     test('renders with default user login heading', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -171,7 +252,7 @@ describe('LoginForm', () => {
 
     test('renders with admin login heading when isAdmin is true', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} isAdmin={true} />
         </MockedProvider>,
       );
@@ -183,7 +264,7 @@ describe('LoginForm', () => {
 
     test('renders email field', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -193,7 +274,7 @@ describe('LoginForm', () => {
 
     test('renders password field', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -203,7 +284,7 @@ describe('LoginForm', () => {
 
     test('renders submit button', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -213,7 +294,7 @@ describe('LoginForm', () => {
 
     test('applies custom testId', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} testId="custom-login" />
         </MockedProvider>,
       );
@@ -229,7 +310,7 @@ describe('LoginForm', () => {
   describe('Form Input Handling', () => {
     test('updates email field value on change', async () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -242,7 +323,7 @@ describe('LoginForm', () => {
 
     test('updates password field value on change', async () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -259,7 +340,7 @@ describe('LoginForm', () => {
       const onSuccess = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockSignInSuccess]}>
+        <MockedProvider link={new StaticMockLink([mockSignInSuccess], true)}>
           <LoginForm {...defaultProps} onSuccess={onSuccess} />
         </MockedProvider>,
       );
@@ -273,10 +354,10 @@ describe('LoginForm', () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        const mockResult = mockSignInSuccess.result as
-          | { data?: { signIn: unknown } }
-          | undefined;
-        expect(onSuccess).toHaveBeenCalledWith(mockResult?.data?.signIn);
+        const expected = (
+          mockSignInSuccess.result as { data?: { signIn: unknown } } | undefined
+        )?.data?.signIn;
+        expect(onSuccess).toHaveBeenCalledWith(expected);
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
@@ -285,7 +366,9 @@ describe('LoginForm', () => {
       const onSuccess = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockSignInAdminSuccess]}>
+        <MockedProvider
+          link={new StaticMockLink([mockSignInAdminSuccess], true)}
+        >
           <LoginForm {...defaultProps} isAdmin={true} onSuccess={onSuccess} />
         </MockedProvider>,
       );
@@ -299,10 +382,12 @@ describe('LoginForm', () => {
       await user.click(submitButton);
 
       await waitFor(() => {
-        const mockResult = mockSignInAdminSuccess.result as
-          | { data?: { signIn: unknown } }
-          | undefined;
-        expect(onSuccess).toHaveBeenCalledWith(mockResult?.data?.signIn);
+        const expected = (
+          mockSignInAdminSuccess.result as
+            | { data?: { signIn: unknown } }
+            | undefined
+        )?.data?.signIn;
+        expect(onSuccess).toHaveBeenCalledWith(expected);
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
@@ -313,7 +398,7 @@ describe('LoginForm', () => {
       const onError = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockSignInError]}>
+        <MockedProvider link={new StaticMockLink([mockSignInError], true)}>
           <LoginForm {...defaultProps} onError={onError} />
         </MockedProvider>,
       );
@@ -336,7 +421,9 @@ describe('LoginForm', () => {
       const onError = vi.fn();
 
       render(
-        <MockedProvider mocks={[mockSignInGraphQLError]}>
+        <MockedProvider
+          link={new StaticMockLink([mockSignInGraphQLError], true)}
+        >
           <LoginForm {...defaultProps} onError={onError} />
         </MockedProvider>,
       );
@@ -357,7 +444,7 @@ describe('LoginForm', () => {
 
     test('does not throw when onError is not provided', async () => {
       render(
-        <MockedProvider mocks={[mockSignInError]}>
+        <MockedProvider link={new StaticMockLink([mockSignInError], true)}>
           <LoginForm onSuccess={vi.fn()} />
         </MockedProvider>,
       );
@@ -381,7 +468,7 @@ describe('LoginForm', () => {
       };
 
       render(
-        <MockedProvider mocks={[delayedMock]}>
+        <MockedProvider link={new StaticMockLink([delayedMock], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -408,7 +495,7 @@ describe('LoginForm', () => {
       };
 
       render(
-        <MockedProvider mocks={[delayedMock]}>
+        <MockedProvider link={new StaticMockLink([delayedMock], true)}>
           <LoginForm {...defaultProps} />
         </MockedProvider>,
       );
@@ -431,7 +518,7 @@ describe('LoginForm', () => {
   describe('Portal Toggle (Admin/User Mode)', () => {
     test('displays user login heading when isAdmin is false', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} isAdmin={false} />
         </MockedProvider>,
       );
@@ -445,7 +532,7 @@ describe('LoginForm', () => {
   describe('reCAPTCHA gating', () => {
     test('submit button is disabled when enableRecaptcha is true and no token', () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} enableRecaptcha={true} />
         </MockedProvider>,
       );
@@ -456,7 +543,7 @@ describe('LoginForm', () => {
 
     test('calls onExpired and disables submit when reCAPTCHA expires', async () => {
       render(
-        <MockedProvider mocks={[]}>
+        <MockedProvider link={new StaticMockLink([], true)}>
           <LoginForm {...defaultProps} enableRecaptcha={true} />
         </MockedProvider>,
       );
@@ -472,12 +559,25 @@ describe('LoginForm', () => {
 
       expect(submitButton).toBeDisabled();
     });
+
+    // TODO: Re-enable when Apollo QueryManager circular stringify (HTMLInputElement ref) is resolved
+    test.todo(
+      'when enableRecaptcha is true and signIn returns null, calls onError with "Not found" and resets reCAPTCHA',
+    );
+
+    test.todo(
+      'with recaptcha token in variables, on success calls onSuccess and does not reset reCAPTCHA on success path',
+    );
+
+    test.todo(
+      'with recaptcha token in variables, on error calls onError and resets reCAPTCHA',
+    );
   });
 
   describe('Callback Handling', () => {
     test('does not throw when onSuccess is not provided', async () => {
       render(
-        <MockedProvider mocks={[mockSignInSuccess]}>
+        <MockedProvider link={new StaticMockLink([mockSignInSuccess], true)}>
           <LoginForm onError={vi.fn()} />
         </MockedProvider>,
       );
@@ -495,7 +595,7 @@ describe('LoginForm', () => {
       // Should render without throwing
       expect(() =>
         render(
-          <MockedProvider mocks={[]}>
+          <MockedProvider link={new StaticMockLink([], true)}>
             <LoginForm />
           </MockedProvider>,
         ),

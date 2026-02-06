@@ -66,55 +66,46 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
+  const isRecaptchaBlocking =
+    enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken;
+
   const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
     fetchPolicy: 'network-only',
   });
 
-  // Handle successful login - pass full signIn so parent can do session/redirect
+  // Single effect: error first, then success, then not-found
   useEffect(() => {
+    if (error) {
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
+      onErrorRef.current?.(error);
+      return;
+    }
     if (data?.signIn?.authenticationToken) {
       onSuccessRef.current?.(data.signIn);
+      return;
     }
-  }, [data]);
-
-  // Handle response with no signIn (e.g. backend returns data: null) — only once per response
-  const reportedNotFoundRef = useRef(false);
-  useEffect(() => {
-    if (error) return;
-    if (data !== undefined && !data?.signIn && !reportedNotFoundRef.current) {
-      reportedNotFoundRef.current = true;
+    if (data !== undefined && !data?.signIn) {
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
       onErrorRef.current?.(new Error('Not found'));
     }
   }, [data, error]);
 
-  // Handle login error - reset ReCAPTCHA when login fails
-  useEffect(() => {
-    if (error) {
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
-      onErrorRef.current?.(error);
-    }
-  }, [error]);
-
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
-    // ReCAPTCHA guard: block submit when required but token missing
-    if (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken) {
+    if (isRecaptchaBlocking) {
       return;
     }
-
-    reportedNotFoundRef.current = false;
 
     await signin({
       variables: {
         email: formData.email,
         password: formData.password,
-        ...(recaptchaToken && { recaptchaToken: recaptchaToken }),
+        ...(recaptchaToken && { recaptchaToken }),
       },
     });
   };
@@ -157,17 +148,13 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
             sitekey={RECAPTCHA_SITE_KEY}
             onChange={(token): void => setRecaptchaToken(token)}
             onExpired={(): void => setRecaptchaToken(null)}
-            data-testid="recaptcha-container"
           />
         </div>
       )}
 
       <Button
         type="submit"
-        disabled={
-          loading ||
-          (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
-        }
+        disabled={loading || isRecaptchaBlocking}
         data-testid={`${testId}-submit`}
         data-cy="loginBtn"
         className="w-100 mt-3"

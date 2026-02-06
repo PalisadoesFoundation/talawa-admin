@@ -148,7 +148,7 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockOnSuccess).not.toHaveBeenCalled();
+    expect(mockRegister).not.toHaveBeenCalled();
   });
 
   it('validates email field', async () => {
@@ -160,7 +160,7 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockOnSuccess).not.toHaveBeenCalled();
+    expect(mockRegister).not.toHaveBeenCalled();
   });
 
   it('validates password field', async () => {
@@ -172,7 +172,7 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockOnSuccess).not.toHaveBeenCalled();
+    expect(mockRegister).not.toHaveBeenCalled();
   });
 
   it('validates password confirmation field', async () => {
@@ -188,7 +188,7 @@ describe('RegistrationForm', () => {
 
     await user.click(screen.getByRole('button', { name: /register/i }));
 
-    expect(mockOnSuccess).not.toHaveBeenCalled();
+    expect(mockRegister).not.toHaveBeenCalled();
   });
 
   it('updates form state on input changes', async () => {
