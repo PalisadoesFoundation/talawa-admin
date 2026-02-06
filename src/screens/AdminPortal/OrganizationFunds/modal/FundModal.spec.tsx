@@ -279,6 +279,28 @@ describe('FundModal', () => {
     expect(props.refetchFunds).toHaveBeenCalled();
   });
 
+  it('should not archive when fund has no id', async () => {
+    const baseFund = fundProps[1].fund;
+    const props = {
+      ...fundProps[1],
+      fund: baseFund
+        ? {
+            ...baseFund,
+            id: undefined as unknown as string,
+          }
+        : null,
+      hide: vi.fn(),
+      refetchFunds: vi.fn(),
+    };
+    renderFundModal(link1, props);
+    const archiveBtn = screen.getByTestId('archiveFundBtn');
+    await userEvent.click(archiveBtn);
+
+    // Should not call refetch or hide since fund.id is missing
+    expect(props.hide).not.toHaveBeenCalled();
+    expect(props.refetchFunds).not.toHaveBeenCalled();
+  });
+
   it('should not update the fund when no fields are changed', async () => {
     renderFundModal(link1, fundProps[1]);
 
