@@ -4,35 +4,25 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L3)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L6)
+
+Defines the structure for agenda item category information.
 
 ## Properties
 
-### \_id
+### creator
 
-> **\_id**: `string`
+> **creator**: `object`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L4)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L10)
 
-***
+#### id
 
-### createdBy
+> **id**: `string`
 
-> **createdBy**: `object`
+#### name
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L7)
-
-#### \_id
-
-> **\_id**: `string`
-
-#### firstName
-
-> **firstName**: `string`
-
-#### lastName
-
-> **lastName**: `string`
+> **name**: `string`
 
 ***
 
@@ -40,7 +30,15 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/Pal
 
 > **description**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L6)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L9)
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L7)
 
 ***
 
@@ -48,4 +46,4 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:6](https://github.com/Pal
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L5)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L8)

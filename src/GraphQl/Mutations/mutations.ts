@@ -679,10 +679,10 @@ export {
 } from './ActionItemMutations';
 
 export {
-  CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
-  DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
-  UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
-} from './AgendaCategoryMutations';
+  CREATE_AGENDA_FOLDER_MUTATION,
+  DELETE_AGENDA_FOLDER_MUTATION,
+  UPDATE_AGENDA_FOLDER_MUTATION,
+} from './AgendaFolderMutations';
 
 export {
   ADD_ADVERTISEMENT_MUTATION,
@@ -694,6 +694,7 @@ export {
   CREATE_AGENDA_ITEM_MUTATION,
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
+  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
 } from './AgendaItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization

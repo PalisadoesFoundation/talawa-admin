@@ -4,27 +4,49 @@
 
 # Interface: InterfaceAgendaItemsDeleteModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L68)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L197)
+
+Props for the AgendaItemsDeleteModal component.
 
 ## Properties
 
-### agendaItemDeleteModalIsOpen
+### agendaItemId
 
-> **agendaItemDeleteModalIsOpen**: `boolean`
+> **agendaItemId**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L69)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L200)
 
 ***
 
-### deleteAgendaItemHandler()
+### isOpen
 
-> **deleteAgendaItemHandler**: () => `Promise`\<`void`\>
+> **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L71)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L198)
+
+***
+
+### onClose()
+
+> **onClose**: () => `void`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L199)
 
 #### Returns
 
-`Promise`\<`void`\>
+`void`
+
+***
+
+### refetchAgendaFolder()
+
+> **refetchAgendaFolder**: () => `void`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L203)
+
+#### Returns
+
+`void`
 
 ***
 
@@ -32,7 +54,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:71](https://github.com/Pa
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L72)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L201)
 
 #### Parameters
 
@@ -50,7 +72,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:72](https://github.com/Pa
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L73)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L202)
 
 #### Parameters
 
@@ -61,15 +83,3 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:73](https://github.com/Pa
 #### Returns
 
 `string`
-
-***
-
-### toggleDeleteModal()
-
-> **toggleDeleteModal**: () => `void`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L70)
-
-#### Returns
-
-`void`

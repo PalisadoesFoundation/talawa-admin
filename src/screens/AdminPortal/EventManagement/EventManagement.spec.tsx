@@ -19,6 +19,15 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
+type TabOption =
+  | 'dashboard'
+  | 'registrants'
+  | 'attendance'
+  | 'agendas'
+  | 'actions'
+  | 'volunteers'
+  | 'statistics';
+
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
     string,
@@ -32,6 +41,16 @@ vi.mock('@mui/icons-material', async () => {
     Group: vi.fn(() => null),
   };
 });
+
+vi.mock(
+  'components/AdminPortal/EventManagement/EventAgenda/EventAgenda',
+  () => ({
+    __esModule: true,
+    default: ({ eventId }: { eventId: string }) => (
+      <div data-testid="mock-event-agenda">EventAgenda mock – {eventId}</div>
+    ),
+  }),
+);
 
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
@@ -191,9 +210,18 @@ describe('Event Management', () => {
       });
     });
 
-    it('renders dashboard tab by default', async () => {
+    it('renders dashboard tab by default', () => {
       renderEventManagement();
       expect(screen.getByTestId('eventDashboardTab')).toBeInTheDocument();
+    });
+
+    it('renders EventAgenda component when agendas tab is selected', async () => {
+      renderEventManagement();
+
+      await user.click(screen.getByTestId('agendasBtn'));
+
+      expect(screen.getByTestId('eventAgendasTab')).toBeInTheDocument();
+      expect(screen.getByTestId('mock-event-agenda')).toBeInTheDocument();
     });
 
     it('switches between all available tabs', async () => {
@@ -252,16 +280,14 @@ describe('Event Management', () => {
     });
 
     it('renders dropdown with all options', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
+      renderEventManagement();
 
-      const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
+      const dropdownContainer = screen.getByTestId('tabsDropdown-container');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await user.click(screen.getByTestId('tabsDropdownToggle'));
+      await user.click(screen.getByTestId('tabsDropdown-toggle'));
 
-      const tabOptions = [
+      const tabOptions: readonly TabOption[] = [
         'dashboard',
         'registrants',
         'attendance',
@@ -272,17 +298,18 @@ describe('Event Management', () => {
       ];
 
       tabOptions.forEach((option) => {
-        expect(screen.getByTestId(`${option}DropdownItem`)).toBeInTheDocument();
+        expect(
+          screen.getByTestId(`tabsDropdown-item-${option}`),
+        ).toBeInTheDocument();
       });
     });
 
     it('switches tabs through dropdown selection', async () => {
-      await act(async () => {
-        renderEventManagement();
-      });
-      await user.click(screen.getByTestId('tabsDropdownToggle'));
+      renderEventManagement();
 
-      const tabOptions = [
+      await user.click(screen.getByTestId('tabsDropdown-toggle'));
+
+      const tabOptions: readonly TabOption[] = [
         'dashboard',
         'registrants',
         'attendance',
@@ -292,12 +319,20 @@ describe('Event Management', () => {
         'statistics',
       ];
 
-      for (const option of tabOptions) {
-        await user.click(screen.getByTestId(`${option}DropdownItem`));
+      const tabTestIdMap: Record<TabOption, string> = {
+        dashboard: 'eventDashboardTab',
+        registrants: 'eventRegistrantsTab',
+        attendance: 'eventAttendanceTab',
+        agendas: 'eventAgendasTab',
+        actions: 'eventActionsTab',
+        volunteers: 'eventVolunteersTab',
+        statistics: 'eventStatsTab',
+      };
 
-        expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(
-          'd-flex gap-2 dropdown-item',
-        );
+      for (const option of tabOptions) {
+        await user.click(screen.getByTestId(`tabsDropdown-item-${option}`));
+
+        expect(screen.getByTestId(tabTestIdMap[option])).toBeInTheDocument();
       }
     });
   });
