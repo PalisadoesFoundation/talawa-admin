@@ -102,6 +102,14 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    // ReCAPTCHA guard: block submit when required but token missing
+    if (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken) {
+      return;
+    }
+
+    reportedNotFoundRef.current = false;
+
     await signin({
       variables: {
         email: formData.email,

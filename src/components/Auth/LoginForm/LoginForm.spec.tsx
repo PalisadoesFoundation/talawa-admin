@@ -26,6 +26,42 @@ vi.mock('Constant/constant', async () => ({
   RECAPTCHA_SITE_KEY: 'test-recaptcha-site-key',
 }));
 
+vi.mock('react-google-recaptcha', async () => {
+  const React = await import('react');
+  return {
+    __esModule: true,
+    default: React.default.forwardRef(
+      (
+        props: {
+          onChange?: (token: string) => void;
+          onExpired?: () => void;
+        } & Record<string, unknown>,
+        ref: React.Ref<HTMLDivElement>,
+      ) =>
+        React.default.createElement(
+          'div',
+          { ref, 'data-testid': 'recaptcha-container', ...props },
+          React.default.createElement('input', {
+            'data-testid': 'mock-recaptcha-input',
+            'aria-label': 'Complete reCAPTCHA',
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              props.onChange?.(e.target.value),
+          }),
+          React.default.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'mock-recaptcha-expire',
+              'aria-label': 'Expire reCAPTCHA',
+              onClick: () => props.onExpired?.(),
+            },
+            'Expire',
+          ),
+        ),
+    ),
+  };
+});
+
 const mockSignInSuccess: MockedResponse = {
   request: {
     query: SIGNIN_QUERY,
@@ -415,6 +451,25 @@ describe('LoginForm', () => {
       );
 
       const submitButton = screen.getByTestId('login-form-submit');
+      expect(submitButton).toBeDisabled();
+    });
+
+    test('calls onExpired and disables submit when reCAPTCHA expires', async () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <LoginForm {...defaultProps} enableRecaptcha={true} />
+        </MockedProvider>,
+      );
+
+      const recaptchaInput = screen.getByTestId('mock-recaptcha-input');
+      await user.type(recaptchaInput, 'token');
+
+      const submitButton = screen.getByTestId('login-form-submit');
+      expect(submitButton).not.toBeDisabled();
+
+      const expireButton = screen.getByTestId('mock-recaptcha-expire');
+      await user.click(expireButton);
+
       expect(submitButton).toBeDisabled();
     });
   });

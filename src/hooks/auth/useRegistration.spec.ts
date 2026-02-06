@@ -161,7 +161,7 @@ describe('useRegistration', () => {
     expect(result.current.loading).toBe(false);
 
     act(() => {
-      result.current.register({
+      void result.current.register({
         name: 'Test User',
         email: 'test@example.com',
         password: 'password123',

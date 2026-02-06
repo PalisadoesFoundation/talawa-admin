@@ -1934,6 +1934,133 @@ describe('Extra coverage for 100 %', () => {
     });
   });
 
+  it('stores admin id (setItem id) on successful admin login', async () => {
+    vi.resetModules();
+    vi.doMock('Constant/constant.ts', async () => ({
+      ...(await vi.importActual<object>('Constant/constant.ts')),
+      REACT_APP_USE_RECAPTCHA: 'NO',
+    }));
+    const { default: LoginPageNoRecaptcha } = await import('./LoginPage');
+
+    const ADMIN_LOGIN_MOCK = [
+      ...createMocks().filter((m) => m.request.query !== SIGNIN_QUERY),
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'admin@example.com', password: 'adminpass' },
+        },
+        variableMatcher: (vars: Record<string, unknown> | undefined) =>
+          vars?.email === 'admin@example.com' && vars?.password === 'adminpass',
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: 'admin-id-123',
+                role: 'administrator',
+                name: 'Admin User',
+                emailAddress: 'admin@example.com',
+                countryCode: 'US',
+                avatarURL: null,
+                isEmailAddressVerified: true,
+              },
+              authenticationToken: 'token',
+              refreshToken: 'refreshToken',
+            },
+          },
+        },
+      },
+    ];
+
+    await withMockedLocation('/admin', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/admin'] });
+      render(
+        <MockedProvider link={new StaticMockLink(ADMIN_LOGIN_MOCK, true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPageNoRecaptcha />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+      await wait();
+
+      await user.type(
+        screen.getByTestId('login-form-email'),
+        'admin@example.com',
+      );
+      await user.type(
+        screen.getByPlaceholderText(/Enter Password/i),
+        'adminpass',
+      );
+      await user.click(screen.getByTestId('login-form-submit'));
+
+      await waitFor(() => {
+        expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+          'id',
+          'admin-id-123',
+        );
+        expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+          'userId',
+          expect.any(String),
+        );
+      });
+    });
+  });
+
+  it('handles RegistrationError via NotificationToast with error code', async () => {
+    vi.resetModules();
+    vi.doMock('Constant/constant.ts', async () => ({
+      ...(await vi.importActual<object>('Constant/constant.ts')),
+      REACT_APP_USE_RECAPTCHA: 'NO',
+    }));
+    const { default: LoginPageNoRecaptcha } = await import('./LoginPage');
+
+    const mocks = [
+      {
+        request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+        result: { data: { community: { inactivityTimeoutDuration: 3600 } } },
+      },
+      ...createMocks3(),
+    ];
+
+    await withMockedLocation('/', async () => {
+      const history = createMemoryHistory({ initialEntries: ['/'] });
+      render(
+        <MockedProvider link={new StaticMockLink(mocks, true)}>
+          <Router location={history.location} navigator={history}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <LoginPageNoRecaptcha />
+              </I18nextProvider>
+            </Provider>
+          </Router>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+      });
+
+      const registerButton = screen.getByTestId('goToRegisterPortion');
+      await user.click(registerButton);
+
+      await user.type(screen.getByLabelText(/First Name/i), 'John Doe');
+      await user.type(screen.getByTestId(/signInEmail/i), 'johndoe@test.com');
+      await user.type(screen.getByTestId('passwordField'), 'Password@123');
+      await user.type(screen.getByTestId('cpassword'), 'Password@123');
+      await user.click(screen.getByTestId('registrationBtn'));
+
+      await waitFor(() => {
+        expect(toastMocks.error).toHaveBeenCalledWith({
+          key: 'missingOrganizationId',
+          namespace: 'errors',
+        });
+      });
+    });
+  });
+
   it('renders component after mount', async () => {
     renderLoginPage();
     await wait();
