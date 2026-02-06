@@ -19,15 +19,6 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
-type TabOption =
-  | 'dashboard'
-  | 'registrants'
-  | 'attendance'
-  | 'agendas'
-  | 'actions'
-  | 'volunteers'
-  | 'statistics';
-
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
     string,
@@ -246,7 +237,7 @@ describe('Event Management', () => {
       }
     });
 
-    it('returns dashboard tab for an invalid tab selection', async () => {
+    it('renders dashboard tab by default when no tab state is set', async () => {
       vi.mocked(useParams).mockReturnValue({
         orgId: 'orgId',
         eventId: 'event123',

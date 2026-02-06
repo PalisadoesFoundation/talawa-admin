@@ -214,11 +214,6 @@ const EventManagement = (): JSX.Element => {
 
   const currentTab = eventDashboardTabs.find((t) => t.value === tab);
 
-  const tabDropdownOptions = eventDashboardTabs.map(({ value }) => ({
-    value,
-    label: t(value),
-  }));
-
   return (
     <div className="d-flex flex-column bg-white rounded-4 min-vh-75">
       <Row className="mx-3 mt-4">
