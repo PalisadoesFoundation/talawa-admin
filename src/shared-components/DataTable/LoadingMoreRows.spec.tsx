@@ -80,4 +80,22 @@ describe('LoadingMoreRows', () => {
     const cells = screen.getAllByTestId('data-skeleton-cell');
     expect(cells.length).toBe(5 * 2);
   });
+
+  it('renders extra cells when both effectiveSelectable and hasRowActions are true', () => {
+    render(
+      <table>
+        <tbody>
+          <LoadingMoreRows
+            columns={columns}
+            effectiveSelectable={true}
+            hasRowActions={true}
+          />
+        </tbody>
+      </table>,
+    );
+
+    // 1 selectable cell + 1 column cell + 1 row-actions cell = 3 per row
+    const cells = screen.getAllByTestId('data-skeleton-cell');
+    expect(cells.length).toBe(5 * 3);
+  });
 });
