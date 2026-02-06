@@ -570,7 +570,6 @@ describe('Calendar Component', () => {
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
-    const user = userEvent.setup();
 
     const { rerender } = renderWithRouterAndPath(
       <Calendar
