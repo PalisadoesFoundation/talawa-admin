@@ -542,5 +542,3 @@ export function CursorPaginationManager<
     </div>
   );
 }
-
-export default CursorPaginationManager;
