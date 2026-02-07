@@ -20,6 +20,7 @@
  * @returns A JSX element rendering the organization people table.
  */
 import React, { useState, useEffect, useMemo } from 'react';
+import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
@@ -128,9 +129,16 @@ function OrganizationPeople(): JSX.Element {
   const { orgId: currentUrl } = useParams();
 
   // State
-  const [state, setState] = useState(role?.role || 0);
+  const [state, setState] = useState(() => {
+    const r = role?.role;
+    return r === 0 || r === 1 || r === 2 ? r : 0;
+  });
   const [searchTerm, setSearchTerm] = useState('');
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const {
+    isOpen: showRemoveModal,
+    open: openRemoveModal,
+    close: closeRemoveModal,
+  } = useModalState();
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
@@ -210,18 +218,20 @@ function OrganizationPeople(): JSX.Element {
     }
   }, [state, currentUrl, fetchMembers, fetchUsers]);
 
-  // Initial data fetch
+  // Initial data fetch (members only when on members tab; tab effect handles admin/users)
   useEffect(() => {
-    fetchMembers({
-      variables: {
-        orgId: currentUrl,
-        first: PAGE_SIZE,
-        after: null,
-        last: null,
-        before: null,
-      },
-    });
-  }, [currentUrl, fetchMembers]);
+    if (state === 0) {
+      fetchMembers({
+        variables: {
+          orgId: currentUrl,
+          first: PAGE_SIZE,
+          after: null,
+          last: null,
+          before: null,
+        },
+      });
+    }
+  }, [currentUrl, fetchMembers, state]);
 
   // Error handling
   useEffect(() => {
@@ -245,11 +255,9 @@ function OrganizationPeople(): JSX.Element {
   }, [currentRows, searchTerm]);
 
   // Modal handlers
-  const toggleRemoveModal = () => setShowRemoveModal((prev) => !prev);
-
   const toggleRemoveMemberModal = (id: string) => {
     setSelectedMemId(id);
-    toggleRemoveModal();
+    openRemoveModal();
   };
 
   const handleSortChange = (value: string): void => {
@@ -262,7 +270,6 @@ function OrganizationPeople(): JSX.Element {
       field: 'sl_no',
       headerName: tCommon('sl_no'),
       flex: 1,
-      minWidth: 50,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -279,7 +286,6 @@ function OrganizationPeople(): JSX.Element {
       field: 'profile',
       headerName: tCommon('profile'),
       flex: 1,
-      minWidth: 50,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -322,7 +328,6 @@ function OrganizationPeople(): JSX.Element {
       field: 'name',
       headerName: tCommon('name'),
       flex: 2,
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -342,7 +347,6 @@ function OrganizationPeople(): JSX.Element {
     {
       field: 'email',
       headerName: tCommon('email'),
-      minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -353,7 +357,6 @@ function OrganizationPeople(): JSX.Element {
       field: 'joined',
       headerName: tCommon('joinedOn'),
       flex: 2,
-      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -383,7 +386,6 @@ function OrganizationPeople(): JSX.Element {
       field: 'action',
       headerName: tCommon('action'),
       flex: 1,
-      minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -405,53 +407,55 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      <SearchFilterBar
-        hasDropdowns={true}
-        searchPlaceholder={t('searchFullName')}
-        searchValue={searchTerm}
-        onSearchChange={(value) => setSearchTerm(value)}
-        searchInputTestId="searchbtn"
-        searchButtonTestId="searchBtn"
-        containerClassName={styles.calendar__header}
-        dropdowns={[
-          {
-            id: 'organization-people-sort',
-            label: tCommon('sort'),
-            type: 'sort',
-            options: [
-              { label: tCommon('members'), value: 'members' },
-              { label: tCommon('admin'), value: 'admin' },
-              { label: tCommon('users'), value: 'users' },
-            ],
-            selectedOption: STATE_TO_OPTION[state] ?? 'members',
-            onOptionChange: (value) => handleSortChange(value.toString()),
-            dataTestIdPrefix: 'sort',
-          },
-        ]}
-        additionalButtons={<AddMember />}
-      />
+      <div className={styles.orgPeopleGrid}>
+        <SearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={t('searchFullName')}
+          searchValue={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value)}
+          searchInputTestId="searchbtn"
+          searchButtonTestId="searchBtn"
+          containerClassName={styles.calendar__header}
+          dropdowns={[
+            {
+              id: 'organization-people-sort',
+              label: tCommon('sort'),
+              type: 'sort',
+              options: [
+                { label: tCommon('members'), value: 'members' },
+                { label: tCommon('admin'), value: 'admin' },
+                { label: tCommon('users'), value: 'users' },
+              ],
+              selectedOption: STATE_TO_OPTION[state] ?? 'members',
+              onOptionChange: (value) => handleSortChange(value.toString()),
+              dataTestIdPrefix: 'sort',
+            },
+          ]}
+          additionalButtons={<AddMember />}
+        />
 
-      <DataGridWrapper<IProcessedRow>
-        rows={filteredRows}
-        columns={columns}
-        error={state === 2 ? userError?.message : memberError?.message}
-        loading={memberLoading || userLoading}
-        emptyStateProps={{
-          message: tCommon('notFound'),
-          description: tCommon('noDataDescription'),
-          dataTestId: 'organization-people-empty-state',
-        }}
-        paginationConfig={{
-          enabled: true,
-          defaultPageSize: PAGE_SIZE,
-          pageSizeOptions: [10, 25, 50, 100],
-        }}
-      />
+        <DataGridWrapper<IProcessedRow>
+          rows={filteredRows}
+          columns={columns}
+          error={state === 2 ? userError?.message : memberError?.message}
+          loading={memberLoading || userLoading}
+          emptyStateProps={{
+            message: tCommon('notFound'),
+            description: tCommon('noDataDescription'),
+            dataTestId: 'organization-people-empty-state',
+          }}
+          paginationConfig={{
+            enabled: true,
+            defaultPageSize: PAGE_SIZE,
+            pageSizeOptions: [10, 25, 50, 100],
+          }}
+        />
+      </div>
 
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}
-          toggleRemoveModal={toggleRemoveModal}
+          toggleRemoveModal={closeRemoveModal}
         />
       )}
     </>
