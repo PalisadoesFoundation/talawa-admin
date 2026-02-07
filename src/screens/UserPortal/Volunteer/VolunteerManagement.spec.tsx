@@ -9,7 +9,7 @@
 
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
@@ -203,24 +203,19 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     // Find the dropdown toggle button
-    const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
+    const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     expect(dropdownToggle).toBeInTheDocument();
 
     // Click the dropdown to open it
     await userEvent.click(dropdownToggle);
 
-    // Find the dropdown container and get the dropdown menu within it
-    const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
-    // The dropdown menu has class "dropdown-menu" in Bootstrap
-    const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
+    // Verify dropdown menu is open
+    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
     expect(dropdownMenu).toBeInTheDocument();
 
-    // Verify dropdown is open
-    expect(dropdownMenu).toHaveClass('show');
-
     // Find and click on "Invitations" within the dropdown menu
-    const invitationsItem = within(dropdownMenu as HTMLElement).getByText(
-      'Invitations',
+    const invitationsItem = screen.getByTestId(
+      'tabs-dropdown-item-invitations',
     );
     await userEvent.click(invitationsItem);
 
@@ -238,17 +233,14 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     // Open dropdown
-    const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
+    const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
-    const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
-    expect(dropdownMenu).toHaveClass('show');
+    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
+    expect(dropdownMenu).toBeInTheDocument();
 
-    const actionsItem = within(dropdownMenu as HTMLElement).getByText(
-      'Action Items',
-    );
+    const actionsItem = screen.getByTestId('tabs-dropdown-item-actions');
     await userEvent.click(actionsItem);
 
     // Verify that actions tab is now displayed
@@ -265,17 +257,14 @@ describe('Volunteer Management', () => {
     renderVolunteerManagement();
 
     // Open dropdown
-    const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
+    const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
-    const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
-    expect(dropdownMenu).toHaveClass('show');
+    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
+    expect(dropdownMenu).toBeInTheDocument();
 
-    const groupsItem = within(dropdownMenu as HTMLElement).getByText(
-      'Volunteer Groups',
-    );
+    const groupsItem = screen.getByTestId('tabs-dropdown-item-groups');
     await userEvent.click(groupsItem);
 
     // Verify that groups tab is now displayed
@@ -297,16 +286,15 @@ describe('Volunteer Management', () => {
     expect(screen.getByTestId('invitationsTab')).toBeInTheDocument();
 
     // Open dropdown
-    const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
+    const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
-    const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
-    expect(dropdownMenu).toHaveClass('show');
+    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
+    expect(dropdownMenu).toBeInTheDocument();
 
-    const upcomingEventsItem = within(dropdownMenu as HTMLElement).getByText(
-      'Upcoming Events',
+    const upcomingEventsItem = screen.getByTestId(
+      'tabs-dropdown-item-upcomingEvents',
     );
     await userEvent.click(upcomingEventsItem);
 

@@ -393,7 +393,7 @@ describe('Donate Component', () => {
 
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-    expect(screen.getByTestId('changeCurrencyBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('currency-dropdown-toggle')).toBeInTheDocument();
     expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
     expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
     expect(screen.getByTestId('organization-sidebar')).toBeInTheDocument();
@@ -411,10 +411,10 @@ describe('Donate Component', () => {
   test('currency switch works correctly', async () => {
     renderDonate();
 
-    const currencyButton = screen.getByTestId('changeCurrencyBtn');
+    const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     await userEvent.click(currencyButton);
 
-    const eurOption = screen.getByTestId('currency2');
+    const eurOption = screen.getByTestId('currency-dropdown-item-2');
     await userEvent.click(eurOption);
 
     expect(currencyButton).toHaveTextContent('EUR');
@@ -539,11 +539,11 @@ describe('Donate Component', () => {
   test('switches to INR currency', async () => {
     renderDonate();
 
-    const currencyButton = screen.getByTestId('changeCurrencyBtn');
+    const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     expect(currencyButton).toHaveTextContent('USD');
 
     await userEvent.click(currencyButton);
-    const inrOption = screen.getByTestId('currency1');
+    const inrOption = screen.getByTestId('currency-dropdown-item-1');
     await userEvent.click(inrOption);
 
     expect(currencyButton).toHaveTextContent('INR');
@@ -552,12 +552,18 @@ describe('Donate Component', () => {
   test('displays all three currency options', async () => {
     renderDonate();
 
-    const currencyButton = screen.getByTestId('changeCurrencyBtn');
+    const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     await userEvent.click(currencyButton);
 
-    expect(screen.getByTestId('currency0')).toHaveTextContent('USD');
-    expect(screen.getByTestId('currency1')).toHaveTextContent('INR');
-    expect(screen.getByTestId('currency2')).toHaveTextContent('EUR');
+    expect(screen.getByTestId('currency-dropdown-item-0')).toHaveTextContent(
+      'USD',
+    );
+    expect(screen.getByTestId('currency-dropdown-item-1')).toHaveTextContent(
+      'INR',
+    );
+    expect(screen.getByTestId('currency-dropdown-item-2')).toHaveTextContent(
+      'EUR',
+    );
   });
 
   test('handles pagination with multiple donations', async () => {

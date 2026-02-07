@@ -39,7 +39,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaRegEnvelopeOpen, FaUserGroup } from 'react-icons/fa6';
 import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
@@ -130,6 +130,13 @@ const VolunteerManagement = (): JSX.Element => {
     );
   };
 
+  // Create options for DropDownButton
+  const tabOptions = volunteerDashboardTabs.map(({ value, icon }) => ({
+    value,
+    label: t(value),
+    icon,
+  }));
+
   const handleBack = (): void => {
     navigate(`/user/organization/${orgId}`);
   };
@@ -153,32 +160,17 @@ const VolunteerManagement = (): JSX.Element => {
             {volunteerDashboardTabs.map(renderButton)}
           </div>
 
-          <Dropdown
-            className="d-md-none"
-            data-testid="tabsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              className={styles.dropdown}
-              data-testid="tabsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {volunteerDashboardTabs.map(({ value, icon }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
-                >
-                  {icon} {t(value)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
+          <DropDownButton
+            id="tabs-dropdown"
+            options={tabOptions}
+            selectedValue={tab}
+            onSelect={(val) => setTab(val as TabOptions)}
+            variant="success"
+            btnStyle={styles.dropdown}
+            dataTestIdPrefix="tabs-dropdown"
+            buttonLabel={t(tab)}
+            parentContainerStyle="d-md-none"
+          />
         </Col>
 
         <Row className="mt-3">
