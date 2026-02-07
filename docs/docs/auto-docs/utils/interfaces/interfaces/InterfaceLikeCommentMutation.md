@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLikeCommentMutation
 
-Defined in: [src/utils/interfaces.ts:1986](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1986)
+Defined in: [src/utils/interfaces.ts:1923](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1923)
 
 Defines the structure for LIKE_COMMENT mutation result.
 
@@ -14,7 +14,7 @@ Defines the structure for LIKE_COMMENT mutation result.
 
 > **createCommentVote**: `object`
 
-Defined in: [src/utils/interfaces.ts:1987](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1987)
+Defined in: [src/utils/interfaces.ts:1924](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1924)
 
 #### id
 

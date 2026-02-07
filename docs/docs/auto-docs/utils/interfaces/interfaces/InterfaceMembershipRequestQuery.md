@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMembershipRequestQuery
 
-Defined in: [src/utils/interfaces.ts:2185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2185)
+Defined in: [src/utils/interfaces.ts:2122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2122)
 
 Defines the structure for MEMBERSHIP_REQUEST_PG query result
 
@@ -14,7 +14,7 @@ Defines the structure for MEMBERSHIP_REQUEST_PG query result
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:2186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2186)
+Defined in: [src/utils/interfaces.ts:2123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2123)
 
 #### id
 

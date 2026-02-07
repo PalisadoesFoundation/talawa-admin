@@ -35,7 +35,7 @@ import { Button } from '../../../../shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   AGENDA_ITEM_CATEGORY_LIST,
   AGENDA_FOLDER_LIST,
@@ -64,11 +64,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
     data: agendaCategoryData,
     loading: agendaCategoryLoading,
     error: agendaCategoryError,
-  }: {
-    data: InterfaceAgendaItemCategoryList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: {
       eventId,
     },
@@ -81,12 +77,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
     loading: agendaFolderLoading,
     error: agendaFolderError,
     refetch: refetchAgendaFolder,
-  }: {
-    data: InterfaceAgendaFolderList | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(AGENDA_FOLDER_LIST, {
+  } = useQuery<InterfaceAgendaFolderList>(AGENDA_FOLDER_LIST, {
     variables: { eventId },
     notifyOnNetworkStatusChange: true,
   });

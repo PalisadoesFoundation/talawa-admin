@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUpdateCommunityMutation
 
-Defined in: [src/utils/interfaces.ts:2152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2152)
+Defined in: [src/utils/interfaces.ts:2089](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2089)
 
 Defines the structure for UPDATE_COMMUNITY_PG mutation result
 
@@ -14,7 +14,7 @@ Defines the structure for UPDATE_COMMUNITY_PG mutation result
 
 > **updateCommunity**: `object`
 
-Defined in: [src/utils/interfaces.ts:2153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2153)
+Defined in: [src/utils/interfaces.ts:2090](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2090)
 
 #### id
 

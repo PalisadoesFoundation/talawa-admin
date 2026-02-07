@@ -124,13 +124,13 @@ function VolunteerGroups(): JSX.Element {
   useEffect(() => {
     const typed = eventData as
       | {
-        event?: {
-          id: string;
-          recurrenceRule?: { id: string } | null;
-          baseEvent?: { id: string } | null;
-          volunteerGroups: InterfaceVolunteerGroupInfo[];
-        };
-      }
+          event?: {
+            id: string;
+            recurrenceRule?: { id: string } | null;
+            baseEvent?: { id: string } | null;
+            volunteerGroups: InterfaceVolunteerGroupInfo[];
+          };
+        }
       | undefined;
     if (typed?.event) {
       setIsRecurring(!!typed.event.recurrenceRule);
@@ -141,10 +141,10 @@ function VolunteerGroups(): JSX.Element {
   const groups = useMemo(() => {
     const typed = eventData as
       | {
-        event?: {
-          volunteerGroups: InterfaceVolunteerGroupInfo[];
-        };
-      }
+          event?: {
+            volunteerGroups: InterfaceVolunteerGroupInfo[];
+          };
+        }
       | undefined;
     const allGroups = typed?.event?.volunteerGroups || [];
 

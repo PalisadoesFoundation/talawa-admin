@@ -6,7 +6,7 @@
 
 > **default**(`folders`): `Element`
 
-Defined in: [src/components/AdminPortal/AgendaFolder/DragAndDrop/AgendaDragAndDrop.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/DragAndDrop/AgendaDragAndDrop.tsx#L42)
+Defined in: [src/components/AdminPortal/AgendaFolder/DragAndDrop/AgendaDragAndDrop.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AgendaFolder/DragAndDrop/AgendaDragAndDrop.tsx#L40)
 
 AgendaDragAndDrop
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCommunityQuery
 
-Defined in: [src/utils/interfaces.ts:1928](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1928)
+Defined in: [src/utils/interfaces.ts:1865](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1865)
 
 Defines the structure for GET_COMMUNITY_DATA_PG query result
 
@@ -14,7 +14,7 @@ Defines the structure for GET_COMMUNITY_DATA_PG query result
 
 > **community**: `object`
 
-Defined in: [src/utils/interfaces.ts:1929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1929)
+Defined in: [src/utils/interfaces.ts:1866](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1866)
 
 #### Index Signature
 

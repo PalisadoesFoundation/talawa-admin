@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventAttendeesQuery
 
-Defined in: [src/utils/interfaces.ts:2326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2326)
+Defined in: [src/utils/interfaces.ts:2263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2263)
 
 Defines the structure for EVENT_ATTENDEES query result
 
@@ -14,7 +14,7 @@ Defines the structure for EVENT_ATTENDEES query result
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2327)
+Defined in: [src/utils/interfaces.ts:2264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2264)
 
 #### attendees
 

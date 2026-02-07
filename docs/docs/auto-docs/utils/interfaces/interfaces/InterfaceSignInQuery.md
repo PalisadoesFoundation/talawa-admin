@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSignInQuery
 
-Defined in: [src/utils/interfaces.ts:2307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2307)
+Defined in: [src/utils/interfaces.ts:2244](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2244)
 
 Defines the structure for SIGNIN_QUERY query result
 
@@ -14,7 +14,7 @@ Defines the structure for SIGNIN_QUERY query result
 
 > **signIn**: `object`
 
-Defined in: [src/utils/interfaces.ts:2308](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2308)
+Defined in: [src/utils/interfaces.ts:2245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2245)
 
 #### authenticationToken
 

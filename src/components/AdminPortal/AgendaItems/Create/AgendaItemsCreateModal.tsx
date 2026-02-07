@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import DropDownButton from 'shared-components/DropDownButton';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import Button from 'shared-components/Button/Button';
@@ -12,14 +12,14 @@ import {
   FormTextField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
-import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CREATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/AgendaItemMutations';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 
 import {
   AGENDA_ITEM_ALLOWED_MIME_TYPES,
   AGENDA_ITEM_MIME_TYPE,
-} from 'Constant/fileUpload';
+} from '../../../../Constant/fileUpload';
 
 import styles from './AgendaItemsCreateModal.module.css';
 

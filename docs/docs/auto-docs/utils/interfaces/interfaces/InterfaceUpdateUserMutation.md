@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUpdateUserMutation
 
-Defined in: [src/utils/interfaces.ts:2256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2256)
+Defined in: [src/utils/interfaces.ts:2193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2193)
 
 Defines the structure for UPDATE_USER_MUTATION mutation result
 
@@ -14,4 +14,4 @@ Defines the structure for UPDATE_USER_MUTATION mutation result
 
 > **updateUser**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:2257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2257)
+Defined in: [src/utils/interfaces.ts:2194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2194)

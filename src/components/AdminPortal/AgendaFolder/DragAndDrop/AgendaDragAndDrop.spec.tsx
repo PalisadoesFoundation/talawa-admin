@@ -1,16 +1,15 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { type DropResult } from '@hello-pangea/dnd';
 
 import AgendaDragAndDrop from './AgendaDragAndDrop';
-import {
-  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
-  UPDATE_AGENDA_FOLDER_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION } from 'GraphQl/Mutations/AgendaItemMutations';
+import { UPDATE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
 import i18nForTest from 'utils/i18nForTest';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type {
@@ -343,7 +342,7 @@ const renderAgendaDragAndDrop = (
   folders: InterfaceAgendaFolderInfo[] = createMockFolders(),
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaDragAndDrop
           folders={folders}

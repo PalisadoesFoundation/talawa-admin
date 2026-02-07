@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationFilterListQuery
 
-Defined in: [src/utils/interfaces.ts:2041](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2041)
+Defined in: [src/utils/interfaces.ts:1978](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1978)
 
 Defines the structure for ORGANIZATION_FILTER_LIST query result
 
@@ -14,4 +14,4 @@ Defines the structure for ORGANIZATION_FILTER_LIST query result
 
 > **organizations**: [`InterfaceOrgFields`](InterfaceOrgFields.md) & `object`[]
 
-Defined in: [src/utils/interfaces.ts:2042](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2042)
+Defined in: [src/utils/interfaces.ts:1979](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1979)

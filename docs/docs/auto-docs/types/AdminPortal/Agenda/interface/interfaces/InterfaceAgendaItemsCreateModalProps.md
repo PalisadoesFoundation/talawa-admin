@@ -38,33 +38,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:170](https://github.com/P
 
 > **hide**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L44)
-
-#### Parameters
-
-##### e
-
-`FormEvent`\<`HTMLFormElement`\>
-
-#### Returns
-
-`Promise`\<`void`\>
-
-***
-
-### formState
-
-> **formState**: [`InterfaceCreateFormStateType`](InterfaceCreateFormStateType.md)
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L40)
-
-***
-
-### hideCreateModal()
-
-> **hideCreateModal**: () => `void`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L39)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L169)
 
 #### Returns
 

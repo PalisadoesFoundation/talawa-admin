@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';

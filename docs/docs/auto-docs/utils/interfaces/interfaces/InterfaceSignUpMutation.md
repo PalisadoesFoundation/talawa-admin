@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSignUpMutation
 
-Defined in: [src/utils/interfaces.ts:1966](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1966)
+Defined in: [src/utils/interfaces.ts:1903](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1903)
 
 Defines the structure for SIGNUP_MUTATION result
 
@@ -14,7 +14,7 @@ Defines the structure for SIGNUP_MUTATION result
 
 > **signUp**: `object`
 
-Defined in: [src/utils/interfaces.ts:1967](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1967)
+Defined in: [src/utils/interfaces.ts:1904](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1904)
 
 #### user
 

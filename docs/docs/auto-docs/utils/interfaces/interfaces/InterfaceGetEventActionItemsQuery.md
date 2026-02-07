@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGetEventActionItemsQuery
 
-Defined in: [src/utils/interfaces.ts:2263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2263)
+Defined in: [src/utils/interfaces.ts:2200](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2200)
 
 Defines the structure for GET_EVENT_ACTION_ITEMS query result
 
@@ -14,7 +14,7 @@ Defines the structure for GET_EVENT_ACTION_ITEMS query result
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2264)
+Defined in: [src/utils/interfaces.ts:2201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2201)
 
 #### actionItems
 

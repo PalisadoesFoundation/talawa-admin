@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventRegistrantsQuery
 
-Defined in: [src/utils/interfaces.ts:2335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2335)
+Defined in: [src/utils/interfaces.ts:2272](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2272)
 
 Defines the structure for EVENT_REGISTRANTS query result
 
@@ -14,7 +14,7 @@ Defines the structure for EVENT_REGISTRANTS query result
 
 > **getEventAttendeesByEventId**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2336)
+Defined in: [src/utils/interfaces.ts:2273](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2273)
 
 #### createdAt
 

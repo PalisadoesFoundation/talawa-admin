@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 
@@ -64,7 +65,7 @@ const renderModal = (
   agendaItemId = MOCK_AGENDA_ITEM_ID,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaItemsDeleteModal
           isOpen={isOpen}
@@ -422,7 +423,7 @@ describe('AgendaItemsDeleteModal', () => {
       const customT = vi.fn((key: string) => `translated_${key}`);
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}
@@ -514,7 +515,7 @@ describe('AgendaItemsDeleteModal', () => {
 
     it('should update when isOpen prop changes', () => {
       const { rerender } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={false}
@@ -533,7 +534,7 @@ describe('AgendaItemsDeleteModal', () => {
       ).not.toBeInTheDocument();
 
       rerender(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}
@@ -583,7 +584,7 @@ describe('AgendaItemsDeleteModal', () => {
       const trackedRefetch = vi.fn(() => callOrder.push('refetch'));
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaItemsDeleteModal
               isOpen={true}

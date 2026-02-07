@@ -3,7 +3,7 @@ import { Row, Col } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import { EditModal } from 'shared-components/CRUDModalTemplate/EditModal';
 import Button from 'shared-components/Button/Button';
@@ -16,7 +16,7 @@ import {
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 
-import { UPDATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_AGENDA_ITEM_MUTATION } from 'GraphQl/Mutations/AgendaItemMutations';
 import {
   AGENDA_ITEM_ALLOWED_MIME_TYPES,
   AGENDA_ITEM_MIME_TYPE,

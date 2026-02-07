@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
 /**
  * GraphQL query to retrieve agenda folders by event ID.

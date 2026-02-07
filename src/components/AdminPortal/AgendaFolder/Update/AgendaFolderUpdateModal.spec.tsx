@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
 
@@ -130,7 +131,7 @@ const renderAgendaFolderUpdateModal = (
   folderFormState: InterfaceAgendaFolderUpdateFormStateType = mockFolderFormState,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <I18nextProvider i18n={i18nForTest}>
         <AgendaFolderUpdateModal
           isOpen={isOpen}
@@ -701,7 +702,7 @@ describe('AgendaFolderUpdateModal', () => {
       ];
 
       render(
-        <MockedProvider mocks={MOCKS_EMPTY_ID} addTypename={false}>
+        <MockedProvider mocks={MOCKS_EMPTY_ID}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}
@@ -828,7 +829,7 @@ describe('AgendaFolderUpdateModal', () => {
       const mockTSpy = vi.fn((key: string) => key);
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}
@@ -850,7 +851,7 @@ describe('AgendaFolderUpdateModal', () => {
       const mockTSpy = vi.fn((key: string) => key);
 
       render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
+        <MockedProvider mocks={MOCKS_SUCCESS}>
           <I18nextProvider i18n={i18nForTest}>
             <AgendaFolderUpdateModal
               isOpen={true}

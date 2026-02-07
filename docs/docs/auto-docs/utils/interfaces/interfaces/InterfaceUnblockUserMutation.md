@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUnblockUserMutation
 
-Defined in: [src/utils/interfaces.ts:2246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2246)
+Defined in: [src/utils/interfaces.ts:2183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2183)
 
 Defines the structure for UNBLOCK_USER_MUTATION_PG mutation result
 
@@ -14,7 +14,7 @@ Defines the structure for UNBLOCK_USER_MUTATION_PG mutation result
 
 > **unBlockUser**: `object`
 
-Defined in: [src/utils/interfaces.ts:2247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2247)
+Defined in: [src/utils/interfaces.ts:2184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2184)
 
 #### id
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgMemberConnectionQuery
 
-Defined in: [src/utils/interfaces.ts:2118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2118)
+Defined in: [src/utils/interfaces.ts:2055](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2055)
 
 Defines the structure for ORGANIZATIONS_MEMBER_CONNECTION_LIST query result
 
@@ -14,7 +14,7 @@ Defines the structure for ORGANIZATIONS_MEMBER_CONNECTION_LIST query result
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:2119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2119)
+Defined in: [src/utils/interfaces.ts:2056](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2056)
 
 #### members
 

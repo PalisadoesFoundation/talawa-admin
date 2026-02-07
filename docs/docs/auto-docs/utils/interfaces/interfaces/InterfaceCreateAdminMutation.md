@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateAdminMutation
 
-Defined in: [src/utils/interfaces.ts:1977](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1977)
+Defined in: [src/utils/interfaces.ts:1914](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1914)
 
 Defines the structure for ADD_ADMIN_MUTATION result.
 
@@ -14,7 +14,7 @@ Defines the structure for ADD_ADMIN_MUTATION result.
 
 > **createAdmin**: `object`
 
-Defined in: [src/utils/interfaces.ts:1978](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1978)
+Defined in: [src/utils/interfaces.ts:1915](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1915)
 
 #### id
 

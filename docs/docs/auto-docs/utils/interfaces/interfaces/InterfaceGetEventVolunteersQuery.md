@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGetEventVolunteersQuery
 
-Defined in: [src/utils/interfaces.ts:2215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2215)
+Defined in: [src/utils/interfaces.ts:2152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2152)
 
 Defines the structure for GET_EVENT_VOLUNTEERS query result
 
@@ -14,7 +14,7 @@ Defines the structure for GET_EVENT_VOLUNTEERS query result
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2216)
+Defined in: [src/utils/interfaces.ts:2153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2153)
 
 #### baseEvent?
 
