@@ -45,6 +45,7 @@ import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export interface ILeftDrawerProps {
   orgId: string;
@@ -69,6 +70,7 @@ const LeftDrawerOrg = ({
   setHideDrawer,
 }: ILeftDrawerProps): React.ReactElement => {
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const userId = getItem('id') as string | null;
@@ -163,46 +165,53 @@ const LeftDrawerOrg = ({
   );
 
   return (
-    <SidebarBase
-      hideDrawer={hideDrawer}
-      setHideDrawer={setHideDrawer}
-      portalType="admin"
-      persistToggleState={true}
-      headerContent={
-        <SidebarOrgSection
-          orgId={orgId}
-          hideDrawer={hideDrawer}
-          isProfilePage={isProfilePage}
-        />
-      }
-      footerContent={
-        <>
-          <div className={styles.switchPortalWrapper}>
-            <SidebarNavItem
-              to="/user/organizations"
-              icon={<FaExchangeAlt />}
-              label={tCommon('switchToUserPortal')}
-              testId="switchToUserPortalBtn"
-              hideDrawer={hideDrawer}
-              onClick={handleLinkClick}
-              iconType="react-icon"
-            />
-          </div>
-          <div
-            className={
-              hideDrawer
-                ? styles.profileContainerHidden
-                : styles.profileContainer
-            }
-          >
-            <ProfileCard />
-          </div>
-          <SignOut hideDrawer={hideDrawer} />
-        </>
-      }
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      {drawerContent}
-    </SidebarBase>
+      <SidebarBase
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
+        portalType="admin"
+        persistToggleState={true}
+        headerContent={
+          <SidebarOrgSection
+            orgId={orgId}
+            hideDrawer={hideDrawer}
+            isProfilePage={isProfilePage}
+          />
+        }
+        footerContent={
+          <>
+            <div className={styles.switchPortalWrapper}>
+              <SidebarNavItem
+                to="/user/organizations"
+                icon={<FaExchangeAlt />}
+                label={tCommon('switchToUserPortal')}
+                testId="switchToUserPortalBtn"
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                iconType="react-icon"
+              />
+            </div>
+            <div
+              className={
+                hideDrawer
+                  ? styles.profileContainerHidden
+                  : styles.profileContainer
+              }
+            >
+              <ProfileCard />
+            </div>
+            <SignOut hideDrawer={hideDrawer} />
+          </>
+        }
+      >
+        {drawerContent}
+      </SidebarBase>
+    </ErrorBoundaryWrapper>
   );
 };
 

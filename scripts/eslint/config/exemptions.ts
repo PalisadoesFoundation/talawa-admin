@@ -66,6 +66,11 @@ export const wrapperExemptions = [
     componentName: 'NotificationToast',
     allowedIds: ['react-toastify'],
   }),
+  createWrapperExemption({
+    componentName: 'DropDownButton',
+    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
+  }),
+
   {
     files: [
       'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
@@ -85,10 +90,6 @@ export const wrapperExemptions = [
   createWrapperExemption({
     componentName: 'Button',
     allowedIds: ['rb-button', 'rb-button-path'],
-  }),
-  createWrapperExemption({
-    componentName: 'DropDownButton',
-    allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
   }),
 ];
 

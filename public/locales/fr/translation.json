@@ -101,6 +101,21 @@
     "resendVerification": "Resend Verification",
     "resendFailed": "Failed to resend verification email. Please try again."
   },
+  "verifyEmail": {
+    "title": "Vérifier l'Email",
+    "loginRequired": "Connexion requise",
+    "verifying": "Vérification...",
+    "success": "Email Vérifié",
+    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
+    "error": "Vérification Échouée",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "noToken": "Aucun jeton de vérification fourni. Veuillez vérifier votre email pour le lien de vérification.",
+    "verificationFailed": "La vérification de l'email a échoué. Veuillez réessayer.",
+    "resendSuccess": "L'email de vérification a été renvoya avec succès.",
+    "resendFailed": "Échec de l'envoi de l'email de vérification. Veuillez réessayer.",
+    "resendButton": "Renvoyer l'Email de Vérification",
+    "goToLogin": "Aller à la Connexion"
+  },
   "adminProfile": {
     "title": "Profil Administrateur",
     "settings": "Paramètres",
@@ -765,9 +780,36 @@
     "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
     "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "Dossier de l’agenda mis à jour avec succès",
+    "agendaFolderDeleted": "Dossier de l’agenda supprimé avec succès",
+    "deleteAgendaFolder": "Supprimer le dossier de l’agenda",
+    "deleteAgendaFolderMsg": "Voulez-vous supprimer ce dossier de l’agenda ?",
+    "updateAgendaFolder": "Mettre à jour le dossier de l’agenda",
+    "folderNamePlaceholder": "Nom du dossier",
+    "createAgendaFolder": "Créer une section de l’agenda",
+    "folderName": "Dossier",
+    "categoryName": "Catégorie",
+    "noCategory": "Aucune catégorie",
+    "previewItem": "Aperçu de l’élément",
+    "folder": "Dossier de l’agenda",
+    "agendaFolderDetails": "Détails de la section de l’agenda",
+    "agendaFolderCreated": "Section de l’agenda créée avec succès",
+    "attachmentPreviewAlt": "Aperçu de la pièce jointe",
+    "agendaFolderUpdateFailed": "Échec de la mise à jour du dossier de l’agenda",
+    "removeUrl": "Supprimer l’URL",
+    "removeAttachment": "Supprimer la pièce jointe",
+    "itemSequenceUpdateSuccessMsg": "La séquence de l’élément a été mise à jour avec succès",
+    "sectionSequenceUpdateSuccessMsg": "La séquence de la section a été mise à jour avec succès",
+    "editFolder": "Modifier le dossier",
+    "editItem": "Modifier l’élément",
+    "deleteItem": "Supprimer l’élément",
+    "deleteFolder": "Supprimer le dossier",
+    "itemPreview": "Aperçu de l’élément",
     "agendaItemDetails": "Détails du point de l'ordre du jour",
     "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
+    "fileUploadFailed": "Échec du téléversement du fichier",
+    "organizationRequired": "L'organisation est requise",
     "title": "Titre",
     "enterTitle": "Entrer le titre",
     "sequence": "Ordre",
@@ -1142,7 +1184,9 @@
     "statistics": "Statistiques",
     "to": "À",
     "volunteers": "Bénévoles",
-    "backToEvents": "Retour aux Événements"
+    "backToEvents": "Retour aux Événements",
+    "selectTab": "Sélectionner un Onglet",
+    "eventTabs": "Onglets de l’événement"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",
@@ -1317,6 +1361,7 @@
     }
   },
   "memberDetail": {
+    "user": "Utilisateur",
     "title": "Détails de l'utilisateur",
     "addAdmin": "Ajouter un administrateur",
     "noeventsAttended": "Aucun événement assisté",
@@ -1877,6 +1922,7 @@
     "groupName": "Nom du groupe",
     "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
+    "memberOptions": "Options des membres",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
     "userNotFound": "Utilisateur non trouvé",
@@ -1899,10 +1945,13 @@
     "chatAction": "Action de chat",
     "confirmRemoveMember": "Confirmer la suppression du membre",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
-    "userAddedSuccessfully": "Utilisateur ajouté avec succès"
+    "userAddedSuccessfully": "Utilisateur ajouté avec succès",
+    "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
+    "thisUser": "cet utilisateur",
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
   },
   "userChatRoom": {
-    "selectContact": "Sélectionnez un contact pour démarrer la conversation",
+    "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",
     "sendMessage": "Envoyer le message",
     "loading": "Chargement...",
     "loadOlderMessages": "Charger les messages plus anciens",
@@ -1921,7 +1970,8 @@
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
       "resetButton": "Réessayer",
       "resetButtonAriaLabel": "Réessayer"
-    }
+    },
+    "messageActions": "Actions de message"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
@@ -2509,19 +2559,6 @@
       "emptyState": "Veuillez demander aux participants de soumettre leurs commentaires pour obtenir des informations !",
       "filledByCount": "{{count}} personnes ont rempli des commentaires pour cet événement."
     }
-  },
-  "verifyEmail": {
-    "title": "Vérifier l'e-mail",
-    "verifying": "Vérification de votre e-mail...",
-    "success": "E-mail vérifié !",
-    "successMessage": "Votre email a été vérifié avec succès. Vous pouvez maintenant vous connecter.",
-    "error": "Échec de la vérification",
-    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
-    "loginRequired": "Veuillez vous connecter pour vérifier votre e-mail.",
-    "resendButton": "Renvoyer l'e-mail de vérification",
-    "resendSuccess": "L'e-mail de vérification a été renvoyé avec succès.",
-    "resendFailed": "Échec de l'envoi de l'e-mail de vérification. Veuillez réessayer.",
-    "goToLogin": "Aller à la connexion"
   },
   "plugins": {
     "loading": "Chargement du plugin...",

@@ -17,7 +17,7 @@
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
-import { Container, Dropdown, Nav, Navbar, Offcanvas } from 'react-bootstrap';
+import { Container, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 import { languages } from 'utils/languages';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
@@ -26,12 +26,10 @@ import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
-interface InterfaceNavbarProps {
-  currentPage: string | null;
-}
+import DropDownButton from 'shared-components/DropDownButton';
+import { InterfaceNavbarProps } from 'types/UserPortal/OrganizationNavbar/interface';
 
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -44,8 +42,6 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const [organizationDetails, setOrganizationDetails] = React.useState<{
     name: string;
   }>({ name: '' });
-
-  const dropDirection: DropDirection = 'start';
 
   const { orgId: organizationId } = useParams();
 
@@ -65,6 +61,22 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
   const handleLogout = async (): Promise<void> => {
     clearAllItems();
     window.location.replace('/');
+  };
+
+  const handleLanguageChange = async (languageCode: string): Promise<void> => {
+    setCurrentLanguageCode(languageCode);
+    await i18next.changeLanguage(languageCode);
+  };
+
+  const handleUserAction = async (action: string): Promise<void> => {
+    switch (action) {
+      case 'settings':
+        navigate('/user/settings');
+        break;
+      case 'logout':
+        await handleLogout();
+        break;
+    }
   };
 
   const userName = getItem('name');
@@ -110,67 +122,57 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
               </Nav.Link>
             </Nav>
             <Navbar.Collapse className="justify-content-end">
-              <Dropdown data-testid="languageDropdown" drop={dropDirection}>
-                <Dropdown.Toggle
-                  variant="white"
-                  id="dropdown-basic"
-                  data-testid="languageDropdownToggle"
-                  className={styles.colorWhite}
-                >
+              <DropDownButton
+                id="language-dropdown"
+                options={languages.map((language) => ({
+                  value: language.code,
+                  label: language.name,
+                }))}
+                selectedValue={currentLanguageCode}
+                onSelect={handleLanguageChange}
+                dataTestIdPrefix="language"
+                variant="light"
+                btnStyle={styles.colorWhite}
+                icon={
                   <LanguageIcon
                     className={styles.colorWhite}
                     data-testid="languageIcon"
                   />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  {languages.map((language, index: number) => (
-                    <Dropdown.Item
-                      key={index}
-                      onClick={async (): Promise<void> => {
-                        setCurrentLanguageCode(language.code);
-                        await i18next.changeLanguage(language.code);
-                      }}
-                      disabled={currentLanguageCode === language.code}
-                      data-testid={`changeLanguageBtn${index}`}
-                    >
-                      <span
-                        className={`fi fi-${language.country_code} mr-2`}
-                      ></span>{' '}
-                      {language.name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
+                }
+                placeholder=""
+                ariaLabel={tCommon('changeLanguage')}
+              />
 
-              <Dropdown drop={dropDirection}>
-                <Dropdown.Toggle
-                  variant="white"
-                  id="dropdown-basic"
-                  data-testid="logoutDropdown"
-                  className={styles.colorWhite}
-                >
-                  <PermIdentityIcon
-                    className={styles.colorWhite}
-                    data-testid="personIcon"
-                  />
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.ItemText>
-                    <b>{userName as string}</b>
-                  </Dropdown.ItemText>
-                  <Dropdown.Item>
-                    <Link to="/user/settings" className={styles.link}>
-                      {tCommon('settings')}
-                    </Link>
-                  </Dropdown.Item>
-                  <Dropdown.Item
-                    onClick={handleLogout}
-                    data-testid={`logoutBtn`}
-                  >
-                    {tCommon('logout')}
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <div className={styles.userMenuContainer}>
+                <span className={styles.userName}>
+                  <b>{userName as string}</b>
+                </span>
+                <DropDownButton
+                  id="user-dropdown"
+                  options={[
+                    {
+                      value: 'settings',
+                      label: tCommon('settings'),
+                    },
+                    {
+                      value: 'logout',
+                      label: tCommon('logout'),
+                    },
+                  ]}
+                  onSelect={handleUserAction}
+                  dataTestIdPrefix="user"
+                  variant="light"
+                  btnStyle={styles.colorWhite}
+                  icon={
+                    <PermIdentityIcon
+                      className={styles.colorWhite}
+                      data-testid="personIcon"
+                    />
+                  }
+                  placeholder=""
+                  ariaLabel={tCommon('userMenu')}
+                />
+              </div>
             </Navbar.Collapse>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

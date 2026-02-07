@@ -45,8 +45,9 @@
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button } from 'shared-components/Button';
-import { ListGroup, Dropdown } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import DropDownButton from 'shared-components/DropDownButton';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -70,7 +71,10 @@ import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceGroupChatDetailsProps } from 'types/UserPortal/Chat/interface';
+import type {
+  InterfaceGroupChatDetailsProps,
+  InterfaceOrganizationMember,
+} from 'types/UserPortal/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -131,7 +135,7 @@ export default function GroupChatDetails({
   const [deleteChat] = useMutation(DELETE_CHAT);
   const [deleteChatMembership] = useMutation(DELETE_CHAT_MEMBERSHIP);
 
-  const currentUserRole = chat.members.edges.find(
+  const currentUserRole = chat.members?.edges?.find(
     (edge) => edge.node.user.id === userId,
   )?.node.role;
 
@@ -267,17 +271,15 @@ export default function GroupChatDetails({
         dataTestId="groupChatDetailsModal"
         className={styles.modalContent}
         headerContent={
-          <div className="d-flex justify-content-between w-100">
-            <div className="modal-title h4">{t('groupInfo')}</div>
+          <div className={styles.headerSection}>
+            <div className={styles.headerGroupInfo}>{t('groupInfo')}</div>
             {currentUserRole === 'administrator' && (
               <Button
                 variant="outline-danger"
                 size="sm"
                 aria-label={t('deleteChat')}
                 onClick={async () => {
-                  if (
-                    window.confirm('Are you sure you want to delete this chat?')
-                  ) {
+                  if (window.confirm(t('deleteChatConfirmation'))) {
                     try {
                       await deleteChat({
                         variables: { input: { id: chat.id } },
@@ -376,14 +378,14 @@ export default function GroupChatDetails({
           )}
 
           <p>
-            {chat?.members.edges.length} {t('members')}
+            {chat?.members?.edges?.length || 0} {t('members')}
           </p>
           <p>{chat?.description}</p>
         </div>
 
         <div>
           <h5>
-            {chat.members.edges.length} {t('members')}
+            {chat.members?.edges?.length || 0} {t('members')}
           </h5>
           <ListGroup className={styles.memberList} variant="flush">
             <ListGroup.Item
@@ -395,7 +397,7 @@ export default function GroupChatDetails({
             >
               <Add /> {t('addMembers')}
             </ListGroup.Item>
-            {chat.members.edges.map((edge) => {
+            {chat.members?.edges?.map((edge) => {
               const user = edge.node.user;
               const role = edge.node.role;
               const isCurrentUser = user.id === userId;
@@ -407,67 +409,65 @@ export default function GroupChatDetails({
                   className={styles.groupMembersList}
                   key={user.id}
                 >
-                  <div
-                    className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
-                  >
-                    <div className="d-flex align-items-center grow">
+                  <div className={styles.chatUserDetails}>
+                    <div className={styles.profileAvatarContainer}>
                       <ProfileAvatarDisplay
                         className={styles.membersImage}
                         fallbackName={user.name}
                         imageUrl={user.avatarURL}
                         size="small"
                       />
-                      <span className="ms-2">{user.name}</span>
-                      <span
-                        className={`badge bg-success text-dark ms-2 ${styles.roleBadge}`}
-                      >
-                        {role}
-                      </span>
+                      <span className={styles.userName}>{user.name}</span>
+                      <span className={styles.roleBadge}>{role}</span>
                     </div>
                     {canManage && (
-                      <Dropdown className="ms-auto">
-                        <Dropdown.Toggle
-                          variant="link"
-                          id={`dropdown-${user.id}`}
-                          className={`btn-sm ${styles.dropdownToggle}`}
-                        >
-                          <BsThreeDotsVertical />
-                        </Dropdown.Toggle>
-                        <Dropdown.Menu align="end">
-                          <Dropdown.Item
-                            onClick={() =>
-                              handleRoleChange(
-                                user.id,
-                                role === 'administrator'
-                                  ? 'regular'
-                                  : 'administrator',
+                      <DropDownButton
+                        id={`dropdown-${user.id}`}
+                        variant="outline-secondary"
+                        icon={<BsThreeDotsVertical />}
+                        buttonLabel=" "
+                        ariaLabel={t('memberOptions')}
+                        options={[
+                          {
+                            value: 'roleChange',
+                            label:
+                              role === 'administrator'
+                                ? t('demoteToRegular')
+                                : t('promoteToAdmin'),
+                          },
+                          ...(canRemove
+                            ? [
+                                {
+                                  value: 'removeMember',
+                                  label: t('remove'),
+                                },
+                              ]
+                            : []),
+                        ]}
+                        onSelect={(value) => {
+                          if (value === 'roleChange') {
+                            handleRoleChange(
+                              user.id,
+                              role === 'administrator'
+                                ? 'regular'
+                                : 'administrator',
+                            );
+                          } else if (value === 'removeMember') {
+                            if (
+                              window.confirm(
+                                t('confirmRemoveMember', {
+                                  name: user.name,
+                                }),
                               )
+                            ) {
+                              handleRemoveMember(user.id);
                             }
-                          >
-                            {role === 'administrator'
-                              ? t('demoteToRegular')
-                              : t('promoteToAdmin')}
-                          </Dropdown.Item>
-                          {canRemove && (
-                            <Dropdown.Item
-                              className={styles.removeItem}
-                              onClick={() => {
-                                if (
-                                  window.confirm(
-                                    t('confirmRemoveMember', {
-                                      name: user.name,
-                                    }),
-                                  )
-                                ) {
-                                  handleRemoveMember(user.id);
-                                }
-                              }}
-                            >
-                              {t('remove')}
-                            </Dropdown.Item>
-                          )}
-                        </Dropdown.Menu>
-                      </Dropdown>
+                          }
+                        }}
+                        btnStyle={styles.dropdownToggle}
+                        parentContainerStyle="ms-auto"
+                        drop="start"
+                      />
                     )}
                   </div>
                 </ListGroup.Item>
@@ -527,15 +527,10 @@ export default function GroupChatDetails({
                       ({
                         node: userDetails,
                       }: {
-                        node: {
-                          id: string;
-                          name: string;
-                          avatarURL?: string;
-                          role: string;
-                        };
+                        node: InterfaceOrganizationMember;
                       }) =>
                         userDetails.id !== userId &&
-                        !chat.members.edges.some(
+                        !chat.members?.edges?.some(
                           (edge) => edge.node.user.id === userDetails.id,
                         ),
                     )
@@ -544,12 +539,7 @@ export default function GroupChatDetails({
                         {
                           node: userDetails,
                         }: {
-                          node: {
-                            id: string;
-                            name: string;
-                            avatarURL?: string;
-                            role: string;
-                          };
+                          node: InterfaceOrganizationMember;
                         },
                         index: number,
                       ) => (

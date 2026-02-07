@@ -452,17 +452,6 @@ export const REMOVE_MEMBER_MUTATION_PG = gql`
   }
 `;
 
-// to add the admin
-export const ADD_ADMIN_MUTATION = gql`
-  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
-    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      user {
-        _id
-      }
-    }
-  }
-`;
-
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost($input: MutationCreatePostInput!) {
     createPost(input: $input) {
@@ -568,8 +557,27 @@ export const UPDATE_POST_VOTE = gql`
   }
 `;
 
+/**
+ * GraphQL mutation to update community profile settings including logo upload.
+ *
+ * @param logo - Optional logo file (Upload scalar) - sent as multipart request via apollo-upload-client
+ * @param name - Community name
+ * @param websiteURL - Community website URL
+ * @param facebookURL - Facebook profile URL
+ * @param instagramURL - Instagram profile URL
+ * @param xURL - X (Twitter) profile URL
+ * @param githubURL - GitHub organization URL
+ * @param youtubeURL - YouTube channel URL
+ * @param linkedinURL - LinkedIn profile URL
+ * @param redditURL - Reddit community URL
+ * @param slackURL - Slack workspace URL
+ * @param inactivityTimeoutDuration - Session timeout in minutes
+ *
+ * @returns Updated community with id, logoURL (computed MinIO URL) and logoMimeType
+ */
 export const UPDATE_COMMUNITY_PG = gql`
   mutation updateCommunity(
+    $logo: Upload
     $facebookURL: String
     $githubURL: String
     $instagramURL: String
@@ -584,6 +592,7 @@ export const UPDATE_COMMUNITY_PG = gql`
   ) {
     updateCommunity(
       input: {
+        logo: $logo
         facebookURL: $facebookURL
         githubURL: $githubURL
         inactivityTimeoutDuration: $inactivityTimeoutDuration
@@ -598,6 +607,8 @@ export const UPDATE_COMMUNITY_PG = gql`
       }
     ) {
       id
+      logoMimeType
+      logoURL
     }
   }
 `;
@@ -657,10 +668,10 @@ export {
 } from './ActionItemMutations';
 
 export {
-  CREATE_AGENDA_ITEM_CATEGORY_MUTATION,
-  DELETE_AGENDA_ITEM_CATEGORY_MUTATION,
-  UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
-} from './AgendaCategoryMutations';
+  CREATE_AGENDA_FOLDER_MUTATION,
+  DELETE_AGENDA_FOLDER_MUTATION,
+  UPDATE_AGENDA_FOLDER_MUTATION,
+} from './AgendaFolderMutations';
 
 export {
   ADD_ADVERTISEMENT_MUTATION,
@@ -672,6 +683,7 @@ export {
   CREATE_AGENDA_ITEM_MUTATION,
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
+  UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
 } from './AgendaItemMutations';
 
 // Changes the role of a event in an organization and add and remove the event from the organization

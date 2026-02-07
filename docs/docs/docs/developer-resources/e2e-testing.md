@@ -17,6 +17,7 @@ Before running Cypress tests, ensure you have the following setup:
 2. Please follow the complete installation guide at: https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md
 
 ### Application Server
+
 Ensure your local development server is running on `http://localhost:4321`.
 
 ## Directory Structure
@@ -50,7 +51,7 @@ Follow these steps to run end to end tests
 
 ```bash
 
-# Open Cypress Test Runner (Interactive Mode) 
+# Open Cypress Test Runner (Interactive Mode)
 # Preferred for Debugging
 
 pnpm run cy:open
@@ -99,13 +100,78 @@ import { LoginPage } from '../pageObjects/auth/LoginPage';
 const loginPage = new LoginPage();
 
 it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);;
+  loginPage.verifyLoginPage().login(userData.email, userData.password);
 });
 ```
 
 ### Custom Commands
 
 Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
+
+### GraphQL Utilities
+
+To reduce duplication and improve reliability, use the GraphQL helpers defined in
+`cypress/support/graphql-utils.ts`. These helpers intercept GraphQL requests by
+`operationName` and provide a consistent API to mock, alias, and await calls.
+
+> The interceptor respects `CYPRESS_API_URL` via `Cypress.env('apiUrl')`, and
+> falls back to `**/graphql` if not set.
+
+```ts
+// Mock a successful operation using a fixture
+cy.mockGraphQLOperation(
+  'OrganizationListBasic',
+  'api/graphql/organizations.success.json',
+);
+
+// Wait for the mocked operation
+cy.waitForGraphQLOperation('OrganizationListBasic');
+
+// Mock a GraphQL error response
+cy.mockGraphQLError(
+  'CreateOrganization',
+  'Organization name already exists',
+  'CONFLICT',
+);
+
+// Alias a live operation and wait for it
+cy.aliasGraphQLOperation('OrganizationListBasic');
+cy.waitForGraphQLOperation('OrganizationListBasic');
+```
+
+#### Mock cleanup and test isolation
+
+Because `testIsolation` is set to `false`, Cypress intercepts can persist
+between tests in the same spec. Always clear GraphQL mocks after each test to
+avoid leaking intercepts across tests or shards:
+
+```ts
+afterEach(() => {
+  cy.clearAllGraphQLMocks();
+});
+```
+
+If multiple tests in the same spec target the same operationName, explicitly
+clean up at the end of each test:
+
+```ts
+it('mocks a successful query', () => {
+  cy.mockGraphQLOperation(
+    'OrganizationListBasic',
+    'api/graphql/organizations.success.json',
+  );
+  // test steps...
+  cy.clearAllGraphQLMocks();
+});
+```
+
+Best practices:
+
+- Prefer `testIsolation: true` for new specs when possible.
+- In parallel/sharded runs, mocks can race if not cleared; keep mocks scoped per
+  test and always reset intercepts after each test.
+- If multiple mocks target the same operation, ensure explicit cleanup between
+  them or scope each mock to a single test to avoid collisions.
 
 ### Test Data
 
@@ -118,16 +184,62 @@ cy.fixture('users').then((users) => {
 });
 ```
 
+#### Fixture library structure
+
+Fixtures are organized by domain under `cypress/fixtures/` to keep tests
+deterministic and consistent:
+
+- `auth/` - credential and user fixtures for login flows
+- `admin/` - organizations, events, people, action items, advertisements, tags,
+  venues
+- `user/` - posts, volunteers, campaigns, donations
+- `api/graphql/` - GraphQL responses grouped by operationName
+
+Datasets are intentionally minimal, include edge cases (empty arrays, long
+names, Unicode), and avoid PII.
+
+Note: `auth/users.json` contains user metadata (id, name, email, role).
+Use `auth/credentials.json` for login credentials in Cypress tests.
+
+Example usage with GraphQL utilities:
+
+```ts
+cy.mockGraphQLOperation(
+  'OrganizationListBasic',
+  'api/graphql/organizations.success.json',
+);
+
+cy.mockGraphQLOperation(
+  'CreateOrganization',
+  'api/graphql/createOrganization.success.json',
+);
+
+cy.mockGraphQLOperation(
+  'CreateOrganization',
+  'api/graphql/createOrganization.error.conflict.json',
+);
+```
+
+Example usage with JSON fixtures:
+
+```ts
+cy.fixture('admin/organizations').then((data) => {
+  expect(data.organizations).to.have.length(2);
+});
+```
+
 ### Test Coverage Report
 
 After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
 
 1. **Run Cypress tests** to collect coverage data:
+
    ```bash
    pnpm run cy:run
    ```
 
 2. **Generate HTML coverage report** using nyc:
+
    ```bash
    npx nyc --reporter=html
    ```

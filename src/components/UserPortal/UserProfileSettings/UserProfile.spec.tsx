@@ -5,9 +5,8 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import translation from '../../../../public/locales/en/translation.json';
 import common from '../../../../public/locales/en/common.json';
-import { describe, it, expect, afterEach, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -26,6 +25,7 @@ describe('UserProfile Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
   it('renders with complete user data and shows truncated name and email', () => {
     const userDetails = {
       firstName: 'Christopher',
@@ -35,7 +35,7 @@ describe('UserProfile Component', () => {
       image: 'profile-image-url',
     };
 
-    const { getByText, getByAltText, getByTestId } = renderWithProviders(
+    const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
 
@@ -43,9 +43,7 @@ describe('UserProfile Component', () => {
 
     expect(getByText('john..@example.com')).toBeInTheDocument();
 
-    const profileImage = getByAltText('profile picture');
-    expect(profileImage).toBeInTheDocument();
-    expect(profileImage).toHaveAttribute('src', 'profile-image-url');
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
     expect(
       getByText(
         `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
@@ -54,7 +52,7 @@ describe('UserProfile Component', () => {
 
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
-  it('renders Avatar when image is null', () => {
+  it('renders ProfileAvatarDisplay fallback when image is null', () => {
     const userDetails = {
       firstName: 'Alice',
       lastName: 'Smith',
@@ -63,10 +61,10 @@ describe('UserProfile Component', () => {
       image: 'null',
     };
 
-    const { getByAltText } = renderWithProviders(
+    const { getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByAltText(translation.settings.dummyPicture)).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
     const userDetails = {

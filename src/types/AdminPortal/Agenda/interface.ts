@@ -1,74 +1,320 @@
-import type { ChangeEvent } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 
+/**
+ * Defines the structure for agenda item category information.
+ */
 export interface InterfaceAgendaItemCategoryInfo {
-  _id: string;
+  id: string;
   name: string;
   description: string;
-  createdBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
+  creator: {
+    id: string;
+    name: string;
   };
 }
 
+/**
+ * Defines the structure for a list of agenda item categories by organization.
+ */
+export interface InterfaceAgendaItemCategoryList {
+  agendaCategoriesByEventId: InterfaceAgendaItemCategoryInfo[];
+}
+
+/**
+ * Defines the structure for agenda item information.
+ */
+export interface InterfaceAgendaItemInfo {
+  id: string;
+  name: string;
+  description: string;
+  duration: string;
+  sequence: number;
+  type?: string;
+  category: {
+    id: string;
+    name: string;
+    description: string;
+  };
+  attachments?: {
+    id: string;
+    name: string;
+    mimeType: string;
+    fileHash: string;
+    objectName: string;
+  }[];
+  creator: {
+    id: string;
+    name: string;
+  };
+  url: {
+    id: string;
+    url: string;
+  }[];
+  folder: {
+    id: string;
+    name: string;
+  } | null;
+  event: {
+    id: string;
+    name: string;
+  };
+}
+
+/**
+ * Defines the structure for agenda folder information.
+ * Represents a folder/section containing grouped agenda items for an event.
+ */
+export interface InterfaceAgendaFolderInfo {
+  id: string;
+  name: string;
+  description?: string;
+  sequence: number;
+  key?: string;
+  isDefaultFolder?: boolean;
+  items: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        description: string;
+        duration: string;
+        sequence: number;
+        attachments?: {
+          id: string;
+          name: string;
+          mimeType: string;
+          objectName: string;
+          fileHash: string;
+        }[];
+        category: {
+          id: string;
+          name: string;
+          description: string;
+        };
+        creator: {
+          id: string;
+          name: string;
+        };
+        url: {
+          id: string;
+          url: string;
+        }[];
+        folder: {
+          id: string;
+          name: string;
+        } | null;
+        event: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
+}
+
+/**
+ * Defines the structure for a list of agenda folders by event.
+ */
+export interface InterfaceAgendaFolderList {
+  agendaFoldersByEventId: InterfaceAgendaFolderInfo[];
+}
+
+/**
+ * Defines the structure for file attachments in agenda items.
+ */
+export interface InterfaceAttachment {
+  name: string;
+  mimeType: string;
+  fileHash: string;
+  objectName: string;
+  previewUrl?: string;
+}
+
+/**
+ * Defines the form state structure for creating a new agenda item.
+ */
 export interface InterfaceCreateFormStateType {
-  agendaItemCategoryIds: string[];
+  id: string;
+  folderId: string | null;
   title: string;
   description: string;
   duration: string;
-  attachments: string[];
+  attachments: InterfaceAttachment[];
   urls: string[];
-}
-
-export interface InterfaceFormStateType {
-  agendaItemCategoryIds: string[];
-  agendaItemCategoryNames: string[];
-  title: string;
-  description: string;
-  duration: string;
-  attachments: string[];
-  urls: string[];
-  createdBy: {
-    firstName: string;
-    lastName: string;
+  creator: {
+    name: string;
   };
+  categoryId: string;
 }
 
+/**
+ * Defines the form state structure for viewing/updating an agenda item.
+ */
+export interface InterfaceFormStateType {
+  id: string;
+  name: string;
+  description: string;
+  duration: string;
+  category: string;
+  attachments: InterfaceAttachment[];
+  url: string[];
+  folder?: string;
+}
+
+/**
+ * Props for the AgendaItemsCreateModal component.
+ */
 export interface InterfaceAgendaItemsCreateModalProps {
-  agendaItemCreateModalIsOpen: boolean;
-  hideCreateModal: () => void;
-  formState: InterfaceCreateFormStateType;
-  setFormState: (
-    state: React.SetStateAction<InterfaceCreateFormStateType>,
-  ) => void;
-  createAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  isOpen: boolean;
+  hide: () => void;
+  eventId: string;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
+  agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
+  refetchAgendaFolder: () => void;
 }
 
-export interface InterfaceAgendaItemsPreviewModalProps {
-  agendaItemPreviewModalIsOpen: boolean;
-  hidePreviewModal: () => void;
-  showUpdateModal: () => void;
-  toggleDeleteModal: () => void;
-  formState: InterfaceFormStateType;
-  t: (key: string) => string;
-}
-
+/**
+ * Props for the AgendaItemsUpdateModal component.
+ */
 export interface InterfaceAgendaItemsUpdateModalProps {
-  agendaItemUpdateModalIsOpen: boolean;
-  hideUpdateModal: () => void;
-  formState: InterfaceFormStateType;
-  setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
-  updateAgendaItemHandler: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaItemId: string;
+  itemFormState: InterfaceFormStateType;
+  setItemFormState: (
+    state: React.SetStateAction<InterfaceFormStateType>,
+  ) => void;
   t: (key: string) => string;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
+  agendaFolderData: InterfaceAgendaFolderInfo[] | undefined;
+  refetchAgendaFolder: () => void;
 }
 
+/**
+ * Props for the AgendaItemsDeleteModal component.
+ */
 export interface InterfaceAgendaItemsDeleteModalProps {
-  agendaItemDeleteModalIsOpen: boolean;
-  toggleDeleteModal: () => void;
-  deleteAgendaItemHandler: () => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  agendaItemId: string;
   t: (key: string) => string;
   tCommon: (key: string) => string;
+  refetchAgendaFolder: () => void;
+}
+
+/**
+ * Props for the AgendaFolderDeleteModal component.
+ */
+export interface InterfaceAgendaFolderDeleteModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  agendaFolderId: string;
+  refetchAgendaFolder: () => void;
+  t: (key: string) => string;
+  tCommon: (key: string) => string;
+}
+
+export interface InterfaceAgendaFolderCreateFormStateType {
+  id: string;
+  name: string;
+  description: string;
+  creator: {
+    name: string;
+  };
+}
+
+export interface InterfaceAgendaFolderCreateModalProps {
+  isOpen: boolean;
+  hide: () => void;
+  eventId: string;
+  agendaFolderData: InterfaceAgendaFolderList | undefined;
+  t: (key: string) => string;
+  refetchAgendaFolder: () => void;
+}
+
+export interface InterfaceAgendaFolderUpdateFormStateType {
+  id: string;
+  name: string;
+  description: string;
+  creator: {
+    id: string;
+    name: string;
+  };
+}
+
+export interface InterfaceAgendaFolderUpdateModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  agendaFolderId: string;
+  folderFormState: InterfaceAgendaFolderUpdateFormStateType;
+  setFolderFormState: (
+    state: React.SetStateAction<InterfaceAgendaFolderUpdateFormStateType>,
+  ) => void;
+  refetchAgendaFolder: () => void;
+  t: (key: string) => string;
+}
+
+export interface InterfaceItemFormStateType {
+  id: string;
+  name: string;
+  description: string;
+  duration: string;
+  attachment?: {
+    mimeType: string;
+    previewUrl: string;
+  }[];
+  creator: {
+    id: string;
+    name: string;
+  };
+  category: {
+    name: string;
+    description: string;
+  };
+  url: string[];
+}
+
+/**
+ * Props for the AgendaItemsPreviewModal component.
+ *
+ * Defines the data and callback functions required to display
+ * agenda item details in a preview modal and perform related actions
+ * such as updating or deleting an agenda item.
+ */
+export interface InterfaceAgendaItemsPreviewModalProps {
+  isOpen: boolean;
+  hidePreviewModal: () => void;
+  formState: InterfaceItemFormStateType;
+  t: (key: string) => string;
+}
+
+/**
+ * Props for the AgendaDragAndDrop component.
+ *
+ * Defines the data and callback handlers required to render
+ * agenda folders and agenda items with drag-and-drop support,
+ * along with edit, preview, and delete actions.
+ */
+export interface InterfaceAgendaDragAndDropProps {
+  folders: InterfaceAgendaFolderInfo[];
+  setFolders: Dispatch<SetStateAction<InterfaceAgendaFolderInfo[]>>;
+  agendaFolderConnection: 'Event' | 'Organization';
+  t: (key: string) => string;
+
+  onEditFolder: (folder: InterfaceAgendaFolderInfo) => void;
+  onDeleteFolder: (folder: InterfaceAgendaFolderInfo) => void;
+
+  onPreviewItem: (item: InterfaceAgendaItemInfo) => void;
+  onEditItem: (item: InterfaceAgendaItemInfo) => void;
+  onDeleteItem: (item: InterfaceAgendaItemInfo) => void;
+  refetchAgendaFolder: () => void;
+}
+
+/**
+ * Props for the useAgendaMutations hook.
+ */
+export interface InterfaceUseAgendaMutationsProps {
+  refetchAgendaFolder: () => void;
+  t: (key: string) => string;
 }
