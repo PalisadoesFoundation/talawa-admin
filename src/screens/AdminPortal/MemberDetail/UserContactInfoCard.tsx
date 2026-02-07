@@ -14,6 +14,12 @@ interface InterfaceUserContactInfoCardProps {
   emailAddress: string;
 }
 
+/**
+ * UserContactInfoCard component renders the user's contact information card.
+ *
+ * This component displays the user's email, phone numbers, and address details.
+ * It also includes a country selector.
+ */
 export const UserContactInfoCard: React.FC<
   InterfaceUserContactInfoCardProps
 > = ({ formState, onFieldChange, emailAddress }) => {
