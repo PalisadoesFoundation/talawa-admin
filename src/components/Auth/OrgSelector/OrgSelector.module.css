@@ -1,32 +1,32 @@
 .orgSelectorDropdown {
-    background-color: var(--orgSelector-dropdown-bg);
-    border: 1px solid var(--orgSelector-dropdown-border);
-    box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
-    z-index: 1000;
-    max-height: 300px;
-    overflow-y: auto;
+  background-color: var(--orgSelector-dropdown-bg);
+  border: 1px solid var(--orgSelector-dropdown-border);
+  box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .orgSelectorOption {
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    transition: background-color 0.15s ease-in-out;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
 }
 
 .orgSelectorOption:hover {
-    background-color: var(--orgSelector-option-hover-bg);
+  background-color: var(--orgSelector-option-hover-bg);
 }
 
 .orgSelectorOptionHighlighted {
-    background-color: var(--orgSelector-option-hover-bg);
+  background-color: var(--orgSelector-option-hover-bg);
 }
 
 .orgSelectorOptionSelected {
-    background-color: var(--orgSelector-option-selected-bg);
+  background-color: var(--orgSelector-option-selected-bg);
 }
 
 .orgSelectorNoResults {
-    padding: 0.5rem 1rem;
-    color: var(--orgSelector-no-results-color);
-    font-style: italic;
+  padding: 0.5rem 1rem;
+  color: var(--orgSelector-no-results-color);
+  font-style: italic;
 }

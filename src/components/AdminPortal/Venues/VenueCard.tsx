@@ -85,7 +85,7 @@ const VenueCard = ({
             <Card.Text className={styles.text}>
               {/* Venue description with truncation if too long */}
               {venueItem.node.description &&
-                venueItem.node.description.length > 40
+              venueItem.node.description.length > 40
                 ? venueItem.node.description.slice(0, 40) + '...'
                 : venueItem.node.description}
             </Card.Text>

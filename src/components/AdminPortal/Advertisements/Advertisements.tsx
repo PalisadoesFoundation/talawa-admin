@@ -156,20 +156,20 @@ export default function Advertisements(): JSX.Element {
           const merged = mergedAdvertisements(prevAds, ads);
           return searchValue
             ? merged.filter(
-              (ad) =>
-                ad.name.toLowerCase().includes(searchValue) ||
-                (ad.description ?? '').toLowerCase().includes(searchValue),
-            )
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
             : merged;
         });
       } else {
         setCompletedAdvertisements(
           searchValue
             ? ads.filter(
-              (ad) =>
-                ad.name.toLowerCase().includes(searchValue) ||
-                (ad.description ?? '').toLowerCase().includes(searchValue),
-            )
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
             : ads,
         );
       }
@@ -189,20 +189,20 @@ export default function Advertisements(): JSX.Element {
           const merged = mergedAdvertisements(prevAds, ads);
           return searchValue
             ? merged.filter(
-              (ad) =>
-                ad.name.toLowerCase().includes(searchValue) ||
-                (ad.description ?? '').toLowerCase().includes(searchValue),
-            )
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
             : merged;
         });
       } else {
         setActiveAdvertisements(
           searchValue
             ? ads.filter(
-              (ad) =>
-                ad.name.toLowerCase().includes(searchValue) ||
-                (ad.description ?? '').toLowerCase().includes(searchValue),
-            )
+                (ad) =>
+                  ad.name.toLowerCase().includes(searchValue) ||
+                  (ad.description ?? '').toLowerCase().includes(searchValue),
+              )
             : ads,
         );
       }

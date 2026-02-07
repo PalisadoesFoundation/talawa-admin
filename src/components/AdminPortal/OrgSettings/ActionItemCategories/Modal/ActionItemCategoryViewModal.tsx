@@ -70,10 +70,11 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             }
             startAdornment={
               <Circle
-                className={`${styles.statusCircle} ${category.isDisabled
+                className={`${styles.statusCircle} ${
+                  category.isDisabled
                     ? styles.statusDisabled
                     : styles.statusActive
-                  }`}
+                }`}
               />
             }
             disabled

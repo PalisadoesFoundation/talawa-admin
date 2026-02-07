@@ -74,5 +74,5 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
     </>
   );
 }
-export { };
+export {};
 export default UserListCard;

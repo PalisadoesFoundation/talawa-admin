@@ -125,7 +125,7 @@ export const CheckInModal = ({
           data={props.value}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
-        // isRecurring={isRecurring}
+          // isRecurring={isRecurring}
         />
       ),
     },

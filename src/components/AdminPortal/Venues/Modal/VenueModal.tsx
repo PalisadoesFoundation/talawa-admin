@@ -133,8 +133,8 @@ const VenueModal = ({
         description: formState.description?.trim() || '',
         ...(formState.attachments &&
           formState.attachments.length > 0 && {
-          attachments: formState.attachments,
-        }),
+            attachments: formState.attachments,
+          }),
       };
       try {
         const result = await mutate({ variables });
@@ -174,8 +174,8 @@ const VenueModal = ({
           description: formState.description?.trim() || '',
           ...(formState.attachments &&
             formState.attachments.length > 0 && {
-            attachments: formState.attachments,
-          }),
+              attachments: formState.attachments,
+            }),
         };
 
         const result = await mutate({ variables });
@@ -196,8 +196,8 @@ const VenueModal = ({
           organizationId: orgId,
           ...(formState.attachments &&
             formState.attachments.length > 0 && {
-            attachments: formState.attachments,
-          }),
+              attachments: formState.attachments,
+            }),
         };
 
         const result = await mutate({ variables });

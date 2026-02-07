@@ -99,9 +99,7 @@ const ProfileDropdown = ({
   ];
 
   return (
-    <div
-      className={`${styles.customDropdown}`}
-    >
+    <div className={`${styles.customDropdown}`}>
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
