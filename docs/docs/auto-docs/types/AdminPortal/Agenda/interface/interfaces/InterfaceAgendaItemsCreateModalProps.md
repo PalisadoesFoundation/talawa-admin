@@ -4,29 +4,39 @@
 
 # Interface: InterfaceAgendaItemsCreateModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L37)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L167)
+
+Props for the AgendaItemsCreateModal component.
 
 ## Properties
+
+### agendaFolderData
+
+> **agendaFolderData**: [`InterfaceAgendaFolderInfo`](InterfaceAgendaFolderInfo.md)[]
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L173)
+
+***
 
 ### agendaItemCategories
 
 > **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`](InterfaceAgendaItemCategoryInfo.md)[]
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L46)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L172)
 
 ***
 
-### agendaItemCreateModalIsOpen
+### eventId
 
-> **agendaItemCreateModalIsOpen**: `boolean`
+> **eventId**: `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L38)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L170)
 
 ***
 
-### createAgendaItemHandler()
+### hide()
 
-> **createAgendaItemHandler**: (`e`) => `Promise`\<`void`\>
+> **hide**: () => `void`
 
 Defined in: [src/types/AdminPortal/Agenda/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L44)
 
@@ -62,17 +72,19 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:39](https://github.com/Pa
 
 ***
 
-### setFormState()
+### isOpen
 
-> **setFormState**: (`state`) => `void`
+> **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L41)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L168)
 
-#### Parameters
+***
 
-##### state
+### refetchAgendaFolder()
 
-`SetStateAction`\<[`InterfaceCreateFormStateType`](InterfaceCreateFormStateType.md)\>
+> **refetchAgendaFolder**: () => `void`
+
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L174)
 
 #### Returns
 
@@ -84,7 +96,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:41](https://github.com/Pa
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L45)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L171)
 
 #### Parameters
 

@@ -4,23 +4,21 @@
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L49)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L285)
+
+Props for the AgendaItemsPreviewModal component.
+
+Defines the data and callback functions required to display
+agenda item details in a preview modal and perform related actions
+such as updating or deleting an agenda item.
 
 ## Properties
 
-### agendaItemPreviewModalIsOpen
-
-> **agendaItemPreviewModalIsOpen**: `boolean`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L50)
-
-***
-
 ### formState
 
-> **formState**: [`InterfaceFormStateType`](InterfaceFormStateType.md)
+> **formState**: [`InterfaceItemFormStateType`](InterfaceItemFormStateType.md)
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L54)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L288)
 
 ***
 
@@ -28,7 +26,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:54](https://github.com/Pa
 
 > **hidePreviewModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L51)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L287)
 
 #### Returns
 
@@ -36,15 +34,11 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:51](https://github.com/Pa
 
 ***
 
-### showUpdateModal()
+### isOpen
 
-> **showUpdateModal**: () => `void`
+> **isOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L52)
-
-#### Returns
-
-`void`
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L286)
 
 ***
 
@@ -52,7 +46,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:52](https://github.com/Pa
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L55)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L289)
 
 #### Parameters
 
@@ -63,15 +57,3 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:55](https://github.com/Pa
 #### Returns
 
 `string`
-
-***
-
-### toggleDeleteModal()
-
-> **toggleDeleteModal**: () => `void`
-
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L53)
-
-#### Returns
-
-`void`
