@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { RECAPTCHA_SITE_KEY } from 'Constant/constant';
+import Button from 'shared-components/Button';
 import { FormField } from '../../../shared-components/Auth/FormField/FormField';
 import { EmailField } from '../../../shared-components/Auth/EmailField/EmailField';
 import { PasswordField } from '../../../shared-components/Auth/PasswordField/PasswordField';
@@ -18,6 +19,7 @@ import type {
   IRegistrationFormProps,
   IRegistrationFormData,
 } from '../../../types/Auth/RegistrationForm/interface';
+import styles from './RegistrationForm.module.css';
 
 /**
  * RegistrationForm component for user registration with validation and reCAPTCHA support
@@ -154,16 +156,17 @@ export const RegistrationForm = ({
           />
         </div>
       )}
-      <button
+      <Button
         type="submit"
         disabled={
           loading ||
           (enableRecaptcha && !!RECAPTCHA_SITE_KEY && !recaptchaToken)
         }
         data-testid="registrationBtn"
+        className={styles.submitBtn}
       >
         {loading ? t('loading') : t('register')}
-      </button>
+      </Button>
     </form>
   );
 };

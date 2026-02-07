@@ -11,6 +11,7 @@ import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
 } from '../../../types/Auth/LoginForm/interface';
+import styles from './LoginForm.module.css';
 
 /**
  * Reusable login form component that composes EmailField and PasswordField.
@@ -177,7 +178,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         disabled={loading || isRecaptchaBlocking}
         data-testid={`${testId}-submit`}
         data-cy="loginBtn"
-        className="w-100 mt-3"
+        className={styles.submitBtn}
       >
         {loading ? t('loading') : tCommon('login')}
       </Button>
