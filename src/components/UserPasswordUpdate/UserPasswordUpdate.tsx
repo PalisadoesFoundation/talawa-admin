@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client/react';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'shared-components/Button';
-import styles from '../../style/app-fixed.module.css';
+import styles from './UserPasswordUpdate.module.css';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 

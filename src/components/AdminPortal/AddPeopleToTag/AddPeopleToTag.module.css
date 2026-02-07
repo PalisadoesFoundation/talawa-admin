@@ -1,4 +1,107 @@
-.dataGridContainer {
-  height: 300px;
-  overflow: auto;
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--error-icon-size, 40px);
+  color: var(--bs-danger, var(--errorIcon-color));
+  margin-bottom: 1rem;
+}
+
+.errorIcon::before {
+  content: '⚠️';
+  margin-right: 0.5rem;
+}
+
+.tableHeader {
+  background-color: var(--tableHeader-bg);
+  color: var(--tableHeader-color);
+}
+
+.editButton {
+  background-color: var(--editButton-bg);
+  color: var(--editButton-font);
+  border: 1px solid var(--editButton-border);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--editButton-bg-hover);
+  border: 1px solid var(--editButton-border-hover);
+}
+
+.removeButton {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  color: var(--removeButton-color-hover) !important;
+}
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.modalHeader {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  background-color: var(--modalHeader-bg) !important;
+  border-bottom: 3.5px solid var(--addButton-bg) !important;
+  padding: 1rem !important;
+}
+
+.scrollContainer {
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.memberBadge {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--memberBadge-box-shadow);
+  max-width: calc(100% - 2rem);
+}
+
+.removeFilterIcon {
+  cursor: pointer;
+}
+
+.loadingDiv {
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: 120px;
+  overflow-y: auto;
 }

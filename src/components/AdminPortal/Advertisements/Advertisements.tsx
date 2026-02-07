@@ -32,7 +32,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client/react';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
@@ -156,20 +156,20 @@ export default function Advertisements(): JSX.Element {
           const merged = mergedAdvertisements(prevAds, ads);
           return searchValue
             ? merged.filter(
-                (ad) =>
-                  ad.name.toLowerCase().includes(searchValue) ||
-                  (ad.description ?? '').toLowerCase().includes(searchValue),
-              )
+              (ad) =>
+                ad.name.toLowerCase().includes(searchValue) ||
+                (ad.description ?? '').toLowerCase().includes(searchValue),
+            )
             : merged;
         });
       } else {
         setCompletedAdvertisements(
           searchValue
             ? ads.filter(
-                (ad) =>
-                  ad.name.toLowerCase().includes(searchValue) ||
-                  (ad.description ?? '').toLowerCase().includes(searchValue),
-              )
+              (ad) =>
+                ad.name.toLowerCase().includes(searchValue) ||
+                (ad.description ?? '').toLowerCase().includes(searchValue),
+            )
             : ads,
         );
       }
@@ -189,20 +189,20 @@ export default function Advertisements(): JSX.Element {
           const merged = mergedAdvertisements(prevAds, ads);
           return searchValue
             ? merged.filter(
-                (ad) =>
-                  ad.name.toLowerCase().includes(searchValue) ||
-                  (ad.description ?? '').toLowerCase().includes(searchValue),
-              )
+              (ad) =>
+                ad.name.toLowerCase().includes(searchValue) ||
+                (ad.description ?? '').toLowerCase().includes(searchValue),
+            )
             : merged;
         });
       } else {
         setActiveAdvertisements(
           searchValue
             ? ads.filter(
-                (ad) =>
-                  ad.name.toLowerCase().includes(searchValue) ||
-                  (ad.description ?? '').toLowerCase().includes(searchValue),
-              )
+              (ad) =>
+                ad.name.toLowerCase().includes(searchValue) ||
+                (ad.description ?? '').toLowerCase().includes(searchValue),
+            )
             : ads,
         );
       }

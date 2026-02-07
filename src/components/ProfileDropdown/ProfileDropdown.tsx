@@ -36,8 +36,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import dropdownStyles from './ProfileDropdown.module.css';
+import styles from './ProfileDropdown.module.css';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
@@ -95,13 +94,13 @@ const ProfileDropdown = ({
       label: tCommon('logout'),
       action: handleLogout,
       testId: 'logoutBtn',
-      className: dropdownStyles.logoutBtn,
+      className: styles.logoutBtn,
     },
   ];
 
   return (
     <div
-      className={`${styles.customDropdown} ${dropdownStyles.profileDropdown}`}
+      className={`${styles.customDropdown}`}
     >
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
@@ -142,7 +141,7 @@ const ProfileDropdown = ({
         ariaLabel={tCommon('userProfileMenu')}
         dataTestIdPrefix="profile-dropdown"
         buttonLabel=""
-        parentContainerStyle={dropdownStyles.dropdownButtonContainer}
+        parentContainerStyle={styles.dropdownButtonContainer}
         btnStyle={styles.dropdownToggle}
       />
     </div>

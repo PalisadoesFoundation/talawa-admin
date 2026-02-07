@@ -36,7 +36,7 @@ export interface InterfaceOrgSelectorProps {
   disabled?: boolean;
 
   /** Whether the field is required - shows asterisk if true */
-  _required?: boolean;
+  required?: boolean;
 
   /** Optional custom label text - defaults to "Organization" */
   label?: string;

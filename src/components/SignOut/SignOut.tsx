@@ -36,7 +36,7 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './SignOut.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';

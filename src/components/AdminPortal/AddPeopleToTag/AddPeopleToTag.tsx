@@ -48,7 +48,7 @@ import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddPeopleToTag.module.css';
 import { Stack } from '@mui/material';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';

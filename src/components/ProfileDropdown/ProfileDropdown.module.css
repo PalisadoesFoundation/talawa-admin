@@ -1,3 +1,90 @@
+.customDropdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  background-color: var(--profile-container-bg);
+  border: none;
+  padding: 5px 12px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.profileContainer:focus {
+  background-color: var(--profile-container-bg-focus);
+  outline: none;
+}
+
+.imageContainer {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatarStyle {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.dropdownToggle {
+  display: flex !important;
+  align-items: center !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  color: #000000 !important;
+  box-shadow: none !important;
+}
+
+.dropdownToggle::after {
+  display: none !important;
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: 8px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.primaryText {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--primaryText-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.secondaryText {
+  font-size: 11px;
+  color: var(--secondaryText-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .logoutBtn {
   color: var(--color-red-500);
+}
+
+.dropdownButtonContainer {
+  position: relative;
 }

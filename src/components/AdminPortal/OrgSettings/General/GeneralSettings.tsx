@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import styles from 'style/app-fixed.module.css';
+import styles from './GeneralSettings.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';

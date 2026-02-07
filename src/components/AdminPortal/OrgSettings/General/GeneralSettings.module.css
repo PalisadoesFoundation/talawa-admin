@@ -1,0 +1,27 @@
+.settingsBody {
+    margin: 2.5rem 0;
+    padding: 0;
+}
+
+.deleteCardHeader {
+    background-color: var(--activeTab-bg);
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.cardHeading {
+    padding-left: 0.3rem !important;
+}
+
+.cardBody {
+    padding: 1rem 0rem;
+    display: flex;
+    width: 100% !important;
+    justify-content: center;
+}
+
+.orgCardSettings {
+    padding: 1rem 1.5rem;
+}

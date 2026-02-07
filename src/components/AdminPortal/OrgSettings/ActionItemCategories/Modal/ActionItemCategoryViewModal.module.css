@@ -11,3 +11,20 @@
 .statusDisabled {
   color: var(--errorIcon-color);
 }
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--noOutline-input-disables) !important;
+}
+
+.noOutline textarea:disabled {
+  color: var(--noOutline-textarea-disables) !important;
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none !important;
+}

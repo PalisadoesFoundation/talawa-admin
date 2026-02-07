@@ -9,7 +9,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserListCard.module.css';
 import { useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceCreateAdminMutation } from 'utils/interfaces';
@@ -74,5 +74,5 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
     </>
   );
 }
-export {};
+export { };
 export default UserListCard;

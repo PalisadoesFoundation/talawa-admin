@@ -1,0 +1,36 @@
+.signOutContainer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    text-align: start;
+    margin-bottom: 0.8rem;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 0.8rem;
+    padding-left: 0.8rem;
+    outline: none;
+    border: none;
+    background-color: var(--signOut-container-bg);
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.signOutButton {
+    background-color: var(--signOutBtn-bg) !important;
+    border: none !important;
+    border-radius: 5px !important;
+    margin-left: 10px;
+}
+
+.signOutDisabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.sidebarText {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--primaryText-color);
+}

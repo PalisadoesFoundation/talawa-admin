@@ -28,7 +28,7 @@ import type {
 } from 'shared-components/DataGridWrapper';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import styles from 'style/app-fixed.module.css';
+import styles from './CheckInModal.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -125,7 +125,7 @@ export const CheckInModal = ({
           data={props.value}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
-          // isRecurring={isRecurring}
+        // isRecurring={isRecurring}
         />
       ),
     },

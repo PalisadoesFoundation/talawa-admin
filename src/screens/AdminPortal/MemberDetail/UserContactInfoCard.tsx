@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { countryOptions } from 'utils/formEnumFields';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
-import styles from './UserContactDetails.module.css';
+import styles from './UserContactInfoCard.module.css';
 import type { UserContactFormState } from './UserContactDetails';
 
 interface InterfaceUserContactInfoCardProps {

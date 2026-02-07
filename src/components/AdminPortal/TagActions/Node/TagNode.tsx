@@ -38,12 +38,11 @@ import type {
 } from 'utils/interfaces';
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import styles from 'style/app-fixed.module.css';
+import styles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
 import type { TFunction } from 'i18next';
-import componentStyle from '../TagAction.module.css';
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -137,7 +136,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className={`me-3 ${componentStyle.cursorPointer}`}
+              className={`me-3 ${styles.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
@@ -146,7 +145,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className={`me-2 ${componentStyle.cursorPointer}`}
+              className={`me-2 ${styles.cursorPointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -160,7 +159,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className={`ms-1 me-2 ${componentStyle.cursorPointer}`}
+              className={`ms-1 me-2 ${styles.cursorPointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -186,7 +185,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             id={`subTagsScrollableDiv${tag._id}`}
             // i18n-ignore-next-line
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            className={componentStyle.subtagsScrollableDiv}
+            className={styles.subtagsScrollableDiv}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

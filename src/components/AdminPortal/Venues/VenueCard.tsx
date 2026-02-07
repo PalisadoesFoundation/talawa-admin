@@ -32,7 +32,7 @@ import { Card } from 'react-bootstrap';
 import { Button } from 'shared-components/Button';
 import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
-import styles from 'style/app-fixed.module.css';
+import styles from './VenueCard.module.css';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
@@ -85,7 +85,7 @@ const VenueCard = ({
             <Card.Text className={styles.text}>
               {/* Venue description with truncation if too long */}
               {venueItem.node.description &&
-              venueItem.node.description.length > 40
+                venueItem.node.description.length > 40
                 ? venueItem.node.description.slice(0, 40) + '...'
                 : venueItem.node.description}
             </Card.Text>

@@ -2,7 +2,7 @@ import React, { useState, useMemo, useRef, useEffect, useId } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceOrgSelectorProps } from '../../../types/Auth/OrgSelector/interface';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './OrgSelector.module.css';
 
 /**
  * Reusable organization selector component with search/autocomplete and accessibility support.
@@ -30,7 +30,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
   error,
   testId,
   disabled = false,
-  _required = false,
+  required = false,
   label,
 }) => {
   const { t } = useTranslation('translation', {
@@ -191,11 +191,10 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
                   role="option"
                   aria-selected={org._id === value}
                   tabIndex={-1}
-                  className={`${styles.orgSelectorOption} ${
-                    index === highlightedIndex
-                      ? styles.orgSelectorOptionHighlighted
-                      : ''
-                  } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
+                  className={`${styles.orgSelectorOption} ${index === highlightedIndex
+                    ? styles.orgSelectorOptionHighlighted
+                    : ''
+                    } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
                   onClick={() => handleOptionClick(org._id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
