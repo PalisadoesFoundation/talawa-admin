@@ -365,7 +365,7 @@ export default function PostsPage() {
                 disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
-                className={`${styles.createButton}`}
+                className={styles.createButton}
               >
                 <Add />
                 {t('createPost')}

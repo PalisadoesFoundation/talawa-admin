@@ -415,10 +415,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       resetButtonText={tErrors('resetButton')}
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
     >
-      <div
-        className={`d-flex flex-column ${styles.chatAreaContainer}`}
-        id="chat-area"
-      >
+      <div className={styles.chatAreaContainer} id="chat-area">
         {!props.selectedContact ? (
           <EmptyChatState message={t('selectContact')} />
         ) : (
@@ -430,9 +427,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               isGroup={chat?.isGroup}
               onGroupClick={openGroupChatDetails}
             />
-            <div
-              className={`d-flex flex-grow-1 flex-column ${styles.flexContainerMinHeight}`}
-            >
+            <div className={styles.flexContainerMinHeight}>
               <CursorPaginationManager
                 query={CHAT_BY_ID}
                 queryVariables={{

@@ -8,7 +8,21 @@
 }
 
 .roleBadge {
+  --badge-padding-x: 0.65em;
+  --badge-padding-y: 0.35em;
+
+  display: inline-block;
+  padding: var(--badge-padding-y) var(--badge-padding-x);
   font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: calc(var(--radius-xs) + var(--radius-sm));
+  background-color: var(--color-green-500);
+  color: var(--color-gray-900);
+  margin-left: var(--space-3);
 }
 
 .hiddenInput {
@@ -123,8 +137,9 @@
 
 .chatUserDetails {
   display: flex;
-  gap: var(--space-5);
   align-items: center;
+  width: 100%;
+  gap: var(--space-5);
 }
 
 .input {
@@ -149,4 +164,30 @@
 
 .userData {
   /* TableContainer styling - can be empty or add specific styles if needed */
+}
+
+.headerSection {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.headerGroupInfo {
+  margin-bottom: 0;
+  line-height: var(--line-height-normal);
+  font-size: var(--font-size-xl);
+}
+
+.userName {
+  margin-left: var(--space-3);
+}
+
+.dropdown {
+  margin-left: auto;
+}
+
+.profileAvatarContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
 }

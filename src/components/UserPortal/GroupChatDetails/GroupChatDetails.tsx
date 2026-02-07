@@ -271,8 +271,8 @@ export default function GroupChatDetails({
         dataTestId="groupChatDetailsModal"
         className={styles.modalContent}
         headerContent={
-          <div className="d-flex justify-content-between w-100">
-            <div className="modal-title h4">{t('groupInfo')}</div>
+          <div className={styles.headerSection}>
+            <div className={styles.headerGroupInfo}>{t('groupInfo')}</div>
             {currentUserRole === 'administrator' && (
               <Button
                 variant="outline-danger"
@@ -409,22 +409,16 @@ export default function GroupChatDetails({
                   className={styles.groupMembersList}
                   key={user.id}
                 >
-                  <div
-                    className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
-                  >
-                    <div className="d-flex align-items-center grow">
+                  <div className={styles.chatUserDetails}>
+                    <div className={styles.profileAvatarContainer}>
                       <ProfileAvatarDisplay
                         className={styles.membersImage}
                         fallbackName={user.name}
                         imageUrl={user.avatarURL}
                         size="small"
                       />
-                      <span className="ms-2">{user.name}</span>
-                      <span
-                        className={`badge bg-success text-dark ms-2 ${styles.roleBadge}`}
-                      >
-                        {role}
-                      </span>
+                      <span className={styles.userName}>{user.name}</span>
+                      <span className={styles.roleBadge}>{role}</span>
                     </div>
                     {canManage && (
                       <DropDownButton
