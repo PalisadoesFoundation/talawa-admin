@@ -642,6 +642,7 @@
     "searchEventName": "ईवेंट का नाम खोजें",
     "eventType": "घटना प्रकार",
     "eventCreated": "बधाई हो! ",
+    "eventCreateFailed": "कार्यक्रम बनाने में विफल। कृपया पुनः प्रयास करें।",
     "customRecurrence": "कस्टम पुनरावृत्ति",
     "repeatsEvery": "प्रत्येक को दोहराता है",
     "repeatsOn": "पर दोहराता है",

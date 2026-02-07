@@ -47,17 +47,14 @@ function EventHeader({
   });
   const { t: tCommon } = useTranslation('common');
 
+  const viewLabelMap: Record<ViewType, string> = {
+    [ViewType.MONTH]: tCommon('month'),
+    [ViewType.DAY]: tCommon('day'),
+    [ViewType.YEAR]: tCommon('year'),
+  };
+
   const getViewLabel = (): string => {
-    switch (viewType) {
-      case ViewType.MONTH:
-        return tCommon('month');
-      case ViewType.DAY:
-        return tCommon('day');
-      case ViewType.YEAR:
-        return tCommon('year');
-      default:
-        return tCommon('month');
-    }
+    return viewLabelMap[viewType] || viewLabelMap[ViewType.MONTH];
   };
   return (
     <div

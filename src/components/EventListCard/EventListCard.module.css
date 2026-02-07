@@ -1,15 +1,13 @@
 .cardsEventListCard {
   background-color: var(--cardsEventListCard-bg);
   color: var(--cardsEventListCard-h2-color);
-  font-size: 10px;
-  font-weight: 400;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
   display: flex;
-  padding: 8px 4px;
-  border-radius: 5px;
-  margin-bottom: 4px;
-  text-overflow: ellipsis;
+  padding: var(--space-3) var(--space-2);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-2);
   overflow: hidden;
-  white-space: nowrap;
   cursor: pointer;
   transition: opacity 0.2s;
 }
@@ -29,7 +27,7 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
-  font-size: 10px;
-  font-weight: 400;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
   color: inherit;
 }

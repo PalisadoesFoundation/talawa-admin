@@ -630,6 +630,7 @@
     "searchEventName": "Rechercher le nom de l'événement",
     "eventType": "Type d'événement",
     "eventCreated": "Toutes nos félicitations! ",
+    "eventCreateFailed": "La création de l'événement a échoué. Veuillez réessayer.",
     "customRecurrence": "Récurrence personnalisée",
     "repeatsEvery": "Se répète tous les",
     "repeatsOn": "Répétition activée",

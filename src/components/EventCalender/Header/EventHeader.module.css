@@ -39,9 +39,9 @@
 /* Override Bootstrap dropdown button styles */
 .dropdown button {
   background-color: var(--color-white);
-  border: 1px solid var(--color-gray-300);
+  border: var(--border-1) solid var(--color-gray-300);
   color: var(--color-gray-700);
-  height: 40px;
+  height: var(--space-9);
   border-radius: var(--radius-md);
 }
 
@@ -53,9 +53,9 @@
 
 .createButton {
   background-color: var(--color-white);
-  border: 1px solid var(--color-gray-300);
+  border: var(--border-1) solid var(--color-gray-300);
   color: var(--color-gray-700);
-  height: 40px;
+  height: var(--space-9);
   min-width: 100px;
   display: inline-flex;
   align-items: center;

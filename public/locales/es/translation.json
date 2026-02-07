@@ -628,6 +628,7 @@
     "enterDescription": "Introduce la descripción",
     "eventLocation": "Introducir ubicación",
     "eventCreated": "¡Felicidades! Se crea el Evento.",
+    "eventCreateFailed": "Error al crear el evento. Por favor, inténtelo de nuevo.",
     "eventType": "Tipo de evento",
     "searchEventName": "Buscar nombre del evento",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",

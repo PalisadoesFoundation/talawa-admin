@@ -628,6 +628,7 @@
     "searchMemberName": "Search Member Name",
     "eventType": "Event Type",
     "eventCreated": "Congratulations! The Event is created.",
+    "eventCreateFailed": "Event creation failed. Please try again.",
     "customRecurrence": "Custom Recurrence",
     "repeatsEvery": "Repeats Every",
     "repeatsOn": "Repeats On",

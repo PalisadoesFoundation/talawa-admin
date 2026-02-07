@@ -630,6 +630,7 @@
     "searchEventName": "搜索活动名称",
     "eventType": "事件类型",
     "eventCreated": "恭喜！",
+    "eventCreateFailed": "创建事件失败。请重试。",
     "customRecurrence": "自定义重复",
     "repeatsEvery": "重复每个",
     "repeatsOn": "重复开启",

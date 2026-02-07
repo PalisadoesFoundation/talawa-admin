@@ -122,8 +122,13 @@ function OrganizationEvents(): JSX.Element {
   const showInviteModal = (): void => createEventModal.open();
   const closeCreateEventModal = (): void => createEventModal.close();
 
+  const isViewType = (value: string): value is ViewType =>
+    Object.values(ViewType).includes(value as ViewType);
+
   const handleChangeView = (item: string | null): void => {
-    if (item) setViewType(item as ViewType);
+    if (item && isViewType(item)) {
+      setViewType(item);
+    }
   };
 
   const {
@@ -143,6 +148,7 @@ function OrganizationEvents(): JSX.Element {
         .toISOString(),
       includeRecurring: true,
     },
+    skip: !currentUrl,
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
     fetchPolicy: 'cache-and-network',
@@ -154,6 +160,7 @@ function OrganizationEvents(): JSX.Element {
       first: 10,
       after: null,
     },
+    skip: !currentUrl,
   });
 
   // Mutation to create a new event
@@ -189,6 +196,9 @@ function OrganizationEvents(): JSX.Element {
   const handleCreateEvent = async (
     payload: IEventFormSubmitPayload,
   ): Promise<void> => {
+    if (!currentUrl) {
+      return;
+    }
     try {
       const recurrenceInput = payload.recurrenceRule
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
@@ -203,8 +213,10 @@ function OrganizationEvents(): JSX.Element {
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
         isInviteOnly: payload.isInviteOnly,
-        ...(payload.description && { description: payload.description }),
-        ...(payload.location && { location: payload.location }),
+        ...(payload.description != null && {
+          description: payload.description,
+        }),
+        ...(payload.location != null && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
@@ -286,6 +298,10 @@ function OrganizationEvents(): JSX.Element {
       errorHandler(t, eventDataError);
     }
   }, [eventDataError, eventData, t]);
+
+  if (!currentUrl) {
+    return <></>;
+  }
 
   return (
     <>
