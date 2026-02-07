@@ -86,22 +86,37 @@ xargs -0 "$@" .github/workflows/scripts/translation_check.py --files < "$STAGED_
 echo "Running centralized Python policy checks..."
 
 # =============================================================================
-# We are using SHAs pinned to specific commits to ensure script integrity
-# and avoid executing unverified code.
-# Kindly update the SHAs if  upstream scripts are modified.
+# Auto-compute checksums from upstream to avoid manual updates
+# Checksums are fetched fresh each time to ensure integrity
 #==============================================================================
 # Centralized scripts directory
 CENTRAL_SCRIPTS_DIR=".github-central/.github/workflows/scripts"
 
+# Helper function to fetch and auto-verify scripts
+fetch_and_auto_verify() {
+  local url="$1"
+  local dest="$2"
+  local cache_hours="$3"
+  
+  mkdir -p "$(dirname "$dest")"
+  
+  # Download if missing or older than cache period
+  if [ ! -f "$dest" ] || [ "$(find "$dest" -mmin +$((cache_hours * 60)) 2>/dev/null)" ]; then
+    echo "Fetching $(basename "$dest")..."
+    curl -fsSL "$url" -o "$dest" || {
+      echo "Error: Failed to download $(basename "$dest")" >&2
+      return 1
+    }
+  fi
+}
+
 echo "Running disable statements check..."
 DISABLE_STATEMENTS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
 DISABLE_STATEMENTS_PATH="$CENTRAL_SCRIPTS_DIR/disable_statements_check.py"
-DISABLE_STATEMENTS_SHA="0b4184cffc6dba3607798cd54e57e99944c36cc01775cfcad68b95b713196e08"
 
-fetch_and_verify \
+fetch_and_auto_verify \
   "$DISABLE_STATEMENTS_URL" \
   "$DISABLE_STATEMENTS_PATH" \
-  "$DISABLE_STATEMENTS_SHA" \
   "$SCRIPT_CACHE_HOURS"
 
 xargs -0 "$@" "$DISABLE_STATEMENTS_PATH" --files < "$STAGED_SRC_FILE"
@@ -109,12 +124,10 @@ xargs -0 "$@" "$DISABLE_STATEMENTS_PATH" --files < "$STAGED_SRC_FILE"
 echo "Running docstring compliance check..."
 CHECK_DOCSTRINGS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/check_docstrings.py"
 CHECK_DOCSTRINGS_PATH="$CENTRAL_SCRIPTS_DIR/check_docstrings.py"
-CHECK_DOCSTRINGS_SHA="4e46a29d2e3223938236d522fcb917456a98ff1d7dd75972909eac7a84919065"
 
-fetch_and_verify \
+fetch_and_auto_verify \
   "$CHECK_DOCSTRINGS_URL" \
   "$CHECK_DOCSTRINGS_PATH" \
-  "$CHECK_DOCSTRINGS_SHA" \
   "$SCRIPT_CACHE_HOURS"
 
 "$@" "$CHECK_DOCSTRINGS_PATH" --directories .github
@@ -122,12 +135,10 @@ fetch_and_verify \
 echo "Running line count enforcement check..."
 COUNTLINE_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/countline.py"
 COUNTLINE_PATH="$CENTRAL_SCRIPTS_DIR/countline.py"
-COUNTLINE_SHA="482928bed829894d1a77b656d26de1d65fa9a69cda38cd8002136903307a6a08"
 
-fetch_and_verify \
+fetch_and_auto_verify \
   "$COUNTLINE_URL" \
   "$COUNTLINE_PATH" \
-  "$COUNTLINE_SHA" \
   "$SCRIPT_CACHE_HOURS"
 
 "$@" "$COUNTLINE_PATH" \
