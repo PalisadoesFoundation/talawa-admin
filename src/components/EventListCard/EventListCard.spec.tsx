@@ -17,7 +17,7 @@ import {
 } from 'shared-components/DateRangePicker';
 import dayjs from 'dayjs';
 import { useLocalStorage } from 'utils/useLocalstorage';
-import { props } from './EventListCardProps';
+import { props } from './EventListCardProps.mock';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
