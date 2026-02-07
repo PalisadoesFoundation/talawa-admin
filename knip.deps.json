@@ -1,7 +1,14 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
-  "entry": ["**/*.{ts,tsx,js}"],
-  "ignore": ["node_modules/**", "build/**", "coverage/**", "**/*.d.ts"],
-  "ignoreDependencies": ["nyc"],
+  "entry": [
+    "**/*.{ts,tsx,js}"
+  ],
+  "ignore": [
+    "node_modules/**",
+    "build/**",
+    "coverage/**",
+    "**/*.d.ts"
+  ],
+  "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
 }
