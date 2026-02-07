@@ -45,8 +45,11 @@ import { DataTableTable } from './DataTableTable';
 // DataTable renders typed tabular data with loading, empty, and error states.
 const DEFAULT_SKELETON_ROWS: number = 5;
 
-// Compare values with nulls last, numbers/dates/booleans handled explicitly.
-function defaultCompare(a: unknown, b: unknown): number {
+/**
+ * Compare values with nulls last, numbers/dates/booleans handled explicitly.
+ * @internal Exported for testing purposes.
+ */
+export function defaultCompare(a: unknown, b: unknown): number {
   // place null/undefined at the end
   const aNull = a === null || a === undefined;
   const bNull = b === null || b === undefined;
@@ -204,6 +207,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   }
 
   function handleHeaderClick(col: IColumnDef<T>) {
+    /* istanbul ignore if -- unreachable: non-sortable headers don't render onClick in DataTableTable */
     if (col.meta?.sortable === false) return;
     const willSortBy = col.id;
     const sameColumn = activeSortBy === willSortBy;

@@ -1400,13 +1400,14 @@ describe('AgendaItemsUpdateModal', () => {
     );
 
     // Test URL with spaces - should be rejected
-    await user.type(
-      screen.getByPlaceholderText('enterUrl'),
-      'http://ex ample.com',
-    );
-    await user.click(screen.getByText('link'));
+    const urlInput = screen.getByPlaceholderText('enterUrl');
+    await user.click(urlInput);
+    await user.paste('http://ex ample.com');
+    await user.click(screen.getByRole('button', { name: 'link' }));
 
-    expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidUrl');
+    });
   });
 
   it('filters out empty and whitespace URLs on component mount', () => {
