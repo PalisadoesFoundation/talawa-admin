@@ -6,7 +6,7 @@ import { BrowserRouter } from 'react-router';
 import * as ReactRouter from 'react-router';
 import { vi } from 'vitest';
 import * as ApolloHooks from '@apollo/client/react';
-import { ApolloClient } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
@@ -141,7 +141,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
@@ -367,7 +367,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
@@ -418,7 +418,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
@@ -550,7 +550,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
@@ -603,7 +603,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
@@ -661,7 +661,7 @@ describe('AgendaItemsCreateModal', () => {
         error: undefined,
         called: true,
         reset: vi.fn(),
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       },
     ]);
 
