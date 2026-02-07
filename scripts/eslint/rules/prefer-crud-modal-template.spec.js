@@ -15,7 +15,7 @@ const ruleTester = new RuleTester({
     },
   },
 });
-const rule = preferCrudModalTemplate as unknown as Rule.RuleModule;
+const rule = preferCrudModalTemplate;
 
 describe('prefer-crud-modal-template', () => {
   ruleTester.run('prefer-crud-modal-template', rule, {

@@ -1,4 +1,4 @@
-import preferCrudModalTemplate from './rules/prefer-crud-modal-template.ts';
+import preferCrudModalTemplate from './rules/prefer-crud-modal-template.js';
 
 /**
  * Map of custom ESLint rule IDs to their implementations.
