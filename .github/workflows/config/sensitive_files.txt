@@ -11,6 +11,7 @@ src/App.tsx$
 ^docker/.*
 ^config/.*
 ^src/style/.*
+^src/assets/.*
 schema.graphql$
 package.json$
 package-lock.json$
