@@ -1322,6 +1322,14 @@ describe('AddMember Screen', () => {
 
     await screen.findByTestId('datatable');
 
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
+
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
 
@@ -1416,6 +1424,14 @@ describe('AddMember Screen', () => {
     fireEvent.click(existingUserOption);
 
     await screen.findByTestId('datatable');
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
 
     const forceNext = screen.getByTestId('force-next');
     const forcePrev = screen.getByTestId('force-prev');
@@ -1542,6 +1558,14 @@ describe('AddMember Screen', () => {
 
     await screen.findByTestId('datatable');
 
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
+
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Alex' } });
 
@@ -1549,5 +1573,13 @@ describe('AddMember Screen', () => {
     fireEvent.click(submitButton);
 
     await screen.findByTestId('datatable');
+
+    await waitFor(
+      () => {
+        const rows = getDataTableBodyRows();
+        expect(rows.length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
   });
 });

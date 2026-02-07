@@ -450,6 +450,13 @@ describe('OrganizationPeople', () => {
       { timeout: 5000 },
     );
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows().length).toBeGreaterThan(0);
+      },
+      { timeout: 5000 },
+    );
+
     // Search for "Jane"
     const searchInput = screen.getByTestId('searchbtn');
     await user.type(searchInput, 'Jane');
