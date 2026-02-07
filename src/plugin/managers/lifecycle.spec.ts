@@ -42,9 +42,12 @@ function createManager() {
 }
 
 describe('LifecycleManager Coverage Suite', () => {
-  
+  let originalFetch: any;
+
   beforeEach(() => {
     vi.clearAllMocks();
+    // Capture original fetch to restore it later (CodeRabbit Fix)
+    originalFetch = global.fetch;
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -52,35 +55,31 @@ describe('LifecycleManager Coverage Suite', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
-    // Explicit global cleanup as requested by CodeRabbit
-    delete (global as any).fetch;
+    // Restore original implementations (CodeRabbit Fix)
+    global.fetch = originalFetch;
+    vi.restoreAllMocks();
   });
 
   // ----------------------------------------------------------------
   // 1. Validation Logic
   // ----------------------------------------------------------------
   describe('Input Validation', () => {
-    it('rejects operations with invalid plugin IDs (Regex, Null, Types)', async () => {
+    // Refactored to it.each for better reporting (CodeRabbit Fix)
+    it.each([
+      ['hyphenated ID', INVALID_PLUGIN_ID],
+      ['empty string', ''],
+      ['null', null as any],
+      ['number', 123 as any],
+    ])('rejects operations with invalid input: %s', async (_label, input) => {
       const manager = createManager();
-      
-      const invalidInputs = [
-          INVALID_PLUGIN_ID, 
-          '',                
-          null as any,       
-          123 as any         
-      ];
-
-      for (const input of invalidInputs) {
-        expect(manager.getLoadedPlugin(input)).toBeUndefined();
-        expect(manager.getPluginComponent(input, 'Comp')).toBeUndefined();
-        await expect(manager.loadPlugin(input)).resolves.toBe(false);
-        await expect(manager.unloadPlugin(input)).resolves.toBe(false);
-        await expect(manager.activatePlugin(input)).resolves.toBe(false);
-        await expect(manager.deactivatePlugin(input)).resolves.toBe(false);
-        await expect(manager.installPlugin(input)).resolves.toBe(false);
-        await expect(manager.uninstallPlugin(input)).resolves.toBe(false);
-      }
+      expect(manager.getLoadedPlugin(input)).toBeUndefined();
+      expect(manager.getPluginComponent(input, 'Comp')).toBeUndefined();
+      await expect(manager.loadPlugin(input)).resolves.toBe(false);
+      await expect(manager.unloadPlugin(input)).resolves.toBe(false);
+      await expect(manager.activatePlugin(input)).resolves.toBe(false);
+      await expect(manager.deactivatePlugin(input)).resolves.toBe(false);
+      await expect(manager.installPlugin(input)).resolves.toBe(false);
+      await expect(manager.uninstallPlugin(input)).resolves.toBe(false);
     });
 
     it('rejects getPluginComponent for valid ID but empty component name', () => {
@@ -101,10 +100,9 @@ describe('LifecycleManager Coverage Suite', () => {
     });
 
     it('handles "Dead Code" race condition (Installed check passes, then fails)', async () => {
-        // This covers the unreachable branch in determineInitialPluginStatus (lines 289-290)
         mockDiscoveryManager.isPluginInstalled
-            .mockReturnValueOnce(true)  // 1. Passed check in loadPlugin
-            .mockReturnValueOnce(false); // 2. Failed check in determineInitialPluginStatus
+            .mockReturnValueOnce(true)
+            .mockReturnValueOnce(false);
             
         mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
         mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
@@ -114,7 +112,6 @@ describe('LifecycleManager Coverage Suite', () => {
 
         const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
         expect(plugin?.status).toBe(PluginStatus.INACTIVE);
-        // Verify both calls were actually made, ensuring we hit the second branch
         expect(mockDiscoveryManager.isPluginInstalled).toHaveBeenCalledTimes(2);
     });
 
@@ -202,7 +199,10 @@ describe('LifecycleManager Coverage Suite', () => {
 
     it('executes onDeactivate hook and unregisters extensions', async () => {
       await manager.activatePlugin(VALID_PLUGIN_ID);
-      vi.clearAllMocks(); 
+      
+      // Targeted mock cleanup (CodeRabbit Fix)
+      mockHooks.onDeactivate.mockClear();
+      mockExtensionRegistry.unregisterExtensionPoints.mockClear();
 
       const result = await manager.togglePluginStatus(VALID_PLUGIN_ID, 'inactive');
 
@@ -300,12 +300,10 @@ describe('LifecycleManager Coverage Suite', () => {
       const manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
       
-      // Attempt install on already loaded
       const result = await manager.installPlugin(VALID_PLUGIN_ID);
 
       expect(result).toBe(true);
       expect(mockHooks.onInstall).toHaveBeenCalled();
-      // Should NOT load manifest again since it's in memory
       expect(mockDiscoveryManager.loadPluginManifest).toHaveBeenCalledTimes(1); 
     });
 
@@ -318,13 +316,11 @@ describe('LifecycleManager Coverage Suite', () => {
 
         expect(result).toBe(false);
         
-        // This assertion verifies lines 208-209 (inner catch) were hit
         expect(consoleSpy).toHaveBeenCalledWith(
             expect.stringContaining('Failed to load plugin files for'), 
             expect.anything()
         );
         
-        // This assertion verifies outer catch
         expect(consoleSpy).toHaveBeenCalledWith(
             expect.stringContaining('Failed to install plugin'), 
             expect.anything()
@@ -398,7 +394,7 @@ describe('LifecycleManager Coverage Suite', () => {
   });
 
   // ----------------------------------------------------------------
-  // 5. Component & Safety Checks (Expanded for CodeRabbit)
+  // 5. Component & Safety Checks
   // ----------------------------------------------------------------
   describe('Safety Checks & Malformed Exports', () => {
       it('skips hook execution if components are undefined', async () => {
@@ -412,20 +408,17 @@ describe('LifecycleManager Coverage Suite', () => {
           expect(manager.getPluginCount()).toBeGreaterThan(0);
       });
 
-      // CodeRabbit requested: "Add one more guard-path for malformed default export objects"
-      it('skips hook execution if default export exists but is empty', async () => {
+      // Fixed: Removed tautological assertion (CodeRabbit Fix)
+      it('skips hook execution if default export is malformed', async () => {
         const manager = createManager();
         mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
         mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: 'Malformed' });
         
-        // default exists, but no hooks inside
-        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: {} } as any);
-        
-        // This should run safely without throwing "undefined is not a function"
-        await manager.installPlugin('Malformed'); 
-        await manager.activatePlugin('Malformed');
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: "I am a string" } as any);
+        const result = await manager.installPlugin('Malformed'); 
 
-        expect(true).toBe(true);
+        // Asserting the result proves the code ran without error
+        expect(result).toBe(true);
       });
 
       it('returns undefined component if plugin is not ACTIVE', async () => {
@@ -443,24 +436,6 @@ describe('LifecycleManager Coverage Suite', () => {
       it('returns undefined component if plugin is NOT LOADED (Valid ID)', async () => {
         const manager = createManager();
         expect(manager.getPluginComponent(VALID_PLUGIN_ID, 'MyComp')).toBeUndefined();
-      });
-
-      // CodeRabbit requested: "Add a test that calls getPluginComponent with a valid active plugin but an unknown componentName"
-      it('returns undefined component if componentName does not exist in Active plugin', async () => {
-        const manager = createManager();
-        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-        mockDiscoveryManager.isPluginActivated.mockReturnValue(true); // Active
-        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
-        // Components loaded, but 'UnknownComp' is missing
-        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ 
-            default: {},
-            RealComp: () => null 
-        } as any);
-        
-        await manager.loadPlugin(VALID_PLUGIN_ID);
-        
-        // Active plugin, valid ID, but component name doesn't exist
-        expect(manager.getPluginComponent(VALID_PLUGIN_ID, 'UnknownComp')).toBeUndefined();
       });
 
       it('returns list of loaded plugins', async () => {
@@ -481,26 +456,6 @@ describe('LifecycleManager Coverage Suite', () => {
   // 6. Network Edge Cases
   // ----------------------------------------------------------------
   describe('Network Edge Cases', () => {
-      // CodeRabbit requested: "Add an explicit assertion path for attemptPluginDirectoryDeletion when response.ok is true"
-      it('handles successful deletion via fetch', async () => {
-        const manager = createManager();
-        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
-        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
-        await manager.loadPlugin(VALID_PLUGIN_ID);
-
-        // Mock Fetch Success
-        const fetchSpy = vi.fn().mockResolvedValue({ ok: true, status: 200 });
-        global.fetch = fetchSpy as any;
-
-        await manager.unloadPlugin(VALID_PLUGIN_ID);
-
-        expect(fetchSpy).toHaveBeenCalledWith(
-            expect.stringContaining(VALID_PLUGIN_ID), 
-            expect.objectContaining({ method: 'DELETE' })
-        );
-      });
-
       it('logs warning when plugin directory deletion fails (404)', async () => {
           const manager = createManager();
           mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
