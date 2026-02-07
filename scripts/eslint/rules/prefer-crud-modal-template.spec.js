@@ -1,5 +1,5 @@
 import { RuleTester, Rule } from 'eslint';
-import preferCrudModalTemplate from './prefer-crud-modal-template.ts';
+import preferCrudModalTemplate from './prefer-crud-modal-template.js';
 import { describe } from 'vitest';
 import parser from '@typescript-eslint/parser';
 

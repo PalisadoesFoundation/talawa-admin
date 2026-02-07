@@ -15,20 +15,6 @@ import {
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-/**
- * @typedef {Object} RestrictedImport
- * @property {string} [id]
- * @property {string} name
- * @property {string} message
- * @property {string[]} [importNames]
- */
-
-/**
- * @typedef {Object} SyntaxRestriction
- * @property {string} selector
- * @property {string} message
- */
-
 describe('ESLint Syntax Restrictions', () => {
   /**
    * Creates an ESLint linter instance
@@ -43,9 +29,9 @@ describe('ESLint Syntax Restrictions', () => {
 
   /**
    * Lints the provided code
-   * @param {string} code - The code to lint
-   * @param {string} [filename='test.tsx'] - The filename for the code
-   * @returns {Promise<LintMessage[]>} Array of lint messages
+   * `@param` {string} code - The code to lint
+   * `@param` {string} [filename='test.tsx'] - The filename for the code
+   * `@returns` {Promise<import('eslint').Linter.LintMessage[]>} Array of lint messages
    */
   const lintCode = async (code, filename = 'test.tsx') => {
     const eslint = await createLinter();
