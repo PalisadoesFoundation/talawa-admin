@@ -148,16 +148,13 @@ function organizationEvents(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: orgData } = useQuery(
-    GET_ORGANIZATION_DATA_PG,
-    {
-      variables: {
-        id: currentUrl,
-        first: 10,
-        after: null,
-      },
+  const { data: orgData } = useQuery(GET_ORGANIZATION_DATA_PG, {
+    variables: {
+      id: currentUrl,
+      first: 10,
+      after: null,
     },
-  );
+  });
 
   // Mutation to create a new event
   const [create] = useMutation(CREATE_EVENT_MUTATION, {
@@ -226,6 +223,8 @@ function organizationEvents(): JSX.Element {
         createEventModal.close();
       } else if (errors && errors.length > 0) {
         throw new Error(errors[0].message);
+      } else {
+        throw new Error(t('eventCreateFailed'));
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -277,7 +276,7 @@ function organizationEvents(): JSX.Element {
       const isRateLimitError =
         errorMessage.includes('too many requests') ||
         errorMessage.includes('rate limit') ||
-        eventDataError.message?.includes('Please try again later');
+        errorMessage.includes('please try again later');
       const isAuthError = errorMessage.includes('not authorized');
 
       if (isRateLimitError || (isAuthError && hasData)) {

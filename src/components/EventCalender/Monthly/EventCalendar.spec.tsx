@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -52,16 +52,14 @@ vi.mock('types/Event/utils', async () => {
   };
 });
 
-async function wait(ms = 200): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
 describe('Calendar', () => {
   const onMonthChange = vi.fn();
+
+  beforeEach(() => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    vi.setSystemTime(new Date('2026-01-15T12:00:00Z'));
+  });
+
   it('renders weekdays', () => {
     render(
       <Router>
@@ -104,6 +102,7 @@ describe('Calendar', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.useRealTimers();
   });
 
   it('should render the current month and year', () => {
@@ -175,15 +174,13 @@ describe('Calendar', () => {
         </I18nextProvider>
       </MockedProvider>,
     );
-    await wait();
-    const prevButtons = screen.getAllByTestId('prevYear');
+    const prevButtons = await screen.findAllByTestId('prevYear');
     // Use for...of to handle awaits sequentially
     for (const button of prevButtons) {
       await userEvent.click(button);
     }
-    await wait();
     //testing next year button
-    const nextButton = screen.getAllByTestId('prevYear');
+    const nextButton = await screen.findAllByTestId('prevYear');
     // Use for...of to handle awaits sequentially
     for (const button of nextButton) {
       await userEvent.click(button);
@@ -497,11 +494,12 @@ describe('Calendar', () => {
       </Router>,
     );
 
-    await wait();
-    months.forEach((month) => {
-      const elements = screen.getAllByText(month);
-      elements.forEach((element) => {
-        expect(element).toBeInTheDocument();
+    await waitFor(() => {
+      months.forEach((month) => {
+        const elements = screen.getAllByText(month);
+        elements.forEach((element) => {
+          expect(element).toBeInTheDocument();
+        });
       });
     });
   });
@@ -519,8 +517,7 @@ describe('Calendar', () => {
       </Router>,
     );
 
-    await wait();
-    const renderHourComponent = screen.getByTestId('hour');
+    const renderHourComponent = await screen.findByTestId('hour');
     expect(renderHourComponent).toBeInTheDocument();
   });
 
@@ -608,16 +605,7 @@ describe('Calendar', () => {
     // onMonthChange(newMonth, newYear);
 
     // Mock today's date to be January 1st to ensure currentDate starts at 1
-    const originalDate = globalThis.Date;
-    globalThis.Date = vi.fn((...args: unknown[]) => {
-      if (args.length === 0) {
-        return new originalDate(new originalDate().getFullYear(), 0, 1); // January 1st of current year
-      }
-      return new originalDate(...(args as ConstructorParameters<typeof Date>));
-    }) as unknown as DateConstructor;
-    globalThis.Date.now = originalDate.now;
-    globalThis.Date.parse = originalDate.parse;
-    globalThis.Date.UTC = originalDate.UTC;
+    vi.setSystemTime(new Date(2026, 0, 1, 12, 0, 0));
 
     render(
       <Router>
@@ -628,7 +616,7 @@ describe('Calendar', () => {
               viewType={ViewType.DAY}
               onMonthChange={mockOnMonthChange}
               currentMonth={0} // January
-              currentYear={dayjs().year()}
+              currentYear={2026}
             />
           </I18nextProvider>
         </MockedProvider>
@@ -641,10 +629,7 @@ describe('Calendar', () => {
     await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with December of previous year
-    expect(mockOnMonthChange).toHaveBeenCalledWith(11, dayjs().year() - 1);
-
-    // Restore original Date
-    globalThis.Date = originalDate;
+    expect(mockOnMonthChange).toHaveBeenCalledWith(11, 2025);
   });
 
   it('should handle previous date navigation from any other month when currentDate is 1', async () => {
@@ -658,20 +643,7 @@ describe('Calendar', () => {
     // onMonthChange(newMonth, newYear);
 
     // Mock today's date to be June 1st to ensure currentDate starts at 1
-    const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(new originalDate().getFullYear(), 5, 1); // June 1st of current year
-      }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
-    }
-    MockDate.now = originalDate.now;
-    MockDate.parse = originalDate.parse;
-    MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    vi.setSystemTime(new Date(2026, 5, 1, 12, 0, 0));
 
     render(
       <Router>
@@ -682,7 +654,7 @@ describe('Calendar', () => {
               viewType={ViewType.DAY}
               onMonthChange={mockOnMonthChange}
               currentMonth={5} // June
-              currentYear={dayjs().year()}
+              currentYear={2026}
             />
           </I18nextProvider>
         </MockedProvider>
@@ -695,10 +667,7 @@ describe('Calendar', () => {
     await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with May of same year
-    expect(mockOnMonthChange).toHaveBeenCalledWith(4, dayjs().year());
-
-    // Restore original Date
-    globalThis.Date = originalDate;
+    expect(mockOnMonthChange).toHaveBeenCalledWith(4, 2026);
   });
 
   it('should handle next date navigation from December 31st (year boundary)', async () => {
@@ -711,20 +680,7 @@ describe('Calendar', () => {
     // onMonthChange(newMonth, newYear);
 
     // Mock today's date to be December 31st to ensure currentDate starts at 31
-    const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(new originalDate().getFullYear(), 11, 31); // December 31st of current year
-      }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
-    }
-    MockDate.now = originalDate.now;
-    MockDate.parse = originalDate.parse;
-    MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    vi.setSystemTime(new Date(2026, 11, 31, 12, 0, 0));
 
     render(
       <Router>
@@ -735,7 +691,7 @@ describe('Calendar', () => {
               viewType={ViewType.DAY}
               onMonthChange={mockOnMonthChange}
               currentMonth={11} // December
-              currentYear={dayjs().year()}
+              currentYear={2026}
             />
           </I18nextProvider>
         </MockedProvider>
@@ -748,10 +704,7 @@ describe('Calendar', () => {
     await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with January of next year
-    expect(mockOnMonthChange).toHaveBeenCalledWith(0, dayjs().year() + 1);
-
-    // Restore original Date
-    globalThis.Date = originalDate;
+    expect(mockOnMonthChange).toHaveBeenCalledWith(0, 2027);
   });
 
   it('should handle next date navigation from end of any other month', async () => {
@@ -764,20 +717,7 @@ describe('Calendar', () => {
     // onMonthChange(newMonth, newYear);
 
     // Mock today's date to be June 30th to ensure currentDate starts at 30
-    const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(new originalDate().getFullYear(), 5, 30); // June 30th of current year
-      }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
-    }
-    MockDate.now = originalDate.now;
-    MockDate.parse = originalDate.parse;
-    MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    vi.setSystemTime(new Date(2026, 5, 30, 12, 0, 0));
 
     render(
       <Router>
@@ -788,7 +728,7 @@ describe('Calendar', () => {
               viewType={ViewType.DAY}
               onMonthChange={mockOnMonthChange}
               currentMonth={5} // June
-              currentYear={dayjs().year()}
+              currentYear={2026}
             />
           </I18nextProvider>
         </MockedProvider>
@@ -801,10 +741,7 @@ describe('Calendar', () => {
     await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with July of same year
-    expect(mockOnMonthChange).toHaveBeenCalledWith(6, dayjs().year());
-
-    // Restore original Date
-    globalThis.Date = originalDate;
+    expect(mockOnMonthChange).toHaveBeenCalledWith(6, 2026);
   });
 
   it('should show invite-only event for an attendee', async () => {
@@ -969,16 +906,16 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // Administrator should see all events (public and private)
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
 
       // Check that "View all" button exists, indicating multiple events are available
-      const viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      const viewAllButton = await screen.findByTestId('more');
       expect(viewAllButton).toHaveTextContent('View all');
     });
 
@@ -1043,14 +980,14 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // Regular user who is a member should see both public and private events
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
 
-      const viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
     });
 
     it('should filter events for regular users who are NOT organization members', async () => {
@@ -1132,11 +1069,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // Member should see "View all" with 3 events (2 public + 1 private)
-      let viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // Now test with non-member
       rerender(
@@ -1158,11 +1092,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // Non-member should still have "View all" but with only 2 public events (private filtered out)
-      viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // This test verifies that filtering works by comparing member vs non-member behavior
       // The filtering logic should exclude the private event for non-members
@@ -1229,11 +1160,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // First check member has access to both events
-      let viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // Now test without userRole - should only see public events
       rerender(
@@ -1254,11 +1182,12 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // When userRole is not provided, should see only public events (single event, no View all button)
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should only show public events when userId is not provided', async () => {
@@ -1322,11 +1251,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // First check member has access to both events
-      let viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // Now test without userId - should only see public events
       rerender(
@@ -1347,11 +1273,12 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // When userId is not provided, should see only public events
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should handle empty organization data for private events', async () => {
@@ -1415,11 +1342,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // First check member has access to both events
-      let viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // Now test without orgData - should only see public events
       rerender(
@@ -1440,11 +1364,12 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // When orgData is not provided, should see only public events
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should handle organization data with empty members for private events', async () => {
@@ -1519,11 +1444,8 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // First check member has access to both events
-      let viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      await screen.findByTestId('more');
 
       // Now test with empty members orgData - should only see public events
       rerender(
@@ -1545,11 +1467,12 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // When orgData has no members, should see only public events
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
     });
 
     it('should handle mixed public and private events correctly for organization members', async () => {
@@ -1628,15 +1551,15 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      await wait();
-
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('[data-has-events="true"]');
-      expect(dayWithEvents).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          container.querySelector('[data-has-events="true"]'),
+        ).toBeInTheDocument();
+      });
 
       // Check that "View all" button exists, indicating multiple events are filtered and available
-      const viewAllButton = screen.queryByTestId('more');
-      expect(viewAllButton).toBeInTheDocument();
+      const viewAllButton = await screen.findByTestId('more');
 
       // This test verifies the filtering logic works by checking that:
       // 1. Events are processed (day has events class)
