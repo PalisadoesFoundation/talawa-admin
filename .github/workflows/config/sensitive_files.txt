@@ -5,9 +5,13 @@ pyproject.toml$
 vitest.config.js$
 src/App.tsx$
 ^.github/.*
+^.coderabbit/.*
 ^.husky/.*
 ^scripts/.*
+^docker/.*
+^config/.*
 ^src/style/.*
+^src/assets/.*
 schema.graphql$
 package.json$
 package-lock.json$
@@ -56,6 +60,3 @@ knip.deps.json$
 ^docs/docusaurus.config.ts$
 ^docs/sidebar..*
 CNAME$
-\.md$
-\.txt$
-\.TXT$

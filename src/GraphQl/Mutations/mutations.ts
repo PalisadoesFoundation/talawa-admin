@@ -452,17 +452,6 @@ export const REMOVE_MEMBER_MUTATION_PG = gql`
   }
 `;
 
-// to add the admin
-export const ADD_ADMIN_MUTATION = gql`
-  mutation CreateAdmin($orgid: ID!, $userid: ID!) {
-    createAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      user {
-        _id
-      }
-    }
-  }
-`;
-
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost($input: MutationCreatePostInput!) {
     createPost(input: $input) {

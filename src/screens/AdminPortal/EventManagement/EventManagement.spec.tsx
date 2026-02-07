@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -12,21 +12,12 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, it } from 'vitest';
+import { vi, it, describe } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
-
-type TabOption =
-  | 'dashboard'
-  | 'registrants'
-  | 'attendance'
-  | 'agendas'
-  | 'actions'
-  | 'volunteers'
-  | 'statistics';
 
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
@@ -140,6 +131,7 @@ describe('Event Management', () => {
   afterEach(() => {
     vi.clearAllMocks();
     clearAllItems();
+    cleanup();
   });
 
   describe('Navigation Tests', () => {
@@ -238,19 +230,19 @@ describe('Event Management', () => {
 
       for (const { button, tab } of tabsToTest) {
         await user.click(screen.getByTestId(button));
-        expect(screen.getByTestId(tab)).toBeInTheDocument();
+
+        await waitFor(() => {
+          expect(screen.getByTestId(tab)).toBeInTheDocument();
+        });
       }
     });
 
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid tab
-      };
-    });
-
-    it('returns dashboard tab for an invalid tab selection', async () => {
+    it('renders dashboard tab by default when no tab state is set', async () => {
+      vi.mocked(useParams).mockReturnValue({
+        orgId: 'orgId',
+        eventId: 'event123',
+        tab: 'invalid',
+      });
       await act(async () => {
         renderEventManagement();
       });
@@ -282,12 +274,16 @@ describe('Event Management', () => {
     it('renders dropdown with all options', async () => {
       renderEventManagement();
 
-      const dropdownContainer = screen.getByTestId('tabsDropdown-container');
+      const dropdownContainer = screen.getByTestId('tabs-container');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await user.click(screen.getByTestId('tabsDropdown-toggle'));
+      await user.click(screen.getByTestId('tabs-toggle'));
 
-      const tabOptions: readonly TabOption[] = [
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-item-dashboard')).toBeInTheDocument();
+      });
+
+      const tabOptions = [
         'dashboard',
         'registrants',
         'attendance',
@@ -297,43 +293,67 @@ describe('Event Management', () => {
         'statistics',
       ];
 
-      tabOptions.forEach((option) => {
-        expect(
-          screen.getByTestId(`tabsDropdown-item-${option}`),
-        ).toBeInTheDocument();
-      });
+      for (const option of tabOptions) {
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${option}`)).toBeInTheDocument();
+        });
+      }
     });
 
     it('switches tabs through dropdown selection', async () => {
       renderEventManagement();
 
-      await user.click(screen.getByTestId('tabsDropdown-toggle'));
-
-      const tabOptions: readonly TabOption[] = [
-        'dashboard',
-        'registrants',
-        'attendance',
-        'agendas',
-        'actions',
-        'volunteers',
-        'statistics',
+      const tabOptions = [
+        { name: 'dashboard', expectedTab: 'eventDashboardTab' },
+        { name: 'registrants', expectedTab: 'eventRegistrantsTab' },
+        { name: 'attendance', expectedTab: 'eventAttendanceTab' },
+        { name: 'agendas', expectedTab: 'eventAgendasTab' },
+        { name: 'actions', expectedTab: 'eventActionsTab' },
+        { name: 'volunteers', expectedTab: 'eventVolunteersTab' },
+        { name: 'statistics', expectedTab: 'eventStatsTab' },
       ];
 
-      const tabTestIdMap: Record<TabOption, string> = {
-        dashboard: 'eventDashboardTab',
-        registrants: 'eventRegistrantsTab',
-        attendance: 'eventAttendanceTab',
-        agendas: 'eventAgendasTab',
-        actions: 'eventActionsTab',
-        volunteers: 'eventVolunteersTab',
-        statistics: 'eventStatsTab',
-      };
+      for (const { name, expectedTab } of tabOptions) {
+        await user.click(screen.getByTestId('tabs-toggle'));
 
-      for (const option of tabOptions) {
-        await user.click(screen.getByTestId(`tabsDropdown-item-${option}`));
+        await waitFor(() => {
+          expect(screen.getByTestId(`tabs-item-${name}`)).toBeInTheDocument();
+        });
 
-        expect(screen.getByTestId(tabTestIdMap[option])).toBeInTheDocument();
+        await user.click(screen.getByTestId(`tabs-item-${name}`));
+
+        await waitFor(() => {
+          expect(screen.getByTestId(expectedTab)).toBeInTheDocument();
+        });
       }
+    });
+
+    it('opens dropdown menu on Enter key', async () => {
+      renderEventManagement();
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      await act(async () => {
+        toggle.focus();
+      });
+      await user.keyboard('{Enter}');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
+    });
+
+    it('opens dropdown menu on Space key', async () => {
+      renderEventManagement();
+
+      const toggle = screen.getByTestId('tabs-toggle');
+      await act(async () => {
+        toggle.focus();
+      });
+      await user.keyboard(' ');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('tabs-menu')).toBeInTheDocument();
+      });
     });
   });
 });
