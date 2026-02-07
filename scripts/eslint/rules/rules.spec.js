@@ -33,9 +33,9 @@ describe('ESLint Syntax Restrictions', () => {
    * `@param` {string} [filename='test.tsx'] - The filename for the code
    * `@returns` {Promise<import('eslint').Linter.LintMessage[]>} Array of lint messages
    */
-  const lintCode = async (code, filename = 'test.tsx') => {
+  const lintCode = async (code, filePath = 'test.tsx') => {
     const eslint = await createLinter();
-    const results = await eslint.lintText(code, { filePath: filename });
+    const results = await eslint.lintText(code, { filePath });
     return results[0]?.messages || [];
   };
 
