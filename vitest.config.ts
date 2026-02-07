@@ -75,6 +75,10 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
+      include: [
+        'src/**/*.{js,jsx,ts,tsx}',
+        'scripts/eslint/**/*.{js,ts}',
+      ],
       exclude: [
         'node_modules',
         'dist',
