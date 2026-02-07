@@ -4,7 +4,10 @@ import { detectOS } from './os/detector';
 import { installPackage } from './packages';
 import type { IPackageStatus, PackageName } from './types';
 import { checkInstalledPackages } from './utils/checker';
+import { commandExists } from './utils/exec';
 import { logError, logInfo, logStep, logSuccess } from './utils/logger';
+
+type DockerMode = 'ROOTFUL' | 'ROOTLESS';
 
 /**
  * Main installation function
@@ -17,6 +20,12 @@ export async function main(): Promise<void> {
     logInfo(`Detected OS: ${os.name}${os.distro ? ` (${os.distro})` : ''}`);
 
     const useDocker = await promptDockerChoice();
+    const dockerMode = useDocker ? await promptDockerModeChoice() : 'ROOTFUL';
+
+    if (useDocker && dockerMode === 'ROOTLESS') {
+      await showRootlessDockerGuidance();
+      await checkRootlessPrerequisites(os);
+    }
 
     logStep('Checking installed prerequisites...');
     const installedPackages = await checkInstalledPackages(useDocker);
@@ -72,6 +81,103 @@ async function promptDockerChoice(): Promise<boolean> {
   ]);
   console.log('');
   return useDocker;
+}
+
+/**
+ * Prompt user for Docker daemon mode choice
+ */
+async function promptDockerModeChoice(): Promise<DockerMode> {
+  const { dockerMode } = await inquirer.prompt([
+    {
+      type: 'list',
+      name: 'dockerMode',
+      message: 'Which Docker daemon mode would you like to use?',
+      choices: [
+        {
+          name: 'Rootful (default)',
+          value: 'ROOTFUL',
+        },
+        {
+          name: 'Rootless',
+          value: 'ROOTLESS',
+        },
+      ],
+      default: 'ROOTFUL',
+    },
+  ]);
+  console.log('');
+  return dockerMode;
+}
+
+async function showRootlessDockerGuidance(): Promise<void> {
+  logStep('Rootless Docker mode selected');
+  logInfo('Set Docker host dynamically for the current user:');
+  logInfo('  export DOCKER_HOST=unix:///run/user/$UID/docker.sock');
+  logInfo(
+    'Run rootless setup without sudo: dockerd-rootless-setuptool.sh install',
+  );
+  logInfo('');
+}
+
+async function checkRootlessPrerequisites(
+  os: ReturnType<typeof detectOS>,
+): Promise<void> {
+  if (os.name !== 'linux' && !os.isWsl) {
+    logInfo(
+      'Rootless daemon prerequisites are primarily applicable to Linux/WSL environments.',
+    );
+    return;
+  }
+
+  const requiredCommands = [
+    'dockerd-rootless-setuptool.sh',
+    'newuidmap',
+    'newgidmap',
+    'slirp4netns',
+    'fuse-overlayfs',
+  ];
+
+  const missingCommands: string[] = [];
+  for (const cmd of requiredCommands) {
+    const exists = await commandExists(cmd);
+    if (!exists) {
+      missingCommands.push(cmd);
+    }
+  }
+
+  if (missingCommands.length === 0) {
+    logSuccess('Rootless prerequisites detected');
+    return;
+  }
+
+  logInfo('Missing rootless prerequisites:');
+  missingCommands.forEach((cmd) => logInfo(`  • ${cmd}`));
+  logInfo('');
+
+  if (os.isWsl) {
+    logInfo('WSL recommendation: use Docker Desktop with WSL integration');
+    logInfo('  https://docs.docker.com/desktop/wsl/');
+    logInfo('');
+    return;
+  }
+
+  if (os.distro === 'ubuntu' || os.distro === 'debian') {
+    logInfo('Install Linux prerequisites (Ubuntu/Debian):');
+    logInfo(
+      '  sudo apt-get install -y uidmap dbus-user-session slirp4netns fuse-overlayfs',
+    );
+    logInfo(
+      '  sudo apt-get install -y docker-ce-rootless-extras  # if setuptool is missing',
+    );
+  } else {
+    logInfo(
+      'Install rootless prerequisites for your distro (uidmap, slirp4netns, fuse-overlayfs, rootless extras).',
+    );
+    logInfo('  https://docs.docker.com/engine/security/rootless/');
+  }
+
+  logInfo('');
+  logInfo('After installing prerequisites, run this installer again.');
 }
 
 /**

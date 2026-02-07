@@ -1,0 +1,44 @@
+FROM node:24-slim AS build
+
+ARG PORT=4321
+ENV PORT=${PORT}
+
+# Build args are populated from host UID/GID by compose.
+ARG USER_UID=1000
+ARG USER_GID=1000
+
+RUN set -eux; \
+    current_uid="$(id -u node)"; \
+    current_gid="$(id -g node)"; \
+    if [ "${USER_GID}" != "${current_gid}" ]; then \
+      if getent group "${USER_GID}" >/dev/null 2>&1; then \
+        target_group="$(getent group "${USER_GID}" | cut -d: -f1)"; \
+        usermod -g "${target_group}" node; \
+      else \
+        groupmod -g "${USER_GID}" node; \
+      fi; \
+    fi; \
+    if [ "${USER_UID}" != "${current_uid}" ]; then \
+      usermod -u "${USER_UID}" node; \
+    fi
+
+WORKDIR /usr/src/app
+
+RUN chown -R node:node /usr/src/app /home/node
+
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate
+
+USER node
+ENV HOME=/home/node
+ENV XDG_CACHE_HOME=/home/node/.cache
+ENV COREPACK_HOME=/home/node/.cache/node/corepack
+
+COPY --chown=node:node package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY --chown=node:node . .
+
+RUN pnpm run build
+EXPOSE ${PORT}
+
+CMD ["pnpm", "run", "serve"]

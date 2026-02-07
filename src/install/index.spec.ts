@@ -44,6 +44,7 @@ describe('install/index', () => {
       stdout: '',
       stderr: '',
     });
+    vi.mocked(execModule.commandExists).mockResolvedValue(true);
   });
 
   afterEach(() => {
@@ -108,6 +109,70 @@ describe('install/index', () => {
             name: 'useDocker',
           }),
         ]),
+      );
+    });
+
+    it('should check rootless prerequisites when rootless mode is selected', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'ubuntu',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(execModule.commandExists).toHaveBeenCalledWith(
+        'dockerd-rootless-setuptool.sh',
+      );
+      expect(execModule.commandExists).toHaveBeenCalledWith('newuidmap');
+      expect(execModule.commandExists).toHaveBeenCalledWith('newgidmap');
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'DOCKER_HOST=unix:///run/user/$UID/docker.sock',
+        ),
+      );
+    });
+
+    it('should print missing prerequisite guidance for rootless mode', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'ubuntu',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+      vi.mocked(execModule.commandExists)
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('Missing rootless prerequisites:'),
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining('docker-ce-rootless-extras'),
       );
     });
 

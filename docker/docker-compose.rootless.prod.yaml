@@ -1,0 +1,15 @@
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.rootless.prod
+    ports:
+      - '${PORT:-4321}:80'
+    env_file:
+      - ../.env
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:80']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped

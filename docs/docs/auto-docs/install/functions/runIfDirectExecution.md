@@ -6,7 +6,7 @@
 
 > **runIfDirectExecution**(`argv`, `currentFilePath`, `mainFn`, `errorHandler`): `void`
 
-Defined in: [src/install/index.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/index.ts#L146)
+Defined in: [src/install/index.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/index.ts#L252)
 
 Runs the main installation function if this file is executed directly.
 

@@ -2,6 +2,8 @@ import inquirer from 'inquirer';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
 import { askForDocker } from 'setup/askForDocker/askForDocker';
 
+type DockerMode = 'ROOTFUL' | 'ROOTLESS';
+
 // Function to manage Docker setup
 const askAndSetDockerOption = async (): Promise<void> => {
   const { useDocker } = await inquirer.prompt([
@@ -16,19 +18,51 @@ const askAndSetDockerOption = async (): Promise<void> => {
   if (useDocker) {
     console.log('Setting up with Docker...');
     updateEnvFile('USE_DOCKER', 'YES');
+
+    const { dockerMode } = await inquirer.prompt<{ dockerMode: DockerMode }>([
+      {
+        type: 'list',
+        name: 'dockerMode',
+        message: 'Choose Docker mode:',
+        choices: [
+          {
+            name: 'Rootful (default)',
+            value: 'ROOTFUL',
+          },
+          {
+            name: 'Rootless (least privilege)',
+            value: 'ROOTLESS',
+          },
+        ],
+        default: 'ROOTFUL',
+      },
+    ]);
+
+    updateEnvFile('DOCKER_MODE', dockerMode);
+
     const answers = await askForDocker();
     const DOCKER_PORT_NUMBER = answers;
     updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
     updateEnvFile('PORT', DOCKER_PORT_NUMBER);
 
+    const composeFile =
+      dockerMode === 'ROOTLESS'
+        ? 'docker/docker-compose.rootless.dev.yaml'
+        : 'docker/docker-compose.dev.yaml';
+    const rootlessHostCommand =
+      dockerMode === 'ROOTLESS'
+        ? 'eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"\n'
+        : '';
+
     console.log(`
         
           Run the commands below after setup:-
-                docker compose --env-file .env -f docker/docker-compose.dev.yaml up       
+                ${rootlessHostCommand}                docker compose --env-file .env -f ${composeFile} up       
        `);
   } else {
     console.log('Setting up without Docker...');
     updateEnvFile('USE_DOCKER', 'NO');
+    updateEnvFile('DOCKER_MODE', 'ROOTFUL');
   }
 };
 

@@ -1,0 +1,23 @@
+# Step 1: Build Stage
+FROM node:24-slim AS builder
+WORKDIR /talawa-admin
+
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+
+ENV NODE_ENV=production
+
+RUN pnpm run build
+
+# Step 2: Production
+FROM nginx:1.27.3-alpine AS production
+
+ENV NODE_ENV=production
+
+COPY config/docker/setup/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /talawa-admin/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

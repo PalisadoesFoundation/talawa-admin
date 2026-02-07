@@ -6,7 +6,7 @@
 
 > **handleDirectExecutionError**(`error`): `void`
 
-Defined in: [src/install/index.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/index.ts#L132)
+Defined in: [src/install/index.ts:238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/index.ts#L238)
 
 ## Parameters
 
