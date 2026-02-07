@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { InMemoryCache } from '@apollo/client';
-import type { ApolloLink } from '@apollo/client';
+import { InMemoryCache, ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
@@ -12,6 +11,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import type { ReactNode } from 'react';
+import { Observable } from '@apollo/client/utilities';
 
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -182,8 +182,7 @@ vi.mock('shared-components/DateRangePicker', async () => {
   };
 });
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCK_ERROR);
+// Module-scoped links removed - now created per-test in beforeEach for isolation
 
 // Validate i18n fixtures exist with clear error messages
 const i18nData = i18nForTest.getDataByLanguage('en');
@@ -267,14 +266,15 @@ const getCurrencySelect = () =>
 // Setup userEvent instance for better async handling
 const setupUser = () => userEvent.setup();
 
-const cache = new InMemoryCache();
+// Cache removed from module scope - now created per-test in beforeEach
 
 const renderCampaignModal = (
   link: ApolloLink,
   props: InterfaceCampaignModal,
+  cacheInstance: InMemoryCache,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} cache={cache}>
+    <MockedProvider link={link} cache={cacheInstance}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -402,14 +402,115 @@ const UPDATE_CURRENCY_ONLY_MOCK = [
   },
 ];
 
-const nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
-const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
-const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
-const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
+// Mock for auto-adjust end date test - verifies endAt is auto-adjusted to match startAt
+const UPDATE_AUTO_ADJUST_END_DATE_MOCK = [
+  {
+    request: {
+      query: UPDATE_CAMPAIGN_MUTATION,
+    },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
+      const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
+      // Verify that when start date is changed to after end date,
+      // the end date is auto-adjusted to match the new start date
+      return (
+        input.id === 'campaignId1' &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0 &&
+        // Both dates should be the same (auto-adjusted)
+        input.startAt === input.endAt
+      );
+    },
+    result: {
+      data: {
+        updateFundCampaign: {
+          id: 'campaignId1',
+        },
+      },
+    },
+  },
+];
+
+// Mock links removed from module scope - now created per-test in beforeEach
 
 describe('CampaignModal', () => {
+  // Test isolation: fresh instances created in beforeEach
+  let link1: StaticMockLink;
+  let link2: StaticMockLink;
+  let cache: InMemoryCache;
+  let nameOnlyMockLink: StaticMockLink;
+  let allFieldsMockLink: StaticMockLink;
+  let noFieldsMockLink: StaticMockLink;
+  let currencyOnlyMockLink: StaticMockLink;
+  let autoAdjustEndDateMockLink: StaticMockLink;
+
+  beforeEach(() => {
+    // Create fresh instances for each test to ensure isolation
+    cache = new InMemoryCache();
+    link1 = new StaticMockLink(MOCKS);
+    link2 = new StaticMockLink(MOCK_ERROR);
+    nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
+    allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
+    noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
+    currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
+    autoAdjustEndDateMockLink = new StaticMockLink(
+      UPDATE_AUTO_ADJUST_END_DATE_MOCK,
+    );
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    cleanup();
+  });
+
+  it('should not render modal when isOpen is false', () => {
+    const closedProps = {
+      ...campaignProps[0],
+      isOpen: false,
+    };
+
+    renderCampaignModal(link1, closedProps, cache);
+
+    // Modal should not be in the DOM
+    const modal = screen.queryByTestId('campaignModal');
+    expect(modal).not.toBeInTheDocument();
+  });
+
+  it('should call hide callback when close button is clicked', async () => {
+    const user = userEvent.setup();
+    const hideCallback = vi.fn();
+
+    const propsWithCallback = {
+      ...campaignProps[0],
+      hide: hideCallback,
+    };
+
+    renderCampaignModal(link1, propsWithCallback, cache);
+
+    // Click the close button
+    const closeBtn = screen.getByTestId('modalCloseBtn');
+    await user.click(closeBtn);
+
+    // Verify hide was called exactly once
+    expect(hideCallback).toHaveBeenCalledTimes(1);
+  });
+
   it('should update form state when campaign prop changes', async () => {
-    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
 
     // Initial values
     expect(getCampaignNameInput()).toHaveValue('Campaign 1');
@@ -430,7 +531,7 @@ describe('CampaignModal', () => {
 
     // Re-render with new campaign prop
     rerender(
-      <MockedProvider link={link1}>
+      <MockedProvider link={link1} cache={cache}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -451,7 +552,7 @@ describe('CampaignModal', () => {
   });
 
   it('should reset form state when campaign prop changes to null', async () => {
-    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
 
     // Initial values
     expect(getCampaignNameInput()).toHaveValue('Campaign 1');
@@ -464,7 +565,7 @@ describe('CampaignModal', () => {
 
     // Re-render with null campaign
     rerender(
-      <MockedProvider link={link1}>
+      <MockedProvider link={link1} cache={cache}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -482,13 +583,8 @@ describe('CampaignModal', () => {
     });
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-    cleanup();
-  });
-
   it('should populate form fields with correct values in edit mode', async () => {
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
     const modal = screen.getByTestId('campaignModal');
 
     await waitFor(() => {
@@ -513,7 +609,7 @@ describe('CampaignModal', () => {
   it('should update fundingGoal when input value changes', async () => {
     const user = setupUser();
     await act(async () => {
-      renderCampaignModal(link1, campaignProps[1]);
+      renderCampaignModal(link1, campaignProps[1], cache);
     });
     const goalInput = getFundingGoalInput();
     expect(goalInput).toHaveValue(100);
@@ -541,7 +637,7 @@ describe('CampaignModal', () => {
 
   it('should set fundingGoal to 0 when field is cleared', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
     const goalInput = getFundingGoalInput();
     expect(goalInput).toHaveValue(100);
     // Clear the field - component sets value to 0 when empty
@@ -557,7 +653,7 @@ describe('CampaignModal', () => {
 
   it('should clamp fundingGoal to 0 when negative value is programmatically set', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
     const goalInput = getFundingGoalInput();
     expect(goalInput).toHaveValue(100);
     // Type a value after clearing to verify Math.max(0, parsed) logic
@@ -575,7 +671,7 @@ describe('CampaignModal', () => {
 
   it('should update Start Date when a new date is selected', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
     const startDateInput = getStartDateInput();
     const testDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
     await user.clear(startDateInput);
@@ -587,7 +683,7 @@ describe('CampaignModal', () => {
 
   it('should update End Date when a new date is selected', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
     const endDateInput = getEndDateInput();
     const testDate = dayjs(campaignProps[1].campaign?.startAt)
       .add(1, 'month')
@@ -601,7 +697,7 @@ describe('CampaignModal', () => {
 
   it('should create campaign', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     campaignName.focus();
@@ -646,9 +742,111 @@ describe('CampaignModal', () => {
     });
   });
 
+  it('should show loading state during mutation', async () => {
+    const user = setupUser();
+
+    type MutationObserver = {
+      next(value: Record<string, unknown>): void;
+      error(error: unknown): void;
+      complete(): void;
+    };
+
+    // Capture the observer to control the stream manually
+    let mutationObserver: MutationObserver | null = null;
+
+    // Create a static link to handle other requests (like refetchQueries)
+    const staticLink = new StaticMockLink(MOCKS);
+
+    // implementation of a manual link that captures the observer
+    const manualLink = new ApolloLink((operation, forward) => {
+      // Verify this is the expected mutation
+      const variables = operation.variables as Record<string, unknown>;
+      const input = variables?.input as Record<string, unknown>;
+
+      if (
+        operation.operationName === 'updateFundCampaign' &&
+        input?.id === 'campaignId1'
+      ) {
+        return new Observable((observer) => {
+          mutationObserver = observer;
+        });
+      }
+
+      return forward(operation);
+    });
+
+    // Use edit mode props to match UPDATE mutation
+    const editProps = { ...campaignProps[1] };
+
+    // Chain the links so unhandled requests go to static mocks
+    const link = ApolloLink.from([manualLink, staticLink]);
+
+    renderCampaignModal(link, editProps, cache);
+
+    // Change a field to trigger the update logic
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Updated For Loading Test');
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+
+    // Submit button should be enabled before clicking
+    expect(submitBtn).not.toBeDisabled();
+
+    // Click submit button - mutation will start but hang until we use the observer
+    await user.click(submitBtn);
+
+    // The component shows a loading overlay/disabled state during mutation
+    await waitFor(() => {
+      // Check for the loading indicator explicitly first to confirm state
+      expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+
+      // The CRUDModalTemplate replaces the form with the loading state,
+      // so the submit button is removed from the DOM.
+      expect(screen.queryByTestId('submitCampaignBtn')).not.toBeInTheDocument();
+    });
+
+    // Now resolve the mutation manually
+    await act(async () => {
+      if (mutationObserver) {
+        mutationObserver.next({
+          data: {
+            updateFundCampaign: {
+              id: 'campaignId1',
+              __typename: 'FundCampaign', // Add typename just in case
+            },
+          },
+        });
+        mutationObserver.complete();
+      } else {
+        throw new Error(
+          'Mutation observer was not captured - operation mismatch?',
+        );
+      }
+    });
+
+    // Wait for success and UI update
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
+
+    // In the test environment, props don't update automatically, so isOpen remains true.
+    // The component should return to idle state, showing the form again.
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+      const btn = screen.getByTestId('submitCampaignBtn');
+      expect(btn).toBeInTheDocument();
+      expect(btn).toBeEnabled();
+    });
+
+    expect(editProps.hide).toHaveBeenCalled();
+  });
+
   it('should update campaign', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     campaignName.focus();
@@ -695,7 +893,7 @@ describe('CampaignModal', () => {
 
   it('Error: should create campaign', async () => {
     const user = setupUser();
-    renderCampaignModal(link2, campaignProps[0]);
+    renderCampaignModal(link2, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     campaignName.focus();
@@ -739,7 +937,7 @@ describe('CampaignModal', () => {
 
   it('Error: should update campaign', async () => {
     const user = setupUser();
-    renderCampaignModal(link2, campaignProps[1]);
+    renderCampaignModal(link2, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     campaignName.focus();
@@ -798,7 +996,7 @@ describe('CampaignModal', () => {
       },
     };
 
-    renderCampaignModal(nameOnlyMockLink, editProps);
+    renderCampaignModal(nameOnlyMockLink, editProps, cache);
 
     // Only change the name field
     const campaignName = getCampaignNameInput();
@@ -833,7 +1031,7 @@ describe('CampaignModal', () => {
       },
     };
 
-    renderCampaignModal(allFieldsMockLink, editProps);
+    renderCampaignModal(allFieldsMockLink, editProps, cache);
 
     // Change all fields
     const campaignName = getCampaignNameInput();
@@ -897,7 +1095,7 @@ describe('CampaignModal', () => {
       },
     };
 
-    renderCampaignModal(noFieldsMockLink, unchangedProps);
+    renderCampaignModal(noFieldsMockLink, unchangedProps, cache);
 
     // Don't change any values, just submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
@@ -927,7 +1125,7 @@ describe('CampaignModal', () => {
       },
     };
 
-    renderCampaignModal(link1, keepEndDateProps);
+    renderCampaignModal(link1, keepEndDateProps, cache);
 
     // Verify initial dates
     const startDateInput = getStartDateInput();
@@ -969,7 +1167,7 @@ describe('CampaignModal', () => {
       },
     };
 
-    renderCampaignModal(currencyOnlyMockLink, editProps);
+    renderCampaignModal(currencyOnlyMockLink, editProps, cache);
 
     // For select components, find the select element and change it
     const currencySelect = screen.getByTestId('currencySelect');
@@ -990,7 +1188,7 @@ describe('CampaignModal', () => {
   // Coverage tests
   it('should mark campaign name as touched on blur', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
     await user.tab(); // Moves focus away, triggering blur
@@ -1002,13 +1200,17 @@ describe('CampaignModal', () => {
 
   it('should prevent create submission if name is empty', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, {
-      ...campaignProps[0],
-      campaign: {
-        ...(campaignProps[0].campaign as InterfaceCampaignInfo),
-        name: '',
+    renderCampaignModal(
+      link1,
+      {
+        ...campaignProps[0],
+        campaign: {
+          ...(campaignProps[0].campaign as InterfaceCampaignInfo),
+          name: '',
+        },
       },
-    });
+      cache,
+    );
 
     // Clear the name field if it has a value (form state init might set it)
     const campaignName = getCampaignNameInput();
@@ -1030,13 +1232,17 @@ describe('CampaignModal', () => {
 
   it('should prevent update submission if name is empty', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, {
-      ...campaignProps[1],
-      campaign: {
-        ...(campaignProps[1].campaign as InterfaceCampaignInfo),
-        name: '',
+    renderCampaignModal(
+      link1,
+      {
+        ...campaignProps[1],
+        campaign: {
+          ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+          name: '',
+        },
       },
-    });
+      cache,
+    );
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1057,7 +1263,7 @@ describe('CampaignModal', () => {
 
   it('should reject non-numeric input in fundingGoal field', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const goalInput = getFundingGoalInput();
     expect(goalInput).toHaveValue(100);
@@ -1082,7 +1288,7 @@ describe('CampaignModal', () => {
 
   it('shows error when campaign name is empty in edit mode', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1107,7 +1313,7 @@ describe('CampaignModal', () => {
 
   it('shows error when date range is missing in edit mode', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1127,7 +1333,7 @@ describe('CampaignModal', () => {
 
   it('shows error when campaign name is empty', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1144,7 +1350,7 @@ describe('CampaignModal', () => {
 
   it('shows error when submitting without date range', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1170,7 +1376,7 @@ describe('CampaignModal', () => {
       campaign: null,
     };
 
-    renderCampaignModal(link1, badProps);
+    renderCampaignModal(link1, badProps, cache);
 
     const campaignName = getCampaignNameInput();
     await user.type(campaignName, 'Valid Name');
@@ -1194,7 +1400,7 @@ describe('CampaignModal', () => {
 
   it('re-enables submit button after invalid date validation error', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1217,7 +1423,7 @@ describe('CampaignModal', () => {
 
   it('re-enables submit button after update error', async () => {
     const user = setupUser();
-    renderCampaignModal(link2, campaignProps[1]);
+    renderCampaignModal(link2, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1242,7 +1448,7 @@ describe('CampaignModal', () => {
 
   it('shows error when creating campaign with invalid date', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1263,7 +1469,7 @@ describe('CampaignModal', () => {
 
   it('shows error when end date is before start date in create mode', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[0]);
+    renderCampaignModal(link1, campaignProps[0], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1289,7 +1495,7 @@ describe('CampaignModal', () => {
 
   it('shows error when updating campaign with invalid date', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1310,7 +1516,7 @@ describe('CampaignModal', () => {
 
   it('shows error when end date is before start date in edit mode', async () => {
     const user = setupUser();
-    renderCampaignModal(link1, campaignProps[1]);
+    renderCampaignModal(link1, campaignProps[1], cache);
 
     const campaignName = getCampaignNameInput();
     await user.clear(campaignName);
@@ -1330,6 +1536,219 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.endDateBeforeStart,
+      );
+    });
+  });
+
+  it('should synchronize form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+
+    expect(campaignName).toHaveValue(campaignProps[1].campaign?.name);
+    expect(goalAmount).toHaveValue(campaignProps[1].campaign?.goalAmount);
+
+    const baseCampaign = campaignProps[1].campaign;
+    if (!baseCampaign) {
+      throw new Error('Expected campaign to be defined for edit-mode test');
+    }
+    const updatedCampaign = {
+      ...campaignProps[1],
+      campaign: {
+        ...baseCampaign,
+        name: 'Updated Campaign Name',
+        goalAmount: 5000,
+      },
+    };
+
+    rerender(
+      <MockedProvider link={link1} cache={cache}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedCampaign} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(campaignName).toHaveValue('Updated Campaign Name');
+      expect(goalAmount).toHaveValue(5000);
+    });
+  });
+
+  it('should handle null campaign prop correctly', async () => {
+    const nullCampaignProps = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    renderCampaignModal(link1, nullCampaignProps, cache);
+
+    const campaignName = getCampaignNameInput();
+    const goalAmount = getFundingGoalInput();
+    const startDate = getStartDateInput();
+    const endDate = getEndDateInput();
+
+    expect(campaignName).toHaveValue('');
+    expect(goalAmount).toHaveValue(0);
+    expect(startDate).toHaveValue('');
+    expect(endDate).toHaveValue('');
+  });
+
+  it('should show error when campaign name is empty in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('should show error when start and end dates are not provided in edit mode', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const campaignName = getCampaignNameInput();
+    await user.clear(campaignName);
+    await user.type(campaignName, 'Valid Campaign Name');
+
+    await user.clear(getStartDateInput());
+    await user.clear(getEndDateInput());
+
+    await user.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('should allow updating the fundingGoal field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const goalAmountInput = getFundingGoalInput();
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '7500');
+
+    expect(goalAmountInput).toHaveValue(7500);
+  });
+
+  it('should allow updating the startAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const startDateInput = getStartDateInput();
+    const newStartDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDate);
+
+    expect(startDateInput).toHaveValue(newStartDate);
+  });
+
+  it('should allow updating the endAt date field value', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const endDateInput = getEndDateInput();
+    const newEndDate = dayjs.utc().add(8, 'month').format('DD/MM/YYYY');
+    await user.clear(endDateInput);
+    await user.type(endDateInput, newEndDate);
+
+    expect(endDateInput).toHaveValue(newEndDate);
+  });
+
+  it('should allow changing the currency code', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const currencySelect = getCurrencySelect();
+    await user.selectOptions(currencySelect, 'EUR');
+
+    expect(currencySelect).toHaveValue('EUR');
+  });
+
+  it('should handle zero value for fundingGoal', async () => {
+    const user = setupUser();
+    renderCampaignModal(link1, campaignProps[1], cache);
+
+    const goalAmountInput = getFundingGoalInput();
+
+    // Test with zero
+    await user.clear(goalAmountInput);
+    await user.type(goalAmountInput, '0');
+    expect(goalAmountInput).toHaveValue(0);
+
+    // Test clearing to empty - component sets value to 0 when cleared
+    await user.clear(goalAmountInput);
+    expect(goalAmountInput).toHaveValue(0);
+  });
+
+  it('should auto-adjust end date when start date is changed to after end date', async () => {
+    const user = userEvent.setup();
+
+    // Use dynamic dates based on baseDate to avoid hardcoded values
+    const initialStartDate = baseDate.add(1, 'month');
+    const initialEndDate = baseDate.add(6, 'month');
+    const newStartDate = baseDate.add(8, 'month'); // After the initial end date
+
+    const editProps = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId1',
+        name: 'Campaign 1',
+        goalAmount: 100,
+        startAt: initialStartDate.toDate(),
+        endAt: initialEndDate.toDate(),
+        currencyCode: 'USD',
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
+      },
+    };
+
+    renderCampaignModal(autoAdjustEndDateMockLink, editProps, cache);
+
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
+
+    // Verify initial dates
+    expect(startDateInput).toHaveValue(initialStartDate.format('DD/MM/YYYY'));
+    expect(endDateInput).toHaveValue(initialEndDate.format('DD/MM/YYYY'));
+
+    // Change start date to be after the current end date
+    // This should trigger auto-adjustment of end date to match start date
+    const newStartDateFormatted = newStartDate.format('DD/MM/YYYY');
+    await user.clear(startDateInput);
+    await user.type(startDateInput, newStartDateFormatted);
+
+    // Verify the start date was updated
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue(newStartDateFormatted);
+    });
+
+    // Note: The end date input won't visually update because the mocked DatePicker
+    // uses defaultValue (uncontrolled). However, the component's internal state
+    // is correctly updated, which we verify via the mutation payload.
+
+    // Submit the form to verify the mutation payload contains auto-adjusted dates
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    await user.click(submitBtn);
+
+    // Verify success - the mock's variableMatcher ensures startAt === endAt
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
       );
     });
   });
