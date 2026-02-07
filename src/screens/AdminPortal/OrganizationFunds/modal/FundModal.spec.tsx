@@ -16,6 +16,7 @@ import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import * as apollo from '@apollo/client';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -125,6 +126,16 @@ const renderFundModal = (
     </MockedProvider>,
   );
 };
+
+const mutationReturn = [
+  vi.fn().mockResolvedValue({ data: {} }),
+  {
+    loading: false,
+    called: false,
+    reset: vi.fn(),
+    client: {} as never,
+  },
+] satisfies ReturnType<typeof apollo.useMutation>;
 
 describe('PledgeModal', () => {
   afterEach(() => {
@@ -477,5 +488,84 @@ describe('PledgeModal', () => {
 
     // Error should be gone because touched state is reset
     expect(screen.queryByText('Required')).not.toBeInTheDocument();
+  });
+
+  it('should create fund successfully and call side effects', async () => {
+    vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
+
+    const hide = vi.fn();
+    const refetchFunds = vi.fn();
+
+    renderFundModal(link1, {
+      ...fundProps[0],
+      hide,
+      refetchFunds,
+      mode: 'create',
+    });
+
+    await userEvent.clear(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    );
+    await userEvent.type(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+      'New Fund',
+    );
+
+    await userEvent.clear(
+      screen.getByLabelText(translations.fundId, { exact: false }),
+    );
+    await userEvent.type(
+      screen.getByLabelText(translations.fundId, { exact: false }),
+      '1234',
+    );
+
+    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(refetchFunds).toHaveBeenCalled();
+      expect(hide).toHaveBeenCalled();
+    });
+
+    expect(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    ).toHaveValue('');
+    expect(
+      screen.getByLabelText(translations.fundId, { exact: false }),
+    ).toHaveValue('');
+  });
+
+  it('should update fund successfully and call side effects', async () => {
+    vi.spyOn(apollo, 'useMutation').mockReturnValue(mutationReturn);
+
+    const hide = vi.fn();
+    const refetchFunds = vi.fn();
+
+    renderFundModal(link1, {
+      ...fundProps[1],
+      hide,
+      refetchFunds,
+      mode: 'edit',
+    });
+
+    await userEvent.clear(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    );
+    await userEvent.type(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+      'Updated Fund',
+    );
+
+    await userEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(refetchFunds).toHaveBeenCalled();
+      expect(hide).toHaveBeenCalled();
+    });
+
+    expect(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    ).toHaveValue('');
   });
 });
