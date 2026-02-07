@@ -4072,8 +4072,6 @@ form label,
   }
 }
 
-/* -- OrgAdminListCard.tsx -- */
-
 /* -- OrganizationCard.tsx -- */
 
 .orgName {
@@ -4152,55 +4150,6 @@ form label,
   justify-content: space-around;
   width: 8rem;
   border-width: medium;
-}
-
-/* -- OrganizationCardStart.tsx -- */
-
-.alignimg {
-  border-radius: 50%;
-  background-blend-mode: darken;
-  height: 65px;
-  width: 65px;
-}
-
-.box {
-  color: var(--box-color);
-}
-
-.box :hover {
-  color: var(--box-color-hover);
-}
-
-.first_box {
-  display: flex;
-  flex-direction: row;
-  padding-bottom: 10px;
-  padding-top: 10px;
-}
-
-.second_box {
-  padding-left: 20px;
-  padding-top: 10px;
-}
-
-.second_box > h4 {
-  font-size: 10;
-  font-weight: bold;
-  text-decoration: none;
-  color: var(--secondBox-h4-color);
-}
-
-.second_box > h5 {
-  text-decoration: none;
-  font-size: 10;
-  font-weight: 100;
-  color: var(--secondBox-h5-color);
-}
-
-.deco {
-  border: 1px solid var(--deco-bg);
-  width: 65vw;
-  height: 0px !important;
 }
 
 /* -- CardItem.tsx -- */
@@ -4700,8 +4649,6 @@ form label,
 .cards:last-child:nth-last-child(odd) {
   grid-column: auto / span 2;
 }
-
-/* -- OrgDelete.tsx -- */
 
 /* -- OrgListCard.tsx -- */
 
@@ -5776,8 +5723,6 @@ form {
 }
 
 /* -- OrganizationCard.tsx -- */
-
-/* -- OrganizationCardStart.tsx -- */
 
 /* -- CardItem.tsx -- */
 

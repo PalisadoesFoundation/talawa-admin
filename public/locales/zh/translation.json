@@ -580,16 +580,6 @@
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-  "orgAdminListCard": {
-    "remove": "消除",
-    "removeAdmin": "删除管理员",
-    "removeAdminMsg": "您想删除该管理员吗？",
-    "adminRemoved": "管理员被删除。",
-    "joined": "已加入",
-    "no": "否",
-    "yes": "是",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
   "orgPeopleListCard": {
     "remove": "消除",
     "removeMember": "删除会员",
@@ -1295,9 +1285,6 @@
     "passNoMatch": "新密码和确认密码不匹配。",
     "saveChanges": "保存更改",
     "cancel": "取消"
-  },
-  "orgDelete": {
-    "deleteOrg": "删除组织"
   },
   "membershipRequest": {
     "accept": "接受",
@@ -2587,13 +2574,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "日期不可用",
     "yes": "是",
     "no": "否",
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数",
-    "viewEventDetails": "查看活动详情"
+    "numberOfAttendees": "出席人数"
   },
   "promotedPost": {
     "title": "推广内容",
