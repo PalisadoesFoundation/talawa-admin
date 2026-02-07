@@ -5,7 +5,9 @@ import type { InterfacePageInfo } from './pagination';
 import type { IColumnDef } from './column';
 import type { Key } from './types';
 
-type ConnectionResolver<TNode, TData> = (data: MaybeMasked<TData>) =>
+type ConnectionResolver<TNode, TData> = (
+  data: MaybeMasked<TData>,
+) => // i18n-ignore-line
   | {
       edges?:
         | Array<{ node: TNode | null | undefined } | null | undefined>

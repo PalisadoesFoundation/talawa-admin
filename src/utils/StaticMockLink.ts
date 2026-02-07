@@ -108,7 +108,7 @@ export interface IStaticMockedResponse extends MockedResponse {
   variableMatcher?: (variables: Record<string, unknown>) => boolean;
   newData?: (
     variables: Record<string, unknown>,
-  ) => FetchResult | ResultFunction<FetchResult>;
+  ) => FetchResult | ResultFunction<FetchResult>; // i18n-ignore-line
   delay?: number | ((operation: Operation) => number);
 }
 
