@@ -70,8 +70,8 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
 
   return (
     <Col xl={4}>
-      <Row className="mb-4">
-        <Card border="0" className={`rounded-4 ${styles.memReqCard}`}>
+      <Row className={styles.row}>
+        <Card border="0" className={`${styles.card} ${styles.memReqCard}`}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('membershipRequests')}</div>
             <Button
@@ -117,7 +117,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
         </Card>
       </Row>
       <Row>
-        <Card border="0" className="rounded-4">
+        <Card border="0" className={styles.card}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
             <Button
