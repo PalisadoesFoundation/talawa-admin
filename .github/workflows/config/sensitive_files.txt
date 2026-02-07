@@ -5,8 +5,11 @@ pyproject.toml$
 vitest.config.js$
 src/App.tsx$
 ^.github/.*
+^.coderabbit/.*
 ^.husky/.*
 ^scripts/.*
+^docker/.*
+^config/.*
 ^src/style/.*
 schema.graphql$
 package.json$
@@ -20,12 +23,6 @@ tsconfig.json$
 .prettierrc$
 .prettierignore$
 vite.config.ts$
-^docker/docker-compose.prod.yaml$
-^docker/docker-compose.dev.yaml$
-^docker/Dockerfile.dev$
-^docker/Dockerfile.prod$
-^config/docker/setup/nginx.conf$
-^config/docker/setup/nginx.prod.conf$
 CODEOWNERS$
 LICENSE$
 setup.ts$
