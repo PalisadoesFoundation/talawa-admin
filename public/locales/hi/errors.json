@@ -2,6 +2,8 @@
   "talawaApiUnavailable": "तलवा-एपीआई सेवा उपलब्ध नहीं है! ",
   "notFound": "नहीं मिला",
   "unknownError": "एक अज्ञात त्रुटि हुई।  {{msg}}",
+  "missingRegistrationFields": "कृपया सभी आवश्यक फ़ील्ड भरें।",
+  "missingOrganizationId": "कृपया एक संगठन चुनें।",
   "notAuthorised": "क्षमा मांगना! ",
   "errorSendingMail": "मेल भेजने में त्रुटि",
   "emailNotRegistered": "ईमेल पंजीकृत नहीं है",
