@@ -133,9 +133,9 @@ describe('Event Management', () => {
 
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
     clearAllItems();
-    cleanup();
+
+    vi.clearAllMocks();
   });
 
   describe('Navigation Tests', () => {

@@ -587,7 +587,6 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    // Select the 'following' option
     const followingRadio = screen.getByLabelText('updateThisAndFollowing');
     await userEvent.click(followingRadio);
 
