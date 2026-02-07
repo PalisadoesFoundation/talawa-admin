@@ -140,7 +140,7 @@ const mutationReturn = [
 describe('PledgeModal', () => {
   afterEach(() => {
     cleanup();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
@@ -527,12 +527,14 @@ describe('PledgeModal', () => {
       expect(hide).toHaveBeenCalled();
     });
 
-    expect(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    ).toHaveValue('');
-    expect(
-      screen.getByLabelText(translations.fundId, { exact: false }),
-    ).toHaveValue('');
+    await waitFor(() => {
+      expect(
+        screen.getByLabelText(translations.fundName, { exact: false }),
+      ).toHaveValue('');
+      expect(
+        screen.getByLabelText(translations.fundId, { exact: false }),
+      ).toHaveValue('');
+    });
   });
 
   it('should update fund successfully and call side effects', async () => {
@@ -564,8 +566,10 @@ describe('PledgeModal', () => {
       expect(hide).toHaveBeenCalled();
     });
 
-    expect(
-      screen.getByLabelText(translations.fundName, { exact: false }),
-    ).toHaveValue('');
+    await waitFor(() => {
+      expect(
+        screen.getByLabelText(translations.fundName, { exact: false }),
+      ).toHaveValue('');
+    });
   });
 });
