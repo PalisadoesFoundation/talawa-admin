@@ -227,7 +227,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           >
             <FormTextField
               name="orgDescrip"
-              label={tCommon('description')}
+              label={''}
               as="textarea"
               className={styles.descriptionTextField}
               placeholder={t('enterOrganizationDescription')}
@@ -246,7 +246,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           >
             <FormTextField
               name="address.line1"
-              label={tCommon('Location')}
+              label={''}
               placeholder={tCommon('Enter Organization location')}
               autoComplete="off"
               className={styles.textFields}

@@ -519,6 +519,16 @@ export const mocks = [
     },
     result: { data: { deleteChat: { id: 'chat1', success: true } } },
   },
+  // Mock for updating chat membership (demoting from administrator to regular)
+  {
+    request: {
+      query: UPDATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user2', chatId: 'chat1', role: 'regular' },
+      },
+    },
+    result: { data: { updateChatMembership: { id: 'chat1', success: true } } },
+  },
 ];
 
 export const failingMocks = [
@@ -567,6 +577,7 @@ export const failingMocks = [
     error: new Error('Failed to update chat image'),
   },
   // Mock for adding user failure
+  // Mock for adding user to chat failure
   {
     request: {
       query: CREATE_CHAT_MEMBERSHIP,
@@ -576,4 +587,44 @@ export const failingMocks = [
     },
     error: new Error('Failed to add user'),
   },
+  // Organization members mocks
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                cursor: 'cursor-1',
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: undefined,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
 ];
+
+/**
+ * Delayed mocks to simulate network latency for loading states testing
+ */
+export const delayedMocks = mocks.map((mock) => ({
+  ...mock,
+  delay: 300,
+}));
