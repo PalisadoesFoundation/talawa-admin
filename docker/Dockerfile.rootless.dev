@@ -2,6 +2,7 @@ FROM node:24-slim AS build
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG PORT=4321
+ARG PNPM_VERSION=10.4.1
 ENV PORT=${PORT}
 
 # Build args are populated from host UID/GID by compose.
@@ -31,7 +32,7 @@ RUN apt-get update \
 
 RUN chown -R node:node /usr/src/app /home/node
 
-RUN corepack enable && corepack prepare pnpm@10.4.1 --activate
+RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 
 USER node
 ENV HOME=/home/node
@@ -43,7 +44,6 @@ RUN pnpm install --frozen-lockfile
 
 COPY --chown=node:node . .
 
-RUN pnpm run build
 EXPOSE ${PORT}
 
 CMD ["pnpm", "run", "serve"]

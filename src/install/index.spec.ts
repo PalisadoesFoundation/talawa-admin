@@ -178,6 +178,45 @@ describe('install/index', () => {
       expect(packagesModule.installPackage).not.toHaveBeenCalled();
     });
 
+    it('should print generic Linux rootless guidance and abort when prerequisites are missing on non-debian distros', async () => {
+      vi.mocked(detectorModule.detectOS).mockReturnValue({
+        name: 'linux',
+        distro: 'other',
+      });
+      vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue([
+        { name: 'docker', installed: true },
+        { name: 'typescript', installed: true },
+      ]);
+      vi.mocked(execModule.commandExists)
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(true);
+
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        useDocker: true,
+      } as never);
+      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+        dockerMode: 'ROOTLESS',
+      } as never);
+
+      await main();
+
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'Install rootless prerequisites for your distro (uidmap, slirp4netns, fuse-overlayfs, rootless extras).',
+        ),
+      );
+      expect(console.log).toHaveBeenCalledWith(
+        expect.stringContaining(
+          'https://docs.docker.com/engine/security/rootless/',
+        ),
+      );
+      expect(process.exit).toHaveBeenCalledWith(1);
+      expect(packagesModule.installPackage).not.toHaveBeenCalled();
+    });
+
     it('should short-circuit Linux rootless prerequisite checks on non-linux platforms', async () => {
       vi.mocked(detectorModule.detectOS).mockReturnValue({
         name: 'macos',

@@ -4,6 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/../../.." && pwd)"
 TARGET_SCRIPT="${ROOT_DIR}/scripts/docker/resolve-docker-host.sh"
+# Test harness uses regular files as socket stand-ins.
+export TEST_HARNESS_ALLOW_REGULAR_SOCKET_PATHS=true
 
 TOTAL=0
 PASSED=0
@@ -38,9 +40,16 @@ assert_contains() {
 run_test() {
   local name="$1"
   local fn="$2"
+  local status
   TOTAL=$((TOTAL + 1))
   echo "Running: $name"
-  if "$fn"; then
+
+  set +e
+  ( set -e; "$fn" )
+  status=$?
+  set -e
+
+  if [[ $status -eq 0 ]]; then
     echo "  PASSED"
     PASSED=$((PASSED + 1))
   else

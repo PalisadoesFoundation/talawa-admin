@@ -9,6 +9,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.rootless.dev
       args:
+        PNPM_VERSION: '${PNPM_VERSION:-10.4.1}'
         USER_UID: '${UID:-1000}'
         USER_GID: '${GID:-1000}'
     ports:

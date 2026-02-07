@@ -33,7 +33,13 @@ require_flag_value() {
 
 socket_exists() {
   local socket_path="$1"
-  [[ -S "$socket_path" || -e "$socket_path" ]]
+  # Production resolution should only accept Unix sockets.
+  # Tests can opt in to regular-file simulation via TEST_HARNESS_ALLOW_REGULAR_SOCKET_PATHS=true.
+  if [[ "${TEST_HARNESS_ALLOW_REGULAR_SOCKET_PATHS:-false}" == "true" ]]; then
+    [[ -S "$socket_path" || -e "$socket_path" ]]
+    return
+  fi
+  [[ -S "$socket_path" ]]
 }
 
 while [[ $# -gt 0 ]]; do
@@ -80,6 +86,9 @@ fi
 
 rootless_socket="${RUNTIME_DIR%/}/docker.sock"
 
+# In explicit rootless mode, we intentionally allow exporting DOCKER_HOST before
+# daemon startup. Callers should perform readiness checks (for example `docker info`)
+# after resolving `resolved` from `rootless_socket`.
 if [[ "$MODE" == "rootless" ]]; then
   resolved="unix://${rootless_socket}"
 elif [[ "$MODE" == "rootful" ]]; then

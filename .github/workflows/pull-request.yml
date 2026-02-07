@@ -840,6 +840,7 @@ jobs:
       - name: Build Docker images
         run: |
           set -e
+          export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
           echo "Building Docker images..."
           docker compose -f docker/docker-compose.prod.yaml build
           docker compose -f docker/docker-compose.dev.yaml build
@@ -961,7 +962,7 @@ jobs:
             TIMEOUT=$((TIMEOUT - 2))
           done
 
-          if [ "$TIMEOUT" -le 0 ]; then
+          if ! docker info >/dev/null 2>&1; then
             echo "Rootless Docker daemon did not start in time."
             if [ -f "$RUNNER_TEMP/dockerd-rootless.log" ]; then
               tail -n 200 "$RUNNER_TEMP/dockerd-rootless.log"
@@ -976,6 +977,7 @@ jobs:
       - name: Build Docker images (Rootless)
         run: |
           set -e
+          export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
           export UID
           export GID="$(id -g)"
           echo "Building rootless Docker images..."

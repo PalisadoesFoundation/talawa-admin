@@ -20,11 +20,12 @@ export async function main(): Promise<void> {
     logInfo(`Detected OS: ${os.name}${os.distro ? ` (${os.distro})` : ''}`);
 
     const useDocker = await promptDockerChoice();
-    const dockerMode = useDocker ? await promptDockerModeChoice() : 'ROOTFUL';
-
-    if (useDocker && dockerMode === 'ROOTLESS') {
-      showRootlessDockerGuidance();
-      await checkRootlessPrerequisites(os);
+    if (useDocker) {
+      const dockerMode = await promptDockerModeChoice();
+      if (dockerMode === 'ROOTLESS') {
+        showRootlessDockerGuidance();
+        await checkRootlessPrerequisites(os);
+      }
     }
 
     logStep('Checking installed prerequisites...');

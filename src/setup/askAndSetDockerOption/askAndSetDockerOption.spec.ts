@@ -65,12 +65,13 @@ describe('askAndSetDockerOption', () => {
     (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       dockerMode: 'ROOTFUL',
     });
-    (askForDocker as Mock).mockResolvedValueOnce(4321);
+    (askForDocker as Mock).mockResolvedValueOnce('4321');
 
     await askAndSetDockerOption();
 
     expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'YES');
     expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_MODE', 'ROOTFUL');
+    expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_PORT', '4321');
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('docker/docker-compose.dev.yaml'),
     );
