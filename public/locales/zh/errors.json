@@ -2,6 +2,8 @@
   "talawaApiUnavailable": "Talawa-API 服务不可用！",
   "notFound": "未找到",
   "unknownError": "出现未知错误。 {{msg}}",
+  "missingRegistrationFields": "请填写所有必填项。",
+  "missingOrganizationId": "请选择一个组织。",
   "notAuthorised": "对不起！",
   "errorSendingMail": "发送邮件时出错",
   "emailNotRegistered": "邮箱未注册",

@@ -2,6 +2,8 @@
   "talawaApiUnavailable": "Talawa-API service is unavailable!. Is it running? Check your network connectivity too.",
   "notFound": "Not found",
   "unknownError": "An unknown error occurred. Please try again later. {{msg}}",
+  "missingRegistrationFields": "Please fill in all required fields.",
+  "missingOrganizationId": "Please select an organization.",
   "notAuthorised": "Sorry! you are not Authorised!",
   "errorSendingMail": "Error sending mail",
   "emailNotRegistered": "Email not registered",

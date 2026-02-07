@@ -40,6 +40,7 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
   placeholder,
   error,
   testId,
+  dataCy,
 }) => {
   const { t } = useTranslation('common');
 
@@ -53,6 +54,7 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
       placeholder={placeholder ?? t('emailPlaceholder')}
       error={error}
       testId={testId}
+      dataCy={dataCy}
       required
     />
   );
