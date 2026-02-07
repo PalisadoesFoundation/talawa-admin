@@ -249,8 +249,8 @@ describe('Volunteer Management', () => {
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
-    expect(dropdownMenu).toBeInTheDocument();
+    // Find dropdown menu and verify it's open
+    await screen.findByTestId('tabs-dropdown-menu');
 
     const actionsItem = screen.getByTestId('tabs-dropdown-item-actions');
     await userEvent.click(actionsItem);
@@ -273,8 +273,8 @@ describe('Volunteer Management', () => {
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
-    expect(dropdownMenu).toBeInTheDocument();
+    // Find dropdown menu and verify it's open
+    await screen.findByTestId('tabs-dropdown-menu');
 
     const groupsItem = screen.getByTestId('tabs-dropdown-item-groups');
     await userEvent.click(groupsItem);
@@ -302,8 +302,8 @@ describe('Volunteer Management', () => {
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    const dropdownMenu = screen.getByTestId('tabs-dropdown-menu');
-    expect(dropdownMenu).toBeInTheDocument();
+    // Find dropdown menu and verify it's open
+    await screen.findByTestId('tabs-dropdown-menu');
 
     const upcomingEventsItem = screen.getByTestId(
       'tabs-dropdown-item-upcomingEvents',

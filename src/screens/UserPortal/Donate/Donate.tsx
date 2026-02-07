@@ -26,6 +26,12 @@ import {
 } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
+const currencies = ['USD', 'INR', 'EUR'];
+const currencyOptions = currencies.map((currency) => ({
+  value: currency,
+  label: currency,
+}));
+
 /**
  * Component for handling donations to an organization.
  * Allows users to make donations and view their donation history.
@@ -50,12 +56,6 @@ export default function Donate(): JSX.Element {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState('');
-
-  const currencies = ['USD', 'INR', 'EUR'];
-  const currencyOptions = currencies.map((currency) => ({
-    value: currency,
-    label: currency,
-  }));
 
   const {
     data: donationData,

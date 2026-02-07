@@ -1,5 +1,4 @@
 import React from 'react';
-import dayjs from 'dayjs';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -8,6 +7,7 @@ import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+import { DUMMY_DATE_TIME_PREFIX } from 'Constant/common';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -16,6 +16,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+
+const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
+import dayjs from 'dayjs';
 
 const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
   mockErrorHandler: vi.fn(),
@@ -182,7 +185,7 @@ const MOCKS = [
             amount: 1,
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
-            updatedAt: dayjs().month(3).date(3).toISOString(),
+            updatedAt: dayjs(MOCK_DATE).toISOString(),
             __typename: 'Donation',
           },
         ],
@@ -267,7 +270,7 @@ const MULTIPLE_DONATIONS_MOCKS = [
           amount: (i + 1) * 10,
           userId: `user-${i}`,
           payPalId: `paypal-${i}`,
-          updatedAt: dayjs().month(3).date(3).toISOString(),
+          updatedAt: dayjs(MOCK_DATE).toISOString(),
           __typename: 'Donation',
         })),
         __typename: 'Query',
@@ -548,6 +551,11 @@ describe('Donate Component', () => {
     expect(currencyButton).toHaveTextContent('USD');
 
     await userEvent.click(currencyButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
+    });
+
     const inrOption = screen.getByTestId('currency-dropdown-item-INR');
     await userEvent.click(inrOption);
 
@@ -559,6 +567,10 @@ describe('Donate Component', () => {
 
     const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     await userEvent.click(currencyButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
+    });
 
     expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
       'USD',
@@ -609,7 +621,7 @@ describe('Donate Component', () => {
               amount: (i + 1) * 10,
               userId: `user-${i}`,
               payPalId: `paypal-${i}`,
-              updatedAt: dayjs().month(3).date(3).toISOString(),
+              updatedAt: dayjs(MOCK_DATE).toISOString(),
               __typename: 'Donation',
             })),
             __typename: 'Query',
