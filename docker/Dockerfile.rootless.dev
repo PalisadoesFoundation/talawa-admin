@@ -1,4 +1,5 @@
 FROM node:24-slim AS build
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG PORT=4321
 ENV PORT=${PORT}
@@ -23,6 +24,10 @@ RUN set -eux; \
     fi
 
 WORKDIR /usr/src/app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN chown -R node:node /usr/src/app /home/node
 

@@ -51,14 +51,16 @@ const askAndSetDockerOption = async (): Promise<void> => {
         : 'docker/docker-compose.dev.yaml';
     const rootlessHostCommand =
       dockerMode === 'ROOTLESS'
-        ? 'eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"\n'
+        ? 'eval "$(./scripts/docker/resolve-docker-host.sh --mode rootless --emit-export --warn-if-docker-group)"'
         : '';
 
-    console.log(`
-        
-          Run the commands below after setup:-
-                ${rootlessHostCommand}                docker compose --env-file .env -f ${composeFile} up       
-       `);
+    const postSetupCommands = [
+      'Run the commands below after setup:-',
+      ...(rootlessHostCommand ? [rootlessHostCommand] : []),
+      `docker compose --env-file .env -f ${composeFile} up`,
+    ];
+
+    console.log(`\n${postSetupCommands.join('\n')}\n`);
   } else {
     console.log('Setting up without Docker...');
     updateEnvFile('USE_DOCKER', 'NO');

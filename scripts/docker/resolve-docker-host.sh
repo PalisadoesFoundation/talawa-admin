@@ -21,18 +21,36 @@ Options:
 EOF
 }
 
+require_flag_value() {
+  local flag="$1"
+  local value="${2-}"
+
+  if [[ -z "$value" || "$value" == --* ]]; then
+    echo "Missing value for ${flag}" >&2
+    exit 1
+  fi
+}
+
+socket_exists() {
+  local socket_path="$1"
+  [[ -S "$socket_path" || -e "$socket_path" ]]
+}
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --mode)
-      MODE="${2:-}"
+      require_flag_value "$1" "${2-}"
+      MODE="$2"
       shift 2
       ;;
     --runtime-dir)
-      RUNTIME_DIR="${2:-}"
+      require_flag_value "$1" "${2-}"
+      RUNTIME_DIR="$2"
       shift 2
       ;;
     --rootful-socket)
-      ROOTFUL_SOCKET="${2:-}"
+      require_flag_value "$1" "${2-}"
+      ROOTFUL_SOCKET="$2"
       shift 2
       ;;
     --emit-export)
@@ -65,12 +83,19 @@ rootless_socket="${RUNTIME_DIR%/}/docker.sock"
 if [[ "$MODE" == "rootless" ]]; then
   resolved="unix://${rootless_socket}"
 elif [[ "$MODE" == "rootful" ]]; then
+  if ! socket_exists "$ROOTFUL_SOCKET"; then
+    echo "Rootful socket not found: ${ROOTFUL_SOCKET}" >&2
+    exit 1
+  fi
   resolved="unix://${ROOTFUL_SOCKET}"
 else
-  if [[ -S "$rootless_socket" || -e "$rootless_socket" ]]; then
+  if socket_exists "$rootless_socket"; then
     resolved="unix://${rootless_socket}"
-  else
+  elif socket_exists "$ROOTFUL_SOCKET"; then
     resolved="unix://${ROOTFUL_SOCKET}"
+  else
+    echo "No Docker socket found (checked: ${rootless_socket}, ${ROOTFUL_SOCKET})" >&2
+    exit 1
   fi
 fi
 

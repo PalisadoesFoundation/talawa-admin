@@ -69,6 +69,7 @@ describe('askAndSetDockerOption', () => {
 
     await askAndSetDockerOption();
 
+    expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'YES');
     expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_MODE', 'ROOTFUL');
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('docker/docker-compose.dev.yaml'),

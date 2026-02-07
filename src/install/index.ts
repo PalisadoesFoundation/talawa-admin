@@ -23,7 +23,7 @@ export async function main(): Promise<void> {
     const dockerMode = useDocker ? await promptDockerModeChoice() : 'ROOTFUL';
 
     if (useDocker && dockerMode === 'ROOTLESS') {
-      await showRootlessDockerGuidance();
+      showRootlessDockerGuidance();
       await checkRootlessPrerequisites(os);
     }
 
@@ -109,7 +109,7 @@ async function promptDockerModeChoice(): Promise<DockerMode> {
   return dockerMode;
 }
 
-async function showRootlessDockerGuidance(): Promise<void> {
+function showRootlessDockerGuidance(): void {
   logStep('Rootless Docker mode selected');
   logInfo('Set Docker host dynamically for the current user:');
   logInfo('  export DOCKER_HOST=unix:///run/user/$UID/docker.sock');
@@ -151,14 +151,18 @@ async function checkRootlessPrerequisites(
   }
 
   logInfo('Missing rootless prerequisites:');
-  missingCommands.forEach((cmd) => logInfo(`  • ${cmd}`));
+  for (const cmd of missingCommands) {
+    logInfo(`  • ${cmd}`);
+  }
   logInfo('');
 
   if (os.isWsl) {
     logInfo('WSL recommendation: use Docker Desktop with WSL integration');
     logInfo('  https://docs.docker.com/desktop/wsl/');
     logInfo('');
-    return;
+    throw new Error(
+      'Missing rootless prerequisites in WSL. Configure Docker Desktop WSL integration before continuing.',
+    );
   }
 
   if (os.distro === 'ubuntu' || os.distro === 'debian') {
@@ -178,6 +182,9 @@ async function checkRootlessPrerequisites(
 
   logInfo('');
   logInfo('After installing prerequisites, run this installer again.');
+  throw new Error(
+    'Missing required rootless Docker prerequisites. Install them and rerun the installer.',
+  );
 }
 
 /**

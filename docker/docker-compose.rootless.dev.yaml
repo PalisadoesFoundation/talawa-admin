@@ -1,3 +1,8 @@
+# Rootless compose requires UID/GID exported for USER_UID/USER_GID mapping.
+# Local setup example:
+#   export UID="$(id -u)"
+#   export GID="$(id -g)"
+# CI already exports these values.
 services:
   app:
     build:
