@@ -7,8 +7,7 @@ import { PluginStatus } from '../types';
 
 const mockRegisterPluginDynamically = vi.fn();
 vi.mock('../registry', () => ({
-  registerPluginDynamically: (...args: any[]) =>
-    mockRegisterPluginDynamically(...args),
+  registerPluginDynamically: (...args: any[]) => mockRegisterPluginDynamically(...args),
 }));
 
 const VALID_PLUGIN_ID = 'TestPlugin_1';
@@ -43,6 +42,7 @@ function createManager() {
 }
 
 describe('LifecycleManager Coverage Suite', () => {
+  
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn().mockResolvedValue({
@@ -53,6 +53,8 @@ describe('LifecycleManager Coverage Suite', () => {
 
   afterEach(() => {
     vi.resetAllMocks();
+    // Explicit global cleanup as requested by CodeRabbit
+    delete (global as any).fetch;
   });
 
   // ----------------------------------------------------------------
@@ -61,8 +63,13 @@ describe('LifecycleManager Coverage Suite', () => {
   describe('Input Validation', () => {
     it('rejects operations with invalid plugin IDs (Regex, Null, Types)', async () => {
       const manager = createManager();
-
-      const invalidInputs = [INVALID_PLUGIN_ID, '', null as any, 123 as any];
+      
+      const invalidInputs = [
+          INVALID_PLUGIN_ID, 
+          '',                
+          null as any,       
+          123 as any         
+      ];
 
       for (const input of invalidInputs) {
         expect(manager.getLoadedPlugin(input)).toBeUndefined();
@@ -94,31 +101,27 @@ describe('LifecycleManager Coverage Suite', () => {
     });
 
     it('handles "Dead Code" race condition (Installed check passes, then fails)', async () => {
-      // This covers the unreachable branch in determineInitialPluginStatus (lines 289-290)
-      mockDiscoveryManager.isPluginInstalled
-        .mockReturnValueOnce(true) // 1. Passed check in loadPlugin
-        .mockReturnValueOnce(false); // 2. Failed check in determineInitialPluginStatus
+        // This covers the unreachable branch in determineInitialPluginStatus (lines 289-290)
+        mockDiscoveryManager.isPluginInstalled
+            .mockReturnValueOnce(true)  // 1. Passed check in loadPlugin
+            .mockReturnValueOnce(false); // 2. Failed check in determineInitialPluginStatus
+            
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
 
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        const manager = createManager();
+        await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      const manager = createManager();
-      await manager.loadPlugin(VALID_PLUGIN_ID);
-
-      const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
-      expect(plugin?.status).toBe(PluginStatus.INACTIVE);
-      // Verify both calls were actually made, ensuring we hit the second branch
-      expect(mockDiscoveryManager.isPluginInstalled).toHaveBeenCalledTimes(2);
+        const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
+        expect(plugin?.status).toBe(PluginStatus.INACTIVE);
+        // Verify both calls were actually made, ensuring we hit the second branch
+        expect(mockDiscoveryManager.isPluginInstalled).toHaveBeenCalledTimes(2);
     });
 
     it('handles full load success (Installed AND Active)', async () => {
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
       mockDiscoveryManager.isPluginActivated.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
 
       const manager = createManager();
@@ -131,9 +134,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
     it('catches generic errors (Error Object) and sets ERROR status', async () => {
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockRejectedValue(
-        new Error('Manifest missing'),
-      );
+      mockDiscoveryManager.loadPluginManifest.mockRejectedValue(new Error('Manifest missing'));
 
       const manager = createManager();
       const result = await manager.loadPlugin(VALID_PLUGIN_ID);
@@ -142,30 +143,24 @@ describe('LifecycleManager Coverage Suite', () => {
       const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
       expect(plugin?.status).toBe(PluginStatus.ERROR);
       expect(plugin?.errorMessage).toBe('Manifest missing');
-      expect(mockEventManager.emit).toHaveBeenCalledWith(
-        'plugin:error',
-        expect.anything(),
-        expect.anything(),
-      );
+      expect(mockEventManager.emit).toHaveBeenCalledWith('plugin:error', expect.anything(), expect.anything());
     });
 
     it('catches non-Error throws and sets Unknown Error status', async () => {
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockRejectedValue('String Error');
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockRejectedValue('String Error'); 
+  
+        const manager = createManager();
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      const manager = createManager();
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
-      await manager.loadPlugin(VALID_PLUGIN_ID);
-
-      const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
-      expect(plugin?.status).toBe(PluginStatus.ERROR);
-      expect(plugin?.errorMessage).toBe('Unknown error');
-
-      consoleSpy.mockRestore();
-    });
+        await manager.loadPlugin(VALID_PLUGIN_ID);
+  
+        const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
+        expect(plugin?.status).toBe(PluginStatus.ERROR);
+        expect(plugin?.errorMessage).toBe('Unknown error');
+        
+        consoleSpy.mockRestore();
+      });
   });
 
   // ----------------------------------------------------------------
@@ -185,12 +180,10 @@ describe('LifecycleManager Coverage Suite', () => {
 
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
       mockDiscoveryManager.isPluginActivated.mockReturnValue(false);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
-
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+      
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: mockHooks,
+        default: mockHooks
       } as any);
 
       manager = createManager();
@@ -198,55 +191,37 @@ describe('LifecycleManager Coverage Suite', () => {
     });
 
     it('executes onActivate hook and registers dynamic plugins', async () => {
-      const result = await manager.togglePluginStatus(
-        VALID_PLUGIN_ID,
-        'active',
-      );
+      const result = await manager.togglePluginStatus(VALID_PLUGIN_ID, 'active');
 
       expect(result).toBe(true);
       expect(mockHooks.onActivate).toHaveBeenCalled();
-      expect(
-        mockDiscoveryManager.updatePluginStatusInGraphQL,
-      ).toHaveBeenCalledWith(VALID_PLUGIN_ID, 'active');
-      expect(mockRegisterPluginDynamically).toHaveBeenCalledWith(
-        VALID_PLUGIN_ID,
-      );
-      expect(manager.getLoadedPlugin(VALID_PLUGIN_ID)?.status).toBe(
-        PluginStatus.ACTIVE,
-      );
+      expect(mockDiscoveryManager.updatePluginStatusInGraphQL).toHaveBeenCalledWith(VALID_PLUGIN_ID, 'active');
+      expect(mockRegisterPluginDynamically).toHaveBeenCalledWith(VALID_PLUGIN_ID);
+      expect(manager.getLoadedPlugin(VALID_PLUGIN_ID)?.status).toBe(PluginStatus.ACTIVE);
     });
 
     it('executes onDeactivate hook and unregisters extensions', async () => {
       await manager.activatePlugin(VALID_PLUGIN_ID);
-      vi.clearAllMocks();
+      vi.clearAllMocks(); 
 
-      const result = await manager.togglePluginStatus(
-        VALID_PLUGIN_ID,
-        'inactive',
-      );
+      const result = await manager.togglePluginStatus(VALID_PLUGIN_ID, 'inactive');
 
       expect(result).toBe(true);
       expect(mockHooks.onDeactivate).toHaveBeenCalled();
-      expect(
-        mockExtensionRegistry.unregisterExtensionPoints,
-      ).toHaveBeenCalledWith(VALID_PLUGIN_ID);
-      expect(manager.getLoadedPlugin(VALID_PLUGIN_ID)?.status).toBe(
-        PluginStatus.INACTIVE,
-      );
+      expect(mockExtensionRegistry.unregisterExtensionPoints).toHaveBeenCalledWith(VALID_PLUGIN_ID);
+      expect(manager.getLoadedPlugin(VALID_PLUGIN_ID)?.status).toBe(PluginStatus.INACTIVE);
     });
 
     it('handles onActivate failure gracefully', async () => {
       mockHooks.onActivate.mockRejectedValue(new Error('Activate Failed'));
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const result = await manager.activatePlugin(VALID_PLUGIN_ID);
 
       expect(result).toBe(true);
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Error calling onActivate'),
-        expect.anything(),
+        expect.anything()
       );
       consoleSpy.mockRestore();
     });
@@ -254,53 +229,47 @@ describe('LifecycleManager Coverage Suite', () => {
     it('handles onDeactivate failure gracefully', async () => {
       await manager.activatePlugin(VALID_PLUGIN_ID);
       mockHooks.onDeactivate.mockRejectedValue(new Error('Deactivate Failed'));
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const result = await manager.deactivatePlugin(VALID_PLUGIN_ID);
 
       expect(result).toBe(true);
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Error calling onDeactivate'),
-        expect.anything(),
+        expect.anything()
       );
       consoleSpy.mockRestore();
     });
 
     it('handles Dynamic Import failure gracefully during activation', async () => {
-      mockRegisterPluginDynamically.mockRejectedValueOnce(
-        new Error('Import failed'),
-      );
+      mockRegisterPluginDynamically.mockRejectedValueOnce(new Error('Import failed'));
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       await manager.activatePlugin(VALID_PLUGIN_ID);
 
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Failed to register plugin'),
-        expect.anything(),
+        expect.anything()
       );
       consoleSpy.mockRestore();
     });
 
     it('handles missing manifest during activation (skips extension registration)', async () => {
-      const managerNoManifest = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as any);
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        const managerNoManifest = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as any);
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        
+        await managerNoManifest.loadPlugin('NoManifestPlugin');
+        await managerNoManifest.activatePlugin('NoManifestPlugin');
 
-      await managerNoManifest.loadPlugin('NoManifestPlugin');
-      await managerNoManifest.activatePlugin('NoManifestPlugin');
-
-      expect(
-        mockExtensionRegistry.registerExtensionPoints,
-      ).not.toHaveBeenCalled();
+        expect(mockExtensionRegistry.registerExtensionPoints).not.toHaveBeenCalled();
     });
 
     it('returns false when activating a non-existent loaded plugin', async () => {
-      const emptyManager = createManager();
-      expect(await emptyManager.activatePlugin(VALID_PLUGIN_ID)).toBe(false);
-      expect(await emptyManager.deactivatePlugin(VALID_PLUGIN_ID)).toBe(false);
+        const emptyManager = createManager();
+        expect(await emptyManager.activatePlugin(VALID_PLUGIN_ID)).toBe(false);
+        expect(await emptyManager.deactivatePlugin(VALID_PLUGIN_ID)).toBe(false);
     });
   });
 
@@ -309,268 +278,264 @@ describe('LifecycleManager Coverage Suite', () => {
   // ----------------------------------------------------------------
   describe('Install & Uninstall', () => {
     it('installs a fresh plugin successfully', async () => {
-      const manager = createManager();
-      const mockHooks = { onInstall: vi.fn() };
+        const manager = createManager();
+        const mockHooks = { onInstall: vi.fn() };
+        
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: 'NewId' });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: mockHooks } as any);
 
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: 'NewId',
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: mockHooks,
-      } as any);
+        const result = await manager.installPlugin('NewId');
 
-      const result = await manager.installPlugin('NewId');
-
-      expect(result).toBe(true);
-      expect(mockHooks.onInstall).toHaveBeenCalled();
-      expect(mockEventManager.emit).toHaveBeenCalledWith(
-        'plugin:installed',
-        'NewId',
-      );
+        expect(result).toBe(true);
+        expect(mockHooks.onInstall).toHaveBeenCalled();
+        expect(mockEventManager.emit).toHaveBeenCalledWith('plugin:installed', 'NewId');
     });
 
     it('handles install on an already loaded plugin', async () => {
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
       const mockHooks = { onInstall: vi.fn() };
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: mockHooks,
-      } as any);
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: mockHooks } as any);
 
       const manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
-
+      
       // Attempt install on already loaded
       const result = await manager.installPlugin(VALID_PLUGIN_ID);
 
       expect(result).toBe(true);
       expect(mockHooks.onInstall).toHaveBeenCalled();
       // Should NOT load manifest again since it's in memory
-      expect(mockDiscoveryManager.loadPluginManifest).toHaveBeenCalledTimes(1);
+      expect(mockDiscoveryManager.loadPluginManifest).toHaveBeenCalledTimes(1); 
     });
 
     it('handles install failure (verifies INNER catch block lines 208-209)', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.loadPluginManifest.mockRejectedValue(
-        new Error('Disk err'),
-      );
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        const manager = createManager();
+        mockDiscoveryManager.loadPluginManifest.mockRejectedValue(new Error('Disk err'));
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      const result = await manager.installPlugin('FailId');
+        const result = await manager.installPlugin('FailId');
 
-      expect(result).toBe(false);
-
-      // This assertion verifies lines 208-209 (inner catch) were hit
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to load plugin files for'),
-        expect.anything(),
-      );
-
-      // This assertion verifies outer catch
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to install plugin'),
-        expect.anything(),
-      );
-      consoleSpy.mockRestore();
+        expect(result).toBe(false);
+        
+        // This assertion verifies lines 208-209 (inner catch) were hit
+        expect(consoleSpy).toHaveBeenCalledWith(
+            expect.stringContaining('Failed to load plugin files for'), 
+            expect.anything()
+        );
+        
+        // This assertion verifies outer catch
+        expect(consoleSpy).toHaveBeenCalledWith(
+            expect.stringContaining('Failed to install plugin'), 
+            expect.anything()
+        );
+        consoleSpy.mockRestore();
     });
 
     it('handles onInstall hook failure gracefully', async () => {
       const manager = createManager();
-      const mockHooks = {
-        onInstall: vi.fn().mockRejectedValue(new Error('Install Hook Crash')),
+      const mockHooks = { 
+        onInstall: vi.fn().mockRejectedValue(new Error('Install Hook Crash')) 
       };
-
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: 'NewId',
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: mockHooks,
-      } as any);
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: 'NewId' });
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: mockHooks } as any);
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
       await manager.installPlugin('NewId');
 
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('Error calling onInstall'),
-        expect.anything(),
+        expect.anything()
       );
       consoleSpy.mockRestore();
     });
 
     it('uninstalls successfully', async () => {
-      const manager = createManager();
-      const onUninstall = vi.fn();
+        const manager = createManager();
+        const onUninstall = vi.fn();
+        
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ 
+            default: { onUninstall } 
+        } as any);
+        
+        await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: { onUninstall },
-      } as any);
+        const result = await manager.uninstallPlugin(VALID_PLUGIN_ID);
 
-      await manager.loadPlugin(VALID_PLUGIN_ID);
-
-      const result = await manager.uninstallPlugin(VALID_PLUGIN_ID);
-
-      expect(result).toBe(true);
-      expect(onUninstall).toHaveBeenCalled();
+        expect(result).toBe(true);
+        expect(onUninstall).toHaveBeenCalled();
     });
 
     it('handles onUninstall hook failure gracefully', async () => {
-      const manager = createManager();
-      const onUninstall = vi
-        .fn()
-        .mockRejectedValue(new Error('Uninstall Hook Crash'));
+        const manager = createManager();
+        const onUninstall = vi.fn().mockRejectedValue(new Error('Uninstall Hook Crash'));
+        
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ 
+            default: { onUninstall } 
+        } as any);
+        
+        await manager.loadPlugin(VALID_PLUGIN_ID);
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: { onUninstall },
-      } as any);
+        await manager.uninstallPlugin(VALID_PLUGIN_ID);
 
-      await manager.loadPlugin(VALID_PLUGIN_ID);
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
-      await manager.uninstallPlugin(VALID_PLUGIN_ID);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Error calling onUninstall'),
-        expect.anything(),
-      );
-      consoleSpy.mockRestore();
+        expect(consoleSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Error calling onUninstall'),
+          expect.anything()
+        );
+        consoleSpy.mockRestore();
     });
 
     it('returns false when uninstalling unknown plugin', async () => {
-      const manager = createManager();
-      expect(await manager.uninstallPlugin('Unknown')).toBe(false);
+        const manager = createManager();
+        expect(await manager.uninstallPlugin('Unknown')).toBe(false);
     });
   });
 
   // ----------------------------------------------------------------
-  // 5. Component & Safety Checks
+  // 5. Component & Safety Checks (Expanded for CodeRabbit)
   // ----------------------------------------------------------------
   describe('Safety Checks & Malformed Exports', () => {
-    it('skips hook execution if components are undefined', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
-      });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue(null as any);
-
-      await manager.loadPlugin(VALID_PLUGIN_ID);
-      await manager.activatePlugin(VALID_PLUGIN_ID); // Should not crash
-
-      expect(manager.getPluginCount()).toBeGreaterThan(0);
-    });
-
-    it('skips hook execution if default export is malformed', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: 'Malformed',
+      it('skips hook execution if components are undefined', async () => {
+          const manager = createManager();
+          mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+          mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+          mockDiscoveryManager.loadPluginComponents.mockResolvedValue(null as any);
+          
+          await manager.loadPlugin(VALID_PLUGIN_ID);
+          await manager.activatePlugin(VALID_PLUGIN_ID); 
+          expect(manager.getPluginCount()).toBeGreaterThan(0);
       });
 
-      // Case 1: default is not an object (e.g. string)
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
-        default: 'I am a string',
-      } as any);
-      await manager.installPlugin('Malformed'); // Should not crash
+      // CodeRabbit requested: "Add one more guard-path for malformed default export objects"
+      it('skips hook execution if default export exists but is empty', async () => {
+        const manager = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: 'Malformed' });
+        
+        // default exists, but no hooks inside
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ default: {} } as any);
+        
+        // This should run safely without throwing "undefined is not a function"
+        await manager.installPlugin('Malformed'); 
+        await manager.activatePlugin('Malformed');
 
-      expect(true).toBe(true);
-    });
-
-    it('returns undefined component if plugin is not ACTIVE', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.isPluginActivated.mockReturnValue(false);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: 'InactiveP',
+        expect(true).toBe(true);
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
 
-      await manager.loadPlugin('InactiveP');
+      it('returns undefined component if plugin is not ACTIVE', async () => {
+          const manager = createManager();
+          mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+          mockDiscoveryManager.isPluginActivated.mockReturnValue(false); 
+          mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: 'InactiveP' });
+          mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+          
+          await manager.loadPlugin('InactiveP');
 
-      expect(manager.getPluginComponent('InactiveP', 'MyComp')).toBeUndefined();
-    });
-
-    it('returns undefined component if plugin is NOT LOADED (Valid ID)', async () => {
-      const manager = createManager();
-      expect(
-        manager.getPluginComponent(VALID_PLUGIN_ID, 'MyComp'),
-      ).toBeUndefined();
-    });
-
-    it('returns list of loaded plugins', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
+          expect(manager.getPluginComponent('InactiveP', 'MyComp')).toBeUndefined();
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
 
-      await manager.loadPlugin(VALID_PLUGIN_ID);
+      it('returns undefined component if plugin is NOT LOADED (Valid ID)', async () => {
+        const manager = createManager();
+        expect(manager.getPluginComponent(VALID_PLUGIN_ID, 'MyComp')).toBeUndefined();
+      });
 
-      const plugins = manager.getLoadedPlugins();
-      expect(plugins).toHaveLength(1);
-      expect(plugins[0].id).toBe(VALID_PLUGIN_ID);
-    });
+      // CodeRabbit requested: "Add a test that calls getPluginComponent with a valid active plugin but an unknown componentName"
+      it('returns undefined component if componentName does not exist in Active plugin', async () => {
+        const manager = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.isPluginActivated.mockReturnValue(true); // Active
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        // Components loaded, but 'UnknownComp' is missing
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({ 
+            default: {},
+            RealComp: () => null 
+        } as any);
+        
+        await manager.loadPlugin(VALID_PLUGIN_ID);
+        
+        // Active plugin, valid ID, but component name doesn't exist
+        expect(manager.getPluginComponent(VALID_PLUGIN_ID, 'UnknownComp')).toBeUndefined();
+      });
+
+      it('returns list of loaded plugins', async () => {
+        const manager = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        
+        await manager.loadPlugin(VALID_PLUGIN_ID);
+        
+        const plugins = manager.getLoadedPlugins();
+        expect(plugins).toHaveLength(1);
+        expect(plugins[0].id).toBe(VALID_PLUGIN_ID);
+      });
   });
 
   // ----------------------------------------------------------------
   // 6. Network Edge Cases
   // ----------------------------------------------------------------
   describe('Network Edge Cases', () => {
-    it('logs warning when plugin directory deletion fails (404)', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
+      // CodeRabbit requested: "Add an explicit assertion path for attemptPluginDirectoryDeletion when response.ok is true"
+      it('handles successful deletion via fetch', async () => {
+        const manager = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        await manager.loadPlugin(VALID_PLUGIN_ID);
+
+        // Mock Fetch Success
+        const fetchSpy = vi.fn().mockResolvedValue({ ok: true, status: 200 });
+        global.fetch = fetchSpy as any;
+
+        await manager.unloadPlugin(VALID_PLUGIN_ID);
+
+        expect(fetchSpy).toHaveBeenCalledWith(
+            expect.stringContaining(VALID_PLUGIN_ID), 
+            expect.objectContaining({ method: 'DELETE' })
+        );
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
-      await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as any).mockResolvedValue({ ok: false, status: 404 });
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      it('logs warning when plugin directory deletion fails (404)', async () => {
+          const manager = createManager();
+          mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+          mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+          mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+          await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      await manager.unloadPlugin(VALID_PLUGIN_ID);
+          (global.fetch as any).mockResolvedValue({ ok: false, status: 404 });
+          const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('deletion returned HTTP 404'),
-      );
-      consoleSpy.mockRestore();
-    });
+          await manager.unloadPlugin(VALID_PLUGIN_ID);
 
-    it('logs warning when fetch throws network error', async () => {
-      const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
-        pluginId: VALID_PLUGIN_ID,
+          expect(consoleSpy).toHaveBeenCalledWith(
+              expect.stringContaining('deletion returned HTTP 404')
+          );
+          consoleSpy.mockRestore();
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
-      await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as any).mockRejectedValue(new Error('Net Down'));
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      it('logs warning when fetch throws network error', async () => {
+        const manager = createManager();
+        mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+        mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
+        mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+        await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      await manager.unloadPlugin(VALID_PLUGIN_ID);
+        (global.fetch as any).mockRejectedValue(new Error('Net Down'));
+        const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Could not delete plugin directory'),
-        expect.anything(),
-      );
-      consoleSpy.mockRestore();
+        await manager.unloadPlugin(VALID_PLUGIN_ID);
+
+        expect(consoleSpy).toHaveBeenCalledWith(
+            expect.stringContaining('Could not delete plugin directory'),
+            expect.anything()
+        );
+        consoleSpy.mockRestore();
     });
   });
 });
