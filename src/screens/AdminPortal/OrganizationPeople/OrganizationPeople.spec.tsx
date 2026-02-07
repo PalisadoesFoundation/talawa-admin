@@ -22,6 +22,7 @@ import {
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
 import { store } from 'state/store';
+import { languages } from 'utils/languages';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -93,6 +94,10 @@ const setupLocationMock = () => {
     writable: true,
   });
 };
+
+// Wait for DataGrid body rows to populate (avoids race with skeleton → data in CI)
+const getDataTableBodyRows = (): HTMLElement[] =>
+  Array.from(document.querySelectorAll('.MuiDataGrid-row'));
 
 // Helper function to create mock Apollo responses
 type MemberConnectionVariables = {
@@ -829,6 +834,13 @@ describe('OrganizationPeople', () => {
       ).toBeInTheDocument();
     });
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
+
     // Navigate to next page
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     expect(nextPageButton).toBeDisabled();
@@ -1111,6 +1123,13 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
+
     // Try to navigate to next page (should not work)
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     expect(nextPageButton).toBeDisabled();
@@ -1161,10 +1180,17 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial data
+    // Wait for initial data (default mock has 2 members: John Doe, Jane Smith)
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
+
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
 
     // Manually trigger pagination to page 1 to simulate being on a later page
     // without having proper cursor data stored
@@ -1354,6 +1380,13 @@ describe('OrganizationPeople', () => {
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
+
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
 
     // Click the previous page button (should be prevented from navigating)
     const prevPageButton = screen.getByRole('button', {
@@ -1647,16 +1680,18 @@ describe('OrganizationPeople', () => {
 
   test('joined column uses en-US locale when language is not in languages list', async () => {
     const originalLanguage = i18nForTest.language;
+    const originalSupported = [
+      ...(i18nForTest.options.supportedLngs as string[]),
+    ];
     const fixedCreatedAt = dayjs
       .utc()
       .year(2020)
       .month(0)
       .date(15)
       .toISOString();
-    const supportedLngs = i18nForTest.options.supportedLngs as string[];
     try {
       await i18nForTest.changeLanguage('en');
-      supportedLngs.push('xx');
+      i18nForTest.options.supportedLngs = [...originalSupported, 'xx'];
       await i18nForTest.changeLanguage('xx');
       const membersMock = createMemberConnectionMock(
         {
@@ -1733,8 +1768,7 @@ describe('OrganizationPeople', () => {
       expect(joinedEl).toBeInTheDocument();
       expect(joinedEl).toHaveTextContent(`Joined : ${expectedEnUSDate}`);
     } finally {
-      const idx = supportedLngs.indexOf('xx');
-      if (idx !== -1) supportedLngs.splice(idx, 1);
+      i18nForTest.options.supportedLngs = originalSupported;
       await i18nForTest.changeLanguage(originalLanguage);
     }
   });
@@ -1795,9 +1829,23 @@ describe('OrganizationPeople', () => {
       },
       { timeout: 5000 },
     );
-    expect(
-      screen.getByTestId('org-people-joined-member-no-date'),
-    ).toBeInTheDocument();
+    const joinedEl = screen.getByTestId('org-people-joined-member-no-date');
+    expect(joinedEl).toBeInTheDocument();
+    // Fallback in OrganizationPeople is new Date().toISOString(); assert displayed date is today (same locale as component)
+    const currentLang = languages.find(
+      (lang: { code: string; country_code: string }) =>
+        lang.code === i18nForTest.language,
+    );
+    const locale = currentLang
+      ? `${currentLang.code}-${currentLang.country_code}`
+      : 'en-US';
+    const todayFormatted = new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'UTC',
+    }).format(new Date());
+    expect(joinedEl.textContent ?? '').toContain(todayFormatted);
   });
 
   test('calls getRowClassName for each rendered row', async () => {
