@@ -13,7 +13,7 @@ message: |
   These local timezone methods cause flakiness in sharded CI environments
   where machines may have different timezone configurations.
 
-note: "Timezone-dependent test assertion detected"
+note: 'Timezone-dependent test assertion detected'
 
 rule:
   any:
@@ -26,8 +26,10 @@ rule:
     - pattern: $DATE.getFullYear()
 
 files:
-  - "test/**/*.test.ts"
-  - "test/**/*.spec.ts"
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
 
 fix: |
   # Manual fix required - replace with UTC equivalent:
