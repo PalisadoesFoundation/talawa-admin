@@ -6,8 +6,7 @@ import type { IPackageStatus, PackageName } from './types';
 import { checkInstalledPackages } from './utils/checker';
 import { commandExists } from './utils/exec';
 import { logError, logInfo, logStep, logSuccess } from './utils/logger';
-
-type DockerMode = 'ROOTFUL' | 'ROOTLESS';
+import type { DockerMode } from '../types/docker';
 
 /**
  * Main installation function

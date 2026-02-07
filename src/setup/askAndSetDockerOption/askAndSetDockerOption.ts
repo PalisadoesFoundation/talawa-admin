@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
 import { askForDocker } from 'setup/askForDocker/askForDocker';
-
-type DockerMode = 'ROOTFUL' | 'ROOTLESS';
+import type { DockerMode } from 'types/docker';
 
 // Function to manage Docker setup
 const askAndSetDockerOption = async (): Promise<void> => {

@@ -893,7 +893,7 @@ jobs:
 
       - name: Generate `.env` File with Hardcoded Values
         run: |
-          cat <<EOF > .env
+          cat > .env <<'EOF'
           PORT=4321
           REACT_APP_TALAWA_URL=http://localhost:4000/graphql
           REACT_APP_USE_RECAPTCHA=
@@ -978,11 +978,9 @@ jobs:
         run: |
           set -e
           export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
-          export UID
-          export GID="$(id -g)"
           echo "Building rootless Docker images..."
           docker compose -f docker/docker-compose.rootless.prod.yaml build
-          docker compose -f docker/docker-compose.rootless.dev.yaml build
+          UID="$(id -u)" GID="$(id -g)" docker compose -f docker/docker-compose.rootless.dev.yaml build
           echo "Rootless Docker images built successfully"
 
       - name: Run Docker Containers (Rootless Production)

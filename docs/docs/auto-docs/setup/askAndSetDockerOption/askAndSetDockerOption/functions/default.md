@@ -6,7 +6,7 @@
 
 > **default**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/askAndSetDockerOption/askAndSetDockerOption.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askAndSetDockerOption/askAndSetDockerOption.ts#L8)
+Defined in: [src/setup/askAndSetDockerOption/askAndSetDockerOption.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askAndSetDockerOption/askAndSetDockerOption.ts#L7)
 
 ## Returns
 

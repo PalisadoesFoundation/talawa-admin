@@ -43,13 +43,13 @@ describe('askAndSetDockerOption', () => {
     (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       dockerMode: 'ROOTLESS',
     });
-    (askForDocker as Mock).mockResolvedValueOnce(8080);
+    (askForDocker as Mock).mockResolvedValueOnce('8080');
 
     await askAndSetDockerOption();
 
     expect(updateEnvFile).toHaveBeenCalledWith('USE_DOCKER', 'YES');
     expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_MODE', 'ROOTLESS');
-    expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_PORT', 8080);
+    expect(updateEnvFile).toHaveBeenCalledWith('DOCKER_PORT', '8080');
     expect(console.log).toHaveBeenCalledWith(
       expect.stringContaining('rootless'),
     );
