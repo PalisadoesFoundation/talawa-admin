@@ -780,9 +780,36 @@
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "议程文件夹已成功更新",
+    "agendaFolderDeleted": "议程文件夹已成功删除",
+    "deleteAgendaFolder": "删除议程文件夹",
+    "deleteAgendaFolderMsg": "您确定要删除此议程文件夹吗？",
+    "updateAgendaFolder": "更新议程文件夹",
+    "folderNamePlaceholder": "文件夹名称",
+    "createAgendaFolder": "创建议程部分",
+    "folderName": "文件夹",
+    "categoryName": "类别",
+    "noCategory": "无分类",
+    "folder": "议程文件夹",
+    "agendaFolderDetails": "议程部分详情",
+    "agendaFolderCreated": "议程部分已成功创建",
+    "attachmentPreviewAlt": "附件预览",
+    "agendaFolderUpdateFailed": "议程文件夹更新失败",
+    "previewItem": "预览项目",
+    "removeUrl": "移除网址",
+    "removeAttachment": "移除附件",
+    "itemSequenceUpdateSuccessMsg": "项目顺序已成功更新",
+    "sectionSequenceUpdateSuccessMsg": "部分顺序已成功更新",
+    "editFolder": "编辑文件夹",
+    "editItem": "编辑项目",
+    "deleteItem": "删除项目",
+    "deleteFolder": "删除文件夹",
+    "itemPreview": "项目预览",
     "agendaItemDetails": "议程项目详细信息",
     "updateAgendaItem": "更新议程项目",
+    "fileUploadFailed": "文件上传失败",
+    "organizationRequired": "需要选择组织",
     "title": "标题",
     "enterTitle": "输入标题",
     "sequence": "顺序",
@@ -1174,7 +1201,8 @@
     "statistics": "统计数据",
     "to": "到",
     "volunteers": "志愿者",
-    "backToEvents": "返回活动"
+    "backToEvents": "返回活动",
+    "eventTabs": "活动选项卡"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1884,6 +1912,7 @@
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
     "groupInfo": "群组信息",
+    "memberOptions": "成员选项",
     "description": "描述",
     "hash": "#",
     "members": "会员",
@@ -1915,7 +1944,10 @@
     "confirmRemoveMember": "确认删除成员",
     "failedToAddUser": "添加用户失败",
     "userAddedSuccessfully": "用户添加成功",
-    "next": "下一步"
+    "next": "下一步",
+    "conversationAlreadyExists": "与 {{userName}} 的对话已存在！",
+    "thisUser": "此用户",
+    "deleteChatConfirmation": "您确定要删除此聊天吗？"
   },
   "userChatRoom": {
     "selectContact": "点击 + 图标以开始新的聊天",

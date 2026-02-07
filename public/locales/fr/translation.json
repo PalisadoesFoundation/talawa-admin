@@ -780,9 +780,36 @@
     "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
     "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "Dossier de l’agenda mis à jour avec succès",
+    "agendaFolderDeleted": "Dossier de l’agenda supprimé avec succès",
+    "deleteAgendaFolder": "Supprimer le dossier de l’agenda",
+    "deleteAgendaFolderMsg": "Voulez-vous supprimer ce dossier de l’agenda ?",
+    "updateAgendaFolder": "Mettre à jour le dossier de l’agenda",
+    "folderNamePlaceholder": "Nom du dossier",
+    "createAgendaFolder": "Créer une section de l’agenda",
+    "folderName": "Dossier",
+    "categoryName": "Catégorie",
+    "noCategory": "Aucune catégorie",
+    "previewItem": "Aperçu de l’élément",
+    "folder": "Dossier de l’agenda",
+    "agendaFolderDetails": "Détails de la section de l’agenda",
+    "agendaFolderCreated": "Section de l’agenda créée avec succès",
+    "attachmentPreviewAlt": "Aperçu de la pièce jointe",
+    "agendaFolderUpdateFailed": "Échec de la mise à jour du dossier de l’agenda",
+    "removeUrl": "Supprimer l’URL",
+    "removeAttachment": "Supprimer la pièce jointe",
+    "itemSequenceUpdateSuccessMsg": "La séquence de l’élément a été mise à jour avec succès",
+    "sectionSequenceUpdateSuccessMsg": "La séquence de la section a été mise à jour avec succès",
+    "editFolder": "Modifier le dossier",
+    "editItem": "Modifier l’élément",
+    "deleteItem": "Supprimer l’élément",
+    "deleteFolder": "Supprimer le dossier",
+    "itemPreview": "Aperçu de l’élément",
     "agendaItemDetails": "Détails du point de l'ordre du jour",
     "updateAgendaItem": "Mettre à jour le point de l'ordre du jour",
+    "fileUploadFailed": "Échec du téléversement du fichier",
+    "organizationRequired": "L'organisation est requise",
     "title": "Titre",
     "enterTitle": "Entrer le titre",
     "sequence": "Ordre",
@@ -1157,7 +1184,8 @@
     "statistics": "Statistiques",
     "to": "À",
     "volunteers": "Bénévoles",
-    "backToEvents": "Retour aux Événements"
+    "backToEvents": "Retour aux Événements",
+    "eventTabs": "Onglets de l’événement"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",
@@ -1893,6 +1921,7 @@
     "groupName": "Nom du groupe",
     "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
+    "memberOptions": "Options des membres",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
     "userNotFound": "Utilisateur non trouvé",
@@ -1915,7 +1944,10 @@
     "chatAction": "Action de chat",
     "confirmRemoveMember": "Confirmer la suppression du membre",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
-    "userAddedSuccessfully": "Utilisateur ajouté avec succès"
+    "userAddedSuccessfully": "Utilisateur ajouté avec succès",
+    "conversationAlreadyExists": "Une conversation avec {{userName}} existe déjà !",
+    "thisUser": "cet utilisateur",
+    "deleteChatConfirmation": "Êtes-vous sûr de vouloir supprimer ce chat ?"
   },
   "userChatRoom": {
     "selectContact": "Cliquez sur l'icône + pour démarrer une nouvelle discussion",

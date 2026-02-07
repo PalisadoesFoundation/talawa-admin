@@ -775,9 +775,36 @@
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
     "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
   },
-  "agendaItems": {
+  "agendaSection": {
+    "agendaFolderUpdated": "Carpeta de la agenda actualizada exitosamente",
+    "agendaFolderDeleted": "Carpeta de la agenda eliminada exitosamente",
+    "deleteAgendaFolder": "Eliminar carpeta de la agenda",
+    "deleteAgendaFolderMsg": "¿Desea eliminar esta carpeta de la agenda?",
+    "updateAgendaFolder": "Actualizar carpeta de la agenda",
+    "folderNamePlaceholder": "Nombre de la carpeta",
+    "createAgendaFolder": "Crear sección de la agenda",
+    "folderName": "Carpeta",
+    "categoryName": "Categoría",
+    "noCategory": "Sin categoría",
+    "organizationRequired": "La organización es obligatoria",
+    "folder": "Carpeta de la agenda",
+    "agendaFolderDetails": "Detalles de la sección de la agenda",
+    "agendaFolderCreated": "Sección de la agenda creada exitosamente",
+    "attachmentPreviewAlt": "Vista previa del archivo adjunto",
+    "agendaFolderUpdateFailed": "Error al actualizar la carpeta de la agenda",
+    "removeUrl": "Eliminar URL",
+    "removeAttachment": "Eliminar archivo adjunto",
+    "itemSequenceUpdateSuccessMsg": "La secuencia del elemento se actualizó correctamente",
+    "sectionSequenceUpdateSuccessMsg": "La secuencia de la sección se actualizó correctamente",
+    "editFolder": "Editar carpeta",
+    "editItem": "Editar elemento",
+    "deleteItem": "Eliminar elemento",
+    "previewItem": "Vista previa del elemento",
+    "deleteFolder": "Eliminar carpeta",
+    "itemPreview": "Vista previa del elemento",
     "agendaItemDetails": "Detalles del punto del orden del día",
     "updateAgendaItem": "Actualizar punto del orden del día",
+    "fileUploadFailed": "La carga del archivo falló",
     "title": "Título",
     "enterTitle": "Ingresar título",
     "sequence": "Secuencia",
@@ -1152,7 +1179,8 @@
     "statistics": "Estadísticas",
     "to": "A",
     "volunteers": "Voluntarios",
-    "backToEvents": "Volver a Eventos"
+    "backToEvents": "Volver a Eventos",
+    "eventTabs": "Pestañas del evento"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1871,6 +1899,7 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
+    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1898,7 +1927,10 @@
     "confirmRemoveMember": "Confirmar eliminar miembro",
     "failedToAddUser": "Error al agregar usuario",
     "userAddedSuccessfully": "Usuario agregado exitosamente",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
+    "thisUser": "este usuario",
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
