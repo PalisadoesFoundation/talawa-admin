@@ -39,10 +39,9 @@ const askAndSetDockerOption = async (): Promise<void> => {
 
     updateEnvFile('DOCKER_MODE', dockerMode);
 
-    const answers = await askForDocker();
-    const DOCKER_PORT_NUMBER = answers;
-    updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
-    updateEnvFile('PORT', DOCKER_PORT_NUMBER);
+    const dockerPort = await askForDocker();
+    updateEnvFile('DOCKER_PORT', dockerPort);
+    updateEnvFile('PORT', dockerPort);
 
     const composeFile =
       dockerMode === 'ROOTLESS'

@@ -978,9 +978,11 @@ jobs:
         run: |
           set -e
           export PNPM_VERSION="${PNPM_VERSION:-10.4.1}"
+          export UID
+          export GID="$(id -g)"
           echo "Building rootless Docker images..."
           docker compose -f docker/docker-compose.rootless.prod.yaml build
-          UID="$(id -u)" GID="$(id -g)" docker compose -f docker/docker-compose.rootless.dev.yaml build
+          docker compose -f docker/docker-compose.rootless.dev.yaml build
           echo "Rootless Docker images built successfully"
 
       - name: Run Docker Containers (Rootless Production)
@@ -1000,6 +1002,8 @@ jobs:
       - name: Stop rootless prod Docker Containers
         if: always()
         run: |
+          export UID
+          export GID="$(id -g)"
           docker compose -f docker/docker-compose.rootless.prod.yaml down
           echo "Rootless prod Docker container stopped and removed"
 
@@ -1020,6 +1024,8 @@ jobs:
       - name: Stop rootless dev Docker Containers
         if: always()
         run: |
+          export UID
+          export GID="$(id -g)"
           docker compose -f docker/docker-compose.rootless.dev.yaml down
           echo "Rootless dev Docker containers stopped and removed"
 
