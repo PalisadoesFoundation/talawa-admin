@@ -122,9 +122,11 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     try {
       await signin({ variables });
     } catch (err) {
-      if (err instanceof DOMException && err.name === 'AbortError') {
-        return;
-      }
+      const isAbortError =
+        (err instanceof DOMException && err.name === 'AbortError') ||
+        (err as { networkError?: { name?: string } })?.networkError?.name ===
+          'AbortError';
+      if (isAbortError) return;
       recaptchaRef.current?.reset();
       setRecaptchaToken(null);
       onErrorRef.current?.(err as Error);

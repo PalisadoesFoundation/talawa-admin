@@ -370,7 +370,7 @@ describe('RegistrationForm', () => {
     await user.click(expireButton);
 
     const submitButton = screen.getByRole('button', { name: /register/i });
-    expect(submitButton).toBeDisabled();
+    await waitFor(() => expect(submitButton).toBeDisabled());
   });
 
   it('calls onSuccess callback when provided', async () => {
