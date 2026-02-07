@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCardItem
 
-Defined in: [src/types/MemberActivity/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L18)
+Defined in: [src/types/MemberActivity/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L11)
 
 Props for EventAttendedCard items displaying event details.
 
@@ -14,7 +14,7 @@ Props for EventAttendedCard items displaying event details.
 
 > `optional` **creator**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L22)
+Defined in: [src/types/MemberActivity/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L15)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/MemberActivity/interface.ts:22](https://github.com/Palisa
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L24)
+Defined in: [src/types/MemberActivity/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L17)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/MemberActivity/interface.ts:24](https://github.com/Palisa
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L23)
+Defined in: [src/types/MemberActivity/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L16)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/MemberActivity/interface.ts:23](https://github.com/Palisa
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L25)
+Defined in: [src/types/MemberActivity/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L18)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/MemberActivity/interface.ts:25](https://github.com/Palisa
 
 > `optional` **startdate**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L21)
+Defined in: [src/types/MemberActivity/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L14)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/MemberActivity/interface.ts:21](https://github.com/Palisa
 
 > `optional` **time**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L20)
+Defined in: [src/types/MemberActivity/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L13)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/MemberActivity/interface.ts:20](https://github.com/Palisa
 
 > **title**: `string`
 
-Defined in: [src/types/MemberActivity/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L19)
+Defined in: [src/types/MemberActivity/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/MemberActivity/interface.ts#L12)
