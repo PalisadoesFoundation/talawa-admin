@@ -933,7 +933,7 @@ jobs:
           sudo chown "$USER":"$USER" "$XDG_RUNTIME_DIR"
 
           if [ ! -f "$HOME/.config/systemd/user/docker.service" ]; then
-            dockerd-rootless-setuptool.sh install
+            dockerd-rootless-setuptool.sh install --force
           fi
 
           systemctl --user daemon-reload || true
