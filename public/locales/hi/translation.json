@@ -2098,6 +2098,7 @@
     "checkInStatus": "चेक इन स्थिति"
   },
   "eventRegistrantsModal": {
+    "addRegistrantTitle": "Add Registrant",
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",

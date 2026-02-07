@@ -2103,6 +2103,7 @@
     "checkInStatus": "签到状态"
   },
   "eventRegistrantsModal": {
+    "addRegistrantTitle": "Add Registrant",
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
     "eventRegistrantsTitle": "活动注册者",

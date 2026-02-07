@@ -2086,6 +2086,7 @@
     "checkInStatus": "Estado de Registro"
   },
   "eventRegistrantsModal": {
+    "addRegistrantTitle": "Add Registrant",
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
     "eventRegistrantsTitle": "Registrantes del evento",

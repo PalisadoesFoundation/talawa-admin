@@ -2103,6 +2103,7 @@
     "checkInStatus": "Statut d'Enregistrement"
   },
   "eventRegistrantsModal": {
+    "addRegistrantTitle": "Add Registrant",
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
