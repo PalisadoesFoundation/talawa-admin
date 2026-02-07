@@ -1,6 +1,7 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { ApolloLink } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
 import {
@@ -417,7 +418,11 @@ const BOUNDARY_MOCKS = [
   },
 ];
 
-const renderDonate = (props: any[] | { mocks?: any[]; link?: any } = MOCKS) => {
+const renderDonate = (
+  props:
+    | MockedResponse[]
+    | { mocks?: MockedResponse[]; link?: ApolloLink } = MOCKS,
+) => {
   const finalProps = Array.isArray(props) ? { mocks: props } : props;
   return render(
     <MockedProvider {...finalProps} addTypename={false}>
