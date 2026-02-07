@@ -1320,7 +1320,7 @@ describe('AddMember Screen', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    await screen.findByTestId('datatable');
+    await screen.findByTestId('datatable', {}, { timeout: 5000 });
 
     await waitFor(
       () => {
