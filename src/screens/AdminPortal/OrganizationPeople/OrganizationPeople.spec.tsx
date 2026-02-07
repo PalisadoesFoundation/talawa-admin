@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent, {
   PointerEventsCheckLevel,
 } from '@testing-library/user-event';
@@ -309,6 +309,7 @@ describe('OrganizationPeople', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -1553,10 +1554,13 @@ describe('OrganizationPeople', () => {
 
     await waitFor(
       () => {
-        expect(screen.getByTestId('sort-toggle')).toBeInTheDocument();
+        expect(screen.getByText('Admin User')).toBeInTheDocument();
       },
       { timeout: 5000 },
     );
+    // Administrator tab is active: admin data shown, member rows not shown
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
   });
 
   test('handleSortChange falls back to state 0 when option value is invalid', async () => {
@@ -1609,7 +1613,7 @@ describe('OrganizationPeople', () => {
       last: null,
       before: null,
     });
-    const link = new StaticMockLink([membersMock], true);
+    const link = new StaticMockLink([membersMock, membersMock], true);
 
     render(
       <MockedProvider link={link}>
@@ -1643,16 +1647,60 @@ describe('OrganizationPeople', () => {
 
   test('joined column uses en-US locale when language is not in languages list', async () => {
     const originalLanguage = i18nForTest.language;
+    const fixedCreatedAt = dayjs
+      .utc()
+      .year(2020)
+      .month(0)
+      .date(15)
+      .toISOString();
+    const supportedLngs = i18nForTest.options.supportedLngs as string[];
     try {
+      await i18nForTest.changeLanguage('en');
+      supportedLngs.push('xx');
       await i18nForTest.changeLanguage('xx');
-      const membersMock = createMemberConnectionMock({
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      });
-      const link = new StaticMockLink([membersMock], true);
+      const membersMock = createMemberConnectionMock(
+        {
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          last: null,
+          before: null,
+        },
+        {
+          edges: [
+            {
+              node: {
+                id: 'member1',
+                name: 'John Doe',
+                emailAddress: 'john@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
+                createdAt: fixedCreatedAt,
+                role: 'member',
+              },
+              cursor: 'cursor1',
+            },
+            {
+              node: {
+                id: 'member2',
+                name: 'Jane Smith',
+                emailAddress: 'jane@example.com',
+                avatarURL: null,
+                createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+                role: 'member',
+              },
+              cursor: 'cursor2',
+            },
+          ],
+          pageInfo: {
+            hasNextPage: true,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor2',
+          },
+        },
+      );
+      // Two requests when state=0 (tab effect + initial fetch); supply two mocks
+      const link = new StaticMockLink([membersMock, membersMock], true);
 
       render(
         <MockedProvider link={link}>
@@ -1671,16 +1719,22 @@ describe('OrganizationPeople', () => {
         </MockedProvider>,
       );
 
-      await waitFor(
-        () => {
-          expect(screen.getByText('John Doe')).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await screen.findByTestId('add-member-button', {}, { timeout: 5000 });
       expect(
-        screen.getByTestId('org-people-joined-member1'),
+        await screen.findByText('John Doe', {}, { timeout: 5000 }),
       ).toBeInTheDocument();
+      const expectedEnUSDate = new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: 'UTC',
+      }).format(new Date(fixedCreatedAt));
+      const joinedEl = screen.getByTestId('org-people-joined-member1');
+      expect(joinedEl).toBeInTheDocument();
+      expect(joinedEl).toHaveTextContent(`Joined : ${expectedEnUSDate}`);
     } finally {
+      const idx = supportedLngs.indexOf('xx');
+      if (idx !== -1) supportedLngs.splice(idx, 1);
       await i18nForTest.changeLanguage(originalLanguage);
     }
   });
