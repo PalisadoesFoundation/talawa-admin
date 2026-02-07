@@ -2029,8 +2029,8 @@ describe('Calendar', () => {
       expect(eventsHeading.length).toBeGreaterThan(0);
     });
 
-    it('should render legend with organizationIndicator and holidayIndicator classes', () => {
-      const { container } = render(
+    it('should render legend with organization and holiday indicators', () => {
+      render(
         <Router>
           <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2046,23 +2046,10 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      const eventsLegend = container.querySelector('[class*="eventsLegend"]');
-      expect(eventsLegend).toBeInTheDocument();
-
-      const orgIndicator = container.querySelector(
-        '[class*="organizationIndicator"]',
-      );
-      expect(orgIndicator).toBeInTheDocument();
-
-      const listContainerHolidays = container.querySelector(
-        '[class*="list_container_holidays"]',
-      );
-      expect(listContainerHolidays).toBeInTheDocument();
-
-      const holidayIndicator = container.querySelector(
-        '[class*="holidayIndicator"]',
-      );
-      expect(holidayIndicator).toBeInTheDocument();
+      expect(screen.getByTestId('events-legend')).toBeInTheDocument();
+      expect(screen.getByTestId('org-indicator')).toBeInTheDocument();
+      expect(screen.getByTestId('holidays-list')).toBeInTheDocument();
+      expect(screen.getByTestId('holiday-indicator')).toBeInTheDocument();
     });
 
     it('should render legend text for eventsCreatedByOrganization and holidays', () => {

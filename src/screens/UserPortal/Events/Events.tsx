@@ -80,10 +80,9 @@ export default function Events(): JSX.Element {
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const createEventModal = useModalState();
   const { orgId: organizationId } = useParams();
-  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
-  );
+  const now = new Date();
+  const [currentMonth, setCurrentMonth] = React.useState(now.getMonth());
+  const [currentYear, setCurrentYear] = React.useState(now.getFullYear());
 
   // Query to fetch events for the organization
   const monthStart = new Date(currentYear, currentMonth, 1);

@@ -102,7 +102,7 @@ export enum ViewType {
   YEAR = 'Year',
 }
 
-function organizationEvents(): JSX.Element {
+function OrganizationEvents(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
@@ -339,4 +339,4 @@ function organizationEvents(): JSX.Element {
   );
 }
 
-export default organizationEvents;
+export default OrganizationEvents;
