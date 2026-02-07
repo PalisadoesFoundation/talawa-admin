@@ -789,10 +789,6 @@
   --titlemodalCustomRecurrenceModal-color: #707070;
   --titlemodalCustomRecurrenceModal-border: #7c9beb;
 
-  --memberfontcreatedbtnUserListCard-border: #286fe0;
-  --memberfontcreatedbtnUserListCard-bg: #286fe0;
-  --memberfontcreatedbtnUserListCard-color: #ffffff;
-
   --recurrenceDayButton-border: #808080;
   --recurrenceDayButton-outline-focus: #0056b3;
   --recurrenceDayButton-bg-hover: #808080;
@@ -6280,22 +6276,6 @@ form {
 
 .updateTimeoutButton:active {
   transform: scale(0.98);
-}
-
-/* -- UserListCard.tsx -- */
-
-.memberfontcreatedbtnUserListCard {
-  margin-top: 33px;
-  border-radius: 7px;
-  border-color: var(--memberfontcreatedbtnUserListCard-border);
-  background-color: var(--memberfontcreatedbtnUserListCard-bg);
-  color: var(--memberfontcreatedbtnUserListCard-color);
-  padding-right: 10px;
-  padding-left: 10px;
-  justify-content: flex-end;
-  float: right;
-  text-align: right;
-  box-shadow: none;
 }
 
 /* -- UserPasswordUpdate.tsx -- */
