@@ -900,7 +900,7 @@ describe('PluginStore', () => {
       Object.defineProperty(window, 'matchMedia', {
         writable: true,
         value: vi.fn().mockImplementation((query) => ({
-          matches: query !== '(max-width: 600px)',
+          matches: query !== `(max-width: ${600}px)`,
           media: query,
           onchange: null,
           addListener: vi.fn(),

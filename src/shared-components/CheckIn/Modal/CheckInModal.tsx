@@ -114,11 +114,11 @@ export const CheckInModal = ({
 
   // Define columns for the DataGrid
   const columns: GridColDef[] = [
-    { field: 'userName', headerName: t('user'), width: 300 }, // Column for user names
+    { field: 'userName', headerName: t('user'), flex: 3 }, // Column for user names
     {
       field: 'checkInData',
       headerName: t('checkInStatus'),
-      width: 400,
+      flex: 4,
       renderCell: (props) => (
         // Render a custom row component for check-in status
         <TableRow
