@@ -993,6 +993,89 @@ import DefaultModal, { OtherModal } from 'shared-components/BaseModal';
           }
         `,
       },
+
+      // JSXElement with nested form inside JSXExpressionContainer
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {<div><form onSubmit={handleSubmit}><input /></form></div>}
+              </BaseModal>
+            );
+          }
+        `,
+        errors: [
+          {
+            messageId: 'preferCrud',
+            line: 5,
+          },
+        ],
+        output: `
+          import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {<div><form onSubmit={handleSubmit}><input /></form></div>}
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // JSXFragment inside JSXExpressionContainer
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {<><form onSubmit={handleSubmit}><input /></form></>}
+              </BaseModal>
+            );
+          }
+        `,
+        errors: [
+          {
+            messageId: 'preferCrud',
+            line: 5,
+          },
+        ],
+        output: `
+          import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {<><form onSubmit={handleSubmit}><input /></form></>}
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // Import with default and namespace
+      {
+        code: `
+          import DefaultModal, * as AllModals from 'shared-components/BaseModal';
+          function Component() {
+            return <DefaultModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        errors: [
+          {
+            messageId: 'preferCrud',
+            line: 4,
+          },
+        ],
+        output: `
+          import { CRUDModalTemplate as DefaultModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import * as AllModals from 'shared-components/BaseModal';
+          function Component() {
+            return <DefaultModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
     ],
   });
 });
