@@ -363,8 +363,60 @@ const DONATION_ERROR_MOCK = [
   },
 ];
 
-const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
-const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
+const BOUNDARY_MOCKS = [
+  ...MOCKS,
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 1,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    result: {
+      data: {
+        createDonation: {
+          _id: 'min-donation',
+          amount: 1,
+          nameOfUser: 'name',
+          nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
+        },
+        __typename: 'Mutation',
+      },
+    },
+  },
+  {
+    request: {
+      query: DONATE_TO_ORGANIZATION,
+      variables: {
+        userId: '123',
+        createDonationOrgId2: '',
+        payPalId: 'paypalId',
+        nameOfUser: 'name',
+        amount: 10000000,
+        nameOfOrg: 'anyOrganization2',
+      },
+    },
+    result: {
+      data: {
+        createDonation: {
+          _id: 'max-donation',
+          amount: 10000000,
+          nameOfUser: 'name',
+          nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
+        },
+        __typename: 'Mutation',
+      },
+    },
+  },
+];
+
 const renderDonate = (mocks = MOCKS) => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
@@ -490,6 +542,7 @@ describe('Donate Component', () => {
   });
 
   test('handles donation mutation error', async () => {
+    const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
     render(
       <MockedProvider link={errorLink}>
         <BrowserRouter>
@@ -511,6 +564,7 @@ describe('Donate Component', () => {
   });
 
   test('shows empty state when no donations exist', async () => {
+    const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
     render(
       <MockedProvider link={emptyLink}>
         <BrowserRouter>
@@ -711,7 +765,7 @@ describe('Donate Component', () => {
   });
 
   test('donation amount at exactly minimum boundary (1)', async () => {
-    renderDonate();
+    renderDonate(BOUNDARY_MOCKS);
 
     await waitFor(() => {
       expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
@@ -720,16 +774,14 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '1');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    // Should not trigger range error
+    // Verify success toast is called
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
-        expect.stringContaining('must be between'),
-      );
+      expect(mockToast.success).toHaveBeenCalled();
     });
   });
 
   test('donation amount at exactly maximum boundary (10000000)', async () => {
-    renderDonate();
+    renderDonate(BOUNDARY_MOCKS);
 
     await waitFor(() => {
       expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
@@ -738,11 +790,9 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '10000000');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    // Should not trigger range error
+    // Verify success toast is called
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
-        expect.stringContaining('must be between'),
-      );
+      expect(mockToast.success).toHaveBeenCalled();
     });
   });
 
