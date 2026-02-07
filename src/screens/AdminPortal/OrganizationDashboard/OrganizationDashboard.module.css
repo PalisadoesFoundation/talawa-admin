@@ -6,18 +6,6 @@
   min-height: var(--space-15);
 }
 
-.memReqCard {
-  min-height: var(--space-17);
-}
-
-.memReqCardBody {
-  min-height: var(--space-15);
-}
-
-.p0 {
-  padding: var(--space-0);
-}
-
 .flex {
   display: flex;
 }
