@@ -46,14 +46,14 @@ export default function Donate(): JSX.Element {
     name: string;
   }>({ name: '' });
   const [donations, setDonations] = useState<InterfaceDonation[]>([]);
-  const [selectedCurrency, setSelectedCurrency] = useState(0);
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState('');
 
   const currencies = ['USD', 'INR', 'EUR'];
-  const currencyOptions = currencies.map((currency, index) => ({
-    value: index.toString(),
+  const currencyOptions = currencies.map((currency) => ({
+    value: currency,
     label: currency,
   }));
 
@@ -139,12 +139,12 @@ export default function Donate(): JSX.Element {
             <DropDownButton
               id="currency-dropdown"
               options={currencyOptions}
-              selectedValue={selectedCurrency.toString()}
-              onSelect={(val) => setSelectedCurrency(parseInt(val, 10))}
+              selectedValue={selectedCurrency}
+              onSelect={(val) => setSelectedCurrency(val)}
               variant="success"
               btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
               dataTestIdPrefix="currency-dropdown"
-              buttonLabel={currencies[selectedCurrency]}
+              buttonLabel={selectedCurrency}
             />
 
             <label htmlFor="donationAmountInput" className="visually-hidden">

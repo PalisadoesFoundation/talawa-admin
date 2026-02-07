@@ -1,6 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
@@ -385,7 +385,8 @@ describe('Donate Component', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
   });
 
   test('renders Donate screen with essential elements', async () => {
@@ -414,7 +415,11 @@ describe('Donate Component', () => {
     const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     await userEvent.click(currencyButton);
 
-    const eurOption = screen.getByTestId('currency-dropdown-item-2');
+    await waitFor(() => {
+      expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
+    });
+
+    const eurOption = screen.getByTestId('currency-dropdown-item-EUR');
     await userEvent.click(eurOption);
 
     expect(currencyButton).toHaveTextContent('EUR');
@@ -543,7 +548,7 @@ describe('Donate Component', () => {
     expect(currencyButton).toHaveTextContent('USD');
 
     await userEvent.click(currencyButton);
-    const inrOption = screen.getByTestId('currency-dropdown-item-1');
+    const inrOption = screen.getByTestId('currency-dropdown-item-INR');
     await userEvent.click(inrOption);
 
     expect(currencyButton).toHaveTextContent('INR');
@@ -555,13 +560,13 @@ describe('Donate Component', () => {
     const currencyButton = screen.getByTestId('currency-dropdown-toggle');
     await userEvent.click(currencyButton);
 
-    expect(screen.getByTestId('currency-dropdown-item-0')).toHaveTextContent(
+    expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
       'USD',
     );
-    expect(screen.getByTestId('currency-dropdown-item-1')).toHaveTextContent(
+    expect(screen.getByTestId('currency-dropdown-item-INR')).toHaveTextContent(
       'INR',
     );
-    expect(screen.getByTestId('currency-dropdown-item-2')).toHaveTextContent(
+    expect(screen.getByTestId('currency-dropdown-item-EUR')).toHaveTextContent(
       'EUR',
     );
   });
