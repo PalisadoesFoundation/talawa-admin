@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { cleanup, render, screen } from '@testing-library/react';
+import { describe, it, expect, afterEach } from 'vitest';
 import { DataTable } from './DataTable';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
 
@@ -18,6 +18,10 @@ import type { IColumnDef } from '../../types/shared-components/DataTable/interfa
  * - Check aria-hidden and data-testid attributes
  */
 describe('LoadingMoreRows (loadingMore functionality)', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   const baseColumns: IColumnDef<{ name: string; email: string }>[] = [
     {
       id: 'name',
