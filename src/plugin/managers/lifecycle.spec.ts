@@ -100,9 +100,10 @@ describe('LifecycleManager Coverage Suite', () => {
     });
 
     it('handles "Dead Code" race condition (Installed check passes, then fails)', async () => {
+        // This covers the unreachable branch in determineInitialPluginStatus (lines 289-290)
         mockDiscoveryManager.isPluginInstalled
-            .mockReturnValueOnce(true)
-            .mockReturnValueOnce(false);
+            .mockReturnValueOnce(true)  // 1. Passed check in loadPlugin
+            .mockReturnValueOnce(false); // 2. Failed check in determineInitialPluginStatus
             
         mockDiscoveryManager.loadPluginManifest.mockResolvedValue({ pluginId: VALID_PLUGIN_ID });
         mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
@@ -112,6 +113,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
         const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
         expect(plugin?.status).toBe(PluginStatus.INACTIVE);
+        // Verify both calls were actually made, ensuring we hit the second branch
         expect(mockDiscoveryManager.isPluginInstalled).toHaveBeenCalledTimes(2);
     });
 
