@@ -140,7 +140,7 @@ export default function Donate(): JSX.Element {
               id="currency-dropdown"
               options={currencyOptions}
               selectedValue={selectedCurrency}
-              onSelect={(val) => setSelectedCurrency(val)}
+              onSelect={setSelectedCurrency}
               variant="success"
               btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
               dataTestIdPrefix="currency-dropdown"

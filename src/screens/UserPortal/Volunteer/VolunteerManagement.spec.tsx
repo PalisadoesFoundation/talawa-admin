@@ -249,7 +249,6 @@ describe('Volunteer Management', () => {
     await userEvent.click(dropdownToggle);
 
     // Find dropdown menu and verify it's open
-    // Find dropdown menu and verify it's open
     await screen.findByTestId('tabs-dropdown-menu');
 
     const actionsItem = screen.getByTestId('tabs-dropdown-item-actions');
@@ -272,7 +271,6 @@ describe('Volunteer Management', () => {
     const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and verify it's open
     // Find dropdown menu and verify it's open
     await screen.findByTestId('tabs-dropdown-menu');
 
@@ -301,7 +299,6 @@ describe('Volunteer Management', () => {
     const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and verify it's open
     // Find dropdown menu and verify it's open
     await screen.findByTestId('tabs-dropdown-menu');
 

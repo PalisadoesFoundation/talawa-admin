@@ -16,9 +16,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
 
 const MOCK_DATE = `${DUMMY_DATE_TIME_PREFIX}00:00:00.000Z`;
-import dayjs from 'dayjs';
 
 const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
   mockErrorHandler: vi.fn(),
@@ -773,7 +773,6 @@ describe('Donate Component', () => {
     });
 
     // Should now show next 5 donations (User 5 to User 9)
-    // Should now show next 5 donations (User 5 to User 9)
     await waitFor(() => {
       const cards = screen.getAllByTestId('donationCard');
       expect(cards.length).toBe(5);
@@ -804,7 +803,6 @@ describe('Donate Component', () => {
       expect(screen.getByTestId('current-page')).toHaveTextContent('0');
     });
 
-    // Should show first 5 donations again
     // Should show first 5 donations again
     await waitFor(() => {
       const cards = screen.getAllByTestId('donationCard');
