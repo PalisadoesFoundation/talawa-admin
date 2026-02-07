@@ -417,9 +417,10 @@ const BOUNDARY_MOCKS = [
   },
 ];
 
-const renderDonate = (mocks = MOCKS) => {
+const renderDonate = (props: any[] | { mocks?: any[]; link?: any } = MOCKS) => {
+  const finalProps = Array.isArray(props) ? { mocks: props } : props;
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider {...finalProps} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -543,17 +544,7 @@ describe('Donate Component', () => {
 
   test('handles donation mutation error', async () => {
     const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
-    render(
-      <MockedProvider link={errorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate({ link: errorLink });
 
     await userEvent.type(screen.getByTestId('donationAmount'), '100');
     await userEvent.click(screen.getByTestId('donateBtn'));
@@ -565,17 +556,7 @@ describe('Donate Component', () => {
 
   test('shows empty state when no donations exist', async () => {
     const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
-    render(
-      <MockedProvider link={emptyLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate({ link: emptyLink });
 
     // Wait for data to load
     await waitFor(() => {
@@ -768,7 +749,9 @@ describe('Donate Component', () => {
     renderDonate(BOUNDARY_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
     });
 
     await userEvent.type(screen.getByTestId('donationAmount'), '1');
@@ -784,7 +767,9 @@ describe('Donate Component', () => {
     renderDonate(BOUNDARY_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
     });
 
     await userEvent.type(screen.getByTestId('donationAmount'), '10000000');
