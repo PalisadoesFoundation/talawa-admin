@@ -1,6 +1,6 @@
 // Add explicit imports from vitest
 import { describe, it, expect } from 'vitest';
-import { props } from './EventListCardProps';
+import { props } from './EventListCardProps.mock';
 import { cleanup } from '@testing-library/react';
 
 afterEach(() => {
