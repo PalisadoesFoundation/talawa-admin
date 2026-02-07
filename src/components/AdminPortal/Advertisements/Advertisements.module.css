@@ -1,8 +1,8 @@
 .containerAdvertisements {
   background-color: var(--containerAdvertisemens-bg);
-  border-radius: 20px;
+  border-radius: var(--radius-20);
   width: auto;
-  margin-inline-start: 12px;
+  margin-inline-start: var(--space-4);
 }
 
 .pMessageAdvertisement {
@@ -10,19 +10,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.5rem;
-  font-weight: 500;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
   line-height: 1.2;
-  padding-bottom: 24px;
+  padding-bottom: var(--space-7);
 }
 
 .justifyspAdvertisements {
   display: grid;
   width: 100%;
-  margin-top: 30px;
+  margin-top: var(--space-8);
   grid-template-rows: auto;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: 0.8rem 0.4rem;
+  grid-gap: var(--space-4) var(--space-6-5);
 }
 
 @media (max-width: 1024px) {
@@ -32,11 +32,11 @@
 }
 
 .rowAdvertisements {
-  margin-top: 20px;
+  margin-top: var(--space-6);
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-gap: 0.8rem 0.4rem;
+  grid-gap: var(--space-4) var(--space-6-5);
   overflow: hidden;
 }
 
@@ -44,13 +44,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px;
+  padding: var(--space-3);
 }
 
 .inputAdvertisements {
   display: flex;
   position: relative;
-  width: 560px;
+  width: calc(var(--space-25) + var(--space-10) + var(--space-4));
 }
 
 .listBoxAdvertisements {
@@ -58,5 +58,5 @@
   width: 100%;
   grid-template-rows: auto;
   grid-template-columns: repeat(6, 1fr);
-  grid-gap: 0.8rem 0.4rem;
+  grid-gap: var(--space-4) var(--space-6-5);
 }

@@ -2,13 +2,13 @@
   background-color: var(--inputField-bg) !important;
   border-color: var(--inputField-border) !important;
   color: var(--inputField-text-color);
-  font-size: 15px !important;
+  font-size: var(--font-size-15) !important;
   width: 100% !important;
 }
 
 .inputField::placeholder {
   color: var(--inputField-placeholder-color);
-  font-size: 15px !important;
+  font-size: var(--font-size-15) !important;
   opacity: 1 !important;
 }
 
@@ -30,12 +30,12 @@
   border: none;
   color: var(--closeButtonP-color);
   cursor: pointer;
-  padding: 5px;
+  padding: var(--space-2) var(--space-0-5);
   border-radius: 50%;
 }
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-5);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);

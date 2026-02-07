@@ -3,6 +3,6 @@
 }
 
 .checkInDataGridContainer {
-  height: 500px;
+  height: var(--space-27);
   width: 100%;
 }

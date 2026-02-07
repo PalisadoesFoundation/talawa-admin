@@ -11,14 +11,14 @@
 }
 
 .errorIcon {
-  font-size: var(--error-icon-size, 40px);
+  font-size: var(--error-icon-size, var(--font-size-26));
   color: var(--bs-danger, var(--errorIcon-color));
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-5);
 }
 
 .errorIcon::before {
   content: '⚠️';
-  margin-right: 0.5rem;
+  margin-right: var(--space-3);
 }
 
 .tableHeader {
@@ -29,20 +29,20 @@
 .editButton {
   background-color: var(--editButton-bg);
   color: var(--editButton-font);
-  border: 1px solid var(--editButton-border);
+  border: var(--border-1) solid var(--editButton-border);
 }
 
 .editButton:is(:hover, :active) {
   background-color: var(--editButton-bg-hover);
-  border: 1px solid var(--editButton-border-hover);
+  border: var(--border-1) solid var(--editButton-border-hover);
 }
 
 .removeButton {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
   border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
   cursor: pointer;
 }
 
@@ -52,7 +52,7 @@
 }
 
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-5);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
@@ -69,23 +69,23 @@
   justify-content: space-between !important;
   align-items: center !important;
   background-color: var(--modalHeader-bg) !important;
-  border-bottom: 3.5px solid var(--addButton-bg) !important;
-  padding: 1rem !important;
+  border-bottom: var(--border-4) solid var(--addButton-bg) !important;
+  padding: var(--space-5) !important;
 }
 
 .scrollContainer {
-  height: 100px;
+  height: var(--space-100);
   overflow-y: auto;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-5);
 }
 
 .memberBadge {
   display: flex;
   align-items: center;
-  padding: 5px 10px;
-  border-radius: 12px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-20);
   box-shadow: 0 1px 3px var(--memberBadge-box-shadow);
-  max-width: calc(100% - 2rem);
+  max-width: calc(100% - var(--space-8));
 }
 
 .removeFilterIcon {
@@ -93,7 +93,7 @@
 }
 
 .loadingDiv {
-  min-height: 300px;
+  min-height: var(--space-20);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,6 +102,6 @@
 .rowBackground {
   background-color: var(--rowBackground-bg);
   color: var(--rowBackground-color);
-  max-height: 120px;
+  max-height: var(--space-14);
   overflow-y: auto;
 }

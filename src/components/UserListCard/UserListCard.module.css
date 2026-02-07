@@ -1,10 +1,10 @@
 .memberfontcreatedbtnUserListCard {
-  margin-top: 33px;
-  border-radius: 7px;
+  margin-top: var(--space-8);
+  border-radius: var(--radius-6);
   border-color: var(--memberfontcreatedbtnUserListCard-border);
   background-color: var(--memberfontcreatedbtnUserListCard-bg);
   color: var(--memberfontcreatedbtnUserListCard-color);
-  padding-right: 10px;
-  padding-left: 10px;
+  padding-right: var(--space-3);
+  padding-left: var(--space-3);
   justify-content: flex-end;
 }
