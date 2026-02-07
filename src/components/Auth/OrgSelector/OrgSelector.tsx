@@ -30,7 +30,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
   error,
   testId,
   disabled = false,
-  required = false,
+  required: _required = false,
   label,
 }) => {
   const { t } = useTranslation('translation', {

@@ -68,7 +68,6 @@ import {
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate';
-import componentStyles from './AddPeopleToTag.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -393,7 +392,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               <div
                 id="addPeopleToTagScrollableDiv"
                 data-testid="addPeopleToTagScrollableDiv"
-                className={componentStyles.dataGridContainer}
+                className={styles.dataGridContainer}
               >
                 <InfiniteScroll
                   dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
