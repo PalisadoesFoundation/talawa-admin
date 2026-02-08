@@ -41,6 +41,7 @@ import {
   type InterfaceEvent,
   type InterfaceCalendarProps,
 } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
 import { filterEventData } from '../utils/filterEventData';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
@@ -80,7 +81,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     const filteredEvents = filterEventData(
       eventData,
       orgData,
-      userRole,
+      userRole as UserRole | undefined,
       userId,
     );
     setEvents(filteredEvents);

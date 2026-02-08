@@ -4,12 +4,13 @@ import Button from 'shared-components/Button';
 import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
-import { holidays, months, weekdays } from 'types/Event/utils';
+import { holidays, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import type {
   InterfaceEvent,
   InterfaceCalendarProps,
 } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { filterEventData } from '../utils/filterEventData';
@@ -34,7 +35,9 @@ const Calendar: React.FC<
   currentMonth,
   currentYear,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventCalendar' });
+  const { t, i18n } = useTranslation('translation', {
+    keyPrefix: 'eventCalendar',
+  });
   const { t: tErrors } = useTranslation('errors');
   const [selectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
@@ -53,7 +56,7 @@ const Calendar: React.FC<
     const filteredEvents = filterEventData(
       eventData || [],
       orgData,
-      userRole,
+      userRole as UserRole | undefined,
       userId,
     );
     setEvents(filteredEvents);
@@ -145,8 +148,17 @@ const Calendar: React.FC<
                   data-testid="current-date"
                 >
                   {viewType === ViewType.DAY
-                    ? `${currentDate} ${months[currentMonth]} ${currentYear}`
-                    : `${currentYear} ${months[currentMonth]}`}
+                    ? new Intl.DateTimeFormat(i18n.language, {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      }).format(
+                        new Date(currentYear, currentMonth, currentDate),
+                      )
+                    : new Intl.DateTimeFormat(i18n.language, {
+                        month: 'long',
+                        year: 'numeric',
+                      }).format(new Date(currentYear, currentMonth, 1))}
                 </div>
 
                 <Button

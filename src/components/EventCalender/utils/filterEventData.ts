@@ -11,7 +11,7 @@ import { UserRole } from 'types/Event/interface';
 export const filterEventData = (
   eventData: InterfaceEvent[],
   orgData?: InterfaceIOrgList,
-  userRole?: string,
+  userRole?: UserRole,
   userId?: string,
 ): InterfaceEvent[] => {
   if (!eventData) return [];
