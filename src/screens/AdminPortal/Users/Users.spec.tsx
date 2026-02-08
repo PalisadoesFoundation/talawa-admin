@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -88,7 +88,10 @@ beforeEach(() => {
 
 afterEach(() => {
   clearAllItems();
-  vi.clearAllMocks();
+  Object.defineProperty(window, 'scrollY', { value: 0, writable: true });
+  cleanup();
+  vi.restoreAllMocks();
+  vi.resetModules();
 });
 
 describe('Testing Users screen', () => {
@@ -307,27 +310,21 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+      expect(screen.getByText('john@example.com')).toBeInTheDocument();
+      expect(screen.getByText('jane@example.com')).toBeInTheDocument();
+      expect(
+        screen.getAllByTestId(/showJoinedOrgsBtnuser/i).length,
+      ).toBeGreaterThan(0);
+      expect(
+        screen.getAllByTestId(/showBlockedOrgsBtnuser/i).length,
+      ).toBeGreaterThan(0);
+    });
 
-    // Verify table is rendered
-    const table = screen.getByTestId('datatable');
-    expect(table).toBeInTheDocument();
-
-    // Verify user data from MOCKS is displayed in rows
-    // Check for user names from mock data
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Doe')).toBeInTheDocument();
-
-    // Verify email data is displayed
-    expect(screen.getByText('john@example.com')).toBeInTheDocument();
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
-
-    // Verify action buttons are present for viewing joined/blocked organizations
     const joinedOrgButtons = screen.getAllByTestId(/showJoinedOrgsBtnuser/i);
-    const blockedOrgButtons = screen.getAllByTestId(/showBlockedOrgsBtnuser/i);
-
-    expect(joinedOrgButtons.length).toBeGreaterThan(0);
-    expect(blockedOrgButtons.length).toBeGreaterThan(0);
 
     // Verify UI interactions: click one of the action buttons
     await userEvent.click(joinedOrgButtons[0]);

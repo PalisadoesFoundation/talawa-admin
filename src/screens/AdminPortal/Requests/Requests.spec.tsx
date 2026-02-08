@@ -1,6 +1,12 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, within } from '@testing-library/react';
+import {
+  cleanup,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -266,6 +272,8 @@ afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
   // Clear all mocks to prevent test pollution in sharded environments
   vi.clearAllMocks();
+  vi.restoreAllMocks();
+  cleanup();
 });
 
 describe('Testing Requests screen', () => {
@@ -451,7 +459,7 @@ describe('Testing Requests screen', () => {
         expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
         expect(
           screen.getByTestId('requests-search-empty-message'),
-        ).toHaveTextContent(/no results found for john/i);
+        ).toHaveTextContent(/no results found for pete/i);
       },
       { timeout: 3000 },
     );

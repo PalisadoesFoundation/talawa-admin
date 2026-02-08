@@ -46,7 +46,6 @@ import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import { DataTable } from 'shared-components/DataTable/DataTable';
-import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -113,39 +112,17 @@ const Requests = (): JSX.Element => {
       notifyOnNetworkStatusChange: true,
     });
 
-  const {
-    rows: membershipRequests,
-    loading,
-    error,
-    refetch,
-  } = useTableData<
-    InterfaceRequestsListItem,
-    InterfaceRequestsListItem,
-    InterfaceMembershipRequestsQueryData
-  >(membershipRequestsResult, {
-    path: (data) => {
-      const requests = data?.organization?.membershipRequests ?? [];
-      return {
-        edges: requests.map((request) => ({ node: request })),
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-        },
-      };
-    },
-  });
+  const { data, loading, error, refetch } = membershipRequestsResult;
 
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
 
   // Filter to show only pending requests
   const displayedRequests = useMemo(() => {
-    if (!membershipRequests.length) {
-      return [];
-    }
-    return membershipRequests.filter(
+    const requests = data?.organization?.membershipRequests ?? [];
+    return requests.filter(
       (req: InterfaceRequestsListItem) => req.status === 'pending',
     );
-  }, [membershipRequests]);
+  }, [data]);
 
   // Precompute request index map for O(1) serial number lookup
   const requestIndexMap = useMemo(() => {
@@ -204,14 +181,6 @@ const Requests = (): JSX.Element => {
    */
   const handleSearch = (value: string): void => {
     setSearchByName(value);
-    refetch({
-      input: {
-        id: organizationId,
-      },
-      first: PAGE_SIZE,
-      skip: 0,
-      name_contains: value,
-    });
   };
 
   // Header titles for the table

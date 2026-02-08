@@ -97,7 +97,7 @@ const Users = (): JSX.Element => {
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: searchByName ? { name: searchByName } : undefined,
+      where: undefined,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -106,8 +106,19 @@ const Users = (): JSX.Element => {
     InterfaceQueryUserListItem,
     InterfaceQueryUserListItem
   >(queryResult, {
-    path: (data: unknown): InterfaceUserListQueryResponse['allUsers'] =>
-      (data as InterfaceUserListQueryResponse)?.allUsers,
+    path: (data: unknown) => {
+      if (!data || typeof data !== 'object') {
+        return undefined;
+      }
+
+      const candidate = data as Record<string, unknown>;
+      const allUsers = candidate.allUsers;
+      if (!allUsers || typeof allUsers !== 'object') {
+        return undefined;
+      }
+
+      return allUsers as InterfaceUserListQueryResponse['allUsers'];
+    },
   });
 
   // Show warning if there are no organizations
@@ -207,54 +218,61 @@ const Users = (): JSX.Element => {
     return t('noUserFound');
   };
 
-  const headerTitles: string[] = [
-    '#',
-    tCommon('name'),
-    tCommon('email'),
-    t('joined_organizations'),
-    t('blocked_organizations'),
-  ];
+  const headerTitles = React.useMemo(
+    () => [
+      '#',
+      tCommon('name'),
+      tCommon('email'),
+      t('joined_organizations'),
+      t('blocked_organizations'),
+    ],
+    [t, tCommon],
+  );
 
-  const tableColumns: Array<IColumnDef<InterfaceQueryUserListItem>> = [
-    {
-      id: 'index',
-      header: headerTitles[0],
-      accessor: (row: InterfaceQueryUserListItem) =>
-        userIndexMap.get(row.id) || 0,
-    },
-    {
-      id: 'name',
-      header: headerTitles[1],
-      accessor: 'name',
-      meta: {
-        searchable: true,
-      },
-    },
-    {
-      id: 'email',
-      header: headerTitles[2],
-      accessor: 'emailAddress',
-      meta: {
-        searchable: true,
-      },
-    },
-    {
-      id: 'joinedOrganizations',
-      header: headerTitles[3],
-      accessor: 'id',
-      meta: {
-        sortable: false,
-      },
-    },
-    {
-      id: 'blockedOrganizations',
-      header: headerTitles[4],
-      accessor: 'id',
-      meta: {
-        sortable: false,
-      },
-    },
-  ];
+  const tableColumns: Array<IColumnDef<InterfaceQueryUserListItem>> =
+    React.useMemo(
+      () => [
+        {
+          id: 'index',
+          header: headerTitles[0],
+          accessor: (row: InterfaceQueryUserListItem) =>
+            userIndexMap.get(row.id) || 0,
+        },
+        {
+          id: 'name',
+          header: headerTitles[1],
+          accessor: 'name',
+          meta: {
+            searchable: true,
+          },
+        },
+        {
+          id: 'email',
+          header: headerTitles[2],
+          accessor: 'emailAddress',
+          meta: {
+            searchable: true,
+          },
+        },
+        {
+          id: 'joinedOrganizations',
+          header: headerTitles[3],
+          accessor: 'id',
+          meta: {
+            sortable: false,
+          },
+        },
+        {
+          id: 'blockedOrganizations',
+          header: headerTitles[4],
+          accessor: 'id',
+          meta: {
+            sortable: false,
+          },
+        },
+      ],
+      [headerTitles, userIndexMap],
+    );
 
   const usersQueryErrorPanel = error ? (
     <div

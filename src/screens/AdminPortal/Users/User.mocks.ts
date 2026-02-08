@@ -28,7 +28,6 @@ export const MOCKS = [
         first: 12,
         after: null,
         orgFirst: 32,
-        where: undefined,
       },
     },
     result: {
@@ -264,7 +263,6 @@ export const MOCKS2 = [
         first: 12,
         after: null,
         orgFirst: 32,
-        where: undefined,
       },
     },
     result: {
