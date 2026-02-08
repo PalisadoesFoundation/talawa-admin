@@ -10,12 +10,16 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
-} from './rules.ts';
+} from './rules.js';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 describe('ESLint Syntax Restrictions', () => {
+  /**
+   * Creates an ESLint linter instance
+   * @returns {Promise<ESLint>}
+   */
   const createLinter = async () => {
     const eslint = new ESLint({
       overrideConfigFile: path.resolve(dirname, '../../../eslint.config.js'),
@@ -23,9 +27,15 @@ describe('ESLint Syntax Restrictions', () => {
     return eslint;
   };
 
-  const lintCode = async (code: string, filename = 'test.tsx') => {
+  /**
+   * Lints the provided code
+   * `@param` {string} code - The code to lint
+   * `@param` {string} [filePath='test.tsx'] - The file path for the code
+   * `@returns` {Promise<import('eslint').Linter.LintMessage[]>} Array of lint messages
+   */
+  const lintCode = async (code, filePath = 'test.tsx') => {
     const eslint = await createLinter();
-    const results = await eslint.lintText(code, { filePath: filename });
+    const results = await eslint.lintText(code, { filePath });
     return results[0]?.messages || [];
   };
 
@@ -574,7 +584,8 @@ describe('ESLint Syntax Restrictions', () => {
         expect(Array.isArray(paths)).toBe(true);
 
         // Create mapping of ID to package name for exact matching
-        const idToPackage: Record<string, string> = {
+        /** @type {Record<string, string>} */
+        const idToPackage = {
           'mui-data-grid': '@mui/x-data-grid',
           'rb-spinner': 'react-bootstrap',
         };
@@ -583,7 +594,7 @@ describe('ESLint Syntax Restrictions', () => {
         allowedIds.forEach((id) => {
           const expectedPackageName = idToPackage[id];
           const isPresent = paths.some(
-            (p: { name: string; message?: string; importNames?: string[] }) =>
+            (p) =>
               p.name === expectedPackageName &&
               (!p.importNames || p.importNames.includes('Spinner')),
           );
@@ -592,7 +603,7 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Assert that non-ID restrictions are preserved
         const fireEventRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
+          (p) =>
             p.name === '@testing-library/react' &&
             p.importNames?.includes('fireEvent'),
         );
@@ -612,7 +623,7 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Should contain restrictions without IDs (like @testing-library/react fireEvent)
         const fireEventRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
+          (p) =>
             p.name === '@testing-library/react' &&
             p.importNames?.includes('fireEvent'),
         );
@@ -620,8 +631,7 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Should contain direct path restrictions without IDs
         const directChipPath = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
-            p.name === '@mui/material/Chip',
+          (p) => p.name === '@mui/material/Chip',
         );
         expect(directChipPath).toBeDefined();
       });
@@ -633,21 +643,20 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Should NOT contain allowed ID's package
         const dataGridRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
-            p.name === '@mui/x-data-grid',
+          (p) => p.name === '@mui/x-data-grid',
         );
         expect(dataGridRestriction).toBeUndefined();
 
         // Should still contain other ID-based restrictions
         const spinnerRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
+          (p) =>
             p.name === 'react-bootstrap' && p.importNames?.includes('Spinner'),
         );
         expect(spinnerRestriction).toBeDefined();
 
         // Should preserve non-ID restrictions
         const fireEventRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
+          (p) =>
             p.name === '@testing-library/react' &&
             p.importNames?.includes('fireEvent'),
         );
@@ -666,7 +675,7 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Should contain non-ID restrictions
         const fireEventRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
+          (p) =>
             p.name === '@testing-library/react' &&
             p.importNames?.includes('fireEvent'),
         );
@@ -674,8 +683,7 @@ describe('ESLint Syntax Restrictions', () => {
 
         // Should contain ID-based restrictions
         const dataGridRestriction = paths.find(
-          (p: { name: string; message?: string; importNames?: string[] }) =>
-            p.name === '@mui/x-data-grid',
+          (p) => p.name === '@mui/x-data-grid',
         );
         expect(dataGridRestriction).toBeDefined();
       });

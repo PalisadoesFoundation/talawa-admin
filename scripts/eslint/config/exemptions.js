@@ -1,22 +1,27 @@
-import { restrictImportsExcept } from '../rules/rules.ts';
+import { restrictImportsExcept } from '../rules/rules.js';
 
-type WrapperExemptionOptions = {
-  componentName: string;
-  allowedIds: string[];
-  additionalPaths?: string[];
-  componentPath?: string;
-  typePath?: string | null;
-  extensions?: string;
-};
+/**
+ * @typedef {Object} WrapperExemptionOptions
+ * @property {string} componentName
+ * @property {string[]} allowedIds
+ * @property {string[]} [additionalPaths]
+ * @property {string} [componentPath]
+ * @property {string|null} [typePath]
+ * @property {string} [extensions]
+ */
 
+/**
+ * @param {WrapperExemptionOptions} options
+ * @returns {string[]}
+ */
 const buildWrapperPaths = ({
   componentName,
   additionalPaths = [],
   componentPath,
   typePath,
   extensions = '{ts,tsx}',
-}: WrapperExemptionOptions): string[] => {
-  const files: string[] = [];
+}) => {
+  const files = [];
   const resolvedComponentPath =
     componentPath ?? `src/shared-components/${componentName}`;
   const resolvedTypePath =
@@ -34,7 +39,10 @@ const buildWrapperPaths = ({
   return [...files, ...additionalPaths];
 };
 
-export const createWrapperExemption = (options: WrapperExemptionOptions) => ({
+/**
+ * @param {WrapperExemptionOptions} options
+ */
+export const createWrapperExemption = (options) => ({
   files: buildWrapperPaths(options),
   rules: restrictImportsExcept(options.allowedIds),
 });
@@ -70,7 +78,6 @@ export const wrapperExemptions = [
     componentName: 'DropDownButton',
     allowedIds: ['rb-dropdown', 'rb-dropdown-path'],
   }),
-
   {
     files: [
       'src/shared-components/DateRangePicker/**/*.{ts,tsx}',

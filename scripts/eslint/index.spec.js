@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import plugin, { rules } from './index.ts';
-import preferCrudModalTemplate from './rules/prefer-crud-modal-template.ts';
+import plugin, { rules } from './index.js';
+import preferCrudModalTemplate from './rules/prefer-crud-modal-template.js';
 
 describe('ESLint Plugin Index', () => {
   describe('rules export', () => {
