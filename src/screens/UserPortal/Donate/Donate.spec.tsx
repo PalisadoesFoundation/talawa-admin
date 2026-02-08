@@ -424,6 +424,7 @@ const renderDonate = (
     | { mocks?: MockedResponse[]; link?: ApolloLink } = MOCKS,
 ) => {
   const finalProps = Array.isArray(props) ? { mocks: props } : props;
+  /* Note: If { link } is passed, it overrides { mocks } in MockedProvider behavior */
   return render(
     <MockedProvider {...finalProps} addTypename={false}>
       <BrowserRouter>

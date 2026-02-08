@@ -145,6 +145,7 @@ export default function Donate(): JSX.Element {
               btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
               dataTestIdPrefix="currency-dropdown"
               buttonLabel={selectedCurrency}
+              ariaLabel={t('selectCurrency')}
             />
 
             <label htmlFor="donationAmountInput" className="visually-hidden">

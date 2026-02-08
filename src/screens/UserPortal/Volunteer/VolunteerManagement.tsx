@@ -141,6 +141,9 @@ const VolunteerManagement = (): JSX.Element => {
     navigate(`/user/organization/${orgId}`);
   };
 
+  const isTabOption = (val: string): val is TabOptions =>
+    ['upcomingEvents', 'invitations', 'actions', 'groups'].includes(val);
+
   return (
     <div className="d-flex flex-column">
       <Row className="mt-4">
@@ -159,17 +162,19 @@ const VolunteerManagement = (): JSX.Element => {
             </Button>
             {volunteerDashboardTabs.map(renderButton)}
           </div>
-
           <DropDownButton
             id="tabs-dropdown"
             options={tabOptions}
             selectedValue={tab}
-            onSelect={(val) => setTab(val as TabOptions)}
+            onSelect={(val) => {
+              if (isTabOption(val)) setTab(val);
+            }}
             variant="success"
             btnStyle={styles.dropdown}
             dataTestIdPrefix="tabs-dropdown"
             buttonLabel={t(tab)}
             parentContainerStyle="d-md-none"
+            ariaLabel={t('volunteerTabs')}
           />
         </Col>
 
