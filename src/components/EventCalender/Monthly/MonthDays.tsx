@@ -5,13 +5,8 @@ import type { JSX } from 'react';
 import styles from './EventCalender.module.css';
 import HolidayCard from '../../HolidayCards/HolidayCard';
 import { months } from 'types/Event/utils';
+import type { InterfaceHoliday } from 'types/Event/utils';
 import type { InterfaceEvent } from 'types/Event/interface';
-
-interface Holiday {
-  name: string;
-  date: string;
-  month: string;
-}
 
 interface MonthDaysProps {
   events: InterfaceEvent[] | null;
@@ -21,10 +16,32 @@ interface MonthDaysProps {
   refetchEvents?: () => void;
   userRole?: string;
   userId?: string;
-  filteredHolidays: Holiday[];
+  filteredHolidays: InterfaceHoliday[];
   windowWidth: number;
+  t: (key: string) => string;
 }
 
+/**
+ * Renders the grid of day cells for the monthly calendar view.
+ *
+ * Each cell displays the day number, any matching holidays, and a filtered
+ * list of events for that date. Events are filtered by the parent based on
+ * user role and organisation membership before being passed in.
+ *
+ * @param props - The component props.
+ * @param props.events - Pre-filtered events to display (may be null while loading).
+ * @param props.currentYear - The year currently being viewed.
+ * @param props.currentMonth - Zero-based month index currently being viewed.
+ * @param props.selectedDate - The date the user has explicitly selected, if any.
+ * @param props.refetchEvents - Callback forwarded to EventListCard to refresh data after mutations.
+ * @param props.userRole - Role of the current user, forwarded to EventListCard.
+ * @param props.userId - ID of the current user, forwarded to EventListCard.
+ * @param props.filteredHolidays - Holidays that fall within the current month.
+ * @param props.windowWidth - Current viewport width used to adjust the visible event count.
+ * @param props.t - i18n translation function scoped to the eventCalendar namespace.
+ *
+ * @returns A fragment of day-cell `div` elements forming the month grid.
+ */
 const MonthDays: React.FC<MonthDaysProps> = ({
   events,
   currentYear,
@@ -35,6 +52,7 @@ const MonthDays: React.FC<MonthDaysProps> = ({
   userId,
   filteredHolidays,
   windowWidth,
+  t,
 }) => {
   const [expanded, setExpanded] = useState<number>(-1);
 
@@ -87,38 +105,38 @@ const MonthDays: React.FC<MonthDaysProps> = ({
         const allEventsList: JSX.Element[] =
           events
             ?.filter(
-              (datas) =>
-                dayjs(datas.startAt).format('YYYY-MM-DD') ===
+              (event) =>
+                dayjs(event.startAt).format('YYYY-MM-DD') ===
                 dayjs(date).format('YYYY-MM-DD'),
             )
-            .map((datas: InterfaceEvent) => (
+            .map((event: InterfaceEvent) => (
               <EventListCard
                 refetchEvents={refetchEvents}
                 userRole={userRole}
-                key={datas.id}
-                id={datas.id}
-                location={datas.location}
-                name={datas.name}
-                description={datas.description}
-                startAt={datas.startAt}
-                endAt={datas.endAt}
-                startTime={datas.startTime}
-                endTime={datas.endTime}
-                allDay={datas.allDay}
-                isPublic={datas.isPublic}
-                isRegisterable={datas.isRegisterable}
-                isInviteOnly={Boolean(datas.isInviteOnly)}
-                attendees={datas.attendees || []}
-                creator={datas.creator}
+                key={event.id}
+                id={event.id}
+                location={event.location}
+                name={event.name}
+                description={event.description}
+                startAt={event.startAt}
+                endAt={event.endAt}
+                startTime={event.startTime}
+                endTime={event.endTime}
+                allDay={event.allDay}
+                isPublic={event.isPublic}
+                isRegisterable={event.isRegisterable}
+                isInviteOnly={Boolean(event.isInviteOnly)}
+                attendees={event.attendees || []}
+                creator={event.creator}
                 userId={userId}
-                isRecurringEventTemplate={datas.isRecurringEventTemplate}
-                baseEvent={datas.baseEvent}
-                sequenceNumber={datas.sequenceNumber}
-                totalCount={datas.totalCount}
-                hasExceptions={datas.hasExceptions}
-                progressLabel={datas.progressLabel}
-                recurrenceDescription={datas.recurrenceDescription}
-                recurrenceRule={datas.recurrenceRule}
+                isRecurringEventTemplate={event.isRecurringEventTemplate}
+                baseEvent={event.baseEvent}
+                sequenceNumber={event.sequenceNumber}
+                totalCount={event.totalCount}
+                hasExceptions={event.hasExceptions}
+                progressLabel={event.progressLabel}
+                recurrenceDescription={event.recurrenceDescription}
+                recurrenceRule={event.recurrenceRule}
               />
             )) || [];
 
@@ -172,11 +190,12 @@ const MonthDays: React.FC<MonthDaysProps> = ({
                 </div>
                 {shouldShowViewMore && (
                   <button
+                    type="button"
                     className={styles.btn__more}
                     data-testid="more"
                     onClick={() => toggleExpand(index)}
                   >
-                    {expanded === index ? 'View less' : 'View all'}
+                    {expanded === index ? t('viewLess') : t('viewAll')}
                   </button>
                 )}
               </div>

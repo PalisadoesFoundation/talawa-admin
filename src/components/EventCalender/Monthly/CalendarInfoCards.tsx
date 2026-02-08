@@ -1,15 +1,10 @@
 import React from 'react';
 import styles from './EventCalender.module.css';
 import { months } from 'types/Event/utils';
-
-interface Holiday {
-  name: string;
-  date: string;
-  month: string;
-}
+import type { InterfaceHoliday } from 'types/Event/utils';
 
 interface CalendarInfoCardsProps {
-  filteredHolidays: Holiday[];
+  filteredHolidays: InterfaceHoliday[];
   t: (key: string) => string;
 }
 

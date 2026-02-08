@@ -2448,7 +2448,9 @@
     "holidays": "Holidays",
     "events": "Events",
     "eventsCreatedByOrganization": "Events Created by Organization",
-    "today": "Today"
+    "today": "Today",
+    "viewAll": "View all",
+    "viewLess": "View less"
   },
   "contact": {
     "card_aria": "Contact card"

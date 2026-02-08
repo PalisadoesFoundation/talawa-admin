@@ -4,7 +4,7 @@ import Button from 'shared-components/Button';
 import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
-import { holidays, weekdays } from 'types/Event/utils';
+import { holidays, months, weekdays } from 'types/Event/utils';
 import YearlyEventCalender from '../Yearly/YearlyEventCalender';
 import type {
   InterfaceEvent,
@@ -109,29 +109,13 @@ const Calendar: React.FC<
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            console.warn(`Holiday "${holiday.name}" has no date specified.`);
             return false;
           }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
           return holidayMonth === currentMonth;
         })
       : [];
-  }, [holidays, currentMonth]);
-
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+  }, [currentMonth]);
 
   return (
     <ErrorBoundaryWrapper
@@ -210,6 +194,7 @@ const Calendar: React.FC<
                   userId={userId}
                   filteredHolidays={filteredHolidays}
                   windowWidth={windowWidth}
+                  t={t}
                 />
               </div>
               <CalendarInfoCards filteredHolidays={filteredHolidays} t={t} />

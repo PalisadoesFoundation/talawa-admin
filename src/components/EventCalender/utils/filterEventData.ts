@@ -34,18 +34,17 @@ export const filterEventData = (
     }
 
     if (event.isInviteOnly) {
-      const isCreator = event.creator && event.creator.id === userId;
-      const isAttendee = event.attendees?.some(
+      return event.attendees?.some(
         (attendee) => attendee.id === userId,
-      );
-      return isCreator || isAttendee;
+      ) ?? false;
     }
 
-    const isMember =
-      orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
-      !orgData?.members ||
-      false;
+    if (!orgData?.members) {
+      return false;
+    }
 
-    return isMember || false;
+    return orgData.members.edges?.some(
+      (edge) => edge.node.id === userId,
+    ) ?? false;
   });
 };

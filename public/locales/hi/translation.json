@@ -2448,7 +2448,9 @@
     "holidays": "छुट्टियाँ",
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
-    "today": "आज"
+    "today": "आज",
+    "viewAll": "सभी देखें",
+    "viewLess": "कम देखें"
   },
   "contact": {
     "card_aria": "संपर्क कार्ड"

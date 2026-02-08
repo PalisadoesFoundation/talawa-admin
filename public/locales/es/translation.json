@@ -2448,7 +2448,9 @@
     "holidays": "Días festivos",
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
-    "today": "Hoy"
+    "today": "Hoy",
+    "viewAll": "Ver todo",
+    "viewLess": "Ver menos"
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"

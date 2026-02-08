@@ -4,13 +4,8 @@ import React, { useState } from 'react';
 import type { JSX } from 'react';
 import styles from './EventCalender.module.css';
 import { months } from 'types/Event/utils';
+import type { InterfaceHoliday } from 'types/Event/utils';
 import type { InterfaceEvent } from 'types/Event/interface';
-
-interface Holiday {
-  name: string;
-  date: string;
-  month: string;
-}
 
 interface DayViewProps {
   events: InterfaceEvent[] | null;
@@ -19,7 +14,7 @@ interface DayViewProps {
   currentDate: number;
   refetchEvents?: () => void;
   userRole?: string;
-  filteredHolidays: Holiday[];
+  filteredHolidays: InterfaceHoliday[];
   windowWidth: number;
   t: (key: string) => string;
 }
@@ -37,12 +32,11 @@ const DayView: React.FC<DayViewProps> = ({
 }) => {
   const [expanded, setExpanded] = useState<number>(-1);
 
-  const timezoneString = `UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${String(
-    Math.floor(Math.abs(new Date().getTimezoneOffset()) / 60),
-  ).padStart(
-    2,
-    '0',
-  )}:${String(Math.abs(new Date().getTimezoneOffset()) % 60).padStart(2, '0')}`;
+  const now = new Date();
+  const offsetMinutes = now.getTimezoneOffset();
+  const timezoneString = `UTC${offsetMinutes > 0 ? '-' : '+'}${String(
+    Math.floor(Math.abs(offsetMinutes) / 60),
+  ).padStart(2, '0')}:${String(Math.abs(offsetMinutes) % 60).padStart(2, '0')}`;
 
   const toggleExpand = (index: number): void => {
     if (expanded === index) setExpanded(-1);
@@ -50,42 +44,42 @@ const DayView: React.FC<DayViewProps> = ({
   };
 
   const currentDateEvents =
-    events?.filter((datas) => {
+    events?.filter((event) => {
       const currDate = new Date(currentYear, currentMonth, currentDate);
       return (
-        dayjs(datas.startAt).format('YYYY-MM-DD') ===
+        dayjs(event.startAt).format('YYYY-MM-DD') ===
         dayjs(currDate).format('YYYY-MM-DD')
       );
     }) || [];
 
   const allDayEventsList: JSX.Element[] = currentDateEvents.map(
-    (datas: InterfaceEvent) => (
+    (event: InterfaceEvent) => (
       <EventListCard
         refetchEvents={refetchEvents}
         userRole={userRole}
-        key={datas.id}
-        id={datas.id}
-        location={datas.location}
-        name={datas.name}
-        description={datas.description}
-        startAt={datas.startAt}
-        endAt={datas.endAt}
-        startTime={datas.startTime}
-        endTime={datas.endTime}
-        allDay={datas.allDay}
-        isPublic={datas.isPublic}
-        isRegisterable={datas.isRegisterable}
-        isInviteOnly={Boolean(datas.isInviteOnly)}
-        isRecurringEventTemplate={datas.isRecurringEventTemplate}
-        baseEvent={datas.baseEvent}
-        sequenceNumber={datas.sequenceNumber}
-        totalCount={datas.totalCount}
-        hasExceptions={datas.hasExceptions}
-        progressLabel={datas.progressLabel}
-        recurrenceDescription={datas.recurrenceDescription}
-        recurrenceRule={datas.recurrenceRule}
-        creator={datas.creator}
-        attendees={datas.attendees}
+        key={event.id}
+        id={event.id}
+        location={event.location}
+        name={event.name}
+        description={event.description}
+        startAt={event.startAt}
+        endAt={event.endAt}
+        startTime={event.startTime}
+        endTime={event.endTime}
+        allDay={event.allDay}
+        isPublic={event.isPublic}
+        isRegisterable={event.isRegisterable}
+        isInviteOnly={Boolean(event.isInviteOnly)}
+        isRecurringEventTemplate={event.isRecurringEventTemplate}
+        baseEvent={event.baseEvent}
+        sequenceNumber={event.sequenceNumber}
+        totalCount={event.totalCount}
+        hasExceptions={event.hasExceptions}
+        progressLabel={event.progressLabel}
+        recurrenceDescription={event.recurrenceDescription}
+        recurrenceRule={event.recurrenceRule}
+        creator={event.creator}
+        attendees={event.attendees || []}
       />
     ),
   );
@@ -141,11 +135,12 @@ const DayView: React.FC<DayViewProps> = ({
             </div>
             {Array.isArray(allDayEventsList) && shouldShowViewMore && (
               <button
+                type="button"
                 className={styles.btn__more}
                 onClick={handleExpandClick}
                 data-testid="view-more-button"
               >
-                {expanded === -100 ? 'View less' : 'View all'}
+                {expanded === -100 ? t('viewLess') : t('viewAll')}
               </button>
             )}
           </div>
@@ -153,9 +148,8 @@ const DayView: React.FC<DayViewProps> = ({
       </div>
 
       <div className={styles.calendar_infocards}>
-        <div
+        <section
           className={styles.holidays_card}
-          role="region"
           aria-label={t('holidays')}
         >
           <h3 className={styles.card_title}>{t('holidays')}</h3>
@@ -170,11 +164,10 @@ const DayView: React.FC<DayViewProps> = ({
               </li>
             ))}
           </ul>
-        </div>
+        </section>
 
-        <div
+        <section
           className={styles.events_card}
-          role="region"
           aria-label={t('events')}
         >
           <h3 className={styles.card_title}>{t('events')}</h3>
@@ -199,7 +192,7 @@ const DayView: React.FC<DayViewProps> = ({
               <span className={styles.holidayText}>{t('holidays')}</span>
             </div>
           </div>
-        </div>
+        </section>
       </div>
     </>
   );
