@@ -204,9 +204,8 @@ export class LifecycleManager {
 
       this.eventManager.emit('plugin:deactivated', pluginId);
       return true;
-    } 
-    /* istanbul ignore next - defensive code, hook errors are swallowed */
-    catch (error) {
+    } catch (error) {
+      /* istanbul ignore next - defensive code, hook errors are swallowed */
       console.error(`Failed to deactivate plugin ${pluginId}:`, error);
       return false;
     }
@@ -238,9 +237,8 @@ export class LifecycleManager {
           pluginId,
           manifest,
         );
-      } 
-      /* istanbul ignore next - tested via 'handles install failure' but tool doesn't detect nested catch */
-      catch (loadError) {
+      } catch (loadError) {
+        /* istanbul ignore next - tested via 'handles install failure' but tool doesn't detect nested catch */
         console.error(
           `Failed to load plugin files for ${pluginId}:`,
           loadError,
@@ -289,9 +287,8 @@ export class LifecycleManager {
 
       this.eventManager.emit('plugin:uninstalled', pluginId);
       return true;
-    } 
-    /* istanbul ignore next - defensive code, hook errors are swallowed */
-    catch (error) {
+    } catch (error) {
+      /* istanbul ignore next - defensive code, hook errors are swallowed */
       console.error(`Failed to uninstall plugin ${pluginId}:`, error);
       return false;
     }

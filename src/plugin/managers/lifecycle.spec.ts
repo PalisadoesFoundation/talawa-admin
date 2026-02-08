@@ -532,6 +532,26 @@ describe('LifecycleManager Coverage Suite', () => {
       expect(plugins).toHaveLength(1);
       expect(plugins[0].id).toBe(VALID_PLUGIN_ID);
     });
+
+    it('returns correct count of active plugins', async () => {
+      const manager = createManager();
+
+      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+      mockDiscoveryManager.isPluginActivated
+        .mockReturnValueOnce(true) // Plugin A active
+        .mockReturnValueOnce(false); // Plugin B inactive
+
+      mockDiscoveryManager.loadPluginManifest
+        .mockResolvedValueOnce({ pluginId: 'PluginA' })
+        .mockResolvedValueOnce({ pluginId: 'PluginB' });
+
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+
+      await manager.loadPlugin('PluginA');
+      await manager.loadPlugin('PluginB');
+
+      expect(manager.getActivePluginCount()).toBe(1);
+    });
   });
 
   // ----------------------------------------------------------------
