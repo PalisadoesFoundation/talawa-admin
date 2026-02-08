@@ -112,11 +112,13 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
           password: securePassword, // initially it was hardcoded as '123456'
+          signupSource:"ADMIN_ONSPOT"
         },
       });
 
       if (response.data?.signUp) {
         NotificationToast.success(t('attendeeAddedSuccess'));
+        
         resetForm();
         reloadMembers();
         handleClose();

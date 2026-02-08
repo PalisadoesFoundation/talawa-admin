@@ -156,6 +156,7 @@ export const SIGNUP_MUTATION = gql`
     $email: EmailAddress!
     $password: String!
     $recaptchaToken: String
+    $signupSource: String
   ) {
     signUp(
       input: {
@@ -164,6 +165,7 @@ export const SIGNUP_MUTATION = gql`
         emailAddress: $email
         password: $password
         recaptchaToken: $recaptchaToken
+        signupSource: $signupSource
       }
     ) {
       user {
