@@ -1,5 +1,6 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
+import { waitForAsync } from 'test-utils/waitForAsync';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import {
   act,
@@ -545,14 +546,6 @@ const mockConfigurations = {
     },
   ],
 };
-
-// Helper to wait for async operations with fake timers
-// Using shouldAdvanceTime: true makes this compatible with userEvent
-async function waitForAsync(ms = 100): Promise<void> {
-  await act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-  });
-}
 
 beforeEach(() => {
   // shouldAdvanceTime: true makes fake timers compatible with userEvent
