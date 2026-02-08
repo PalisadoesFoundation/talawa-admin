@@ -236,6 +236,28 @@ describe('UserGlobalScreen', () => {
       expect(handleLogoutMock).toHaveBeenCalled();
     });
 
+    it('should log error when logout fails', async () => {
+      const user = userEvent.setup();
+      const error = new Error('Logout failed');
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn().mockRejectedValue(error);
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      renderComponent();
+
+      const logoutOption = screen.getByTestId('option-logout');
+      await user.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
+      // Wait for promise rejection handling
+      await new Promise(process.nextTick);
+      expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+      consoleSpy.mockRestore();
+    });
+
     it('should handle unknown eventKey in DropDownButton', async () => {
       const user = userEvent.setup();
       // Mock userProfile hook to capture handleLogout

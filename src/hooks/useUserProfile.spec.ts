@@ -197,4 +197,26 @@ describe('useUserProfile', () => {
     expect(consoleWarnSpy).toHaveBeenCalledWith('Logout already in progress');
     consoleWarnSpy.mockRestore();
   });
+
+  it('should log error when cleanup fails during logout', async () => {
+    const error = new Error('Cleanup failed');
+    mockClearAllItems.mockImplementation(() => {
+      throw error;
+    });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { result } = renderHook(() => useUserProfile());
+
+    await act(async () => {
+      await result.current.handleLogout();
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error during logout cleanup:',
+      error,
+    );
+    // Navigation should still attempt to happen
+    expect(mockNavigate).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
 });

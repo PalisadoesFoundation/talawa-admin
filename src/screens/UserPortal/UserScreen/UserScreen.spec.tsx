@@ -476,6 +476,49 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     expect(handleLogoutMock).toHaveBeenCalled();
   });
 
+  it('should log error when logout fails', async () => {
+    const error = new Error('Logout failed');
+    const handleLogoutMock = vi.fn().mockRejectedValue(error);
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    const user = userEvent.setup();
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg',
+        profileDestination: '/user/profile',
+        handleLogout: handleLogoutMock,
+        tCommon: (key: string) => key,
+      }),
+    );
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const logoutOption = screen.getByTestId('option-logout');
+    await user.click(logoutOption);
+
+    expect(handleLogoutMock).toHaveBeenCalled();
+    await new Promise(process.nextTick);
+    expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+    consoleSpy.mockRestore();
+  });
+
   it('should handle unknown eventKey in DropDownButton', async () => {
     // Mock userProfile hook to capture handleLogout
     const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
