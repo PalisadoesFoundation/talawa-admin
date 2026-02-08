@@ -144,8 +144,9 @@ const Calendar: React.FC<
                   className={styles.calendar__header_month}
                   data-testid="current-date"
                 >
-                  {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                  {currentYear} <span>{months[currentMonth]}</span>
+                  {viewType === ViewType.DAY
+                    ? `${currentDate} ${months[currentMonth]} ${currentYear}`
+                    : `${currentYear} ${months[currentMonth]}`}
                 </div>
 
                 <Button
