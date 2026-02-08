@@ -99,6 +99,7 @@ vi.mock('shared-components/DropDownButton', () => ({
             <button
               key={opt.value}
               data-testid={`option-${opt.value}`}
+              type="button"
               onClick={() => props.onSelect && props.onSelect(opt.value)}
             >
               {opt.label}
@@ -314,23 +315,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     expect(titleElement).toHaveTextContent('User Portal');
   });
 
-  it('renders DropDownButton component', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
-  });
-
-  it('passes correct props to DropDownButton', () => {
+  it('renders DropDownButton component with correct props', () => {
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -344,6 +329,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     const dropdown = screen.getByTestId('user-profile-dropdown');
+    expect(dropdown).toBeInTheDocument();
     expect(dropdown).toHaveAttribute('data-variant', 'light');
     // showCaret is not passed, so it should be undefined in the mock props
     // We expect it NOT to be present or NOT be 'false' if it defaults to undefined in usage

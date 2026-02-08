@@ -121,9 +121,6 @@ const UserGlobalScreen = (): JSX.Element => {
                   handleLogout();
                   break;
                 default:
-                  console.warn(
-                    `User profile dropdown: Unhandled eventKey "${eventKey}"`,
-                  );
                   break;
               }
             }}

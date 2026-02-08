@@ -1,3 +1,9 @@
+/**
+ * Normalizes an avatar URL by converting null-like values to an empty string.
+ *
+ * @param url - The avatar URL to normalize
+ * @returns The original URL, or an empty string if the input is falsy or the literal string "null"
+ */
 export const sanitizeAvatars = (
   file: File | null,
   fallbackUrl: string,

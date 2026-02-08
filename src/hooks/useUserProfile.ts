@@ -18,6 +18,7 @@ import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
+import { useMemo } from 'react';
 
 const useUserProfile = (
   portal: ProfilePortal = 'user',
@@ -28,14 +29,20 @@ const useUserProfile = (
   const { getItem, clearAllItems } = useLocalStorage();
   const navigate = useNavigate();
 
-  const userRole = getItem<string>('role') || '';
-  const name: string = getItem<string>('name') || '';
-  const userImage = sanitizeAvatarURL(getItem<string>('UserImage'));
+  const { userRole, name, userImage } = useMemo(() => {
+    const role = getItem<string>('role') || '';
+    const n = getItem<string>('name') || '';
+    const img = sanitizeAvatarURL(getItem<string>('UserImage'));
+    return { userRole: role, name: n, userImage: img };
+  }, [getItem]);
 
-  const displayedName =
-    name.length > MAX_NAME_LENGTH
-      ? name.substring(0, MAX_NAME_LENGTH - 3) + '...'
-      : name;
+  const displayedName = useMemo(
+    () =>
+      name.length > MAX_NAME_LENGTH
+        ? name.substring(0, Math.max(MAX_NAME_LENGTH - 3, 0)) + '...'
+        : name,
+    [name],
+  );
 
   const profileDestination = resolveProfileNavigation({
     portal,

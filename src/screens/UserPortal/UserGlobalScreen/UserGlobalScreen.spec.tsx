@@ -37,13 +37,13 @@ vi.mock('shared-components/DropDownButton', () => ({
       <div data-testid="dropdown-options">
         {props.options?.map(
           (opt: { value: string; label: React.ReactNode }) => (
-            <div
+            <button
               key={opt.value}
               data-testid={`option-${opt.value}`}
               onClick={() => props.onSelect && props.onSelect(opt.value)}
             >
               {opt.label}
-            </div>
+            </button>
           ),
         )}
       </div>
@@ -198,15 +198,17 @@ describe('UserGlobalScreen', () => {
     });
 
     it('should navigate to profile when viewProfile is selected', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       const viewProfileOption = screen.getByTestId('option-viewProfile');
-      await userEvent.click(viewProfileOption);
+      await user.click(viewProfileOption);
 
       expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
     });
 
     it('should call handleLogout when logout is selected', async () => {
+      const user = userEvent.setup();
       // Mock userProfile hook to capture handleLogout
       const handleLogoutMock = vi.fn();
       const useUserProfileMock = await import('hooks/useUserProfile');
@@ -228,7 +230,7 @@ describe('UserGlobalScreen', () => {
       renderComponent();
 
       const logoutOption = screen.getByTestId('option-logout');
-      await userEvent.click(logoutOption);
+      await user.click(logoutOption);
 
       expect(handleLogoutMock).toHaveBeenCalled();
     });
