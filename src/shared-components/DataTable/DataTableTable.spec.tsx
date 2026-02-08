@@ -625,14 +625,17 @@ describe('DataTableTable', () => {
       sortedRows: [
         { id: '1', name: 'Ada', value: 10 },
         { id: '2', name: 'Bob' },
+        { id: '3', name: 'Claire', value: null },
       ] as Row[],
     });
     render(<DataTableTable<Row> {...props} />);
     const valueCells = screen.getAllByTestId('datatable-cell-value');
-    expect(valueCells).toHaveLength(2);
+    expect(valueCells).toHaveLength(3);
     expect(valueCells[0]).toHaveTextContent('10');
     expect(valueCells[1]).toBeInTheDocument();
     expect(valueCells[1]).toHaveTextContent('');
+    expect(valueCells[2]).toBeInTheDocument();
+    expect(valueCells[2]).toHaveTextContent('');
   });
 
   /* ------------------------------------------------------------------
