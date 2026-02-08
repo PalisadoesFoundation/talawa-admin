@@ -4,6 +4,7 @@ export interface InterfaceUserTag {
   name: string;
   assignedTo: number;
   createdOn: string;
+  createdAt: string;
   createdBy?: string;
 }
 /** Shape of the GraphQL response for the GetUserTags query. */

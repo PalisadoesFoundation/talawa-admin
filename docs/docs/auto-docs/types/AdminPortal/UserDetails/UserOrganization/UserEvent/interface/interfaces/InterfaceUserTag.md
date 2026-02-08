@@ -18,11 +18,19 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 ***
 
+### createdAt
+
+> **createdAt**: `string`
+
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L7)
+
+***
+
 ### createdBy?
 
 > `optional` **createdBy**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L7)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L8)
 
 ***
 

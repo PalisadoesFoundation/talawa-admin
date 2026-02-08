@@ -6,12 +6,13 @@ import { ReactNode } from 'react';
 
 /* -------------------- mocks -------------------- */
 
-// mock react-router params
+// mock react-router params - default mock
+const mockUseParams = vi.fn((): { userId?: string } => ({
+  userId: '123',
+}));
+
 vi.mock('react-router-dom', () => ({
-  useParams: () => ({
-    userId: '123',
-    orgId: '456',
-  }),
+  useParams: () => mockUseParams(),
 }));
 
 // mock i18n
@@ -76,7 +77,25 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+  });
+
+  it('renders noUserId message when userId is not provided', () => {
+    // Override the mock to return no userId
+    mockUseParams.mockReturnValueOnce({
+      userId: undefined,
+    });
+
+    render(<MemberDetail />);
+
+    // Should render the noUserId message
+    expect(screen.getByText('noUserId')).toBeInTheDocument();
+
+    // Should NOT render any tabs or content
+    expect(screen.queryByTestId('tab-overview')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('user-contact-details'),
+    ).not.toBeInTheDocument();
   });
 
   it('renders overview tab by default with userId from route', () => {
@@ -86,7 +105,6 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
-
     expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
   });
 
@@ -133,7 +151,6 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('tab-overview'));
-
     expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
     expect(screen.getByTestId('tab-overview')).toHaveAttribute(
       'data-active',

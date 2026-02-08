@@ -68,16 +68,18 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
       id: tag.id,
       name: tag.name,
       assignedTo: tag.assignees?.edges?.length ?? 0,
+      createdAt: tag.createdAt,
       createdOn: formatDate(tag.createdAt),
       createdBy: tag.creator?.name,
     })) ?? [];
+  console.log('data', data);
 
   const sortTags = (tags: InterfaceUserTag[]) => {
     const sorted = [...tags];
 
     sorted.sort((a, b) => {
-      const dateA = new Date(a.createdOn).getTime();
-      const dateB = new Date(b.createdOn).getTime();
+      const dateA = new Date(a.createdAt).getTime();
+      const dateB = new Date(b.createdAt).getTime();
       return sortBy === 'latest' ? dateB - dateA : dateA - dateB;
     });
     return sorted;
@@ -86,11 +88,13 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const filterTags = (tags: InterfaceUserTag[]) => {
     if (!searchTerm) return tags;
 
+    const term = searchTerm.toLowerCase();
+
     return tags.filter(
       (tag) =>
-        tag.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        tag.createdBy?.toLowerCase().includes(searchTerm.toLowerCase()) ===
-          true,
+        tag.name.toLowerCase().includes(term) ||
+        tag.createdBy?.toLowerCase().includes(term) ||
+        tag.createdOn.toLowerCase().includes(term),
     );
   };
 

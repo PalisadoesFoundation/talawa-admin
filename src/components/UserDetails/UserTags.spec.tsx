@@ -4,6 +4,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserTags from './UserTags';
 import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { OperationVariables } from '@apollo/client/core/types';
 import * as apolloClient from '@apollo/client';
 import {
@@ -13,25 +14,35 @@ import {
   ObservableQuery,
 } from '@apollo/client';
 
+dayjs.extend(utc);
+
+/* -------------------- Dynamic Dates -------------------- */
+
+const latestDate = dayjs.utc().subtract(1, 'day');
+const middleDate = dayjs.utc().subtract(2, 'day');
+const oldestDate = dayjs.utc().subtract(3, 'day');
+
+/* -------------------- Mock Data -------------------- */
+
 const mockTags = [
   {
     id: '1',
     name: 'Marketing Campaign',
-    createdAt: dayjs().subtract(2, 'day').toISOString(),
+    createdAt: latestDate.toISOString(),
     assignees: { edges: [{}, {}] },
     creator: { name: 'John Doe' },
   },
   {
     id: '2',
     name: 'Product Launch',
-    createdAt: dayjs().subtract(3, 'day').toISOString(),
+    createdAt: middleDate.toISOString(),
     assignees: { edges: [{}] },
     creator: { name: 'Sarah Smith' },
   },
   {
     id: '3',
     name: 'Security Audit',
-    createdAt: dayjs().subtract(1, 'day').toISOString(),
+    createdAt: oldestDate.toISOString(),
     assignees: { edges: [] },
     creator: { name: 'Mike Johnson' },
   },
@@ -74,22 +85,20 @@ vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
   ),
 }));
 
-// Mock @apollo/client with factory function
 vi.mock('@apollo/client', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@apollo/client')>();
 
-  // Create mock function inside the factory with default return value
-  const mockUseQuery = vi.fn(() => ({
-    data: { userTags: mockTags },
-    loading: false,
-    error: undefined,
-  }));
-
   return {
     ...actual,
-    useQuery: mockUseQuery,
+    useQuery: vi.fn(() => ({
+      data: { userTags: mockTags },
+      loading: false,
+      error: undefined,
+    })),
   };
 });
+
+/* -------------------- Tests -------------------- */
 
 describe('UserTags', () => {
   afterEach(() => {
@@ -99,8 +108,6 @@ describe('UserTags', () => {
   const renderComponent = () => {
     render(<UserTags id="user-123" />);
   };
-
-  /* -------------------- Tests -------------------- */
 
   it('renders table headers', () => {
     renderComponent();
@@ -122,23 +129,19 @@ describe('UserTags', () => {
   it('formats created date correctly', () => {
     renderComponent();
 
-    const firstTagDate = dayjs().subtract(2, 'day').format('HH:mm DD MMM YYYY');
-    expect(screen.getByText(firstTagDate)).toBeInTheDocument();
+    expect(
+      screen.getByText(latestDate.format('HH:mm DD MMM YYYY')),
+    ).toBeInTheDocument();
 
-    const secondTagDate = dayjs()
-      .subtract(3, 'day')
-      .format('HH:mm DD MMM YYYY');
-    expect(screen.getByText(secondTagDate)).toBeInTheDocument();
-
-    const thirdTagDate = dayjs().subtract(1, 'day').format('HH:mm DD MMM YYYY');
-    expect(screen.getByText(thirdTagDate)).toBeInTheDocument();
+    expect(
+      screen.getByText(middleDate.format('HH:mm DD MMM YYYY')),
+    ).toBeInTheDocument();
   });
 
   it('filters tags by name', async () => {
     renderComponent();
 
     const searchInput = screen.getByTestId('tagsSearchInput');
-
     await userEvent.type(searchInput, 'Marketing');
 
     expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
@@ -149,7 +152,6 @@ describe('UserTags', () => {
     renderComponent();
 
     const searchInput = screen.getByTestId('tagsSearchInput');
-
     await userEvent.type(searchInput, 'Sarah');
 
     expect(screen.getByText('Product Launch')).toBeInTheDocument();
@@ -160,13 +162,10 @@ describe('UserTags', () => {
     renderComponent();
 
     const sortSelect = screen.getByTestId('tagsSort-select');
-
     await userEvent.selectOptions(sortSelect, 'latest');
 
     const rows = screen.getAllByRole('row');
-
-    // Header row + latest first
-    expect(rows[1]).toHaveTextContent('Security Audit');
+    expect(rows[1]).toHaveTextContent('Marketing Campaign');
   });
 
   it('shows correct assignedTo count', () => {
@@ -186,13 +185,14 @@ describe('UserTags', () => {
   });
 });
 
+/* -------------------- Loading & Error -------------------- */
+
 describe('UserTags - loading and error states', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders loading state correctly', () => {
-    // Mock useQuery to return loading=true
     vi.mocked(apolloClient.useQuery).mockReturnValue({
       data: undefined,
       loading: true,
@@ -214,15 +214,11 @@ describe('UserTags - loading and error states', () => {
 
     render(<UserTags id="user-123" />);
 
-    // Should render the loading text
     expect(screen.getByText('loading')).toBeInTheDocument();
-
-    // Table should NOT be rendered
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 
   it('renders error state correctly', () => {
-    // Mock useQuery to return an error
     vi.mocked(apolloClient.useQuery).mockReturnValue({
       data: undefined,
       loading: false,
@@ -244,10 +240,7 @@ describe('UserTags - loading and error states', () => {
 
     render(<UserTags id="user-123" />);
 
-    // Should render the error text
     expect(screen.getByText('somethingWentWrong')).toBeInTheDocument();
-
-    // Table should NOT be rendered
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 });

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserTagGQL
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L14)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L15)
 
 Raw GraphQL shape for a single user tag as returned by the API.
 
@@ -14,7 +14,7 @@ Raw GraphQL shape for a single user tag as returned by the API.
 
 > `optional` **assignees**: `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L21)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L22)
 
 #### edges
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **createdAt**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L17)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L18)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L28)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L29)
 
 #### id
 
@@ -50,7 +50,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > `optional` **folder**: `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L18)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L19)
 
 #### id
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L15)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L16)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L16)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L17)
