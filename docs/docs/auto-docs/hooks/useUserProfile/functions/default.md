@@ -6,7 +6,7 @@
 
 > **default**(`portal`): [`InterfaceUseUserProfileReturn`](../../../types/UseUserProfile/interfaces/InterfaceUseUserProfileReturn.md)
 
-Defined in: [src/hooks/useUserProfile.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useUserProfile.ts#L22)
+Defined in: [src/hooks/useUserProfile.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useUserProfile.ts#L23)
 
 ## Parameters
 
