@@ -72,8 +72,6 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
       createdOn: formatDate(tag.createdAt),
       createdBy: tag.creator?.name,
     })) ?? [];
-  console.log('data', data);
-
   const sortTags = (tags: InterfaceUserTag[]) => {
     const sorted = [...tags];
 

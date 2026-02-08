@@ -26,13 +26,6 @@ const oldestDate = dayjs.utc().subtract(3, 'day');
 
 const mockTags = [
   {
-    id: '1',
-    name: 'Marketing Campaign',
-    createdAt: latestDate.toISOString(),
-    assignees: { edges: [{}, {}] },
-    creator: { name: 'John Doe' },
-  },
-  {
     id: '2',
     name: 'Product Launch',
     createdAt: middleDate.toISOString(),
@@ -45,6 +38,13 @@ const mockTags = [
     createdAt: oldestDate.toISOString(),
     assignees: { edges: [] },
     creator: { name: 'Mike Johnson' },
+  },
+  {
+    id: '1',
+    name: 'Marketing Campaign',
+    createdAt: latestDate.toISOString(),
+    assignees: { edges: [{}, {}] },
+    creator: { name: 'John Doe' },
   },
 ];
 
@@ -158,15 +158,18 @@ describe('UserTags', () => {
     expect(screen.queryByText('Marketing Campaign')).not.toBeInTheDocument();
   });
 
-  it('sorts tags when selecting latest', async () => {
-    renderComponent();
+it('sorts tags when selecting latest', async () => {
+  renderComponent();
 
-    const sortSelect = screen.getByTestId('tagsSort-select');
-    await userEvent.selectOptions(sortSelect, 'latest');
+  const sortSelect = screen.getByTestId('tagsSort-select');
+  await userEvent.selectOptions(sortSelect, 'latest');
 
-    const rows = screen.getAllByRole('row');
-    expect(rows[1]).toHaveTextContent('Marketing Campaign');
-  });
+  const rows = screen.getAllByRole('row');
+
+  // Header row is index 0; newest tag should be first data row
+  expect(rows[1]).toHaveTextContent('Marketing Campaign');
+});
+
 
   it('shows correct assignedTo count', () => {
     renderComponent();
