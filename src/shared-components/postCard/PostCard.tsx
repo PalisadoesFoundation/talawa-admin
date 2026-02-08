@@ -470,7 +470,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           data-testid="comment-card"
           size="sm"
           variant="link"
-          className="text-secondary small ms-2 mb-1 text-decoration-none"
+          className={postCardStyles.viewCommentsButton}
         >
           {showComments
             ? t('postCard.hideComments')
