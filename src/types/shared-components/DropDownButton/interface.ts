@@ -13,11 +13,6 @@ export interface InterfaceDropDownOption {
   label: React.ReactNode;
 
   /**
-   * Optional icon to display next to the label.
-   */
-  icon?: React.ReactNode;
-
-  /**
    * Whether the option is disabled.
    */
   disabled?: boolean;

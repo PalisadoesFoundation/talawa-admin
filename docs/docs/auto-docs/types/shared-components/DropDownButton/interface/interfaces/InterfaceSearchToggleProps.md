@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSearchToggleProps
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L140)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L135)
 
 Interface for SearchToggle component props.
 
@@ -14,7 +14,7 @@ Interface for SearchToggle component props.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L148)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L143)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:148](https:
 
 > **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L147)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L142)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:147](https:
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L146)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L141)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:146](https:
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L143)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L138)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:143](https:
 
 > **onClick**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L141)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L136)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:141](https:
 
 > **onInputClick**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L144)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L139)
 
 #### Parameters
 
@@ -92,7 +92,7 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:144](https:
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L145)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L140)
 
 ***
 
@@ -100,4 +100,4 @@ Defined in: [src/types/shared-components/DropDownButton/interface.ts:145](https:
 
 > **value**: `string`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L142)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L137)

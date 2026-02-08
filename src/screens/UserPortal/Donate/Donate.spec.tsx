@@ -418,13 +418,10 @@ const BOUNDARY_MOCKS = [
   },
 ];
 
-const renderDonate = (
-  props:
-    | MockedResponse[]
-    | { mocks: MockedResponse[]; link?: never }
-    | { link: ApolloLink; mocks?: never } = MOCKS,
-) => {
-  const finalProps = Array.isArray(props) ? { mocks: props } : props;
+const renderDonate = (mocksOrLink: MockedResponse[] | ApolloLink = MOCKS) => {
+  const finalProps = Array.isArray(mocksOrLink)
+    ? { mocks: mocksOrLink }
+    : { link: mocksOrLink };
   /* Note: If { link } is passed, it overrides { mocks } in MockedProvider behavior */
   return render(
     <MockedProvider {...finalProps} addTypename={false}>
@@ -551,7 +548,7 @@ describe('Donate Component', () => {
 
   test('handles donation mutation error', async () => {
     const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
-    renderDonate({ link: errorLink });
+    renderDonate(errorLink);
 
     await waitFor(() => {
       expect(
@@ -569,7 +566,7 @@ describe('Donate Component', () => {
 
   test('shows empty state when no donations exist', async () => {
     const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
-    renderDonate({ link: emptyLink });
+    renderDonate(emptyLink);
 
     // Wait for data to load
     await waitFor(() => {
@@ -638,16 +635,6 @@ describe('Donate Component', () => {
     await waitFor(() => {
       const cards = screen.getAllByTestId('donationCard');
       // Should show 5 cards (default rowsPerPage)
-      expect(cards.length).toBe(5);
-    });
-  });
-
-  test('pagination displays correct donations based on page and rowsPerPage', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
-
-    // Wait for donations to load - page 0, showing first 5 donations
-    await waitFor(() => {
-      const cards = screen.getAllByTestId('donationCard');
       expect(cards.length).toBe(5);
     });
   });
