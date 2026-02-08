@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L49)
+Defined in: [src/components/ProfileDropdown/ProfileDropdown.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileDropdown/ProfileDropdown.tsx#L50)
 
 ## Parameters
 

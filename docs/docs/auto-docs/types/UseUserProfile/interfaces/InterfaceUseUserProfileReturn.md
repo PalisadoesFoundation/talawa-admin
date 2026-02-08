@@ -4,7 +4,14 @@
 
 # Interface: InterfaceUseUserProfileReturn
 
-Defined in: [src/types/UseUserProfile.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L1)
+Defined in: [src/types/UseUserProfile.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L8)
+
+Return type for the useUserProfile hook.
+
+## Remarks
+
+Provides user profile data and actions (logout, translation) for rendering
+profile dropdowns in portal screens.
 
 ## Properties
 
@@ -12,7 +19,7 @@ Defined in: [src/types/UseUserProfile.ts:1](https://github.com/PalisadoesFoundat
 
 > **displayedName**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L3)
+Defined in: [src/types/UseUserProfile.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L10)
 
 ***
 
@@ -20,7 +27,7 @@ Defined in: [src/types/UseUserProfile.ts:3](https://github.com/PalisadoesFoundat
 
 > **handleLogout**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/UseUserProfile.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L7)
+Defined in: [src/types/UseUserProfile.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L14)
 
 #### Returns
 
@@ -32,7 +39,7 @@ Defined in: [src/types/UseUserProfile.ts:7](https://github.com/PalisadoesFoundat
 
 > **name**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L2)
+Defined in: [src/types/UseUserProfile.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L9)
 
 ***
 
@@ -40,7 +47,7 @@ Defined in: [src/types/UseUserProfile.ts:2](https://github.com/PalisadoesFoundat
 
 > **profileDestination**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L6)
+Defined in: [src/types/UseUserProfile.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L13)
 
 ***
 
@@ -48,7 +55,7 @@ Defined in: [src/types/UseUserProfile.ts:6](https://github.com/PalisadoesFoundat
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/UseUserProfile.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L8)
+Defined in: [src/types/UseUserProfile.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L15)
 
 #### Parameters
 
@@ -66,7 +73,7 @@ Defined in: [src/types/UseUserProfile.ts:8](https://github.com/PalisadoesFoundat
 
 > **userImage**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L5)
+Defined in: [src/types/UseUserProfile.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L12)
 
 ***
 
@@ -74,4 +81,4 @@ Defined in: [src/types/UseUserProfile.ts:5](https://github.com/PalisadoesFoundat
 
 > **userRole**: `string`
 
-Defined in: [src/types/UseUserProfile.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L4)
+Defined in: [src/types/UseUserProfile.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UseUserProfile.ts#L11)
