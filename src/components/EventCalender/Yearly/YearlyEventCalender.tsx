@@ -40,9 +40,8 @@ import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,
   type InterfaceCalendarProps,
-  type InterfaceIOrgList,
-  UserRole,
 } from 'types/Event/interface';
+import { filterEventData } from '../utils/filterEventData';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 
@@ -77,56 +76,11 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
     'December',
   ];
 
-  /**
-   * Filters events based on user role, organization data, and user ID.
-   *
-   * @param eventData - Array of event data to filter.
-   * @param orgData - Organization data for filtering events (includes members).
-   * @param userRole - Role of the user for access control (ADMINISTRATOR or REGULAR).
-   * @param userId - ID of the user for filtering events they are attending.
-   * @returns Filtered array of event data.
-   */
-  const filterData = (
-    eventData: InterfaceEvent[],
-    orgData?: InterfaceIOrgList,
-    userRole?: UserRole,
-    userId?: string,
-  ): InterfaceEvent[] => {
-    const filteredEvents: InterfaceEvent[] = [];
-
-    if (!eventData) return filteredEvents;
-
-    if (!userRole || !userId) {
-      return eventData.filter((event) => event.isPublic);
-    }
-
-    if (userRole === UserRole.ADMINISTRATOR) {
-      return eventData; // Administrators see all events
-    }
-
-    // For REGULAR users
-    eventData.forEach((event) => {
-      if (event.isPublic) {
-        filteredEvents.push(event);
-        return;
-      }
-
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (isMember) {
-        filteredEvents.push(event);
-      }
-    });
-
-    return filteredEvents;
-  };
-
   useEffect(() => {
-    const filteredEvents = filterData(
+    const filteredEvents = filterEventData(
       eventData,
       orgData,
-      userRole as UserRole | undefined,
+      userRole,
       userId,
     );
     setEvents(filteredEvents);
