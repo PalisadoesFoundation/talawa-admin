@@ -11,7 +11,7 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
-} from '../rules/rules.ts';
+} from '../rules/rules.js';
 
 export const baseTypeScriptConfig = {
   files: ['**/*.ts', '**/*.tsx'],
