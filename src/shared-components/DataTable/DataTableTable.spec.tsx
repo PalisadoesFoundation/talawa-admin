@@ -102,6 +102,28 @@ describe('DataTableTable', () => {
     expect(table.getAttribute('aria-busy')).not.toBe('true');
   });
 
+  it('renders empty table body when sortedRows is empty', () => {
+    const props = defaultProps({ sortedRows: [] });
+    const { container } = render(<DataTableTable<Row> {...props} />);
+    const table = screen.getByTestId('datatable');
+    expect(table).toBeInTheDocument();
+    const dataRows = container.querySelectorAll(
+      'tbody tr[data-testid^="datatable-row-"]',
+    );
+    expect(dataRows).toHaveLength(0);
+  });
+
+  it('renders no column headers when columns is empty', () => {
+    const props = defaultProps({
+      columns: [],
+      effectiveSelectable: false,
+      hasRowActions: false,
+    });
+    render(<DataTableTable<Row> {...props} />);
+    const columnHeaders = screen.queryAllByRole('columnheader');
+    expect(columnHeaders).toHaveLength(0);
+  });
+
   /* ------------------------------------------------------------------
    * Columns: headers and sort indicators
    * ------------------------------------------------------------------ */
@@ -590,6 +612,29 @@ describe('DataTableTable', () => {
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
+  it('renders empty string for null/undefined cell value via default renderCellValue', () => {
+    const props = defaultProps({
+      columns: [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+        {
+          id: 'value',
+          header: 'Value',
+          accessor: (row: Row) => row.value,
+        },
+      ],
+      sortedRows: [
+        { id: '1', name: 'Ada', value: 10 },
+        { id: '2', name: 'Bob' },
+      ] as Row[],
+    });
+    render(<DataTableTable<Row> {...props} />);
+    const valueCells = screen.getAllByTestId('datatable-cell-value');
+    expect(valueCells).toHaveLength(2);
+    expect(valueCells[0]).toHaveTextContent('10');
+    expect(valueCells[1]).toBeInTheDocument();
+    expect(valueCells[1]).toHaveTextContent('');
+  });
+
   /* ------------------------------------------------------------------
    * hasRowActions and ActionsCell
    * ------------------------------------------------------------------ */
@@ -640,10 +685,10 @@ describe('DataTableTable', () => {
       skeletonRows: 3,
     });
     render(<DataTableTable<Row> {...props} />);
-    const skeletonRows = document.querySelectorAll(
+    const renderedSkeletonRows = document.querySelectorAll(
       '[data-testid^="skeleton-append-"]',
     );
-    expect(skeletonRows).toHaveLength(3);
+    expect(renderedSkeletonRows).toHaveLength(3);
   });
 
   it('passes columns, effectiveSelectable, hasRowActions, skeletonRows to LoadingMoreRows', () => {
@@ -654,11 +699,11 @@ describe('DataTableTable', () => {
       skeletonRows: 2,
     });
     render(<DataTableTable<Row> {...props} />);
-    const skeletonRows = document.querySelectorAll(
+    const renderedSkeletonRows = document.querySelectorAll(
       '[data-testid^="skeleton-append-"]',
     );
-    expect(skeletonRows).toHaveLength(2);
-    const firstRow = skeletonRows[0];
+    expect(renderedSkeletonRows).toHaveLength(2);
+    const firstRow = renderedSkeletonRows[0];
     const cells = firstRow?.querySelectorAll('td');
     expect(cells?.length).toBe(4); // select + 2 columns + actions
   });
