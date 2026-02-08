@@ -4,13 +4,33 @@
 
 # Interface: InterfaceVolunteerData
 
-Defined in: [src/types/Volunteer/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L11)
-
-InterfaceVolunteerData
-
-## Description
+Defined in: [src/types/Volunteer/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L10)
 
 Defines the structure for volunteer data used in mutations.
+
+## Param
+
+The event ID.
+
+## Param
+
+The group ID, or null for individual volunteering.
+
+## Param
+
+The status of the volunteer request.
+
+## Param
+
+The user ID of the volunteer.
+
+## Param
+
+(Optional) Scope for recurring events.
+
+## Param
+
+(Optional) Instance ID for recurring events.
 
 ## Properties
 
@@ -18,9 +38,7 @@ Defines the structure for volunteer data used in mutations.
 
 > **event**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L12)
-
-The event ID.
+Defined in: [src/types/Volunteer/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L11)
 
 ***
 
@@ -28,9 +46,7 @@ The event ID.
 
 > **group**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L13)
-
-The group ID, or null for individual volunteering.
+Defined in: [src/types/Volunteer/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L12)
 
 ***
 
@@ -38,9 +54,7 @@ The group ID, or null for individual volunteering.
 
 > `optional` **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L17)
-
-Optional instance ID for recurring events.
+Defined in: [src/types/Volunteer/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L16)
 
 ***
 
@@ -48,9 +62,7 @@ Optional instance ID for recurring events.
 
 > `optional` **scope**: `"ENTIRE_SERIES"` \| `"THIS_INSTANCE_ONLY"`
 
-Defined in: [src/types/Volunteer/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L16)
-
-Optional scope for recurring events.
+Defined in: [src/types/Volunteer/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L15)
 
 ***
 
@@ -58,9 +70,7 @@ Optional scope for recurring events.
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L14)
-
-The status of the volunteer request.
+Defined in: [src/types/Volunteer/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L13)
 
 ***
 
@@ -68,6 +78,4 @@ The status of the volunteer request.
 
 > **userId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L15)
-
-The user ID of the volunteer.
+Defined in: [src/types/Volunteer/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L14)

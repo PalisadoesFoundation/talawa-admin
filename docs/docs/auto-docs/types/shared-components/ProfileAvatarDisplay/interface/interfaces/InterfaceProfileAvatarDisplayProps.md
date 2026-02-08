@@ -8,6 +8,46 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:16](h
 
 Props for the ProfileAvatarDisplay component.
 
+## Param
+
+(Optional) URL of the avatar image to display.
+
+## Param
+
+(Optional) Size preset: 'small', 'medium', 'large', or 'custom'.
+
+## Param
+
+(Optional) Shape: 'circle', 'square', or 'rounded'.
+
+## Param
+
+(Optional) Custom size in pixels (used when size='custom').
+
+## Param
+
+(Optional) Flag to add a border around the avatar.
+
+## Param
+
+(Optional) Additional CSS class names.
+
+## Param
+
+(Optional) Inline React CSS properties.
+
+## Param
+
+Required name used for fallback avatar generation.
+
+## Param
+
+(Optional) Test ID for testing purposes.
+
+## Param
+
+(Optional) CSS object-fit value for the image.
+
 ## Properties
 
 ### border?
@@ -16,8 +56,6 @@ Props for the ProfileAvatarDisplay component.
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L21)
 
-Optional flag to add a border around the avatar.
-
 ***
 
 ### className?
@@ -25,8 +63,6 @@ Optional flag to add a border around the avatar.
 > `optional` **className**: `string`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L22)
-
-Optional additional CSS class names.
 
 ***
 
@@ -44,8 +80,6 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](h
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L20)
 
-Optional custom size in pixels (used when size='custom').
-
 ***
 
 ### dataTestId?
@@ -53,8 +87,6 @@ Optional custom size in pixels (used when size='custom').
 > `optional` **dataTestId**: `string`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L25)
-
-Optional test ID for testing purposes.
 
 ***
 
@@ -82,8 +114,6 @@ If true, clicking the avatar opens an enlarged modal view
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L24)
 
-Required name used for fallback avatar generation.
-
 ***
 
 ### imageUrl?
@@ -91,8 +121,6 @@ Required name used for fallback avatar generation.
 > `optional` **imageUrl**: `string`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L17)
-
-Optional URL of the avatar image to display.
 
 ***
 
@@ -109,8 +137,6 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](h
 > `optional` **objectFit**: `"fill"` \| `"none"` \| `"cover"` \| `"contain"` \| `"scale-down"`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L26)
-
-Optional CSS object-fit value for the image.
 
 ***
 
@@ -156,8 +182,6 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:35](h
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L19)
 
-Optional shape: 'circle', 'square', or 'rounded'.
-
 ***
 
 ### size?
@@ -166,8 +190,6 @@ Optional shape: 'circle', 'square', or 'rounded'.
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L18)
 
-Optional size preset: 'small', 'medium', 'large', or 'custom'.
-
 ***
 
 ### style?
@@ -175,5 +197,3 @@ Optional size preset: 'small', 'medium', 'large', or 'custom'.
 > `optional` **style**: `CSSProperties`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L23)
-
-Optional inline React CSS properties.

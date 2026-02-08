@@ -4,11 +4,41 @@
 
 # Interface: ISidebarBaseProps
 
-Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L14)
+Defined in: [src/types/SidebarBase/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L13)
 
 Interface for SidebarBase component props.
 
- ISidebarBaseProps
+## Param
+
+State indicating whether the sidebar is hidden
+
+## Param
+
+Function to toggle sidebar visibility
+
+## Param
+
+Type of portal (admin or user)
+
+## Param
+
+Navigation items and other content
+
+## Param
+
+(Optional) Content after branding (e.g., org section)
+
+## Param
+
+(Optional) Footer content
+
+## Param
+
+(Optional) Background color override
+
+## Param
+
+(Optional) Whether to persist toggle state to localStorage
 
 ## Properties
 
@@ -16,9 +46,7 @@ Interface for SidebarBase component props.
 
 > `optional` **backgroundColor**: `string`
 
-Defined in: [src/types/SidebarBase/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L21)
-
-Optional background color override
+Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L20)
 
 ***
 
@@ -26,9 +54,7 @@ Optional background color override
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L18)
-
-Navigation items and other content
+Defined in: [src/types/SidebarBase/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L17)
 
 ***
 
@@ -36,9 +62,7 @@ Navigation items and other content
 
 > `optional` **footerContent**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L20)
-
-Optional footer content
+Defined in: [src/types/SidebarBase/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L19)
 
 ***
 
@@ -46,9 +70,7 @@ Optional footer content
 
 > `optional` **headerContent**: `ReactNode`
 
-Defined in: [src/types/SidebarBase/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L19)
-
-Optional content after branding (e.g., org section)
+Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L18)
 
 ***
 
@@ -56,9 +78,7 @@ Optional content after branding (e.g., org section)
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarBase/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L15)
-
-State indicating whether the sidebar is hidden
+Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L14)
 
 ***
 
@@ -66,9 +86,7 @@ State indicating whether the sidebar is hidden
 
 > `optional` **persistToggleState**: `boolean`
 
-Defined in: [src/types/SidebarBase/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L22)
-
-Whether to persist toggle state to localStorage
+Defined in: [src/types/SidebarBase/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L21)
 
 ***
 
@@ -76,9 +94,7 @@ Whether to persist toggle state to localStorage
 
 > **portalType**: `"user"` \| `"admin"`
 
-Defined in: [src/types/SidebarBase/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L17)
-
-Type of portal (admin or user)
+Defined in: [src/types/SidebarBase/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L16)
 
 ***
 
@@ -86,6 +102,4 @@ Type of portal (admin or user)
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/SidebarBase/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L16)
-
-Function to toggle sidebar visibility
+Defined in: [src/types/SidebarBase/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarBase/interface.ts#L15)

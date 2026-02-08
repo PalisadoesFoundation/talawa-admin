@@ -1,12 +1,11 @@
 /**
- * @interface InterfaceVolunteerData
- * @description Defines the structure for volunteer data used in mutations.
- * @property {string} event - The event ID.
- * @property {string | null} group - The group ID, or null for individual volunteering.
- * @property {string} status - The status of the volunteer request.
- * @property {string} userId - The user ID of the volunteer.
- * @property {'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY'} [scope] - Optional scope for recurring events.
- * @property {string} [recurringEventInstanceId] - Optional instance ID for recurring events.
+ * Defines the structure for volunteer data used in mutations.
+ * @param event - The event ID.
+ * @param group - The group ID, or null for individual volunteering.
+ * @param status - The status of the volunteer request.
+ * @param userId - The user ID of the volunteer.
+ * @param scope - (Optional) Scope for recurring events.
+ * @param recurringEventInstanceId - (Optional) Instance ID for recurring events.
  */
 export interface InterfaceVolunteerData {
   event: string;
@@ -18,16 +17,15 @@ export interface InterfaceVolunteerData {
 }
 
 /**
- * @interface InterfaceVolunteerGroupData
- * @description Defines the structure for volunteer group data used in mutations.
- * @property {string | undefined} eventId - The event ID, can be undefined for recurring events when baseEvent is used.
- * @property {string} [leaderId] - Optional leader ID for the volunteer group.
- * @property {string} name - The name of the volunteer group.
- * @property {string} description - The description of the volunteer group.
- * @property {number | null} volunteersRequired - The number of volunteers required, or null if not specified.
- * @property {string[]} volunteerUserIds - Array of user IDs for volunteer group members.
- * @property {'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY'} [scope] - Optional scope for recurring events.
- * @property {string} [recurringEventInstanceId] - Optional instance ID for recurring events.
+ * Defines the structure for volunteer group data used in mutations.
+ * @param eventId - The event ID, can be undefined for recurring events when baseEvent is used.
+ * @param leaderId - (Optional) leader ID for the volunteer group.
+ * @param name - The name of the volunteer group.
+ * @param description - The description of the volunteer group.
+ * @param volunteersRequired - The number of volunteers required, or null if not specified.
+ * @param volunteerUserIds - Array of user IDs for volunteer group members.
+ * @param scope - (Optional) scope for recurring events.
+ * @param recurringEventInstanceId - (Optional) instance ID for recurring events.
  */
 export interface InterfaceVolunteerGroupData {
   eventId: string | undefined;
@@ -41,9 +39,8 @@ export interface InterfaceVolunteerGroupData {
 }
 
 /**
- * @interface InterfaceEventEdge
- * @description Defines the structure for GraphQL event edge from queries.
- * @property {object} node - The event node containing all event data.
+ * Defines the structure for GraphQL event edge from queries.
+ * @param node - The event node containing all event data.
  */
 export interface InterfaceEventEdge {
   node: {
@@ -91,24 +88,23 @@ export interface InterfaceEventEdge {
 }
 
 /**
- * @interface InterfaceMappedEvent
- * @description Defines the structure for mapped event objects used in the UI.
- * @property {string} _id - Legacy ID format.
- * @property {string} id - The unique identifier of the event.
- * @property {string} name - The name of the event.
- * @property {string} title - The title of the event (mapped from name).
- * @property {string | null} description - The description of the event.
- * @property {string} startDate - The start date (mapped from startAt).
- * @property {string} endDate - The end date (mapped from endAt).
- * @property {string} startAt - The original startAt field.
- * @property {string} endAt - The original endAt field.
- * @property {string | null} location - The location of the event.
- * @property {boolean} recurring - Indicates if the event is recurring.
- * @property {boolean} isRecurringInstance - Indicates if this is a recurring instance.
- * @property {string | null} baseEventId - The base event ID for recurring events.
- * @property {object | null} [recurrenceRule] - The recurrence rule for recurring events.
- * @property {Array} volunteerGroups - Array of volunteer groups with mapped structure.
- * @property {Array} volunteers - Array of volunteers.
+ * Defines the structure for mapped event objects used in the UI.
+ * @param _id - Legacy ID format.
+ * @param id - The unique identifier of the event.
+ * @param name - The name of the event.
+ * @param title - The title of the event (mapped from name).
+ * @param description - The description of the event.
+ * @param startDate - The start date (mapped from startAt).
+ * @param endDate - The end date (mapped from endAt).
+ * @param startAt - The original startAt field.
+ * @param endAt - The original endAt field.
+ * @param location - The location of the event.
+ * @param recurring - Indicates if the event is recurring.
+ * @param isRecurringInstance - Indicates if this is a recurring instance.
+ * @param baseEventId - The base event ID for recurring events.
+ * @param recurrenceRule - (Optional) The recurrence rule for recurring events.
+ * @param volunteerGroups - Array of volunteer groups with mapped structure.
+ * @param volunteers - Array of volunteers.
  */
 export interface InterfaceMappedEvent {
   _id: string;
@@ -153,13 +149,12 @@ export interface InterfaceMappedEvent {
 }
 
 /**
- * @interface InterfaceVolunteerStatus
- * @description Defines the structure for volunteer status button configuration.
- * @property {string} status - The status of the volunteer membership.
- * @property {string} buttonText - The text to display on the button.
- * @property {string} buttonVariant - The Bootstrap variant for the button.
- * @property {boolean} disabled - Whether the button should be disabled.
- * @property {React.ComponentType} icon - The icon component to display.
+ * Defines the structure for volunteer status button configuration.
+ * @param status - The status of the volunteer membership.
+ * @param buttonText - The text to display on the button.
+ * @param buttonVariant - The Bootstrap variant for the button.
+ * @param disabled - Whether the button should be disabled.
+ * @param icon - The icon component to display.
  */
 export interface InterfaceVolunteerStatus {
   status: string;
@@ -174,35 +169,16 @@ export interface InterfaceVolunteerStatus {
 }
 
 /**
- * @interface InterfaceVolunteerMembership
- * @description Defines the structure for volunteer membership information.
- * @property {string} id - The unique identifier of the volunteer membership.
- * @property {string} status - The status of the volunteer membership.
- * @property {string} createdAt - The creation date of the volunteer membership record.
- * @property {string} updatedAt - The last update date of the volunteer membership record.
- * @property {object} event - The event associated with the volunteer membership.
- * @property {string} event.id - The unique identifier of the event.
- * @property {string} event.name - The name of the event.
- * @property {string} event.startAt - The start date of the event.
- * @property {string} event.endAt - The end date of the event.
- * @property {object} volunteer - The volunteer associated with the membership.
- * @property {string} volunteer.id - The unique identifier of the volunteer.
- * @property {boolean} volunteer.hasAccepted - Whether the volunteer has accepted.
- * @property {number} volunteer.hoursVolunteered - Hours volunteered.
- * @property {object} volunteer.user - The user information of the volunteer.
- * @property {string} volunteer.user.id - The unique identifier of the user.
- * @property {string} volunteer.user.name - The name of the user.
- * @property {string} volunteer.user.emailAddress - The email address of the user.
- * @property {string | null} [volunteer.user.avatarURL] - The avatar URL of the user.
- * @property {object | null} [group] - The group associated with the membership.
- * @property {string} group.id - The unique identifier of the group.
- * @property {string} group.name - The name of the group.
- * @property {object} createdBy - The user who created this membership.
- * @property {string} createdBy.id - The unique identifier of the creator.
- * @property {string} createdBy.name - The name of the creator.
- * @property {object} updatedBy - The user who last updated this membership.
- * @property {string} updatedBy.id - The unique identifier of the updater.
- * @property {string} updatedBy.name - The name of the updater.
+ * Defines the structure for volunteer membership information.
+ * @param id - The unique identifier of the volunteer membership.
+ * @param status - The status of the volunteer membership.
+ * @param createdAt - The creation date of the volunteer membership record.
+ * @param updatedAt - The last update date of the volunteer membership record.
+ * @param event - The event object associated with the volunteer membership.
+ * @param volunteer - The volunteer object associated with the membership.
+ * @param group - (Optional) The group object associated with the membership.
+ * @param createdBy - The user object who created this membership.
+ * @param updatedBy - The user object who last updated this membership.
  */
 export interface InterfaceVolunteerMembership {
   id: string;
@@ -210,63 +186,71 @@ export interface InterfaceVolunteerMembership {
   createdAt: string;
   updatedAt: string;
   event: {
+    /** The unique identifier of the event */
     id: string;
+    /** The name of the event */
     name: string;
+    /** The start of the event */
     startAt: string;
+    /** The end of the event */
     endAt: string;
     recurrenceRule?: {
       id: string;
     } | null;
   };
   volunteer: {
+    /** The unique identifier of the event */
     id: string;
+    /** Whether the volunteer has accepted */
     hasAccepted: boolean;
+    /** Hours volunteered */
     hoursVolunteered: number;
+    /** The user information of the volunteer */
     user: {
+      /** The unique identifier of the user */
       id: string;
+      /** The name of the user */
       name: string;
+      /** The email address of the user */
       emailAddress: string;
+      /** The avatar URL of the user (optional) */
       avatarURL?: string | null;
     };
   };
   group?: {
+    /** The unique identifier of the group */
     id: string;
+    /** The name of the group */
     name: string;
   } | null;
   createdBy: {
+    /** The unique identifier of the creator */
     id: string;
+    /** The name of the creator */
     name: string;
   };
   updatedBy: {
+    /** The unique identifier of the updater */
     id: string;
+    /** The name of the updater */
     name: string;
   };
 }
 
 /**
- * @interface InterfaceEventVolunteerInfo
- * @description Defines the structure for event volunteer information.
- * @property {string} id - The unique identifier of the event volunteer.
- * @property {boolean} hasAccepted - Indicates if the volunteer has accepted.
- * @property {'accepted' | 'rejected' | 'pending'} volunteerStatus - The status of the volunteer.
- * @property {number} hoursVolunteered - The number of hours volunteered.
- * @property {boolean} isPublic - Indicates if the volunteer profile is public.
- * @property {string} createdAt - The creation date of the volunteer record.
- * @property {string} updatedAt - The last update date of the volunteer record.
- * @property {object} user - The user information of the volunteer.
- * @property {string} user.id - The unique identifier of the user.
- * @property {string} user.name - The name of the user.
- * @property {string | null} [user.avatarURL] - The avatar URL of the user.
- * @property {object} event - The event associated with the volunteer.
- * @property {string} event.id - The unique identifier of the event.
- * @property {string} event.name - The name of the event.
- * @property {object} creator - The user who created this volunteer record.
- * @property {string} creator.id - The unique identifier of the creator.
- * @property {string} creator.name - The name of the creator.
- * @property {object} updater - The user who last updated this volunteer record.
- * @property {string} updater.id - The unique identifier of the updater.
- * @property {string} updater.name - The name of the updater.
- * @property {Array} groups - Array of groups associated with the volunteer.
+ * Defines the structure for event volunteer information.
+ * @param id - The unique identifier of the event volunteer.
+ * @param hasAccepted - Indicates if the volunteer has accepted.
+ * @param volunteerStatus - The status of the volunteer.
+ * @param hoursVolunteered - The number of hours volunteered.
+ * @param isPublic - Indicates if the volunteer profile is public.
+ * @param createdAt - The creation date of the volunteer record.
+ * @param updatedAt - The last update date of the volunteer record.
+ * @param user - The user object information of the volunteer.
+ * @param event - The event object associated with the volunteer.
+ * @param creator - The user object who created this volunteer record.
+ * @param updater - The user object who last updated this volunteer record.
+ * @param groups - Array of groups associated with the volunteer.
  */
 export interface InterfaceEventVolunteerInfo {
   id: string;
@@ -279,12 +263,17 @@ export interface InterfaceEventVolunteerInfo {
   createdAt: string;
   updatedAt: string;
   user: {
+    /** The unique identifier of the user */
     id: string;
+    /** The name of the user */
     name: string;
+    /** The avatar URL of the user (optional) */
     avatarURL?: string | null;
   };
   event: {
+    /** The unique identifier of the event */
     id: string;
+    /** The name of the event */
     name: string;
     recurrenceRule?: {
       id: string;
@@ -294,11 +283,15 @@ export interface InterfaceEventVolunteerInfo {
     } | null;
   };
   creator: {
+    /** The unique identifier of the creator */
     id: string;
+    /** The name of the creator */
     name: string;
   };
   updater: {
+    /** The unique identifier of the updater */
     id: string;
+    /** The name of the updater */
     name: string;
   };
   groups: {
@@ -312,16 +305,15 @@ export interface InterfaceEventVolunteerInfo {
 }
 
 /**
- * @interface InterfaceCreateVolunteerGroupData
- * @description Defines the structure for create volunteer group mutation data.
- * @property {string} eventId - The event ID.
- * @property {string} [leaderId] - The ID of the group leader (optional).
- * @property {string} name - The name of the volunteer group.
- * @property {string | null} [description] - The description of the volunteer group (optional).
- * @property {number | null} [volunteersRequired] - Number of volunteers required (optional).
- * @property {string[]} volunteerUserIds - Array of volunteer user IDs.
- * @property {'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY'} [scope] - Optional scope for recurring events.
- * @property {string} [recurringEventInstanceId] - Optional instance ID for recurring events.
+ * Defines the structure for create volunteer group mutation data.
+ * @param eventId - The event ID.
+ * @param leaderId - (Optional) The ID of the group leader.
+ * @param name - The name of the volunteer group.
+ * @param description - (Optional) The description of the volunteer group.
+ * @param volunteersRequired - (Optional) Number of volunteers required.
+ * @param volunteerUserIds - Array of volunteer user IDs.
+ * @param scope - (Optional) Scope for recurring events.
+ * @param recurringEventInstanceId - (Optional) Instance ID for recurring events.
  */
 export interface InterfaceCreateVolunteerGroupData {
   eventId: string | undefined;

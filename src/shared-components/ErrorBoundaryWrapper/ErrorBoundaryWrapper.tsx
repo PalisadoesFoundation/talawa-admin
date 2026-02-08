@@ -25,6 +25,7 @@
  *
  * @example
  * // With custom error message and logging
+ * ```jsx
  * <ErrorBoundaryWrapper
  *   errorMessage={translatedErrorMessage}
  *   onError={(error, info) => logToService(error, info)}
@@ -32,12 +33,15 @@
  * >
  *   <ComplexModal />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
  * // With custom fallback component
+ * ```jsx
  * <ErrorBoundaryWrapper fallbackComponent={CustomModalError}>
  *   <Modal>...</Modal>
  * </ErrorBoundaryWrapper>
+ * ```
  */
 
 import React, { ReactNode, ErrorInfo } from 'react';

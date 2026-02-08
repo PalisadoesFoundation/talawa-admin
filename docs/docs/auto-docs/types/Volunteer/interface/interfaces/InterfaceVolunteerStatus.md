@@ -4,13 +4,29 @@
 
 # Interface: InterfaceVolunteerStatus
 
-Defined in: [src/types/Volunteer/interface.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L164)
-
-InterfaceVolunteerStatus
-
-## Description
+Defined in: [src/types/Volunteer/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L159)
 
 Defines the structure for volunteer status button configuration.
+
+## Param
+
+The status of the volunteer membership.
+
+## Param
+
+The text to display on the button.
+
+## Param
+
+The Bootstrap variant for the button.
+
+## Param
+
+Whether the button should be disabled.
+
+## Param
+
+The icon component to display.
 
 ## Properties
 
@@ -18,9 +34,7 @@ Defines the structure for volunteer status button configuration.
 
 > **buttonText**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L166)
-
-The text to display on the button.
+Defined in: [src/types/Volunteer/interface.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L161)
 
 ***
 
@@ -28,9 +42,7 @@ The text to display on the button.
 
 > **buttonVariant**: `"outline-secondary"` \| `"outline-success"` \| `"outline-danger"` \| `"outline-warning"`
 
-Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L167)
-
-The Bootstrap variant for the button.
+Defined in: [src/types/Volunteer/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L162)
 
 ***
 
@@ -38,9 +50,7 @@ The Bootstrap variant for the button.
 
 > **disabled**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L172)
-
-Whether the button should be disabled.
+Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L167)
 
 ***
 
@@ -48,9 +58,7 @@ Whether the button should be disabled.
 
 > **icon**: `ComponentType`\<\{ `className?`: `string`; `size?`: `number`; \}\>
 
-Defined in: [src/types/Volunteer/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L173)
-
-The icon component to display.
+Defined in: [src/types/Volunteer/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L168)
 
 ***
 
@@ -58,6 +66,4 @@ The icon component to display.
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L165)
-
-The status of the volunteer membership.
+Defined in: [src/types/Volunteer/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L160)
