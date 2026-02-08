@@ -5,6 +5,13 @@ import { MemoryRouter } from 'react-router-dom';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import UserGlobalScreen from './UserGlobalScreen';
 
+// Mock Avatar
+vi.mock('shared-components/Avatar/Avatar', () => ({
+  default: vi.fn(({ 'data-testid': dataTestId, alt, src }) => (
+    <img data-testid={dataTestId} alt={alt} src={src || 'mock-avatar-src'} />
+  )),
+}));
+
 // Mock the child components
 vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   default: vi.fn(({ hideDrawer, setHideDrawer }) => (
@@ -45,15 +52,17 @@ vi.mock('shared-components/DropDownButton', () => ({
 }));
 
 vi.mock('hooks/useUserProfile', () => ({
-  default: vi.fn(() => ({
-    name: 'Test User',
-    displayedName: 'Test User',
-    userRole: 'User',
-    userImage: 'test-image.jpg',
-    profileDestination: '/user/profile',
-    handleLogout: vi.fn(),
-    tCommon: (key: string) => key,
-  })),
+  default: vi.fn(
+    (): InterfaceUseUserProfileReturn => ({
+      name: 'Test User',
+      displayedName: 'Test User',
+      userRole: 'User',
+      userImage: 'test-image.jpg',
+      profileDestination: '/user/profile',
+      handleLogout: vi.fn(),
+      tCommon: (key: string) => key,
+    }),
+  ),
 }));
 
 // Mock react-i18next
@@ -82,6 +91,7 @@ vi.mock('./UserGlobalScreen.module.css', () => ({
     expand: 'expand',
     contract: 'contract',
     titleFlex: 'titleFlex',
+    profileDropdownMenu: 'profileDropdownMenu',
   },
 }));
 
@@ -158,6 +168,33 @@ describe('UserGlobalScreen', () => {
       expect(dropdown).toHaveAttribute('data-variant', 'light');
       expect(dropdown).toHaveAttribute('data-show-caret', 'false');
       expect(dropdown).toHaveAttribute('data-menu-class');
+    });
+
+    it('should render Avatar fallback when userImage is falsy', async () => {
+      // Mock useUserProfile to return empty userImage
+      const useUserProfileMock = await import('hooks/useUserProfile');
+      // Verify we are mocking the default export
+      const mockUseUserProfile =
+        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+      mockUseUserProfile.mockImplementation(
+        (): InterfaceUseUserProfileReturn => ({
+          name: 'Test User',
+          displayedName: 'Test User',
+          userRole: 'User',
+          userImage: '', // Falsy value
+          profileDestination: '/user/profile',
+          handleLogout: vi.fn(),
+          tCommon: (key: string) => key,
+        }),
+      );
+
+      renderComponent();
+
+      // Assert that the image displayed is the Avatar (fallback)
+      const avatarImg = screen.getByTestId('display-img');
+      expect(avatarImg).toBeInTheDocument();
+      expect(avatarImg).toHaveAttribute('alt', 'profilePicturePlaceholder');
     });
 
     it('should navigate to profile when viewProfile is selected', async () => {

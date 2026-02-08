@@ -30,3 +30,10 @@ export const sanitizeAvatars = (
     return '';
   }
 };
+
+export const sanitizeAvatarURL = (url: string | null | undefined): string => {
+  if (!url || url === 'null') {
+    return '';
+  }
+  return url;
+};

@@ -170,6 +170,7 @@ const UserGlobalScreen = (): JSX.Element => {
             btnStyle={styles.profileDropdownBtn}
             variant="light"
             menuClassName={styles.profileDropdownMenu}
+            showCaret={false}
           />
         </div>
         <Outlet />

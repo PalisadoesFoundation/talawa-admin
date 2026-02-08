@@ -9,11 +9,12 @@ import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { MAX_NAME_LENGTH } from 'Constant/common';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import {
   resolveProfileNavigation,
   type ProfilePortal,
 } from 'utils/profileNavigation';
+import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
@@ -29,8 +30,7 @@ const useUserProfile = (
 
   const userRole = getItem<string>('role') || '';
   const name: string = getItem<string>('name') || '';
-  const rawUserImage: string = getItem<string>('UserImage') || '';
-  const userImage = rawUserImage === 'null' ? '' : rawUserImage;
+  const userImage = sanitizeAvatarURL(getItem<string>('UserImage'));
 
   const displayedName =
     name.length > MAX_NAME_LENGTH
