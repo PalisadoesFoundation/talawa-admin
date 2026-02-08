@@ -313,22 +313,22 @@ function OrganizationEvents(): JSX.Element {
             handleChangeView={handleChangeView}
           />
         </div>
-      </div>
 
-      <EventCalendar
-        viewType={viewType}
-        eventData={events}
-        refetchEvents={refetchEvents}
-        orgData={orgData?.organization}
-        userRole={userRole}
-        userId={userId}
-        onMonthChange={(month, year) => {
-          setCurrentMonth(month);
-          setCurrentYear(year);
-        }}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
-      />
+        <EventCalendar
+          viewType={viewType}
+          eventData={events}
+          refetchEvents={refetchEvents}
+          orgData={orgData?.organization}
+          userRole={userRole}
+          userId={userId}
+          onMonthChange={(month, year) => {
+            setCurrentMonth(month);
+            setCurrentYear(year);
+          }}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
+      </div>
 
       <CRUDModalTemplate
         open={createEventModal.isOpen}

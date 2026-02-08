@@ -87,11 +87,11 @@ function EventHeader({
             selectedOption={viewType}
             onSortChange={(value) => handleChangeView(value as ViewType)}
             dataTestIdPrefix="selectViewType"
-            className={styles.dropdown}
+            className={`${styles.dropdown} ${styles.headerActionBtn}`}
             buttonLabel={getViewLabel()}
           />
           <Button
-            className={styles.createButton}
+            className={`${styles.headerActionBtn} ${styles.createButton}`}
             onClick={showInviteModal}
             data-testid="createEventModalBtn"
             data-cy="createEventModalBtn"
