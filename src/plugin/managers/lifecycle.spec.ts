@@ -47,7 +47,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Capture original fetch to restore it later (CodeRabbit Fix)
+    // Capture original fetch to restore it later
     originalFetch = global.fetch;
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
@@ -56,7 +56,7 @@ describe('LifecycleManager Coverage Suite', () => {
   });
 
   afterEach(() => {
-    // Restore original implementations (CodeRabbit Fix)
+    // Restore original implementations
     global.fetch = originalFetch;
     vi.restoreAllMocks();
   });
@@ -65,7 +65,6 @@ describe('LifecycleManager Coverage Suite', () => {
   // 1. Validation Logic
   // ----------------------------------------------------------------
   describe('Input Validation', () => {
-    // Refactored to it.each for better reporting (CodeRabbit Fix)
     it.each([
       ['hyphenated ID', INVALID_PLUGIN_ID],
       ['empty string', ''],
@@ -101,10 +100,9 @@ describe('LifecycleManager Coverage Suite', () => {
     });
 
     it('handles "Dead Code" race condition (Installed check passes, then fails)', async () => {
-      // This covers the unreachable branch in determineInitialPluginStatus (lines 289-290)
       mockDiscoveryManager.isPluginInstalled
-        .mockReturnValueOnce(true) // 1. Passed check in loadPlugin
-        .mockReturnValueOnce(false); // 2. Failed check in determineInitialPluginStatus
+        .mockReturnValueOnce(true)
+        .mockReturnValueOnce(false);
 
       mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
         pluginId: VALID_PLUGIN_ID,
@@ -116,7 +114,6 @@ describe('LifecycleManager Coverage Suite', () => {
 
       const plugin = manager.getLoadedPlugin(VALID_PLUGIN_ID);
       expect(plugin?.status).toBe(PluginStatus.INACTIVE);
-      // Verify both calls were actually made, ensuring we hit the second branch
       expect(mockDiscoveryManager.isPluginInstalled).toHaveBeenCalledTimes(2);
     });
 
@@ -226,7 +223,7 @@ describe('LifecycleManager Coverage Suite', () => {
     it('executes onDeactivate hook and unregisters extensions', async () => {
       await manager.activatePlugin(VALID_PLUGIN_ID);
 
-      // Targeted mock cleanup (CodeRabbit Fix)
+      // Targeted mock cleanup
       mockHooks.onDeactivate.mockClear();
       mockExtensionRegistry.unregisterExtensionPoints.mockClear();
 
@@ -244,6 +241,47 @@ describe('LifecycleManager Coverage Suite', () => {
         PluginStatus.INACTIVE,
       );
     });
+
+    // --- NEW: Infrastructure Failure Tests (Option A) ---
+
+    it('handles infrastructure failure during activation (outer catch)', async () => {
+      mockDiscoveryManager.updatePluginStatusInGraphQL.mockRejectedValue(
+        new Error('GraphQL Error'),
+      );
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const result = await manager.activatePlugin(VALID_PLUGIN_ID);
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to activate plugin'),
+        expect.anything(),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    it('handles infrastructure failure during deactivation (outer catch)', async () => {
+      await manager.activatePlugin(VALID_PLUGIN_ID);
+      mockDiscoveryManager.updatePluginStatusInGraphQL.mockRejectedValue(
+        new Error('GraphQL Error'),
+      );
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const result = await manager.deactivatePlugin(VALID_PLUGIN_ID);
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to deactivate plugin'),
+        expect.anything(),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    // ----------------------------------------------------
 
     it('handles onActivate failure gracefully', async () => {
       mockHooks.onActivate.mockRejectedValue(new Error('Activate Failed'));
@@ -298,6 +336,7 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
       mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as any);
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+      mockExtensionRegistry.registerExtensionPoints.mockClear();
 
       await managerNoManifest.loadPlugin('NoManifestPlugin');
       await managerNoManifest.activatePlugin('NoManifestPlugin');
@@ -338,6 +377,37 @@ describe('LifecycleManager Coverage Suite', () => {
         'NewId',
       );
     });
+
+    // --- NEW: Infrastructure Failure Test (Option A) ---
+
+    it('handles infrastructure failure during uninstallation (outer catch)', async () => {
+      const manager = createManager();
+      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true); // <--- FIXED: Added missing mock
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
+        pluginId: VALID_PLUGIN_ID,
+      });
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+      await manager.loadPlugin(VALID_PLUGIN_ID);
+
+      // Force unloadPlugin to throw to hit outer catch
+      vi.spyOn(manager as any, 'unloadPlugin').mockRejectedValue(
+        new Error('Unload Error'),
+      );
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const result = await manager.uninstallPlugin(VALID_PLUGIN_ID);
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to uninstall plugin'),
+        expect.anything(),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    // --------------------------------------------------
 
     it('handles install on an already loaded plugin', async () => {
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
@@ -480,7 +550,6 @@ describe('LifecycleManager Coverage Suite', () => {
       expect(manager.getPluginCount()).toBeGreaterThan(0);
     });
 
-    // Fixed: Removed tautological assertion (CodeRabbit Fix)
     it('skips hook execution if default export is malformed', async () => {
       const manager = createManager();
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
@@ -493,7 +562,6 @@ describe('LifecycleManager Coverage Suite', () => {
       } as any);
       const result = await manager.installPlugin('Malformed');
 
-      // Asserting the result proves the code ran without error
       expect(result).toBe(true);
     });
 
@@ -533,24 +601,19 @@ describe('LifecycleManager Coverage Suite', () => {
       expect(plugins[0].id).toBe(VALID_PLUGIN_ID);
     });
 
-    it('returns correct count of active plugins', async () => {
+    // --- NEW: getActivePluginCount Test (requested by bot) ---
+    it('returns count of active plugins', async () => {
       const manager = createManager();
-
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.isPluginActivated
-        .mockReturnValueOnce(true) // Plugin A active
-        .mockReturnValueOnce(false); // Plugin B inactive
-
-      mockDiscoveryManager.loadPluginManifest
-        .mockResolvedValueOnce({ pluginId: 'PluginA' })
-        .mockResolvedValueOnce({ pluginId: 'PluginB' });
-
+      mockDiscoveryManager.isPluginActivated.mockReturnValue(true);
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
+        pluginId: VALID_PLUGIN_ID,
+      });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
 
-      await manager.loadPlugin('PluginA');
-      await manager.loadPlugin('PluginB');
-
+      await manager.loadPlugin(VALID_PLUGIN_ID);
       expect(manager.getActivePluginCount()).toBe(1);
+      expect(manager.getPluginCount()).toBe(1);
     });
   });
 

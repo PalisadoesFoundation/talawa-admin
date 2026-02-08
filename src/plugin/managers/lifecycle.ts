@@ -205,7 +205,6 @@ export class LifecycleManager {
       this.eventManager.emit('plugin:deactivated', pluginId);
       return true;
     } catch (error) {
-      /* istanbul ignore next - defensive code, hook errors are swallowed */
       console.error(`Failed to deactivate plugin ${pluginId}:`, error);
       return false;
     }
@@ -238,7 +237,6 @@ export class LifecycleManager {
           manifest,
         );
       } catch (loadError) {
-        /* istanbul ignore next - tested via 'handles install failure' but tool doesn't detect nested catch */
         console.error(
           `Failed to load plugin files for ${pluginId}:`,
           loadError,
@@ -288,7 +286,6 @@ export class LifecycleManager {
       this.eventManager.emit('plugin:uninstalled', pluginId);
       return true;
     } catch (error) {
-      /* istanbul ignore next - defensive code, hook errors are swallowed */
       console.error(`Failed to uninstall plugin ${pluginId}:`, error);
       return false;
     }
@@ -308,7 +305,6 @@ export class LifecycleManager {
 
   private determineInitialPluginStatus(pluginId: string): PluginStatus {
     // Check if plugin is installed first
-    /* istanbul ignore next - tested via race condition test but tool doesn't detect mock sequence */
     if (!this.discoveryManager.isPluginInstalled(pluginId)) {
       return PluginStatus.INACTIVE;
     }
