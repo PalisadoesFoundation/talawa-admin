@@ -340,7 +340,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         <Typography className={postCardStyles.caption}>
           {props.title}
         </Typography>
-        {postCardStyles.body && (
+        {props.body && (
           <Box className={postCardStyles.bodyContainer}>
             <Typography variant="body2" className={`${postCardStyles.body}`}>
               {props.body}
