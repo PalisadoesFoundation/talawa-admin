@@ -302,5 +302,6 @@
   "userMenu": "Menú de usuario",
   "searchPlaceholder": "Buscar...",
   "noOptionsFound": "No se encontraron opciones",
-  "noUserId": "ID de usuario no disponible"
+  "noUserId": "ID de usuario no disponible",
+  "noTagsFound": "No se encontraron etiquetas"
 }

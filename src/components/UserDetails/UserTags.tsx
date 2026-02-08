@@ -138,46 +138,53 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
           buttonTestId: 'tagsSearchBtn',
         }}
       />
-
-      {/* Table */}
-      <div className={styles.peopleTabUserTagComponentSection}>
-        <table className={styles.peopleTabUserTagTable}>
-          <thead className={styles.peopleTabUserTagTableHeader}>
-            <tr className={styles.peopleTabUserTagColumnHeader}>
-              <th className={styles.peopleTabUserTagTableHeaderCell}>
-                {tCommon('peopleTabTagName')}
-              </th>
-              <th className={styles.peopleTabUserTagTableHeaderCell}>
-                {tCommon('assignedTo')}
-              </th>
-              <th className={styles.peopleTabUserTagTableHeaderCell}>
-                {tCommon('createdOn')}
-              </th>
-              <th className={styles.peopleTabUserTagTableHeaderCell}>
-                {tCommon('createdBy')}
-              </th>
-            </tr>
-          </thead>
-          <tbody className={styles.peopleTabUserTagTableBody}>
-            {displayTags.map((tag) => (
-              <tr key={tag.id} className={styles.peopleTabUserTagTableRow}>
-                <td className={styles.peopleTabUserTagTableCell}>{tag.name}</td>
-                <td className={styles.peopleTabUserTagTableCell}>
-                  {tag.assignedTo}
-                </td>
-                <td className={styles.peopleTabUserTagTableCell}>
-                  {tag.createdOn}
-                </td>
-                <td className={styles.peopleTabUserTagTableCell}>
-                  <a className={styles.peopleTabUserTagCreatedByButton}>
-                    {tag.createdBy}
-                  </a>
-                </td>
+      {displayTags.length === 0 ? (
+        <p className={styles.peopleTabUserTagNoResults}>
+          {tCommon('noTagsFound')}
+        </p>
+      ) : (
+        <div className={styles.peopleTabUserTagComponentSection}>
+          <table className={styles.peopleTabUserTagTable}>
+            <thead className={styles.peopleTabUserTagTableHeader}>
+              <tr className={styles.peopleTabUserTagColumnHeader}>
+                <th className={styles.peopleTabUserTagTableHeaderCell}>
+                  {tCommon('peopleTabTagName')}
+                </th>
+                <th className={styles.peopleTabUserTagTableHeaderCell}>
+                  {tCommon('assignedTo')}
+                </th>
+                <th className={styles.peopleTabUserTagTableHeaderCell}>
+                  {tCommon('createdOn')}
+                </th>
+                <th className={styles.peopleTabUserTagTableHeaderCell}>
+                  {tCommon('createdBy')}
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+
+            <tbody className={styles.peopleTabUserTagTableBody}>
+              {displayTags.map((tag) => (
+                <tr key={tag.id} className={styles.peopleTabUserTagTableRow}>
+                  <td className={styles.peopleTabUserTagTableCell}>
+                    {tag.name}
+                  </td>
+                  <td className={styles.peopleTabUserTagTableCell}>
+                    {tag.assignedTo}
+                  </td>
+                  <td className={styles.peopleTabUserTagTableCell}>
+                    {tag.createdOn}
+                  </td>
+                  <td className={styles.peopleTabUserTagTableCell}>
+                    <a className={styles.peopleTabUserTagCreatedByButton}>
+                      {tag.createdBy}
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

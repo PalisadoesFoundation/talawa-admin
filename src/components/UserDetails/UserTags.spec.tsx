@@ -18,9 +18,12 @@ dayjs.extend(utc);
 
 /* -------------------- Dynamic Dates -------------------- */
 
-const latestDate = dayjs.utc('2026-02-07T10:30:00.000Z');
-const middleDate = dayjs.utc('2026-02-06T14:45:00.000Z');
-const oldestDate = dayjs.utc('2026-02-05T09:15:00.000Z');
+const now = dayjs.utc();
+
+const latestDate = now.subtract(1, 'day');
+const middleDate = now.subtract(2, 'day');
+const oldestDate = now.subtract(3, 'day');
+
 /* -------------------- Mock Data -------------------- */
 
 const mockTags = [
@@ -242,6 +245,32 @@ describe('UserTags - loading and error states', () => {
     render(<UserTags id="user-123" />);
 
     expect(screen.getByText('somethingWentWrong')).toBeInTheDocument();
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+  });
+
+  it('renders noTagsFound when there are no tags', () => {
+    vi.mocked(apolloClient.useQuery).mockReturnValue({
+      data: { userTags: [] }, // empty list
+      loading: false,
+      error: undefined,
+      refetch: vi.fn(),
+      networkStatus: 7,
+      called: true,
+      client: {} as ApolloClient<NormalizedCacheObject>,
+      observable: {} as ObservableQuery<unknown, OperationVariables>,
+      previousData: undefined,
+      variables: undefined,
+      fetchMore: vi.fn(),
+      subscribeToMore: vi.fn(),
+      updateQuery: vi.fn(),
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
+      reobserve: vi.fn(),
+    });
+
+    render(<UserTags id="user-123" />);
+
+    expect(screen.getByText('noTagsFound')).toBeInTheDocument();
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 });
