@@ -204,7 +204,7 @@ const AgendaItemsUpdateModal: React.FC<
             notes:
               itemFormState.notes?.trim() === ''
                 ? null
-                : (itemFormState.notes ?? undefined),
+                : (itemFormState.notes?.trim() ?? undefined),
             url: itemFormState.url.map((u) => ({ url: u })),
             attachments: itemFormState.attachments.map((att) => ({
               name: att.name,

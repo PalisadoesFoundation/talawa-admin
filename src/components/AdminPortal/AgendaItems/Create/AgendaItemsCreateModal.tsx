@@ -395,7 +395,6 @@ const AgendaItemsCreateModal: React.FC<
         label={t('notes')}
         placeholder={t('enterNotes')}
         value={agendaItemFormState.notes}
-        required
         onChange={(v) =>
           setAgendaItemFormState((prev) => ({ ...prev, notes: v }))
         }
