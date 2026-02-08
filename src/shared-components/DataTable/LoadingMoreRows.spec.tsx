@@ -599,12 +599,14 @@ describe('LoadingMoreRows (loadingMore functionality)', () => {
       const row = container.querySelector(
         'tr[data-testid^="skeleton-append-"]',
       );
-      const cells = row?.querySelectorAll('td');
-      expect(cells).toHaveLength(2);
+      expect(row).not.toBeNull();
+      expect(row).toBeInTheDocument();
+      if (row === null) return;
 
-      // Verify cells are rendered (keys are used internally by React)
-      expect(cells?.[0]).toBeInTheDocument();
-      expect(cells?.[1]).toBeInTheDocument();
+      const cells = row.querySelectorAll('td');
+      expect(cells).toHaveLength(2);
+      expect(cells[0]).toBeInTheDocument();
+      expect(cells[1]).toBeInTheDocument();
     });
 
     it('handles columns with numeric ids', () => {
