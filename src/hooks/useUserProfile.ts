@@ -18,13 +18,14 @@ import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 
 const useUserProfile = (
   portal: ProfilePortal = 'user',
 ): InterfaceUseUserProfileReturn => {
   const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
+  const abortControllerRef = useRef<AbortController | null>(null);
   const [logout] = useMutation(LOGOUT_MUTATION);
   const { getItem, clearAllItems } = useLocalStorage();
   const navigate = useNavigate();
@@ -48,15 +49,54 @@ const useUserProfile = (
     role: userRole,
   });
 
+  const isLoggingOutRef = useRef(false);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+      isLoggingOutRef.current = false;
+    };
+  }, []);
+
   const handleLogout = async (): Promise<void> => {
+    // Prevent multiple simultaneous logout calls (race condition guard)
+    if (isLoggingOutRef.current) {
+      console.warn('Logout already in progress');
+      return;
+    }
+
+    isLoggingOutRef.current = true;
+    abortControllerRef.current = new AbortController();
+
+    // Save abort controller for potential cleanup
+    const abortController = abortControllerRef.current;
+
     try {
-      await logout();
+      await logout({
+        context: {
+          fetchOptions: {
+            signal: abortController.signal,
+          },
+        },
+      });
     } catch (error) {
       console.error('Error during logout:', error);
-    } finally {
+    }
+
+    try {
       clearAllItems();
       endSession();
-      navigate('/');
+      // Only navigate if not aborted
+      if (!abortController.signal.aborted) {
+        navigate('/');
+      }
+    } finally {
+      // Reset flag only if this is the same abort controller
+      if (abortControllerRef.current === abortController) {
+        isLoggingOutRef.current = false;
+        abortControllerRef.current = null;
+      }
     }
   };
 

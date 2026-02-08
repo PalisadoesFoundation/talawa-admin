@@ -118,7 +118,11 @@ const UserGlobalScreen = (): JSX.Element => {
                   navigate(profileDestination);
                   break;
                 case 'logout':
-                  handleLogout();
+                  handleLogout().catch((err) => {
+                    console.error('Logout failed:', err);
+                    // Optionally show a toast notification here
+                    // toast.error(tCommon('logoutFailed'));
+                  });
                   break;
                 default:
                   break;

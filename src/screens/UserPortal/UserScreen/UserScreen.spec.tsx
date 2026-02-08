@@ -119,7 +119,7 @@ vi.mock('hooks/useUserProfile', () => ({
       userRole: 'User',
       userImage: 'test-image.jpg',
       profileDestination: '/user/profile',
-      handleLogout: vi.fn(),
+      handleLogout: vi.fn().mockResolvedValue(undefined),
       tCommon: (key: string) => key,
     }),
   ),
@@ -368,7 +368,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
         userRole: 'User',
         userImage: '', // Falsy value
         profileDestination: '/user/profile',
-        handleLogout: vi.fn(),
+        handleLogout: vi.fn().mockResolvedValue(undefined),
         tCommon: (key: string) => key,
       }),
     );
@@ -407,7 +407,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
         userRole: 'User',
         userImage: 'test-image.jpg',
         profileDestination: '/user/profile',
-        handleLogout: vi.fn(),
+        handleLogout: vi.fn().mockResolvedValue(undefined),
         tCommon: (key: string) => key,
       }),
     );
@@ -433,7 +433,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   it('calls handleLogout on logout click', async () => {
     // Mock userProfile hook to capture handleLogout
-    const handleLogoutMock = vi.fn();
+    const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
     const useUserProfileMock = await import('hooks/useUserProfile');
     const user = userEvent.setup();
     // Cast the default export to a Mock function to access mockImplementation
@@ -471,7 +471,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   it('should handle unknown eventKey in DropDownButton', async () => {
     // Mock userProfile hook to capture handleLogout
-    const handleLogoutMock = vi.fn();
+    const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
     const useUserProfileMock = await import('hooks/useUserProfile');
     const mockUseUserProfile =
       useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;

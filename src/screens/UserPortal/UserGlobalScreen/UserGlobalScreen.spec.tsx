@@ -68,7 +68,7 @@ vi.mock('hooks/useUserProfile', () => ({
       userRole: 'User',
       userImage: 'test-image.jpg',
       profileDestination: '/user/profile',
-      handleLogout: vi.fn(),
+      handleLogout: vi.fn().mockResolvedValue(undefined),
       tCommon: (key: string) => key,
     }),
   ),
@@ -164,7 +164,7 @@ describe('UserGlobalScreen', () => {
         userRole: 'User',
         userImage: 'test-image.jpg', // Default valid image
         profileDestination: '/user/profile',
-        handleLogout: vi.fn(),
+        handleLogout: vi.fn().mockResolvedValue(undefined),
         tCommon: (key: string) => key,
         ...overrides,
       }),
