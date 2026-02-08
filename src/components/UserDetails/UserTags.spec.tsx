@@ -1,53 +1,93 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserTags from './UserTags';
 import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
+import dayjs from 'dayjs';
 
-/**
- * Mock PageHeader because:
- * - We only want to test UserTags logic
- * - PageHeader is already tested elsewhere
- */
+const mockTags = [
+  {
+    id: '1',
+    name: 'Marketing Campaign',
+    createdAt: dayjs().subtract(2, 'day').toISOString(),
+    assignees: { edges: [{}, {}] },
+    creator: { name: 'John Doe' },
+  },
+  {
+    id: '2',
+    name: 'Product Launch',
+    createdAt: dayjs().subtract(3, 'day').toISOString(),
+    assignees: { edges: [{}] },
+    creator: { name: 'Sarah Smith' },
+  },
+  {
+    id: '3',
+    name: 'Security Audit',
+    createdAt: dayjs().subtract(1, 'day').toISOString(),
+    assignees: { edges: [] },
+    creator: { name: 'Mike Johnson' },
+  },
+];
+
+vi.mock('@apollo/client', () => ({
+  useQuery: vi.fn(() => ({
+    data: { userTags: mockTags },
+    loading: false,
+    error: undefined,
+  })),
+  gql: vi.fn(),
+}));
+
+/* -------------------- Mocks -------------------- */
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
   default: (props: InterfacePeopleTabNavbarProps) => (
     <div>
-      {/* Mock search input */}
       {props.search && (
         <input
-          data-testid={props.search.inputTestId || 'search-input'}
+          data-testid={props.search.inputTestId}
           placeholder={props.search.placeholder}
           onChange={(e) => props.search?.onSearch(e.target.value)}
         />
       )}
 
-      {/* Mock sorting select */}
-      {props.sorting &&
-        props.sorting.map((sort) => (
-          <select
-            key={sort.title}
-            data-testid={`${sort.testIdPrefix}-select`}
-            value={sort.selected}
-            onChange={(e) => sort.onChange(e.target.value)}
-          >
-            {sort.options.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        ))}
+      {props.sorting?.map((sort) => (
+        <select
+          key={sort.title}
+          data-testid={`${sort.testIdPrefix}-select`}
+          value={sort.selected}
+          onChange={(e) => sort.onChange(e.target.value)}
+        >
+          {sort.options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
+        </select>
+      ))}
     </div>
   ),
 }));
 
-describe('UserTags Component', () => {
+describe('UserTags', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders table headers correctly', () => {
-    render(<UserTags />);
+  const renderComponent = () => {
+    render(<UserTags id="user-123" />);
+  };
+
+  /* -------------------- Tests -------------------- */
+
+  it('renders table headers', () => {
+    renderComponent();
 
     expect(screen.getByText('peopleTabTagName')).toBeInTheDocument();
     expect(screen.getByText('assignedTo')).toBeInTheDocument();
@@ -55,75 +95,77 @@ describe('UserTags Component', () => {
     expect(screen.getByText('createdBy')).toBeInTheDocument();
   });
 
-  it('renders all tags initially', () => {
-    render(<UserTags />);
+  it('renders tags from API', () => {
+    renderComponent();
 
-    // One known tag
     expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
     expect(screen.getByText('Product Launch')).toBeInTheDocument();
     expect(screen.getByText('Security Audit')).toBeInTheDocument();
   });
 
-  it('filters tags by search term (tag name)', async () => {
-    render(<UserTags />);
+  it('formats created date correctly', () => {
+    renderComponent();
+
+    const firstTagDate = dayjs().subtract(2, 'day').format('HH:mm DD MMM YYYY');
+    expect(screen.getByText(firstTagDate)).toBeInTheDocument();
+
+    const secondTagDate = dayjs()
+      .subtract(3, 'day')
+      .format('HH:mm DD MMM YYYY');
+    expect(screen.getByText(secondTagDate)).toBeInTheDocument();
+
+    const thirdTagDate = dayjs().subtract(1, 'day').format('HH:mm DD MMM YYYY');
+    expect(screen.getByText(thirdTagDate)).toBeInTheDocument();
+  });
+
+  it('filters tags by name', async () => {
+    renderComponent();
 
     const searchInput = screen.getByTestId('tagsSearchInput');
 
-    await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Marketing');
 
     expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
     expect(screen.queryByText('Product Launch')).not.toBeInTheDocument();
   });
 
-  it('filters tags by createdBy field', async () => {
-    render(<UserTags />);
+  it('filters tags by creator name', async () => {
+    renderComponent();
 
     const searchInput = screen.getByTestId('tagsSearchInput');
 
-    await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'John Doe');
+    await userEvent.type(searchInput, 'Sarah');
 
-    expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
-    expect(screen.getByText('Sales Q2')).toBeInTheDocument();
-    expect(screen.queryByText('Design Review')).not.toBeInTheDocument();
+    expect(screen.getByText('Product Launch')).toBeInTheDocument();
+    expect(screen.queryByText('Marketing Campaign')).not.toBeInTheDocument();
   });
 
-  it('changes sorting order when sort option changes', async () => {
-    render(<UserTags />);
+  it('sorts tags when selecting latest', async () => {
+    renderComponent();
 
     const sortSelect = screen.getByTestId('tagsSort-select');
 
-    // Change to oldest
-    await userEvent.selectOptions(sortSelect, 'oldest');
-
-    // First row should now be the first dummy tag
-    const rows = screen.getAllByRole('row');
-    expect(rows[1]).toHaveTextContent('Marketing Campaign');
-  });
-
-  it('shows correct created by links', () => {
-    render(<UserTags />);
-
-    const createdByLinks = screen.getAllByText(
-      /John Doe|Sarah Smith|Mike Johnson/,
-    );
-    expect(createdByLinks.length).toBeGreaterThan(0);
-  });
-
-  it('reverses tag order when sorting by latest', async () => {
-    render(<UserTags />);
-
-    const sortSelect = screen.getByTestId('tagsSort-select');
-
-    // Trigger reverse()
     await userEvent.selectOptions(sortSelect, 'latest');
 
     const rows = screen.getAllByRole('row');
 
-    // rows[0] = header
-    // rows[1] = first data row after sorting
-
+    // Header row + latest first
     expect(rows[1]).toHaveTextContent('Security Audit');
+  });
+
+  it('shows correct assignedTo count', () => {
+    renderComponent();
+
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('0')).toBeInTheDocument();
+  });
+
+  it('renders createdBy as clickable text', () => {
+    renderComponent();
+
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Sarah Smith')).toBeInTheDocument();
+    expect(screen.getByText('Mike Johnson')).toBeInTheDocument();
   });
 });

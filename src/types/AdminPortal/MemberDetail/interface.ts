@@ -33,3 +33,5 @@ export interface InterfaceAddressFieldConfig {
   /** Optional column size for layout/grid purposes */
   colSize?: number;
 }
+
+export type InterfaceMemberDetailProps = { id?: string };
