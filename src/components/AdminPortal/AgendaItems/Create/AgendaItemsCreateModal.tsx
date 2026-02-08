@@ -80,6 +80,7 @@ const AgendaItemsCreateModal: React.FC<
       attachments: [],
       folderId: '',
       categoryId: '',
+      notes: '',
     });
 
   useEffect(() => {
@@ -94,6 +95,7 @@ const AgendaItemsCreateModal: React.FC<
         attachments: [],
         folderId: '',
         categoryId: '',
+        notes: '',
       });
       setNewUrl('');
     }
@@ -146,6 +148,7 @@ const AgendaItemsCreateModal: React.FC<
             duration: agendaItemFormState.duration,
             folderId: agendaItemFormState.folderId,
             categoryId: agendaItemFormState.categoryId,
+            notes: agendaItemFormState.notes,
             attachments:
               agendaItemFormState.attachments.length > 0
                 ? agendaItemFormState.attachments.map((att) => ({
@@ -174,6 +177,7 @@ const AgendaItemsCreateModal: React.FC<
         urls: [],
         attachments: [],
         creator: { name: '' },
+        notes: '',
       });
 
       hide();
@@ -383,6 +387,17 @@ const AgendaItemsCreateModal: React.FC<
         required
         onChange={(v) =>
           setAgendaItemFormState((prev) => ({ ...prev, description: v }))
+        }
+      />
+
+      <FormTextField
+        name="notes"
+        label={t('notes')}
+        placeholder={t('enterNotes')}
+        value={agendaItemFormState.notes}
+        required
+        onChange={(v) =>
+          setAgendaItemFormState((prev) => ({ ...prev, notes: v }))
         }
       />
 
