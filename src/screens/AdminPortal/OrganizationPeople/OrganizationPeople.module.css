@@ -96,3 +96,18 @@
 .memberNameFontSize {
   font-size: var(--font-size-md);
 }
+
+.orgPeopleGrid [data-field='sl_no'],
+.orgPeopleGrid [data-field='profile'] {
+  min-width: var(--space-10);
+}
+
+.orgPeopleGrid [data-field='name'],
+.orgPeopleGrid [data-field='email'] {
+  min-width: var(--space-15);
+}
+
+.orgPeopleGrid [data-field='joined'],
+.orgPeopleGrid [data-field='action'] {
+  min-width: var(--space-13);
+}

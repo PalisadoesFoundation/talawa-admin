@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent, {
   PointerEventsCheckLevel,
 } from '@testing-library/user-event';
@@ -20,7 +20,9 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
+import type { InterfaceSearchFilterBarAdvanced } from 'types/shared-components/SearchFilterBar/interface';
 import { store } from 'state/store';
+import { languages } from 'utils/languages';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -40,6 +42,36 @@ vi.mock('./addMember/AddMember', () => ({
     </button>
   ),
 }));
+
+vi.mock(
+  'shared-components/SearchFilterBar/SearchFilterBar',
+  async (importOriginal) => {
+    const actual =
+      await importOriginal<
+        typeof import('shared-components/SearchFilterBar/SearchFilterBar')
+      >();
+    return {
+      default: (props: React.ComponentProps<typeof actual.default>) => (
+        <>
+          <actual.default {...props} />
+          <button
+            type="button"
+            data-testid="trigger-invalid-sort"
+            onClick={() => {
+              if (props.hasDropdowns) {
+                (
+                  props as InterfaceSearchFilterBarAdvanced
+                ).dropdowns?.[0]?.onOptionChange?.('invalid');
+              }
+            }}
+          >
+            Invalid Sort
+          </button>
+        </>
+      ),
+    };
+  },
+);
 
 // Setup mock window.location
 const setupLocationMock = () => {
@@ -62,6 +94,10 @@ const setupLocationMock = () => {
     writable: true,
   });
 };
+
+// Wait for DataGrid body rows to populate (avoids race with skeleton → data in CI)
+const getDataTableBodyRows = (): HTMLElement[] =>
+  Array.from(document.querySelectorAll('.MuiDataGrid-row'));
 
 // Helper function to create mock Apollo responses
 type MemberConnectionVariables = {
@@ -278,6 +314,7 @@ describe('OrganizationPeople', () => {
   });
 
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
   });
 
@@ -409,6 +446,13 @@ describe('OrganizationPeople', () => {
     await waitFor(
       () => {
         expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows().length).toBeGreaterThan(0);
       },
       { timeout: 5000 },
     );
@@ -797,6 +841,13 @@ describe('OrganizationPeople', () => {
       ).toBeInTheDocument();
     });
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
+
     // Navigate to next page
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     expect(nextPageButton).toBeDisabled();
@@ -1079,6 +1130,13 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
+
     // Try to navigate to next page (should not work)
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
     expect(nextPageButton).toBeDisabled();
@@ -1129,10 +1187,17 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial data
+    // Wait for initial data (default mock has 2 members: John Doe, Jane Smith)
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
+
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(2);
+      },
+      { timeout: 5000 },
+    );
 
     // Manually trigger pagination to page 1 to simulate being on a later page
     // without having proper cursor data stored
@@ -1323,6 +1388,13 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
+    await waitFor(
+      () => {
+        expect(getDataTableBodyRows()).toHaveLength(1);
+      },
+      { timeout: 5000 },
+    );
+
     // Click the previous page button (should be prevented from navigating)
     const prevPageButton = screen.getByRole('button', {
       name: /previous page/i,
@@ -1398,6 +1470,389 @@ describe('OrganizationPeople', () => {
     );
     expect(imgElement).toBeInTheDocument();
     expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
+  });
+
+  test('renders avatar placeholder when member has no avatarURL', async () => {
+    const mockWithoutAvatar = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member-no-image',
+              name: 'User Without Image',
+              emailAddress: 'noimg@example.com',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([mockWithoutAvatar], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('User Without Image')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('avatar')).toBeInTheDocument();
+  });
+
+  test('uses initial tab from location.state.role when provided', async () => {
+    const adminMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+        where: { role: { equal: 'administrator' } },
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+              role: 'administrator',
+            },
+            cursor: 'adminCursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
+      },
+    );
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([adminMock, membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter
+          initialEntries={[
+            { pathname: '/admin/orgpeople/orgid', state: { role: 1 } },
+          ]}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Admin User')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    // Administrator tab is active: admin data shown, member rows not shown
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+  });
+
+  test('handleSortChange falls back to state 0 when option value is invalid', async () => {
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    const invalidSortButton = screen.getByTestId('trigger-invalid-sort');
+    await userEvent.click(invalidSortButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('falls back to members when location.state.role is invalid', async () => {
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+    const link = new StaticMockLink([membersMock, membersMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter
+          initialEntries={[
+            { pathname: '/admin/orgpeople/orgid', state: { role: 99 } },
+          ]}
+        >
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+  });
+
+  test('joined column uses en-US locale when language is not in languages list', async () => {
+    const originalLanguage = i18nForTest.language;
+    const originalSupported = [
+      ...(i18nForTest.options.supportedLngs as string[]),
+    ];
+    const fixedCreatedAt = dayjs
+      .utc()
+      .year(2020)
+      .month(0)
+      .date(15)
+      .toISOString();
+    try {
+      await i18nForTest.changeLanguage('en');
+      i18nForTest.options.supportedLngs = [...originalSupported, 'xx'];
+      await i18nForTest.changeLanguage('xx');
+      const membersMock = createMemberConnectionMock(
+        {
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          last: null,
+          before: null,
+        },
+        {
+          edges: [
+            {
+              node: {
+                id: 'member1',
+                name: 'John Doe',
+                emailAddress: 'john@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
+                createdAt: fixedCreatedAt,
+                role: 'member',
+              },
+              cursor: 'cursor1',
+            },
+            {
+              node: {
+                id: 'member2',
+                name: 'Jane Smith',
+                emailAddress: 'jane@example.com',
+                avatarURL: null,
+                createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+                role: 'member',
+              },
+              cursor: 'cursor2',
+            },
+          ],
+          pageInfo: {
+            hasNextPage: true,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor2',
+          },
+        },
+      );
+      // Two requests when state=0 (tab effect + initial fetch); supply two mocks
+      const link = new StaticMockLink([membersMock, membersMock], true);
+
+      render(
+        <MockedProvider link={link}>
+          <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route
+                    path="/admin/orgpeople/:orgId"
+                    element={<OrganizationPeople />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await screen.findByTestId('add-member-button', {}, { timeout: 5000 });
+      expect(
+        await screen.findByText('John Doe', {}, { timeout: 5000 }),
+      ).toBeInTheDocument();
+      const expectedEnUSDate = new Intl.DateTimeFormat('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        timeZone: 'UTC',
+      }).format(new Date(fixedCreatedAt));
+      const joinedEl = screen.getByTestId('org-people-joined-member1');
+      expect(joinedEl).toBeInTheDocument();
+      expect(joinedEl).toHaveTextContent(`Joined : ${expectedEnUSDate}`);
+    } finally {
+      i18nForTest.options.supportedLngs = originalSupported;
+      await i18nForTest.changeLanguage(originalLanguage);
+    }
+  });
+
+  test('processes rows when edge.node.createdAt is missing', async () => {
+    const mockWithMissingCreatedAt = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member-no-date',
+              name: 'Member No Date',
+              emailAddress: 'nodate@example.com',
+              avatarURL: null,
+              createdAt: undefined as unknown as string,
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+    const link = new StaticMockLink([mockWithMissingCreatedAt], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/admin/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Member No Date')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+    const joinedEl = screen.getByTestId('org-people-joined-member-no-date');
+    expect(joinedEl).toBeInTheDocument();
+    // Fallback in OrganizationPeople is new Date().toISOString(); assert displayed date is today (same locale as component)
+    const currentLang = languages.find(
+      (lang: { code: string; country_code: string }) =>
+        lang.code === i18nForTest.language,
+    );
+    const locale = currentLang
+      ? `${currentLang.code}-${currentLang.country_code}`
+      : 'en-US';
+    const todayFormatted = new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'UTC',
+    }).format(new Date());
+    expect(joinedEl.textContent ?? '').toContain(todayFormatted);
   });
 
   test('calls getRowClassName for each rendered row', async () => {

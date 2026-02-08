@@ -182,6 +182,22 @@ The currently selected value.
 
 ***
 
+### showCaret?
+
+> `optional` **showCaret**: `boolean`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L129)
+
+Whether to show the caret icon on the dropdown button.
+
+#### Default Value
+
+```ts
+true
+```
+
+***
+
 ### variant?
 
 > `optional` **variant**: `"primary"` \| `"secondary"` \| `"success"` \| `"danger"` \| `"warning"` \| `"info"` \| `"dark"` \| `"light"` \| `"outline-primary"` \| `"outline-secondary"` \| `"outline-success"` \| `"outline-danger"` \| `"outline-warning"` \| `"outline-info"` \| `"outline-dark"` \| `"outline-light"`
