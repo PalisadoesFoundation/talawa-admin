@@ -575,16 +575,6 @@
     "addAdmin": "Agregar administrador",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "orgAdminListCard": {
-    "joined": "Unido",
-    "remove": "Remover",
-    "removeAdmin": "Eliminar administrador",
-    "removeAdminMsg": "¿Quieres eliminar a este administrador?",
-    "no": "No",
-    "yes": "Sí",
-    "adminRemoved": "Se elimina el administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
   "orgPeopleListCard": {
     "joined": "Unido",
     "remove": "Remover",
@@ -1273,9 +1263,6 @@
     "cancel": "Cancelar",
     "passCantBeEmpty": "La contraseña no puede estar vacía",
     "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
-  },
-  "orgDelete": {
-    "deleteOrg": "Eliminar organización"
   },
   "membershipRequest": {
     "joined": "Unido",
@@ -2589,13 +2576,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Fecha N/A",
     "yes": "Sí",
     "no": "No",
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes",
-    "viewEventDetails": "Ver detalles del evento"
+    "numberOfAttendees": "Número de asistentes"
   },
   "promotedPost": {
     "title": "Contenido Promocionado",

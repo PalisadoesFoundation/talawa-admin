@@ -580,16 +580,6 @@
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
-  "orgAdminListCard": {
-    "remove": "Remove",
-    "removeAdmin": "Remove Admin",
-    "removeAdminMsg": "Do you want to remove this admin?",
-    "adminRemoved": "The admin is removed.",
-    "joined": "joined",
-    "no": "no",
-    "yes": "yes",
-    "talawaApiUnavailable": "talawaApiUnavailable"
-  },
   "orgPeopleListCard": {
     "remove": "Remove",
     "removeMember": "Remove Member",
@@ -1339,9 +1329,6 @@
     "passNoMatch": "New and Confirm password do not match.",
     "saveChanges": "saveChanges",
     "cancel": "cancel"
-  },
-  "orgDelete": {
-    "deleteOrg": "Delete Org"
   },
   "membershipRequest": {
     "accept": "Accept",
@@ -2589,13 +2576,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Date N/A",
     "yes": "Yes",
     "no": "No",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees",
-    "viewEventDetails": "View event details"
+    "numberOfAttendees": "Number of attendees"
   },
   "promotedPost": {
     "title": "Promoted Content",
