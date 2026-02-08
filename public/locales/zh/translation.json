@@ -580,16 +580,6 @@
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
-  "orgAdminListCard": {
-    "remove": "消除",
-    "removeAdmin": "删除管理员",
-    "removeAdminMsg": "您想删除该管理员吗？",
-    "adminRemoved": "管理员被删除。",
-    "joined": "已加入",
-    "no": "否",
-    "yes": "是",
-    "talawaApiUnavailable": "塔拉瓦 API 不可用"
-  },
   "orgPeopleListCard": {
     "remove": "消除",
     "removeMember": "删除会员",
@@ -1297,9 +1287,6 @@
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
-  "orgDelete": {
-    "deleteOrg": "删除组织"
-  },
   "membershipRequest": {
     "accept": "接受",
     "reject": "拒绝",
@@ -1752,7 +1739,8 @@
     "invalidAmount": "请输入捐赠金额的数值。",
     "donationAmountDescription": "请输入捐款金额的数值。",
     "donationOutOfRange": "捐款金额必须在 {{min}} 和 {{max}} 之间。",
-    "donateTo": "捐赠给"
+    "donateTo": "捐赠给",
+    "selectCurrency": "选择货币"
   },
   "transactions": {
     "title": "交易",
@@ -2365,7 +2353,8 @@
     "invited": "已邀请",
     "groupsAvailable": "{{count}} 个小组可用",
     "volunteersRequired": "必需",
-    "signedUp": "已报名"
+    "signedUp": "已报名",
+    "volunteerTabs": "志愿者选项卡"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -2588,13 +2577,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "日期不可用",
     "yes": "是",
     "no": "否",
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
-    "numberOfAttendees": "出席人数",
-    "viewEventDetails": "查看活动详情"
+    "numberOfAttendees": "出席人数"
   },
   "promotedPost": {
     "title": "推广内容",

@@ -1,29 +1,24 @@
 import { TSESTree, AST_NODE_TYPES, TSESLint } from '@typescript-eslint/utils';
 import path from 'node:path';
 
-type MessageIds = 'preferCrud';
-
-export interface InterfaceRuleOptions {
-  keywords?: string[];
-  variants?: string[];
-  ignorePaths?: string[];
-  importPathPatterns?: string[];
-}
-
-type Options = [InterfaceRuleOptions?];
+/**
+ * @typedef {Object} InterfaceRuleOptions
+ * @property {string[]} [keywords] - Array of prop names that indicate CRUD context
+ * @property {string[]} [variants] - Array of component names to check
+ * @property {string[]} [ignorePaths] - Array of glob patterns for files to ignore
+ * @property {string[]} [importPathPatterns] - Array of import path patterns to match
+ */
 
 const DEFAULT_KEYWORDS = ['onSubmit', 'onConfirm', 'onPrimary', 'onSave'];
 const DEFAULT_VARIANTS = ['BaseModal'];
 const CRUD_IMPORT_PATH =
   'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
-/**
- * Simple glob matcher for file paths and patterns
- */
-const escapeRegExp = (input: string): string =>
+// Simple glob matcher for file paths and patterns
+const escapeRegExp = (input) =>
   input.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 
-const matchesGlob = (str: string, pattern: string): boolean => {
+const matchesGlob = (str, pattern) => {
   const escapedPattern = escapeRegExp(pattern);
 
   const regexPattern = escapedPattern
@@ -34,6 +29,22 @@ const matchesGlob = (str: string, pattern: string): boolean => {
 
   const regex = new RegExp(`^${regexPattern}$`);
   return regex.test(str);
+};
+
+/**
+ * Converts an ImportSpecifier to its string representation
+ * @type {(spec: ImportSpecifier) => string}
+ */
+const specifierToString = (spec) => {
+  const imported =
+    spec.imported.type === AST_NODE_TYPES.Identifier
+      ? spec.imported.name
+      : '';
+  const local = spec.local.name;
+  const typePrefix = spec.importKind === 'type' ? 'type ' : '';
+  return imported === local
+    ? `${typePrefix}${local}`
+    : `${typePrefix}${imported} as ${local}`;
 };
 
 /**
@@ -48,7 +59,7 @@ const matchesGlob = (str: string, pattern: string): boolean => {
  * - ignorePaths: Array of glob patterns for files to ignore
  * - importPathPatterns: Array of import path patterns to match
  */
-const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
+const preferCrudModalTemplate = {
   meta: {
     type: 'suggestion',
     docs: {
@@ -90,7 +101,8 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
     ],
   },
 
-  create(context: TSESLint.RuleContext<MessageIds, Options>) {
+  /** @type {(context: RuleContextType) => RuleListenerType} */
+  create(context) {
     const options = context.options[0] || {};
     const keywords = options.keywords || DEFAULT_KEYWORDS;
     const variants = options.variants || DEFAULT_VARIANTS;
@@ -114,13 +126,16 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
     }
 
     // Track BaseModal local names and their import declarations
-    const baseModalNames = new Set<string>();
-    const importDeclarations = new Map<string, TSESTree.ImportDeclaration>();
+    /** @type {Set<string>} */
+    const baseModalNames = new Set();
+    /** @type {Map<string, ImportDeclaration>} */
+    const importDeclarations = new Map();
 
     /**
      * Checks if an import path matches BaseModal patterns
+     * @type {(importPath: string) => boolean}
      */
-    const isTargetModalPath = (importPath: string): boolean => {
+    const isTargetModalPath = (importPath) => {
       // Check against custom import path patterns if provided
       if (importPathPatterns.length > 0) {
         return importPathPatterns.some((pattern) => {
@@ -145,23 +160,10 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
         );
       });
     };
-    /**
-     * Converts an ImportSpecifier to its string representation
-     */
-    const specifierToString = (spec: TSESTree.ImportSpecifier): string => {
-      const imported =
-        spec.imported.type === AST_NODE_TYPES.Identifier
-          ? spec.imported.name
-          : '';
-      const local = spec.local.name;
-      const typePrefix = spec.importKind === 'type' ? 'type ' : '';
-      return imported === local
-        ? `${typePrefix}${local}`
-        : `${typePrefix}${imported} as ${local}`;
-    };
+
     return {
-      // Collect BaseModal imports
-      ImportDeclaration(node: TSESTree.ImportDeclaration) {
+      /** @type {(node: ImportDeclaration) => void} */
+      ImportDeclaration(node) {
         if (typeof node.source.value !== 'string') return;
 
         const importPath = node.source.value;
@@ -192,8 +194,8 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
         });
       },
 
-      // Check JSX usage
-      JSXOpeningElement(node: TSESTree.JSXOpeningElement) {
+      /** @type {(node: JSXOpeningElement) => void} */
+      JSXOpeningElement(node) {
         // Get the component name from JSX element
         // Handle both JSXIdentifier (BaseModal) and JSXMemberExpression (UI.BaseModal)
         const elementName =
@@ -220,7 +222,8 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
           return false;
         });
 
-        const hasFormInExpression = (expr: TSESTree.Expression): boolean => {
+        /** @type {(expr: Expression) => boolean} */
+        const hasFormInExpression = (expr) => {
           if (expr.type === AST_NODE_TYPES.JSXElement) {
             const childName =
               expr.openingElement.name.type === AST_NODE_TYPES.JSXIdentifier
@@ -246,7 +249,8 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
           return false;
         };
 
-        const hasFormElement = (children: TSESTree.JSXChild[]): boolean =>
+        /** @type {(children: JSXChild[]) => boolean} */
+        const hasFormElement = (children) =>
           children.some((child) => {
             if (child.type === AST_NODE_TYPES.JSXElement) {
               const childName =
@@ -282,7 +286,7 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
             node: node,
             messageId: 'preferCrud',
             fix: importDecl
-              ? (fixer) => {
+              ? /** @type {(fixer: RuleFixer) => import('@typescript-eslint/utils').TSESLint.RuleFix} */ (fixer) => {
                   const localName = elementName;
 
                   // Check if import has multiple specifiers
@@ -351,7 +355,7 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
                           (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
                         )
                         .map((spec) =>
-                          specifierToString(spec as TSESTree.ImportSpecifier),
+                          specifierToString(spec),
                         )
                         .join(', ');
                       preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
@@ -361,7 +365,7 @@ const preferCrudModalTemplate: TSESLint.RuleModule<MessageIds, Options> = {
                       const namespaceSpec = otherSpecifiers.find(
                         (s) =>
                           s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
-                      ) as TSESTree.ImportNamespaceSpecifier;
+                      );
                       preservedImportStmt = `import * as ${namespaceSpec.local.name} from '${originalImportPath}';`;
                     } else {
                       preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;

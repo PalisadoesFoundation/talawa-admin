@@ -36,7 +36,6 @@ const restrictedImports = [
     message:
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
-
   {
     id: 'rb-form',
     name: 'react-bootstrap',
@@ -98,101 +97,96 @@ const restrictedImports = [
     name: '@testing-library/react',
     importNames: ['fireEvent'],
     message:
-      'Tests in this file use fireEvent for user interactions; our test standards require using userEvent from @testing-library/user-event for interaction fidelity and test reliability.',
+      'Tests in this file use fireEvent for user interactions; use userEvent from @testing-library/user-event instead.',
   },
   {
     name: '@mui/material',
     importNames: ['Chip'],
     message:
-      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component instead.',
   },
   {
     name: '@mui/material/Chip',
     message:
-      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component instead.',
   },
   {
     name: '@mui/material',
     importNames: ['TextField'],
     message:
-      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component instead.',
   },
   {
     name: '@mui/material/TextField',
     message:
-      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component instead.',
   },
   {
     name: '@mui/material',
     importNames: ['FormControl'],
     message:
-      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component instead.',
   },
   {
     name: '@mui/material/FormControl',
     message:
-      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component instead.',
   },
   {
     name: '@mui/material',
     importNames: ['Button'],
     message:
-      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component instead.',
   },
   {
     name: '@mui/material/Button',
     message:
-      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component instead.',
   },
   {
     id: 'rb-dropdown',
     name: 'react-bootstrap',
     importNames: ['Dropdown'],
     message:
-      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component instead.',
   },
   {
     id: 'rb-dropdown-path',
     name: 'react-bootstrap/Dropdown',
     message:
-      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component from src/shared-components/DropDownButton/ instead.',
+      'Do not import Dropdown directly from react-bootstrap. Use the shared DropDownButton component instead.',
   },
   {
     id: 'mui-autocomplete',
     name: '@mui/material',
     importNames: ['Autocomplete'],
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead. If you genuinely need Autocomplete (not for a dropdown), add your file to "scripts/eslint/config/exemptions.ts".',
+      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead.',
   },
   {
     id: 'mui-autocomplete-path',
     name: '@mui/material/Autocomplete',
     message:
-      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead. If you genuinely need Autocomplete (not for a dropdown), add your file to "scripts/eslint/config/exemptions.ts".',
+      'Do not import Autocomplete from @mui/material. Use the shared DropDownButton component with searchable={true} instead.',
   },
 ];
 
-// Helper functions for rule processing
-const stripId = (entry: {
-  id?: string;
-  name: string;
-  message?: string;
-  importNames?: string[];
-}) => {
+/**
+ * Removes `id` from a restriction entry (used by ESLint rule format)
+ * @param {{ id?: string, name: string, message?: string, importNames?: string[] }} entry
+ */
+const stripId = (entry) => {
   const { id: _id, ...rule } = entry;
   return rule;
 };
 
 const restrictedImportPaths = restrictedImports.map(stripId);
 
-const restrictImportsExcept = (
-  allowedIds: string[] = [],
-): {
-  'no-restricted-imports': readonly [
-    'error',
-    { paths: { name: string; message?: string; importNames?: string[] }[] },
-  ];
-} => ({
+/**
+ * Builds a no-restricted-imports rule allowing specific IDs
+ * @param {string[]} allowedIds
+ */
+const restrictImportsExcept = (allowedIds = []) => ({
   'no-restricted-imports': [
     'error',
     {
@@ -200,7 +194,7 @@ const restrictImportsExcept = (
         .filter(({ id }) => !id || !allowedIds.includes(id))
         .map(stripId),
     },
-  ] as const,
+  ],
 });
 
 export {

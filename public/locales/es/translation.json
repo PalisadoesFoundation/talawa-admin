@@ -575,16 +575,6 @@
     "addAdmin": "Agregar administrador",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
-  "orgAdminListCard": {
-    "joined": "Unido",
-    "remove": "Remover",
-    "removeAdmin": "Eliminar administrador",
-    "removeAdminMsg": "¿Quieres eliminar a este administrador?",
-    "no": "No",
-    "yes": "Sí",
-    "adminRemoved": "Se elimina el administrador.",
-    "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
-  },
   "orgPeopleListCard": {
     "joined": "Unido",
     "remove": "Remover",
@@ -1275,9 +1265,6 @@
     "passCantBeEmpty": "La contraseña no puede estar vacía",
     "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },
-  "orgDelete": {
-    "deleteOrg": "Eliminar organización"
-  },
   "membershipRequest": {
     "joined": "Unido",
     "accept": "Aceptar",
@@ -1735,7 +1722,8 @@
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
     "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
-    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}.",
+    "selectCurrency": "Seleccionar moneda"
   },
   "transactions": {
     "title": "Transacciones",
@@ -2348,7 +2336,8 @@
     "invited": "Invitado",
     "groupsAvailable": "{{count}} grupos disponibles",
     "volunteersRequired": "Requerido",
-    "signedUp": "Registrado"
+    "signedUp": "Registrado",
+    "volunteerTabs": "Pestañas de voluntarios"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -2588,13 +2577,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Fecha N/A",
     "yes": "Sí",
     "no": "No",
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
-    "numberOfAttendees": "Número de asistentes",
-    "viewEventDetails": "Ver detalles del evento"
+    "numberOfAttendees": "Número de asistentes"
   },
   "promotedPost": {
     "title": "Contenido Promocionado",
