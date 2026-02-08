@@ -51,11 +51,11 @@ import styles from './VolunteerManagement.module.css';
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} className="me-1" />,
+    icon: <TbCalendarEvent size={21} className="me-2" />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
+    icon: <FaRegEnvelopeOpen size={18} className="me-2" />,
   },
   { value: 'actions', icon: <FaTasks size={18} className="me-2" /> },
   { value: 'groups', icon: <FaUserGroup size={18} className="me-2" /> },
@@ -148,6 +148,34 @@ const VolunteerManagement = (): JSX.Element => {
     <div className="d-flex flex-column">
       <Row className="mt-4">
         <Col>
+          {/* Mobile Navigation */}
+          <div className="d-md-none d-flex align-items-center gap-2 mb-2">
+            <Button
+              size="sm"
+              variant="light"
+              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3 p-3"
+              onClick={handleBack}
+              data-testid="mobile-back-btn"
+            >
+              <FaChevronLeft cursor={'pointer'} />
+            </Button>
+            <DropDownButton
+              id="tabs-dropdown"
+              options={tabOptions}
+              selectedValue={tab}
+              onSelect={(val) => {
+                if (isTabOption(val)) setTab(val);
+              }}
+              variant="success"
+              btnStyle={styles.dropdown}
+              dataTestIdPrefix="tabs-dropdown"
+              buttonLabel={t(tab)}
+              parentContainerStyle="flex-grow-1 w-100"
+              ariaLabel={t('volunteerTabs')}
+            />
+          </div>
+
+          {/* Desktop Navigation */}
           <div className="d-none d-md-flex gap-3">
             <Button
               size="sm"
@@ -162,23 +190,9 @@ const VolunteerManagement = (): JSX.Element => {
             </Button>
             {volunteerDashboardTabs.map(renderButton)}
           </div>
-          <DropDownButton
-            id="tabs-dropdown"
-            options={tabOptions}
-            selectedValue={tab}
-            onSelect={(val) => {
-              if (isTabOption(val)) setTab(val);
-            }}
-            variant="success"
-            btnStyle={styles.dropdown}
-            dataTestIdPrefix="tabs-dropdown"
-            buttonLabel={t(tab)}
-            parentContainerStyle="d-md-none"
-            ariaLabel={t('volunteerTabs')}
-          />
         </Col>
 
-        <Row className="mt-3">
+        <Row className="mt-4">
           <hr />
         </Row>
       </Row>

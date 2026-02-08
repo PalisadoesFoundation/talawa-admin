@@ -143,75 +143,99 @@ describe('Volunteer Management', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
-    });
+    // Use findBy instead of getBy inside waitFor
+    const paramsError = await screen.findByTestId('paramsError');
+    expect(paramsError).toBeInTheDocument();
   });
 
   test('Render Volunteer Management Screen', async () => {
     renderVolunteerManagement();
 
+    // Wait for initial render
     const upcomingEventsTab = await screen.findByTestId('upcomingEventsTab');
     expect(upcomingEventsTab).toBeInTheDocument();
-    expect(screen.getByTestId('invitationsBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('actionsBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('groupsBtn')).toBeInTheDocument();
+
+    // These should all be present now, but use findBy to be safe
+    expect(await screen.findByTestId('invitationsBtn')).toBeInTheDocument();
+    expect(await screen.findByTestId('actionsBtn')).toBeInTheDocument();
+    expect(await screen.findByTestId('groupsBtn')).toBeInTheDocument();
   });
 
   test('Testing back button navigation', async () => {
     renderVolunteerManagement();
 
-    const backButton = screen
-      .getByTestId('chevron-left-icon')
-      .closest('button');
+    // Wait for component to render
+    await screen.findByTestId('mobile-back-btn');
+
+    const backButton = screen.getByTestId('mobile-back-btn');
     expect(backButton).toBeInTheDocument();
 
     await userEvent.click(backButton as HTMLButtonElement);
-    await waitFor(() => {
-      const orgHome = screen.getByTestId('orgHome');
-      expect(orgHome).toBeInTheDocument();
-    });
+
+    // Use findBy instead of getBy inside waitFor
+    const orgHome = await screen.findByTestId('orgHome');
+    expect(orgHome).toBeInTheDocument();
   });
 
   test('Testing volunteer management tab switching', async () => {
     renderVolunteerManagement();
 
-    const invitationsBtn = screen.getByTestId('invitationsBtn');
+    // Wait for initial render
+    await screen.findByTestId('upcomingEventsTab');
+
+    // Click invitations
+    const invitationsBtn = await screen.findByTestId('invitationsBtn');
     await userEvent.click(invitationsBtn);
 
-    const invitationsTab = screen.getByTestId('invitationsTab');
+    // Wait for tab to appear
+    const invitationsTab = await screen.findByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
 
-    const actionsBtn = screen.getByTestId('actionsBtn');
+    // Click actions
+    const actionsBtn = await screen.findByTestId('actionsBtn');
     await userEvent.click(actionsBtn);
 
-    const actionsTab = screen.getByTestId('actionsTab');
+    // Wait for tab to appear
+    const actionsTab = await screen.findByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
 
-    const groupsBtn = screen.getByTestId('groupsBtn');
+    // Click groups
+    const groupsBtn = await screen.findByTestId('groupsBtn');
     await userEvent.click(groupsBtn);
 
-    const groupsTab = screen.getByTestId('groupsTab');
+    // Wait for tab to appear
+    const groupsTab = await screen.findByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();
   });
+
   test('Component should highlight the selected tab', async () => {
     renderVolunteerManagement();
 
-    const upcomingEventsBtn = screen.getByTestId('upcomingEventsBtn');
-    const invitationsBtn = screen.getByTestId('invitationsBtn');
+    // Wait for initial render
+    await screen.findByTestId('upcomingEventsTab');
+
+    const upcomingEventsBtn = await screen.findByTestId('upcomingEventsBtn');
+    const invitationsBtn = await screen.findByTestId('invitationsBtn');
+
     // Click the invitations tab
     await userEvent.click(invitationsBtn);
+
     await waitFor(() => {
       expect(invitationsBtn).toHaveClass('btn-success');
       expect(upcomingEventsBtn).not.toHaveClass('btn-success');
     });
   });
+
   test('should update the component state on tab switch', async () => {
     renderVolunteerManagement();
 
-    const actionsBtn = screen.getByTestId('actionsBtn');
+    // Wait for initial render
+    await screen.findByTestId('upcomingEventsTab');
+
+    const actionsBtn = await screen.findByTestId('actionsBtn');
     await userEvent.click(actionsBtn);
-    const actionsTab = screen.getByTestId('actionsTab');
+
+    const actionsTab = await screen.findByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
   });
 
@@ -244,21 +268,24 @@ describe('Volunteer Management', () => {
   test('Testing mobile dropdown switches to actions tab', async () => {
     renderVolunteerManagement();
 
-    // Open dropdown
+    // Wait for initial render
+    await screen.findByTestId('upcomingEventsTab');
+
     const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and verify it's open
+    // Wait for menu to open
     await screen.findByTestId('tabs-dropdown-menu');
 
-    const actionsItem = screen.getByTestId('tabs-dropdown-item-actions');
+    // Wait for specific item to be available
+    const actionsItem = await screen.findByTestId('tabs-dropdown-item-actions');
     await userEvent.click(actionsItem);
 
-    // Verify that actions tab is now displayed
+    // Wait for tab to render
     const actionsTab = await screen.findByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
 
-    // Verify dropdown closed after selection
+    // Wait for dropdown to close
     await waitFor(() => {
       expect(dropdownToggle).toHaveAttribute('aria-expanded', 'false');
     });
@@ -267,6 +294,8 @@ describe('Volunteer Management', () => {
   test('Testing mobile dropdown switches to groups tab', async () => {
     renderVolunteerManagement();
 
+    await screen.findByTestId('upcomingEventsTab');
+
     // Open dropdown
     const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
     await userEvent.click(dropdownToggle);
@@ -274,7 +303,7 @@ describe('Volunteer Management', () => {
     // Find dropdown menu and verify it's open
     await screen.findByTestId('tabs-dropdown-menu');
 
-    const groupsItem = screen.getByTestId('tabs-dropdown-item-groups');
+    const groupsItem = await screen.findByTestId('tabs-dropdown-item-groups');
     await userEvent.click(groupsItem);
 
     // Verify that groups tab is now displayed
@@ -290,8 +319,10 @@ describe('Volunteer Management', () => {
   test('Testing mobile dropdown switches to upcomingEvents tab', async () => {
     renderVolunteerManagement();
 
+    await screen.findByTestId('upcomingEventsTab');
+
     // First switch to a different tab
-    const invitationsBtn = screen.getByTestId('invitationsBtn');
+    const invitationsBtn = await screen.findByTestId('invitationsBtn');
     await userEvent.click(invitationsBtn);
     expect(screen.getByTestId('invitationsTab')).toBeInTheDocument();
 
@@ -302,7 +333,7 @@ describe('Volunteer Management', () => {
     // Find dropdown menu and verify it's open
     await screen.findByTestId('tabs-dropdown-menu');
 
-    const upcomingEventsItem = screen.getByTestId(
+    const upcomingEventsItem = await screen.findByTestId(
       'tabs-dropdown-item-upcomingEvents',
     );
     await userEvent.click(upcomingEventsItem);
