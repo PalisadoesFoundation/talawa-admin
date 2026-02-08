@@ -5,7 +5,8 @@
   max-width: var(--space-27);
   margin: 0 auto var(--space-7);
   border-radius: var(--radius-md);
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg) var(--color-gray-100);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
+    var(--color-gray-100);
   overflow: hidden;
 }
 
