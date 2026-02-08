@@ -35,10 +35,10 @@ beforeAll(() => {
 
 // Basic cleanup after each test
 afterEach(() => {
-  cleanup();
-  // Ensure any pending timers are flushed before cleanup
+  // Flush pending timers before cleanup to prevent state updates on unmounted components
   vi.runOnlyPendingTimers();
   vi.useRealTimers();
+  cleanup();
   vi.clearAllMocks();
 });
 
