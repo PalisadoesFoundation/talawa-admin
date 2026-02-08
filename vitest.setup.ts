@@ -36,7 +36,9 @@ beforeAll(() => {
 // Basic cleanup after each test
 afterEach(() => {
   // Flush pending timers before cleanup to prevent state updates on unmounted components
-  vi.runOnlyPendingTimers();
+  if (vi.isFakeTimers()) {
+    vi.runOnlyPendingTimers();
+  }
   vi.useRealTimers();
   cleanup();
   vi.clearAllMocks();
