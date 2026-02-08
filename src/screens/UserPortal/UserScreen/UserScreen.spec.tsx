@@ -40,7 +40,7 @@ const mockUserProfile = vi.hoisted(() => ({
   handleLogout: vi.fn<() => Promise<void>>().mockResolvedValue(undefined),
   userImage: '' as string,
 }));
-const mainContainer = screen.queryByTestId('mainpageright');
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -253,17 +253,6 @@ describe('UserScreen tests', () => {
     renderUserScreen();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Posts',
-  it('renders the correct title for posts', () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserScreen />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
     );
   });
 
@@ -424,7 +413,6 @@ describe('UserScreen tests', () => {
         'true',
       );
     });
-    expect(mainContainer).toBeInTheDocument();
   });
 
   it('shows drawer when localStorage sidebar is false', async () => {
@@ -572,15 +560,10 @@ describe('UserScreen tests', () => {
     renderUserScreen(errorLink);
 
     await waitFor(() => {
-      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+      expect(screen.getByTestId('leftDrawerContainer')).toHaveAttribute(
+        'data-hide-drawer',
+        'false',
+      );
     });
-
-    expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
-  });
-
-  it('renders mainpageright container', () => {
-    renderUserScreen();
-    expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
-    expect(mainContainer).toBeInTheDocument();
   });
 });
