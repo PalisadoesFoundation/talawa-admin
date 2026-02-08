@@ -162,7 +162,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           : t('postCard.postPinnedSuccess'),
       );
       setDropdownAnchor(null);
-      window.location.reload();
     } catch (error) {
       errorHandler(t, error);
     }
