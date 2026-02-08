@@ -36,6 +36,9 @@ beforeAll(() => {
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
+  // Ensure any pending timers are flushed before cleanup
+  vi.runOnlyPendingTimers();
+  vi.useRealTimers();
   vi.clearAllMocks();
 });
 
