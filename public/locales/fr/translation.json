@@ -1751,7 +1751,8 @@
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
     "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don.",
     "donationOutOfRange": "Le montant du don doit être compris entre {{min}} et {{max}}.",
-    "donateTo": "Faire un don à"
+    "donateTo": "Faire un don à",
+    "selectCurrency": "Sélectionner la devise"
   },
   "transactions": {
     "title": "Transactions",
@@ -2364,7 +2365,8 @@
     "invited": "Invité",
     "groupsAvailable": "{{count}} groupes disponibles",
     "volunteersRequired": "Requis",
-    "signedUp": "Inscrit"
+    "signedUp": "Inscrit",
+    "volunteerTabs": "Onglets bénévoles"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
