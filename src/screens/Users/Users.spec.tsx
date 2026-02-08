@@ -4,7 +4,7 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -21,10 +21,9 @@ import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import * as ApolloClient from '@apollo/client';
-import type { OperationVariables } from '@apollo/client';
 
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+
+
 
 const { setItem, removeItem } = useLocalStorage();
 
@@ -32,17 +31,18 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_NEW, true);
-const link6 = new StaticMockLink(MOCKS_NEW2, true);
-const link7 = new StaticMockLink(MOCKS_NEW3, true);
 
-async function wait(ms = 1000): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+
+// Helper to wait for async operations with fake timers
+// Using shouldAdvanceTime: true makes this compatible with userEvent
+async function waitForAsync(ms = 1000): Promise<void> {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, ms));
   });
 }
 beforeEach(() => {
+  // shouldAdvanceTime: true makes fake timers compatible with userEvent
+  vi.useFakeTimers({ shouldAdvanceTime: true });
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
@@ -68,7 +68,7 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
     expect(screen.getByTestId('testcomp')).toBeInTheDocument();
   });
 
@@ -76,7 +76,7 @@ describe('Testing Users screen', () => {
   and or userId does not exists in localstorage`, async () => {
     setItem('AdminFor', ['123']);
     removeItem('SuperAdmin');
-    await wait();
+    await waitForAsync();
     setItem('id', '');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -89,13 +89,13 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitForAsync();
   });
 
   it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
     removeItem('AdminFor');
     removeItem('SuperAdmin');
-    await wait();
+    await waitForAsync();
     removeItem('id');
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -108,7 +108,7 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitForAsync();
   });
 
   it('Component should be rendered properly when user is superAdmin', async () => {
@@ -124,7 +124,7 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
   });
 
   it('Testing seach by name functionality', async () => {
@@ -140,12 +140,12 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
     const searchBtn = screen.getByTestId('searchButton');
     const search1 = 'John';
     await userEvent.type(screen.getByTestId(/searchByName/i), search1);
     await userEvent.click(searchBtn);
-    await wait();
+    await waitForAsync();
     expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
 
     const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
@@ -162,7 +162,7 @@ describe('Testing Users screen', () => {
     await userEvent.type(screen.getByTestId(/searchByName/i), search5);
     await userEvent.clear(screen.getByTestId(/searchByName/i));
     await userEvent.click(searchBtn);
-    await wait();
+    await waitForAsync();
   });
 
   it('testing search not found', async () => {
@@ -179,7 +179,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await waitForAsync();
 
     const searchBtn = screen.getByTestId('searchButton');
     const searchInput = screen.getByTestId(/searchByName/i);
@@ -293,7 +293,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await waitForAsync();
 
     const searchInput = screen.getByTestId('filter');
     expect(searchInput).toBeInTheDocument();
@@ -346,7 +346,7 @@ describe('Testing Users screen', () => {
       fireEvent.click(toggleTite);
     });
 
-    await wait();
+    await waitForAsync();
 
     expect(searchInput).toBeInTheDocument();
   });
@@ -365,7 +365,7 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
     rerender(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
@@ -378,7 +378,7 @@ describe('Testing Users screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitForAsync();
   });
 
   it('Check if pressing enter key triggers search', async () => {
@@ -396,7 +396,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
     });
-    await wait();
+    await waitForAsync();
     const searchInput = screen.getByTestId('searchByName');
 
     await act(async () => {
@@ -453,14 +453,14 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait();
+      await waitForAsync();
 
       // Simulate scroll to trigger load more
       await act(async () => {
         fireEvent.scroll(window, { target: { scrollY: 1000 } });
       });
 
-      await wait(500); // Give time for data to load
+      await waitForAsync(500); // Give time for data to load
     });
   });
 

@@ -1,12 +1,10 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
-import {
-  act,
+act,
   render,
   screen,
   fireEvent,
-  cleanup,
   waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -547,22 +545,22 @@ const mockConfigurations = {
   ],
 };
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
+// Helper to wait for async operations with fake timers
+// Using shouldAdvanceTime: true makes this compatible with userEvent
+async function waitForAsync(ms = 100): Promise<void> {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, ms));
   });
 }
 
 beforeEach(() => {
+  // shouldAdvanceTime: true makes fake timers compatible with userEvent
+  vi.useFakeTimers({ shouldAdvanceTime: true });
   vi.spyOn(Storage.prototype, 'setItem');
 });
 
 afterEach(() => {
   localStorage.clear();
-  cleanup();
-  vi.clearAllMocks();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
@@ -570,7 +568,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitForAsync();
 
     // Test that the search bar filters organizations by name
     const searchBar = screen.getByTestId(/searchInput/i);
@@ -582,7 +580,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitForAsync();
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
@@ -594,7 +592,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('basic');
 
     renderWithProviders();
-    await wait();
+    await waitForAsync();
 
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
@@ -606,7 +604,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitForAsync();
 
     const searchBar = screen.getByTestId('searchInput');
     expect(searchBar).toBeInTheDocument();
@@ -614,17 +612,15 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Type multiple characters quickly to test debouncing
     await userEvent.type(searchBar, 'Dum');
 
-    // Wait for debounce delay (300ms)
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
+    // Wait for debounce delay (300ms) - use fake timers
+    vi.advanceTimersByTime(350);
   });
 
   test('Testing immediate search on Enter key press', async () => {
     setupUser('superAdmin');
 
     renderWithProviders();
-    await wait();
+    await waitForAsync();
 
     const searchBar = screen.getByTestId('searchInput');
     expect(searchBar).toBeInTheDocument();
@@ -640,7 +636,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithOrgData = createOrgMock(mockOrgData.singleOrg);
     renderWithMocks(mockWithOrgData);
-    await wait();
+    await waitForAsync();
 
     // Check if pagination component is rendered (should appear when there are organizations)
     const paginationElement = screen.getByTestId('table-pagination');
@@ -652,7 +648,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
-    await wait();
+    await waitForAsync();
 
     // Check if pagination component is rendered
     const paginationElement = screen.getByTestId('table-pagination');
@@ -669,7 +665,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await wait();
+    await waitForAsync();
 
     // Verify pagination component is rendered
     const paginationElement = screen.getByTestId('table-pagination');
@@ -682,7 +678,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await wait();
+    await waitForAsync();
 
     // Verify default rows per page is 5
     const rowsPerPageSelect = screen.getByDisplayValue('5');
@@ -691,7 +687,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     // Change rows per page to 10
     fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
 
-    await wait();
+    await waitForAsync();
   });
 
   test('Testing pagination with search integration', async () => {
@@ -699,7 +695,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setItem('role', 'administrator');
 
     renderWithMocks(mockConfigurations.searchableMocks);
-    await wait();
+    await waitForAsync();
 
     // Verify pagination is present initially
     const paginationElement = screen.getByTestId('table-pagination');
@@ -709,10 +705,8 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, 'Dog');
 
-    // Wait for debounce
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
+    // Wait for debounce - use fake timers
+    vi.advanceTimersByTime(350);
 
     // After search, pagination should still be present
     const paginationAfterSearch = screen.getByTestId('table-pagination');
@@ -725,7 +719,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     renderWithProviders(mockLinks.empty);
 
-    await wait();
+    await waitForAsync();
     expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
     expect(
       screen.queryByText('Please create an organization through dashboard'),
@@ -737,7 +731,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     renderWithProviders(mockLinks.empty);
 
-    await wait();
+    await waitForAsync();
   });
 
   test('testing scroll', async () => {
@@ -764,7 +758,7 @@ describe('Organisations Page testing as Admin', () => {
 
     renderWithProviders(mockLinks.admin);
 
-    await wait();
+    await waitForAsync();
 
     const sortDropdown = screen.getByTestId('sort');
     expect(sortDropdown).toBeInTheDocument();
@@ -819,7 +813,7 @@ describe('Plugin Modal Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open organization creation modal
     await userEvent.click(screen.getByTestId('createOrganizationBtn'));
@@ -910,7 +904,7 @@ describe('Advanced Component Functionality Tests', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitForAsync();
 
     // Verify pagination is shown even with single organization
     const paginationElement = screen.getByTestId('table-pagination');
@@ -919,7 +913,7 @@ describe('Advanced Component Functionality Tests', () => {
     // Test pagination with rowsPerPage = 0 edge case
     const rowsPerPageSelect = screen.getByDisplayValue('5');
     fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
-    await wait();
+    await waitForAsync();
   });
 
   test('Testing handleChangePage pagination navigation', async () => {
@@ -930,7 +924,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
-    await wait();
+    await waitForAsync();
 
     // Verify pagination component is rendered
     const paginationElement = screen.getByTestId('table-pagination');
@@ -943,7 +937,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     if (nextPageButton && !nextPageButton.hasAttribute('disabled')) {
       fireEvent.click(nextPageButton);
-      await wait(200);
+      await waitForAsync(200);
     }
   });
 
@@ -956,7 +950,7 @@ describe('Advanced Component Functionality Tests', () => {
     // Use multipleOrgs with different dates to ensure sorting logic is executed
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
-    await wait();
+    await waitForAsync();
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
@@ -966,7 +960,7 @@ describe('Advanced Component Functionality Tests', () => {
     const latestOption = screen.getByTestId('Latest');
     await userEvent.click(latestOption);
 
-    await wait(200);
+    await waitForAsync(200);
 
     // Verify the sort was applied
     expect(sortButton).toHaveTextContent('Latest');
@@ -981,7 +975,7 @@ describe('Advanced Component Functionality Tests', () => {
     // Use multipleOrgs with different dates
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
-    await wait();
+    await waitForAsync();
 
     // Open sort dropdown
     const sortButton = screen.getByTestId('sortOrgs');
@@ -991,7 +985,7 @@ describe('Advanced Component Functionality Tests', () => {
     const earliestOption = screen.getByTestId('Earliest');
     await userEvent.click(earliestOption);
 
-    await wait(200);
+    await waitForAsync(200);
 
     // Verify the sort was applied
     expect(sortButton).toHaveTextContent('Earliest');
@@ -1018,7 +1012,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open organization creation modal
     await userEvent.click(screen.getByTestId('createOrganizationBtn'));
@@ -1073,7 +1067,7 @@ describe('Advanced Component Functionality Tests', () => {
     const mockWithOrgs = createOrgMock(mockOrgData.singleOrg);
 
     renderWithMocks(mockWithOrgs);
-    await wait();
+    await waitForAsync();
 
     // Verify modal is not open initially
     expect(
@@ -1084,7 +1078,7 @@ describe('Advanced Component Functionality Tests', () => {
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
     fireEvent.click(createOrgBtn);
 
-    await wait();
+    await waitForAsync();
 
     // Verify modal is open
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
@@ -1111,7 +1105,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open organization creation modal
     await userEvent.click(screen.getByTestId('createOrganizationBtn'));
@@ -1178,7 +1172,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open and fill the form
     await userEvent.click(screen.getByTestId('createOrganizationBtn'));
@@ -1272,13 +1266,13 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open modal
     const createOrgBtn = screen.getByTestId('createOrganizationBtn');
     fireEvent.click(createOrgBtn);
 
-    await wait();
+    await waitForAsync();
 
     // Fill form
     await userEvent.type(
@@ -1313,7 +1307,7 @@ describe('Advanced Component Functionality Tests', () => {
     // Submit form
     await userEvent.click(screen.getByTestId('submitOrganizationForm'));
 
-    await wait();
+    await waitForAsync();
   });
 
   test('Testing no results found message when search returns empty', async () => {
@@ -1347,7 +1341,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     renderWithMocks(mocksWithSearch);
-    await wait();
+    await waitForAsync();
 
     // Type search term
     const searchInput = screen.getByTestId('searchInput');
@@ -1357,7 +1351,7 @@ describe('Advanced Component Functionality Tests', () => {
     const searchBtn = screen.getByTestId('searchBtn');
     fireEvent.click(searchBtn);
 
-    await wait();
+    await waitForAsync();
 
     // Check for "no results found" message
     expect(screen.getByTestId('noResultFound')).toBeInTheDocument();
@@ -1383,7 +1377,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
@@ -1395,7 +1389,7 @@ describe('Advanced Component Functionality Tests', () => {
     const earliestOption = screen.getByTestId('Earliest');
     await userEvent.click(earliestOption);
 
-    await wait();
+    await waitForAsync();
 
     // Verify sorting changed
     expect(sortDropdown).toHaveTextContent('Earliest');
@@ -1410,7 +1404,7 @@ describe('Advanced Component Functionality Tests', () => {
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
 
-    await wait();
+    await waitForAsync();
 
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
@@ -1422,13 +1416,13 @@ describe('Advanced Component Functionality Tests', () => {
     const latestOption = screen.getByTestId('Latest');
     await userEvent.click(latestOption);
 
-    await wait();
+    await waitForAsync();
 
     // Verify sorting changed
     expect(sortDropdown).toHaveTextContent('Latest');
 
     // Wait a bit for the sort to be applied
-    await wait(200);
+    await waitForAsync(200);
   });
 
   test('Testing date-based sorting with Latest and Earliest', async () => {
@@ -1440,7 +1434,7 @@ describe('Advanced Component Functionality Tests', () => {
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
 
-    await wait();
+    await waitForAsync();
 
     const sortDropdown = screen.getByTestId('sortOrgs');
 
@@ -1448,13 +1442,13 @@ describe('Advanced Component Functionality Tests', () => {
     await userEvent.click(sortDropdown);
     const latestOption = screen.getByTestId('Latest');
     await userEvent.click(latestOption);
-    await wait(200);
+    await waitForAsync(200);
 
     // Test Earliest sorting (dateA - dateB path)
     await userEvent.click(sortDropdown);
     const earliestOption = screen.getByTestId('Earliest');
     await userEvent.click(earliestOption);
-    await wait(200);
+    await waitForAsync(200);
   });
 
   test('Testing handleChangeRowsPerPage functionality', async () => {
@@ -1477,7 +1471,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Find all select elements (pagination uses MUI Select)
     const selects = screen.queryAllByRole('combobox');
@@ -1486,7 +1480,7 @@ describe('Advanced Component Functionality Tests', () => {
       // Trigger the select to ensure the handler is tested
       const paginationSelect = selects[0];
       fireEvent.mouseDown(paginationSelect);
-      await wait(100);
+      await waitForAsync(100);
     }
 
     // Test passes - we've exercised the pagination component
@@ -1569,7 +1563,7 @@ describe('Advanced Component Functionality Tests', () => {
     );
 
     // Wait for error to be processed
-    await wait(500);
+    await waitForAsync(500);
 
     // The error handler should have been called
     // Note: Depending on error handler implementation, these may or may not be called
@@ -1664,7 +1658,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Get pagination controls
     const paginationElement = screen.getByTestId('table-pagination');
@@ -1678,7 +1672,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     if (nextButton && !nextButton.hasAttribute('disabled')) {
       fireEvent.click(nextButton);
-      await wait(200);
+      await waitForAsync(200);
     }
 
     // Also test previous button
@@ -1688,7 +1682,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     if (prevButton && !prevButton.hasAttribute('disabled')) {
       fireEvent.click(prevButton);
-      await wait(200);
+      await waitForAsync(200);
     }
   });
 
@@ -1808,13 +1802,13 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitForAsync();
 
     // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
 
-    await wait();
+    await waitForAsync();
 
     // Fill the form with values matching our mock
     await userEvent.type(
@@ -1873,7 +1867,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     const mocks = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mocks);
-    await wait();
+    await waitForAsync();
 
     // Verify organizations are loaded by checking for one of them
     const orgs = screen.queryAllByRole('img');
@@ -1883,20 +1877,20 @@ describe('Advanced Component Functionality Tests', () => {
     const searchInput = screen.queryByTestId('searchInput');
     if (searchInput) {
       await userEvent.clear(searchInput);
-      await wait(100);
+      await waitForAsync(100);
     }
 
     // Find and open sort dropdown
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
     await userEvent.click(sortDropdown);
-    await wait(100);
+    await waitForAsync(100);
 
     // Select "Earliest" option to verify ascending date sort works correctly
     const earliestOption = screen.getByTestId('Earliest');
     expect(earliestOption).toBeInTheDocument();
     await userEvent.click(earliestOption);
-    await wait(300); // Give more time for re-render
+    await waitForAsync(300); // Give more time for re-render
 
     // Verify sorting was applied
     expect(sortDropdown).toHaveTextContent('Earliest');
@@ -1955,12 +1949,12 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     renderWithMocks(completeMocks);
-    await wait();
+    await waitForAsync();
 
     // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
-    await wait();
+    await waitForAsync();
 
     // Fill and submit form with exact values matching our mock
     await userEvent.type(
@@ -2003,7 +1997,7 @@ describe('Advanced Component Functionality Tests', () => {
         { timeout: 3000 },
       );
       await userEvent.click(enableEverythingBtn);
-      await wait(200);
+      await waitForAsync(200);
     } catch {
       // If button doesn't appear, test still passes
     }
@@ -2062,12 +2056,12 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     renderWithMocks(completeMocks);
-    await wait();
+    await waitForAsync();
 
     // Create an organization to trigger the plugin modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
-    await wait();
+    await waitForAsync();
 
     // Fill and submit form with exact values matching our mock
     await userEvent.type(
@@ -2117,7 +2111,7 @@ describe('Advanced Component Functionality Tests', () => {
       const closeButtons = screen.queryAllByLabelText(/close/i);
       if (closeButtons.length > 0) {
         await userEvent.click(closeButtons[closeButtons.length - 1]);
-        await wait(200);
+        await waitForAsync(200);
       }
     } catch {
       // If modal doesn't appear, test still passes
