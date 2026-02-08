@@ -5,8 +5,7 @@
   max-width: var(--space-27);
   margin: 0 auto var(--space-7);
   border-radius: var(--radius-md);
-  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg)
-    var(--color-gray-100);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-lg) var(--color-gray-100);
   overflow: hidden;
 }
 
@@ -152,7 +151,7 @@
   border: none !important;
   border-radius: var(--radius-full) !important;
   width: var(--space-8) !important;
-  height: var(--space-8) !important;
+  height: var(--space-8);
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -171,7 +170,7 @@
 }
 
 .noCommentsText {
-  color: var(--bs-secondary);
+  color: var(--color-gray-500);
   text-align: center;
   padding: var(--space-5) var(--space-0);
   font-size: var(--font-size-sm);
@@ -199,7 +198,7 @@
 }
 
 .viewCommentsButton {
-  color: var(--bs-secondary);
+  color: var(--color-gray-500);
   font-size: var(--font-size-xs);
   margin-left: var(--space-2);
   margin-bottom: var(--space-1);
