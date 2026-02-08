@@ -18,10 +18,9 @@ dayjs.extend(utc);
 
 /* -------------------- Dynamic Dates -------------------- */
 
-const latestDate = dayjs.utc().subtract(1, 'day');
-const middleDate = dayjs.utc().subtract(2, 'day');
-const oldestDate = dayjs.utc().subtract(3, 'day');
-
+const latestDate = dayjs.utc('2026-02-07T10:30:00.000Z');
+const middleDate = dayjs.utc('2026-02-06T14:45:00.000Z');
+const oldestDate = dayjs.utc('2026-02-05T09:15:00.000Z');
 /* -------------------- Mock Data -------------------- */
 
 const mockTags = [
