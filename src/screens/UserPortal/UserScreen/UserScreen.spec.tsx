@@ -179,7 +179,6 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
     cleanup();
     localStorage.removeItem('name');
     localStorage.removeItem('sidebar');

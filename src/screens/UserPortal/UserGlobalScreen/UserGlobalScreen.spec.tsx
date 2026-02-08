@@ -31,6 +31,7 @@ vi.mock('shared-components/DropDownButton', () => ({
       data-variant={props.variant}
       data-menu-class={props.menuClassName}
       data-show-caret={props.showCaret}
+      role="menu"
       aria-label={props.ariaLabel}
     >
       {props.icon}
@@ -47,6 +48,13 @@ vi.mock('shared-components/DropDownButton', () => ({
             </button>
           ),
         )}
+        <button
+          type="button"
+          data-testid="option-unknownKey"
+          onClick={() => props.onSelect && props.onSelect('unknownKey')}
+        >
+          Unknown
+        </button>
       </div>
     </div>
   )),
@@ -142,6 +150,27 @@ describe('UserGlobalScreen', () => {
     );
   };
 
+  const overrideUserProfile = async (
+    overrides: Partial<InterfaceUseUserProfileReturn> = {},
+  ) => {
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg', // Default valid image
+        profileDestination: '/user/profile',
+        handleLogout: vi.fn(),
+        tCommon: (key: string) => key,
+        ...overrides,
+      }),
+    );
+  };
+
   describe('Component Rendering', () => {
     it('should render all required components', () => {
       renderComponent();
@@ -173,22 +202,7 @@ describe('UserGlobalScreen', () => {
 
     it('should render Avatar fallback when userImage is falsy', async () => {
       // Mock useUserProfile to return empty userImage
-      const useUserProfileMock = await import('hooks/useUserProfile');
-      // Verify we are mocking the default export
-      const mockUseUserProfile =
-        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-
-      mockUseUserProfile.mockImplementation(
-        (): InterfaceUseUserProfileReturn => ({
-          name: 'Test User',
-          displayedName: 'Test User',
-          userRole: 'User',
-          userImage: '', // Falsy value
-          profileDestination: '/user/profile',
-          handleLogout: vi.fn(),
-          tCommon: (key: string) => key,
-        }),
-      );
+      await overrideUserProfile({ userImage: '' });
 
       renderComponent();
 
@@ -212,21 +226,7 @@ describe('UserGlobalScreen', () => {
       const user = userEvent.setup();
       // Mock userProfile hook to capture handleLogout
       const handleLogoutMock = vi.fn();
-      const useUserProfileMock = await import('hooks/useUserProfile');
-      // Cast the default export to a Mock function
-      const mockUseUserProfile =
-        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-      mockUseUserProfile.mockImplementation(
-        (): InterfaceUseUserProfileReturn => ({
-          name: 'Test User',
-          displayedName: 'Test User',
-          userRole: 'User',
-          userImage: 'test-image.jpg',
-          profileDestination: '/user/profile',
-          handleLogout: handleLogoutMock,
-          tCommon: (key: string) => key,
-        }),
-      );
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
 
       renderComponent();
 
@@ -237,43 +237,15 @@ describe('UserGlobalScreen', () => {
     });
 
     it('should handle unknown eventKey in DropDownButton', async () => {
+      const user = userEvent.setup();
       // Mock userProfile hook to capture handleLogout
       const handleLogoutMock = vi.fn();
-      const useUserProfileMock = await import('hooks/useUserProfile');
-      const mockUseUserProfile =
-        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
-
-      mockUseUserProfile.mockImplementation(
-        (): InterfaceUseUserProfileReturn => ({
-          name: 'Test User',
-          displayedName: 'Test User',
-          userRole: 'User',
-          userImage: 'test-image.jpg',
-          profileDestination: '/user/profile',
-          handleLogout: handleLogoutMock,
-          tCommon: (key: string) => key,
-        }),
-      );
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
 
       renderComponent();
 
-      // We need to trigger the onSelect prop of DropDownButton with an unknown key
-      // Since our mock implementation renders buttons for options, we can't easily click an "unknown" option.
-      // However, we can access the mock call args to get the onSelect function.
-      const DropDownButtonMock =
-        await import('shared-components/DropDownButton');
-      const mockDropDownButton =
-        DropDownButtonMock.default as unknown as ReturnType<typeof vi.fn>;
-
-      // Get the last call to DropDownButton
-      const lastCall =
-        mockDropDownButton.mock.calls[mockDropDownButton.mock.calls.length - 1];
-      const props = lastCall[0];
-
-      // Invoke onSelect with unknown key
-      act(() => {
-        props.onSelect('unknownKey');
-      });
+      const unknownOption = screen.getByTestId('option-unknownKey');
+      await user.click(unknownOption);
 
       // Assert that nothing happened
       expect(routerSpies.navigate).not.toHaveBeenCalled();
