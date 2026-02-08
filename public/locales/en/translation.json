@@ -1734,7 +1734,8 @@
     "invalidAmount": "Please enter a numerical value for the donation amount.",
     "donationAmountDescription": "Please enter the numerical value for the donation amount.",
     "donationOutOfRange": "Donation amount must be between {{min}} and {{max}}.",
-    "donateTo": "donateTo"
+    "donateTo": "donateTo",
+    "selectCurrency": "Select Currency"
   },
   "transactions": {
     "title": "Transactions",
@@ -2347,7 +2348,8 @@
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
     "options": "Options",
-    "notSpecified": "Not Specified"
+    "notSpecified": "Not Specified",
+    "volunteerTabs": "Volunteer Tabs"
   },
   "pluginStore": {
     "title": "Plugin Store",

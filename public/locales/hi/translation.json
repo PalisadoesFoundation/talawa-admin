@@ -1746,7 +1746,8 @@
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
-    "donateTo": "दान करें"
+    "donateTo": "दान करें",
+    "selectCurrency": "मुद्रा चुनें"
   },
   "transactions": {
     "title": "लेन-देन",
@@ -2359,7 +2360,8 @@
     "invited": "आमंत्रित",
     "groupsAvailable": "{{count}} समूह उपलब्ध",
     "volunteersRequired": "आवश्यक",
-    "signedUp": "पंजीकृत"
+    "signedUp": "पंजीकृत",
+    "volunteerTabs": "स्वयंसेवक टैब"
   },
   "plugin": {
     "error": "प्लगइन त्रुटि",
