@@ -1734,7 +1734,8 @@
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
     "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
-    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}.",
+    "selectCurrency": "Seleccionar moneda"
   },
   "transactions": {
     "title": "Transacciones",
@@ -2347,7 +2348,8 @@
     "invited": "Invitado",
     "groupsAvailable": "{{count}} grupos disponibles",
     "volunteersRequired": "Requerido",
-    "signedUp": "Registrado"
+    "signedUp": "Registrado",
+    "volunteerTabs": "Pestañas de voluntarios"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",

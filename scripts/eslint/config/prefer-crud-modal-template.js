@@ -1,4 +1,4 @@
-import customRules from '../index.ts';
+import customRules from '../index.js';
 /**
  * ESLint flat config for the prefer-crud-modal-template rule.
  * Targets TypeScript React files in src/ while excluding test, spec, and story files.

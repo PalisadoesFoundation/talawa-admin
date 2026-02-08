@@ -6,11 +6,11 @@ import {
   restrictedImportPaths,
   stripId,
   restrictedImports,
-} from './imports.ts';
-import { securityRestrictions } from './security.ts';
-import { searchInputRestrictions } from './search-input.ts';
-import preferCrudModalTemplate from './prefer-crud-modal-template.ts';
-import { modalStateRestrictions } from './modal-state.ts';
+} from './imports.js';
+import { securityRestrictions } from './security.js';
+import { searchInputRestrictions } from './search-input.js';
+import preferCrudModalTemplate from './prefer-crud-modal-template.js';
+import { modalStateRestrictions } from './modal-state.js';
 
 export {
   restrictedImports,

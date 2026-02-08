@@ -32,14 +32,14 @@
  *
  * @returns JSX.Element - The rendered `VolunteerManagement` component.
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
-import { Dropdown } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaRegEnvelopeOpen, FaUserGroup } from 'react-icons/fa6';
 import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
@@ -51,11 +51,11 @@ import styles from './VolunteerManagement.module.css';
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} className="me-1" />,
+    icon: <TbCalendarEvent size={21} className="me-2" />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} className="me-1" />,
+    icon: <FaRegEnvelopeOpen size={18} className="me-2" />,
   },
   { value: 'actions', icon: <FaTasks size={18} className="me-2" /> },
   { value: 'groups', icon: <FaUserGroup size={18} className="me-2" /> },
@@ -130,14 +130,56 @@ const VolunteerManagement = (): JSX.Element => {
     );
   };
 
+  // Create options for DropDownButton
+  const tabOptions = useMemo(
+    () =>
+      volunteerDashboardTabs.map(({ value, icon }) => ({
+        value,
+        label: t(value),
+        icon,
+      })),
+    [t],
+  );
+
   const handleBack = (): void => {
     navigate(`/user/organization/${orgId}`);
   };
+
+  const isTabOption = (val: string): val is TabOptions =>
+    volunteerDashboardTabs.some((option) => option.value === val);
 
   return (
     <div className="d-flex flex-column">
       <Row className="mt-4">
         <Col>
+          {/* Mobile Navigation */}
+          <div className="d-md-none d-flex align-items-center gap-2 mb-2">
+            <Button
+              size="sm"
+              variant="light"
+              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3 p-3"
+              onClick={handleBack}
+              data-testid="mobile-back-btn"
+            >
+              <FaChevronLeft cursor={'pointer'} />
+            </Button>
+            <DropDownButton
+              id="tabs-dropdown"
+              options={tabOptions}
+              selectedValue={tab}
+              onSelect={(val) => {
+                if (isTabOption(val)) setTab(val);
+              }}
+              variant="success"
+              btnStyle={styles.dropdown}
+              dataTestIdPrefix="tabs-dropdown"
+              buttonLabel={t(tab)}
+              parentContainerStyle="flex-grow-1 w-100"
+              ariaLabel={t('volunteerTabs')}
+            />
+          </div>
+
+          {/* Desktop Navigation */}
           <div className="d-none d-md-flex gap-3">
             <Button
               size="sm"
@@ -152,38 +194,11 @@ const VolunteerManagement = (): JSX.Element => {
             </Button>
             {volunteerDashboardTabs.map(renderButton)}
           </div>
-
-          <Dropdown
-            className="d-md-none"
-            data-testid="tabsDropdownContainer"
-            drop="down"
-          >
-            <Dropdown.Toggle
-              variant="success"
-              id="dropdown-basic"
-              className={styles.dropdown}
-              data-testid="tabsDropdownToggle"
-            >
-              <span className="me-1">{t(tab)}</span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {/* Render dropdown items for each settings category */}
-              {volunteerDashboardTabs.map(({ value, icon }, index) => (
-                <Dropdown.Item
-                  key={index}
-                  onClick={() => setTab(value)}
-                  className={`d-flex gap-2 ${tab === value && 'text-secondary'}`}
-                >
-                  {icon} {t(value)}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
         </Col>
 
-        <Row className="mt-3">
+        <Col xs={12} className="mt-4">
           <hr />
-        </Row>
+        </Col>
       </Row>
 
       {/* Render content based on the selected settings category */}
@@ -191,19 +206,13 @@ const VolunteerManagement = (): JSX.Element => {
         switch (tab) {
           case 'upcomingEvents':
             return (
-              <div
-                data-testid="upcomingEventsTab"
-                // className="bg-white p-4 pt-2 rounded-4 shadow"
-              >
+              <div data-testid="upcomingEventsTab">
                 <UpcomingEvents />
               </div>
             );
           case 'invitations':
             return (
-              <div
-                data-testid="invitationsTab"
-                // className="bg-white p-4 pt-2 rounded-4 shadow"
-              >
+              <div data-testid="invitationsTab">
                 <Invitations />
               </div>
             );
