@@ -96,7 +96,7 @@ CENTRAL_SCRIPTS_DIR=".github-central/.github/workflows/scripts"
 echo "Running disable statements check..."
 DISABLE_STATEMENTS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
 DISABLE_STATEMENTS_PATH="$CENTRAL_SCRIPTS_DIR/disable_statements_check.py"
-DISABLE_STATEMENTS_SHA="7d423be7b83596c65218fa7ac60ae8c0463af91b56240e96d6b2a83862660d49"
+DISABLE_STATEMENTS_SHA="9acbc75c02413607c2f15eb3babc3484bb7dbd53c5d27f611d6cd26cc89c55ec"
 
 fetch_and_verify \
   "$DISABLE_STATEMENTS_URL" \
