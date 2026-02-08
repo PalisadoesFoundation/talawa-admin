@@ -421,7 +421,8 @@ const BOUNDARY_MOCKS = [
 const renderDonate = (
   props:
     | MockedResponse[]
-    | { mocks?: MockedResponse[]; link?: ApolloLink } = MOCKS,
+    | { mocks: MockedResponse[]; link?: never }
+    | { link: ApolloLink; mocks?: never } = MOCKS,
 ) => {
   const finalProps = Array.isArray(props) ? { mocks: props } : props;
   /* Note: If { link } is passed, it overrides { mocks } in MockedProvider behavior */
@@ -551,6 +552,12 @@ describe('Donate Component', () => {
   test('handles donation mutation error', async () => {
     const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
     renderDonate({ link: errorLink });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
 
     await userEvent.type(screen.getByTestId('donationAmount'), '100');
     await userEvent.click(screen.getByTestId('donateBtn'));

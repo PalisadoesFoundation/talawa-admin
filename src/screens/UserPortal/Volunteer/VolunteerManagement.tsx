@@ -142,7 +142,7 @@ const VolunteerManagement = (): JSX.Element => {
   };
 
   const isTabOption = (val: string): val is TabOptions =>
-    ['upcomingEvents', 'invitations', 'actions', 'groups'].includes(val);
+    volunteerDashboardTabs.some((t) => t.value === val);
 
   return (
     <div className="d-flex flex-column">
