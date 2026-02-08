@@ -152,7 +152,7 @@
   border: none !important;
   border-radius: var(--radius-full) !important;
   width: var(--space-8) !important;
-  height: var(--space-8);
+  height: var(--space-8) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
