@@ -32,7 +32,7 @@
  *
  * @returns JSX.Element - The rendered `VolunteerManagement` component.
  */
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Navigate, useNavigate, useParams } from 'react-router';
@@ -131,11 +131,15 @@ const VolunteerManagement = (): JSX.Element => {
   };
 
   // Create options for DropDownButton
-  const tabOptions = volunteerDashboardTabs.map(({ value, icon }) => ({
-    value,
-    label: t(value),
-    icon,
-  }));
+  const tabOptions = useMemo(
+    () =>
+      volunteerDashboardTabs.map(({ value, icon }) => ({
+        value,
+        label: t(value),
+        icon,
+      })),
+    [t],
+  );
 
   const handleBack = (): void => {
     navigate(`/user/organization/${orgId}`);

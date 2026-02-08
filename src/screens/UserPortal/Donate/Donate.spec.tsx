@@ -1,6 +1,6 @@
 import React from 'react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/react-testing';
 import { ApolloLink } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
@@ -418,15 +418,9 @@ const BOUNDARY_MOCKS = [
   },
 ];
 
-const renderDonate = (
-  mocksOrLink: MockedResponse[] | ApolloLink = new StaticMockLink(MOCKS, true),
-) => {
-  const finalProps = Array.isArray(mocksOrLink)
-    ? { mocks: mocksOrLink }
-    : { link: mocksOrLink };
-  /* Note: If { link } is passed, it overrides { mocks } in MockedProvider behavior */
+const renderDonate = (link: ApolloLink = new StaticMockLink(MOCKS, true)) => {
   return render(
-    <MockedProvider {...finalProps} addTypename={false}>
+    <MockedProvider link={link} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
