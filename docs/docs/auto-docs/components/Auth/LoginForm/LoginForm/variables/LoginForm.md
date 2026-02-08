@@ -6,7 +6,7 @@
 
 > `const` **LoginForm**: `React.FC`\<[`InterfaceLoginFormProps`](../../../../../types/Auth/LoginForm/interface/interfaces/InterfaceLoginFormProps.md)\>
 
-Defined in: [src/components/Auth/LoginForm/LoginForm.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/LoginForm/LoginForm.tsx#L37)
+Defined in: [src/components/Auth/LoginForm/LoginForm.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/LoginForm/LoginForm.tsx#L40)
 
 Reusable login form component that composes EmailField and PasswordField.
 
@@ -22,7 +22,7 @@ Whether the login form is rendered for an admin user
 
 ## Param
 
-Callback invoked with the authentication token on successful login
+Callback invoked with the full sign-in result (user + tokens)
 
 ## Param
 

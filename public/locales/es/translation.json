@@ -1900,7 +1900,6 @@
     "hash": "#",
     "description": "Descripción",
     "groupInfo": "Información del grupo",
-    "memberOptions": "Opciones de miembro",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
     "userNotFound": "Usuario no encontrado",
@@ -1931,7 +1930,8 @@
     "next": "Siguiente",
     "conversationAlreadyExists": "¡Ya existe una conversación con {{userName}}!",
     "thisUser": "este usuario",
-    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?"
+    "deleteChatConfirmation": "¿Estás seguro de que quieres eliminar este chat?",
+    "memberActionsMenu": "Menú de acciones del miembro"
   },
   "userChatRoom": {
     "selectContact": "Haga clic en el icono + para iniciar un nuevo chat",
