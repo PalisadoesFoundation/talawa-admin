@@ -142,7 +142,7 @@ const VolunteerManagement = (): JSX.Element => {
   };
 
   const isTabOption = (val: string): val is TabOptions =>
-    volunteerDashboardTabs.some((tab) => tab.value === val);
+    volunteerDashboardTabs.some((option) => option.value === val);
 
   return (
     <div className="d-flex flex-column">
@@ -188,19 +188,13 @@ const VolunteerManagement = (): JSX.Element => {
         switch (tab) {
           case 'upcomingEvents':
             return (
-              <div
-                data-testid="upcomingEventsTab"
-                // className="bg-white p-4 pt-2 rounded-4 shadow"
-              >
+              <div data-testid="upcomingEventsTab">
                 <UpcomingEvents />
               </div>
             );
           case 'invitations':
             return (
-              <div
-                data-testid="invitationsTab"
-                // className="bg-white p-4 pt-2 rounded-4 shadow"
-              >
+              <div data-testid="invitationsTab">
                 <Invitations />
               </div>
             );

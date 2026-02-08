@@ -418,7 +418,9 @@ const BOUNDARY_MOCKS = [
   },
 ];
 
-const renderDonate = (mocksOrLink: MockedResponse[] | ApolloLink = MOCKS) => {
+const renderDonate = (
+  mocksOrLink: MockedResponse[] | ApolloLink = new StaticMockLink(MOCKS, true),
+) => {
   const finalProps = Array.isArray(mocksOrLink)
     ? { mocks: mocksOrLink }
     : { link: mocksOrLink };
@@ -439,9 +441,6 @@ const renderDonate = (mocksOrLink: MockedResponse[] | ApolloLink = MOCKS) => {
 describe('Donate Component', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: '' });
-    mockErrorHandler.mockClear();
-    mockToast.error.mockClear();
-    mockToast.success.mockClear();
   });
 
   afterEach(() => {
@@ -629,7 +628,7 @@ describe('Donate Component', () => {
   });
 
   test('handles pagination with multiple donations', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
 
     // Wait for donations to load
     await waitFor(() => {
@@ -666,7 +665,7 @@ describe('Donate Component', () => {
       ...MOCKS.slice(1),
     ];
 
-    renderDonate(exactMatchMocks);
+    renderDonate(new StaticMockLink(exactMatchMocks, true));
 
     // With exactly 5 donations and rowsPerPage=5, should show all 5
     await waitFor(() => {
@@ -746,7 +745,7 @@ describe('Donate Component', () => {
   });
 
   test('donation amount at exactly minimum boundary (1)', async () => {
-    renderDonate(BOUNDARY_MOCKS);
+    renderDonate(new StaticMockLink(BOUNDARY_MOCKS, true));
 
     await waitFor(() => {
       expect(
@@ -764,7 +763,7 @@ describe('Donate Component', () => {
   });
 
   test('donation amount at exactly maximum boundary (10000000)', async () => {
-    renderDonate(BOUNDARY_MOCKS);
+    renderDonate(new StaticMockLink(BOUNDARY_MOCKS, true));
 
     await waitFor(() => {
       expect(
@@ -782,7 +781,7 @@ describe('Donate Component', () => {
   });
 
   test('changes page using pagination next button', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
 
     // Wait for donations to load
     await waitFor(() => {
