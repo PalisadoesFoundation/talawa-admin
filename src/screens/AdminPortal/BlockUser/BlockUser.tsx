@@ -16,8 +16,8 @@
  * Hooks:
  * - `useQuery`: Fetches members and blocked users data.
  * - `useMutation`: Executes block and unblock user mutations.
- * - `useState`: Manages component state for members, blocked users, search term, etc.
- * - `useEffect`: Handles side effects such as data updates and error handling.
+ * - `useState`: Manages component state for search term and view toggle.
+ * - `useEffect`: Syncs derived state with query results.
  * - `useCallback`: Optimizes event handlers for blocking/unblocking users and searching.
  *
  * Dependencies:
@@ -31,11 +31,7 @@
  *
  * State Variables:
  * - `showBlockedMembers`: Toggles between viewing blocked and unblocked members.
- * - `allMembers`: Stores the list of all organization members.
- * - `blockedUsers`: Stores the list of blocked users.
  * - `searchTerm`: Stores the current search input value.
- * - `filteredAllMembers`: Stores the filtered list of unblocked members.
- * - `filteredBlockedUsers`: Stores the filtered list of blocked users.
  *
  * Returns:
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
@@ -69,6 +65,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import Button from 'shared-components/Button';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 
 type BlockUserRow = {
   user: InterfaceUserPg;
@@ -98,14 +95,24 @@ const BlockUser = (): JSX.Element => {
   >([]);
 
   // Query to fetch blocked users list
+  const blockedUsersResult = useQuery<InterfaceOrganizationPg>(
+    GET_ORGANIZATION_BLOCKED_USERS_PG,
+    {
+      variables: { id: currentUrl, first: 32, after: null },
+      notifyOnNetworkStatusChange: true,
+    },
+  );
+
   const {
-    data: blockedUsersData,
+    rows: blockedUsersRows,
     loading: loadingBlockedUsers,
     error: errorBlockedUsers,
-  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_PG, {
-    variables: { id: currentUrl, first: 32, after: null },
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useTableData<InterfaceUserPg, InterfaceUserPg, InterfaceOrganizationPg>(
+    blockedUsersResult,
+    {
+      path: ['organization', 'blockedUsers'],
+    },
+  );
 
   useEffect(() => {
     if (errorBlockedUsers) {
@@ -114,23 +121,29 @@ const BlockUser = (): JSX.Element => {
   }, [errorBlockedUsers, t]);
 
   useEffect(() => {
-    if (blockedUsersData) {
-      const edges = blockedUsersData.organization?.blockedUsers?.edges || [];
-      const newBlockedUsers = edges.map((edge) => edge.node);
-      setBlockedUsers(newBlockedUsers);
-      setFilteredBlockedUsers(newBlockedUsers);
-    }
-  }, [blockedUsersData]);
+    setBlockedUsers(blockedUsersRows);
+    setFilteredBlockedUsers(blockedUsersRows);
+  }, [blockedUsersRows]);
 
   // Query to fetch members list
+  const membersResult = useQuery<InterfaceOrganizationPg>(
+    GET_ORGANIZATION_MEMBERS_PG,
+    {
+      variables: { id: currentUrl, first: 32, after: null },
+      notifyOnNetworkStatusChange: true,
+    },
+  );
+
   const {
-    data: memberData,
+    rows: membersRows,
     loading: loadingMembers,
     error: errorMembers,
-  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
-    variables: { id: currentUrl, first: 32, after: null },
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useTableData<InterfaceUserPg, InterfaceUserPg, InterfaceOrganizationPg>(
+    membersResult,
+    {
+      path: ['organization', 'members'],
+    },
+  );
 
   useEffect(() => {
     if (errorMembers) {
@@ -139,20 +152,15 @@ const BlockUser = (): JSX.Element => {
   }, [errorMembers, t]);
 
   useEffect(() => {
-    if (memberData) {
-      const edges = memberData.organization?.members?.edges || [];
-      const newMembers = edges.map((edge) => edge.node);
+    // Filter out blocked users
+    const filteredMembers = membersRows.filter(
+      (member) =>
+        !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
+    );
 
-      // Filter out blocked users
-      const filteredMembers = newMembers.filter(
-        (member) =>
-          !blockedUsers.some((blockedUser) => blockedUser.id === member.id),
-      );
-
-      setAllMembers(filteredMembers);
-      setFilteredAllMembers(filteredMembers);
-    }
-  }, [memberData, blockedUsers]);
+    setAllMembers(filteredMembers);
+    setFilteredAllMembers(filteredMembers);
+  }, [membersRows, blockedUsers]);
 
   useEffect(() => {
     if (searchTerm.trim() === '') {
@@ -177,9 +185,11 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
+  // Mutations
   const [blockUser] = useMutation(BLOCK_USER_MUTATION_PG);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
 
+  // Handle block user
   const handleBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
       try {
@@ -200,6 +210,7 @@ const BlockUser = (): JSX.Element => {
     [blockUser, currentUrl, t],
   );
 
+  // Handle unblock user
   const handleUnBlockUser = useCallback(
     async (user: InterfaceUserPg): Promise<void> => {
       try {
@@ -222,6 +233,7 @@ const BlockUser = (): JSX.Element => {
     [unBlockUser, currentUrl, t],
   );
 
+  // Handle search
   const handleSearch = useCallback((value: string): void => {
     setSearchTerm(value);
   }, []);
@@ -248,23 +260,23 @@ const BlockUser = (): JSX.Element => {
       id: 'index',
       header: headerTitles[0],
       accessor: 'index',
-      render: (_value, row) => row.index + 1,
+      render: (_value: unknown, row: BlockUserRow) => row.index + 1,
     },
     {
       id: 'name',
       header: headerTitles[1],
-      accessor: (row) => row.user.name,
+      accessor: (row: BlockUserRow) => row.user.name,
     },
     {
       id: 'email',
       header: headerTitles[2],
-      accessor: (row) => row.user.emailAddress,
+      accessor: (row: BlockUserRow) => row.user.emailAddress,
     },
     {
       id: 'action',
       header: headerTitles[3],
-      accessor: (row) => row.user.id,
-      render: (_, row) => {
+      accessor: (row: BlockUserRow) => row.user.id,
+      render: (_: unknown, row: BlockUserRow) => {
         const user = row.user;
         return showBlockedMembers ? (
           <Button
@@ -303,7 +315,12 @@ const BlockUser = (): JSX.Element => {
     return (
       <TableLoader
         data-testid="TableLoader"
-        headerTitles={headerTitles}
+        headerTitles={[
+          '#',
+          tCommon('name'),
+          tCommon('email'),
+          t('block_unblock'),
+        ]}
         noOfRows={10}
       />
     );
@@ -343,10 +360,10 @@ const BlockUser = (): JSX.Element => {
           {(!showBlockedMembers && filteredAllMembers.length > 0) ||
           (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
             <div data-testid="userList">
-              <DataTable
+              <DataTable<BlockUserRow>
                 data={tableRows}
                 columns={tableColumns}
-                rowKey={(row: (typeof tableRows)[number]) => row.user.id}
+                rowKey={(row: BlockUserRow) => row.user.id}
                 tableClassName={styles.custom_table}
               />
             </div>

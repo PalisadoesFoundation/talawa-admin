@@ -1396,6 +1396,26 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 /**
+ * GraphQL response type for user list queries.
+ */
+export interface InterfaceUserListQueryResponse {
+  allUsers?: {
+    edges?:
+      | Array<
+          | {
+              cursor?: string;
+              node: InterfaceQueryUserListItem | null | undefined;
+            }
+          | null
+          | undefined
+        >
+      | null
+      | undefined;
+    pageInfo?: InterfacePageInfoPg | null;
+  } | null;
+}
+
+/**
  * Defines the structure for a user list item returned from a query.
  */
 export interface InterfaceQueryUserListItem {

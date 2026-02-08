@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -264,8 +264,8 @@ beforeEach(() => {
 
 afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
-  // Restore all mocks
-  vi.restoreAllMocks();
+  // Clear all mocks to prevent test pollution in sharded environments
+  vi.clearAllMocks();
 });
 
 describe('Testing Requests screen', () => {
@@ -349,12 +349,16 @@ describe('Testing Requests screen', () => {
       </MockedProvider>,
     );
 
-    await wait(200);
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('testComp')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify basic page elements are rendered
     expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
@@ -442,8 +446,15 @@ describe('Testing Requests screen', () => {
     await userEvent.clear(searchInput);
     const search2 = 'Pete';
     await userEvent.type(searchInput, search2);
-    await wait(100);
-    await userEvent.clear(searchInput);
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for john/i);
+      },
+      { timeout: 3000 },
+    );
 
     const search3 = 'Sam';
     await userEvent.type(searchInput, search3);
@@ -480,14 +491,16 @@ describe('Testing Requests screen', () => {
     const search = 'hello';
     await userEvent.type(searchInput, search);
     await userEvent.keyboard('{Enter}');
-    await wait(200);
-
-    // When there are no requests at all, show "no requests found" message
-    const grid = screen.getByRole('grid');
-    expect(grid).toBeInTheDocument();
-
-    const rows = grid.querySelectorAll('[role="row"]');
-    expect(rows.length).toBe(1);
+    await waitFor(
+      () => {
+        // When there are no requests at all, show "no requests found" message
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for hello/i);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Testing Request data is not present', async () => {
@@ -542,7 +555,6 @@ describe('Testing Requests screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait(200);
     expect(container.textContent).not.toMatch(
       'Organizations not found, please create an organization through dashboard',
@@ -627,7 +639,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    const table = screen.getByRole('grid');
+    const table = screen.getByTestId('datatable');
     expect(table).toBeInTheDocument();
 
     const initialRows = screen.getAllByRole('row').length;
@@ -636,15 +648,6 @@ describe('Testing Requests screen', () => {
     await waitFor(() => {
       expect(screen.getByText(/User1 Test/i)).toBeInTheDocument();
     });
-
-    const paginationButtons = screen
-      .getAllByRole('button')
-      .filter(
-        (btn) =>
-          btn.getAttribute('aria-label')?.includes('Go to page') ||
-          btn.getAttribute('aria-label')?.includes('page'),
-      );
-    expect(paginationButtons.length).toBeGreaterThan(0);
   });
 
   test('rows.length whould be greater than 9 when newRequests.length > perPageResult', async () => {
@@ -778,9 +781,15 @@ describe('Testing Requests screen', () => {
       });
     }
 
-    await wait(500);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for user/i);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('should handle loading more requests when no previous data exists', async () => {
@@ -907,8 +916,10 @@ describe('Testing Requests screen', () => {
     await userEvent.keyboard('{Enter}');
     await waitFor(
       () => {
-        const grid = screen.getByRole('grid');
-        expect(grid.getAttribute('aria-rowcount')).toBe('1');
+        expect(screen.getByTestId('requests-search-empty')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('requests-search-empty-message'),
+        ).toHaveTextContent(/no results found for nonexistent/i);
       },
       { timeout: 3000 },
     );
@@ -942,7 +953,7 @@ describe('Testing Requests screen', () => {
 
     // Wait for data to load and grid to appear
     await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
     });
   });
 
@@ -961,7 +972,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    const table = screen.getByRole('grid');
+    const table = screen.getByTestId('datatable');
     expect(table).toBeInTheDocument();
 
     const requestsContainer = document.querySelector(
@@ -1041,7 +1052,7 @@ describe('Testing Requests screen', () => {
     await userEvent.clear(searchInput);
     await wait(200);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test('should handle null response in fetchMore correctly', async () => {
@@ -1156,7 +1167,7 @@ describe('Testing Requests screen', () => {
 
     await wait(500);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test('should handle empty state when organization returns null', async () => {
@@ -1542,7 +1553,7 @@ describe('Testing Requests screen', () => {
     await wait(200);
 
     // Check that the component renders and has the grid with data
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
     // Verify the user name is displayed, indicating the row is rendered
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
@@ -2042,7 +2053,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test('should handle avatar with null string avatarURL', async () => {
@@ -2118,7 +2129,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
@@ -2195,7 +2206,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
   });
 
   test('should handle email with fallback when emailAddress is missing', async () => {
@@ -2271,7 +2282,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
@@ -2640,9 +2651,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               acceptMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req123',
-                },
+                success: true,
+                message: 'Membership request accepted',
               },
             },
           },
@@ -2705,9 +2715,8 @@ describe('Testing Requests screen', () => {
           result: {
             data: {
               rejectMembershipRequest: {
-                membershipRequest: {
-                  membershipRequestId: 'req789',
-                },
+                success: true,
+                message: 'Membership request rejected',
               },
             },
           },
@@ -2858,36 +2867,6 @@ describe('Testing Requests screen', () => {
   });
 
   describe('Column rendering', () => {
-    test('should render all column headers with correct data-field attributes', async () => {
-      render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Requests />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await wait(200);
-
-      // Check that DataGrid columns exist by their data-field attributes
-      const columnHeaders = document.querySelectorAll('[data-field]');
-      const fields = Array.from(columnHeaders).map((el) =>
-        el.getAttribute('data-field'),
-      );
-
-      // Assert expected columns are present
-      expect(fields).toContain('sl_no');
-      expect(fields).toContain('profile');
-      expect(fields).toContain('name');
-      expect(fields).toContain('email');
-      expect(fields).toContain('accept');
-      expect(fields).toContain('reject');
-    });
-
     test('should render accept and reject buttons in action column', async () => {
       render(
         <MockedProvider link={link}>
@@ -2952,7 +2931,9 @@ describe('Testing Requests screen', () => {
       await wait(200);
 
       await waitFor(() => {
-        expect(screen.getByText('1.')).toBeInTheDocument();
+        const firstRow = screen.getAllByRole('row')[1]; // Header is row 0, first data row is row 1
+        const serialCell = within(firstRow).getByText('1');
+        expect(serialCell).toBeInTheDocument();
       });
     });
   });

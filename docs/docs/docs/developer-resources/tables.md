@@ -881,6 +881,12 @@ Before → After (concise)
   - Implement Sorting Functionality
   - Add Filtering and Search Capabilities
   - Implement Row and Bulk Actions
+- Phase 4
+  - Stabilize selection, sorting, filtering, and loading overlay behavior
+  - Expand test coverage for edge cases
+- Phase 5
+  - This phase completed a pilot migration of three admin screens (Users, BlockUser, Requests) to validate the DataTable architecture and establish patterns for future migrations.
+  - Validate useTableData integration patterns and DataTable column migration
 
 ## Organization and People Screens Migration Examples
 

@@ -25,87 +25,98 @@ export const MOCKS = [
     request: {
       query: USER_LIST_FOR_ADMIN,
       variables: {
-        input: {
-          ids: '123',
-        },
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: undefined,
       },
     },
     result: {
       data: {
-        usersByIds: [
-          {
-            id: 'user1',
-            name: 'John Doe',
-            emailAddress: 'john@example.com',
-            avatarURL: null,
-            createdAt: '2030-06-20T00:00:00.000Z',
-            city: 'Kingston',
-            state: 'Kingston Parish',
-            countryCode: 'JM',
-            postalCode: 'JM12345',
-            organizationsWhereMember: {
-              edges: [
-                {
-                  node: {
-                    id: 'org1',
-                    name: 'Organization 1',
-                    avatarURL: null,
-                    createdAt: '2030-06-20T00:00:00.000Z',
-                    city: 'Kingston',
-                    state: 'Kingston Parish',
-                    countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
-                    },
-                  },
-                },
-              ],
-            },
-            createdOrganizations: [
-              {
-                id: 'org1',
-                name: 'Organization 1',
+        allUsers: {
+          pageInfo: {
+            endCursor: 'cursor_2',
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cursor_1',
+          },
+          edges: [
+            {
+              cursor: 'cursor_1',
+              node: {
+                id: 'user1',
+                name: 'John Doe',
+                role: 'regular',
+                emailAddress: 'john@example.com',
                 avatarURL: null,
-              },
-            ],
-          },
-          {
-            id: 'user2',
-            name: 'Jane Doe',
-            emailAddress: 'jane@example.com',
-            avatarURL: null,
-            createdAt: '2030-06-20T00:00:00.000Z',
-            city: 'Kingston',
-            state: 'Kingston Parish',
-            countryCode: 'JM',
-            postalCode: 'JM12345',
-            organizationsWhereMember: {
-              edges: [
-                {
-                  node: {
-                    id: 'org1',
-                    name: 'Organization 1',
-                    avatarURL: null,
-                    createdAt: '2030-06-20T00:00:00.000Z',
-                    city: 'Kingston',
-                    state: 'Kingston Parish',
-                    countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
+                createdAt: '2030-06-20T00:00:00.000Z',
+                city: 'Kingston',
+                state: 'Kingston Parish',
+                countryCode: 'JM',
+                postalCode: 'JM12345',
+                orgsWhereUserIsBlocked: { edges: [] },
+                organizationsWhereMember: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'org1',
+                        name: 'Organization 1',
+                        avatarURL: null,
+                        createdAt: '2030-06-20T00:00:00.000Z',
+                        city: 'Kingston',
+                        state: 'Kingston Parish',
+                        countryCode: 'JM',
+                        creator: {
+                          id: 'user1',
+                          name: 'John Doe',
+                          emailAddress: 'john@example.com',
+                          avatarURL: null,
+                        },
+                      },
                     },
-                  },
+                  ],
                 },
-              ],
+              },
             },
-            createdOrganizations: [],
-          },
-        ],
+            {
+              cursor: 'cursor_2',
+              node: {
+                id: 'user2',
+                name: 'Jane Doe',
+                role: 'regular',
+                emailAddress: 'jane@example.com',
+                avatarURL: null,
+                createdAt: '2030-06-20T00:00:00.000Z',
+                city: 'Kingston',
+                state: 'Kingston Parish',
+                countryCode: 'JM',
+                postalCode: 'JM12345',
+                orgsWhereUserIsBlocked: { edges: [] },
+                organizationsWhereMember: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'org1',
+                        name: 'Organization 1',
+                        avatarURL: null,
+                        createdAt: '2030-06-20T00:00:00.000Z',
+                        city: 'Kingston',
+                        state: 'Kingston Parish',
+                        countryCode: 'JM',
+                        creator: {
+                          id: 'user1',
+                          name: 'John Doe',
+                          emailAddress: 'john@example.com',
+                          avatarURL: null,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       },
     },
   },
@@ -167,7 +178,7 @@ export const MOCKS = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 avatarURL: 'https://example.com/avatar1.png',
                 emailAddress: 'john@example.com',
                 createdAt: '2030-06-20T00:00:00.000Z',
@@ -210,7 +221,7 @@ export const MOCKS = [
               node: {
                 id: 'user1',
                 name: 'John Doe',
-                role: 'Member',
+                role: 'regular',
                 avatarURL: 'https://example.com/avatar2.png',
                 emailAddress: 'john@example.com',
                 createdAt: '2030-06-21T00:00:00.000Z',
@@ -250,49 +261,61 @@ export const MOCKS2 = [
     request: {
       query: USER_LIST_FOR_ADMIN,
       variables: {
-        input: {
-          ids: '123', // Match loggedInUserId from beforeEach
-        },
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: undefined,
       },
     },
     result: {
       data: {
-        usersByIds: [
-          // Changed from 'users' to 'usersByIds'
-          {
-            id: 'user1',
-            name: 'John Doe',
-            emailAddress: 'john@example.com',
-            avatarURL: null,
-            createdAt: '2030-06-20T00:00:00.000Z',
-            city: 'Kingston',
-            state: 'Kingston Parish',
-            countryCode: 'JM',
-            postalCode: 'JM12345',
-            organizationsWhereMember: {
-              edges: [
-                {
-                  node: {
-                    id: 'org1',
-                    name: 'Organization 1',
-                    avatarURL: null,
-                    createdAt: '2030-06-20T00:00:00.000Z',
-                    city: 'Kingston',
-                    state: 'Kingston Parish',
-                    countryCode: 'JM',
-                    creator: {
-                      id: 'user1',
-                      name: 'John Doe',
-                      emailAddress: 'john@example.com',
-                      avatarURL: null,
-                    },
-                  },
-                },
-              ],
-            },
-            createdOrganizations: [],
+        allUsers: {
+          pageInfo: {
+            endCursor: 'cursor_1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cursor_1',
           },
-        ],
+          edges: [
+            {
+              cursor: 'cursor_1',
+              node: {
+                id: 'user1',
+                name: 'John Doe',
+                role: 'regular',
+                emailAddress: 'john@example.com',
+                avatarURL: null,
+                createdAt: '2030-06-20T00:00:00.000Z',
+                city: 'Kingston',
+                state: 'Kingston Parish',
+                countryCode: 'JM',
+                postalCode: 'JM12345',
+                orgsWhereUserIsBlocked: { edges: [] },
+                organizationsWhereMember: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'org1',
+                        name: 'Organization 1',
+                        avatarURL: null,
+                        createdAt: '2030-06-20T00:00:00.000Z',
+                        city: 'Kingston',
+                        state: 'Kingston Parish',
+                        countryCode: 'JM',
+                        creator: {
+                          id: 'user1',
+                          name: 'John Doe',
+                          emailAddress: 'john@example.com',
+                          avatarURL: null,
+                        },
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       },
     },
   },
