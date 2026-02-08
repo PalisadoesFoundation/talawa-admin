@@ -6,9 +6,9 @@
 
 > **sanitizeAvatars**(`file`, `fallbackUrl`): `string`
 
-Defined in: [src/utils/sanitizeAvatar.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/sanitizeAvatar.ts#L7)
+Defined in: [src/utils/sanitizeAvatar.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/sanitizeAvatar.ts#L8)
 
-Normalizes an avatar URL by converting null-like values to an empty string.
+Sanitizes a file-based or URL-based avatar source.
 
 ## Parameters
 
@@ -16,12 +16,16 @@ Normalizes an avatar URL by converting null-like values to an empty string.
 
 `File`
 
+An image File to create an object URL from, or null
+
 ### fallbackUrl
 
 `string`
+
+A URL string to validate and return if no file is provided
 
 ## Returns
 
 `string`
 
-The original URL, or an empty string if the input is falsy or the literal string "null"
+A safe blob: or https: URL, or an empty string
