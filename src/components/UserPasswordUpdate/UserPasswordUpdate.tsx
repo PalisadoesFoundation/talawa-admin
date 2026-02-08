@@ -6,22 +6,7 @@
  * and confirming the new password. The component validates the input and
  * communicates with the backend to update the password using a GraphQL mutation.
  *
- * @file UserPasswordUpdate.tsx
- * @module UserUpdate
- * @requires React
- * @requires @apollo/client - For executing the GraphQL mutation.
- * @requires GraphQl/Mutations/mutations - Contains the `UPDATE_USER_PASSWORD_MUTATION`.
- * @requires react-i18next - For internationalization and translations.
- * @requires react-bootstrap/Button - For styled buttons.
- * @requires react-bootstrap/Form - For form controls.
- * @requires style/app.module.css - For component-specific styles.
- * @requires react-toastify - For displaying success and error notifications.
- *
- * @interface InterfaceUserPasswordUpdateProps
- * @property {string} id - The unique identifier of the user whose password is being updated.
- *
- * @function UserUpdate
- * @returns {JSX.Element} The rendered component.
+ * @returns - The rendered component.
  *
  * @remarks
  * - Validates that all fields are filled and that the new password matches the confirmation.
@@ -37,9 +22,9 @@ import React from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
-import styles from '../../style/app-fixed.module.css';
-import { Form } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import styles from './UserPasswordUpdate.module.css';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
@@ -122,54 +107,52 @@ export const UserUpdate: React.FC<
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('previousPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="previousPassword"
+                label={t('previousPassword')}
                 type="password"
-                id="previousPassword"
                 placeholder={t('previousPassword')}
-                autoComplete="off"
-                required
                 value={formState.previousPassword}
-                onChange={(e): void => {
+                required
+                onChange={(v) =>
                   setFormState({
                     ...formState,
-                    previousPassword: e.target.value,
-                  });
-                }}
+                    previousPassword: v,
+                  })
+                }
               />
             </div>
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('newPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="newPassword"
+                label={t('newPassword')}
                 type="password"
-                id="newPassword"
                 placeholder={t('newPassword')}
-                autoComplete="off"
-                required
                 value={formState.newPassword}
-                onChange={(e): void => {
-                  setFormState({ ...formState, newPassword: e.target.value });
-                }}
+                required
+                onChange={(v) => setFormState({ ...formState, newPassword: v })}
               />
             </div>
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
               <label>{t('confirmNewPassword')}</label>
-              <Form.Control
+              <FormTextField
+                name="confirmNewPassword"
+                label={t('confirmNewPassword')}
                 type="password"
-                id="confirmNewPassword"
                 placeholder={t('confirmNewPassword')}
-                autoComplete="off"
-                required
                 value={formState.confirmNewPassword}
-                onChange={(e): void => {
+                required
+                onChange={(v) =>
                   setFormState({
                     ...formState,
-                    confirmNewPassword: e.target.value,
-                  });
-                }}
+                    confirmNewPassword: v,
+                  })
+                }
               />
             </div>
           </div>

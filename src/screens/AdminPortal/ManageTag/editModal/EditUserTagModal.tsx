@@ -27,9 +27,12 @@
 import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { BaseModal } from 'shared-components/BaseModal';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import {
+  FormFieldGroup,
+  FormTextField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
 
 export interface InterfaceEditUserTagModalProps {
@@ -67,14 +70,12 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
     isTouched && isTagNameInvalid ? tCommon('required') : undefined;
 
   return (
-    <BaseModal
-      show={editUserTagModalIsOpen}
-      onHide={hideEditUserTagModal}
-      backdrop="static"
+    <CRUDModalTemplate
+      open={editUserTagModalIsOpen}
+      onClose={hideEditUserTagModal}
       title={t('tagDetails')}
-      headerClassName={styles.modalHeader}
-      headerTestId="modalOrganizationHeader"
-      footer={
+      header-testId="modalOrganizationHeader"
+      customFooter={
         <>
           <Button
             type="button"
@@ -99,7 +100,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         </>
       }
     >
-      <Form
+      <form
         id={formId}
         onSubmitCapture={async (
           e: FormEvent<HTMLFormElement>,
@@ -123,25 +124,23 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           touched={isTouched}
           error={errorMessage}
         >
-          <Form.Control
-            id="tagName"
-            type="text"
-            className={`mb-3 ${styles.inputField}`}
+          <FormTextField
+            name="tagName"
+            label={t('tagName')}
             placeholder={t('tagNamePlaceholder')}
-            data-testid="tagNameInput"
-            autoComplete="off"
-            required
             value={newTagName}
-            isInvalid={isTouched && isTagNameInvalid}
-            ref={tagNameRef}
+            required
+            data-testid="tagNameInput"
+            className={`mb-3 ${styles.inputField}`}
+            error={isTagNameInvalid ? t('invalidTagName') : undefined}
+            touched={isTouched}
+            inputId="tagName"
             onBlur={() => setIsTouched(true)}
-            onChange={(e): void => {
-              setNewTagName(e.target.value);
-            }}
+            onChange={(v) => setNewTagName(v)}
           />
         </FormFieldGroup>
-      </Form>
-    </BaseModal>
+      </form>
+    </CRUDModalTemplate>
   );
 };
 

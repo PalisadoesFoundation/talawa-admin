@@ -33,8 +33,9 @@
  * ```
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button';
+import styles from './VenueModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -44,7 +45,7 @@ import {
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -332,67 +333,55 @@ const VenueModal = ({
     }
   };
   return (
-    <BaseModal
-      show={show}
-      onHide={onHide}
-      title={t('venueDetails')}
-      showCloseButton
-    >
-      <Form data-testid="venueForm">
+    <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
+      <form data-testid="venueForm">
         <label htmlFor="venuetitle">{t('venueName')}</label>
-        <Form.Control
-          type="title"
-          id="venuetitle"
+        <FormTextField
+          name="venueTitle"
+          label={t('venueName')}
           placeholder={t('enterVenueName')}
-          autoComplete="off"
-          required
           value={name}
-          onChange={(e): void => {
-            setFormState({ ...formState, name: e.target.value });
-          }}
+          required
+          onChange={(v) => setFormState({ ...formState, name: v })}
           className={styles.inputField}
         />
+
         <label htmlFor="venuedescrip">{tCommon('description')}</label>
-        <Form.Control
-          type="text"
-          id="venuedescrip"
+        <FormTextField
+          name="venueDescription"
+          label={tCommon('description')}
           as="textarea"
           placeholder={t('enterVenueDesc')}
-          autoComplete="off"
+          value={description}
           required
           maxLength={500}
-          value={description}
-          onChange={(e): void => {
-            setFormState({ ...formState, description: e.target.value });
-          }}
+          onChange={(v) => setFormState({ ...formState, description: v })}
           className={styles.inputField}
         />
+
         <label htmlFor="venuecapacity">{t('capacity')}</label>
-        <Form.Control
-          type="text"
-          id="venuecapacity"
+        <FormTextField
+          name="venueCapacity"
+          label={t('capacity')}
           placeholder={t('enterVenueCapacity')}
-          autoComplete="off"
-          required
           value={capacity}
-          onChange={(e): void => {
-            setFormState({ ...formState, capacity: e.target.value });
-          }}
+          required
+          onChange={(v) => setFormState({ ...formState, capacity: v })}
           className={styles.inputField}
         />
-        <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
-        <Form.Control
+        <label htmlFor="venueImgUrl">{t('image')}</label>
+        <input
           accept="image/*"
           id="venueImgUrl"
           data-testid="venueImgUrl"
           name="venueImg"
           type="file"
-          placeholder={t('uploadVenueImage')}
           multiple={false}
           ref={fileInputRef}
           onChange={handleFileUpload}
           className={styles.inputField}
         />
+
         {imagePreviewUrl && (
           <div className={styles.previewVenueModal}>
             <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
@@ -416,8 +405,8 @@ const VenueModal = ({
         >
           {edit ? t('editVenue') : t('createVenue')}
         </Button>
-      </Form>
-    </BaseModal>
+      </form>
+    </CRUDModalTemplate>
   );
 };
 
