@@ -34,22 +34,18 @@
  */
 import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import dropdownStyles from './ProfileDropdown.module.css';
+import styles from './ProfileDropdown.module.css';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
+import DropDownButton from 'shared-components/DropDownButton';
+import type { InterfaceProfileDropdownProps } from 'types/shared-components/ProfileDropdown/interface';
 
 export const MAX_NAME_LENGTH = 20;
-
-interface InterfaceProfileDropdownProps {
-  portal?: 'admin' | 'user';
-}
 
 const ProfileDropdown = ({
   portal = 'admin',
@@ -84,60 +80,59 @@ const ProfileDropdown = ({
   });
 
   return (
-    <Dropdown as={ButtonGroup} variant="none" className={styles.customDropdown}>
-      <div className={styles.profileContainer}>
-        <div className={styles.imageContainer}>
-          {userImage && userImage !== 'null' ? (
-            <img
-              src={userImage}
-              alt={tCommon('profilePicture')}
-              data-testid="display-img"
-              crossOrigin="anonymous"
-            />
-          ) : (
-            <Avatar
-              avatarStyle={styles.avatarStyle}
-              data-testid="display-img"
-              size={45}
-              name={name}
-              alt={tCommon('profilePicturePlaceholder')}
-            />
-          )}
+    <DropDownButton
+      id="profile-dropdown"
+      options={[
+        {
+          value: 'viewProfile',
+          label: tCommon('viewProfile'),
+        },
+        {
+          value: 'logout',
+          label: <span className={styles.logoutBtn}>{tCommon('logout')}</span>,
+        },
+      ]}
+      onSelect={(eventKey) => {
+        if (eventKey === 'viewProfile') {
+          navigate(profileDestination);
+        } else if (eventKey === 'logout') {
+          handleLogout();
+        }
+      }}
+      icon={
+        <div className={styles.profileContainer}>
+          <div className={styles.imageContainer}>
+            {userImage && userImage !== 'null' ? (
+              <img
+                src={userImage}
+                alt={tCommon('profilePicture')}
+                data-testid="display-img"
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <Avatar
+                avatarStyle={styles.avatarStyle}
+                data-testid="display-img"
+                size={45}
+                name={name}
+                alt={tCommon('profilePicturePlaceholder')}
+              />
+            )}
+          </div>
+          <div className={styles.profileText}>
+            <span className={styles.primaryText} data-testid="display-name">
+              {displayedName}
+            </span>
+            <span className={styles.secondaryText} data-testid="display-type">
+              {`${userRole}`}
+            </span>
+          </div>
         </div>
-        <div className={styles.profileText}>
-          <span className={styles.primaryText} data-testid="display-name">
-            {displayedName}
-          </span>
-          <span className={styles.secondaryText} data-testid="display-type">
-            {`${userRole}`}
-          </span>
-        </div>
-      </div>
-      <Dropdown.Toggle
-        split
-        variant="none"
-        data-testid="togDrop"
-        id="dropdown-split-basic"
-        className={styles.dropdownToggle}
-        aria-label={tCommon('userProfileMenu')}
-      />
-      <Dropdown.Menu>
-        <Dropdown.Item
-          data-testid="profileBtn"
-          onClick={() => navigate(profileDestination)}
-          aria-label={tCommon('viewProfile')}
-        >
-          {tCommon('viewProfile')}
-        </Dropdown.Item>
-        <Dropdown.Item
-          className={dropdownStyles.logoutBtn}
-          onClick={handleLogout}
-          data-testid="logoutBtn"
-        >
-          {tCommon('logout')}
-        </Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+      }
+      ariaLabel={tCommon('userProfileMenu')}
+      dataTestIdPrefix="profile"
+      btnStyle={styles.dropdownToggle}
+    />
   );
 };
 

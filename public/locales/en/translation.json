@@ -580,16 +580,6 @@
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
-  "orgAdminListCard": {
-    "remove": "Remove",
-    "removeAdmin": "Remove Admin",
-    "removeAdminMsg": "Do you want to remove this admin?",
-    "adminRemoved": "The admin is removed.",
-    "joined": "joined",
-    "no": "no",
-    "yes": "yes",
-    "talawaApiUnavailable": "talawaApiUnavailable"
-  },
   "orgPeopleListCard": {
     "remove": "Remove",
     "removeMember": "Remove Member",
@@ -1340,9 +1330,6 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
-  "orgDelete": {
-    "deleteOrg": "Delete Org"
-  },
   "membershipRequest": {
     "accept": "Accept",
     "reject": "Reject",
@@ -1734,7 +1721,8 @@
     "invalidAmount": "Please enter a numerical value for the donation amount.",
     "donationAmountDescription": "Please enter the numerical value for the donation amount.",
     "donationOutOfRange": "Donation amount must be between {{min}} and {{max}}.",
-    "donateTo": "donateTo"
+    "donateTo": "donateTo",
+    "selectCurrency": "Select Currency"
   },
   "transactions": {
     "title": "Transactions",
@@ -1931,7 +1919,7 @@
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
     "thisUser": "this user",
     "deleteChatConfirmation": "Are you sure you want to delete this chat?",
-    "memberOptions": "Member Options"
+    "memberActionsMenu": "Member Actions Menu"
   },
   "userChatRoom": {
     "selectContact": "Click the + icon to start a new chat",
@@ -2347,7 +2335,8 @@
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
     "options": "Options",
-    "notSpecified": "Not Specified"
+    "notSpecified": "Not Specified",
+    "volunteerTabs": "Volunteer Tabs"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -2587,13 +2576,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Date N/A",
     "yes": "Yes",
     "no": "No",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees",
-    "viewEventDetails": "View event details"
+    "numberOfAttendees": "Number of attendees"
   },
   "promotedPost": {
     "title": "Promoted Content",

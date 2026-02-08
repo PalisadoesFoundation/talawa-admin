@@ -421,15 +421,6 @@ export const DELETE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// to remove an admin from an organization
-export const REMOVE_ADMIN_MUTATION = gql`
-  mutation RemoveAdmin($orgid: ID!, $userid: ID!) {
-    removeAdmin(data: { organizationId: $orgid, userId: $userid }) {
-      _id
-    }
-  }
-`;
-
 // to Remove member from an organization
 export const REMOVE_MEMBER_MUTATION = gql`
   mutation RemoveMember($orgid: ID!, $userid: ID!) {

@@ -592,16 +592,6 @@
     "joined": "शामिल हुए",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
-  "orgAdminListCard": {
-    "remove": "निकालना",
-    "removeAdmin": "व्यवस्थापक हटाएँ",
-    "removeAdminMsg": "क्या आप इस व्यवस्थापक को हटाना चाहते हैं?",
-    "adminRemoved": "व्यवस्थापक को हटा दिया गया है.",
-    "joined": "शामिल हुए",
-    "no": "नहीं",
-    "yes": "हाँ",
-    "talawaApiUnavailable": "Talawa API अनुपलब्ध"
-  },
   "orgPeopleListCard": {
     "remove": "निकालना",
     "removeMember": "सदस्य हटाएँ",
@@ -1291,9 +1281,6 @@
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"
   },
-  "orgDelete": {
-    "deleteOrg": "संगठन हटाएं"
-  },
   "membershipRequest": {
     "accept": "स्वीकार करना",
     "reject": "अस्वीकार करना",
@@ -1746,7 +1733,8 @@
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
-    "donateTo": "दान करें"
+    "donateTo": "दान करें",
+    "selectCurrency": "मुद्रा चुनें"
   },
   "transactions": {
     "title": "लेन-देन",
@@ -1911,7 +1899,6 @@
     "description": "विवरण",
     "hash": "#",
     "groupInfo": "समूह जानकारी",
-    "memberOptions": "सदस्य विकल्प",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
@@ -1943,7 +1930,8 @@
     "next": "अगला",
     "conversationAlreadyExists": "{{userName}} के साथ पहले से एक बातचीत मौजूद है!",
     "thisUser": "इस उपयोगकर्ता",
-    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?"
+    "deleteChatConfirmation": "क्या आप वाकई इस चैट को हटाना चाहते हैं?",
+    "memberActionsMenu": "सदस्य क्रियाएं मेनू"
   },
   "userChatRoom": {
     "selectContact": "नया चैट शुरू करने के लिए + आइकन पर क्लिक करें",
@@ -2359,7 +2347,8 @@
     "invited": "आमंत्रित",
     "groupsAvailable": "{{count}} समूह उपलब्ध",
     "volunteersRequired": "आवश्यक",
-    "signedUp": "पंजीकृत"
+    "signedUp": "पंजीकृत",
+    "volunteerTabs": "स्वयंसेवक टैब"
   },
   "plugin": {
     "error": "प्लगइन त्रुटि",
@@ -2587,13 +2576,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "दिनांक उपलब्ध नहीं",
     "yes": "हाँ",
     "no": "नहीं",
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
-    "numberOfAttendees": "उपस्थित लोगों की संख्या",
-    "viewEventDetails": "इवेंट विवरण देखें"
+    "numberOfAttendees": "उपस्थित लोगों की संख्या"
   },
   "promotedPost": {
     "title": "प्रचारित सामग्री",
