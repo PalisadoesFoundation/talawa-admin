@@ -136,6 +136,91 @@ describe('prefer-crud-modal-template', () => {
           }
         `,
       },
+
+      // hasFormInExpression with ConditionalExpression (no JSX)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                {true ? "Yes" : "No"}
+              </BaseModal>
+            );
+          }
+        `,
+      },
+
+      // Test JSXOpeningElement with NON-JSXIdentifier and NON-JSXMemberExpression
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            // JSXNamespacedName is rare but possible: <ns:Element />
+            return <BaseModal:Test onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Test attr.name.type !== JSXIdentifier (JSXNamespacedName in attribute)
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal ns:onSubmit={() => {}} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Test ignorePaths with simple filename (line 40)
+      {
+        filename: 'test.tsx',
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onClose={() => {}} />;
+          }
+        `,
+        options: [{ ignorePaths: ['test.tsx'] }],
+      },
+
+
+      // Test when specifier.imported.type !== Identifier
+      {
+        code: `
+          import { "base-modal" as BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // context.filename is undefined
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // JSXMemberExpression in form detection
+      {
+        code: `
+          import { BaseModal } from 'shared-components/BaseModal';
+          import * as UI from 'ui-library';
+          function Component() {
+            return (
+              <BaseModal onClose={() => {}}>
+                <UI.Form>  {/* JSXMemberExpression, not JSXIdentifier */}
+                  <input />
+                </UI.Form>
+              </BaseModal>
+            );
+          }
+        `,
+      },
     ],
 
     invalid: [
@@ -1073,6 +1158,42 @@ import DefaultModal, { OtherModal } from 'shared-components/BaseModal';
 import * as AllModals from 'shared-components/BaseModal';
           function Component() {
             return <DefaultModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Invalid test - tests imported !== local (aliased)  
+      {
+        code: `
+          import { BaseModal as MyModal, Something as Alias } from 'shared-components/BaseModal';
+          function Component() {
+            return <MyModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        errors: [{ messageId: 'preferCrud', line: 4 }],
+        output: `
+          import { CRUDModalTemplate as MyModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { Something as Alias } from 'shared-components/BaseModal';
+          function Component() {
+            return <MyModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+      },
+
+      // Invalid test - multiple imports with different cases
+      {
+        code: `
+          import { type SomeType, BaseModal, Button as Btn } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
+          }
+        `,
+        errors: [{ messageId: 'preferCrud', line: 4 }],
+        output: `
+          import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
+import { type SomeType, Button as Btn } from 'shared-components/BaseModal';
+          function Component() {
+            return <BaseModal onSubmit={handleSubmit} onClose={() => {}} />;
           }
         `,
       },
