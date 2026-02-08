@@ -186,7 +186,7 @@ The currently selected value.
 
 > `optional` **showCaret**: `boolean`
 
-Defined in: [src/types/shared-components/DropDownButton/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L129)
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L134)
 
 Whether to show the caret icon on the dropdown button.
 
