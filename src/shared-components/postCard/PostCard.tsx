@@ -14,7 +14,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { useTranslation } from 'react-i18next';
 import {
   IconButton,
-  Button,
   Input,
   InputAdornment,
   Box,
@@ -26,6 +25,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
+import { Button } from 'shared-components/Button';
 import {
   Favorite,
   ChatBubbleOutline,
@@ -237,7 +237,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }}
             PaperProps={{
               sx: {
-                minWidth: '150px',
+                minWidth: 'var(--space-15)',
                 '& .MuiMenuItem-root': {
                   px: 2,
                   py: 1,
@@ -468,14 +468,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         <Button
           onClick={toggleComments}
           data-testid="comment-card"
-          size="small"
-          sx={{
-            color: 'text.secondary',
-            fontSize: '0.75rem',
-            ml: 2,
-            mb: 1,
-            textTransform: 'none',
-          }}
+          size="sm"
+          variant="link"
+          className="text-secondary small ms-2 mb-1 text-decoration-none"
         >
           {showComments
             ? t('postCard.hideComments')
@@ -519,7 +514,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             }
             sx={{
               backgroundColor: 'action.hover',
-              borderRadius: 20,
+              borderRadius: 'var(--radius-2xl)',
               px: 2,
               py: 0.5,
             }}

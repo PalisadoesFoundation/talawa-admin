@@ -196,3 +196,16 @@
   width: 100%;
   transform: scale(1.5);
 }
+
+.viewCommentsButton {
+  color: var(--bs-secondary);
+  font-size: var(--font-size-xs);
+  margin-left: var(--spacing-2);
+  margin-bottom: var(--spacing-1);
+  text-transform: none;
+  text-decoration: none;
+}
+
+.viewCommentsButton:hover {
+  text-decoration: underline;
+}
