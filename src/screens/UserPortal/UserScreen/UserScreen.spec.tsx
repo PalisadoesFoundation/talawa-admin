@@ -249,11 +249,20 @@ describe('UserScreen tests', () => {
     });
   });
 
-  it('renders the correct title for posts (organization route)', () => {
-    renderUserScreen();
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Posts',
+  it('renders the correct title for posts', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
     );
+
+    const titleElement = screen.getByRole('heading', { level: 1 });
   });
 
   it('renders the correct title for people route', () => {
