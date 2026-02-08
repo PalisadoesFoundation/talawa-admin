@@ -179,28 +179,22 @@ describe('useUserProfile', () => {
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(mockEndSession).toHaveBeenCalled();
     expect(mockNavigate).toHaveBeenCalledWith('/');
+    consoleSpy.mockRestore();
   });
 
   it('prevents race conditions when logout is called multiple times', async () => {
-    localStorage.setItem('name', 'John Doe');
-
     const { result } = renderHook(() => useUserProfile('user'));
-
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
-
     // Call logout multiple times simultaneously
     const promise1 = result.current.handleLogout();
     const promise2 = result.current.handleLogout();
     const promise3 = result.current.handleLogout();
-
     await Promise.all([promise1, promise2, promise3]);
-
     // Should only call mutation once
     expect(mockLogoutMutation).toHaveBeenCalledTimes(1);
     expect(consoleWarnSpy).toHaveBeenCalledWith('Logout already in progress');
-
     consoleWarnSpy.mockRestore();
   });
 });

@@ -11,7 +11,7 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen, cleanup, act } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -106,6 +106,13 @@ vi.mock('shared-components/DropDownButton', () => ({
             </button>
           ),
         )}
+        <button
+          type="button"
+          data-testid="option-unknownKey"
+          onClick={() => props.onSelect && props.onSelect('unknownKey')}
+        >
+          Unknown
+        </button>
       </div>
     </div>
   )),
@@ -500,18 +507,9 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
       </MockedProvider>,
     );
 
-    // Get the mock call to Access onSelect
-    const DropDownButtonMock = await import('shared-components/DropDownButton');
-    const mockDropDownButton =
-      DropDownButtonMock.default as unknown as ReturnType<typeof vi.fn>;
-
-    const lastCall =
-      mockDropDownButton.mock.calls[mockDropDownButton.mock.calls.length - 1];
-    const props = lastCall[0];
-
-    act(() => {
-      props.onSelect('unknownKey');
-    });
+    const user = userEvent.setup();
+    const unknownOption = screen.getByTestId('option-unknownKey');
+    await user.click(unknownOption);
 
     expect(routerSpies.navigate).not.toHaveBeenCalled();
     expect(handleLogoutMock).not.toHaveBeenCalled();

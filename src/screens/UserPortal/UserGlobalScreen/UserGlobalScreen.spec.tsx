@@ -132,7 +132,7 @@ describe('UserGlobalScreen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
@@ -225,7 +225,7 @@ describe('UserGlobalScreen', () => {
     it('should call handleLogout when logout is selected', async () => {
       const user = userEvent.setup();
       // Mock userProfile hook to capture handleLogout
-      const handleLogoutMock = vi.fn();
+      const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
       await overrideUserProfile({ handleLogout: handleLogoutMock });
 
       renderComponent();

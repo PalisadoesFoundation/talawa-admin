@@ -91,6 +91,8 @@ const useUserProfile = (
       if (!abortController.signal.aborted) {
         navigate('/');
       }
+    } catch (cleanupError) {
+      console.error('Error during logout cleanup:', cleanupError);
     } finally {
       // Reset flag only if this is the same abort controller
       if (abortControllerRef.current === abortController) {
