@@ -49,11 +49,11 @@
   position: relative;
   display: inline-block;
   box-shadow: var(--shadow-sm);
+  align-items: center;
 }
 
 .dropdown:is(:hover, :active, .show) {
   background-color: var(--color-gray-500);
   color: var(--color-white);
   border-color: var(--color-gray-500);
-  align-items: center;
 }

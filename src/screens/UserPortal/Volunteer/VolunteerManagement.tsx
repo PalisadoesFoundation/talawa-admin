@@ -192,9 +192,9 @@ const VolunteerManagement = (): JSX.Element => {
           </div>
         </Col>
 
-        <Row className="mt-4">
+        <Col xs={12} className="mt-4">
           <hr />
-        </Row>
+        </Col>
       </Row>
 
       {/* Render content based on the selected settings category */}

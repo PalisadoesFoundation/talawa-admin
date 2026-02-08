@@ -655,12 +655,12 @@ describe('Donate Component', () => {
       expect(screen.getByTestId('currency-dropdown-menu')).toBeInTheDocument();
     });
 
-    expect(
-      await screen.getByTestId('currency-dropdown-item-USD'),
-    ).toHaveTextContent('USD');
-    expect(
-      await screen.getByTestId('currency-dropdown-item-INR'),
-    ).toHaveTextContent('INR');
+    expect(screen.getByTestId('currency-dropdown-item-USD')).toHaveTextContent(
+      'USD',
+    );
+    expect(screen.getByTestId('currency-dropdown-item-INR')).toHaveTextContent(
+      'INR',
+    );
     expect(screen.getByTestId('currency-dropdown-item-EUR')).toHaveTextContent(
       'EUR',
     );
@@ -732,9 +732,11 @@ describe('Donate Component', () => {
     const donateBtn = await screen.findByTestId('donateBtn');
     await userEvent.click(donateBtn);
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
   });
 
   test('handles negative donation amount', async () => {
@@ -746,9 +748,11 @@ describe('Donate Component', () => {
     const donateBtn = await screen.findByTestId('donateBtn');
     await userEvent.click(donateBtn);
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Donation amount must be between 1 and 10000000.',
+      );
+    });
   });
 
   test('updates amount input field correctly', async () => {
@@ -865,7 +869,7 @@ describe('Donate Component', () => {
   });
 
   test('changes page using pagination previous button', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
 
     // Wait for donations to load
     await waitFor(() => {
@@ -896,7 +900,7 @@ describe('Donate Component', () => {
   });
 
   test('changes rows per page and resets to page 0', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
 
     // Wait for donations to load
     await waitFor(() => {
@@ -939,7 +943,7 @@ describe('Donate Component', () => {
   });
 
   test('parses rows per page value correctly', async () => {
-    renderDonate(MULTIPLE_DONATIONS_MOCKS);
+    renderDonate(new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true));
 
     // Wait for donations to load
     await waitFor(() => {

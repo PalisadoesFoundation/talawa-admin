@@ -164,10 +164,7 @@ describe('Volunteer Management', () => {
   test('Testing back button navigation', async () => {
     renderVolunteerManagement();
 
-    // Wait for component to render
-    await screen.findByTestId('mobile-back-btn');
-
-    const backButton = screen.getByTestId('mobile-back-btn');
+    const backButton = await screen.findByTestId('mobile-back-btn');
     expect(backButton).toBeInTheDocument();
 
     await userEvent.click(backButton as HTMLButtonElement);
@@ -324,7 +321,8 @@ describe('Volunteer Management', () => {
     // First switch to a different tab
     const invitationsBtn = await screen.findByTestId('invitationsBtn');
     await userEvent.click(invitationsBtn);
-    expect(screen.getByTestId('invitationsTab')).toBeInTheDocument();
+    const invitationsTab = await screen.findByTestId('invitationsTab');
+    expect(invitationsTab).toBeInTheDocument();
 
     // Open dropdown
     const dropdownToggle = await screen.findByTestId('tabs-dropdown-toggle');
