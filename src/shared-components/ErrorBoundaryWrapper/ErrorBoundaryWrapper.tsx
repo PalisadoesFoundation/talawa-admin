@@ -19,9 +19,11 @@
  *
  * @example
  * // Basic usage with default fallback
+ * ```jsx
  * <ErrorBoundaryWrapper>
  *   <YourComponent />
  * </ErrorBoundaryWrapper>
+ * ```
  *
  * @example
  * // With custom error message and logging

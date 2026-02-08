@@ -39,7 +39,7 @@
  *
  * @param dataTestId - (Optional) Test identifier. Defaults to 'empty-state'
  *
- * @returns JSX.Element - The rendered EmptyState component
+ * @returns The rendered EmptyState component
  *
  * @see {@link InterfaceEmptyStateProps} for prop definitions
  */

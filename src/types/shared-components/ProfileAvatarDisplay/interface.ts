@@ -1,28 +1,27 @@
 import React from 'react';
 /**
  * Props for the ProfileAvatarDisplay component.
- *
- * @param imageUrl - (Optional) URL of the avatar image to display.
- * @param size - (Optional) Size preset: 'small', 'medium', 'large', or 'custom'.
- * @param shape - (Optional) Shape: 'circle', 'square', or 'rounded'.
- * @param customSize - (Optional) Custom size in pixels (used when size='custom').
- * @param border - (Optional) Flag to add a border around the avatar.
- * @param className - (Optional) Additional CSS class names.
- * @param style - (Optional) Inline React CSS properties.
- * @param fallbackName - Required name used for fallback avatar generation.
- * @param dataTestId - (Optional) Test ID for testing purposes.
- * @param objectFit - (Optional) CSS object-fit value for the image.
  */
 export interface InterfaceProfileAvatarDisplayProps {
+  /** (Optional) URL of the avatar image to display. */
   imageUrl?: string | null;
+  /** (Optional) Size preset: 'small', 'medium', 'large', or 'custom'. */
   size?: 'small' | 'medium' | 'large' | 'custom';
+  /** (Optional) Shape: 'circle', 'square', or 'rounded'. */
   shape?: 'circle' | 'square' | 'rounded';
+  /** (Optional) Custom size in pixels (used when size='custom'). */
   customSize?: number;
+  /** (Optional) Flag to add a border around the avatar. */
   border?: boolean;
+  /** (Optional) Additional CSS class names. */
   className?: string;
+  /** (Optional) Inline React CSS properties. */
   style?: React.CSSProperties;
+  /** Required name used for fallback avatar generation. */
   fallbackName: string;
+  /** (Optional) Test ID for testing purposes. */
   dataTestId?: string;
+  /** (Optional) CSS object-fit value for the image. */
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
   onClick?: () => void;
   /** If true, clicking the avatar opens an enlarged modal view */

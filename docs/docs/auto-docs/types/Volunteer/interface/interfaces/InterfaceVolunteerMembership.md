@@ -200,7 +200,7 @@ Hours volunteered
 
 > **id**: `string`
 
-The unique identifier of the event
+The unique identifier of the volunteer
 
 #### user
 

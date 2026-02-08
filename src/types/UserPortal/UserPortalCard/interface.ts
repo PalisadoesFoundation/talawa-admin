@@ -8,21 +8,20 @@ import React from 'react';
  *
  * This component centralizes layout, spacing, and density while keeping
  * all content and text controlled by consuming components.
- *
- * @param imageSlot - (Optional) Left section (avatar, logo, thumbnail, icon)
- * @param children - Main content area (required)
- * @param actionsSlot - (Optional) Right section (buttons, badges, counters)
- * @param variant - Visual density preset controlling padding and spacing
- * @param className - (Optional) Additional class for the outer container
- * @param dataTestId - (Optional) Test id prefix for unit/e2e testing
- * @param ariaLabel - Accessible label for the card container (i18n required)
  */
 export interface InterfaceUserPortalCardProps {
+  /** (Optional) Left section (avatar, logo, thumbnail, icon) */
   imageSlot?: React.ReactNode;
+  /** Main content area (required) */
   children: React.ReactNode;
+  /** (Optional) Right section (buttons, badges, counters) */
   actionsSlot?: React.ReactNode;
+  /** Visual density preset controlling padding and spacing */
   variant?: 'compact' | 'standard' | 'expanded';
+  /** (Optional) Additional class for the outer container */
   className?: string;
+  /** (Optional) Test id prefix for unit/e2e testing */
   dataTestId?: string;
+  /** (Optional) Accessible label for the card container (i18n required) */
   ariaLabel?: string;
 }

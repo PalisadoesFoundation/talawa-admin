@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserPortalCardProps
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L20)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L12)
 
 Props for UserPortalCard — a flexible layout wrapper for User Portal cards.
 
@@ -14,41 +14,15 @@ Layout:
 This component centralizes layout, spacing, and density while keeping
 all content and text controlled by consuming components.
 
-## Param
-
-(Optional) Left section (avatar, logo, thumbnail, icon)
-
-## Param
-
-Main content area (required)
-
-## Param
-
-(Optional) Right section (buttons, badges, counters)
-
-## Param
-
-Visual density preset controlling padding and spacing
-
-## Param
-
-(Optional) Additional class for the outer container
-
-## Param
-
-(Optional) Test id prefix for unit/e2e testing
-
-## Param
-
-Accessible label for the card container (i18n required)
-
 ## Properties
 
 ### actionsSlot?
 
 > `optional` **actionsSlot**: `ReactNode`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L23)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L18)
+
+(Optional) Right section (buttons, badges, counters)
 
 ***
 
@@ -56,7 +30,9 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:23](https://github
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L27)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L26)
+
+(Optional) Accessible label for the card container (i18n required)
 
 ***
 
@@ -64,7 +40,9 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:27](https://github
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L22)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L16)
+
+Main content area (required)
 
 ***
 
@@ -72,7 +50,9 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L25)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L22)
+
+(Optional) Additional class for the outer container
 
 ***
 
@@ -80,7 +60,9 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:25](https://github
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L26)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L24)
+
+(Optional) Test id prefix for unit/e2e testing
 
 ***
 
@@ -88,7 +70,9 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github
 
 > `optional` **imageSlot**: `ReactNode`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L21)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L14)
+
+(Optional) Left section (avatar, logo, thumbnail, icon)
 
 ***
 
@@ -96,4 +80,6 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:21](https://github
 
 > `optional` **variant**: `"compact"` \| `"standard"` \| `"expanded"`
 
-Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L24)
+Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalCard/interface.ts#L20)
+
+Visual density preset controlling padding and spacing

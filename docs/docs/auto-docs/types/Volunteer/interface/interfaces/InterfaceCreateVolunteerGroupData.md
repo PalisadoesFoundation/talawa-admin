@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateVolunteerGroupData
 
-Defined in: [src/types/Volunteer/interface.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L318)
+Defined in: [src/types/Volunteer/interface.ts:320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L320)
 
 Defines the structure for create volunteer group mutation data.
 
@@ -46,7 +46,7 @@ Array of volunteer user IDs.
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:322](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L322)
+Defined in: [src/types/Volunteer/interface.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L324)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Volunteer/interface.ts:322](https://github.com/Palisadoes
 
 > **eventId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L319)
+Defined in: [src/types/Volunteer/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L321)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Volunteer/interface.ts:319](https://github.com/Palisadoes
 
 > `optional` **leaderId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L320)
+Defined in: [src/types/Volunteer/interface.ts:322](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L322)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Volunteer/interface.ts:320](https://github.com/Palisadoes
 
 > **name**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L321)
+Defined in: [src/types/Volunteer/interface.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L323)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Volunteer/interface.ts:321](https://github.com/Palisadoes
 
 > `optional` **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L326)
+Defined in: [src/types/Volunteer/interface.ts:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L328)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Volunteer/interface.ts:326](https://github.com/Palisadoes
 
 > `optional` **scope**: `"ENTIRE_SERIES"` \| `"THIS_INSTANCE_ONLY"`
 
-Defined in: [src/types/Volunteer/interface.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L325)
+Defined in: [src/types/Volunteer/interface.ts:327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L327)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Volunteer/interface.ts:325](https://github.com/Palisadoes
 
 > `optional` **volunteersRequired**: `number`
 
-Defined in: [src/types/Volunteer/interface.ts:323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L323)
+Defined in: [src/types/Volunteer/interface.ts:325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L325)
 
 ***
 
@@ -102,4 +102,4 @@ Defined in: [src/types/Volunteer/interface.ts:323](https://github.com/Palisadoes
 
 > **volunteerUserIds**: `string`[]
 
-Defined in: [src/types/Volunteer/interface.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L324)
+Defined in: [src/types/Volunteer/interface.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L326)

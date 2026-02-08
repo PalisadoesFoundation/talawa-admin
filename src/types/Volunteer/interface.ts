@@ -199,7 +199,7 @@ export interface InterfaceVolunteerMembership {
     } | null;
   };
   volunteer: {
-    /** The unique identifier of the event */
+    /** The unique identifier of the volunteer */
     id: string;
     /** Whether the volunteer has accepted */
     hasAccepted: boolean;
@@ -244,6 +244,8 @@ export interface InterfaceVolunteerMembership {
  * @param volunteerStatus - The status of the volunteer.
  * @param hoursVolunteered - The number of hours volunteered.
  * @param isPublic - Indicates if the volunteer profile is public.
+ * @param isTemplate - Indicates if this is a template volunteer record.
+ * @param isInstanceException - Indicates if this is an exception to a recurring instance.
  * @param createdAt - The creation date of the volunteer record.
  * @param updatedAt - The last update date of the volunteer record.
  * @param user - The user object information of the volunteer.
