@@ -580,16 +580,6 @@
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa indisponible"
   },
-  "orgAdminListCard": {
-    "remove": "Retirer",
-    "removeAdmin": "Supprimer l'administrateur",
-    "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
-    "adminRemoved": "L'administrateur est supprimé.",
-    "joined": "Rejoint",
-    "no": "Non",
-    "yes": "Oui",
-    "talawaApiUnavailable": "API Talawa indisponible"
-  },
   "orgPeopleListCard": {
     "remove": "Retirer",
     "removeMember": "Supprimer un membre",
@@ -1295,9 +1285,6 @@
     "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
-  },
-  "orgDelete": {
-    "deleteOrg": "Supprimer l'organisation"
   },
   "membershipRequest": {
     "accept": "Accepter",
@@ -2589,13 +2576,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Date N/D",
     "yes": "Oui",
     "no": "Non",
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants",
-    "viewEventDetails": "Voir les détails de l'événement"
+    "numberOfAttendees": "Nombre de participants"
   },
   "promotedPost": {
     "title": "Contenu Promu",
