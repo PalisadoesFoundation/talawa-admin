@@ -15,15 +15,19 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-4);
+  padding: var(--space-4);
 }
 
 .userInfo {
   display: flex;
   align-items: center;
   gap: var(--space-4);
+  gap: var(--space-4);
 }
 
 .postMedia {
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
   padding-left: var(--space-5);
   padding-right: var(--space-5);
   width: 100%;
@@ -86,6 +90,7 @@
 
 .commentSection {
   max-height: var(--space-20);
+  max-height: var(--space-20);
   overflow-y: auto;
   padding: var(--space-0) var(--space-5);
 }
@@ -96,6 +101,7 @@
 }
 
 .commentForm :global(.MuiInput-root) {
+  font-size: var(--font-size-sm);
   font-size: var(--font-size-sm);
 }
 
@@ -115,12 +121,14 @@
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: var(--space-25);
+  max-width: var(--space-25);
   /* background-color handled by sx prop for theme support */
   border-radius: var(--radius-md);
   padding: var(--space-7);
 }
 
 .editModalContent h3 {
+  margin-bottom: var(--space-5);
   margin-bottom: var(--space-5);
 }
 
@@ -164,6 +172,7 @@
 
 .closeButtonIcon {
   font-size: var(--font-size-xl) !important;
+  font-size: var(--font-size-xl) !important;
 }
 
 .image {
@@ -187,6 +196,7 @@
   overflow: hidden;
   border-radius: var(--radius-full);
   position: relative;
+  border: var(--border-2) solid var(--userImageUserPost-border);
   border: var(--border-2) solid var(--userImageUserPost-border);
 }
 

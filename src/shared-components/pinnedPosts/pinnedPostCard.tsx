@@ -36,7 +36,6 @@ import {
   CardContent,
   CardMedia,
   Typography,
-  Avatar,
   Box,
   IconButton,
   Container,
@@ -62,6 +61,7 @@ import styles from './pinnedPostCard.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Button } from '../Button';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   pinnedPost,
@@ -144,19 +144,28 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             pb: 1,
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Avatar
-              src={pinnedPost.node?.creator?.avatarURL || undefined}
-              sx={{ width: 28, height: 28 }}
-            >
-              {pinnedPost.node?.creator?.name?.[0]}
-            </Avatar>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 'var(--space-7)',
+            }}
+          >
+            <ProfileAvatarDisplay
+              imageUrl={pinnedPost.node?.creator?.avatarURL || defaultImg}
+              fallbackName={pinnedPost.node?.creator?.name || ''}
+              size="small"
+              crossOrigin="anonymous"
+              enableEnlarge
+              className={styles.userImageUserPost}
+              dataTestId="org-avatar"
+            />
             <Typography className={styles.creatorName}>
               {pinnedPost.node?.creator?.name}
             </Typography>
           </Box>
 
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
+          <Box sx={{ display: 'flex', gap: 'var(--space-3)' }}>
             <IconButton size="small" aria-label={t('pinnedPost')}>
               <PushPin className={styles.pushPin} />
             </IconButton>
@@ -180,7 +189,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                   transformOrigin={{ vertical: 'top', horizontal: 'right' }}
                   PaperProps={{
                     sx: {
-                      minWidth: '150px',
+                      minWidth: 'var(--space-15)',
                       '& .MuiMenuItem-root': { px: 2, py: 1 },
                     },
                   }}
@@ -264,8 +273,8 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         <CardContent className={styles.cardContent}>
           <Typography
             sx={{
-              fontWeight: 500,
-              fontSize: '18px',
+              fontWeight: 'var(--font-weight-medium)',
+              fontSize: 'var(--font-size-lg)',
               display: '-webkit-box',
               WebkitLineClamp: 1,
               WebkitBoxOrient: 'vertical',
@@ -280,7 +289,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             color="text.secondary"
             sx={{
               mb: 1,
-              fontSize: '12px',
+              fontSize: 'var(--font-size-xs)',
             }}
           >
             {t('postedOn', { date: formatDate(pinnedPost.node.createdAt) })}

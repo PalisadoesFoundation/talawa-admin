@@ -198,6 +198,8 @@ const ALLOWLIST_PATTERNS = [
   /@media[^{]*\(\s*(?:min|max)-(?:width|height):\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*width:\s*[\d.]+(px|rem|em)\s*\)/,
   /@media[^{]*\(\s*height:\s*[\d.]+(px|rem|em)\s*\)/,
+  // MUI DataGrid GridColDef width properties - TypeScript requires numbers, not CSS var() strings
+  /(?:min|max)?[Ww]idth:\s*\d+,?\s*$/,
 ];
 
 const normalizePath = (file: string): string => file.split(path.sep).join('/');

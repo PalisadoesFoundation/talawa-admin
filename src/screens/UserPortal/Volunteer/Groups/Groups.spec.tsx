@@ -43,52 +43,105 @@ vi.mock('@mui/icons-material', async () => {
   >;
   return {
     ...actual,
-    WarningAmberRounded: () => (
-      <span data-testid="warning-icon">WarningAmberRounded</span>
-    ),
+    WarningAmberRounded: function WarningIcon(props: Record<string, unknown>) {
+      return React.createElement(
+        'span',
+        { ...props, 'data-testid': 'warning-icon' },
+        'WarningAmberRounded',
+      );
+    },
   };
 });
 
-vi.mock('./GroupModal', () => ({
-  default: ({
-    isOpen,
-    hide,
-    refetchGroups,
-  }: {
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => {
+  const exports: Record<string, unknown> = {};
+  exports['ProfileAvatarDisplay'] = (params: {
+    imageUrl?: string;
+    fallbackName: string;
+    dataTestId?: string;
+  }) => {
+    const { imageUrl, fallbackName, dataTestId } = params;
+    return React.createElement(
+      'div',
+      null,
+      imageUrl
+        ? React.createElement('img', {
+            src: imageUrl,
+            alt: fallbackName,
+            'data-testid': dataTestId,
+          })
+        : React.createElement(
+            'div',
+            { 'data-testid': dataTestId },
+            fallbackName.charAt(0),
+          ),
+    );
+  };
+  return exports;
+});
+
+vi.mock('./GroupModal', () => {
+  const exports: Record<string, unknown> = {};
+  exports['default'] = (params: {
     isOpen: boolean;
     hide: () => void;
     refetchGroups?: () => void;
-  }) =>
-    isOpen ? (
-      <div data-testid="groupModal">
-        <div>Manage Group</div>
-        <button type="button" data-testid="modalCloseBtn" onClick={hide}>
-          Close
-        </button>
-        <button
-          type="button"
-          data-testid="triggerRefetch"
-          onClick={() => refetchGroups?.()}
-        >
-          Trigger Refetch
-        </button>
-      </div>
-    ) : null,
-}));
+  }) => {
+    const { isOpen, hide, refetchGroups } = params;
+    return isOpen
+      ? React.createElement(
+          'div',
+          { 'data-testid': 'groupModal' },
+          React.createElement('div', null, 'Manage Group'),
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'modalCloseBtn',
+              onClick: hide,
+            },
+            'Close',
+          ),
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'triggerRefetch',
+              onClick: () => refetchGroups?.(),
+            },
+            'Trigger Refetch',
+          ),
+        )
+      : null;
+  };
+  return exports;
+});
 
 vi.mock(
   'shared-components/VolunteerGroupViewModal/VolunteerGroupViewModal',
-  () => ({
-    default: ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) =>
-      isOpen ? (
-        <div data-testid="volunteerViewModal">
-          <div>Group Details</div>
-          <button data-testid="volunteerViewModalCloseBtn" onClick={hide}>
-            Close
-          </button>
-        </div>
-      ) : null,
-  }),
+  () => {
+    const exports: Record<string, unknown> = {};
+    exports['default'] = (params: { isOpen: boolean; hide: () => void }) => {
+      const { isOpen, hide } = params;
+      return isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'volunteerViewModal' },
+            React.createElement('div', null, 'Group Details'),
+            React.createElement(
+              'button',
+              {
+                'data-testid': 'volunteerViewModalCloseBtn',
+                onClick: hide,
+              },
+              'Close',
+            ),
+          )
+        : null;
+    };
+    return exports;
+  },
 );
 
 // Create mocks with correct variable structure
@@ -547,26 +600,25 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 2')).toBeInTheDocument();
     });
 
-    // Group 2 has an avatarURL
-    const leaderNames = screen.getAllByTestId('leaderName');
-    const group2Leader = leaderNames.find((el) =>
-      el.textContent?.includes('Jane Smith'),
-    );
-
-    expect(group2Leader).toBeInTheDocument();
-    expect(group2Leader?.querySelector('img')).toBeInTheDocument();
+    // Group 2 has an avatarURL, mock should render an img tag
+    const avatarImg = screen.getByTestId('imagedifferentUserId');
+    expect(avatarImg).toBeInTheDocument();
+    expect(avatarImg.tagName).toBe('IMG');
+    expect(avatarImg).toHaveAttribute('src', 'https://example.com/avatar.jpg');
   });
 
-  it('displays Avatar component when avatarURL is not provided', async () => {
+  it('displays first letter when avatarURL is not provided', async () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    // Group 1 has no avatarURL, should use Avatar component
-    const leaderNames = screen.getAllByTestId('leaderName');
-    expect(leaderNames[0]).toBeInTheDocument();
+    // Group 1 has no avatarURL, mock should render a div with first letter
+    const avatarDiv = screen.getByTestId('imageuserId');
+    expect(avatarDiv).toBeInTheDocument();
+    expect(avatarDiv.tagName).toBe('DIV');
+    expect(avatarDiv.textContent).toBe('T'); // First letter of "Teresa Bradley"
   });
 
   it('displays correct number of volunteers in each group', async () => {

@@ -16,11 +16,11 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
-import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 /**
  * Component for displaying and managing action items assigned to the current volunteer.
@@ -143,12 +143,13 @@ function Actions(): JSX.Element {
             className="d-flex fw-bold align-items-center"
             data-testid="assigneeName"
           >
-            <Avatar
-              name={name}
-              alt={name}
-              containerStyle={styles.imageContainer}
-              avatarStyle={styles.tableImage}
+            <ProfileAvatarDisplay
+              imageUrl={user?.avatarUrl}
+              fallbackName={name}
+              size="small"
+              dataTestId={'image' + user?.id}
             />
+
             <span className="ms-2">{name}</span>
           </div>
         );

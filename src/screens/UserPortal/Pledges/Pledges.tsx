@@ -27,12 +27,12 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'shared-components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const Pledges = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
@@ -159,22 +159,13 @@ const Pledges = (): JSX.Element => {
                   className={styles.pledgerContainer}
                   key={`${user.id}-${index}`}
                 >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt={user.name}
-                      data-testid={'image-pledger-' + user.id}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <Avatar
-                      containerStyle={styles.imageContainerPledge}
-                      avatarStyle={styles.TableImagePledge}
-                      name={user.name}
-                      alt={user.name}
-                      dataTestId={'avatar-pledger-' + user.id}
-                    />
-                  )}
+                  <ProfileAvatarDisplay
+                    imageUrl={user.avatarURL}
+                    fallbackName={user.name}
+                    size="small"
+                    className={styles.TableImagePledge}
+                    dataTestId={'profile-avatar-pledger-' + user?.id}
+                  />
                   <span>{user.name}</span>
                 </div>
               ))}

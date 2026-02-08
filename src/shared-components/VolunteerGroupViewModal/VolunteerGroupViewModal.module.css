@@ -3,12 +3,8 @@
   margin: 2vh auto;
 }
 
-.tableImages {
-  object-fit: cover;
-  width: 100%;
-  height: auto;
-  border-radius: 0;
-  margin-right: var(--space-3);
+.tableimages {
+  margin: auto;
 }
 
 .avatarContainer {

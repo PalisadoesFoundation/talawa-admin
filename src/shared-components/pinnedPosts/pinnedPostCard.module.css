@@ -1,51 +1,61 @@
 .postCardContainer {
-  width: 340px;
-  height: 380px;
+  width: var(--space-22);
+  height: var(--space-23);
+}
+
+.userImageUserPost {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: var(--border-2) solid var(--userImageUserPost-border);
 }
 
 .card {
-  width: 340px;
-  border-radius: 2px;
+  width: var(--space-22);
+  border-radius: var(--radius-xs);
   overflow: hidden;
 }
 
 .cardHeader {
-  height: 49px;
+  height: var(--space-10);
 }
 
 .pushPin {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
 }
 
 .creatorName {
-  font-size: 14px;
-  font-weight: 300;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-lighter);
 }
 
 .moreOptionsButton {
-  font-size: 20px;
+  font-size: var(--font-size-xl);
 }
 
 .postMedia {
-  height: 195px;
+  height: var(--space-16);
   width: 100%;
 }
 
 .cardContent {
-  height: 136px;
+  height: var(--space-14);
 }
 
 /* Scoped button styles with parent class for proper specificity */
 .postCardContainer .viewPostButton {
-  background-color: #a8c7fa;
+  background-color: var(--color-blue-200);
   color: black;
   text-transform: none;
-  border-radius: 8px;
-  padding: 8px 24px;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--font-size-15);
+  font-weight: var(--font-weight-medium);
 }
 
 .postCardContainer .viewPostButton:hover {
-  background-color: #8bb5e8;
+  background-color: var(--color-blue-300);
 }
