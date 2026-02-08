@@ -71,6 +71,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   searchable = false,
   searchPlaceholder,
   showCaret = true,
+  menuClassName,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedSearchPlaceholder =
@@ -160,7 +161,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         <Dropdown.Menu
           role="listbox"
           aria-label={ariaLabel || tCommon('optionsSuffix')}
-          className={`${styles.dropdownMenu} w-100`}
+          className={`${styles.dropdownMenu} w-100 ${menuClassName || ''}`}
           data-testid={`${dataTestIdPrefix}-menu`}
         >
           {filteredOptions.length > 0 ? (
@@ -231,7 +232,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             ? `${ariaLabel} ${tCommon('optionsSuffix')}`
             : tCommon('optionsSuffix')
         }
-        className={styles.dropdownMenu}
+        className={`${styles.dropdownMenu} ${menuClassName || ''}`}
         data-testid={`${dataTestIdPrefix}-menu`}
       >
         {options.map((opt) => (

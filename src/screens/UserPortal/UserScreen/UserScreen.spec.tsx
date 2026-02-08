@@ -10,6 +10,7 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
+// SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
@@ -81,14 +82,32 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
-// Mock ProfileCard component to prevent useNavigate() error from Router context
+vi.mock('shared-components/DropDownButton', () => ({
+  default: vi.fn(() => (
+    <div data-testid="user-profile-dropdown">DropDownButton</div>
+  )),
+}));
+
+vi.mock('hooks/useUserProfile', () => ({
+  default: vi.fn(() => ({
+    name: 'Test User',
+    displayedName: 'Test User',
+    userRole: 'User',
+    userImage: 'test-image.jpg',
+    profileDestination: '/user/profile',
+    handleLogout: vi.fn(),
+    tCommon: (key: string) => key,
+  })),
+}));
+
+/* // Mock ProfileCard component to prevent useNavigate() error from Router context
 vi.mock('components/ProfileCard/ProfileCard', () => ({
   default: vi.fn(() => (
     <div data-testid="profile-dropdown">
       <div data-testid="display-name">Test User</div>
     </div>
   )),
-}));
+})); */
 
 const MOCKS = [
   {
@@ -276,5 +295,21 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
     const titleElement = screen.getByRole('heading', { level: 1 });
     expect(titleElement).toHaveTextContent('User Portal');
+  });
+
+  it('renders DropDownButton component', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
   });
 });

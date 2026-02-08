@@ -16,10 +16,22 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
-vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
+vi.mock('shared-components/DropDownButton', () => ({
   default: vi.fn(() => (
-    <div data-testid="profile-dropdown">ProfileDropdown</div>
+    <div data-testid="user-profile-dropdown">DropDownButton</div>
   )),
+}));
+
+vi.mock('hooks/useUserProfile', () => ({
+  default: vi.fn(() => ({
+    name: 'Test User',
+    displayedName: 'Test User',
+    userRole: 'User',
+    userImage: 'test-image.jpg',
+    profileDestination: '/user/profile',
+    handleLogout: vi.fn(),
+    tCommon: (key: string) => key,
+  })),
 }));
 
 // Mock react-i18next
@@ -57,6 +69,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Content</div>),
+    useNavigate: vi.fn(),
   };
 });
 
@@ -96,7 +109,7 @@ describe('UserGlobalScreen', () => {
       renderComponent();
 
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
       expect(screen.getByTestId('outlet')).toBeInTheDocument();
       expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
       expect(screen.getByText('Global Features')).toBeInTheDocument();
@@ -110,10 +123,10 @@ describe('UserGlobalScreen', () => {
       // The sidebar should initially show hideDrawer as false for desktop
     });
 
-    it('should render ProfileDropdown component', () => {
+    it('should render DropDownButton component', () => {
       renderComponent();
 
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
     });
 
     it('should render Outlet for nested routes', () => {
