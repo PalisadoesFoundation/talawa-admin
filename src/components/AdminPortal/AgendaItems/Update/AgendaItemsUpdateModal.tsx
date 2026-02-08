@@ -202,7 +202,7 @@ const AgendaItemsUpdateModal: React.FC<
             folderId: itemFormState.folder || undefined,
             categoryId: itemFormState.category || undefined,
             notes:
-              itemFormState.notes === ''
+              itemFormState.notes?.trim() === ''
                 ? null
                 : (itemFormState.notes ?? undefined),
             url: itemFormState.url.map((u) => ({ url: u })),
