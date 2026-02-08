@@ -11,7 +11,7 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen, cleanup } from '@testing-library/react';
+import { render, screen, cleanup, act } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -331,10 +331,8 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     const dropdown = screen.getByTestId('user-profile-dropdown');
     expect(dropdown).toBeInTheDocument();
     expect(dropdown).toHaveAttribute('data-variant', 'light');
-    // showCaret is not passed, so it should be undefined in the mock props
-    // We expect it NOT to be present or NOT be 'false' if it defaults to undefined in usage
-    // Adjusted to check for absence or difference from strict 'false' string if that was the issue
-    expect(dropdown).not.toHaveAttribute('data-show-caret', 'false');
+    // showCaret is passed as false in UserScreen.tsx
+    expect(dropdown).toHaveAttribute('data-show-caret', 'false');
     // We check if the class name is passed (it will be the hashed class name from CSS module)
     expect(dropdown).toHaveAttribute('data-menu-class');
   });
@@ -470,5 +468,53 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     await user.click(logoutOption);
 
     expect(handleLogoutMock).toHaveBeenCalled();
+  });
+
+  it('should handle unknown eventKey in DropDownButton', async () => {
+    // Mock userProfile hook to capture handleLogout
+    const handleLogoutMock = vi.fn();
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg',
+        profileDestination: '/user/profile',
+        handleLogout: handleLogoutMock,
+        tCommon: (key: string) => key,
+      }),
+    );
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Get the mock call to Access onSelect
+    const DropDownButtonMock = await import('shared-components/DropDownButton');
+    const mockDropDownButton =
+      DropDownButtonMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    const lastCall =
+      mockDropDownButton.mock.calls[mockDropDownButton.mock.calls.length - 1];
+    const props = lastCall[0];
+
+    act(() => {
+      props.onSelect('unknownKey');
+    });
+
+    expect(routerSpies.navigate).not.toHaveBeenCalled();
+    expect(handleLogoutMock).not.toHaveBeenCalled();
   });
 });

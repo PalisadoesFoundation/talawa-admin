@@ -75,7 +75,7 @@
   background-color: var(--color-white);
   border: var(--border-1) solid var(--color-gray-200);
   border-radius: var(--radius-lg);
-  padding: var(--space-2) var(--space-2) var(--space-1) var(--space-1);
+  padding: var(--space-2) var(--space-3) var(--space-1) var(--space-1);
   margin: var(--space-6) var(--space-8) var(--space-6) var(--space-6);
   transition: all 0.2s ease;
   display: flex;

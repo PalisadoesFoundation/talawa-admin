@@ -18,7 +18,7 @@ import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
 import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const useUserProfile = (
   portal: ProfilePortal = 'user',
@@ -29,12 +29,11 @@ const useUserProfile = (
   const { getItem, clearAllItems } = useLocalStorage();
   const navigate = useNavigate();
 
-  const { userRole, name, userImage } = useMemo(() => {
-    const role = getItem<string>('role') || '';
-    const n = getItem<string>('name') || '';
-    const img = sanitizeAvatarURL(getItem<string>('UserImage'));
-    return { userRole: role, name: n, userImage: img };
-  }, [getItem]);
+  const [{ userRole, name, userImage }] = useState(() => ({
+    userRole: getItem<string>('role') || '',
+    name: getItem<string>('name') || '',
+    userImage: sanitizeAvatarURL(getItem<string>('UserImage')),
+  }));
 
   const displayedName = useMemo(
     () =>

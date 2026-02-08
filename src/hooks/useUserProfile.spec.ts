@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, cleanup } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import useUserProfile from './useUserProfile';
 import { useMutation } from '@apollo/client';
@@ -73,6 +73,7 @@ describe('useUserProfile', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    cleanup();
   });
 
   it('should return default values when local storage is empty', () => {

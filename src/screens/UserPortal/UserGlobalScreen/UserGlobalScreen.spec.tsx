@@ -7,7 +7,7 @@ import UserGlobalScreen from './UserGlobalScreen';
 
 // Mock Avatar
 vi.mock('shared-components/Avatar/Avatar', () => ({
-  default: vi.fn(({ 'data-testid': dataTestId, alt, src }) => (
+  default: vi.fn(({ dataTestId, alt, src }) => (
     <img data-testid={dataTestId} alt={alt} src={src || 'mock-avatar-src'} />
   )),
 }));
@@ -40,6 +40,7 @@ vi.mock('shared-components/DropDownButton', () => ({
             <button
               key={opt.value}
               data-testid={`option-${opt.value}`}
+              type="button"
               onClick={() => props.onSelect && props.onSelect(opt.value)}
             >
               {opt.label}
@@ -233,6 +234,50 @@ describe('UserGlobalScreen', () => {
       await user.click(logoutOption);
 
       expect(handleLogoutMock).toHaveBeenCalled();
+    });
+
+    it('should handle unknown eventKey in DropDownButton', async () => {
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn();
+      const useUserProfileMock = await import('hooks/useUserProfile');
+      const mockUseUserProfile =
+        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+      mockUseUserProfile.mockImplementation(
+        (): InterfaceUseUserProfileReturn => ({
+          name: 'Test User',
+          displayedName: 'Test User',
+          userRole: 'User',
+          userImage: 'test-image.jpg',
+          profileDestination: '/user/profile',
+          handleLogout: handleLogoutMock,
+          tCommon: (key: string) => key,
+        }),
+      );
+
+      renderComponent();
+
+      // We need to trigger the onSelect prop of DropDownButton with an unknown key
+      // Since our mock implementation renders buttons for options, we can't easily click an "unknown" option.
+      // However, we can access the mock call args to get the onSelect function.
+      const DropDownButtonMock =
+        await import('shared-components/DropDownButton');
+      const mockDropDownButton =
+        DropDownButtonMock.default as unknown as ReturnType<typeof vi.fn>;
+
+      // Get the last call to DropDownButton
+      const lastCall =
+        mockDropDownButton.mock.calls[mockDropDownButton.mock.calls.length - 1];
+      const props = lastCall[0];
+
+      // Invoke onSelect with unknown key
+      act(() => {
+        props.onSelect('unknownKey');
+      });
+
+      // Assert that nothing happened
+      expect(routerSpies.navigate).not.toHaveBeenCalled();
+      expect(handleLogoutMock).not.toHaveBeenCalled();
     });
   });
 

@@ -139,7 +139,7 @@ const UserGlobalScreen = (): JSX.Element => {
                     <Avatar
                       avatarStyle={styles.profileImage}
                       containerStyle={styles.imageContainer}
-                      data-testid="display-img"
+                      dataTestId="display-img"
                       size={45}
                       name={name}
                       alt={tCommon('profilePicturePlaceholder')}
