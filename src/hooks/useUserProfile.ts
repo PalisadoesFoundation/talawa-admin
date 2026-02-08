@@ -7,7 +7,7 @@
  */
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { MAX_NAME_LENGTH } from 'components/ProfileDropdown/ProfileDropdown';
+import { MAX_NAME_LENGTH } from 'Constant/common';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -16,16 +16,7 @@ import {
 } from 'utils/profileNavigation';
 import useLocalStorage from 'utils/useLocalstorage';
 import useSession from 'utils/useSession';
-
-interface InterfaceUseUserProfileReturn {
-  name: string;
-  displayedName: string;
-  userRole: string;
-  userImage: string;
-  profileDestination: string;
-  handleLogout: () => Promise<void>;
-  tCommon: (key: string) => string;
-}
+import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 
 const useUserProfile = (
   portal: ProfilePortal = 'user',
@@ -38,7 +29,8 @@ const useUserProfile = (
 
   const userRole = getItem<string>('role') || '';
   const name: string = getItem<string>('name') || '';
-  const userImage: string = getItem<string>('UserImage') || '';
+  const rawUserImage: string = getItem<string>('UserImage') || '';
+  const userImage = rawUserImage === 'null' ? '' : rawUserImage;
 
   const displayedName =
     name.length > MAX_NAME_LENGTH
@@ -55,10 +47,11 @@ const useUserProfile = (
       await logout();
     } catch (error) {
       console.error('Error during logout:', error);
+    } finally {
+      clearAllItems();
+      endSession();
+      navigate('/');
     }
-    clearAllItems();
-    endSession();
-    navigate('/');
   };
 
   return {

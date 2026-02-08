@@ -17,6 +17,7 @@
  * @param placeholder - Placeholder text when no option is selected.
  * @param parentContainerStyle - Additional styles for the parent container.
  * @param btnStyle - Additional styles for the dropdown button.
+ * @param menuClassName - Custom class name for the dropdown menu.
  * @param showCaret - Whether to render the caret indicator (non-searchable mode).
  *
  * @returns A DropDownButton component.

@@ -113,16 +113,24 @@ const UserGlobalScreen = (): JSX.Element => {
               },
             ]}
             onSelect={(eventKey) => {
-              if (eventKey === 'viewProfile') {
-                navigate(profileDestination);
-              } else if (eventKey === 'logout') {
-                handleLogout();
+              switch (eventKey) {
+                case 'viewProfile':
+                  navigate(profileDestination);
+                  break;
+                case 'logout':
+                  handleLogout();
+                  break;
+                default:
+                  console.warn(
+                    `User profile dropdown: Unhandled eventKey "${eventKey}"`,
+                  );
+                  break;
               }
             }}
             icon={
               <div className={styles.profileContainer}>
                 <div className={styles.imageContainer}>
-                  {userImage && userImage !== 'null' ? (
+                  {userImage ? (
                     <img
                       src={userImage}
                       alt={tCommon('profilePicture')}
@@ -152,7 +160,7 @@ const UserGlobalScreen = (): JSX.Element => {
                     className={styles.profileRole}
                     data-testid="display-type"
                   >
-                    {`${userRole}`}
+                    {userRole}
                   </span>
                 </div>
               </div>

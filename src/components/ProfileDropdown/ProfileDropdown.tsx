@@ -44,8 +44,7 @@ import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 import DropDownButton from 'shared-components/DropDownButton';
 import type { InterfaceProfileDropdownProps } from 'types/shared-components/ProfileDropdown/interface';
-
-export const MAX_NAME_LENGTH = 20;
+import { MAX_NAME_LENGTH } from 'Constant/common';
 
 const ProfileDropdown = ({
   portal = 'admin',

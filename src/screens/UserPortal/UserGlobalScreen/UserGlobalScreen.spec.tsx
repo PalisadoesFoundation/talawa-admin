@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import UserGlobalScreen from './UserGlobalScreen';
 
 // Mock the child components
@@ -17,8 +18,29 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
 }));
 
 vi.mock('shared-components/DropDownButton', () => ({
-  default: vi.fn(() => (
-    <div data-testid="user-profile-dropdown">DropDownButton</div>
+  default: vi.fn((props) => (
+    <div
+      data-testid="user-profile-dropdown"
+      data-variant={props.variant}
+      data-menu-class={props.menuClassName}
+      data-show-caret={props.showCaret}
+      aria-label={props.ariaLabel}
+    >
+      {props.icon}
+      <div data-testid="dropdown-options">
+        {props.options?.map(
+          (opt: { value: string; label: React.ReactNode }) => (
+            <div
+              key={opt.value}
+              data-testid={`option-${opt.value}`}
+              onClick={() => props.onSelect && props.onSelect(opt.value)}
+            >
+              {opt.label}
+            </div>
+          ),
+        )}
+      </div>
+    </div>
   )),
 }));
 
@@ -63,13 +85,17 @@ vi.mock('./UserGlobalScreen.module.css', () => ({
   },
 }));
 
+const routerSpies = vi.hoisted(() => ({
+  navigate: vi.fn(),
+}));
+
 // Mock react-router Outlet
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Content</div>),
-    useNavigate: vi.fn(),
+    useNavigate: () => routerSpies.navigate,
   };
 });
 
@@ -88,6 +114,7 @@ describe('UserGlobalScreen', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    cleanup();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -123,22 +150,50 @@ describe('UserGlobalScreen', () => {
       // The sidebar should initially show hideDrawer as false for desktop
     });
 
-    it('should render DropDownButton component', () => {
+    it('should render DropDownButton component with correct props', () => {
       renderComponent();
 
-      expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
+      const dropdown = screen.getByTestId('user-profile-dropdown');
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown).toHaveAttribute('data-variant', 'light');
+      expect(dropdown).toHaveAttribute('data-show-caret', 'false');
+      expect(dropdown).toHaveAttribute('data-menu-class');
     });
 
-    it('should render Outlet for nested routes', () => {
+    it('should navigate to profile when viewProfile is selected', async () => {
       renderComponent();
 
-      expect(screen.getByTestId('outlet')).toBeInTheDocument();
+      const viewProfileOption = screen.getByTestId('option-viewProfile');
+      await userEvent.click(viewProfileOption);
+
+      expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
     });
 
-    it('should render Global Features heading', () => {
+    it('should call handleLogout when logout is selected', async () => {
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn();
+      const useUserProfileMock = await import('hooks/useUserProfile');
+      // Cast the default export to a Mock function
+      const mockUseUserProfile =
+        useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+      mockUseUserProfile.mockImplementation(
+        (): InterfaceUseUserProfileReturn => ({
+          name: 'Test User',
+          displayedName: 'Test User',
+          userRole: 'User',
+          userImage: 'test-image.jpg',
+          profileDestination: '/user/profile',
+          handleLogout: handleLogoutMock,
+          tCommon: (key: string) => key,
+        }),
+      );
+
       renderComponent();
 
-      expect(screen.getByText('Global Features')).toBeInTheDocument();
+      const logoutOption = screen.getByTestId('option-logout');
+      await userEvent.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
     });
   });
 

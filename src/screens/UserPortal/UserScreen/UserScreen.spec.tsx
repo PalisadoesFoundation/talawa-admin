@@ -10,9 +10,8 @@
  */
 
 // SKIP_LOCALSTORAGE_CHECK
-// SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -25,6 +24,7 @@ import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
 import localStyles from './UserScreen.module.css';
+import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -83,31 +83,45 @@ vi.mock('utils/useSession', () => ({
 }));
 
 vi.mock('shared-components/DropDownButton', () => ({
-  default: vi.fn(() => (
-    <div data-testid="user-profile-dropdown">DropDownButton</div>
+  default: vi.fn((props) => (
+    <div
+      data-testid="user-profile-dropdown"
+      data-variant={props.variant}
+      data-menu-class={props.menuClassName}
+      data-show-caret={props.showCaret}
+      aria-label={props.ariaLabel}
+    >
+      {props.icon}
+      <div data-testid="dropdown-options">
+        {props.options?.map(
+          (opt: { value: string; label: React.ReactNode }) => (
+            <div
+              key={opt.value}
+              data-testid={`option-${opt.value}`}
+              onClick={() => props.onSelect && props.onSelect(opt.value)}
+            >
+              {opt.label}
+            </div>
+          ),
+        )}
+      </div>
+    </div>
   )),
 }));
 
 vi.mock('hooks/useUserProfile', () => ({
-  default: vi.fn(() => ({
-    name: 'Test User',
-    displayedName: 'Test User',
-    userRole: 'User',
-    userImage: 'test-image.jpg',
-    profileDestination: '/user/profile',
-    handleLogout: vi.fn(),
-    tCommon: (key: string) => key,
-  })),
+  default: vi.fn(
+    (): InterfaceUseUserProfileReturn => ({
+      name: 'Test User',
+      displayedName: 'Test User',
+      userRole: 'User',
+      userImage: 'test-image.jpg',
+      profileDestination: '/user/profile',
+      handleLogout: vi.fn(),
+      tCommon: (key: string) => key,
+    }),
+  ),
 }));
-
-/* // Mock ProfileCard component to prevent useNavigate() error from Router context
-vi.mock('components/ProfileCard/ProfileCard', () => ({
-  default: vi.fn(() => (
-    <div data-testid="profile-dropdown">
-      <div data-testid="display-name">Test User</div>
-    </div>
-  )),
-})); */
 
 const MOCKS = [
   {
@@ -163,6 +177,8 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
     localStorage.removeItem('name');
     localStorage.removeItem('sidebar');
   });
@@ -311,5 +327,99 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
+  });
+
+  it('passes correct props to DropDownButton', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('user-profile-dropdown');
+    expect(dropdown).toHaveAttribute('data-variant', 'light');
+    expect(dropdown).toHaveAttribute('data-show-caret', 'false');
+    // We check if the class name is passed (it will be the hashed class name from CSS module)
+    expect(dropdown).toHaveAttribute('data-menu-class');
+  });
+
+  it('renders profile content correctly', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('display-img')).toBeInTheDocument();
+    expect(screen.getByTestId('display-name')).toHaveTextContent('Test User');
+    expect(screen.getByTestId('display-type')).toHaveTextContent('User');
+  });
+
+  it('navigates to profile on viewProfile click', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const viewProfileOption = screen.getByTestId('option-viewProfile');
+    viewProfileOption.click();
+
+    expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
+  });
+
+  it('calls handleLogout on logout click', async () => {
+    // Mock userProfile hook to capture handleLogout
+    const handleLogoutMock = vi.fn();
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    // Cast the default export to a Mock function to access mockImplementation
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg',
+        profileDestination: '/user/profile',
+        handleLogout: handleLogoutMock,
+        tCommon: (key: string) => key,
+      }),
+    );
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const logoutOption = screen.getByTestId('option-logout');
+    logoutOption.click();
+
+    expect(handleLogoutMock).toHaveBeenCalled();
   });
 });

@@ -132,7 +132,7 @@ const LoginPage = (): JSX.Element => {
     setItem('name', user.name);
     setItem('email', user.emailAddress);
     setItem('role', user.role);
-    setItem('UserImage', user.avatarURL || '');
+    setItem('UserImage', user.avatarURL === 'null' ? '' : user.avatarURL || '');
     if (role === 'admin') {
       setItem('id', user.id);
     } else {

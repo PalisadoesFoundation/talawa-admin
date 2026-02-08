@@ -4,9 +4,9 @@
 
 # Function: default()
 
-> **default**(`portal`): `InterfaceUseUserProfileReturn`
+> **default**(`portal`): [`InterfaceUseUserProfileReturn`](../../../types/UseUserProfile/interfaces/InterfaceUseUserProfileReturn.md)
 
-Defined in: [src/hooks/useUserProfile.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useUserProfile.ts#L30)
+Defined in: [src/hooks/useUserProfile.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useUserProfile.ts#L21)
 
 ## Parameters
 
@@ -16,4 +16,4 @@ Defined in: [src/hooks/useUserProfile.ts:30](https://github.com/PalisadoesFounda
 
 ## Returns
 
-`InterfaceUseUserProfileReturn`
+[`InterfaceUseUserProfileReturn`](../../../types/UseUserProfile/interfaces/InterfaceUseUserProfileReturn.md)

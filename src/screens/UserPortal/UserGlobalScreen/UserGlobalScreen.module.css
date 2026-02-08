@@ -162,7 +162,8 @@
 
 .profileDropdownBtn:hover {
   background-color: var(--color-gray-50);
-  box-shadow: 0 2px 8px var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-xs) var(--shadow-blur-sm)
+    var(--color-gray-200);
   border-color: var(--color-gray-300);
 }
 
