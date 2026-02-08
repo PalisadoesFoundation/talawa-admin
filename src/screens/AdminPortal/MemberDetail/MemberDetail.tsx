@@ -48,14 +48,15 @@ import UserContactDetails from './UserContactDetails';
 import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
-import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { useParams } from 'react-router-dom';
 
-const MemberDetail: React.FC<InterfaceMemberDetailProps> = (): JSX.Element => {
+const MemberDetail: React.FC = (): JSX.Element => {
   const { userId } = useParams<{ userId: string }>();
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
-
+  if (!userId) {
+    return <div>{tCommon('noUserId')}</div>;
+  }
   return (
     <div className={styles.peopleTabComponent}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>

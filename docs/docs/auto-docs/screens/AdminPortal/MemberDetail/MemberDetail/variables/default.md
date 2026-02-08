@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceMemberDetailProps`](../../../../../types/AdminPortal/MemberDetail/interface/type-aliases/InterfaceMemberDetailProps.md)\>
+> `const` **default**: `React.FC`
 
-Defined in: [src/screens/AdminPortal/MemberDetail/MemberDetail.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/MemberDetail.tsx#L54)
+Defined in: [src/screens/AdminPortal/MemberDetail/MemberDetail.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/MemberDetail.tsx#L53)

@@ -44,6 +44,9 @@ import {
   InterfaceUserTag,
   InterfaceGetUserTagsData,
 } from 'types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const { t: tCommon } = useTranslation('common');
@@ -57,28 +60,10 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
     },
   );
 
-  const formatDate = (isoDate: string) => {
-    const date = new Date(isoDate);
+  const formatDate = (isoDate: string): string =>
+    dayjs.utc(isoDate).format('HH:mm DD MMM YYYY');
 
-    const time = date.toLocaleTimeString('en-GB', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    const day = date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-    });
-
-    const month = date.toLocaleDateString('en-GB', {
-      month: 'short',
-    });
-
-    const year = date.getFullYear();
-
-    return `${time} ${day} ${month} ${year}`;
-  };
-
-  const dummyTags: InterfaceUserTag[] =
+  const userTags: InterfaceUserTag[] =
     data?.userTags.map((tag) => ({
       id: tag.id,
       name: tag.name,
@@ -90,10 +75,11 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
   const sortTags = (tags: InterfaceUserTag[]) => {
     const sorted = [...tags];
 
-    if (sortBy === 'latest') {
-      return sorted.reverse();
-    }
-
+    sorted.sort((a, b) => {
+      const dateA = new Date(a.createdOn).getTime();
+      const dateB = new Date(b.createdOn).getTime();
+      return sortBy === 'latest' ? dateB - dateA : dateA - dateB;
+    });
     return sorted;
   };
 
@@ -108,7 +94,6 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
     );
   };
 
-  const displayTags = sortTags(filterTags(dummyTags));
   if (loading) {
     return (
       <div className={styles.peopleTabUserTagContainer}>
@@ -124,6 +109,7 @@ const UserTags = ({ id }: InterfaceUserTagsProps) => {
       </div>
     );
   }
+  const displayTags = sortTags(filterTags(userTags));
 
   return (
     <div className={styles.peopleTabUserTagContainer}>

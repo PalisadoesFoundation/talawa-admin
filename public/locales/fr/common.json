@@ -301,5 +301,6 @@
   "optionsSuffix": "options",
   "userMenu": "Menu utilisateur",
   "searchPlaceholder": "Rechercher...",
-  "noOptionsFound": "Aucune option trouvée"
+  "noOptionsFound": "Aucune option trouvée",
+  "noUserId": "ID utilisateur non disponible"
 }

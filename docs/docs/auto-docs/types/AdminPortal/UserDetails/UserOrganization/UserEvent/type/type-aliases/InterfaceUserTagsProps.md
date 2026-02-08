@@ -6,7 +6,9 @@
 
 > **InterfaceUserTagsProps** = `object`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts#L1)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts#L2)
+
+Props for the UserTags component.
 
 ## Properties
 
@@ -14,4 +16,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.t
 
 > `optional` **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts#L1)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/type.ts#L2)

@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUserTag
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L1)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L2)
+
+UI-mapped representation of a user tag for table display.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **assignedTo**: `number`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L4)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L5)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > `optional` **createdBy**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L6)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L7)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **createdOn**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L5)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L6)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L2)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L3)
 
 ***
 
@@ -44,4 +46,4 @@ Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interf
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L3)
+Defined in: [src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserDetails/UserOrganization/UserEvent/interface.ts#L4)

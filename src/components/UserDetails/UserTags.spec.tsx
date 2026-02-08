@@ -4,6 +4,14 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserTags from './UserTags';
 import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
 import dayjs from 'dayjs';
+import { OperationVariables } from '@apollo/client/core/types';
+import * as apolloClient from '@apollo/client';
+import {
+  ApolloError,
+  ApolloClient,
+  NormalizedCacheObject,
+  ObservableQuery,
+} from '@apollo/client';
 
 const mockTags = [
   {
@@ -28,15 +36,6 @@ const mockTags = [
     creator: { name: 'Mike Johnson' },
   },
 ];
-
-vi.mock('@apollo/client', () => ({
-  useQuery: vi.fn(() => ({
-    data: { userTags: mockTags },
-    loading: false,
-    error: undefined,
-  })),
-  gql: vi.fn(),
-}));
 
 /* -------------------- Mocks -------------------- */
 
@@ -74,6 +73,23 @@ vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
     </div>
   ),
 }));
+
+// Mock @apollo/client with factory function
+vi.mock('@apollo/client', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@apollo/client')>();
+
+  // Create mock function inside the factory with default return value
+  const mockUseQuery = vi.fn(() => ({
+    data: { userTags: mockTags },
+    loading: false,
+    error: undefined,
+  }));
+
+  return {
+    ...actual,
+    useQuery: mockUseQuery,
+  };
+});
 
 describe('UserTags', () => {
   afterEach(() => {
@@ -167,5 +183,71 @@ describe('UserTags', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Sarah Smith')).toBeInTheDocument();
     expect(screen.getByText('Mike Johnson')).toBeInTheDocument();
+  });
+});
+
+describe('UserTags - loading and error states', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders loading state correctly', () => {
+    // Mock useQuery to return loading=true
+    vi.mocked(apolloClient.useQuery).mockReturnValue({
+      data: undefined,
+      loading: true,
+      error: undefined,
+      refetch: vi.fn(),
+      networkStatus: 1,
+      called: true,
+      client: {} as ApolloClient<NormalizedCacheObject>,
+      observable: {} as ObservableQuery<unknown, OperationVariables>,
+      previousData: undefined,
+      variables: undefined,
+      fetchMore: vi.fn(),
+      subscribeToMore: vi.fn(),
+      updateQuery: vi.fn(),
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
+      reobserve: vi.fn(),
+    });
+
+    render(<UserTags id="user-123" />);
+
+    // Should render the loading text
+    expect(screen.getByText('loading')).toBeInTheDocument();
+
+    // Table should NOT be rendered
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+  });
+
+  it('renders error state correctly', () => {
+    // Mock useQuery to return an error
+    vi.mocked(apolloClient.useQuery).mockReturnValue({
+      data: undefined,
+      loading: false,
+      error: new ApolloError({ errorMessage: 'GraphQL error' }),
+      refetch: vi.fn(),
+      networkStatus: 8,
+      called: true,
+      client: {} as ApolloClient<NormalizedCacheObject>,
+      observable: {} as ObservableQuery<unknown, OperationVariables>,
+      previousData: undefined,
+      variables: undefined,
+      fetchMore: vi.fn(),
+      subscribeToMore: vi.fn(),
+      updateQuery: vi.fn(),
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
+      reobserve: vi.fn(),
+    });
+
+    render(<UserTags id="user-123" />);
+
+    // Should render the error text
+    expect(screen.getByText('somethingWentWrong')).toBeInTheDocument();
+
+    // Table should NOT be rendered
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
   });
 });

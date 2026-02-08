@@ -76,7 +76,7 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders overview tab by default with userId from route', () => {

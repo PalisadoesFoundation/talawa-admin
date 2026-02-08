@@ -1277,6 +1277,7 @@ export const GET_ORGANIZATION_VENUES_PG = gql`
   }
 `;
 
+/** Fetches tags assigned to a user, including assignees (capped), creator, and folder. */
 export const GET_USER_TAGS = gql`
   query GetUserTags($userId: ID!) {
     userTags(userId: $userId) {
