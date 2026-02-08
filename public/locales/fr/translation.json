@@ -580,16 +580,6 @@
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa indisponible"
   },
-  "orgAdminListCard": {
-    "remove": "Retirer",
-    "removeAdmin": "Supprimer l'administrateur",
-    "removeAdminMsg": "Voulez-vous supprimer cet administrateur ?",
-    "adminRemoved": "L'administrateur est supprimé.",
-    "joined": "Rejoint",
-    "no": "Non",
-    "yes": "Oui",
-    "talawaApiUnavailable": "API Talawa indisponible"
-  },
   "orgPeopleListCard": {
     "remove": "Retirer",
     "removeMember": "Supprimer un membre",
@@ -1296,9 +1286,6 @@
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
   },
-  "orgDelete": {
-    "deleteOrg": "Supprimer l'organisation"
-  },
   "membershipRequest": {
     "accept": "Accepter",
     "reject": "Rejeter",
@@ -1751,7 +1738,8 @@
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
     "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don.",
     "donationOutOfRange": "Le montant du don doit être compris entre {{min}} et {{max}}.",
-    "donateTo": "Faire un don à"
+    "donateTo": "Faire un don à",
+    "selectCurrency": "Sélectionner la devise"
   },
   "transactions": {
     "title": "Transactions",
@@ -2364,7 +2352,8 @@
     "invited": "Invité",
     "groupsAvailable": "{{count}} groupes disponibles",
     "volunteersRequired": "Requis",
-    "signedUp": "Inscrit"
+    "signedUp": "Inscrit",
+    "volunteerTabs": "Onglets bénévoles"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -2591,13 +2580,11 @@
     }
   },
   "memberActivity": {
-    "dateNA": "Date N/D",
     "yes": "Oui",
     "no": "Non",
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants",
-    "viewEventDetails": "Voir les détails de l'événement"
+    "numberOfAttendees": "Nombre de participants"
   },
   "promotedPost": {
     "title": "Contenu Promu",
