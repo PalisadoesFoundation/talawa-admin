@@ -53,6 +53,7 @@ const createAgendaItemNode = (sequence: number) => ({
   description: 'Desc',
   duration: '10',
   sequence,
+  notes: 'Initial notes',
   attachments: [],
   category: {
     id: 'cat-1',

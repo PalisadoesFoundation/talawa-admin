@@ -80,6 +80,7 @@ export interface InterfaceAgendaFolderInfo {
         description: string;
         duration: string;
         sequence: number;
+        notes: string;
         attachments?: {
           id: string;
           name: string;

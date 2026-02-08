@@ -250,6 +250,7 @@ const mockAgendaItem: InterfaceAgendaItemInfo = {
   description: 'Item description',
   duration: '30',
   sequence: 1,
+  notes: 'Initial notes',
   category: {
     id: 'cat1',
     name: 'Category 1',
@@ -288,6 +289,7 @@ const mockAgendaItemWithoutCategory: InterfaceAgendaItemInfo = {
   ...mockAgendaItem,
   id: 'item2',
   name: 'Item Without Category',
+  notes: 'Initial notes',
   category: null as unknown as InterfaceAgendaItemInfo['category'],
   attachments: undefined,
   url: [],
@@ -307,6 +309,7 @@ const mockAgendaFolders: InterfaceAgendaFolderInfo[] = [
             name: 'Agenda Item 1',
             description: 'Item description',
             duration: '30',
+            notes: 'Initial notes',
             sequence: 1,
             attachments: [
               {
