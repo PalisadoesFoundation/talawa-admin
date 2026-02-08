@@ -35,9 +35,9 @@ const mockEventManager = {
 
 function createManager() {
   return new LifecycleManager(
-    mockDiscoveryManager as unknown as any,
-    mockExtensionRegistry as unknown as any,
-    mockEventManager as unknown as any,
+    mockDiscoveryManager as any,
+    mockExtensionRegistry as any,
+    mockEventManager as any,
   );
 }
 
@@ -51,7 +51,7 @@ describe('LifecycleManager Coverage Suite', () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-    }) as unknown as any;
+    }) as any;
   });
 
   afterEach(() => {
@@ -67,8 +67,8 @@ describe('LifecycleManager Coverage Suite', () => {
     it.each([
       ['hyphenated ID', INVALID_PLUGIN_ID],
       ['empty string', ''],
-      ['null', null as unknown as any],
-      ['number', 123 as unknown as any],
+      ['null', null as any],
+      ['number', 123 as any],
     ])('rejects operations with invalid input: %s', async (_label, input) => {
       const manager = createManager();
       expect(manager.getLoadedPlugin(input)).toBeUndefined();
@@ -194,7 +194,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as unknown as any);
+      } as any);
 
       manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
@@ -241,7 +241,7 @@ describe('LifecycleManager Coverage Suite', () => {
       );
     });
 
-    // --- NEW: Infrastructure Failure Tests (Option A) ---
+    // --- Infrastructure Failure Tests (Option A) ---
 
     it('handles infrastructure failure during activation (outer catch)', async () => {
       mockDiscoveryManager.updatePluginStatusInGraphQL.mockRejectedValue(
@@ -333,7 +333,7 @@ describe('LifecycleManager Coverage Suite', () => {
     it('handles missing manifest during activation (skips extension registration)', async () => {
       const managerNoManifest = createManager();
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as unknown as any);
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as any);
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       mockExtensionRegistry.registerExtensionPoints.mockClear();
 
@@ -365,7 +365,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as unknown as any);
+      } as any);
 
       const result = await manager.installPlugin('NewId');
 
@@ -377,11 +377,11 @@ describe('LifecycleManager Coverage Suite', () => {
       );
     });
 
-    // --- NEW: Infrastructure Failure Test (Option A) ---
+    // --- Infrastructure Failure Test (Option A) ---
 
     it('handles infrastructure failure during uninstallation (outer catch)', async () => {
       const manager = createManager();
-      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true); // <--- FIXED: Added missing mock
+      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
       mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
         pluginId: VALID_PLUGIN_ID,
       });
@@ -389,7 +389,7 @@ describe('LifecycleManager Coverage Suite', () => {
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
       // Force unloadPlugin to throw to hit outer catch
-      vi.spyOn(manager as unknown as any, 'unloadPlugin').mockRejectedValue(
+      vi.spyOn(manager, 'unloadPlugin').mockRejectedValue(
         new Error('Unload Error'),
       );
       const consoleSpy = vi
@@ -416,7 +416,7 @@ describe('LifecycleManager Coverage Suite', () => {
       const mockHooks = { onInstall: vi.fn() };
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as unknown as any);
+      } as any);
 
       const manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
@@ -428,7 +428,7 @@ describe('LifecycleManager Coverage Suite', () => {
       expect(mockDiscoveryManager.loadPluginManifest).toHaveBeenCalledTimes(1);
     });
 
-    it('handles install failure (verifies INNER catch block lines 208-209)', async () => {
+    it('handles install failure when manifest loading throws (inner + outer catch)', async () => {
       const manager = createManager();
       mockDiscoveryManager.loadPluginManifest.mockRejectedValue(
         new Error('Disk err'),
@@ -464,7 +464,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as unknown as any);
+      } as any);
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
@@ -488,7 +488,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: { onUninstall },
-      } as unknown as any);
+      } as any);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
@@ -510,7 +510,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: { onUninstall },
-      } as unknown as any);
+      } as any);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
       const consoleSpy = vi
@@ -542,7 +542,7 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
         pluginId: VALID_PLUGIN_ID,
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue(null as unknown as any);
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue(null as any);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
       await manager.activatePlugin(VALID_PLUGIN_ID);
@@ -558,7 +558,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: 'I am a string',
-      } as unknown as any);
+      } as any);
       const result = await manager.installPlugin('Malformed');
 
       expect(result).toBe(true);
@@ -600,7 +600,6 @@ describe('LifecycleManager Coverage Suite', () => {
       expect(plugins[0].id).toBe(VALID_PLUGIN_ID);
     });
 
-    // --- NEW: getActivePluginCount Test (requested by bot) ---
     it('returns count of active plugins', async () => {
       const manager = createManager();
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
@@ -613,6 +612,27 @@ describe('LifecycleManager Coverage Suite', () => {
       await manager.loadPlugin(VALID_PLUGIN_ID);
       expect(manager.getActivePluginCount()).toBe(1);
       expect(manager.getPluginCount()).toBe(1);
+    });
+
+    // --- NEW: getPluginComponent Success Test ---
+    it('returns component from an ACTIVE plugin', async () => {
+      const manager = createManager();
+      const FakeComponent = () => null;
+
+      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+      mockDiscoveryManager.isPluginActivated.mockReturnValue(true);
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
+        pluginId: VALID_PLUGIN_ID,
+      });
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
+        MyComp: FakeComponent,
+      } as any);
+
+      await manager.loadPlugin(VALID_PLUGIN_ID);
+
+      expect(manager.getPluginComponent(VALID_PLUGIN_ID, 'MyComp')).toBe(
+        FakeComponent,
+      );
     });
   });
 
@@ -629,13 +649,40 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as unknown as any).mockResolvedValue({ ok: false, status: 404 });
+      (global.fetch as any).mockResolvedValue({ ok: false, status: 404 });
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       await manager.unloadPlugin(VALID_PLUGIN_ID);
 
       expect(consoleSpy).toHaveBeenCalledWith(
         expect.stringContaining('deletion returned HTTP 404'),
+      );
+      consoleSpy.mockRestore();
+    });
+
+    // --- NEW: unloadPlugin infrastructure failure test ---
+    it('handles errors during unloading (e.g. GraphQL failure)', async () => {
+      const manager = createManager();
+      mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
+        pluginId: VALID_PLUGIN_ID,
+      });
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
+      await manager.loadPlugin(VALID_PLUGIN_ID);
+
+      mockDiscoveryManager.removePluginFromGraphQL.mockRejectedValue(
+        new Error('GraphQL Removal Failed'),
+      );
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const result = await manager.unloadPlugin(VALID_PLUGIN_ID);
+
+      expect(result).toBe(false);
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to unload plugin'),
+        expect.anything(),
       );
       consoleSpy.mockRestore();
     });
@@ -649,7 +696,7 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as unknown as any).mockRejectedValue(new Error('Net Down'));
+      (global.fetch as any).mockRejectedValue(new Error('Net Down'));
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       await manager.unloadPlugin(VALID_PLUGIN_ID);
