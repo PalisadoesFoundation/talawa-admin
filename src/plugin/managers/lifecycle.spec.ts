@@ -1,12 +1,15 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 import { LifecycleManager } from './lifecycle';
 import { PluginStatus } from '../types';
+import { DiscoveryManager } from './discovery';
+import { ExtensionRegistryManager } from './extension-registry';
+import { EventManager } from './event-manager';
 
 // --- Mocks ---
 
 const mockRegisterPluginDynamically = vi.fn();
 vi.mock('../registry', () => ({
-  registerPluginDynamically: (...args: any[]) =>
+  registerPluginDynamically: (...args: unknown[]) =>
     mockRegisterPluginDynamically(...args),
 }));
 
@@ -35,14 +38,14 @@ const mockEventManager = {
 
 function createManager() {
   return new LifecycleManager(
-    mockDiscoveryManager as any,
-    mockExtensionRegistry as any,
-    mockEventManager as any,
+    mockDiscoveryManager as unknown as DiscoveryManager,
+    mockExtensionRegistry as unknown as ExtensionRegistryManager,
+    mockEventManager as unknown as EventManager,
   );
 }
 
 describe('LifecycleManager Coverage Suite', () => {
-  let originalFetch: any;
+  let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -51,7 +54,7 @@ describe('LifecycleManager Coverage Suite', () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       status: 200,
-    }) as any;
+    }) as unknown as typeof fetch;
   });
 
   afterEach(() => {
@@ -67,8 +70,8 @@ describe('LifecycleManager Coverage Suite', () => {
     it.each([
       ['hyphenated ID', INVALID_PLUGIN_ID],
       ['empty string', ''],
-      ['null', null as any],
-      ['number', 123 as any],
+      ['null', null as unknown as string],
+      ['number', 123 as unknown as string],
     ])('rejects operations with invalid input: %s', async (_label, input) => {
       const manager = createManager();
       expect(manager.getLoadedPlugin(input)).toBeUndefined();
@@ -176,7 +179,12 @@ describe('LifecycleManager Coverage Suite', () => {
   // ----------------------------------------------------------------
   describe('Lifecycle Hooks & State Toggles', () => {
     let manager: LifecycleManager;
-    let mockHooks: any;
+    let mockHooks: {
+      onActivate: Mock;
+      onDeactivate: Mock;
+      onInstall: Mock;
+      onUninstall: Mock;
+    };
 
     beforeEach(async () => {
       mockHooks = {
@@ -194,7 +202,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
@@ -241,7 +249,7 @@ describe('LifecycleManager Coverage Suite', () => {
       );
     });
 
-    // --- Infrastructure Failure Tests (Option A) ---
+    // --- Infrastructure Failure Tests ---
 
     it('handles infrastructure failure during activation (outer catch)', async () => {
       mockDiscoveryManager.updatePluginStatusInGraphQL.mockRejectedValue(
@@ -333,7 +341,9 @@ describe('LifecycleManager Coverage Suite', () => {
     it('handles missing manifest during activation (skips extension registration)', async () => {
       const managerNoManifest = createManager();
       mockDiscoveryManager.isPluginInstalled.mockReturnValue(true);
-      mockDiscoveryManager.loadPluginManifest.mockResolvedValue(null as any);
+      mockDiscoveryManager.loadPluginManifest.mockResolvedValue(
+        null as unknown as object,
+      );
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       mockExtensionRegistry.registerExtensionPoints.mockClear();
 
@@ -365,7 +375,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       const result = await manager.installPlugin('NewId');
 
@@ -377,7 +387,7 @@ describe('LifecycleManager Coverage Suite', () => {
       );
     });
 
-    // --- Infrastructure Failure Test (Option A) ---
+    // --- Infrastructure Failure Test ---
 
     it('handles infrastructure failure during uninstallation (outer catch)', async () => {
       const manager = createManager();
@@ -388,7 +398,7 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      // Force unloadPlugin to throw to hit outer catch
+      // NO CAST NEEDED: UnloadPlugin is public, we can spy on it directly
       vi.spyOn(manager, 'unloadPlugin').mockRejectedValue(
         new Error('Unload Error'),
       );
@@ -416,7 +426,7 @@ describe('LifecycleManager Coverage Suite', () => {
       const mockHooks = { onInstall: vi.fn() };
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       const manager = createManager();
       await manager.loadPlugin(VALID_PLUGIN_ID);
@@ -464,7 +474,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: mockHooks,
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
@@ -488,7 +498,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: { onUninstall },
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
@@ -510,7 +520,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: { onUninstall },
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
       const consoleSpy = vi
@@ -542,7 +552,9 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginManifest.mockResolvedValue({
         pluginId: VALID_PLUGIN_ID,
       });
-      mockDiscoveryManager.loadPluginComponents.mockResolvedValue(null as any);
+      mockDiscoveryManager.loadPluginComponents.mockResolvedValue(
+        null as unknown as Record<string, React.ComponentType>,
+      );
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
       await manager.activatePlugin(VALID_PLUGIN_ID);
@@ -558,7 +570,7 @@ describe('LifecycleManager Coverage Suite', () => {
 
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         default: 'I am a string',
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
       const result = await manager.installPlugin('Malformed');
 
       expect(result).toBe(true);
@@ -626,7 +638,7 @@ describe('LifecycleManager Coverage Suite', () => {
       });
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({
         MyComp: FakeComponent,
-      } as any);
+      } as unknown as Record<string, React.ComponentType>);
 
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
@@ -649,7 +661,11 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as any).mockResolvedValue({ ok: false, status: 404 });
+      // Safe casting using Mock type
+      (global.fetch as Mock).mockResolvedValue({
+        ok: false,
+        status: 404,
+      });
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       await manager.unloadPlugin(VALID_PLUGIN_ID);
@@ -696,7 +712,8 @@ describe('LifecycleManager Coverage Suite', () => {
       mockDiscoveryManager.loadPluginComponents.mockResolvedValue({});
       await manager.loadPlugin(VALID_PLUGIN_ID);
 
-      (global.fetch as any).mockRejectedValue(new Error('Net Down'));
+      // Safe casting using Mock type
+      (global.fetch as Mock).mockRejectedValue(new Error('Net Down'));
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       await manager.unloadPlugin(VALID_PLUGIN_ID);
