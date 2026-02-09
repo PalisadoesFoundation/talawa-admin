@@ -3,7 +3,11 @@ import graphql from '@graphql-eslint/eslint-plugin';
 import ts from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import prettier from 'eslint-plugin-prettier';
-import { securityRestrictions } from '../rules/rules.js';
+import {
+  securityRestrictions,
+  nativeButtonRestrictions,
+  modalStateRestrictions
+} from '../rules/rules.js';
 
 export const graphqlConfig = {
   files: ['*.graphql'],
@@ -59,6 +63,11 @@ export const searchComponentsExemption = {
     'src/shared-components/SearchBar/SearchBar.tsx',
   ],
   rules: {
-    'no-restricted-syntax': ['error', ...securityRestrictions],
+    'no-restricted-syntax': [
+      'error',
+      ...securityRestrictions,
+      ...nativeButtonRestrictions,
+      ...modalStateRestrictions
+    ],
   },
 };
