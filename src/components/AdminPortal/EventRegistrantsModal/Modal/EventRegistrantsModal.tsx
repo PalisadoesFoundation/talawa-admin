@@ -241,13 +241,13 @@ export const EventRegistrantsModal = ({
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
-                <button
-                  type="button"
+                <Button
                   data-testid="add-onspot-link"
+                  variant="link"
                   className={`underline ${styles.underlineText}`}
                   onClick={() => setOpen(true)}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onKeyDown={(e) => {
+                  onMouseDown={(e: React.MouseEvent) => e.preventDefault()}
+                  onKeyDown={(e: React.KeyboardEvent) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
                       setOpen(true);
@@ -255,7 +255,7 @@ export const EventRegistrantsModal = ({
                   }}
                 >
                   {t('addOnspotRegistrationLink')}
-                </button>
+                </Button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}

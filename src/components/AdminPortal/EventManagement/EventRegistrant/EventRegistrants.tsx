@@ -51,6 +51,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import Button from 'shared-components/Button/Button';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -275,11 +276,9 @@ function EventRegistrants(): JSX.Element {
       header: t('options'),
       accessor: () => null,
       render: (_val, row) => (
-        <button
-          type="button"
-          className={`btn btn-sm ${
-            row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
-          }`}
+        <Button
+          variant={row.isCheckedIn ? 'secondary' : 'outline-danger'}
+          size="sm"
           onClick={() => {
             if (row.user?.id) {
               deleteRegistrant(row.user.id);
@@ -293,7 +292,7 @@ function EventRegistrants(): JSX.Element {
           }
         >
           {row.isCheckedIn ? t('checkedIn') : t('unregister')}
-        </button>
+        </Button>
       ),
     },
   ];
