@@ -205,6 +205,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 
+  useEffect(() => {
+    // Cleanup debounce on unmount
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
+
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
@@ -273,6 +280,9 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
                 fallbackName={displayName}
                 imageUrl={imageUrl}
                 size="medium"
+                onError={() => {
+                  console.warn(`Failed to load avatar for user: ${avatarKey}`);
+                }}
                 enableEnlarge={true}
               />
             </div>

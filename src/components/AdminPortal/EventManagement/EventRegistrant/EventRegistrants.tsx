@@ -33,7 +33,7 @@
  * - This component is used in the event management section of the application
  *   to display and manage event registrants and attendees.
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { useTranslation } from 'react-i18next';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
@@ -72,6 +72,14 @@ function EventRegistrants(): JSX.Element {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
+
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Determine event type and set appropriate variables
   useEffect(() => {
@@ -128,9 +136,16 @@ function EventRegistrants(): JSX.Element {
     },
   });
   // callback function to refresh the data
-  const refreshData = useCallback(() => {
-    getEventRegistrants();
-    getEventCheckIns();
+  const refreshData = useCallback(async () => {
+    try {
+      await Promise.all([getEventRegistrants(), getEventCheckIns()]);
+
+      if (!isMountedRef.current) return;
+    } catch (error) {
+      if (!isMountedRef.current) return;
+      console.error('Error refreshing data:', error);
+      NotificationToast.error(tErrors('errorLoadingData'));
+    }
   }, [getEventRegistrants, getEventCheckIns]);
 
   // Function to remove a registrant from the event
@@ -171,25 +186,27 @@ function EventRegistrants(): JSX.Element {
   // Process registrants data with check-in status
   useEffect(() => {
     if (registrants.length > 0) {
-      const processedData = registrants.map((registrant) => {
-        const [date, timeWithMilliseconds] = registrant.createdAt
-          ? registrant.createdAt.split('T')
-          : ['N/A', 'N/A'];
-        const [time] =
-          timeWithMilliseconds !== 'N/A'
-            ? timeWithMilliseconds.split('.')
-            : ['N/A'];
+      const processedData = registrants
+        .filter((registrant) => registrant.user != null)
+        .map((registrant) => {
+          const [date, timeWithMilliseconds] = registrant.createdAt
+            ? registrant.createdAt.split('T')
+            : ['N/A', 'N/A'];
+          const [time] =
+            timeWithMilliseconds !== 'N/A'
+              ? timeWithMilliseconds.split('.')
+              : ['N/A'];
 
-        const isCheckedIn = checkedInUsers.includes(registrant.user.id);
+          const isCheckedIn = checkedInUsers.includes(registrant.user.id);
 
-        return {
-          ...registrant,
-          name: registrant.user.name || 'N/A',
-          createdAt: date,
-          time: time,
-          isCheckedIn: isCheckedIn,
-        };
-      });
+          return {
+            ...registrant,
+            name: registrant.user.name || 'N/A',
+            createdAt: date,
+            time: time,
+            isCheckedIn: isCheckedIn,
+          };
+        });
       setCombinedData(processedData);
     } else {
       setCombinedData([]);
@@ -222,9 +239,12 @@ function EventRegistrants(): JSX.Element {
         return (
           <div className="d-flex align-items-center">
             <ProfileAvatarDisplay
-              imageUrl={row.user?.avatarURL}
-              fallbackName={name}
+              imageUrl={row.user?.avatarURL ?? undefined}
+              fallbackName={row.name || 'N/A'}
               size="small"
+              onError={() => {
+                console.warn(`Failed to load avatar for user: ${row.user?.id}`);
+              }}
               enableEnlarge={true}
             />
             <span className="ms-2">{name}</span>
@@ -259,7 +279,11 @@ function EventRegistrants(): JSX.Element {
           className={`btn btn-sm ${
             row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
           }`}
-          onClick={() => deleteRegistrant(row.user.id)}
+          onClick={() => {
+            if (row.user?.id) {
+              deleteRegistrant(row.user.id);
+            }
+          }}
           disabled={row.isCheckedIn}
           title={
             row.isCheckedIn

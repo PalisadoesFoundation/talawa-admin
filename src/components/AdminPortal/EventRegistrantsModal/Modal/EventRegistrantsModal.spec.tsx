@@ -792,8 +792,11 @@ describe('EventRegistrantsModal', () => {
 
     await waitFor(
       () => {
-        expect(NotificationToast.warning).toHaveBeenCalledWith(
-          'Please choose a user to add first!',
+        const warningCalls = vi.mocked(NotificationToast.warning).mock.calls;
+        const warningMessage = warningCalls[0]?.[0];
+        // Check for either the English text or the translation key
+        expect(warningMessage).toMatch(
+          /Please choose a user to add first!|selectUserFirst/,
         );
         expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
       },

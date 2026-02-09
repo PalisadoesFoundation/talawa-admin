@@ -38,7 +38,7 @@
  * - `NotificationToast` for toast notifications.
  * - `react-i18next` for translations.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import Button from 'shared-components/Button';
 import { useMutation, useQuery } from '@apollo/client';
@@ -72,6 +72,14 @@ export const EventRegistrantsModal = ({
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
 
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
   // Hooks for mutation operations
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
 
@@ -103,30 +111,48 @@ export const EventRegistrantsModal = ({
     variables: { organizationId: orgId },
   });
 
+  const [isAdding, setIsAdding] = useState(false);
   // Function to add a new registrant to the event
-  const addRegistrant = (): void => {
+  const addRegistrant = async (): Promise<void> => {
     if (member == null) {
       NotificationToast.warning(t('selectUserFirst'));
       return;
     }
+
+    if (isAdding) {
+      return;
+    }
+
+    setIsAdding(true);
     NotificationToast.warning(t('addingAttendee'));
+
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
 
-    addRegistrantMutation({
-      variables: addVariables,
-    })
-      .then(() => {
-        NotificationToast.success(
-          tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
-        );
-        attendeesRefetch(); // Refresh the list of attendees
-      })
-      .catch((err) => {
-        NotificationToast.error(t('errorAddingAttendee') as string);
-        NotificationToast.error(err.message);
+    try {
+      await addRegistrantMutation({
+        variables: addVariables,
       });
+
+      if (!isMountedRef.current) return;
+
+      NotificationToast.success(
+        tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
+      );
+
+      setMember(null);
+      setInputValue('');
+
+      await attendeesRefetch();
+    } catch (err) {
+      if (!isMountedRef.current) return;
+      NotificationToast.error(t('errorAddingAttendee') as string);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      NotificationToast.error(errorMessage);
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   return (
@@ -174,6 +200,7 @@ export const EventRegistrantsModal = ({
                 className={styles.addButton}
                 data-testid="add-registrant-btn"
                 onClick={addRegistrant}
+                disabled={isAdding}
               >
                 {t('addRegistrantButton')}
               </Button>
@@ -198,6 +225,11 @@ export const EventRegistrantsModal = ({
                     imageUrl={option.avatarURL}
                     fallbackName={option.name || t('unknownUser')}
                     size="small"
+                    onError={() => {
+                      console.warn(
+                        `Failed to load avatar for user: ${option.id}`,
+                      );
+                    }}
                     enableEnlarge={false}
                   />
                   <span className="ms-2">
