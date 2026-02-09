@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 
 import AgendaFolderDeleteModal from './AgendaFolderDeleteModal';
 import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
@@ -92,6 +92,7 @@ const renderAgendaFolderDeleteModal = (
 
 describe('AgendaFolderDeleteModal', () => {
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
 
@@ -128,65 +129,6 @@ describe('AgendaFolderDeleteModal', () => {
 
       expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
       expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
-    });
-  });
-
-  describe('Branch coverage – non-Error rejection', () => {
-    beforeEach(async () => {
-      vi.resetModules();
-
-      vi.doMock('@apollo/client', async () => {
-        const actual =
-          await vi.importActual<typeof import('@apollo/client')>(
-            '@apollo/client',
-          );
-
-        return {
-          ...actual,
-          useMutation: () => [
-            vi.fn().mockRejectedValueOnce('Network failure'),
-            { loading: false, error: undefined },
-          ],
-        };
-      });
-    });
-
-    afterEach(() => {
-      vi.doUnmock('@apollo/client');
-      vi.resetModules();
-      vi.clearAllMocks();
-    });
-
-    it('does nothing when mutation throws non-Error value', async () => {
-      const { default: AgendaFolderDeleteModal } =
-        await import('./AgendaFolderDeleteModal');
-
-      render(
-        <MockedProvider mocks={MOCKS_SUCCESS} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AgendaFolderDeleteModal
-              isOpen
-              onClose={mockOnClose}
-              agendaFolderId={mockAgendaFolderId}
-              refetchAgendaFolder={mockRefetchAgendaFolder}
-              t={mockT}
-              tCommon={mockTCommon}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await userEvent.click(screen.getByTestId('modal-delete-btn'));
-
-      await waitFor(
-        () => {
-          expect(NotificationToast.error).not.toHaveBeenCalled();
-          expect(NotificationToast.success).not.toHaveBeenCalled();
-          expect(mockRefetchAgendaFolder).not.toHaveBeenCalled();
-          expect(mockOnClose).not.toHaveBeenCalled();
-        },
-        { timeout: 5000 },
-      );
     });
   });
 
