@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { sanitizeAvatars } from './sanitizeAvatar';
+import { sanitizeAvatars, sanitizeAvatarURL } from './sanitizeAvatar';
 
 describe('sanitizeAvatars', () => {
   let mockCreateObjectURL: ReturnType<typeof vi.fn>;
@@ -127,5 +127,28 @@ describe('sanitizeAvatars', () => {
   it('should properly handle Unicode characters in URLs', () => {
     const result = sanitizeAvatars(null, 'https://example.com/üser/avatär.jpg');
     expect(result).toBe('https://example.com/%C3%BCser/avat%C3%A4r.jpg');
+  });
+});
+
+describe('sanitizeAvatarURL', () => {
+  it('should return empty string for "null" string', () => {
+    expect(sanitizeAvatarURL('null')).toBe('');
+  });
+
+  it('should return empty string for null', () => {
+    expect(sanitizeAvatarURL(null)).toBe('');
+  });
+
+  it('should return empty string for undefined', () => {
+    expect(sanitizeAvatarURL(undefined)).toBe('');
+  });
+
+  it('should return empty string for empty string', () => {
+    expect(sanitizeAvatarURL('')).toBe('');
+  });
+
+  it('should return original URL for valid string', () => {
+    const url = 'https://example.com/avatar.jpg';
+    expect(sanitizeAvatarURL(url)).toBe(url);
   });
 });

@@ -34,6 +34,7 @@ import {
   RegistrationError,
 } from 'hooks/auth/useRegistration';
 import { errorHandler } from 'utils/errorHandler';
+import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../../constants';
 import styles from './LoginPage.module.css';
@@ -132,7 +133,7 @@ const LoginPage = (): JSX.Element => {
     setItem('name', user.name);
     setItem('email', user.emailAddress);
     setItem('role', user.role);
-    setItem('UserImage', user.avatarURL || '');
+    setItem('UserImage', sanitizeAvatarURL(user.avatarURL));
     if (role === 'admin') {
       setItem('id', user.id);
     } else {

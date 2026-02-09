@@ -31,6 +31,11 @@ export interface InterfaceDropDownProps {
    * Custom styles for the dropdown button.
    */
   btnStyle?: string;
+
+  /**
+   * Custom class name for the dropdown menu.
+   */
+  menuClassName?: string;
 }
 
 /**

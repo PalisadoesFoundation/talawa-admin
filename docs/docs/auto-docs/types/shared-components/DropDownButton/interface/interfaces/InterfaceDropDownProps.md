@@ -24,6 +24,16 @@ Custom styles for the dropdown button.
 
 ***
 
+### menuClassName?
+
+> `optional` **menuClassName**: `string`
+
+Defined in: [src/types/shared-components/DropDownButton/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DropDownButton/interface.ts#L38)
+
+Custom class name for the dropdown menu.
+
+***
+
 ### parentContainerStyle?
 
 > `optional` **parentContainerStyle**: `string`
