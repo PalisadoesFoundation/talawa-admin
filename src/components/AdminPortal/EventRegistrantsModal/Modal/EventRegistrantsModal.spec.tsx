@@ -853,8 +853,8 @@ describe('EventRegistrantsModal', () => {
 
     await user.type(input, 'NonexistentUser');
 
-    const addOnspotLink = await screen.findByText(
-      'Add Onspot Registration',
+    const addOnspotLink = await screen.findByTestId(
+      'add-onspot-link',
       {},
       { timeout: 3000 },
     );
