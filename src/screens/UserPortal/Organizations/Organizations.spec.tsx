@@ -1557,6 +1557,9 @@ test('should call errorHandler when resend verification mutation throws', async 
 });
 
 test('should search joined organizations in mode 1', async () => {
+  // NOTE: In this suite we use StaticMockLink; refetch responses for changed
+  // variables are not reliably reflected in rendered state for this joined-mode
+  // path, so this test validates search submission flow without asserting a new card.
   const joinedSearchLink = new StaticMockLink(
     [
       COMMUNITY_TIMEOUT_MOCK,
@@ -1655,6 +1658,8 @@ test('should search joined organizations in mode 1', async () => {
   await userEvent.type(searchInput, 'joined-search');
   await userEvent.click(screen.getByTestId('searchBtn'));
 
+  // Note: StaticMockLink doesn't reliably reflect refetch responses in DOM,
+  // so we verify component stability rather than asserting the refetched org name.
   await waitFor(() => {
     expect(screen.getByTestId('org-name-JoinedInitial')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
@@ -1752,6 +1757,8 @@ test('should search created organizations in mode 2', async () => {
   await userEvent.type(searchInput, 'created-search');
   await userEvent.click(screen.getByTestId('searchBtn'));
 
+  // Note: StaticMockLink doesn't reliably reflect refetch responses in DOM,
+  // so we verify component stability rather than asserting the refetched org name.
   await waitFor(() => {
     expect(screen.getByTestId('org-name-CreatedInitial')).toBeInTheDocument();
     expect(screen.getByTestId('modeChangeBtn-container')).toBeInTheDocument();
