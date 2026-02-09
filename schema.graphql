@@ -5812,6 +5812,16 @@ type Query {
   usersByOrganizationId(organizationId: ID!): [User!]
 
   """
+  Query field to fetch tags assigned to a user.
+  """
+  userTags(
+    """
+    ID of the user whose tags are fetched
+    """
+    userId: ID!
+  ): [Tag!]!
+
+  """
   Query field to read a venue.
   """
   venue(input: QueryVenueInput!): Venue

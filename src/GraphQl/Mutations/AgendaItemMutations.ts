@@ -13,6 +13,7 @@ export const CREATE_AGENDA_ITEM_MUTATION = gql`
       name
       description
       duration
+      notes
       createdAt
       url {
         id
@@ -78,6 +79,7 @@ export const UPDATE_AGENDA_ITEM_MUTATION = gql`
       name
       description
       duration
+      notes
       url {
         id
         url
