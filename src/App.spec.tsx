@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
 import { MemoryRouter } from 'react-router';
@@ -396,6 +396,8 @@ describe('Testing the App Component', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
+    cleanup();
+    vi.restoreAllMocks();
     logSpy?.mockRestore();
     errorSpy?.mockRestore();
   });
