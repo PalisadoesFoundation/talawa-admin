@@ -69,3 +69,72 @@
 .drawer {
   position: relative;
 }
+
+/* Profile Dropdown Styles */
+.profileDropdownBtn {
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2) var(--space-3) var(--space-1) var(--space-1);
+  margin: var(--space-6) var(--space-8) var(--space-6) var(--space-6);
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+  display: flex;
+  align-items: center;
+}
+
+.profileDropdownBtn:hover {
+  background-color: var(--color-gray-50);
+  box-shadow: 0 2px 8px var(--color-gray-200);
+  border-color: var(--color-gray-300);
+}
+
+.profileContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding-right: var(--space-2);
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.profileImage {
+  width: var(--space-9);
+  height: var(--space-9);
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--border-2) solid var(--color-gray-100);
+}
+
+.profileText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: var(--line-height-tight);
+}
+
+.profileName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-800);
+}
+
+.profileRole {
+  font-size: var(--font-size-xs);
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-medium);
+}
+
+.logoutBtn {
+  color: var(--color-red-500);
+  font-weight: var(--font-weight-medium);
+}
+
+.profileDropdownMenu {
+  /* Override Bootstrap dropdown default min-width */
+  min-width: var(--space-16) !important;
+}

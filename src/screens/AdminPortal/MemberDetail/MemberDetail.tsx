@@ -2,28 +2,39 @@
  * MemberDetail component
  *
  * Renders a detailed view of a member’s profile, allowing users to view
- * and update personal and contact information.
+ * and update personal and contact information via tab-based navigation.
  *
- * Features include avatar upload, form validation, and tab-based navigation
- * for overview, organizations, events, and tags.
+ * Tabs include:
+ * - Overview: Shows the member's contact details.
+ * - Organizations: Lists organizations the member belongs to.
+ * - Events: Shows events associated with the member.
+ * - Tags: Displays tags assigned to the member.
  *
- * @param props - Component props.
- * Optional {@link MemberDetailProps.id | id} may be provided to fetch
- * and display member details.
+ * The component determines which member to display from the URL parameters
+ * `orgId` and `userId` using `useParams`. The `userId` is passed to child
+ * components that require it (e.g., `UserContactDetails` and `UserTags`).
  *
- * @returns The rendered MemberDetail component.
+ * The expected route format is:
+ * ```
+ * /admin/member/:orgId/:userId
+ * ```
+ *
+ * @returns JSX.Element representing the member detail view.
  *
  * @remarks
- * - Uses Apollo Client hooks for fetching and updating user data.
- * - Provides form validation for sensitive fields such as passwords and avatar uploads.
- * - Uses react-bootstrap and MUI date pickers for UI elements.
- * - Supports localization via react-i18next.
+ * - Uses React state to manage the active tab.
+ * - Uses `react-i18next` for localization.
+ * - Uses MUI `LocalizationProvider` and `AdapterDayjs` for date pickers.
+ * - Child components include `UserContactDetails`, `UserOrganizations`,
+ *   `UserEvents`, and `UserTags`.
  *
  * @example
  * ```tsx
- * <MemberDetail id="12345" />
+ * // URL: /admin/member/123/456
+ * <MemberDetail />
  * ```
  */
+
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './MemberDetail.module.css';
@@ -37,12 +48,15 @@ import UserContactDetails from './UserContactDetails';
 import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
-import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
+import { useParams } from 'react-router-dom';
 
-const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
+const MemberDetail: React.FC = (): JSX.Element => {
+  const { userId } = useParams<{ userId: string }>();
   const { t: tCommon } = useTranslation('common');
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
-
+  if (!userId) {
+    return <div>{tCommon('noUserId')}</div>;
+  }
   return (
     <div className={styles.peopleTabComponent}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -74,10 +88,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         </div>
 
         <div className={styles.peopleTabComponentSection}>
-          {activeTab === tCommon('overview') && <UserContactDetails id={id} />}
+          {activeTab === tCommon('overview') && (
+            <UserContactDetails id={userId} />
+          )}
           {activeTab === tCommon('organizations') && <UserOrganizations />}
           {activeTab === tCommon('events') && <UserEvents />}
-          {activeTab === tCommon('tags') && <UserTags />}
+          {activeTab === tCommon('tags') && <UserTags id={userId} />}
         </div>
       </LocalizationProvider>
     </div>

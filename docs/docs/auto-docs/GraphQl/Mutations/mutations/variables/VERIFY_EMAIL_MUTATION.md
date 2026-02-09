@@ -6,7 +6,7 @@
 
 > `const` **VERIFY\_EMAIL\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:273](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L273)
+Defined in: [src/GraphQl/Mutations/mutations.ts:251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L251)
 
 Verifies a user's email address using a token sent via email.
 
