@@ -6,7 +6,7 @@
 
 > **VenueInput** = `object`
 
-Defined in: [src/types/AdminPortal/venue.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L12)
+Defined in: [src/types/AdminPortal/venue.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L13)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/venue.ts:12](https://github.com/PalisadoesFou
 
 > **capacity**: `number`
 
-Defined in: [src/types/AdminPortal/venue.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L13)
+Defined in: [src/types/AdminPortal/venue.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L14)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/venue.ts:13](https://github.com/PalisadoesFou
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L14)
+Defined in: [src/types/AdminPortal/venue.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L15)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/venue.ts:14](https://github.com/PalisadoesFou
 
 > `optional` **file**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L15)
+Defined in: [src/types/AdminPortal/venue.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L16)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/venue.ts:15](https://github.com/PalisadoesFou
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L16)
+Defined in: [src/types/AdminPortal/venue.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L17)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/AdminPortal/venue.ts:16](https://github.com/PalisadoesFou
 
 > **organizationId**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L17)
+Defined in: [src/types/AdminPortal/venue.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L18)

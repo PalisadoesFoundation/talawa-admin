@@ -1,4 +1,5 @@
 import type { Organization } from 'types/AdminPortal/Organization/type';
+import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
 export type Venue = {
   _id: string;
@@ -24,3 +25,9 @@ export type EditVenueInput = {
   id: string;
   name?: string; // Optional
 };
+
+export interface InterfaceVenueCardProps {
+  venueItem: InterfaceQueryVenueListItem;
+  showEditVenueModal: (venueItem: InterfaceQueryVenueListItem) => void;
+  handleDelete: (venueId: string) => void;
+}

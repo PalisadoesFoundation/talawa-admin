@@ -2,7 +2,7 @@
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
   background-color: var(--eventManagement-button-bg);
-  border: var(--border-1) solid var(--input-shadow);
+  border: var(--border-1) solid var(--color-gray-100);
   box-shadow: 0 var(--space-3) var(--space-5) var(--color-shadow-light);
 }
 

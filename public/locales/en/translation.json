@@ -573,7 +573,8 @@
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
     "addMember": "Add Member",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "invalidTagName": "Invalid tag name"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -1348,7 +1349,8 @@
     "reject": "Reject",
     "memberAdded": "it is accepted",
     "joined": "joined",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "confirmRejectRequest": "Are you sure you want to reject this request?"
   },
   "orgUpdate": {
     "city": "City",

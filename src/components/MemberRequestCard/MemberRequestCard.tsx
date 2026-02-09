@@ -28,7 +28,7 @@
  *   memberName="John Doe"
  *   memberLocation="New York"
  *   email="john.doe@example.com"
- *   joinDate={dayjs().subtract(1, 'year').format('YYYY-MM-DD')}}
+ *   joinDate={dayjs().subtract(1, 'year').format('YYYY-MM-DD')}
  * />
  * ```
  */
@@ -79,7 +79,7 @@ function MemberRequestCard({
   };
 
   const rejectMember = async (): Promise<void> => {
-    const sure = window.confirm('Are you sure you want to Reject Request ?');
+    const sure = window.confirm(t('confirmRejectRequest'));
     if (sure) {
       try {
         await rejectMutation({ variables: { userid: id } });

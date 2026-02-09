@@ -29,10 +29,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import {
-  FormFieldGroup,
-  FormTextField,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
 
 export interface InterfaceEditUserTagModalProps {
@@ -66,8 +63,6 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   }, [editUserTagModalIsOpen]);
 
   const isTagNameInvalid = !newTagName.trim();
-  const errorMessage =
-    isTouched && isTagNameInvalid ? tCommon('required') : undefined;
 
   return (
     <CRUDModalTemplate
@@ -117,28 +112,20 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           await handleEditUserTag(e);
         }}
       >
-        <FormFieldGroup
+        <FormTextField
           name="tagName"
           label={t('tagName')}
+          placeholder={t('tagNamePlaceholder')}
+          value={newTagName}
           required
+          data-testid="tagNameInput"
+          className={`mb-3 ${styles.inputField}`}
+          error={isTagNameInvalid ? t('invalidTagName') : undefined}
           touched={isTouched}
-          error={errorMessage}
-        >
-          <FormTextField
-            name="tagName"
-            label={t('tagName')}
-            placeholder={t('tagNamePlaceholder')}
-            value={newTagName}
-            required
-            data-testid="tagNameInput"
-            className={`mb-3 ${styles.inputField}`}
-            error={isTagNameInvalid ? t('invalidTagName') : undefined}
-            touched={isTouched}
-            inputId="tagName"
-            onBlur={() => setIsTouched(true)}
-            onChange={(v) => setNewTagName(v)}
-          />
-        </FormFieldGroup>
+          inputId="tagName"
+          onBlur={() => setIsTouched(true)}
+          onChange={(v) => setNewTagName(v)}
+        />
       </form>
     </CRUDModalTemplate>
   );

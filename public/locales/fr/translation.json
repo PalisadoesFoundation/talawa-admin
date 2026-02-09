@@ -573,7 +573,8 @@
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
-    "removeMember": "Supprimer un membre"
+    "removeMember": "Supprimer un membre",
+    "invalidTagName": "Nom d’étiquette invalide"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -1304,7 +1305,8 @@
     "reject": "Rejeter",
     "memberAdded": "c'est accepté",
     "joined": "Rejoint",
-    "talawaApiUnavailable": "API Talawa non disponible"
+    "talawaApiUnavailable": "API Talawa non disponible",
+    "confirmRejectRequest": "Êtes-vous sûr de vouloir rejeter cette demande ?"
   },
   "orgUpdate": {
     "city": "Ville",

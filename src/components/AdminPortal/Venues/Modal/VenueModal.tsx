@@ -43,18 +43,9 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-
-export interface InterfaceVenueModalProps {
-  show: boolean;
-  onHide: () => void;
-  refetchVenues: () => void;
-  orgId: string;
-  venueData?: InterfaceQueryVenueListItem | null;
-  edit: boolean;
-}
+import { InterfaceVenueModalProps } from 'types/AdminPortal/Venues/interface';
 
 interface InterfaceVenueFormState {
   name: string;
@@ -344,6 +335,7 @@ const VenueModal = ({
           required
           onChange={(v) => setFormState({ ...formState, name: v })}
           className={styles.inputField}
+          data-testid="venueTitleInput"
         />
 
         <label htmlFor="venuedescrip">{tCommon('description')}</label>
@@ -396,7 +388,7 @@ const VenueModal = ({
         )}
 
         <Button
-          type="submit"
+          type="button"
           className={styles.addButton}
           value={edit ? 'editVenue' : 'createVenue'}
           data-testid={edit ? 'updateVenueBtn' : 'createVenueBtn'}

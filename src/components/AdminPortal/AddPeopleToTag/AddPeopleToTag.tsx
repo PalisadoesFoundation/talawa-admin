@@ -279,7 +279,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             data-testid={
               isToBeAssigned ? 'deselectMemberBtn' : 'selectMemberBtn'
             }
-            // variant={!isToBeAssigned ? 'primary' : 'danger'}
             className={
               !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
             }

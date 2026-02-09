@@ -35,13 +35,7 @@ import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
 import styles from './VenueCard.module.css';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
-
-interface InterfaceVenueCardProps {
-  venueItem: InterfaceQueryVenueListItem;
-  showEditVenueModal: (venueItem: InterfaceQueryVenueListItem) => void;
-  handleDelete: (venueId: string) => void;
-}
+import { InterfaceVenueCardProps } from 'types/AdminPortal/venue';
 
 const VenueCard = ({
   venueItem,
