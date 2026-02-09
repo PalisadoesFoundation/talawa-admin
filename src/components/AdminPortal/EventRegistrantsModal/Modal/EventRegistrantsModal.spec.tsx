@@ -1124,14 +1124,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
   beforeEach(() => {
     user = userEvent.setup();
     vi.clearAllMocks();
-
-    // Re-mock ProfileAvatarDisplay for these tests
-    vi.doMock(
-      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
-      () => ({
-        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
-      }),
-    );
   });
 
   afterEach(() => {
@@ -1243,6 +1235,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('renderOption renders ProfileAvatarDisplay with correct props for members with names and avatars (lines 192, 195-202)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1304,6 +1302,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('renderOption uses unknownUser fallback when member name is empty (lines 199, 204)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1353,6 +1357,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('renderOption creates li elements with correct structure (line 195-196)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1407,6 +1417,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('renderOption span elements contain correct member names with ms-2 class (line 203-204)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1455,6 +1471,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('getOptionLabel returns correct labels for all member types (line 192)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1499,6 +1521,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('ProfileAvatarDisplay always receives enableEnlarge=false (line 201)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,
@@ -1542,6 +1570,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
 
   test('ProfileAvatarDisplay always receives size="small" (line 200)', async () => {
     vi.resetModules();
+    vi.doMock(
+      'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay',
+      () => ({
+        ProfileAvatarDisplay: ProfileAvatarDisplayMock,
+      }),
+    );
     vi.doMock('@mui/material/Autocomplete', () => ({
       __esModule: true,
       default: enhancedAutocompleteMock,

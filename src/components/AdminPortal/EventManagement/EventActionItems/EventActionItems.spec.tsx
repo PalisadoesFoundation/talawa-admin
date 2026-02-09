@@ -1153,7 +1153,8 @@ describe('EventActionItems', () => {
 
       // Small delay between clicks to ensure state updates
       await waitFor(() => {
-        // Assert intermediate filter state if needed, or just proceed
+        // Assert pending filter is applied before clicking again
+        expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
       await userEvent.click(filterBtn);
@@ -1636,23 +1637,15 @@ describe('EventActionItems', () => {
   });
 
   describe('ProfileAvatarDisplay', () => {
-    it('renders ProfileAvatarDisplay for assignees with name', async () => {
+    it('renders ProfileAvatarDisplay with correct props for each assignee', async () => {
       renderEventActionItems();
 
       await waitFor(
         () => {
-          expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
-        },
-        { timeout: 5000 },
-      );
-    });
-
-    it('ProfileAvatarDisplay renders avatar for each action item assignee', async () => {
-      renderEventActionItems();
-
-      await waitFor(
-        () => {
-          expect(screen.getAllByText('John Doe').length).toBeGreaterThan(0);
+          const avatars = screen.getAllByTestId('profile-avatar-display');
+          expect(avatars.length).toBeGreaterThan(0);
+          // Verify fallbackName is passed through
+          expect(avatars[0]).toHaveAttribute('data-name', 'John Doe');
         },
         { timeout: 5000 },
       );
