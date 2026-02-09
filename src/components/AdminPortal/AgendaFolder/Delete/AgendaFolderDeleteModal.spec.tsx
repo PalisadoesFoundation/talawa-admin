@@ -141,7 +141,7 @@ describe('AgendaFolderDeleteModal', () => {
       { loading: false, error: undefined, called: false },
     ] as unknown as ReturnType<typeof ApolloClient.useMutation>);
 
-    renderAgendaFolderDeleteModal();
+    renderAgendaFolderDeleteModal([], true);
 
     await userEvent.click(screen.getByTestId('modal-delete-btn'));
 
