@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import {
@@ -29,8 +28,8 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useParams: vi.fn(() => useParamsMock),
-    Navigate: ({ to }: { to: string }) => (
-      <div data-testid="navigate">{to}</div>
+    Navigate: vi.fn(({ to }: { to: string }) =>
+      React.createElement('div', { 'data-testid': 'navigate' }, to),
     ),
   };
 });
@@ -59,92 +58,107 @@ vi.mock('react-toastify', () => ({
 
 // Mock sub-components
 vi.mock('shared-components/LoadingState/LoadingState', () => ({
-  default: ({
-    isLoading,
-    children,
-  }: {
-    isLoading: boolean;
-    children: React.ReactNode;
-  }) => {
-    if (isLoading) return <div data-testid="loader">Loading...</div>;
-    return children;
-  },
-}));
-
-vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
-  ProfileAvatarDisplay: ({
-    fallbackName,
-    imageUrl,
-  }: {
-    fallbackName: string;
-    imageUrl?: string;
-  }) => (
-    <div
-      data-testid="profile-avatar-display"
-      data-name={fallbackName}
-      data-image={imageUrl ?? ''}
-    >
-      {fallbackName}
-    </div>
+  default: vi.fn(
+    ({
+      isLoading,
+      children,
+    }: {
+      isLoading: boolean;
+      children: React.ReactNode;
+    }) => {
+      if (isLoading)
+        return React.createElement(
+          'div',
+          { 'data-testid': 'loader' },
+          'Loading...',
+        );
+      return children;
+    },
   ),
 }));
 
-vi.mock('shared-components/SortingButton/SortingButton', () => ({
-  default: ({
-    onSortChange,
-    dataTestIdPrefix,
-    buttonLabel,
-  }: {
-    onSortChange: (value: string) => void;
-    dataTestIdPrefix: string;
-    buttonLabel: string;
-  }) => {
-    const [filterClickCount, setFilterClickCount] = React.useState(0);
-
-    return (
-      <button
-        data-testid={`${dataTestIdPrefix}Btn`}
-        onClick={() => {
-          if (dataTestIdPrefix === 'searchByToggle') {
-            // Switch to category for testing
-            onSortChange('category');
-          } else if (dataTestIdPrefix === 'filter') {
-            // Cycle through filter states: all -> pending -> completed -> all
-            const nextCount = filterClickCount + 1;
-            setFilterClickCount(nextCount);
-            const filterStates = ['pending', 'completed', 'all'];
-            const currentState = filterStates[(nextCount - 1) % 3];
-            onSortChange(currentState);
-          } else {
-            onSortChange('test-value');
-          }
-        }}
-      >
-        {buttonLabel}
-      </button>
-    );
-  },
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(
+    ({ fallbackName, imageUrl }: { fallbackName: string; imageUrl?: string }) =>
+      React.createElement(
+        'div',
+        {
+          'data-testid': 'profile-avatar-display',
+          'data-name': fallbackName,
+          'data-image': imageUrl ?? '',
+        },
+        fallbackName,
+      ),
+  ),
 }));
 
+vi.mock('shared-components/SortingButton/SortingButton', () => {
+  return {
+    default: vi.fn(
+      ({
+        onSortChange,
+        dataTestIdPrefix,
+        buttonLabel,
+      }: {
+        onSortChange: (value: string) => void;
+        dataTestIdPrefix: string;
+        buttonLabel: string;
+      }) => {
+        const [filterClickCount, setFilterClickCount] = React.useState(0);
+
+        return React.createElement(
+          'button',
+          {
+            'data-testid': `${dataTestIdPrefix}Btn`,
+            onClick: () => {
+              if (dataTestIdPrefix === 'searchByToggle') {
+                // Switch to category for testing
+                onSortChange('category');
+              } else if (dataTestIdPrefix === 'filter') {
+                // Cycle through filter states: all -> pending -> completed -> all
+                const nextCount = filterClickCount + 1;
+                setFilterClickCount(nextCount);
+                const filterStates = ['pending', 'completed', 'all'];
+                const currentState = filterStates[(nextCount - 1) % 3];
+                onSortChange(currentState);
+              } else {
+                onSortChange('test-value');
+              }
+            },
+          },
+          buttonLabel,
+        );
+      },
+    ),
+  };
+});
+
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
-  default: ({
-    onSearch,
-    inputTestId,
-    buttonTestId,
-  }: {
-    onSearch: (value: string) => void;
-    inputTestId: string;
-    buttonTestId: string;
-  }) => (
-    <div>
-      <input
-        data-testid={inputTestId}
-        onChange={(e) => {
-          onSearch(e.target.value);
-        }}
-      />
-      <button data-testid={buttonTestId}>Search</button>
-    </div>
+  default: vi.fn(
+    ({
+      onSearch,
+      inputTestId,
+      buttonTestId,
+    }: {
+      onSearch: (value: string) => void;
+      inputTestId: string;
+      buttonTestId: string;
+    }) =>
+      React.createElement(
+        'div',
+        null,
+        React.createElement('input', {
+          'data-testid': inputTestId,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+            onSearch(e.target.value);
+          },
+        }),
+        React.createElement(
+          'button',
+          { 'data-testid': buttonTestId },
+          'Search',
+        ),
+      ),
   ),
 }));
 
@@ -152,34 +166,60 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
 vi.mock(
   'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="view-modal">View Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'view-modal' },
+            'View Modal',
+          )
+        : null,
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemModal/ActionItemModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? (
-        <div data-testid="action-item-modal">Action Item Modal</div>
-      ) : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'action-item-modal' },
+            'Action Item Modal',
+          )
+        : null,
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="delete-modal">Delete Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'delete-modal' },
+            'Delete Modal',
+          )
+        : null,
+    ),
   }),
 );
 
 vi.mock(
   'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
   () => ({
-    default: ({ isOpen }: { isOpen: boolean }) =>
-      isOpen ? <div data-testid="status-modal">Status Modal</div> : null,
+    default: vi.fn(({ isOpen }: { isOpen: boolean }) =>
+      isOpen
+        ? React.createElement(
+            'div',
+            { 'data-testid': 'status-modal' },
+            'Status Modal',
+          )
+        : null,
+    ),
   }),
 );
 
