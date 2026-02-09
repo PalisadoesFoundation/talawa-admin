@@ -58,7 +58,7 @@ import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/Err
 
 const { getItem } = useLocalStorage();
 
-export const handleCreateDirectChat = async (
+const handleCreateDirectChat = async (
   id: string,
   userName: string,
   chats: Chat[],

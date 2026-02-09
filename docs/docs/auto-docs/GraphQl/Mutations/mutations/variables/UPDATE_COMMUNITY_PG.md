@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_COMMUNITY\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:569](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L569)
+Defined in: [src/GraphQl/Mutations/mutations.ts:547](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L547)
 
 GraphQL mutation to update community profile settings including logo upload.
 
