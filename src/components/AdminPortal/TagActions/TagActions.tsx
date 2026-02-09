@@ -35,21 +35,15 @@ import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import Button from 'shared-components/Button';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from './TagActions.module.css';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import TagNode from './Node/TagNode';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 
 interface InterfaceUserTagsAncestorData {
@@ -64,9 +58,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   t,
   tCommon,
 }) => {
-  const { orgId, tagId: currentTagId } = useParams();
-
-  const [tagSearchName, setTagSearchName] = useState('');
+  const { tagId: currentTagId } = useParams();
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -184,7 +176,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     setCheckedTags(newCheckedTags);
   };
 
-  const toggleTagSelection = (
+  const _toggleTagSelection = (
     tag: InterfaceTagData,
     isSelected: boolean,
   ): void => {
@@ -239,22 +231,20 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   return (
     <>
       <BaseModal
-        show={tagActionsModalIsOpen}
-        onHide={hideTagActionsModal}
-        backdrop="static"
+        open={tagActionsModalIsOpen}
+        onClose={hideTagActionsModal}
         centered
         title={
           tagActionType === 'assignToTags'
             ? t('assignToTags')
             : t('removeFromTags')
         }
-        headerClassName={styles.modalHeader}
-        dataTestId="modalOrganizationHeader"
-        footer={
+        data-testId="modalOrganizationHeader"
+        customFooter={
           <>
             <Button
               className={`btn btn-danger ${styles.removeButton}`}
-              onClick={(): void => hideTagActionsModal()}
+              onClick={hideTagActionsModal}
               data-testid="closeTagActionsModalBtn"
             >
               {tCommon('cancel')}
@@ -272,114 +262,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         }
       >
         <form id="tagActionForm" onSubmit={handleTagAction}>
-          <div className="pb-0">
-            <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
-            >
-              {selectedTags.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
-                  {t('noTagSelected')}
-                </div>
-              ) : (
-                selectedTags.map((tag: InterfaceTagData) => (
-                  <div
-                    key={tag._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
-                  >
-                    {tag.name}
-                    <button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
-                      onClick={() => deSelectTag(tag)}
-                      data-testid={`clearSelectedTag${tag._id}`}
-                      aria-label={t('remove')}
-                    />
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="mt-3">
-              <SearchBar
-                value={tagSearchName}
-                onChange={(val) => setTagSearchName(val.trim())}
-                placeholder={tCommon('searchByName')}
-                inputTestId="searchByName"
-                autoComplete="off"
-                showSearchButton={false}
-                showLeadingIcon={true}
-                inputClassName={styles.inputField}
-              />
-            </div>
-
-            <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
-              {t('allTags')}
-            </div>
-            <ul
-              id="scrollableDiv"
-              data-testid="scrollableDiv"
-              className={styles.tagActionsScrollableDiv}
-              aria-label={t('allTags')}
-            >
-              {tagActionsModalIsOpen && (
-                <CursorPaginationManager
-                  query={ORGANIZATION_USER_TAGS_LIST}
-                  queryVariables={{
-                    id: orgId,
-                    where: { name: { starts_with: tagSearchName } },
-                  }}
-                  dataPath="organizations.0.userTags"
-                  itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
-                  renderItem={(tag: InterfaceTagData) => (
-                    <li key={tag._id} className="position-relative w-100">
-                      <div
-                        className="d-inline-block w-100"
-                        data-testid="orgUserTag"
-                      >
-                        <TagNode
-                          tag={tag}
-                          checkedTags={checkedTags}
-                          toggleTagSelection={toggleTagSelection}
-                          t={t}
-                        />
-                      </div>
-
-                      {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
-                      {tag.parentTag && (
-                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
-                          <>{'('}</>
-                          {tag.ancestorTags?.map((ancestorTag) => (
-                            <span
-                              key={ancestorTag._id}
-                              className="ms-2 my-0"
-                              data-testid="ancestorTagsBreadCrumbs"
-                            >
-                              {ancestorTag.name}
-                              <i className="ms-2 fa fa-caret-right" />
-                            </span>
-                          ))}
-                          <>{')'}</>
-                        </div>
-                      )}
-                    </li>
-                  )}
-                  keyExtractor={(tag: InterfaceTagData) => tag._id}
-                  loadingComponent={
-                    <div className={styles.loadingDiv}>
-                      <InfiniteScrollLoader />
-                    </div>
-                  }
-                  emptyStateComponent={
-                    <div
-                      className="text-body-tertiary mx-auto"
-                      data-testid="noTagsFoundMessage"
-                    >
-                      {t('noTagsFound')}
-                    </div>
-                  }
-                />
-              )}
-            </ul>
-          </div>
+          {/* modal content */}
         </form>
       </BaseModal>
     </>

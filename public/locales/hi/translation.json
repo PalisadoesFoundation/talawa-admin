@@ -2579,5 +2579,12 @@
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"
+  },
+  "userPasswordUpdate": {
+    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
+    "newPassword": "नया पासवर्ड",
+    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
+    "passNoMatch": "पासवर्ड मेल नहीं खा रहे हैं",
+    "previousPassword": "पिछला पासवर्ड"
   }
 }

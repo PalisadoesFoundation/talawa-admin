@@ -2579,5 +2579,12 @@
   },
   "csv": {
     "demographics": "Demografía de {{category}}"
+  },
+  "userPasswordUpdate": {
+    "confirmNewPassword": "Confirmar nueva contraseña",
+    "newPassword": "Nueva contraseña",
+    "passCantBeEmpty": "La contraseña no puede estar vacía",
+    "passNoMatch": "Las contraseñas no coinciden",
+    "previousPassword": "Contraseña anterior"
   }
 }

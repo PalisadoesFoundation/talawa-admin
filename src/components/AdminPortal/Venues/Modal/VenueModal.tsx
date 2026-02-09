@@ -377,13 +377,13 @@ const VenueModal = ({
         {imagePreviewUrl && (
           <div className={styles.previewVenueModal}>
             <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
-            <button
+            <Button
               className={styles.closeButtonP}
               onClick={clearImageInput}
               data-testid="closeimage"
             >
               <i className="fa fa-times"></i>
-            </button>
+            </Button>
           </div>
         )}
 

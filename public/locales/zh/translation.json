@@ -2579,5 +2579,12 @@
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
+  },
+  "userPasswordUpdate": {
+    "confirmNewPassword": "确认新密码",
+    "newPassword": "新密码",
+    "passCantBeEmpty": "密码不能为空",
+    "passNoMatch": "密码不匹配",
+    "previousPassword": "之前的密码"
   }
 }
