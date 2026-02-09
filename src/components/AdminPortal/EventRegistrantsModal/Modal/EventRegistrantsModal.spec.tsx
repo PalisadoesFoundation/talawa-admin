@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, waitFor, screen, cleanup } from '@testing-library/react';
+import * as ApolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -1103,6 +1104,217 @@ describe('EventRegistrantsModal', () => {
       { timeout: 3000 },
     );
   });
+  describe('Error Handling and Edge Cases', () => {
+    test('handles mutation error when adding registrant (Network error)', async () => {
+      renderWithProviders([
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersWithOneMock(),
+        {
+          request: {
+            query: ADD_EVENT_ATTENDEE,
+            variables: { userId: 'user1', eventId: 'event123' },
+          },
+          error: new Error('Network error'),
+        },
+      ]);
+
+      await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+      const input = await screen.findByTestId(
+        'autocomplete',
+        {},
+        { timeout: 3000 },
+      );
+      await user.type(input, 'John');
+      const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+      await user.click(option);
+
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+
+      vi.clearAllMocks();
+      const addButton = await screen.findByTestId(
+        'add-registrant-btn',
+        {},
+        { timeout: 3000 },
+      );
+      await user.click(addButton);
+
+      await waitFor(
+        () => {
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            'Error adding attendee',
+          );
+          expect(NotificationToast.error).toHaveBeenCalledWith('Network error');
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('handles unmounted component during mutation (Success path)', async () => {
+      const { unmount } = renderWithProviders([
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersWithOneMock(),
+        {
+          request: {
+            query: ADD_EVENT_ATTENDEE,
+            variables: { userId: 'user1', eventId: 'event123' },
+          },
+          result: {
+            data: {
+              addEventAttendee: {
+                id: 'user1',
+                name: 'John Doe',
+                emailAddress: 'johndoe@example.com',
+              },
+            },
+          },
+          delay: 100, // Introduce delay to allow unmount
+        },
+      ]);
+
+      await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+      const input = await screen.findByTestId(
+        'autocomplete',
+        {},
+        { timeout: 3000 },
+      );
+      await user.type(input, 'John');
+      const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+      await user.click(option);
+
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+
+      vi.clearAllMocks();
+      const addButton = await screen.findByTestId(
+        'add-registrant-btn',
+        {},
+        { timeout: 3000 },
+      );
+      await user.click(addButton);
+
+      // Unmount immediately after clicking
+      unmount();
+
+      // Wait to ensure no success toast is called after delay
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+
+    test('handles unmounted component during mutation (Error path)', async () => {
+      const { unmount } = renderWithProviders([
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersWithOneMock(),
+        {
+          request: {
+            query: ADD_EVENT_ATTENDEE,
+            variables: { userId: 'user1', eventId: 'event123' },
+          },
+          error: new Error('Network error'),
+          delay: 100, // Introduce delay to allow unmount
+        },
+      ]);
+
+      await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+      const input = await screen.findByTestId(
+        'autocomplete',
+        {},
+        { timeout: 3000 },
+      );
+      await user.type(input, 'John');
+      const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+      await user.click(option);
+
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+
+      vi.clearAllMocks();
+      const addButton = await screen.findByTestId(
+        'add-registrant-btn',
+        {},
+        { timeout: 3000 },
+      );
+      await user.click(addButton);
+
+      // Unmount immediately after clicking
+      unmount();
+
+      // Wait to ensure no error toast is called after delay
+      await new Promise((resolve) => setTimeout(resolve, 200));
+
+      expect(NotificationToast.error).not.toHaveBeenCalled();
+    });
+
+    test('handles non-Error exceptions', async () => {
+      // Mock useMutation to reject with a string
+      const mockMutate = vi.fn().mockRejectedValue('String error');
+
+      // Spy on useMutation to return our mock
+      const useMutationSpy = vi
+        .spyOn(ApolloClient, 'useMutation')
+        .mockReturnValue([
+          mockMutate,
+          {
+            data: undefined,
+            loading: false,
+            error: undefined,
+            called: false,
+            reset: vi.fn(),
+            client: {} as ApolloClient.ApolloClient<object>,
+          },
+        ]);
+
+      renderWithProviders([
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersWithOneMock(),
+      ]);
+
+      await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+      const input = await screen.findByTestId(
+        'autocomplete',
+        {},
+        { timeout: 3000 },
+      );
+      await user.type(input, 'John');
+      const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+      await user.click(option);
+
+      await waitFor(() => expect(input).toHaveValue('John'), { timeout: 3000 });
+
+      vi.clearAllMocks();
+      const addButton = await screen.findByTestId(
+        'add-registrant-btn',
+        {},
+        { timeout: 3000 },
+      );
+      await user.click(addButton);
+
+      await waitFor(
+        () => {
+          expect(mockMutate).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(
+        () => {
+          // Based on code: err instanceof Error ? err.message : 'Unknown error'
+          // 'String error' is NOT instanceof Error, so it falls to 'Unknown error'
+          expect(NotificationToast.error).toHaveBeenCalledWith('Unknown error');
+        },
+        { timeout: 3000 },
+      );
+
+      // Clean up spy
+      useMutationSpy.mockRestore();
+    });
+  });
 });
 
 // Additional tests for renderOption coverage (lines 192, 195, 199, 204)
@@ -1123,6 +1335,12 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       </div>
     ),
   );
+
+  // Array to capture getOptionLabel calls
+  const getOptionLabelCalls: {
+    option: { id: string; name?: string };
+    result: string;
+  }[] = [];
 
   beforeEach(() => {
     user = userEvent.setup();
@@ -1226,7 +1444,11 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
               // Actually call renderOption to execute the real code
               return renderOption
                 ? renderOption(liProps, option, { selected: false })
-                : getOptionLabel?.(option) || option.name;
+                : (() => {
+                    const label = getOptionLabel?.(option) || option.name || '';
+                    getOptionLabelCalls.push({ option, result: label });
+                    return label;
+                  })();
             })
           ) : (
             <div data-testid="no-options">No options</div>
@@ -1287,7 +1509,6 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
       },
       { timeout: 3000 },
     );
-
     const avatarDisplays = screen.getAllByTestId('profile-avatar-display');
     const user1Avatar = avatarDisplays[0];
     expect(user1Avatar).toHaveAttribute(
@@ -1772,5 +1993,157 @@ describe('EventRegistrantsModal - renderOption Coverage', () => {
     await user.click(option1);
 
     expect(option1).toBeInTheDocument();
+  });
+
+  test('handles mutation error when adding registrant', async () => {
+    const errorMock = {
+      request: {
+        query: ADD_EVENT_ATTENDEE,
+        variables: { userId: 'user1', eventId: 'event123' },
+      },
+      error: new Error('Network error'),
+    };
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      errorMock,
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
+    await user.click(input);
+    await user.type(input, 'John Doe');
+    const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+    await user.click(option);
+
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+    vi.clearAllMocks();
+    await user.click(addButton);
+
+    await waitFor(
+      () => {
+        // The component calls toast.error twice: one strict string, one from err.message
+        // expecting 'Network error' ensures catch block was hit with correct error
+        expect(NotificationToast.error).toHaveBeenCalledWith('Network error');
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  test('handles unmounted component during mutation', async () => {
+    const delayedMock = {
+      request: {
+        query: ADD_EVENT_ATTENDEE,
+        variables: { userId: 'user1', eventId: 'event123' },
+      },
+      result: {
+        data: {
+          addEventAttendee: {
+            id: 'user1',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+          },
+        },
+      },
+      delay: 100,
+    };
+
+    const { unmount } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      delayedMock,
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
+    await user.click(input);
+    await user.type(input, 'John Doe');
+    const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+    await user.click(option);
+
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+    vi.clearAllMocks();
+
+    await user.click(addButton);
+
+    // Unmount immediately
+    unmount();
+
+    // Wait to ensure no side effects from potential async completion
+    await new Promise((r) => setTimeout(r, 200));
+
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.error).not.toHaveBeenCalled();
+  });
+
+  test('handles non-Error exceptions', async () => {
+    // Spy on useMutation to reject with string
+    const addRegistrantMutationMock = vi.fn().mockRejectedValue('String error');
+
+    // Spy on the module's useMutation
+    const spy = vi
+      .spyOn(ApolloClient, 'useMutation')
+      .mockReturnValue([
+        addRegistrantMutationMock,
+        { loading: false } as ApolloClient.MutationResult,
+      ]);
+
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await screen.findByTestId('invite-modal', {}, { timeout: 3000 });
+
+    const input = await screen.findByTestId(
+      'autocomplete',
+      {},
+      { timeout: 3000 },
+    );
+    await user.click(input);
+    await user.type(input, 'John Doe');
+    const option = await screen.findByText('John Doe', {}, { timeout: 3000 });
+    await user.click(option);
+
+    const addButton = await screen.findByTestId(
+      'add-registrant-btn',
+      {},
+      { timeout: 3000 },
+    );
+    vi.clearAllMocks();
+
+    await user.click(addButton);
+
+    await waitFor(
+      () => {
+        // Logic: const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        expect(NotificationToast.error).toHaveBeenCalledWith('Unknown error');
+      },
+      { timeout: 3000 },
+    );
+
+    spy.mockRestore();
   });
 });

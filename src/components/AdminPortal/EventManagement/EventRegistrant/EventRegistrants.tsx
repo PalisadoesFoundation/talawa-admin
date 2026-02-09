@@ -246,6 +246,7 @@ function EventRegistrants(): JSX.Element {
                 console.warn(`Failed to load avatar for user: ${row.user?.id}`);
               }}
               enableEnlarge={true}
+              dataTestId="profile-avatar-display"
             />
             <span className="ms-2">{name}</span>
           </div>

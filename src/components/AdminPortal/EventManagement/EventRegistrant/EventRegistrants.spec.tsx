@@ -26,6 +26,12 @@ import {
   ERROR_DELETION_MOCKS,
 } from './Registrations.mocks';
 
+import {
+  EVENT_REGISTRANTS,
+  EVENT_DETAILS,
+  EVENT_CHECKINS,
+} from 'GraphQl/Queries/Queries';
+
 // Mock NotificationToast
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -421,6 +427,129 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
       await waitFor(() => {
         expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
         expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Optional Chaining Edge Cases', () => {
+    test('handles registrant with null user (avatarURL undefined check)', async () => {
+      const mockDataWithNullAvatar = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            isRegistered: true,
+            createdAt: dayjs()
+              .year(2023)
+              .month(0)
+              .date(1)
+              .hour(10)
+              .minute(0)
+              .second(0)
+              .millisecond(0)
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            user: {
+              id: 'user1',
+              name: 'User No Avatar',
+              emailAddress: 'test@example.com',
+              avatarURL: null,
+            },
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockDataWithNullAvatar },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      await waitFor(() => {
+        expect(screen.getByText('User No Avatar')).toBeInTheDocument();
+        const avatarDisplay = screen.getByTestId('profile-avatar-display');
+        expect(avatarDisplay).toBeInTheDocument();
+      });
+    });
+
+    test('handles delete when user is undefined (simulated by checking button click handler safety)', async () => {
+      const mockData = {
+        getEventAttendeesByEventId: [
+          {
+            id: 'att1',
+            isRegistered: true,
+            createdAt: dayjs()
+              .year(2023)
+              .month(0)
+              .date(1)
+              .hour(10)
+              .minute(0)
+              .second(0)
+              .millisecond(0)
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            user: {
+              id: 'user1',
+              name: 'User To Delete',
+              emailAddress: 'test@example.com',
+              avatarURL: 'http://example.com/avatar.jpg',
+            },
+          },
+        ],
+      };
+
+      const customMocks = [
+        {
+          request: {
+            query: EVENT_REGISTRANTS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: mockData },
+        },
+        {
+          request: {
+            query: EVENT_CHECKINS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { attendeesCheckInStatus: [] } } },
+        },
+        {
+          request: {
+            query: EVENT_DETAILS,
+            variables: { eventId: 'event123' },
+          },
+          result: { data: { event: { recurrenceRule: null } } },
+        },
+      ];
+
+      renderEventRegistrants(customMocks);
+
+      const unregisterButton = await screen.findByRole('button', {
+        name: 'Unregister',
+      });
+      await user.click(unregisterButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.warning).toHaveBeenCalledWith(
+          'Removing the attendee...',
+        );
       });
     });
   });

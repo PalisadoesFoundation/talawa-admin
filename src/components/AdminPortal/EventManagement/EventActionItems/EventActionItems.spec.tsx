@@ -1651,4 +1651,78 @@ describe('EventActionItems', () => {
       );
     });
   });
+
+  describe('Modal State Branches Coverage', () => {
+    it('opens delete modal when DELETE state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('deleteItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const deleteBtn = screen.getByTestId('deleteItemBtnactionItemId1');
+      await userEvent.click(deleteBtn);
+
+      await waitFor(() => {
+        // Asserting that the delete modal is present, which implies toggleModal(ModalState.DELETE) logic worked
+        expect(screen.getByTestId('delete-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('opens view modal when VIEW state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('viewItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const viewBtn = screen.getByTestId('viewItemBtnactionItemId1');
+      await userEvent.click(viewBtn);
+
+      await waitFor(() => {
+        // Asserting that the view modal is present, which implies toggleModal(ModalState.VIEW) logic worked
+        expect(screen.getByTestId('view-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('opens status modal when STATUS state is clicked', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('statusCheckboxactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const statusCheckbox = screen.getByTestId('statusCheckboxactionItemId1');
+      await userEvent.click(statusCheckbox);
+
+      await waitFor(() => {
+        // Asserting that the status modal is present, which implies toggleModal(ModalState.STATUS) logic worked
+        expect(screen.getByTestId('status-modal')).toBeInTheDocument();
+      });
+    });
+
+    it('handles edit mode when actionItem exists', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('editItemBtnactionItemId1'),
+        ).toBeInTheDocument();
+      });
+
+      const editBtn = screen.getByTestId('editItemBtnactionItemId1');
+      await userEvent.click(editBtn);
+
+      await waitFor(() => {
+        // The modal should be open (edit mode)
+        expect(screen.getByTestId('action-item-modal')).toBeInTheDocument();
+      });
+    });
+  });
 });
