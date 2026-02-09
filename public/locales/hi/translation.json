@@ -2084,9 +2084,6 @@
       "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
       "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
       "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
-    },
-    "eventRegistrant": {
-      "unknownMember": "अज्ञात सदस्य"
     }
   },
   "onSpotAttendee": {

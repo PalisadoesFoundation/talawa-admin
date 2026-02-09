@@ -2072,9 +2072,6 @@
       "noRecipientsError": "Please provide at least one recipient email",
       "invalidEmailsError": "Invalid email(s): {{emails}}",
       "invitesSentSuccessfully": "Invites sent successfully"
-    },
-    "eventRegistrant": {
-      "unknownMember": "Unknown Member"
     }
   },
   "onSpotAttendee": {
