@@ -11,6 +11,7 @@ import {
   securityRestrictions,
   searchInputRestrictions,
   modalStateRestrictions,
+  nativeButtonRestrictions,
 } from '../rules/rules.js';
 
 export const baseTypeScriptConfig = {
@@ -124,6 +125,7 @@ export const baseTypeScriptConfig = {
       ...securityRestrictions,
       ...searchInputRestrictions,
       ...modalStateRestrictions,
+      ...nativeButtonRestrictions,
     ],
     'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
   },
