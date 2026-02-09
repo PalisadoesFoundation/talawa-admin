@@ -304,7 +304,7 @@ export default function Organizations(): React.JSX.Element {
       } else {
         setOrganizations([]);
       }
-    } else if (mode === 2) {
+    } else {
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
@@ -501,10 +501,7 @@ export default function Organizations(): React.JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={Math.max(
-                      organizations ? organizations.length : 0,
-                      rowsPerPage + 1,
-                    )}
+                    count={Math.max(organizations.length, rowsPerPage + 1)}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
