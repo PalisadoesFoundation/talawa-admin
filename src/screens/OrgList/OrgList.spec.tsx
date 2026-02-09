@@ -607,7 +607,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     await userEvent.type(searchBar, 'Dum');
 
     // Wait for debounce delay (300ms) - use fake timers
-    vi.advanceTimersByTime(350);
+    await act(async () => {
+      vi.advanceTimersByTime(350);
+    });
   });
 
   test('Testing immediate search on Enter key press', async () => {
