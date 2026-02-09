@@ -2407,7 +2407,7 @@
     "installing": "Installation ({{elapsed}})",
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
-    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
+    "uninstallPluginWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin",
     "failedToParsePluginZip": "Échec de l'analyse du fichier ZIP du plugin",
     "pluginUploadedSuccess": "Plugin téléchargé avec succès ! (composants {{components}}) - Vous pouvez maintenant l'installer depuis la liste des plugins."

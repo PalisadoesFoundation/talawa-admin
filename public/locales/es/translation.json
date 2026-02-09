@@ -2390,7 +2390,7 @@
     "installing": "Instalando ({{elapsed}})",
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
-    "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
+    "uninstallPluginWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin",
     "failedToParsePluginZip": "Error al analizar el archivo ZIP del plugin",
     "pluginUploadedSuccess": "¡Plugin subido exitosamente! (componentes {{components}}) - Ahora puedes instalarlo desde la lista de plugins."
