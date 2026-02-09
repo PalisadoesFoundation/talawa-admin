@@ -93,43 +93,47 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
 }));
 
 vi.mock('shared-components/SortingButton/SortingButton', () => {
-  return {
-    default: vi.fn(
-      ({
-        onSortChange,
-        dataTestIdPrefix,
-        buttonLabel,
-      }: {
-        onSortChange: (value: string) => void;
-        dataTestIdPrefix: string;
-        buttonLabel: string;
-      }) => {
-        const [filterClickCount, setFilterClickCount] = React.useState(0);
-
-        return React.createElement(
-          'button',
-          {
-            'data-testid': `${dataTestIdPrefix}Btn`,
-            onClick: () => {
-              if (dataTestIdPrefix === 'searchByToggle') {
-                // Switch to category for testing
-                onSortChange('category');
-              } else if (dataTestIdPrefix === 'filter') {
-                // Cycle through filter states: all -> pending -> completed -> all
-                const nextCount = filterClickCount + 1;
-                setFilterClickCount(nextCount);
-                const filterStates = ['pending', 'completed', 'all'];
-                const currentState = filterStates[(nextCount - 1) % 3];
-                onSortChange(currentState);
-              } else {
-                onSortChange('test-value');
-              }
-            },
+  let filterClickCount = 0;
+  const MockComponent = vi.fn(
+    ({
+      onSortChange,
+      dataTestIdPrefix,
+      buttonLabel,
+    }: {
+      onSortChange: (value: string) => void;
+      dataTestIdPrefix: string;
+      buttonLabel: string;
+    }) =>
+      React.createElement(
+        'button',
+        {
+          'data-testid': `${dataTestIdPrefix}Btn`,
+          onClick: () => {
+            if (dataTestIdPrefix === 'searchByToggle') {
+              // Switch to category for testing
+              onSortChange('category');
+            } else if (dataTestIdPrefix === 'filter') {
+              // Cycle through filter states: all -> pending -> completed -> all
+              filterClickCount += 1;
+              const filterStates = ['pending', 'completed', 'all'];
+              const currentState = filterStates[(filterClickCount - 1) % 3];
+              onSortChange(currentState);
+            } else {
+              onSortChange('test-value');
+            }
           },
-          buttonLabel,
-        );
-      },
-    ),
+        },
+        buttonLabel,
+      ),
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (MockComponent as any).resetFilterCount = () => {
+    filterClickCount = 0;
+  };
+
+  return {
+    default: MockComponent,
   };
 });
 
@@ -440,11 +444,20 @@ const renderEventActionItems = (
 };
 
 describe('EventActionItems', () => {
+  beforeEach(async () => {
+    const { default: SortingButton } =
+      await import('shared-components/SortingButton/SortingButton');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (SortingButton as any).resetFilterCount?.();
+
+    useParamsMock = { orgId: '123' };
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
   afterEach(() => {
     setUseParamsMock({ orgId: 'orgId1' });
     cleanup();
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Component Rendering', () => {
