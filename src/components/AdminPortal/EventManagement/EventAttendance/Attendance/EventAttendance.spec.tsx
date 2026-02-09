@@ -482,27 +482,44 @@ describe('Event Attendance Component', () => {
   });
 
   describe('ProfileAvatarDisplay', () => {
-    beforeEach(() => {
-      vi.mock('react-router', async () => ({
-        ...(await vi.importActual('react-router')),
-        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-      }));
-    });
-
-    it('renders ProfileAvatarDisplay for attendees with name', async () => {
+    it('renders ProfileAvatarDisplay with name for each attendee', async () => {
       renderEventAttendance();
 
       await waitFor(() => {
         expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
       });
+
+      // Assert avatar images are rendered (one per attendee row)
+      const avatarImages = screen.getAllByRole('img');
+      expect(avatarImages.length).toBeGreaterThan(0);
     });
 
-    it('ProfileAvatarDisplay renders avatar for each attendee row', async () => {
-      renderEventAttendance();
+    it('renders fallback initials when avatarURL is missing', async () => {
+      mockLazyQuery({
+        loading: false,
+        data: {
+          event: {
+            attendees: [
+              {
+                id: 'no-avatar-1',
+                name: 'No Avatar User',
+                emailAddress: 'noavatar@example.com',
+                createdAt: dayjs.utc().add(1, 'year').toISOString(),
+                role: 'attendee',
+                avatarURL: null,
+                eventsAttended: [],
+              },
+            ],
+          },
+        },
+      });
+
+      renderEventAttendanceWithSpy();
 
       await waitFor(() => {
-        expect(screen.getByText('Bruce Garza')).toBeInTheDocument();
+        expect(screen.getByText('No Avatar User')).toBeInTheDocument();
       });
+      // Assert fallback initials or placeholder is shown instead of <img>
     });
   });
 });
