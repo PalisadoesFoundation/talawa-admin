@@ -9,6 +9,14 @@ import { DiscoveryManager } from './discovery';
 import { ExtensionRegistryManager } from './extension-registry';
 import { EventManager } from './event-manager';
 
+// Define the interface for plugin lifecycle hooks
+interface PluginLifecycleHooks {
+  onInstall?: () => void | Promise<void>;
+  onActivate?: () => void | Promise<void>;
+  onDeactivate?: () => void | Promise<void>;
+  onUninstall?: () => void | Promise<void>;
+}
+
 export class LifecycleManager {
   private loadedPlugins: Map<string, ILoadedPlugin> = new Map();
 
@@ -406,7 +414,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onInstall' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as PluginLifecycleHooks;
         if (typeof lifecycle.onInstall === 'function') {
           await lifecycle.onInstall();
         }
@@ -437,7 +445,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onActivate' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as PluginLifecycleHooks;
         if (typeof lifecycle.onActivate === 'function') {
           await lifecycle.onActivate();
         }
@@ -468,7 +476,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onDeactivate' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as PluginLifecycleHooks;
         if (typeof lifecycle.onDeactivate === 'function') {
           await lifecycle.onDeactivate();
         }
@@ -499,7 +507,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onUninstall' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as PluginLifecycleHooks;
         if (typeof lifecycle.onUninstall === 'function') {
           await lifecycle.onUninstall();
         }
