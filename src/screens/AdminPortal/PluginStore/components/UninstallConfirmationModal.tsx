@@ -26,15 +26,15 @@ export default function UninstallConfirmationModal({
   const customFooter = (
     <>
       <Button
-        variant="secondary" // Was 'color="inherit"' in MUI, usually translates to secondary or outline-secondary in Bootstrap/BaseModal
+        variant="secondary"
         onClick={onClose}
-        className="me-2" // sx={{ mr: 1 }}
+        className="me-2"
         data-testid="uninstall-cancel-btn"
       >
         {tCommon('cancel')}
       </Button>
       <Button
-        variant="danger" // Was 'color="error"' in MUI
+        variant="danger"
         onClick={onConfirm}
         data-testid="uninstall-remove-btn"
       >
@@ -49,9 +49,9 @@ export default function UninstallConfirmationModal({
       title={t('uninstallPlugin')}
       onHide={onClose}
       footer={customFooter}
-      size="sm" // maxWidth="sm" in MUI
+      size="sm"
       dataTestId="uninstall-modal"
-      centered // Default in BaseModal but good to be explicit if matching MUI's likely centered behavior
+      centered
     >
       <div>
         <div data-testid="uninstall-modal-title" className="mb-3">
@@ -59,10 +59,7 @@ export default function UninstallConfirmationModal({
             pluginName: plugin?.name || '',
           })}
         </div>
-        <div className="text-muted">
-          This action will permanently remove the plugin and all its data. This
-          action cannot be undone.
-        </div>
+        <div className="text-muted">{t('uninstallPluginWarning')}</div>
       </div>
     </BaseModal>
   );
