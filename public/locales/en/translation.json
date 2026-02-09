@@ -1310,7 +1310,7 @@
     "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
     "cancel": "cancel",
-    "sucessfullyDeletedOrganization": "Successfully deleted Organization"
+    "successfullyDeletedOrganization": "Successfully deleted Organization"
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",

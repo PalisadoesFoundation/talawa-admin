@@ -1,4 +1,3 @@
-import React from 'react';
 import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -23,7 +22,7 @@ import { useModalState } from 'shared-components/CRUDModalTemplate';
  *
  * @returns JSX.Element - The rendered component with delete functionality.
  */
-function deleteOrg(): JSX.Element {
+function DeleteOrg(): JSX.Element {
   // Translation hook for localization
   const { t } = useTranslation('translation', { keyPrefix: 'deleteOrg' });
   const { t: tCommon } = useTranslation('common');
@@ -33,18 +32,11 @@ function deleteOrg(): JSX.Element {
   // Navigation hook for redirecting
   const navigate = useNavigate();
 
-  const { isOpen, toggle } = useModalState();
+  const { isOpen, toggle, close } = useModalState();
 
   // Hook for accessing local storage
   const { getItem } = useLocalStorage();
   const canDelete = getItem('SuperAdmin') || true;
-
-  // Check if the user has super admin privileges
-  // const canDelete = getItem('SuperAdmin');
-  /**
-   * Toggles the visibility of the delete confirmation modal.
-   */
-  const toggleDeleteModal = (): void => toggle();
 
   // GraphQL mutations for deleting organizations
   const [del] = useMutation(DELETE_ORGANIZATION_MUTATION);
@@ -56,7 +48,7 @@ function deleteOrg(): JSX.Element {
   const deleteOrg = async (): Promise<void> => {
     try {
       await del({ variables: { input: { id: currentUrl || '' } } });
-      NotificationToast.success(t('sucessfullyDeletedOrganization') as string);
+      NotificationToast.success(t('successfullyDeletedOrganization') as string);
       navigate('/admin/orglist');
     } catch (error) {
       errorHandler(t, error);
@@ -75,7 +67,7 @@ function deleteOrg(): JSX.Element {
             <Button
               variant="danger"
               className={styles.deleteButton}
-              onClick={toggleDeleteModal}
+              onClick={toggle}
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
@@ -88,14 +80,14 @@ function deleteOrg(): JSX.Element {
       {canDelete && (
         <BaseModal
           show={isOpen}
-          onHide={toggleDeleteModal}
+          onHide={toggle}
           title={t('deleteOrganization')}
           dataTestId="orgDeleteModal"
           headerClassName={styles.modalHeaderDelete}
           footer={
             <>
               <Button
-                onClick={toggleDeleteModal}
+                onClick={close}
                 data-testid="closeDelOrgModalBtn"
                 className={styles.btnDelete}
               >
@@ -118,4 +110,4 @@ function deleteOrg(): JSX.Element {
   );
 }
 
-export default deleteOrg;
+export default DeleteOrg;

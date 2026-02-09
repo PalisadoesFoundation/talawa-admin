@@ -13,7 +13,7 @@
 }
 
 .tableHeader {
-  background-color: var(--color-red-500, #f8f9fa);
+  background-color: var(--color-red-500);
 }
 
 .editButton {

@@ -239,7 +239,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             name="address.line1"
             label={tCommon('location')}
             required
-            placeholder={tCommon('Enter Organization location')}
+            placeholder={t('enterOrganizationLocation')}
             autoComplete="off"
             className={styles.textFields}
             value={formState.address.line1}
@@ -280,9 +280,10 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <FormCheckField
                 name="isPublic"
                 id="isPublic"
-                label={`${t('isPublic')}`}
+                label={t('isPublic')}
                 type="checkbox"
                 data-testid="user-reg-switch"
+                // "Is Public" is the inverse of "user registration required"
                 checked={!userRegistrationRequiredChecked}
                 onChange={() =>
                   setuserRegistrationRequiredChecked(

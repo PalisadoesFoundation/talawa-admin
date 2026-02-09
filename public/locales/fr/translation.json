@@ -1266,7 +1266,7 @@
     "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
     "cancel": "Annuler",
-    "sucessfullyDeletedOrganization": "Organisation supprimée avec succès"
+    "successfullyDeletedOrganization": "Organisation supprimée avec succès"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",

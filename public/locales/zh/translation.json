@@ -1266,7 +1266,7 @@
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消",
-    "sucessfullyDeletedOrganization": "组织已成功删除"
+    "successfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",

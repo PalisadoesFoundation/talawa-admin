@@ -1261,7 +1261,7 @@
     "deleteSampleOrganization": "नमूना संगठन हटाएँ",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
     "cancel": "रद्द करें",
-    "sucessfullyDeletedOrganization": "संगठन सफलतापूर्वक हटा दिया गया"
+    "successfullyDeletedOrganization": "संगठन सफलतापूर्वक हटा दिया गया"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
