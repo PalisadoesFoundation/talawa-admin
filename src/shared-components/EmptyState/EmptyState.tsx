@@ -76,9 +76,9 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
   };
 
   /**
-   * Helper to map custom variant to MUI Button variant
-   * @param variant - (Optional) Button variant type
-   * @returns - MUI Button variant
+   * Helper to map action variant to shared Button variant
+   * `@param` variant - (Optional) Action button variant type
+   * `@returns` Mapped Button variant string
    */
   const getButtonVariant = (
     variant: 'primary' | 'secondary' | 'outlined' | undefined,

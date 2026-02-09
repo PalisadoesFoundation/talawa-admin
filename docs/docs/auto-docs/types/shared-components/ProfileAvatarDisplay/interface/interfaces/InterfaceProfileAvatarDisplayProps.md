@@ -34,7 +34,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:17](h
 
 > `optional` **crossOrigin**: `"anonymous"` \| `"use-credentials"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L30)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L31)
+
+need to support other props which are in images
 
 ***
 
@@ -62,7 +64,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:23](h
 
 > `optional` **decoding**: `"sync"` \| `"async"` \| `"auto"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L31)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L33)
+
+(Optional) Decoding strategy for the image element.
 
 ***
 
@@ -70,7 +74,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:31](h
 
 > `optional` **enableEnlarge**: `boolean`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L28)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L29)
 
 If true, clicking the avatar opens an enlarged modal view
 
@@ -100,7 +104,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:7](ht
 
 > `optional` **loading**: `"eager"` \| `"lazy"`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L32)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L35)
+
+(Optional) Loading strategy for the image element.
 
 ***
 
@@ -118,7 +124,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:25](h
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L26)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L27)
+
+(Optional) Click handler for the avatar.
 
 #### Returns
 
@@ -130,7 +138,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](h
 
 > `optional` **onError**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L33)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L37)
+
+Error handler for the image element.
 
 #### Returns
 
@@ -142,7 +152,9 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](h
 
 > `optional` **onLoad**: () => `void`
 
-Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L34)
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L39)
+
+Load handler for the image element.
 
 #### Returns
 

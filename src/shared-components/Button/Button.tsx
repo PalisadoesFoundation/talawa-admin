@@ -24,34 +24,32 @@ const mapSizeToBootstrap = (
   return undefined; // md/default
 };
 
-// Add this helper function
+const BOOTSTRAP_VARIANTS = new Set([
+  'primary',
+  'secondary',
+  'success',
+  'danger',
+  'warning',
+  'info',
+  'light',
+  'dark',
+  'link',
+  'outline-primary',
+  'outline-secondary',
+  'outline-success',
+  'outline-danger',
+  'outline-warning',
+  'outline-info',
+  'outline-light',
+  'outline-dark',
+]);
+
 const mapVariantToBootstrap = (
   variant: ButtonVariant | undefined,
 ): string | undefined => {
   if (!variant) return 'primary';
 
-  // If it's already a bootstrap variant, return as-is
-  const bootstrapVariants = [
-    'primary',
-    'secondary',
-    'success',
-    'danger',
-    'warning',
-    'info',
-    'light',
-    'dark',
-    'link',
-    'outline-primary',
-    'outline-secondary',
-    'outline-success',
-    'outline-danger',
-    'outline-warning',
-    'outline-info',
-    'outline-light',
-    'outline-dark',
-  ];
-
-  if (bootstrapVariants.includes(variant)) {
+  if (BOOTSTRAP_VARIANTS.has(variant)) {
     return variant;
   }
 

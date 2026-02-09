@@ -4,13 +4,9 @@
 
 # Interface: InterfaceEventEdge
 
-Defined in: [src/types/Volunteer/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L45)
+Defined in: [src/types/Volunteer/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L44)
 
 Defines the structure for GraphQL event edge from queries.
-
-## Param
-
-The event node containing all event data.
 
 ## Properties
 
@@ -19,6 +15,8 @@ The event node containing all event data.
 > **node**: `object`
 
 Defined in: [src/types/Volunteer/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L46)
+
+The event node containing all event data.
 
 #### allDay
 

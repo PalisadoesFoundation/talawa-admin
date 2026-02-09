@@ -23,13 +23,18 @@ export interface InterfaceProfileAvatarDisplayProps {
   dataTestId?: string;
   /** (Optional) CSS object-fit value for the image. */
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  /** (Optional) Click handler for the avatar. */
   onClick?: () => void;
   /** If true, clicking the avatar opens an enlarged modal view */
   enableEnlarge?: boolean;
-  // need to support other props which are in images
+  /** need to support other props which are in images */
   crossOrigin?: 'anonymous' | 'use-credentials';
+  /**  (Optional) Decoding strategy for the image element. */
   decoding?: 'sync' | 'async' | 'auto';
+  /** (Optional) Loading strategy for the image element. */
   loading?: 'eager' | 'lazy';
+  /** Error handler for the image element. */
   onError?: () => void;
+  /** Load handler for the image element. */
   onLoad?: () => void;
 }
