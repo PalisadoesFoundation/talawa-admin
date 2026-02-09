@@ -413,13 +413,9 @@ describe('Testing the App Component', () => {
   it('Login page shows footer for unauthenticated users', async () => {
     renderApp(link2, '/');
 
-    await wait();
-
-    expect(
-      screen.getByText(
-        'An open source application by Palisadoes Foundation volunteers',
-      ),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('app-footer')).toBeInTheDocument();
+    });
   });
 
   it('Component should be rendered properly and user is logged out', async () => {
