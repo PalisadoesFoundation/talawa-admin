@@ -174,6 +174,29 @@ describe('NotificationToast', () => {
       expect.any(Object),
     );
   });
+
+  it('merges custom options in promise toast', () => {
+    const promiseFn = vi.fn().mockResolvedValue(undefined);
+    NotificationToast.promise(
+      promiseFn,
+      {
+        pending: 'Loading...',
+        success: 'Done',
+        error: 'Failed',
+      },
+      { autoClose: false },
+    );
+
+    expect(toastMock.promise).toHaveBeenCalledWith(
+      promiseFn,
+      {
+        pending: 'Loading...',
+        success: 'Done',
+        error: 'Failed',
+      },
+      expect.objectContaining({ autoClose: false }),
+    );
+  });
 });
 
 describe('NotificationToastContainer', () => {
@@ -203,5 +226,15 @@ describe('NotificationToastContainer', () => {
     const toastContainer = screen.getByTestId('toast-container');
     expect(toastContainer).toBeInTheDocument();
     expect(toastContainer).toHaveAttribute('data-limit', '5');
+  });
+
+  it('merges custom className with default container class', () => {
+    render(
+      <NotificationToastContainer className="custom-toast-class" />,
+    );
+
+    const container = screen.getByTestId('toast-container');
+    expect(container).toHaveClass(/notificationContainer/);
+    expect(container).toHaveClass('custom-toast-class');
   });
 });
