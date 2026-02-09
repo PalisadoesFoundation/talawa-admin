@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { cleanup, render, screen, waitFor, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -305,6 +305,61 @@ const fiveMembersMock = {
   },
 };
 
+// Mock for empty members (covers useMemo early return when no edges)
+const emptyMembersMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: makeQueryVars(),
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [],
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mock for member with avatar URL (covers avatar column img branch)
+const memberWithAvatarMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: makeQueryVars(),
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [
+            memberEdge({
+              cursor: 'cursor1',
+              id: 'avatar-user',
+              name: 'User With Avatar',
+              role: 'member',
+              emailAddress: 'avatar@example.com',
+              avatarURL: 'https://example.com/avatar.png',
+            }),
+          ],
+          pageInfo: {
+            endCursor: 'cursor1',
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: 'cursor1',
+          },
+        },
+      },
+    },
+  },
+};
+
 // Debounce duration used by SearchFilterBar component (default: 300ms)
 // NOTE: This value must be manually kept in sync with SearchFilterBar's debounceDelay default
 const SEARCH_DEBOUNCE_MS = 300;
@@ -352,6 +407,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  cleanup();
   vi.clearAllMocks();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
 });
@@ -445,8 +501,11 @@ describe('Testing People Screen [User Portal]', () => {
     await user.click(screen.getByTestId('modeChangeBtn-item-1'));
     await wait();
 
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    // Wait for refetch and useMemo with mode=1 (return adminsList branch)
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
   });
 
   it('Shows loading state while fetching data', async () => {
@@ -481,6 +540,81 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
     // Pagination functional (visual test)
     expect(screen.getByText('user1')).toBeInTheDocument();
+  });
+
+  it('renders empty state when organization has no members', async () => {
+    render(
+      <MockedProvider mocks={[emptyMembersMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+  });
+
+  it('renders avatar image when member has avatarURL', async () => {
+    render(
+      <MockedProvider mocks={[memberWithAvatarMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const img = document.querySelector(
+      'img[src="https://example.com/avatar.png"]',
+    );
+    expect(img).toBeInTheDocument();
+    expect(screen.getByText('User With Avatar')).toBeInTheDocument();
+  });
+
+  it('uses organization id from route params in query', async () => {
+    const orgIdFromRoute = 'org-123';
+    sharedMocks.useParams.mockReturnValue({ orgId: orgIdFromRoute });
+    const mockWithOrgId = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars({ orgId: orgIdFromRoute }),
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: defaultMembersEdges,
+              pageInfo: {
+                endCursor: 'cursor3',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+    render(
+      <MockedProvider mocks={[mockWithOrgId]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });
 
@@ -519,9 +653,9 @@ describe('Testing People Screen Pagination [User Portal]', () => {
   });
 
   it('handles backward pagination correctly', async () => {
-    // Use mocks that support forward and backward navigation
+    // Initial load + useEffect refetch both use same vars; then fetchMore uses after: 'cursor3'
     render(
-      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
+      <MockedProvider mocks={[defaultQueryMock, defaultQueryMock, nextPageMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -533,18 +667,22 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     );
     await wait();
 
-    // Navigate to page 2
     const nextButton = screen.getByTestId('nextPage');
-    await user.click(nextButton);
-    await wait();
-
-    // Now navigate back to page 1 (this covers lines 158-161)
-    // This uses cached cursor, no new query needed
     const prevButton = screen.getByTestId('previousPage');
+
+    // Navigate to page 2 (fetchMore with after: endCursor)
+    await user.click(nextButton);
+    await wait(400);
+
+    // Wait until we are on page 2 (previous button becomes enabled)
+    await waitFor(() => {
+      expect(prevButton).not.toBeDisabled();
+    });
+
+    // Navigate back to page 1 (covers else-if: setCurrentPage when pageCursors[newPage] is defined)
     await user.click(prevButton);
     await wait();
 
-    // Should be back on first page
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 });
