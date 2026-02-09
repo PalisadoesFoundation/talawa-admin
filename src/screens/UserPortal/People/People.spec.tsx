@@ -554,14 +554,18 @@ describe('Testing People Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(
-      screen.getByText(i18nForTest.t('people.nothingToShow')),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(
+        screen.getByText(i18nForTest.t('people.nothingToShow')),
+      ).toBeInTheDocument(),
+    );
   });
 
   it('renders avatar image when member has avatarURL', async () => {
     const rowName = 'User With Avatar';
+    const expectedAvatarUrl =
+      memberWithAvatarMock.result.data.organization.members.edges[0].node
+        .avatarURL;
     render(
       <MockedProvider mocks={[memberWithAvatarMock, memberWithAvatarMock]}>
         <BrowserRouter>
@@ -573,9 +577,11 @@ describe('Testing People Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
+    await waitFor(() =>
+      expect(screen.getByRole('img', { name: rowName })).toBeInTheDocument(),
+    );
     const img = screen.getByRole('img', { name: rowName });
-    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', expectedAvatarUrl);
     expect(screen.getByText(rowName)).toBeInTheDocument();
   });
 
@@ -614,8 +620,9 @@ describe('Testing People Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    await wait();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByText('Test User')).toBeInTheDocument(),
+    );
   });
 });
 
