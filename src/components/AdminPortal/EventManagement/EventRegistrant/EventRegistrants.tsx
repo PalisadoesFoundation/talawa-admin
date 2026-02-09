@@ -235,7 +235,7 @@ function EventRegistrants(): JSX.Element {
       header: t('registrant'),
       accessor: 'name',
       render: (_value: unknown, row) => {
-        const name = row.name || '';
+        const name = row.name || t('unknownMember');
         return (
           <div className="d-flex align-items-center">
             <ProfileAvatarDisplay

@@ -47,6 +47,14 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';
 
+const COLUMN_WIDTHS = {
+  INDEX: 70,
+  NAME: 200,
+  STATUS: 150,
+  EVENTS_ATTENDED: 180,
+  TASK_ASSIGNED: 200,
+};
+
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { t: tCommon } = useTranslation('common');
@@ -144,14 +152,6 @@ function EventAttendance(): JSX.Element {
   useEffect(() => {
     getEventAttendees();
   }, [eventId, getEventAttendees]);
-
-  const COLUMN_WIDTHS = {
-    INDEX: 70,
-    NAME: 200,
-    STATUS: 150,
-    EVENTS_ATTENDED: 180,
-    TASK_ASSIGNED: 200,
-  };
 
   const columns: GridColDef<InterfaceMember & { index: number }>[] = useMemo(
     () => [
