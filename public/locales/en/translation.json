@@ -1309,7 +1309,8 @@
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
     "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "sucessfullyDeletedOrganization": "Successfully deleted Organization"
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",

@@ -22,6 +22,7 @@ import {
   InterfaceOrganization,
   InterfaceMutationUpdateOrganizationInput,
 } from 'types/AdminPortal/OrgUpdate/interface';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 
 /**
  * Component for updating organization details.
@@ -220,42 +221,33 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             }}
           />
 
-          <FormFieldGroup
+          <FormTextField
             name="orgDescrip"
             label={tCommon('description')}
             required
-          >
-            <FormTextField
-              name="orgDescrip"
-              label={''}
-              as="textarea"
-              className={styles.descriptionTextField}
-              placeholder={t('enterOrganizationDescription')}
-              autoComplete="off"
-              value={formState.orgDescrip}
-              onChange={(value: string) => {
-                setFormState({ ...formState, orgDescrip: value });
-              }}
-            />
-          </FormFieldGroup>
+            as="textarea"
+            className={styles.descriptionTextField}
+            placeholder={t('enterOrganizationDescription')}
+            autoComplete="off"
+            value={formState.orgDescrip}
+            onChange={(value: string) => {
+              setFormState({ ...formState, orgDescrip: value });
+            }}
+          />
 
-          <FormFieldGroup
+          <FormTextField
             name="address.line1"
-            label={tCommon('Location')}
+            label={tCommon('location')}
             required
-          >
-            <FormTextField
-              name="address.line1"
-              label={''}
-              placeholder={tCommon('Enter Organization location')}
-              autoComplete="off"
-              className={styles.textFields}
-              value={formState.address.line1}
-              onChange={(value: string) => {
-                handleInputChange('line1', value);
-              }}
-            />
-          </FormFieldGroup>
+            placeholder={tCommon('Enter Organization location')}
+            autoComplete="off"
+            className={styles.textFields}
+            value={formState.address.line1}
+            onChange={(value: string) => {
+              handleInputChange('line1', value);
+            }}
+          />
+
           <FormFieldGroup name="photo" label={tCommon('displayImage')}>
             <input
               ref={fileInputRef}
@@ -283,41 +275,34 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             />
           </FormFieldGroup>
 
-          <Row>
-            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <FormFieldGroup
+          <Row className="mt-3">
+            <Col sm={6} className="d-flex align-items-center">
+              <FormCheckField
                 name="isPublic"
-                label={`${t('isPublic')}:`}
+                id="isPublic"
+                label={`${t('isPublic')}`}
+                type="checkbox"
+                data-testid="user-reg-switch"
+                checked={!userRegistrationRequiredChecked}
+                onChange={() =>
+                  setuserRegistrationRequiredChecked(
+                    !userRegistrationRequiredChecked,
+                  )
+                }
                 inline
-              >
-                <input
-                  id="isPublic"
-                  type="checkbox"
-                  data-testid="user-reg-switch"
-                  className="custom-switch"
-                  checked={!userRegistrationRequiredChecked}
-                  onChange={() =>
-                    setuserRegistrationRequiredChecked(
-                      !userRegistrationRequiredChecked,
-                    )
-                  }
-                />
-              </FormFieldGroup>
+              />
             </Col>
-            <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
-              <FormFieldGroup
+            <Col sm={6} className="d-flex align-items-center">
+              <FormCheckField
                 name="isVisibleInSearch"
-                label={`${t('isVisibleInSearch')}:`}
+                id="isVisibleInSearch"
+                label={`${t('isVisibleInSearch')}`}
+                type="checkbox"
+                data-testid="visibility-switch"
+                checked={visiblechecked}
+                onChange={() => setVisibleChecked(!visiblechecked)}
                 inline
-              >
-                <input
-                  type="checkbox"
-                  data-testid="visibility-switch"
-                  className="custom-switch"
-                  checked={visiblechecked}
-                  onChange={() => setVisibleChecked(!visiblechecked)}
-                />
-              </FormFieldGroup>
+              />
             </Col>
           </Row>
 

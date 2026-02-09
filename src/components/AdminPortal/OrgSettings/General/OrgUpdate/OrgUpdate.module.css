@@ -28,6 +28,44 @@
 
 .customFileInput {
   background-color: var(--inputColor-bg);
+  color: var(--text-fields-color);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-1) solid var(--input-border-color, #ccc);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: border-color var(--transition-duration, 0.2s) ease;
+  width: 100%;
+  max-width: var(--space-22);
+  margin-left: var(--space-8);
+}
+
+.customFileInput:hover {
+  border-color: var(--input-hover-border-color, #999);
+}
+
+.customFileInput:focus {
+  outline: none;
+  border-color: var(--primary-theme-color);
+  box-shadow: 0 0 0 var(--border-1) var(--primary-theme-color);
+  opacity: 0.8;
+}
+
+.customFileInput::file-selector-button {
+  background-color: var(--primary-theme-color);
+  color: var(--btn-primary-text-color, white);
+  border: var(--border-0);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  margin-right: var(--space-2);
+  transition: background-color var(--transition-duration, 0.2s) ease;
+}
+
+.customFileInput::file-selector-button:hover {
+  background-color: var(--primary-theme-color);
+  opacity: 0.9;
 }
 
 .resetChangesBtn {
@@ -57,7 +95,7 @@
   color: var(--btn-primary-text-color, white);
   border: var(--border-0);
   height: var(--space-10);
-  width: var(--space-16);
+  width: var(--space-22);
   font-size: var(--font-size-xs);
   background-color: var(--card-background-color);
 }

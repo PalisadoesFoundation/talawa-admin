@@ -1243,7 +1243,8 @@
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
     "deleteSampleOrganization": "Eliminar organización de muestra",
-    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente",
+    "sucessfullyDeletedOrganization": "Organización eliminada correctamente"
   },
   "userUpdate": {
     "firstName": "Primer nombre",

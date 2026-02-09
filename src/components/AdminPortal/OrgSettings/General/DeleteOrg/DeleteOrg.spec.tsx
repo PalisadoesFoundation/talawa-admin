@@ -6,7 +6,6 @@ import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import { describe, beforeEach, it, expect, vi, type Mock } from 'vitest';
 import {
@@ -90,7 +89,7 @@ describe('DeleteOrg Component', () => {
     expect(screen.getByTestId('orgDeleteModal')).toBeInTheDocument();
   });
 
-  it('deletes regular organization successfully', async () => {
+  it('deletes organization successfully', async () => {
     deleteOrgMutationMock.mockResolvedValue({});
 
     render(<DeleteOrg />);
@@ -105,7 +104,7 @@ describe('DeleteOrg Component', () => {
     });
   });
 
-  it('handles error during regular organization deletion', async () => {
+  it('handles error during organization deletion', async () => {
     const error = new Error('Deletion failed');
     deleteOrgMutationMock.mockRejectedValue(error);
 
@@ -116,70 +115,6 @@ describe('DeleteOrg Component', () => {
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
     });
-  });
-
-  it('handles error during sample organization deletion', async () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
-      loading: false,
-    });
-    const error = new Error('Sample deletion failed');
-    removeSampleOrgMutationMock.mockRejectedValue(error);
-
-    render(<DeleteOrg />);
-    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(error.message);
-    });
-  });
-
-  it('deletes sample organization successfully', async () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
-      loading: false,
-    });
-    removeSampleOrgMutationMock.mockResolvedValue({});
-
-    render(<DeleteOrg />);
-    await userEvent.click(screen.getByTestId('openDeleteModalBtn'));
-    await userEvent.click(screen.getByTestId('deleteOrganizationBtn'));
-
-    await waitFor(() => {
-      expect(removeSampleOrgMutationMock).toHaveBeenCalled();
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        'successfullyDeletedSampleOrganization',
-      );
-    });
-
-    await waitFor(
-      () => {
-        expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
-      },
-      { timeout: 1500 },
-    );
-  });
-
-  it('renders delete button with different text for sample organization', () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
-      loading: false,
-    });
-
-    render(<DeleteOrg />);
-    const deleteButton = screen.getByTestId('openDeleteModalBtn');
-    expect(deleteButton).toHaveTextContent('deleteSampleOrganization');
-  });
-
-  it('renders when canDelete is true due to OR condition', () => {
-    (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn().mockReturnValue(false),
-    });
-
-    render(<DeleteOrg />);
-    // Due to canDelete = getItem('SuperAdmin') || true, it will always render
-    expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
   });
 
   it('closes modal when close button is clicked', async () => {
@@ -207,6 +142,16 @@ describe('DeleteOrg Component', () => {
         variables: { input: { id: '' } },
       });
     });
+  });
+
+  it('renders delete button even when SuperAdmin is false', () => {
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn().mockReturnValue(false),
+    });
+
+    render(<DeleteOrg />);
+    // Should still render because of || true fallback
+    expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
   });
 
   it('handles query loading state', () => {

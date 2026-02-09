@@ -9,11 +9,11 @@
 .iconOrgActionItemCategories {
   transform: scale(1.5);
   color: var(--iconOrgActionItemCategories-color);
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .tableHeader {
-  background-color: red;
+  background-color: var(--color-red-500, #f8f9fa);
 }
 
 .editButton {
@@ -26,28 +26,36 @@
 
 .btnsContainerOrgActionItemCategories {
   display: flex;
-  margin: 0.5rem 0 1.5rem 0;
+  margin: var(--space-2) 0 var(--space-4) 0;
   align-items: stretch;
-  gap: 0.75rem;
+  gap: var(--space-1);
   flex-wrap: wrap;
 }
 
 .dropdown {
   background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
+  min-width: var(--space-16);
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
 }
 
+.createButton {
+  background-color: var(--createButton-bg);
+  color: var(--createButton-font);
+  border-color: var(--createButton-border);
+  --bs-btn-active-bg: var(--createButton-bg-active);
+  --bs-btn-active-border-color: var(--createButton-border-active);
+  padding: var(--space-4) var(--space-6);
+}
+
 .marginTopSm {
-  margin-top: 11px;
+  margin-top: var(--space-9);
 }
 
 .rowBackground {
   background-color: var(--rowBackground-bg);
   color: var(--rowBackground-color);
-  max-height: 120px;
+  max-height: var(--space-24);
   overflow-y: auto;
 }

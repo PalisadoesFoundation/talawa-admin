@@ -1265,7 +1265,8 @@
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
     "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
-    "cancel": "取消"
+    "cancel": "取消",
+    "sucessfullyDeletedOrganization": "组织已成功删除"
   },
   "userUpdate": {
     "appLanguageCode": "默认语言",

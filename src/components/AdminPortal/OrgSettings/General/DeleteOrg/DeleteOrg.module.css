@@ -1,31 +1,63 @@
 .DeleteOrgCard {
-  composes: DeleteOrgCard from '../../../../../style/app-fixed.module.css';
+  border-radius: var(--space-3);
+  box-shadow: 0 var(--space-1) var(--space-2) rgba(var(--color-black), 0.075);
+  border: none;
+  height: var(--spacing-22) !important;
+  width: 98% !important;
 }
 
 .deleteCardHeader {
-  composes: deleteCardHeader from '../../../../../style/app-fixed.module.css';
+  background-color: var(--activeTab-bg);
+  border-top-left-radius: var(--space-5) !important;
+  border-top-right-radius: var(--space-5) !important;
+  padding-top: var(--space-5);
+  padding-bottom: var(--space-5);
 }
 
 .textBox {
-  composes: textBox from '../../../../../style/app-fixed.module.css';
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-3);
 }
 
 .deleteButton {
-  composes: deleteButton from '../../../../../style/app-fixed.module.css';
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: var(--border-1) solid var(--removeButton-color);
+  padding: var(--space-2) var(--space-10);
+  cursor: pointer;
+  display: block;
+  margin: var(--space-4) auto;
+  border-radius: var(--radius-sm);
+  height: var(--space-11);
+  text-align: center;
+}
+
+.deleteButton:hover,
+.deleteButton:active,
+.deleteButton:focus {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: var(--border-shadow-xs) var(--hover-shadow);
+  outline: none;
 }
 
 .icon {
-  composes: icon from '../../../../../style/app-fixed.module.css';
+  margin-right: var(--space-3);
 }
 
 .modalHeaderDelete {
-  composes: modalHeaderDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--card-header-background-color);
+  color: var(--color-white);
 }
 
 .btnDelete {
-  composes: btnDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--activeTab-bg);
+  border: var(--border-1) solid var(--active-item-color) !important;
+  color: var(--active-item-color);
 }
 
 .btnConfirmDelete {
-  composes: btnConfirmDelete from '../../../../../style/app-fixed.module.css';
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: var(--space-0);
 }
