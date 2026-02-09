@@ -1,18 +1,14 @@
 /**
- * Confirmation modal for plugin uninstallation
+ * Confirmation modal for plugin uninstallation.
+ *
+ * @param props - The properties for the component.
+ * @returns The rendered UninstallConfirmationModal component.
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Button } from 'shared-components/Button';
-import type { IPluginMeta } from 'plugin';
-
-interface IUninstallConfirmationModalProps {
-  show: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  plugin: IPluginMeta | null;
-}
+import { IUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/UninstallConfirmationModal/interface';
 
 export default function UninstallConfirmationModal({
   show,
