@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import { FormControl, InputGroup } from 'react-bootstrap';
+import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
@@ -25,6 +26,12 @@ import {
 } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
+const currencies = ['USD', 'INR', 'EUR'];
+const currencyOptions = currencies.map((currency) => ({
+  value: currency,
+  label: currency,
+}));
+
 /**
  * Component for handling donations to an organization.
  * Allows users to make donations and view their donation history.
@@ -45,12 +52,10 @@ export default function Donate(): JSX.Element {
     name: string;
   }>({ name: '' });
   const [donations, setDonations] = useState<InterfaceDonation[]>([]);
-  const [selectedCurrency, setSelectedCurrency] = useState(0);
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchText, setSearchText] = useState('');
-
-  const currencies = ['USD', 'INR', 'EUR'];
 
   const {
     data: donationData,
@@ -131,29 +136,17 @@ export default function Donate(): JSX.Element {
           </div>
 
           <InputGroup className={styles.width100}>
-            <Dropdown>
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.dropdown}`}
-                variant="success"
-                data-testid="modeChangeBtn"
-              >
-                <span data-testid="changeCurrencyBtn">
-                  {currencies[selectedCurrency]}
-                </span>
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                {currencies.map((currency, index) => (
-                  <Dropdown.Item
-                    key={currency}
-                    data-testid={`currency${index}`}
-                    onClick={() => setSelectedCurrency(index)}
-                  >
-                    {currency}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+            <DropDownButton
+              id="currency-dropdown"
+              options={currencyOptions}
+              selectedValue={selectedCurrency}
+              onSelect={setSelectedCurrency}
+              variant="success"
+              btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
+              dataTestIdPrefix="currency-dropdown"
+              buttonLabel={selectedCurrency}
+              ariaLabel={t('selectCurrency')}
+            />
 
             <label htmlFor="donationAmountInput" className="visually-hidden">
               {t('amount')}

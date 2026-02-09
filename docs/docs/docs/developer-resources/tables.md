@@ -881,3 +881,187 @@ Before → After (concise)
   - Implement Sorting Functionality
   - Add Filtering and Search Capabilities
   - Implement Row and Bulk Actions
+
+## Organization and People Screens Migration Examples
+
+This section provides practical migration examples for organization and people management screens.
+
+### AddMember Modal Table (Phase 6)
+
+The AddMember component displays users in a modal for adding members to an organization.
+
+Before (MUI Table):
+
+```tsx
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+
+<TableContainer component={Paper}>
+  <Table>
+    <TableHead>
+      <TableRow>
+        <TableCell>#</TableCell>
+        <TableCell>Profile</TableCell>
+        <TableCell>User</TableCell>
+        <TableCell>Add Member</TableCell>
+      </TableRow>
+    </TableHead>
+    <TableBody>
+      {userLoading ? (
+        <TableRow><TableCell colSpan={4}>Loading...</TableCell></TableRow>
+      ) : (
+        users.map((user, index) => (
+          <TableRow key={user.id}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell><Avatar name={user.name} /></TableCell>
+            <TableCell>{user.name}</TableCell>
+            <TableCell><Button onClick={() => addMember(user.id)}>Add</Button></TableCell>
+          </TableRow>
+        ))
+      )}
+    </TableBody>
+  </Table>
+</TableContainer>
+```
+
+After (DataTable):
+
+```tsx
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+
+type UserRow = IUserDetails & { rowIndex: number };
+
+const columns: IColumnDef<UserRow>[] = [
+  { id: 'index', header: '#', accessor: 'rowIndex' },
+  {
+    id: 'profile',
+    header: 'Profile',
+    accessor: 'avatarURL',
+    render: (value, row) => <Avatar name={row.name} />,
+  },
+  {
+    id: 'user',
+    header: 'User',
+    accessor: 'name',
+    render: (_, row) => (
+      <Link to={`/member/${row.id}`}>
+        {row.name}<br />{row.emailAddress}
+      </Link>
+    ),
+  },
+  {
+    id: 'action',
+    header: 'Add Member',
+    accessor: 'id',
+    render: (_, row) => (
+      <Button onClick={() => addMember(row.id)}>Add</Button>
+    ),
+  },
+];
+
+<DataTable<UserRow>
+  data={users.map((user, index) => ({ ...user, rowIndex: index + 1 }))}
+  columns={columns}
+  rowKey="id"
+  loading={userLoading}
+  error={userError}
+  emptyMessage="No users found"
+/>
+```
+
+### People List Screen (Phase 6)
+
+The People screen displays organization members with filtering by role.
+
+Before (PeopleCard list):
+
+```tsx
+import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+
+<div className={styles.people_card_header}>
+  <span>{t('sNo')}</span>
+  <span>{t('avatar')}</span>
+  <span>{t('name')}</span>
+  <span>{t('email')}</span>
+  <span>{t('role')}</span>
+</div>
+<LoadingState isLoading={loading}>
+  {members.map((member, index) => (
+    <PeopleCard
+      key={index}
+      name={member.node.name}
+      image={member.node.avatarURL}
+      email={member.node.emailAddress}
+      role={member.userType}
+      sno={(index + 1).toString()}
+    />
+  ))}
+</LoadingState>
+```
+
+After (DataTable):
+
+```tsx
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+
+interface IPeopleTableRow {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  role: string;
+  sno: number;
+}
+
+const tableData: IPeopleTableRow[] = members.map((member, index) => ({
+  id: member.node.id,
+  name: member.node.name,
+  email: member.node.emailAddress ?? t('emailNotAvailable'),
+  image: member.node.avatarURL ?? '',
+  role: member.userType,
+  sno: index + 1 + currentPage * rowsPerPage,
+}));
+
+const columns: IColumnDef<IPeopleTableRow>[] = [
+  { id: 'sno', header: t('sNo'), accessor: 'sno', meta: { width: '60px' } },
+  {
+    id: 'avatar',
+    header: t('avatar'),
+    accessor: 'image',
+    render: (value, row) => (
+      value ? <img src={value} alt={row.name} /> : <Avatar name={row.name} />
+    ),
+  },
+  { id: 'name', header: t('name'), accessor: 'name' },
+  { id: 'email', header: t('email'), accessor: 'email' },
+  { id: 'role', header: t('role'), accessor: 'role' },
+];
+
+<DataTable<IPeopleTableRow>
+  data={tableData}
+  columns={columns}
+  loading={loading}
+  emptyMessage={t('nothingToShow')}
+  rowKey="id"
+  skeletonRows={rowsPerPage}
+/>
+```
+
+### Key Migration Patterns
+
+1. **Custom cell rendering**: Use the `render` function in column definitions for complex cells like avatars, links, or action buttons.
+
+2. **Row data transformation**: Transform raw API data into a flat row structure before passing to DataTable.
+
+3. **Loading states**: Replace custom loading components with DataTable's built-in `loading` prop.
+
+4. **Empty states**: Use the `emptyMessage` prop instead of conditional rendering.
+
+5. **Pagination**: Keep external pagination controls (like PaginationList) when needed for server-side pagination.
+
+6. **Preserved test IDs**: Add `data-testid` attributes in render functions to maintain test compatibility.

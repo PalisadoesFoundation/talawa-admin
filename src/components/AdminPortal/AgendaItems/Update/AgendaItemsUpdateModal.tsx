@@ -201,6 +201,10 @@ const AgendaItemsUpdateModal: React.FC<
             duration: itemFormState.duration?.trim() || undefined,
             folderId: itemFormState.folder || undefined,
             categoryId: itemFormState.category || undefined,
+            notes:
+              itemFormState.notes?.trim() === ''
+                ? null
+                : (itemFormState.notes?.trim() ?? undefined),
             url: itemFormState.url.map((u) => ({ url: u })),
             attachments: itemFormState.attachments.map((att) => ({
               name: att.name,
@@ -316,6 +320,19 @@ const AgendaItemsUpdateModal: React.FC<
           setItemFormState({
             ...itemFormState,
             description: v,
+          })
+        }
+      />
+
+      <FormTextField
+        name="notes"
+        label={t('notes')}
+        placeholder={t('enterNotes')}
+        value={itemFormState.notes}
+        onChange={(v) =>
+          setItemFormState({
+            ...itemFormState,
+            notes: v,
           })
         }
       />

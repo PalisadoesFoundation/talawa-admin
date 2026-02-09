@@ -187,5 +187,3 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     </form>
   );
 };
-
-export default LoginForm;

@@ -50,6 +50,3 @@ knip.deps.json$
 ^docs/docusaurus.config.ts$
 ^docs/sidebar..*
 CNAME$
-\.md$
-\.txt$
-\.TXT$

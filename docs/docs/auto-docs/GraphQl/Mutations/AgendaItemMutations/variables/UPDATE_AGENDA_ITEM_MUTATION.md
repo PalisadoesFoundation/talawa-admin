@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_AGENDA\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaItemMutations.ts#L74)
+Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaItemMutations.ts#L75)
 
 GraphQL mutation to update an agenda item's details.
 
