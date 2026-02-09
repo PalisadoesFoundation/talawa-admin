@@ -10,7 +10,7 @@ export interface InterfaceDropDownOption {
   /**
    * The label of the option.
    */
-  label: string;
+  label: React.ReactNode;
 
   /**
    * Whether the option is disabled.
@@ -31,6 +31,11 @@ export interface InterfaceDropDownProps {
    * Custom styles for the dropdown button.
    */
   btnStyle?: string;
+
+  /**
+   * Custom class name for the dropdown menu.
+   */
+  menuClassName?: string;
 }
 
 /**
@@ -122,6 +127,11 @@ export interface InterfaceDropDownButtonProps extends InterfaceDropDownProps {
    * Placeholder text for the search input.
    */
   searchPlaceholder?: string;
+
+  /** Whether to show the caret icon on the dropdown button.
+   * @defaultValue true
+   */
+  showCaret?: boolean;
 }
 
 /**

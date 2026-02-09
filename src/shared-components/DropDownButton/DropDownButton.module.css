@@ -4,7 +4,7 @@
 }
 
 .dropdownToggle {
-  min-width: var(--space-16);
+  width: var(--space-16);
   display: inline-flex;
   align-items: center;
   gap: var(--space-3);

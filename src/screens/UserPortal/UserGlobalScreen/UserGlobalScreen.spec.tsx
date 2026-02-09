@@ -1,8 +1,16 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, act, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
+import type { InterfaceUseUserProfileReturn } from 'types/UseUserProfile';
 import UserGlobalScreen from './UserGlobalScreen';
+
+// Mock Avatar
+vi.mock('shared-components/Avatar/Avatar', () => ({
+  default: vi.fn(({ dataTestId, alt, src }) => (
+    <img data-testid={dataTestId} alt={alt} src={src || 'mock-avatar-src'} />
+  )),
+}));
 
 // Mock the child components
 vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
@@ -16,10 +24,54 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
-vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
-  default: vi.fn(() => (
-    <div data-testid="profile-dropdown">ProfileDropdown</div>
+vi.mock('shared-components/DropDownButton', () => ({
+  default: vi.fn((props) => (
+    <div
+      data-testid="user-profile-dropdown"
+      data-variant={props.variant}
+      data-menu-class={props.menuClassName}
+      data-show-caret={props.showCaret}
+      role="menu"
+      aria-label={props.ariaLabel}
+    >
+      {props.icon}
+      <div data-testid="dropdown-options">
+        {props.options?.map(
+          (opt: { value: string; label: React.ReactNode }) => (
+            <button
+              key={opt.value}
+              data-testid={`option-${opt.value}`}
+              type="button"
+              onClick={() => props.onSelect && props.onSelect(opt.value)}
+            >
+              {opt.label}
+            </button>
+          ),
+        )}
+        <button
+          type="button"
+          data-testid="option-unknownKey"
+          onClick={() => props.onSelect && props.onSelect('unknownKey')}
+        >
+          Unknown
+        </button>
+      </div>
+    </div>
   )),
+}));
+
+vi.mock('hooks/useUserProfile', () => ({
+  default: vi.fn(
+    (): InterfaceUseUserProfileReturn => ({
+      name: 'Test User',
+      displayedName: 'Test User',
+      userRole: 'User',
+      userImage: 'test-image.jpg',
+      profileDestination: '/user/profile',
+      handleLogout: vi.fn().mockResolvedValue(undefined),
+      tCommon: (key: string) => key,
+    }),
+  ),
 }));
 
 // Mock react-i18next
@@ -48,7 +100,12 @@ vi.mock('./UserGlobalScreen.module.css', () => ({
     expand: 'expand',
     contract: 'contract',
     titleFlex: 'titleFlex',
+    profileDropdownMenu: 'profileDropdownMenu',
   },
+}));
+
+const routerSpies = vi.hoisted(() => ({
+  navigate: vi.fn(),
 }));
 
 // Mock react-router Outlet
@@ -57,6 +114,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     Outlet: vi.fn(() => <div data-testid="outlet">Outlet Content</div>),
+    useNavigate: () => routerSpies.navigate,
   };
 });
 
@@ -74,7 +132,8 @@ describe('UserGlobalScreen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    cleanup();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {
       writable: true,
@@ -91,12 +150,33 @@ describe('UserGlobalScreen', () => {
     );
   };
 
+  const overrideUserProfile = async (
+    overrides: Partial<InterfaceUseUserProfileReturn> = {},
+  ) => {
+    const useUserProfileMock = await import('hooks/useUserProfile');
+    const mockUseUserProfile =
+      useUserProfileMock.default as unknown as ReturnType<typeof vi.fn>;
+
+    mockUseUserProfile.mockImplementation(
+      (): InterfaceUseUserProfileReturn => ({
+        name: 'Test User',
+        displayedName: 'Test User',
+        userRole: 'User',
+        userImage: 'test-image.jpg', // Default valid image
+        profileDestination: '/user/profile',
+        handleLogout: vi.fn().mockResolvedValue(undefined),
+        tCommon: (key: string) => key,
+        ...overrides,
+      }),
+    );
+  };
+
   describe('Component Rendering', () => {
     it('should render all required components', () => {
       renderComponent();
 
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      expect(screen.getByTestId('user-profile-dropdown')).toBeInTheDocument();
       expect(screen.getByTestId('outlet')).toBeInTheDocument();
       expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
       expect(screen.getByText('Global Features')).toBeInTheDocument();
@@ -110,22 +190,88 @@ describe('UserGlobalScreen', () => {
       // The sidebar should initially show hideDrawer as false for desktop
     });
 
-    it('should render ProfileDropdown component', () => {
+    it('should render DropDownButton component with correct props', () => {
       renderComponent();
 
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      const dropdown = screen.getByTestId('user-profile-dropdown');
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown).toHaveAttribute('data-variant', 'light');
+      expect(dropdown).toHaveAttribute('data-show-caret', 'false');
+      expect(dropdown).toHaveAttribute('data-menu-class');
     });
 
-    it('should render Outlet for nested routes', () => {
+    it('should render Avatar fallback when userImage is falsy', async () => {
+      // Mock useUserProfile to return empty userImage
+      await overrideUserProfile({ userImage: '' });
+
       renderComponent();
 
-      expect(screen.getByTestId('outlet')).toBeInTheDocument();
+      // Assert that the image displayed is the Avatar (fallback)
+      const avatarImg = screen.getByTestId('display-img');
+      expect(avatarImg).toBeInTheDocument();
+      expect(avatarImg).toHaveAttribute('alt', 'profilePicturePlaceholder');
     });
 
-    it('should render Global Features heading', () => {
+    it('should navigate to profile when viewProfile is selected', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
-      expect(screen.getByText('Global Features')).toBeInTheDocument();
+      const viewProfileOption = screen.getByTestId('option-viewProfile');
+      await user.click(viewProfileOption);
+
+      expect(routerSpies.navigate).toHaveBeenCalledWith('/user/profile');
+    });
+
+    it('should call handleLogout when logout is selected', async () => {
+      const user = userEvent.setup();
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn().mockResolvedValue(undefined);
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+
+      renderComponent();
+
+      const logoutOption = screen.getByTestId('option-logout');
+      await user.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
+    });
+
+    it('should log error when logout fails', async () => {
+      const user = userEvent.setup();
+      const error = new Error('Logout failed');
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn().mockRejectedValue(error);
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      renderComponent();
+
+      const logoutOption = screen.getByTestId('option-logout');
+      await user.click(logoutOption);
+
+      expect(handleLogoutMock).toHaveBeenCalled();
+      // Wait for promise rejection handling
+      await new Promise(process.nextTick);
+      expect(consoleSpy).toHaveBeenCalledWith('Logout failed:', error);
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle unknown eventKey in DropDownButton', async () => {
+      const user = userEvent.setup();
+      // Mock userProfile hook to capture handleLogout
+      const handleLogoutMock = vi.fn();
+      await overrideUserProfile({ handleLogout: handleLogoutMock });
+
+      renderComponent();
+
+      const unknownOption = screen.getByTestId('option-unknownKey');
+      await user.click(unknownOption);
+
+      // Assert that nothing happened
+      expect(routerSpies.navigate).not.toHaveBeenCalled();
+      expect(handleLogoutMock).not.toHaveBeenCalled();
     });
   });
 

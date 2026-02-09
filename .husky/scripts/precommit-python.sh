@@ -96,7 +96,7 @@ CENTRAL_SCRIPTS_DIR=".github-central/.github/workflows/scripts"
 echo "Running disable statements check..."
 DISABLE_STATEMENTS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
 DISABLE_STATEMENTS_PATH="$CENTRAL_SCRIPTS_DIR/disable_statements_check.py"
-DISABLE_STATEMENTS_SHA="0b4184cffc6dba3607798cd54e57e99944c36cc01775cfcad68b95b713196e08"
+DISABLE_STATEMENTS_SHA="9acbc75c02413607c2f15eb3babc3484bb7dbd53c5d27f611d6cd26cc89c55ec"
 
 fetch_and_verify \
   "$DISABLE_STATEMENTS_URL" \
@@ -109,7 +109,7 @@ xargs -0 "$@" "$DISABLE_STATEMENTS_PATH" --files < "$STAGED_SRC_FILE"
 echo "Running docstring compliance check..."
 CHECK_DOCSTRINGS_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/check_docstrings.py"
 CHECK_DOCSTRINGS_PATH="$CENTRAL_SCRIPTS_DIR/check_docstrings.py"
-CHECK_DOCSTRINGS_SHA="4e46a29d2e3223938236d522fcb917456a98ff1d7dd75972909eac7a84919065"
+CHECK_DOCSTRINGS_SHA="f9a2efbb8cad49241f3e72e65637f5cdde98980c30a09c8ba0acf3e98494fee7"
 
 fetch_and_verify \
   "$CHECK_DOCSTRINGS_URL" \

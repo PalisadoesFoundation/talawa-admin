@@ -99,9 +99,6 @@ const VerifyEmail = (): JSX.Element => {
     isMountedRef.current = true;
 
     const verifyEmailToken = async (): Promise<void> => {
-      if (!isMountedRef.current) {
-        return;
-      }
       try {
         const { data } = await verifyEmail({
           variables: { token },
@@ -147,9 +144,6 @@ const VerifyEmail = (): JSX.Element => {
    * Handles resending verification email
    */
   const handleResendEmail = async (): Promise<void> => {
-    // Debounce
-    if (isResending) return;
-
     setIsResending(true);
     try {
       const { data } = await resendVerification();

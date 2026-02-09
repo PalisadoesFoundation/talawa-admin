@@ -301,5 +301,7 @@
   "optionsSuffix": "options",
   "userMenu": "User menu",
   "searchPlaceholder": "Search...",
-  "noOptionsFound": "No options found"
+  "noOptionsFound": "No options found",
+  "noUserId": "User ID not available",
+  "noTagsFound": "No tags found"
 }
