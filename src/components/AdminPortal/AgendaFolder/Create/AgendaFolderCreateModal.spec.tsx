@@ -39,7 +39,7 @@ describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
     cleanup();
     vi.doUnmock('react-router');
-    vi.resetModules();
+    vi.restoreAllMocks(); // restore spy implementations
     vi.clearAllMocks();
   });
 
