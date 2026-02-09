@@ -1,10 +1,10 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, afterEach } from 'vitest';
-
+import * as ApolloClient from '@apollo/client';
 import AgendaFolderDeleteModal from './AgendaFolderDeleteModal';
 import { DELETE_AGENDA_FOLDER_MUTATION } from 'GraphQl/Mutations/AgendaFolderMutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -92,6 +92,7 @@ const renderAgendaFolderDeleteModal = (
 
 describe('AgendaFolderDeleteModal', () => {
   afterEach(() => {
+    cleanup();
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
@@ -129,6 +130,25 @@ describe('AgendaFolderDeleteModal', () => {
 
       expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
       expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
+    });
+  });
+
+  it('shows error toast with error message when mutation throws an Error', async () => {
+    const mutationError = new Error('Delete failed directly');
+
+    vi.spyOn(ApolloClient, 'useMutation').mockReturnValue([
+      vi.fn().mockRejectedValueOnce(mutationError),
+      { loading: false, error: undefined, called: false },
+    ] as unknown as ReturnType<typeof ApolloClient.useMutation>);
+
+    renderAgendaFolderDeleteModal();
+
+    await userEvent.click(screen.getByTestId('modal-delete-btn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Delete failed directly',
+      );
     });
   });
 
