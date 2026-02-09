@@ -795,6 +795,8 @@
     "categoryName": "श्रेणी",
     "noCategory": "कोई एजेंडा श्रेणी नहीं",
     "folder": "एजेंडा फ़ोल्डर",
+    "notes": "नोट्स",
+    "enterNotes": "नोट दर्ज करें",
     "previewItem": "आइटम का पूर्वावलोकन",
     "agendaFolderDetails": "एजेंडा सेक्शन विवरण",
     "agendaFolderCreated": "एजेंडा सेक्शन सफलतापूर्वक बनाया गया",
@@ -1270,15 +1272,6 @@
     "admin": "प्रशासक",
     "superAdmin": "सुपर प्रशासक",
     "displayImage": "प्रदर्शन छवि",
-    "saveChanges": "परिवर्तन सहेजें",
-    "cancel": "रद्द करें"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "पिछला पासवर्ड",
-    "newPassword": "नया पासवर्ड",
-    "confirmNewPassword": "नए पासवर्ड की पुष्टि करें",
-    "passCantBeEmpty": "पासवर्ड खाली नहीं हो सकता",
-    "passNoMatch": "नया पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"
   },
@@ -2584,10 +2577,6 @@
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFound": "इवेंट नहीं मिला या हटा दिया गया है",
     "numberOfAttendees": "उपस्थित लोगों की संख्या"
-  },
-  "promotedPost": {
-    "title": "प्रचारित सामग्री",
-    "promotedContent": "प्रचारित सामग्री: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} जनसांख्यिकी"

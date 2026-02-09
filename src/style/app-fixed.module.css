@@ -3679,8 +3679,6 @@ form label,
   animation: load8 1.1s infinite linear;
 }
 
-/* -- EventStatsWrapper.tsx -- */
-
 /* -- GroupChatDetails.tsx -- */
 
 .groupInfo {
@@ -6158,45 +6156,6 @@ form {
   transform: scale(0.98);
 }
 
-/* -- UserPasswordUpdate.tsx -- */
-
-.dispflexUserPasswordUpdate {
-  display: flex;
-  justify-content: flex-start;
-  margin: 0 auto;
-}
-
-.dispflexUserPasswordUpdate > div {
-  width: 50%;
-  margin-right: 50px;
-}
-
-.dispbtnflex {
-  width: 90%;
-  display: flex;
-  margin: 20px 30% 0 30%;
-}
-
-.whitebtn {
-  margin: 1rem 0 0;
-  margin-top: 10px;
-  border: 1px solid var(--whitebtn-border);
-  box-shadow: 0 2px 2px var(--whitebtn-box-shadow);
-  padding: 10px 20px;
-  border-radius: 5px;
-  background: none;
-  width: 20%;
-  font-size: 16px;
-  color: var(--whitebtn-color);
-  outline: none;
-  font-weight: 600;
-  cursor: pointer;
-  float: left;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
 /* -- ChatRoom.tsx -- */
 /* -- CommentCard.tsx -- */
 /* -- ContactCard.tsx -- */
@@ -6279,43 +6238,6 @@ form {
 /* -- EventCard.tsx -- */
 /* -- OrganizationCard.tsx -- */
 /* -- OrganizationNavbar.tsx -- */
-
-/* -- PeopleCard.tsx -- */
-
-.personImage_peoplecard {
-  border-radius: 50%;
-  margin-right: 25px;
-  max-width: 70px;
-}
-
-.userAvatar {
-  border-radius: 50%;
-  margin-right: 25px;
-  width: 53px;
-  height: 53px;
-}
-
-.people_card_container {
-  display: flex;
-}
-
-.display_flex {
-  display: flex;
-}
-
-.align_center {
-  align-self: center;
-}
-
-.people_role {
-  width: 75%;
-  border: 1px solid var(--peopleRole-border);
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  border-radius: 0.25rem;
-}
 
 /* -- PostCard.tsx -- */
 
@@ -6526,20 +6448,6 @@ form {
 
 .postInput:focus {
   box-shadow: none;
-}
-
-/* -- PromotedPost.tsx -- */
-
-.cardHeaderPromotedPost {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  color: var(--cardHeaderPromotedPost-color);
-}
-
-.imageContainerPromotedPost {
-  max-width: 100%;
 }
 
 /* -- Register.tsx -- */

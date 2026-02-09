@@ -804,8 +804,10 @@
     "sequence": "Sequence",
     "description": "Description",
     "enterDescription": "Enter Description",
+    "enterNotes": "Enter Notes",
     "category": "Agenda Category",
     "noCategory": "No category",
+    "notes": "Notes",
     "previewItem": "Preview Item",
     "attachments": "Attachments",
     "attachmentLimit": "Add any image file or video file up to 10MB",
@@ -1319,15 +1321,6 @@
     "admin": "admin",
     "superAdmin": "superAdmin",
     "displayImage": "displayImage",
-    "saveChanges": "saveChanges",
-    "cancel": "cancel"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Previous Password",
-    "newPassword": "New Password",
-    "confirmNewPassword": "Confirm New Password",
-    "passCantBeEmpty": "Password can't be empty",
-    "passNoMatch": "New and Confirm password do not match.",
     "saveChanges": "saveChanges",
     "cancel": "cancel"
   },
@@ -2584,10 +2577,6 @@
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFound": "Event not found or has been deleted",
     "numberOfAttendees": "Number of attendees"
-  },
-  "promotedPost": {
-    "title": "Promoted Content",
-    "promotedContent": "Promoted content: {{title}}"
   },
   "csv": {
     "demographics": "{{category}} Demographics"

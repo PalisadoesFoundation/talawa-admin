@@ -779,6 +779,8 @@
     "noCategory": "Sin categoría",
     "organizationRequired": "La organización es obligatoria",
     "folder": "Carpeta de la agenda",
+    "notes": "Notas",
+    "enterNotes": "Introducir nota",
     "agendaFolderDetails": "Detalles de la sección de la agenda",
     "agendaFolderCreated": "Sección de la agenda creada exitosamente",
     "attachmentPreviewAlt": "Vista previa del archivo adjunto",
@@ -1255,15 +1257,6 @@
     "displayImage": "Mostrar imagen",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Contraseña anterior",
-    "newPassword": "Nueva contraseña",
-    "confirmNewPassword": "Confirmar nueva contraseña",
-    "saveChanges": "Guardar cambios",
-    "cancel": "Cancelar",
-    "passCantBeEmpty": "La contraseña no puede estar vacía",
-    "passNoMatch": "La nueva contraseña y la confirmación no coinciden."
   },
   "membershipRequest": {
     "joined": "Unido",
@@ -2584,10 +2577,6 @@
     "unableToLoadEventDetails": "No se pueden cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFound": "Evento no encontrado o ha sido eliminado",
     "numberOfAttendees": "Número de asistentes"
-  },
-  "promotedPost": {
-    "title": "Contenido Promocionado",
-    "promotedContent": "Contenido promocionado: {{title}}"
   },
   "csv": {
     "demographics": "Demografía de {{category}}"

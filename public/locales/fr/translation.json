@@ -794,6 +794,8 @@
     "sectionSequenceUpdateSuccessMsg": "La séquence de la section a été mise à jour avec succès",
     "editFolder": "Modifier le dossier",
     "editItem": "Modifier l’élément",
+    "notes": "Notes",
+    "enterNotes": "Saisir une note",
     "deleteItem": "Supprimer l’élément",
     "deleteFolder": "Supprimer le dossier",
     "itemPreview": "Aperçu de l’élément",
@@ -1275,15 +1277,6 @@
     "admin": "Admin",
     "superAdmin": "Super Admin",
     "displayImage": "Image d'affichage",
-    "saveChanges": "Enregistrer les modifications",
-    "cancel": "Annuler"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "Mot de passe précédent",
-    "newPassword": "nouveau mot de passe",
-    "confirmNewPassword": "Confirmer le nouveau mot de passe",
-    "passCantBeEmpty": "Le mot de passe ne peut pas être vide",
-    "passNoMatch": "Le nouveau mot de passe et la confirmation du mot de passe ne correspondent pas.",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"
   },
@@ -2584,10 +2577,6 @@
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFound": "Événement introuvable ou supprimé",
     "numberOfAttendees": "Nombre de participants"
-  },
-  "promotedPost": {
-    "title": "Contenu Promu",
-    "promotedContent": "Contenu promu : {{title}}"
   },
   "csv": {
     "demographics": "Démographie de {{category}}"

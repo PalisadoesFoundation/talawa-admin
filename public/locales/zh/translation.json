@@ -783,6 +783,8 @@
     "categoryName": "类别",
     "noCategory": "无分类",
     "folder": "议程文件夹",
+    "notes": "备注",
+    "enterNotes": "输入备注",
     "agendaFolderDetails": "议程部分详情",
     "agendaFolderCreated": "议程部分已成功创建",
     "attachmentPreviewAlt": "附件预览",
@@ -1275,15 +1277,6 @@
     "admin": "管理员",
     "superAdmin": "超级管理员",
     "displayImage": "显示图像",
-    "saveChanges": "保存更改",
-    "cancel": "取消"
-  },
-  "userPasswordUpdate": {
-    "previousPassword": "旧密码",
-    "newPassword": "新密码",
-    "confirmNewPassword": "确认新密码",
-    "passCantBeEmpty": "密码不能为空",
-    "passNoMatch": "新密码和确认密码不匹配。",
     "saveChanges": "保存更改",
     "cancel": "取消"
   },
@@ -2584,10 +2577,6 @@
     "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。",
     "eventNotFound": "未找到活动或已被删除",
     "numberOfAttendees": "出席人数"
-  },
-  "promotedPost": {
-    "title": "推广内容",
-    "promotedContent": "推广内容：{{title}}"
   },
   "csv": {
     "demographics": "{{category}} 人口统计"
