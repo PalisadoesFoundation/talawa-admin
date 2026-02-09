@@ -408,7 +408,7 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup();
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
 });
 
@@ -544,7 +544,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('renders empty state when organization has no members', async () => {
     render(
-      <MockedProvider mocks={[emptyMembersMock]}>
+      <MockedProvider mocks={[emptyMembersMock, emptyMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -555,10 +555,13 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('people.nothingToShow')),
+    ).toBeInTheDocument();
   });
 
   it('renders avatar image when member has avatarURL', async () => {
+    const rowName = 'User With Avatar';
     render(
       <MockedProvider mocks={[memberWithAvatarMock]}>
         <BrowserRouter>
@@ -571,11 +574,9 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
     await wait();
-    const img = document.querySelector(
-      'img[src="https://example.com/avatar.png"]',
-    );
+    const img = screen.getByRole('img', { name: rowName });
     expect(img).toBeInTheDocument();
-    expect(screen.getByText('User With Avatar')).toBeInTheDocument();
+    expect(screen.getByText(rowName)).toBeInTheDocument();
   });
 
   it('uses organization id from route params in query', async () => {
@@ -655,7 +656,9 @@ describe('Testing People Screen Pagination [User Portal]', () => {
   it('handles backward pagination correctly', async () => {
     // Initial load + useEffect refetch both use same vars; then fetchMore uses after: 'cursor3'
     render(
-      <MockedProvider mocks={[defaultQueryMock, defaultQueryMock, nextPageMock]}>
+      <MockedProvider
+        mocks={[defaultQueryMock, defaultQueryMock, nextPageMock]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -672,8 +675,6 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Navigate to page 2 (fetchMore with after: endCursor)
     await user.click(nextButton);
-    await wait(400);
-
     // Wait until we are on page 2 (previous button becomes enabled)
     await waitFor(() => {
       expect(prevButton).not.toBeDisabled();
