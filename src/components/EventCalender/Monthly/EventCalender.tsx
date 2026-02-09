@@ -54,7 +54,7 @@ const Calendar: React.FC<
 
   useEffect(() => {
     const filteredEvents = filterEventData(
-      eventData || [],
+      eventData,
       orgData,
       userRole as UserRole | undefined,
       userId,
