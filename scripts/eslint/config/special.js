@@ -6,6 +6,7 @@ import prettier from 'eslint-plugin-prettier';
 import {
   securityRestrictions,
   nativeButtonRestrictions,
+  modalStateRestrictions
 } from '../rules/rules.js';
 
 export const graphqlConfig = {
@@ -66,6 +67,7 @@ export const searchComponentsExemption = {
       'error',
       ...securityRestrictions,
       ...nativeButtonRestrictions,
+      ...modalStateRestrictions
     ],
   },
 };

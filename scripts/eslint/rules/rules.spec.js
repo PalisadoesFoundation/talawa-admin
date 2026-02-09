@@ -396,6 +396,9 @@ describe('ESLint Syntax Restrictions', () => {
         expect(nativeButtonRestrictions[0]?.selector).toContain(
           "name.name='button'",
         );
+        expect(nativeButtonRestrictions[0]?.message).toContain(
+          'shared Button component',
+        );
       });
     });
 
