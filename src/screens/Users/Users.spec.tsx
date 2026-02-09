@@ -1,4 +1,5 @@
 import React from 'react';
+import { waitForAsync } from 'test-utils/waitForAsync';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -31,13 +32,6 @@ const link5 = new StaticMockLink(MOCKS_NEW, true);
 const link6 = new StaticMockLink(MOCKS_NEW2, true);
 const link7 = new StaticMockLink(MOCKS_NEW3, true);
 
-// Helper to wait for async operations with fake timers
-// Using shouldAdvanceTime: true makes this compatible with userEvent
-async function waitForAsync(ms = 1000): Promise<void> {
-  await act(async () => {
-    await new Promise((resolve) => setTimeout(resolve, ms));
-  });
-}
 beforeEach(() => {
   // shouldAdvanceTime: true makes fake timers compatible with userEvent
   vi.useFakeTimers({ shouldAdvanceTime: true });
