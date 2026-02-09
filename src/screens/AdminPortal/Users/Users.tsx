@@ -92,14 +92,17 @@ const Users = (): React.ReactElement => {
     useState<FilteringOption>('cancel');
 
   // Build where clause including role filter for server-side filtering
-  const buildWhereClause = () => {
+  const buildWhereClause = (
+    name: string,
+    filtering: FilteringOption,
+  ): { name?: string; role?: string } | undefined => {
     const where: { name?: string; role?: string } = {};
-    if (searchByName) {
-      where.name = searchByName;
+    if (name) {
+      where.name = name;
     }
-    if (filteringOption === 'user') {
+    if (filtering === 'user') {
       where.role = USER_ROLES.REGULAR;
-    } else if (filteringOption === 'admin') {
+    } else if (filtering === 'admin') {
       where.role = USER_ROLES.ADMINISTRATOR;
     }
     return Object.keys(where).length > 0 ? where : undefined;
@@ -111,27 +114,22 @@ const Users = (): React.ReactElement => {
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: buildWhereClause(),
+      where: buildWhereClause(searchByName, filteringOption),
     },
     notifyOnNetworkStatusChange: true,
   });
 
   const { rows, loading, pageInfo, error, fetchMore, refetch } = useTableData<
     InterfaceQueryUserListItemForAdmin,
-    InterfaceQueryUserListItemForAdmin
+    InterfaceQueryUserListItemForAdmin,
+    InterfaceUserListQueryResponse
   >(queryResult, {
-    path: (data: unknown) => {
-      if (!data || typeof data !== 'object') {
+    path: (data: InterfaceUserListQueryResponse) => {
+      if (!data || !data.allUsers) {
         return undefined;
       }
 
-      const candidate = data as Record<string, unknown>;
-      const allUsers = candidate.allUsers;
-      if (!allUsers || typeof allUsers !== 'object') {
-        return undefined;
-      }
-
-      return allUsers as InterfaceUserListQueryResponse['allUsers'];
+      return data.allUsers;
     },
   });
 
@@ -174,31 +172,22 @@ const Users = (): React.ReactElement => {
 
   const handleSearch = (value: string): void => {
     setSearchByName(value);
-    const where: { name?: string; role?: string } = {};
-    if (value) {
-      where.name = value;
-    }
-    if (filteringOption === 'user') {
-      where.role = USER_ROLES.REGULAR;
-    } else if (filteringOption === 'admin') {
-      where.role = USER_ROLES.ADMINISTRATOR;
-    }
     refetch({
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: Object.keys(where).length > 0 ? where : undefined,
+      where: buildWhereClause(value, filteringOption),
     });
   };
 
   const resetAndRefetch = (): void => {
+    setSearchByName('');
     refetch({
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      where: undefined,
+      where: buildWhereClause('', filteringOption),
     });
-    setSearchByName('');
   };
 
   const handleSorting = (option: string): void => {
@@ -210,21 +199,11 @@ const Users = (): React.ReactElement => {
   const handleFiltering = (option: string): void => {
     if (isValidFilteringOption(option)) {
       setFilteringOption(option);
-      // Refetch with new role filter
-      const where: { name?: string; role?: string } = {};
-      if (searchByName) {
-        where.name = searchByName;
-      }
-      if (option === 'user') {
-        where.role = USER_ROLES.REGULAR;
-      } else if (option === 'admin') {
-        where.role = USER_ROLES.ADMINISTRATOR;
-      }
       refetch({
         first: perPageResult,
         after: null,
         orgFirst: 32,
-        where: Object.keys(where).length > 0 ? where : undefined,
+        where: buildWhereClause(searchByName, option),
       });
     }
   };
@@ -233,22 +212,12 @@ const Users = (): React.ReactElement => {
     if (!pageInfo?.hasNextPage) return;
     if (!pageInfo?.endCursor) return;
 
-    const where: { name?: string; role?: string } = {};
-    if (searchByName) {
-      where.name = searchByName;
-    }
-    if (filteringOption === 'user') {
-      where.role = USER_ROLES.REGULAR;
-    } else if (filteringOption === 'admin') {
-      where.role = USER_ROLES.ADMINISTRATOR;
-    }
-
     await fetchMore({
       variables: {
         first: perPageResult,
         after: pageInfo.endCursor,
         orgFirst: 32,
-        where: Object.keys(where).length > 0 ? where : undefined,
+        where: buildWhereClause(searchByName, filteringOption),
       },
     });
   };
