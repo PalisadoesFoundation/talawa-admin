@@ -21,11 +21,14 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 
+let mockOrgId: string | undefined = 'org-123';
+
 vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: 'org-123' }),
+    useParams: () => ({ orgId: mockOrgId }),
   };
 });
 
@@ -38,7 +41,7 @@ const t = (key: string): string => key;
 describe('AgendaFolderCreateModal', () => {
   afterEach(() => {
     cleanup();
-    vi.doUnmock('react-router');
+    mockOrgId = 'org-123';
     vi.restoreAllMocks(); // restore spy implementations
     vi.clearAllMocks();
   });
@@ -616,23 +619,12 @@ describe('AgendaFolderCreateModal', () => {
   });
 
   it('shows error and renders nothing when orgId is missing', async () => {
-    vi.resetModules();
-
-    vi.doMock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: () => ({}), // orgId missing
-      };
-    });
-
-    const { default: AgendaFolderCreateModalNoOrg } =
-      await import('./AgendaFolderCreateModal');
+    mockOrgId = undefined;
 
     render(
       <MockedProvider>
         <BrowserRouter>
-          <AgendaFolderCreateModalNoOrg
+          <AgendaFolderCreateModal
             isOpen={true}
             hide={vi.fn()}
             eventId="event-1"
@@ -644,16 +636,12 @@ describe('AgendaFolderCreateModal', () => {
       </MockedProvider>,
     );
 
-    await waitFor(
-      () => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'organizationRequired',
-        );
-      },
-      { timeout: 5000 },
-    );
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'organizationRequired',
+      );
+    });
 
-    // component must render nothing
     expect(
       screen.queryByTestId('createAgendaFolderModal'),
     ).not.toBeInTheDocument();
